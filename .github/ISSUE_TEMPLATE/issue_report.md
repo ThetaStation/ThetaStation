@@ -1,5 +1,5 @@
 ---
-name: Report an Issue
+name: Описать проблему
 about: "..."
 title: ''
 labels: ''
@@ -7,14 +7,11 @@ assignees: ''
 
 ---
 
-## Description
-<!-- Explain your issue in detail. Issues without proper explanation are liable to be closed by maintainers. -->
+## Описание
+<!-- Здесь необходимо подробно расписать саму проблему. -->
 
-**Reproduction**
-<!-- Include the steps to reproduce if applicable. -->
+**Воспроизведение**
+<!-- Здесь должна быть пошаговая инструкция того, как восспроизвести проблему. -->
 
 **Screenshots**
-<!-- If applicable, add screenshots to help explain your problem. -->
-
-**Additional context**
-<!-- Add any other context about the problem here. Anything you think is related to the issue. -->
+<!-- Если применимо, здесь должны быть картиночки связанные с проблемой. -->
