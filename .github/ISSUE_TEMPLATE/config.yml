@@ -1,7 +1,7 @@
 contact_links:
-  - name: Report a Security Exploit
+  - name: Нарушение безопасности
     url: https://discord.gg/MwDDf6t
-    about: Please report serious security exploits and vulnerabilities to @PJB3005. (PJB#3482 on discord).
-  - name: Request a Feature
+    about: По поводу серьёзных эксплойтов и уязвимостей необходимо писать @PJB3005. (PJB#3482 в Дискорде).
+  - name: Запросить фичу
     url: https://hackmd.io/@ss14/docs
-    about: Submit feature requests on our [discord server](https://discord.gg/ZBFGnb3) or checkout our design documentation on HackMD.
+    about: В случае если фича связана с игрой в принципе, писать в [дискорд сервер апстрим](https://discord.gg/ZBFGnb3) в ином случае писать в [наш дискорд сервер](https://discord.gg/8HV9qcrBNR).

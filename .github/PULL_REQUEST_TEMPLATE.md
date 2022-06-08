@@ -1,27 +1,20 @@
 <!-- The text between the arrows are comments - they will not be visible on your PR. -->
 
-## About the PR <!-- Describe the Pull Request here. What does it change? What other things could this impact? -->
+## Описание <!-- Что ПР меняет? На что это может повлиять? -->
 
-**Screenshots**
-<!-- If applicable, add screenshots to showcase your PR. If your PR is a visual change, add
-screenshots or it's liable to be closed by maintainers. -->
+**Скриншоты** <!-- Если ПР меняет что-либо визуальное, добавь скриншотов. -->
 
-**Changelog**
+**Ссылки** <!-- Если ваш ПР не приняли в апстриме (в связи с не-техническими причинами), оставьте ссылку на него здесь. -->
+
+**Список изменений**
 <!--
-Here you can fill out a changelog that will automatically be added to the game when your PR is merged
-There are 4 icons for changelog entries: add, remove, tweak, fix. I trust you can figure out the rest.
+Сюда нужно писать только то, что игроки могут действительно увидеть.
 
-You can put your name after the :cl: symbol to change the name that shows in the changelog (otherwise it takes your GitHub username)
-Like so: :cl: PJB
+Формат ченжлога:
 
-Generally, only put things in changelogs that players actually care about. Stuff like "Refactored X system, no changes should be visible" shouldn't be on a changelog.
-
-For writing actual entries, don't consider the entry type suffix (e.g. add) to be "part" of the sentence:
-bad: - add: a new tool for engineers
-good: - add: added a new tool for engineers
+:cl: <НИКНЕЙМ>
+- add: Добавлено что-то
+- remove: Что-то убрано
+- tweak: Что-то немножко изменено
+- fix: Что-то починено
 -->
-
-:cl:
-- add: Added fun!
-- remove: Removed fun!
-
