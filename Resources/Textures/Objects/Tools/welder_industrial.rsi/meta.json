@@ -51,9 +51,9 @@
           0.2,
           0.1
         ]
-        ]
-      },
-      {
+      ]
+    },
+    {
       "name": "on-inhand-right",
       "directions": 4,
       "delays": [
