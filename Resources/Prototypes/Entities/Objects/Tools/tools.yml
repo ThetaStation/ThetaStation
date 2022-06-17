@@ -29,13 +29,23 @@
   - type: RandomSpriteColor
     state: cutters
     colors:
-      blue: "#1861d5"
-      red: "#951710"
-      pink: "#d5188d"
-      brown: "#a05212"
-      green: "#0e7f1b"
-      cyan: "#18a2d5"
-      yellow: "#d58c18"
+    # <downstream-del>
+    #  blue: "#1861d5"
+    #  red: "#951710"
+    #  pink: "#d5188d"
+    #  brown: "#a05212"
+    #  green: "#0e7f1b"
+    #  cyan: "#18a2d5"
+    #  yellow: "#d58c18"
+    # </downstream-del>
+    # <downstream-add>
+      red: "#d74722"
+      pink: "#ad66be"
+      brown: "#b89b6e"
+      green: "#79b330"
+      cyan: "#5eabeb"
+      yellow: "#dda91b"
+    # </downstream-add>
   - type: Item
     sprite: Objects/Tools/wirecutters.rsi
 
@@ -71,13 +81,23 @@
   - type: RandomSpriteColor
     state: screwdriver
     colors:
-      blue: "#1861d5"
-      red: "#ff0000"
-      pink: "#d5188d"
-      brown: "#a05212"
-      green: "#0e7f1b"
-      cyan: "#18a2d5"
-      yellow: "#ffa500"
+    # <downstream-del>
+    #  blue: "#1861d5"
+    #  red: "#951710"
+    #  pink: "#d5188d"
+    #  brown: "#a05212"
+    #  green: "#0e7f1b"
+    #  cyan: "#18a2d5"
+    #  yellow: "#d58c18"
+    # </downstream-del>
+    # <downstream-add>
+      red: "#d74722"
+      pink: "#ad66be"
+      brown: "#b89b6e"
+      green: "#79b330"
+      cyan: "#5eabeb"
+      yellow: "#dda91b"
+    # </downstream-add>
 
 - type: entity
   name: wrench
