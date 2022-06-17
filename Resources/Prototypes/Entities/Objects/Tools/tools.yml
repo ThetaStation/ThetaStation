@@ -29,12 +29,15 @@
   - type: RandomSpriteColor
     state: cutters
     colors:
+    # <downstream-del> blue: "#1861d5"
+    # <downstream-add
       red: "#d74722"
       pink: "#ad66be"
       brown: "#b89b6e"
       green: "#79b330"
       cyan: "#5eabeb"
       yellow: "#dda91b"
+    # >
   - type: Item
     sprite: Objects/Tools/wirecutters.rsi
 
@@ -71,13 +74,14 @@
     state: screwdriver
     colors:
     # <downstream-del> blue: "#1861d5"
-    # <downstream-add>
+    # <downstream-add
       red: "#d74722"
       pink: "#ad66be"
       brown: "#b89b6e"
       green: "#79b330"
       cyan: "#5eabeb"
       yellow: "#dda91b"
+    # >
 
 - type: entity
   name: wrench
