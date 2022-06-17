@@ -70,6 +70,8 @@
   - type: RandomSpriteColor
     state: screwdriver
     colors:
+    # <downstream-del> blue: "#1861d5"
+    # <downstream-add>
       red: "#d74722"
       pink: "#ad66be"
       brown: "#b89b6e"
