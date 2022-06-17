@@ -30,7 +30,13 @@
     state: cutters
     colors:
     # <downstream-del>
-    # blue: "#1861d5"
+    #  blue: "#1861d5"
+    #  red: "#951710"
+    #  pink: "#d5188d"
+    #  brown: "#a05212"
+    #  green: "#0e7f1b"
+    #  cyan: "#18a2d5"
+    #  yellow: "#d58c18"
     # </downstream-del>
     # <downstream-add>
       red: "#d74722"
@@ -75,8 +81,14 @@
   - type: RandomSpriteColor
     state: screwdriver
     colors:
-    # <downstream-del
-    # blue: "#1861d5"
+    # <downstream-del>
+    #  blue: "#1861d5"
+    #  red: "#951710"
+    #  pink: "#d5188d"
+    #  brown: "#a05212"
+    #  green: "#0e7f1b"
+    #  cyan: "#18a2d5"
+    #  yellow: "#d58c18"
     # </downstream-del>
     # <downstream-add>
       red: "#d74722"
