@@ -28403,7 +28403,7 @@ entities:
     parent: 130
     type: Transform
 - uid: 1171
-  type: ComputerSupplyRequest
+  type: ComputerCargoOrders
   components:
   - pos: -30.5,-7.5
     parent: 130
@@ -28412,9 +28412,6 @@ entities:
       board: !type:Container
         ents: []
     type: ContainerContainer
-  - outputs:
-      OrderSender: []
-    type: SignalTransmitter
 - uid: 1172
   type: Grille
   components:
@@ -39959,7 +39956,7 @@ entities:
     parent: 130
     type: Transform
 - uid: 2885
-  type: ComputerSupplyOrdering
+  type: ComputerCargoOrders
   components:
   - rot: 3.141592653589793 rad
     pos: -34.5,-16.5
@@ -40285,7 +40282,7 @@ entities:
     parent: 130
     type: Transform
 - uid: 2933
-  type: ComputerSupplyOrdering
+  type: ComputerCargoOrders
   components:
   - rot: 3.141592653589793 rad
     pos: -35.5,-12.5
@@ -53389,7 +53386,7 @@ entities:
     parent: 130
     type: Transform
 - uid: 4846
-  type: PowerCellLargeStandard
+  type: PowerCellSmall
   components:
   - pos: 29.227386,-9.561591
     parent: 130
@@ -59257,7 +59254,7 @@ entities:
   - canCollide: False
     type: Physics
 - uid: 5637
-  type: cargoTelepad
+  type: CargoTelepad
   components:
   - pos: -34.5,-17.5
     parent: 130
@@ -90644,7 +90641,7 @@ entities:
     parent: 130
     type: Transform
 - uid: 9699
-  type: PowerCellMediumPotato
+  type: PowerCellPotato
   components:
   - pos: 34.5,-20.500025
     parent: 130
@@ -93243,7 +93240,7 @@ entities:
       charger-slot: !type:ContainerSlot {}
     type: ContainerContainer
 - uid: 9947
-  type: PowerCellLargeHigh
+  type: PowerCellMedium
   components:
   - pos: 29.548517,-9.58406
     parent: 130
@@ -95478,7 +95475,7 @@ entities:
     parent: 130
     type: Transform
 - uid: 10276
-  type: PowerCellLargeStandard
+  type: PowerCellSmall
   components:
   - pos: -40.50005,-16.500025
     parent: 130
