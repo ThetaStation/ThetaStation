@@ -24,7 +24,7 @@ jobs:
           upstreamrepo: https://github.com/space-wizards/space-station-14
           upstreambranch: master
           originbranch: main
-          prlabels: :robot: auto-sync
+          prlabels: auto-sync
         env:
           GITHUB_PAT: ${{ secrets.GH_PAT }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
