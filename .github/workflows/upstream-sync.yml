@@ -2,7 +2,7 @@ name: 'Upstream Sync'
 
 on:
   schedule:
-    - cron:  '0 10 * * 5'
+    - cron:  '0 10 * * *'
     # scheduled at 10:00 AM every Friday
 
   workflow_dispatch:  # click the button on Github repo!
@@ -24,6 +24,7 @@ jobs:
           upstreamrepo: https://github.com/space-wizards/space-station-14
           upstreambranch: master
           originbranch: main
+          prlabels: :robot: auto-sync
         env:
           GITHUB_PAT: ${{ secrets.GH_PAT }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
