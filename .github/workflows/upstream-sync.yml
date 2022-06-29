@@ -24,6 +24,5 @@ jobs:
           upstreamrepo: https://github.com/space-wizards/space-station-14
           upstreambranch: master
         env:
-          GITHUB_PAT: ${{ secrets.GH_PAT }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NO_CREDITS: true
