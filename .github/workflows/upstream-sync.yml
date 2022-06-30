@@ -27,5 +27,5 @@ jobs:
           prlabels: auto-sync
         env:
           GITHUB_PAT: ${{ secrets.GH_PAT }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           NO_CREDITS: true
