@@ -253,7 +253,7 @@ namespace Content.Client.Doors
             //</downstream-add>
             if (!_simpleVisuals)
             {
-                /*<downstream-add>
+                /*<downstream-del>
                 sprite.LayerSetVisible(DoorVisualLayers.BaseUnlit, unlitVisible && state != DoorState.Closed && state != DoorState.Welded);
                 </downstream-del>*/
                 //<downstream-add>
