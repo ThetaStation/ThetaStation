@@ -264,11 +264,11 @@ namespace Content.Client.Doors
                 {
                     /*<downstream-del>
                     sprite.LayerSetVisible(DoorVisualLayers.BaseEmergencyAccess,
-                        emergencyLightsVisible
-                        && state != DoorState.Open
-                        && state != DoorState.Opening
-                        && state != DoorState.Closing
-                        && unlitVisible);
+                            emergencyLightsVisible
+                            && state != DoorState.Open
+                            && state != DoorState.Opening
+                            && state != DoorState.Closing
+                            && unlitVisible);
                     <downstream-del>*/
                     //<downstream-add>
                     sprite.LayerSetVisible(DoorVisualLayers.BaseEmergencyAccess, unlitVisible && emergencyLightsVisible);
