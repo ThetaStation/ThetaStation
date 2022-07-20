@@ -159,7 +159,9 @@ namespace Content.Client.Doors
 
             var door = _entMan.GetComponent<DoorComponent>(component.Owner);
             var unlitVisible = true;
+            //<downstream-add>
             var baseVisible = true;
+            //</downstream-add>
             var boltedVisible = false;
             var emergencyLightsVisible = false;
 
@@ -187,8 +189,10 @@ namespace Content.Client.Doors
                     if (_openUnlitVisible && !_simpleVisuals)
                     {
                         sprite.LayerSetState(DoorVisualLayers.BaseUnlit, "open_unlit");
+                        //<downstream-add>
                         sprite.LayerSetState(DoorVisualLayers.BaseBolted, "bolted_open_unlit");
                         sprite.LayerSetState(DoorVisualLayers.BaseEmergencyAccess, "emergency_open_unlit");
+                        //</downstream-add>
                     }
                     break;
                 case DoorState.Closed:
@@ -197,7 +201,9 @@ namespace Content.Client.Doors
                     {
                         sprite.LayerSetState(DoorVisualLayers.BaseUnlit, "closed_unlit");
                         sprite.LayerSetState(DoorVisualLayers.BaseBolted, "bolted_unlit");
+                        //<downstream-add>
                         sprite.LayerSetState(DoorVisualLayers.BaseEmergencyAccess, "emergency_unlit");
+                        //</downstream-add>
                     }
                     break;
                 case DoorState.Opening:
@@ -234,7 +240,7 @@ namespace Content.Client.Doors
             {
                 emergencyLightsVisible = true;
             }
-
+            //<downstream-add>
             if ((state == DoorState.Open || state == DoorState.Closed) && (emergencyLightsVisible || boltedVisible))
             {
                 baseVisible = false;
@@ -244,14 +250,29 @@ namespace Content.Client.Doors
             {
                 emergencyLightsVisible = false;
             }
-
+            //</downstream-add>
             if (!_simpleVisuals)
             {
+                /*<downstream-add>
+                sprite.LayerSetVisible(DoorVisualLayers.BaseUnlit, unlitVisible && state != DoorState.Closed && state != DoorState.Welded);
+                </downstream-del>*/
+                //<downstream-add>
                 sprite.LayerSetVisible(DoorVisualLayers.BaseUnlit, unlitVisible && baseVisible);
+                //</downstream-add>
                 sprite.LayerSetVisible(DoorVisualLayers.BaseBolted, unlitVisible && boltedVisible);
                 if (_emergencyAccessLayer)
                 {
+                    /*<downstream-del>
+                    sprite.LayerSetVisible(DoorVisualLayers.BaseEmergencyAccess,
+                        emergencyLightsVisible
+                        && state != DoorState.Open
+                        && state != DoorState.Opening
+                        && state != DoorState.Closing
+                        && unlitVisible);
+                    <downstream-del>*/
+                    //<downstream-add>
                     sprite.LayerSetVisible(DoorVisualLayers.BaseEmergencyAccess, unlitVisible && emergencyLightsVisible);
+                    //</downstream-add>
                 }
             }
         }
