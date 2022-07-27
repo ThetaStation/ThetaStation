@@ -2,7 +2,7 @@ name: Update Wiki
 
 on:
   push:
-    branches: [ master, jsondump ]
+    branches: [ main, jsondump ]
     paths:
       - '.github/workflows/update-wiki.yml'
       - 'Content.Shared/Chemistry/**.cs'

@@ -37,23 +37,34 @@ jobs:
     - name: Shuffle files around
       run: |
         mkdir "release/${{ github.sha }}"
-        mv release/*.zip "release/${{ github.sha }}"
+        cp release/*.zip "release/${{ github.sha }}"
 
     - name: Upload files to centcomm
       uses: appleboy/scp-action@master
       with:
-        host: centcomm.spacestation14.io
-        username: wizards-build-push
-        key: ${{ secrets.CENTCOMM_WIZARDS_BUILDS_PUSH_KEY }}
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key:  ${{ secrets.SSHKEY }}
+        port: ${{ secrets.PORT }}
         source: "release/${{ github.sha }}"
-        target: "/home/wizards-build-push/builds_dir/builds/"
+        target: ${{ secrets.BUILDS_FOLDER }}
         strip_components: 1
+  
+#    - name: Update release version
+#      uses: garygrossgarten/github-action-scp@release
+#      with:
+#        local: release/SS14.Client.zip
+#        remote: release/SS14.Client.zip
+#        host: ${{ secrets.HOST }}
+#        port: ${{ secrets.PORT }}
+#        username: ${{ secrets.USERNAME }}
+#        privateKey: ${{ secrets.SSHKEY }}
 
     - name: Update manifest JSON
       uses: appleboy/ssh-action@master
       with:
-        host: centcomm.spacestation14.io
-        username: wizards-build-push
-        key: ${{ secrets.CENTCOMM_WIZARDS_BUILDS_PUSH_KEY }}
-        script: /home/wizards-build-push/push.ps1 ${{ github.sha }}
-
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key:  ${{ secrets.SSHKEY }}
+        port: ${{ secrets.PORT }}
+        script: node ~/scripts/create-manifest.js -fork theta -id ${{ github.sha }}

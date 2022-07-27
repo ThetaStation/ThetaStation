@@ -118,6 +118,11 @@
     - type: Sprite
       sprite: Structures/Storage/kvass.rsi
       state: kvass
+# <downstream-add>
+    - type: Rotatable
+    - type: Transform
+      noRot: false
+# </downstream-add>
 
 - type: entity
   parent: KvassTank
