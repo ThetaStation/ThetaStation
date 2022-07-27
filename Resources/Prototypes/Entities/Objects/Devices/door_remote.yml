@@ -8,7 +8,9 @@
   - type: Sprite
     sprite: Objects/Devices/door_remote.rsi
     netsync: false
+    #<downstream-add>
     state: generic
+    #</downstream-add>
   - type: Access
   - type: DoorRemote
 
@@ -20,11 +22,23 @@
   - type: Sprite
     layers:
     - state: door_remotebase
+      #<downstream-add>
     - state: CAP
+      #</downstream-add>
     - state: door_remotelightscolour
+      #<downstream-del>
+      #color: "#e6e600"
+      #</downstream-del>
+      #<downstream-add>
       color: "#edc241"
+      #</downstream-add>
     - state: door_remotescreencolour
+      #<downstream-del>
+      #color: "#9f9f00"
+      #</downstream-del>
+      #<downstream-add>
       shader: unshaded
+      #</downstream-add>
   - type: Access
     groups:
     - Command
@@ -37,11 +51,23 @@
   - type: Sprite
     layers:
     - state: door_remotebase
+      #<downstream-add>
     - state: HOS
+      #</downstream-add>
     - state: door_remotelightscolour
+      #<downstream-del>
+      #color: "#cb0000"
+      #</downstream-del>
+      #<downstream-add>
       color: "#347eab"
+      #<downstream-add>
     - state: door_remotescreencolour
+      #<downstream-del>
+      #color: "#830000"
+      #</downstream-del>
+      #<downstream-add>
       shader: unshaded
+      #<downstream-add>
   - type: Access
     groups:
     - Security
@@ -54,11 +80,23 @@
   - type: Sprite
     layers:
     - state: door_remotebase
+      #<downstream-add>
     - state: HOP
+      #</downstream-add>
     - state: door_remotelightscolour
+      #<downstream-del>
+      #color: "#58c800"
+      #</downstream-del>
+      #<downstream-add>
       color: "#347eab"
+      #</downstream-add>
     - state: door_remotescreencolour
+      #<downstream-del>
+      #color: "#3a7231"
+      #</downstream-del>
+      #<downstream-add>
       shader: unshaded
+      #</downstream-add>
   - type: Access
     groups:
     - Service
@@ -71,11 +109,23 @@
   - type: Sprite
     layers:
     - state: door_remotebase
+      #<downstream-add>
     - state: RD
+      #</downstream-add>
     - state: door_remotelightscolour
+      #<downstream-del>
+      #color: "#a53aaa"
+      #</downstream-del>
+      #<downstream-add>
       color: "#347eab"
+      #</downstream-add>
     - state: door_remotescreencolour
+      #<downstream-del>
+      #color: "#652368"
+      #</downstream-del>
+      #<downstream-add>
       shader: unshaded
+      #</downstream-add>
   - type: Access
     groups:
     - Research
@@ -88,11 +138,23 @@
   - type: Sprite
     layers:
     - state: door_remotebase
+      #<downstream-add>
     - state: QM
+      #</downstream-add>
     - state: door_remotelightscolour
+      #<downstream-del>
+      #color: "#b18644"
+      #</downstream-del>
+      #<downstream-add>
       color: "#af9a01"
+      #</downstream-add>
     - state: door_remotescreencolour
+      #<downstream-del>
+      #color: "#5b4523"
+      #</downstream-del>
+      #<downstream-add>
       shader: unshaded
+      #</downstream-add>
   - type: Access
     groups:
     - Cargo
@@ -105,11 +167,25 @@
   - type: Sprite
     layers:
     - state: door_remotebase
+      #<downstream-add>
     - state: CMO
+      #</downstream-add>
+    #<downstream-del>
+    #- state: door_remotelightscolour
+      #color: "#68aed6"
+    #</downstream-del>
     - state: door_remotelightscolour_alternative
+      #<downstream-del>
+      #color: "#b18644"
+      #</downstream-del>
+      #<downstream-add>
       color: "#286384"
+      #</downstream-add>
     - state: door_remotescreencolour
+      #color: "#325f7a"
+      #<downstream-add>
       shader: unshaded
+      #</downstream-add>
   - type: Access
     groups:
     - Medical
@@ -122,11 +198,19 @@
   - type: Sprite
     layers:
     - state: door_remotebase
+      #<downstream-add>
     - state: CE
+      #</downstream-add>
     - state: door_remotelightscolour
+      #color: "#ffa62b"
+      #<downstream-add>
       color: "#347eab"
+      #</downstream-add>
     - state: door_remotescreencolour
+      #color: "#bc5b00"
+      #<downstream-add>
       shader: unshaded
+      #</downstream-add>
   - type: Access
     groups:
     - Engineering
