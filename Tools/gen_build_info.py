@@ -18,12 +18,11 @@ SERVER_FILES = [
     "SS14.Server_win-x64.zip",
     "SS14.Server_osx-x64.zip"
 ]
-
 VERSION = os.environ['GITHUB_SHA']
-FORK_ID = "wizards"
-BUILD_URL = f"https://cdn.centcomm.spacestation14.com/builds/wizards/builds/{{FORK_VERSION}}/{FILE}"
-MANIFEST_URL = f"https://cdn.centcomm.spacestation14.com/cdn/version/{{FORK_VERSION}}/manifest"
-MANIFEST_DOWNLOAD_URL = f"https://cdn.centcomm.spacestation14.com/cdn/version/{{FORK_VERSION}}/download"
+FORK_ID = "theta"
+BUILD_URL = f"https://thetastation.org/builds/{FORK_ID}/{{FORK_VERSION}}/{FILE}"
+MANIFEST_URL = f"https://thetastation.org//manifests/{FORK_ID}/manifest.json"
+MANIFEST_DOWNLOAD_URL = f"https://thetastation.org/manifests/{FORK_ID}/manifest/download"
 
 def main() -> None:
     client_file = os.path.join("release", FILE)
@@ -51,9 +50,9 @@ def generate_build_json(file: str) -> str:
         "version": VERSION,
         "fork_id": FORK_ID,
         "engine_version": engine_version,
-        "manifest_url": MANIFEST_URL,
-        "manifest_download_url": MANIFEST_DOWNLOAD_URL,
-        "manifest_hash": manifest_hash
+        # "manifest_url": MANIFEST_URL,
+        # "manifest_download_url": MANIFEST_DOWNLOAD_URL,
+        # "manifest_hash": manifest_hash
     })
 
 def generate_manifest_hash(file: str) -> str:

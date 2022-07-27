@@ -2,52 +2,30 @@ name: 'Upstream Sync'
 
 on:
   schedule:
-    - cron:  '0 10 * * 5'
-    # scheduled at 10:00 AM every Friday
+    - cron:  '0 10 * * *'
+    # scheduled at 10:00 AM every day
 
   workflow_dispatch:  # click the button on Github repo!
 
 jobs:
-  sync_latest_from_upstream:
+  build:
     runs-on: ubuntu-latest
-    name: Sync latest commits from upstream repo
 
     steps:
-    # REQUIRED step
-    # Step 1: run a standard checkout action, provided by github
-    - name: Checkout target repo
-      uses: actions/checkout@v2
-      with:
-        # optional: set the branch to checkout,
-        # sync action checks out your 'target_sync_branch' anyway
-        ref:  main
-        # REQUIRED if your upstream repo is private (see wiki)
-        persist-credentials: false
-
-    # REQUIRED step
-    # Step 2: run the sync action
-    - name: Sync upstream changes
-      id: sync
-      uses: aormsby/Fork-Sync-With-Upstream-action@v3.2
-      with:
-        target_sync_branch: main
-        # REQUIRED 'target_repo_token' exactly like this!
-        target_repo_token: ${{ secrets.GITHUB_TOKEN }}
-        upstream_sync_branch: master
-        upstream_sync_repo: space-wizards/space-station-14
-        # upstream_repo_access_token: ${{ secrets.UPSTREAM_REPO_SECRET }}
-
-        # Set test_mode true to run tests instead of the true action!!
-        test_mode: false
-
-    # Step 3: Display a sample message based on the sync output var 'has_new_commits'
-    - name: New commits found
-      if: steps.sync.outputs.has_new_commits == 'true'
-      run: echo "New commits were found to sync."
-    
-    - name: No new commits
-      if: steps.sync.outputs.has_new_commits == 'false'
-      run: echo "There were no new commits."
-      
-    - name: Show value of 'has_new_commits'
-      run: echo ${{ steps.sync.outputs.has_new_commits }}
+      # Checkout the current repo
+      - uses: actions/checkout@v2
+      # Fetch the history and unshallow the repo so that it can be used
+      - name: Fetch all history for all tags and branches
+        run: git fetch --prune --unshallow
+      # Pull the detached remote and do the magic
+      - name: Pull Detached Remote
+        uses: litetex/pull-detached-remote@v0.3.0
+        with:
+          upstreamrepo: https://github.com/space-wizards/space-station-14
+          upstreambranch: master
+          originbranch: main
+          prlabels: auto-sync
+        env:
+          GITHUB_PAT: ${{ secrets.GH_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          NO_CREDITS: true
