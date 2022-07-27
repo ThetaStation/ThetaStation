@@ -395,3 +395,52 @@
     sprite: Structures/Furniture/Altars/Cults/fangs.rsi
   - type: Icon
     sprite: Structures/Furniture/Altars/Cults/fangs.rsi
+
+#<downstream-add>
+- type: entity
+  id: AltarImperium
+  parent: AltarNanotrasen
+  name: imperium altar
+  components:
+  - type: Sprite
+    sprite: Structures/Furniture/Altars/Gods/nanotrasen.rsi
+    state: imperium
+  - type: Icon
+    sprite: Structures/Furniture/Altars/Gods/nanotrasen.rsi
+    state: imperium
+
+- type: entity
+  id: AltarNeotheology
+  parent: AltarBase
+  name: neotheology altar
+  components:
+  - type: Sprite
+    sprite: Structures/Furniture/Altars/Gods/neotheology.rsi
+    layers:
+    - state: neotheology
+    - state: neotheology-lightning
+      shader: unshaded
+  - type: Icon
+    sprite: Structures/Furniture/Altars/Gods/neotheology.rsi
+    state: neotheology
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 25
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          path: /Audio/Effects/metalbreak.ogg
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          SheetSteel1:
+            min: 1
+            max: 5
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: PointLight
+    radius: 1.5
+    energy: 1
+    color: "#fbceb1"
+#</downstream-add>
