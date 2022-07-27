@@ -23,11 +23,10 @@ public sealed class MaxTimeRestartRuleSystem : GameRuleSystem
         SubscribeLocalEvent<GameRunLevelChangedEvent>(RunLevelChanged);
     }
 
-    public override void Started()
+    public override void Started(GameRuleConfiguration config)
     {
-        if (Configuration is not MaxTimeRestartRuleConfiguration maxTimeRestartConfig)
+        if (config is not MaxTimeRestartRuleConfiguration maxTimeRestartConfig)
             return;
-
         RoundMaxTime = maxTimeRestartConfig.RoundMaxTime;
         RoundEndDelay = maxTimeRestartConfig.RoundEndDelay;
 
@@ -35,7 +34,7 @@ public sealed class MaxTimeRestartRuleSystem : GameRuleSystem
             RestartTimer();
     }
 
-    public override void Ended()
+    public override void Ended(GameRuleConfiguration _)
     {
         StopTimer();
     }
@@ -63,7 +62,7 @@ public sealed class MaxTimeRestartRuleSystem : GameRuleSystem
 
     private void RunLevelChanged(GameRunLevelChangedEvent args)
     {
-        if (!RuleAdded)
+        if (!Enabled)
             return;
 
         switch (args.New)

@@ -36,7 +36,50 @@ namespace Content.Client.Atmos.EntitySystems
         public override void Shutdown()
         {
             base.Shutdown();
-            _overlayMan.RemoveOverlay(_overlay);
+            var overlayManager = IoCManager.Resolve<IOverlayManager>();
+            overlayManager.RemoveOverlay<GasTileOverlay>();
+            overlayManager.RemoveOverlay<FireTileOverlay>();
+        }
+
+        private void OnGridRemoved(GridRemovalEvent ev)
+        {
+            if (_tileData.ContainsKey(ev.GridId))
+            {
+                _tileData.Remove(ev.GridId);
+            }
+        }
+
+        public bool HasData(EntityUid gridId)
+        {
+            return _tileData.ContainsKey(gridId);
+        }
+
+        public GasOverlayEnumerator GetOverlays(EntityUid gridIndex, Vector2i indices)
+        {
+            if (!_tileData.TryGetValue(gridIndex, out var chunks))
+                return default;
+
+            var chunkIndex = GetGasChunkIndices(indices);
+            if (!chunks.TryGetValue(chunkIndex, out var chunk))
+                return default;
+
+            var overlays = chunk.GetData(indices);
+
+            return new GasOverlayEnumerator(overlays, this);
+        }
+
+        public FireOverlayEnumerator GetFireOverlays(EntityUid gridIndex, Vector2i indices)
+        {
+            if (!_tileData.TryGetValue(gridIndex, out var chunks))
+                return default;
+
+            var chunkIndex = GetGasChunkIndices(indices);
+            if (!chunks.TryGetValue(chunkIndex, out var chunk))
+                return default;
+
+            var overlays = chunk.GetData(indices);
+
+            return new FireOverlayEnumerator(overlays, this);
         }
 
         private void HandleGasOverlayUpdate(GasOverlayUpdateEvent ev)

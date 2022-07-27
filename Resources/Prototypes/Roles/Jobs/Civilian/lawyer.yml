@@ -1,11 +1,11 @@
 - type: job
   id: Lawyer
-  name: job-name-lawyer
+  name: "lawyer"
   startingGear: LawyerGear
   departments:
   - Civilian
   icon: "Lawyer"
-  supervisors: job-supervisors-hop
+  supervisors: "the head of personnel"
   access:
   - Service
   - Brig
@@ -18,6 +18,6 @@
     back: ClothingBackpackBriefcaseFilled
     shoes: ClothingShoesColorBlack
     id: LawyerPDA
-    ears: ClothingHeadsetSecurity
+    ears: ClothingHeadsetService
     # TODO add copy of space law
 

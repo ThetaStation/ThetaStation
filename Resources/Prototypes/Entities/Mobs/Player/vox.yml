@@ -9,14 +9,14 @@
     - type: InteractionPopup
       successChance: 1
       interactSuccessString: hugging-success-generic
-      interactSuccessSound: /Audio/Effects/thudswoosh.ogg
+      interactSuccessSound: /Audio/Effects/hug.ogg
       messagePerceivedByOthers: hugging-success-generic-others
     - type: Mind
       showExamineInfo: true
     - type: Input
       context: "human"
-    - type: MobMover
-    - type: InputMover
+    - type: PlayerMobMover
+    - type: PlayerInputMover
     - type: Vocal
       maleScream: /Audio/Voice/Vox/shriek1.ogg
       femaleScream: /Audio/Voice/Vox/shriek1.ogg

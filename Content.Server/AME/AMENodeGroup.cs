@@ -37,21 +37,14 @@ namespace Content.Server.AME
             base.LoadNodes(groupNodes);
 
             var mapManager = IoCManager.Resolve<IMapManager>();
-            IMapGrid? grid = null;
+            var grid = mapManager.GetGrid(GridId);
 
             foreach (var node in groupNodes)
             {
                 var nodeOwner = node.Owner;
                 if (_entMan.TryGetComponent(nodeOwner, out AMEShieldComponent? shield))
                 {
-                    var xform = _entMan.GetComponent<TransformComponent>(nodeOwner);
-                    if (xform.GridUid != grid?.GridEntityId && !mapManager.TryGetGrid(xform.GridUid, out grid))
-                        continue;
-
-                    if (grid == null)
-                        continue;
-
-                    var nodeNeighbors = grid.GetCellsInSquareArea(xform.Coordinates, 1)
+                    var nodeNeighbors = grid.GetCellsInSquareArea(_entMan.GetComponent<TransformComponent>(nodeOwner).Coordinates, 1)
                         .Where(entity => entity != nodeOwner && _entMan.HasComponent<AMEShieldComponent>(entity));
 
                     if (nodeNeighbors.Count() >= 8)

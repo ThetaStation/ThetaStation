@@ -343,5 +343,37 @@ namespace Content.Shared.Interaction.Helpers
                 ignoreInsideBlocker);
         }
         #endregion
+
+        #region EventArgs
+        public static bool InRangeUnOccluded(
+            this ITargetedInteractEventArgs args,
+            float range = InteractionRange,
+            Ignored? predicate = null,
+            bool ignoreInsideBlocker = true)
+        {
+            return ExamineSystemShared.InRangeUnOccluded(args, range, predicate,
+                ignoreInsideBlocker);
+        }
+
+        public static bool InRangeUnOccluded(
+            this DragDropEvent args,
+            float range = InteractionRange,
+            Ignored? predicate = null,
+            bool ignoreInsideBlocker = true)
+        {
+            return ExamineSystemShared.InRangeUnOccluded(args, range, predicate,
+                ignoreInsideBlocker);
+        }
+
+        public static bool InRangeUnOccluded(
+            this AfterInteractEventArgs args,
+            float range = InteractionRange,
+            Ignored? predicate = null,
+            bool ignoreInsideBlocker = true)
+        {
+            return ExamineSystemShared.InRangeUnOccluded(args, range, predicate,
+                ignoreInsideBlocker);
+        }
+        #endregion
     }
 }

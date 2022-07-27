@@ -15,14 +15,18 @@ namespace Content.IntegrationTests.Tests
 {
     [TestFixture]
     [TestOf(typeof(EntityUid))]
-    public sealed class EntityTest
+    public sealed class EntityTest : ContentIntegrationTest
     {
         [Test]
         public async Task SpawnTest()
         {
-            //TODO: Run this test in a for loop, and figure out why garbage is ending up in the Entities list on cleanup.
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true, Dirty = true, Destructive = true});
-            var server = pairTracker.Pair.Server;
+            var options = new ServerContentIntegrationOption()
+            {
+                CVarOverrides = {{CCVars.NPCMaxUpdates.Name, int.MaxValue.ToString()}}
+            };
+
+            var server = StartServer(options);
+            await server.WaitIdleAsync();
 
             var mapManager = server.ResolveDependency<IMapManager>();
             var entityMan = server.ResolveDependency<IEntityManager>();
@@ -34,7 +38,7 @@ namespace Content.IntegrationTests.Tests
             EntityUid testEntity;
 
             //Build up test environment
-            await server.WaitPost(() =>
+            server.Post(() =>
             {
                 // Create a one tile grid to stave off the grid 0 monsters
                 var mapId = mapManager.CreateMap();
@@ -52,9 +56,7 @@ namespace Content.IntegrationTests.Tests
                 mapManager.DoMapInitialize(mapId);
             });
 
-            await server.WaitRunTicks(5);
-
-            await server.WaitAssertion(() =>
+            server.Assert(() =>
             {
                 var testLocation = grid.ToCoordinates();
 
@@ -78,7 +80,7 @@ namespace Content.IntegrationTests.Tests
                             {
                                 Logger.LogS(LogLevel.Debug, "EntityTest", $"Testing: {prototype.ID}");
                                 testEntity = entityMan.SpawnEntity(prototype.ID, testLocation);
-                                server.RunTicks(1);
+                                server.RunTicks(2);
                                 if(!entityMan.Deleted(testEntity))
                                     entityMan.DeleteEntity(testEntity);
                             }, "Entity '{0}' threw an exception.",
@@ -87,7 +89,7 @@ namespace Content.IntegrationTests.Tests
                 });
             });
 
-            await pairTracker.CleanReturnAsync();
+            await server.WaitIdleAsync();
         }
 
         [Test]
@@ -108,8 +110,12 @@ namespace Content.IntegrationTests.Tests
 - type: entity
   id: AllComponentsOneToOneDeleteTestEntity";
 
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true, ExtraPrototypes = testEntity});
-            var server = pairTracker.Pair.Server;
+            var server = StartServer(new ServerContentIntegrationOption
+            {
+                ExtraPrototypes = testEntity,
+                FailureLogLevel = LogLevel.Error
+            });
+            await server.WaitIdleAsync();
 
             var mapManager = server.ResolveDependency<IMapManager>();
             var entityManager = server.ResolveDependency<IEntityManager>();
@@ -118,7 +124,7 @@ namespace Content.IntegrationTests.Tests
 
             IMapGrid grid = default;
 
-            await server.WaitPost(() =>
+            server.Post(() =>
             {
                 // Create a one tile grid to stave off the grid 0 monsters
                 var mapId = mapManager.CreateMap();
@@ -136,9 +142,7 @@ namespace Content.IntegrationTests.Tests
                 mapManager.DoMapInitialize(mapId);
             });
 
-            await server.WaitRunTicks(5);
-
-            await server.WaitAssertion(() =>
+            server.Assert(() =>
             {
                 Assert.Multiple(() =>
                 {
@@ -147,10 +151,9 @@ namespace Content.IntegrationTests.Tests
                     foreach (var type in componentFactory.AllRegisteredTypes)
                     {
                         var component = (Component) componentFactory.GetComponent(type);
-                        var name = componentFactory.GetComponentName(type);
 
                         // If this component is ignored
-                        if (skipComponents.Contains(name))
+                        if (skipComponents.Contains(component.Name))
                         {
                             continue;
                         }
@@ -168,20 +171,22 @@ namespace Content.IntegrationTests.Tests
 
                         component.Owner = entity;
 
-                        Logger.LogS(LogLevel.Debug, "EntityTest", $"Adding component: {name}");
+                        Logger.LogS(LogLevel.Debug, "EntityTest", $"Adding component: {component.Name}");
 
                         Assert.DoesNotThrow(() =>
                             {
                                 entityManager.AddComponent(entity, component);
                             }, "Component '{0}' threw an exception.",
-                            name);
+                            component.Name);
+
+                        server.RunTicks(2);
 
                         entityManager.DeleteEntity(entity);
                     }
                 });
             });
 
-            await pairTracker.CleanReturnAsync();
+            await server.WaitIdleAsync();
         }
 
         [Test]
@@ -202,8 +207,13 @@ namespace Content.IntegrationTests.Tests
 - type: entity
   id: AllComponentsOneEntityDeleteTestEntity";
 
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true, ExtraPrototypes = testEntity});
-            var server = pairTracker.Pair.Server;
+            var server = StartServer(new ServerContentIntegrationOption
+            {
+                ExtraPrototypes = testEntity,
+                FailureLogLevel = LogLevel.Error,
+                Pool = false
+            });
+            await server.WaitIdleAsync();
 
             var mapManager = server.ResolveDependency<IMapManager>();
             var entityManager = server.ResolveDependency<IEntityManager>();
@@ -212,7 +222,7 @@ namespace Content.IntegrationTests.Tests
 
             IMapGrid grid = default;
 
-            await server.WaitPost(() =>
+            server.Post(() =>
             {
                 // Create a one tile grid to stave off the grid 0 monsters
                 var mapId = mapManager.CreateMap();
@@ -227,7 +237,6 @@ namespace Content.IntegrationTests.Tests
                 grid.SetTile(Vector2i.Zero, tile);
                 mapManager.DoMapInitialize(mapId);
             });
-            await server.WaitRunTicks(5);
 
             var distinctComponents = new List<(List<CompIdx> components, List<CompIdx> references)>
             {
@@ -263,7 +272,7 @@ namespace Content.IntegrationTests.Tests
             // Sanity check
             Assert.That(distinctComponents, Is.Not.Empty);
 
-            await server.WaitAssertion(() =>
+            server.Assert(() =>
             {
                 Assert.Multiple(() =>
                 {
@@ -284,14 +293,15 @@ namespace Content.IntegrationTests.Tests
                                 continue;
                             }
 
-                            var name = componentFactory.GetComponentName(component.GetType());
-
                             // If this component is ignored
-                            if (skipComponents.Contains(name))
+                            if (skipComponents.Contains(component.Name))
+                            {
                                 continue;
+                            }
 
                             component.Owner = entity;
-                            Logger.LogS(LogLevel.Debug, "EntityTest", $"Adding component: {name}");
+
+                            Logger.LogS(LogLevel.Debug, "EntityTest", $"Adding component: {component.Name}");
 
                             // Note for the future coder: if an exception occurs where a component reference
                             // was already occupied it might be because some component is ensuring another // initialize.
@@ -301,14 +311,16 @@ namespace Content.IntegrationTests.Tests
                                 {
                                     entityManager.AddComponent(entity, component);
                                 }, "Component '{0}' threw an exception.",
-                                name);
+                                component.Name);
                         }
+
+                        server.RunTicks(2);
                         entityManager.DeleteEntity(entity);
                     }
                 });
             });
 
-            await pairTracker.CleanReturnAsync();
+            await server.WaitIdleAsync();
         }
     }
 }

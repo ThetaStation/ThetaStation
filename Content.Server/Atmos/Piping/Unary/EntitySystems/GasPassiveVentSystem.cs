@@ -22,7 +22,7 @@ namespace Content.Server.Atmos.Piping.Unary.EntitySystems
 
         private void OnPassiveVentUpdated(EntityUid uid, GasPassiveVentComponent vent, AtmosDeviceUpdateEvent args)
         {
-            var environment = _atmosphereSystem.GetContainingMixture(uid, true, true);
+            var environment = _atmosphereSystem.GetTileMixture(EntityManager.GetComponent<TransformComponent>(vent.Owner).Coordinates, true);
 
             if (environment == null)
                 return;

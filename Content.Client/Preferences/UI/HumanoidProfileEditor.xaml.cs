@@ -341,11 +341,10 @@ namespace Content.Client.Preferences.UI
 
             _jobPriorities = new List<JobPrioritySelector>();
             _jobCategories = new Dictionary<string, BoxContainer>();
-            var spriteSystem = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<SpriteSystem>();
 
             var firstCategory = true;
 
-            foreach (var job in prototypeManager.EnumeratePrototypes<JobPrototype>().OrderBy(j => j.LocalizedName))
+            foreach (var job in prototypeManager.EnumeratePrototypes<JobPrototype>().OrderBy(j => j.Name))
             {
                 if(!job.SetPreference) { continue; }
 
@@ -390,7 +389,7 @@ namespace Content.Client.Preferences.UI
                         _jobList.AddChild(category);
                     }
 
-                    var selector = new JobPrioritySelector(job, spriteSystem);
+                    var selector = new JobPrioritySelector(job);
                     category.AddChild(selector);
                     _jobPriorities.Add(selector);
 
@@ -992,7 +991,7 @@ namespace Content.Client.Preferences.UI
 
             public event Action<JobPriority>? PriorityChanged;
 
-            public JobPrioritySelector(JobPrototype job, SpriteSystem sprites)
+            public JobPrioritySelector(JobPrototype job)
             {
                 Job = job;
 
@@ -1021,9 +1020,12 @@ namespace Content.Client.Preferences.UI
                     Stretch = TextureRect.StretchMode.KeepCentered
                 };
 
-                var specifier = new SpriteSpecifier.Rsi(new ResourcePath("/Textures/Interface/Misc/job_icons.rsi"),
-                    job.Icon);
-                icon.Texture = sprites.Frame0(specifier);
+                if (job.Icon != null)
+                {
+                    var specifier = new SpriteSpecifier.Rsi(new ResourcePath("/Textures/Interface/Misc/job_icons.rsi"),
+                        job.Icon);
+                    icon.Texture = specifier.Frame0();
+                }
 
                 AddChild(new BoxContainer
                 {
@@ -1031,7 +1033,7 @@ namespace Content.Client.Preferences.UI
                     Children =
                     {
                         icon,
-                        new Label {Text = job.LocalizedName, MinSize = (175, 0)},
+                        new Label {Text = job.Name, MinSize = (175, 0)},
                         _optionButton
                     }
                 });

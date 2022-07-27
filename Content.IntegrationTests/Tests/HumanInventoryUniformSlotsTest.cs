@@ -11,7 +11,7 @@ namespace Content.IntegrationTests.Tests
     // i.e. the interaction between uniforms and the pocket/ID slots.
     // and also how big items don't fit in pockets.
     [TestFixture]
-    public sealed class HumanInventoryUniformSlotsTest
+    public sealed class HumanInventoryUniformSlotsTest : ContentIntegrationTest
     {
         private const string Prototypes = @"
 - type: entity
@@ -56,8 +56,8 @@ namespace Content.IntegrationTests.Tests
         [Test]
         public async Task Test()
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true, ExtraPrototypes = Prototypes});
-            var server = pairTracker.Pair.Server;
+            var options = new ServerIntegrationOptions{ExtraPrototypes = Prototypes};
+            var server = StartServer(options);
 
             EntityUid human = default;
             EntityUid uniform = default;
@@ -66,7 +66,7 @@ namespace Content.IntegrationTests.Tests
 
             InventorySystem invSystem = default!;
 
-            await server.WaitAssertion(() =>
+            server.Assert(() =>
             {
                 invSystem = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<InventorySystem>();
                 var mapMan = IoCManager.Resolve<IMapManager>();
@@ -102,9 +102,9 @@ namespace Content.IntegrationTests.Tests
                 Assert.That(invSystem.TryUnequip(human, "jumpsuit"));
             });
 
-            await server.WaitRunTicks(2);
+            server.RunTicks(2);
 
-            await server.WaitAssertion(() =>
+            server.Assert(() =>
             {
                 // Items have been dropped!
                 Assert.That(IsDescendant(uniform, human), Is.False);
@@ -117,7 +117,7 @@ namespace Content.IntegrationTests.Tests
                 Assert.That(!invSystem.TryGetSlotEntity(human, "pocket1", out _));
             });
 
-            await pairTracker.CleanReturnAsync();
+            await server.WaitIdleAsync();
         }
 
         private static bool IsDescendant(EntityUid descendant, EntityUid parent)

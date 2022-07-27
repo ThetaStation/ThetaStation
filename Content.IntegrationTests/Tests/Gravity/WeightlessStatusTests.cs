@@ -5,7 +5,6 @@ using Content.Shared.Alert;
 using Content.Shared.Coordinates;
 using NUnit.Framework;
 using Robust.Shared.GameObjects;
-using Robust.Shared.IoC;
 using Robust.Shared.Map;
 
 namespace Content.IntegrationTests.Tests.Gravity
@@ -13,7 +12,7 @@ namespace Content.IntegrationTests.Tests.Gravity
     [TestFixture]
     [TestOf(typeof(GravitySystem))]
     [TestOf(typeof(GravityGeneratorComponent))]
-    public sealed class WeightlessStatusTests
+    public sealed class WeightlessStatusTests : ContentIntegrationTest
     {
         private const string Prototypes = @"
 - type: entity
@@ -38,55 +37,57 @@ namespace Content.IntegrationTests.Tests.Gravity
         [Test]
         public async Task WeightlessStatusTest()
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true, ExtraPrototypes = Prototypes});
-            var server = pairTracker.Pair.Server;
+            var options = new ServerContentIntegrationOption {ExtraPrototypes = Prototypes};
+            var server = StartServer(options);
+
+            await server.WaitIdleAsync();
 
             var entityManager = server.ResolveDependency<IEntityManager>();
             var alertsSystem = server.ResolveDependency<IEntitySystemManager>().GetEntitySystem<AlertsSystem>();
 
             EntityUid human = default;
 
-            var testMap = await PoolManager.CreateTestMap(pairTracker);
-
             await server.WaitAssertion(() =>
             {
-                human = entityManager.SpawnEntity("HumanDummy", testMap.GridCoords);
+                var grid = GetMainGrid(mapManager);
+                var coordinates = grid.ToCoordinates();
+                human = entityManager.SpawnEntity("HumanDummy", coordinates);
 
                 Assert.True(entityManager.TryGetComponent(human, out AlertsComponent alerts));
             });
 
             // Let WeightlessSystem and GravitySystem tick
-            await PoolManager.RunTicksSync(pairTracker.Pair, 10);
-            var generatorUid = EntityUid.Invalid;
+            await server.WaitRunTicks(1);
+
             await server.WaitAssertion(() =>
             {
                 // No gravity without a gravity generator
                 Assert.True(alertsSystem.IsShowingAlert(human, AlertType.Weightless));
 
-                generatorUid = entityManager.SpawnEntity("GravityGeneratorDummy", entityManager.GetComponent<TransformComponent>(human).Coordinates);
+                entityManager.SpawnEntity("GravityGeneratorDummy", entityManager.GetComponent<TransformComponent>(human).Coordinates);
             });
 
             // Let WeightlessSystem and GravitySystem tick
-            await PoolManager.RunTicksSync(pairTracker.Pair, 10);
+            await server.WaitRunTicks(1);
 
             await server.WaitAssertion(() =>
             {
                 Assert.False(alertsSystem.IsShowingAlert(human, AlertType.Weightless));
 
-                // This should kill gravity
-                entityManager.DeleteEntity(generatorUid);
+                // TODO: Re-add gravity generator breaking when Vera is done with construction stuff.
+                /*
+                // Disable the gravity generator
+                var args = new BreakageEventArgs {Owner = human};
+                // gravityGenerator.OnBreak(args);
+                */
             });
 
-            await PoolManager.RunTicksSync(pairTracker.Pair, 10);
+            /*await server.WaitRunTicks(1);
 
             await server.WaitAssertion(() =>
             {
-                Assert.True(alertsSystem.IsShowingAlert(human, AlertType.Weightless));
-            });
-
-            await PoolManager.RunTicksSync(pairTracker.Pair, 10);
-
-            await pairTracker.CleanReturnAsync();
+                Assert.True(alerts.IsShowingAlert(AlertType.Weightless));
+            });*/
         }
     }
 }

@@ -1,7 +1,6 @@
 using Content.Server.AI.Utility;
 using Content.Server.AI.WorldState.States.Inventory;
 using Content.Server.Storage.Components;
-using Content.Server.Storage.EntitySystems;
 using Content.Shared.Interaction;
 
 namespace Content.Server.AI.Operators.Inventory
@@ -57,17 +56,16 @@ namespace Content.Server.AI.Operators.Inventory
                 return Outcome.Failed;
             }
 
-            var entMan = IoCManager.Resolve<IEntityManager>();
-
-            if (!entMan.TryGetComponent(_target, out EntityStorageComponent? storageComponent) ||
+            if (!IoCManager.Resolve<IEntityManager>().TryGetComponent(_target, out EntityStorageComponent? storageComponent) ||
                 storageComponent.IsWeldedShut)
             {
                 return Outcome.Failed;
             }
-            
-            if (entMan.EntitySysManager.TryGetEntitySystem<EntityStorageSystem>(out var entStorage) && storageComponent.Open)
+
+            if (storageComponent.Open)
             {
-                entStorage.ToggleOpen(_owner, _target, storageComponent);
+                var activateArgs = new ActivateEventArgs(_owner, _target);
+                storageComponent.Activate(activateArgs);
             }
 
             return Outcome.Success;

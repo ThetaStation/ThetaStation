@@ -6,13 +6,15 @@ using NUnit.Framework;
 using Robust.Shared.GameObjects;
 using Robust.Shared.IoC;
 using Robust.Shared.Map;
+using Robust.Shared.Physics;
+using Content.Server.Climbing;
 
 namespace Content.IntegrationTests.Tests.GameObjects.Components.Movement
 {
     [TestFixture]
     [TestOf(typeof(ClimbableComponent))]
     [TestOf(typeof(ClimbingComponent))]
-    public sealed class ClimbUnitTest
+    public sealed class ClimbUnitTest : ContentIntegrationTest
     {
         private const string Prototypes = @"
 - type: entity
@@ -33,14 +35,14 @@ namespace Content.IntegrationTests.Tests.GameObjects.Components.Movement
         [Test]
         public async Task Test()
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true, ExtraPrototypes = Prototypes});
-            var server = pairTracker.Pair.Server;
+            var options = new ServerIntegrationOptions{ExtraPrototypes = Prototypes};
+            var server = StartServer(options);
 
             EntityUid human;
             EntityUid table;
             ClimbingComponent climbing;
 
-            await server.WaitAssertion(() =>
+            server.Assert(() =>
             {
                 var mapManager = IoCManager.Resolve<IMapManager>();
                 mapManager.CreateNewMapEntity(MapId.Nullspace);
@@ -67,7 +69,7 @@ namespace Content.IntegrationTests.Tests.GameObjects.Components.Movement
                 // climbing.IsClimbing = false;
             });
 
-            await pairTracker.CleanReturnAsync();
+            await server.WaitIdleAsync();
         }
     }
 }

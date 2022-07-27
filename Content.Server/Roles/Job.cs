@@ -1,6 +1,5 @@
 using Content.Server.Chat;
 using Content.Server.Chat.Managers;
-using Content.Server.Chat.Systems;
 using Content.Shared.Roles;
 
 namespace Content.Server.Roles
@@ -18,15 +17,12 @@ namespace Content.Server.Roles
         public string? StartingGear => Prototype.StartingGear;
 
         [ViewVariables]
-        public string? JobEntity => Prototype.JobEntity;
-
-        [ViewVariables]
         public bool CanBeAntag;
 
         public Job(Mind.Mind mind, JobPrototype jobPrototype) : base(mind)
         {
             Prototype = jobPrototype;
-            Name = jobPrototype.LocalizedName;
+            Name = jobPrototype.Name;
             CanBeAntag = jobPrototype.CanBeAntag;
         }
 
@@ -43,7 +39,7 @@ namespace Content.Server.Roles
                 if(Prototype.RequireAdminNotify)
                     chatMgr.DispatchServerMessage(session, Loc.GetString("job-greet-important-disconnect-admin-notify"));
 
-                chatMgr.DispatchServerMessage(session, Loc.GetString("job-greet-supervisors-warning", ("jobName", Name), ("supervisors", Loc.GetString(Prototype.Supervisors))));
+                chatMgr.DispatchServerMessage(session, Loc.GetString("job-greet-supervisors-warning", ("jobName", Name), ("supervisors", Prototype.Supervisors)));
 
                 if(Prototype.JoinNotifyCrew && Mind.CharacterName != null)
                 {

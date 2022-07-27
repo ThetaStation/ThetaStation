@@ -17,7 +17,7 @@ namespace Content.IntegrationTests.Tests.Buckle
     [TestFixture]
     [TestOf(typeof(BuckleComponent))]
     [TestOf(typeof(StrapComponent))]
-    public sealed class BuckleTest
+    public sealed class BuckleTest : ContentIntegrationTest
     {
         private const string BuckleDummyId = "BuckleDummy";
         private const string StrapDummyId = "StrapDummy";
@@ -51,11 +51,9 @@ namespace Content.IntegrationTests.Tests.Buckle
         [Test]
         public async Task BuckleUnbuckleCooldownRangeTest()
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{ExtraPrototypes = Prototypes});
-            var server = pairTracker.Pair.Server;
-
-            var testMap = await PoolManager.CreateTestMap(pairTracker);
-            var coordinates = testMap.GridCoords;
+            var cOptions = new ClientIntegrationOptions {ExtraPrototypes = Prototypes};
+            var sOptions = new ServerIntegrationOptions {ExtraPrototypes = Prototypes};
+            var (_, server) = await StartConnectedServerClientPair(cOptions, sOptions);
 
             EntityUid human = default;
             EntityUid chair = default;
@@ -69,6 +67,9 @@ namespace Content.IntegrationTests.Tests.Buckle
 
                 var actionBlocker = EntitySystem.Get<ActionBlockerSystem>();
                 var standingState = EntitySystem.Get<StandingStateSystem>();
+
+                var grid = GetMainGrid(mapManager);
+                var coordinates = new EntityCoordinates(grid.GridEntityId, 0, 0);
 
                 human = entityManager.SpawnEntity(BuckleDummyId, coordinates);
                 chair = entityManager.SpawnEntity(StrapDummyId, coordinates);
@@ -208,18 +209,13 @@ namespace Content.IntegrationTests.Tests.Buckle
                 Assert.Null(buckle.BuckledTo);
                 Assert.IsEmpty(strap.BuckledEntities);
             });
-
-            await pairTracker.CleanReturnAsync();
         }
 
         [Test]
         public async Task BuckledDyingDropItemsTest()
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true, ExtraPrototypes = Prototypes});
-            var server = pairTracker.Pair.Server;
-
-            var testMap = await PoolManager.CreateTestMap(pairTracker);
-            var coordinates = testMap.GridCoords;
+            var options = new ServerContentIntegrationOption {ExtraPrototypes = Prototypes};
+            var server = StartServer(options);
 
             EntityUid human = default;
             BuckleComponent buckle = null;
@@ -230,7 +226,11 @@ namespace Content.IntegrationTests.Tests.Buckle
 
             await server.WaitAssertion(() =>
             {
+                var mapManager = IoCManager.Resolve<IMapManager>();
                 var entityManager = IoCManager.Resolve<IEntityManager>();
+
+                var grid = GetMainGrid(mapManager);
+                var coordinates = new EntityCoordinates(grid.GridEntityId, 0, 0);
 
                 human = entityManager.SpawnEntity(BuckleDummyId, coordinates);
                 var chair = entityManager.SpawnEntity(StrapDummyId, coordinates);
@@ -292,18 +292,16 @@ namespace Content.IntegrationTests.Tests.Buckle
 
                 buckle.TryUnbuckle(human, true);
             });
-
-            await pairTracker.CleanReturnAsync();
         }
 
         [Test]
         public async Task ForceUnbuckleBuckleTest()
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true, ExtraPrototypes = Prototypes});
-            var server = pairTracker.Pair.Server;
-
-            var testMap = await PoolManager.CreateTestMap(pairTracker);
-            var coordinates = testMap.GridCoords;
+            var options = new ServerContentIntegrationOption
+            {
+                ExtraPrototypes = Prototypes
+            };
+            var server = StartServer(options);
 
             EntityUid human = default;
             EntityUid chair = default;
@@ -313,6 +311,9 @@ namespace Content.IntegrationTests.Tests.Buckle
             {
                 var mapManager = IoCManager.Resolve<IMapManager>();
                 var entityManager = IoCManager.Resolve<IEntityManager>();
+
+                var grid = GetMainGrid(mapManager);
+                var coordinates = new EntityCoordinates(grid.GridEntityId, 0, 0);
 
                 human = entityManager.SpawnEntity(BuckleDummyId, coordinates);
                 chair = entityManager.SpawnEntity(StrapDummyId, coordinates);
@@ -330,7 +331,7 @@ namespace Content.IntegrationTests.Tests.Buckle
                 entityManager.GetComponent<TransformComponent>(human).WorldPosition += (100, 0);
             });
 
-            await PoolManager.WaitUntil(server, () => !buckle.Buckled, 10);
+            await WaitUntil(server, () => !buckle.Buckled, 10);
 
             Assert.False(buckle.Buckled);
 
@@ -355,7 +356,6 @@ namespace Content.IntegrationTests.Tests.Buckle
                 Assert.NotNull(buckle.BuckledTo);
                 Assert.True(buckle.Buckled);
             });
-            await pairTracker.CleanReturnAsync();
         }
     }
 }

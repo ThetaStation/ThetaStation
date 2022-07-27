@@ -9,17 +9,18 @@ namespace Content.IntegrationTests.Tests.Atmos
 {
     [TestFixture]
     [TestOf(typeof(GasMixture))]
-    public sealed class GasMixtureTest
+    public sealed class GasMixtureTest : ContentIntegrationTest
     {
         [Test]
         public async Task TestMerge()
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true});
-            var server = pairTracker.Pair.Server;
+            var server = StartServer();
+
+            await server.WaitIdleAsync();
 
             var atmosphereSystem = server.ResolveDependency<IEntitySystemManager>().GetEntitySystem<AtmosphereSystem>();
 
-            await server.WaitAssertion(() =>
+            server.Assert(() =>
             {
                 var a = new GasMixture(10f);
                 var b = new GasMixture(10f);
@@ -47,7 +48,7 @@ namespace Content.IntegrationTests.Tests.Atmos
                 Assert.That(a.GetMoles(Gas.Oxygen), Is.EqualTo(50));
             });
 
-            await pairTracker.CleanReturnAsync();
+            await server.WaitIdleAsync();
         }
 
         [Test]
@@ -59,10 +60,9 @@ namespace Content.IntegrationTests.Tests.Atmos
         [TestCase(Atmospherics.BreathPercentage)]
         public async Task RemoveRatio(float ratio)
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true});
-            var server = pairTracker.Pair.Server;
+            var server = StartServer();
 
-            await server.WaitAssertion(() =>
+            server.Assert(() =>
             {
                 var a = new GasMixture(10f);
 
@@ -85,7 +85,7 @@ namespace Content.IntegrationTests.Tests.Atmos
                 Assert.That(a.GetMoles(Gas.Nitrogen), Is.EqualTo(100 - b.GetMoles(Gas.Nitrogen)));
             });
 
-            await pairTracker.CleanReturnAsync();
+            await server.WaitIdleAsync();
         }
     }
 }

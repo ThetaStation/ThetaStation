@@ -1,7 +1,5 @@
 ﻿### Stunbaton component
 
-comp-stunbaton-stun = Stunned
-
 ## Used when examining the stunbaton
 
 comp-stunbaton-examined-on = The light is currently [color=darkgreen]on[/color].

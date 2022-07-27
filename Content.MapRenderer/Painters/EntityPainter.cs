@@ -112,14 +112,7 @@ public sealed class EntityPainter
 
             var (x, y, width, height) = GetRsiFrame(rsi, image, entity, layer, dir);
 
-            var rect = new Rectangle(x, y, width, height);
-            if (!new Rectangle(Point.Empty, image.Size()).Contains(rect))
-            {
-                Console.WriteLine($"Invalid layer {rsi!.Path}/{layer.RsiState.Name}.png for entity {_sEntityManager.ToPrettyString(entity.Sprite.Owner)} at ({entity.X}, {entity.Y})");
-                return;
-            }
-
-            image.Mutate(o => o.Crop(rect));
+            image.Mutate(o => o.Crop(new Rectangle(x, y, width, height)));
 
             var colorMix = entity.Sprite.Color * layer.Color;
             var imageColor = Color.FromRgba(colorMix.RByte, colorMix.GByte, colorMix.BByte, colorMix.AByte);

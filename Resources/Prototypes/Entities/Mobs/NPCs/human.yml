@@ -4,9 +4,7 @@
   id: MobCivilian
   description: A miserable pile of secrets.
   components:
-  - type: InputMover
-  - type: MobMover
-  - type: UtilityNPC
+  - type: UtilityAI
     behaviorSets:
     - Clothing
     - Hunger
@@ -24,29 +22,13 @@
   id: MobSpirate
   description: Yarr!
   components:
-  - type: InputMover
-  - type: MobMover
-  - type: UtilityNPC
+  - type: UtilityAI
     behaviorSets:
     - Clothing
     - Hunger
     - Thirst
     - Idle
     - Spirate
-
-- type: entity
-  parent: MobHuman
-  id: MobCBURNUnit
-  name: CBURN Agent
-  description: A miserable pile of secrets
-  components:
-  - type: RandomHumanoidAppearance
-  - type: Loadout
-    prototype: CBURNGear
-  - type: GhostTakeoverAvailable
-    makeSentient: false
-    name: CBURN Agent
-    description: A highly trained CentCom agent, capable of dealing with various threats.
 
 - type: entity
   parent: MobHumanBase

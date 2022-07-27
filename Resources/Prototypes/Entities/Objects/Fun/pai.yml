@@ -33,9 +33,7 @@
       event: !type:OpenUiActionEvent
         key: enum.InstrumentUiKey.Key
   - type: Examiner
-  - type: IntrinsicRadio
-    channels:
-    - Common
+  - type: GhostRadio
   - type: DoAfter
   - type: Actions
   - type: TypingIndicator
@@ -47,7 +45,7 @@
     # Note that the personal AI never "dies".
   - type: MobState
     thresholds:
-      0: Alive
+      0: !type:NormalMobState {}
   - type: Appearance
     visuals:
       - type: GenericEnumVisualizer

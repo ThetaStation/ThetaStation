@@ -27,6 +27,7 @@
   - type: MovedByPressure
   - type: Physics
     bodyType: Dynamic
+    fixedRotation: false
   - type: Transform
     noRot: true
   - type: Fixtures
@@ -37,14 +38,13 @@
       mass: 5
       mask:
       - Impassable
-  - type: EntityStorage
-    capacity: 1
-    isCollidableWhenOpen: true
+  - type: BodyBagEntityStorage
+    Capacity: 1
+    IsCollidableWhenOpen: true
     closeSound:
       path: /Audio/Misc/zip.ogg
     openSound:
       path: /Audio/Misc/zip.ogg
-  - type: EntityStorageLayingDownOverride
   - type: Foldable
   - type: PaperLabel
     labelSlot:
@@ -59,14 +59,8 @@
       state_open: open_overlay
     - type: FoldableVisualizer
       key: bag
-  - type: GenericVisualizer
-    visuals:
-      enum.PaperLabelVisuals.HasLabel:
-        enum.BodyBagVisualLayers.Label:
-          True: {visible: true}
-          False: {visible: false}
+    - type: BodyBagVisualizer
   - type: Pullable
-  - type: AntiRottingContainer
 
 - type: entity
   id: BodyBag_Folded

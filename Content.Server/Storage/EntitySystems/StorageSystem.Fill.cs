@@ -8,12 +8,10 @@ public sealed partial class StorageSystem
     private void OnStorageFillMapInit(EntityUid uid, StorageFillComponent component, MapInitEvent args)
     {
         if (component.Contents.Count == 0) return;
-        if (!EntityManager.EntitySysManager.TryGetEntitySystem<EntityStorageSystem>(out var entityStorage)) return;
-
+        // ServerStorageComponent needs to rejoin IStorageComponent when other storage components are ECS'd
+        TryComp<IStorageComponent>(uid, out var storage);
         TryComp<ServerStorageComponent>(uid, out var serverStorageComp);
-        TryComp<EntityStorageComponent>(uid, out var entityStorageComp);
-
-        if (entityStorageComp == null && serverStorageComp == null)
+        if (storage == null && serverStorageComp == null)
         {
             Logger.Error($"StorageFillComponent couldn't find any StorageComponent ({uid})");
             return;
@@ -27,7 +25,7 @@ public sealed partial class StorageSystem
             var ent = EntityManager.SpawnEntity(item, coordinates);
 
             // handle depending on storage component, again this should be unified after ECS
-            if (entityStorageComp != null && entityStorage.Insert(ent, uid))
+            if (storage != null && storage.Insert(ent))
                continue;
 
             if (serverStorageComp != null && Insert(uid, ent, serverStorageComp))

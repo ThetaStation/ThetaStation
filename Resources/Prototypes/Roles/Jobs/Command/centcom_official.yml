@@ -1,12 +1,12 @@
 - type: job
   id: CentralCommandOfficial
-  name: job-name-centcomoff
+  name: "centcom official"
   setPreference: false
   startingGear: CentcomGear
   departments:
   - Command
   icon: "Nanotrasen"
-  supervisors: job-supervisors-hos
+  supervisors: "the head of security"
   canBeAntag: false
   accessGroups:
   - AllAccess

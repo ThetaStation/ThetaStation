@@ -70,7 +70,6 @@
     state: smear-0
     netsync: false
   - type: Puddle
-    slipThreshold: 5
   - type: Appearance
     visuals:
     - type: PuddleVisualizer
@@ -90,7 +89,6 @@
     state: splatter-0
     netsync: false
   - type: Puddle
-    slipThreshold: 5
   - type: Appearance
     visuals:
     - type: PuddleVisualizer
@@ -143,7 +141,6 @@
     state: vomit-0
     netsync: false
   - type: Puddle
-    slipThreshold: 5
   - type: SolutionContainerManager
     solutions:
       puddle:
@@ -155,10 +152,6 @@
   - type: Slippery
     launchForwardsMultiplier: 2.0
   - type: StepTrigger
-  - type: Appearance
-    visuals:
-    - type: PuddleVisualizer
-      customPuddleSprite: true
 
 - type: entity
   name: toxins vomit

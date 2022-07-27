@@ -1,9 +1,8 @@
-using Content.Shared.Database;
+﻿using Content.Shared.Database;
 using Content.Shared.Follower.Components;
 using Content.Shared.Ghost;
-using Content.Shared.Movement.Events;
+using Content.Shared.Movement.EntitySystems;
 using Content.Shared.Verbs;
-using Robust.Shared.Map;
 
 namespace Content.Shared.Follower;
 
@@ -14,7 +13,7 @@ public sealed class FollowerSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<GetVerbsEvent<AlternativeVerb>>(OnGetAlternativeVerbs);
-        SubscribeLocalEvent<FollowerComponent, MoveInputEvent>(OnFollowerMove);
+        SubscribeLocalEvent<FollowerComponent, RelayMoveInputEvent>(OnFollowerMove);
         SubscribeLocalEvent<FollowedComponent, EntityTerminatingEvent>(OnFollowedTerminating);
     }
 
@@ -41,7 +40,7 @@ public sealed class FollowerSystem : EntitySystem
         ev.Verbs.Add(verb);
     }
 
-    private void OnFollowerMove(EntityUid uid, FollowerComponent component, ref MoveInputEvent args)
+    private void OnFollowerMove(EntityUid uid, FollowerComponent component, RelayMoveInputEvent args)
     {
         StopFollowingEntity(uid, component.Following);
     }
@@ -80,7 +79,7 @@ public sealed class FollowerSystem : EntitySystem
         var followerEv = new StartedFollowingEntityEvent(entity, follower);
         var entityEv = new EntityStartedFollowingEvent(entity, follower);
 
-        RaiseLocalEvent(follower, followerEv, true);
+        RaiseLocalEvent(follower, followerEv);
         RaiseLocalEvent(entity, entityEv, false);
     }
 
@@ -101,20 +100,14 @@ public sealed class FollowerSystem : EntitySystem
             RemComp<FollowedComponent>(target);
         RemComp<FollowerComponent>(uid);
 
-        var xform = Transform(uid);
-        xform.AttachToGridOrMap();
-        if (xform.MapID == MapId.Nullspace)
-        {
-            Del(uid);
-            return;
-        }
+        Transform(uid).AttachToGridOrMap();
 
         RemComp<OrbitVisualsComponent>(uid);
 
         var uidEv = new StoppedFollowingEntityEvent(target, uid);
         var targetEv = new EntityStoppedFollowingEvent(target, uid);
 
-        RaiseLocalEvent(uid, uidEv, true);
+        RaiseLocalEvent(uid, uidEv);
         RaiseLocalEvent(target, targetEv, false);
     }
 

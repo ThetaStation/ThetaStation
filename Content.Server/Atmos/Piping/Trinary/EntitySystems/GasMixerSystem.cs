@@ -36,12 +36,25 @@ namespace Content.Server.Atmos.Piping.Trinary.EntitySystems
             SubscribeLocalEvent<GasMixerComponent, GasMixerChangeNodePercentageMessage>(OnChangeNodePercentageMessage);
             SubscribeLocalEvent<GasMixerComponent, GasMixerToggleStatusMessage>(OnToggleStatusMessage);
 
-            SubscribeLocalEvent<GasMixerComponent, AtmosDeviceDisabledEvent>(OnMixerLeaveAtmosphere);
+            // Shouldn't need re-anchor event
+            SubscribeLocalEvent<GasMixerComponent, AnchorStateChangedEvent>(OnAnchorChanged);
         }
 
-        private void OnInit(EntityUid uid, GasMixerComponent mixer, ComponentInit args)
+        private void OnAnchorChanged(EntityUid uid, GasMixerComponent component, ref AnchorStateChangedEvent args)
         {
-            UpdateAppearance(uid, mixer);
+            if (args.Anchored)
+                return;
+
+            component.Enabled = false;
+
+            DirtyUI(uid, component);
+            UpdateAppearance(uid, component);
+            _userInterfaceSystem.TryCloseAll(uid, GasFilterUiKey.Key);
+        }
+
+        private void OnInit(EntityUid uid, GasMixerComponent component, ComponentInit args)
+        {
+            UpdateAppearance(uid, component);
         }
 
         private void OnMixerUpdated(EntityUid uid, GasMixerComponent mixer, AtmosDeviceUpdateEvent args)
@@ -69,6 +82,8 @@ namespace Content.Server.Atmos.Piping.Trinary.EntitySystems
 
             if (outputStartingPressure >= mixer.TargetPressure)
                 return; // Target reached, no need to mix.
+
+
 
             var generalTransfer = (mixer.TargetPressure - outputStartingPressure) * outlet.Air.Volume / Atmospherics.R;
 
@@ -112,44 +127,30 @@ namespace Content.Server.Atmos.Piping.Trinary.EntitySystems
             }
 
             // Actually transfer the gas now.
-            var transferred = false;
 
             if (transferMolesOne > 0f)
             {
-                transferred = true;
                 var removed = inletOne.Air.Remove(transferMolesOne);
                 _atmosphereSystem.Merge(outlet.Air, removed);
             }
 
             if (transferMolesTwo > 0f)
             {
-                transferred = true;
                 var removed = inletTwo.Air.Remove(transferMolesTwo);
                 _atmosphereSystem.Merge(outlet.Air, removed);
             }
-
-            if (transferred)
-                _ambientSoundSystem.SetAmbience(mixer.Owner, true);
+            _ambientSoundSystem.SetAmbience(mixer.Owner, true);
         }
 
-        private void OnMixerLeaveAtmosphere(EntityUid uid, GasMixerComponent mixer, AtmosDeviceDisabledEvent args)
-        {
-            mixer.Enabled = false;
-
-            DirtyUI(uid, mixer);
-            UpdateAppearance(uid, mixer);
-            _userInterfaceSystem.TryCloseAll(uid, GasFilterUiKey.Key);
-        }
-
-        private void OnMixerInteractHand(EntityUid uid, GasMixerComponent mixer, InteractHandEvent args)
+        private void OnMixerInteractHand(EntityUid uid, GasMixerComponent component, InteractHandEvent args)
         {
             if (!EntityManager.TryGetComponent(args.User, out ActorComponent? actor))
                 return;
 
-            if (EntityManager.GetComponent<TransformComponent>(mixer.Owner).Anchored)
+            if (EntityManager.GetComponent<TransformComponent>(component.Owner).Anchored)
             {
                 _userInterfaceSystem.TryOpen(uid, GasMixerUiKey.Key, actor.PlayerSession);
-                DirtyUI(uid, mixer);
+                DirtyUI(uid, component);
             }
             else
             {

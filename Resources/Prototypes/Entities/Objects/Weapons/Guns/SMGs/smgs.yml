@@ -28,14 +28,12 @@
         startingItem: MagazinePistolSubMachineGun
         insertSound: /Audio/Weapons/Guns/MagIn/smg_magin.ogg
         ejectSound: /Audio/Weapons/Guns/MagOut/smg_magout.ogg
-        priority: 2
         whitelist:
           tags:
             - MagazinePistolSubMachineGun
       gun_chamber:
         name: Chamber
         startingItem: CartridgePistol
-        priority: 1
         whitelist:
           tags:
             - CartridgePistol
@@ -61,8 +59,6 @@
     sprite: Objects/Weapons/Guns/SMGs/atreides.rsi
   - type: Gun
     fireRate: 10
-    soundGunshot:
-      path: /Audio/Weapons/Guns/Gunshots/atreides.ogg
   - type: MagazineVisuals
     magState: mag
     steps: 1
@@ -85,13 +81,11 @@
   - type: Item
     sprite: Objects/Weapons/Guns/SMGs/c20r.rsi
   - type: Gun
-    soundGunshot:
-      path: /Audio/Weapons/Guns/Gunshots/c-20r.ogg
   - type: ChamberMagazineAmmoProvider
     # autoEject: true # Do not set this until the PVS prediction issue is resolved
   - type: MagazineVisuals
     magState: mag
-    steps: 6
+    steps: 1
     zeroVisible: true
   - type: Appearance
 
@@ -113,8 +107,6 @@
   - type: Gun
     fireRate: 6
     selectedMode: FullAuto
-    soundGunshot:
-      path: /Audio/Weapons/Guns/Gunshots/atreides.ogg
     availableModes:
     - FullAuto
   - type: ItemSlots
@@ -124,14 +116,12 @@
         startingItem: MagazineMagnumSubMachineGun
         insertSound: /Audio/Weapons/Guns/MagIn/smg_magin.ogg
         ejectSound: /Audio/Weapons/Guns/MagOut/smg_magout.ogg
-        priority: 2
         whitelist:
           tags:
             - MagazineMagnumSubMachineGun
       gun_chamber:
         name: Chamber
         startingItem: CartridgeMagnum
-        priority: 1
         whitelist:
           tags:
             - CartridgeMagnum
@@ -178,14 +168,12 @@
         startingItem: MagazinePistolSubMachineGunTopMounted
         insertSound: /Audio/Weapons/Guns/MagIn/smg_magin.ogg
         ejectSound: /Audio/Weapons/Guns/MagOut/smg_magout.ogg
-        priority: 2
         whitelist:
           tags:
             - MagazinePistolSubMachineGunTopMounted
       gun_chamber:
         name: Chamber
         startingItem: CartridgePistol
-        priority: 1
         whitelist:
           tags:
             - CartridgePistol
@@ -209,14 +197,12 @@
         startingItem: MagazineMagnumSubMachineGunRubber
         insertSound: /Audio/Weapons/Guns/MagIn/smg_magin.ogg
         ejectSound: /Audio/Weapons/Guns/MagOut/smg_magout.ogg
-        priority: 2
         whitelist:
           tags:
             - MagazineMagnumSubMachineGun
       gun_chamber:
         name: Chamber
         startingItem: CartridgeMagnumRubber
-        priority: 1
         whitelist:
           tags:
             - CartridgeMagnum

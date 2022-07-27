@@ -40,7 +40,7 @@ public sealed class ArtifactSystem : EntitySystem
         }
 
         EntityManager.AddComponent(uid, trigger);
-        RaiseLocalEvent(uid, new RandomizeTriggerEvent(), true);
+        RaiseLocalEvent(uid, new RandomizeTriggerEvent());
     }
 
     public bool TryActivateArtifact(EntityUid uid, EntityUid? user = null,
@@ -74,6 +74,6 @@ public sealed class ArtifactSystem : EntitySystem
         {
             Activator = user
         };
-        RaiseLocalEvent(uid, ev, true);
+        RaiseLocalEvent(uid, ev);
     }
 }

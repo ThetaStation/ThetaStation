@@ -18,7 +18,7 @@ namespace Content.IntegrationTests.Tests.Disposal
     [TestOf(typeof(DisposalHolderComponent))]
     [TestOf(typeof(DisposalEntryComponent))]
     [TestOf(typeof(DisposalUnitComponent))]
-    public sealed class DisposalUnitTest
+    public sealed class DisposalUnitTest : ContentIntegrationTest
     {
         [Reflect(false)]
         private sealed class DisposalUnitTestSystem : EntitySystem
@@ -127,10 +127,9 @@ namespace Content.IntegrationTests.Tests.Disposal
         [Test]
         public async Task Test()
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true, ExtraPrototypes = Prototypes});
-            var server = pairTracker.Pair.Server;
-
-            var testMap = await PoolManager.CreateTestMap(pairTracker);
+            var options = new ServerIntegrationOptions { ExtraPrototypes = Prototypes };
+            var server = StartServer(options);
+            await server.WaitIdleAsync();
 
             EntityUid human = default!;
             EntityUid wrench = default!;
@@ -138,12 +137,13 @@ namespace Content.IntegrationTests.Tests.Disposal
             EntityUid disposalTrunk = default!;
             DisposalUnitComponent unit = default!;
 
+            var mapManager = server.ResolveDependency<IMapManager>();
             var entityManager = server.ResolveDependency<IEntityManager>();
 
             await server.WaitAssertion(() =>
             {
                 // Spawn the entities
-                var coordinates = testMap.GridCoords;
+                var coordinates = GetMainEntityCoordinates(mapManager);
                 human = entityManager.SpawnEntity("HumanDummy", coordinates);
                 wrench = entityManager.SpawnEntity("WrenchDummy", coordinates);
                 disposalUnit = entityManager.SpawnEntity("DisposalUnitDummy", coordinates);
@@ -208,7 +208,6 @@ namespace Content.IntegrationTests.Tests.Disposal
                 // Re-pressurizing
                 Flush(unit, false);
             });
-            await pairTracker.CleanReturnAsync();
         }
     }
 }

@@ -42,7 +42,7 @@ public sealed class MindSystem : EntitySystem
             return;
 
         mind.Mind = value;
-        RaiseLocalEvent(uid, new MindAddedMessage(), true);
+        RaiseLocalEvent(uid, new MindAddedMessage());
     }
 
     /// <summary>
@@ -56,7 +56,7 @@ public sealed class MindSystem : EntitySystem
             return;
 
         if (!Deleted(uid))
-            RaiseLocalEvent(uid, new MindRemovedMessage(), true);
+            RaiseLocalEvent(uid, new MindRemovedMessage());
 
         mind.Mind = null;
     }
@@ -90,7 +90,7 @@ public sealed class MindSystem : EntitySystem
                         return;
 
                     // Async this so that we don't throw if the grid we're on is being deleted.
-                    var gridId = spawnPosition.GetGridUid(EntityManager);
+                    var gridId = spawnPosition.GetGridEntityId(EntityManager);
                     if (!spawnPosition.IsValid(EntityManager) || gridId == EntityUid.Invalid || !_mapManager.GridExists(gridId))
                     {
                         spawnPosition = _gameTicker.GetObserverSpawnPoint();

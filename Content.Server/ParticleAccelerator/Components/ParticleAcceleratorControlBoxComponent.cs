@@ -329,7 +329,7 @@ namespace Content.Server.ParticleAccelerator.Components
             // Find fuel chamber first by scanning cardinals.
             if (_entMan.GetComponent<TransformComponent>(Owner).Anchored)
             {
-                var grid = _mapManager.GetGrid(_entMan.GetComponent<TransformComponent>(Owner).GridUid!.Value);
+                var grid = _mapManager.GetGrid(_entMan.GetComponent<TransformComponent>(Owner).GridEntityId);
                 var coords = _entMan.GetComponent<TransformComponent>(Owner).Coordinates;
                 foreach (var maybeFuel in grid.GetCardinalNeighborCells(coords))
                 {
@@ -403,14 +403,8 @@ namespace Content.Server.ParticleAccelerator.Components
         private bool ScanPart<T>(Vector2i offset, [NotNullWhen(true)] out T? part)
             where T : ParticleAcceleratorPartComponent
         {
-            var xform = _entMan.GetComponent<TransformComponent>(Owner);
-            if (!_mapManager.TryGetGrid(xform.GridUid, out var grid))
-            {
-                part = default;
-                return false;
-            }
-
-            var coords = xform.Coordinates;
+            var grid = _mapManager.GetGrid(_entMan.GetComponent<TransformComponent>(Owner).GridEntityId);
+            var coords = _entMan.GetComponent<TransformComponent>(Owner).Coordinates;
             foreach (var ent in grid.GetOffset(coords, offset))
             {
                 if (_entMan.TryGetComponent(ent, out part) && !part.Deleted)

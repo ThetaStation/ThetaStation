@@ -15,11 +15,9 @@ public sealed class IntrinsicUIComponent : Component, ISerializationHooks
 
     void ISerializationHooks.AfterDeserialization()
     {
-        for (var i = 0; i < UIs.Count; i++)
+        foreach (var ui in UIs)
         {
-            var ui = UIs[i];
             ui.AfterDeserialization();
-            UIs[i] = ui;
         }
     }
 }

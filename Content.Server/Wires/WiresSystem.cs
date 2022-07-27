@@ -34,8 +34,8 @@ public sealed class WiresSystem : EntitySystem
     // This is where all the wire layouts are stored.
     [ViewVariables] private readonly Dictionary<string, WireLayout> _layouts = new();
 
-    private const float ScrewTime = 1f;
-    private float _toolTime = 0f;
+    private const float ScrewTime = 2.5f;
+    private const float ToolTime = 1f;
 
     private static DummyWireAction _dummyWire = new DummyWireAction();
 
@@ -315,7 +315,7 @@ public sealed class WiresSystem : EntitySystem
             {
                 if (wire.CancelToken.IsCancellationRequested)
                 {
-                    RaiseLocalEvent(owner, wire.OnFinish, true);
+                    RaiseLocalEvent(owner, wire.OnFinish);
                     _finishedWires.Add((owner, wire));
                 }
                 else
@@ -323,7 +323,7 @@ public sealed class WiresSystem : EntitySystem
                     wire.TimeLeft -= frameTime;
                     if (wire.TimeLeft <= 0)
                     {
-                        RaiseLocalEvent(owner, wire.OnFinish, true);
+                        RaiseLocalEvent(owner, wire.OnFinish);
                         _finishedWires.Add((owner, wire));
                     }
                 }
@@ -677,36 +677,28 @@ public sealed class WiresSystem : EntitySystem
                 break;
         }
 
-        wires.WiresQueue.Add(id);
-
-        if (_toolTime > 0f)
+        var args = new DoAfterEventArgs(user, ToolTime, default, used)
         {
-            var args = new DoAfterEventArgs(user, _toolTime, default, used)
+            NeedHand = true,
+            BreakOnStun = true,
+            BreakOnDamage = true,
+            BreakOnUserMove = true,
+            TargetFinishedEvent = new OnWireDoAfterEvent
             {
-                NeedHand = true,
-                BreakOnStun = true,
-                BreakOnDamage = true,
-                BreakOnUserMove = true,
-                TargetFinishedEvent = new OnWireDoAfterEvent
-                {
-                    Target = used,
-                    User = user,
-                    Tool = toolEntity,
-                    Action = action,
-                    Id = id
-                },
-                TargetCancelledEvent = new OnWireDoAfterCancelEvent
-                {
-                    Id = id
-                }
-            };
+                Target = used,
+                User = user,
+                Tool = toolEntity,
+                Action = action,
+                Id = id
+            },
+            TargetCancelledEvent = new OnWireDoAfterCancelEvent
+            {
+                Id = id
+            }
+        };
+        _doAfter.DoAfter(args);
 
-            _doAfter.DoAfter(args);
-        }
-        else
-        {
-            UpdateWires(used, user, toolEntity, id, action, wires);
-        }
+        wires.WiresQueue.Add(id);
     }
 
 

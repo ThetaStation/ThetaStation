@@ -264,11 +264,6 @@ namespace Content.Server.GameTicking
 
             RunLevel = GameRunLevel.PostRound;
 
-            ShowRoundEndScoreboard(text);
-        }
-
-        public void ShowRoundEndScoreboard(string text = "")
-        {
             //Tell every client the round has ended.
             var gamemodeTitle = Preset != null ? Loc.GetString(Preset.ModeTitle) : string.Empty;
 
@@ -321,7 +316,6 @@ namespace Content.Server.GameTicking
                         PlayerOOCName = contentPlayerData?.Name ?? "(IMPOSSIBLE: REGISTERED MIND WITH NO OWNER)",
                         // Character name takes precedence over current entity name
                         PlayerICName = playerIcName,
-                        PlayerEntityUid = mind.OwnedEntity,
                         Role = antag
                             ? mind.AllRoles.First(role => role.Antagonist).Name
                             : mind.AllRoles.FirstOrDefault()?.Name ?? Loc.GetString("game-ticker-unknown-role"),
@@ -427,7 +421,6 @@ namespace Content.Server.GameTicking
             ClearGameRules();
 
             _addedGameRules.Clear();
-            _allPreviousGameRules.Clear();
 
             // Round restart cleanup event, so entity systems can reset.
             var ev = new RoundRestartCleanupEvent();
@@ -486,7 +479,7 @@ namespace Content.Server.GameTicking
                 if (!proto.GamePresets.Contains(Preset.ID)) continue;
 
                 if (proto.Message != null)
-                    _chatSystem.DispatchGlobalAnnouncement(Loc.GetString(proto.Message), playSound: true);
+                    _chatSystem.DispatchGlobalStationAnnouncement(Loc.GetString(proto.Message), playDefaultSound: true);
 
                 if (proto.Sound != null)
                     SoundSystem.Play(proto.Sound.GetSound(), Filter.Broadcast());

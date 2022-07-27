@@ -102,7 +102,7 @@ namespace Content.Server.Storage.EntitySystems
             }
         }
 
-        public void StartDoAfter(EntityUid storageUid, EntityUid? targetUid, EntityUid userUid, DumpableComponent dumpable, ServerStorageComponent storage, float multiplier = 1)
+        private void StartDoAfter(EntityUid storageUid, EntityUid? targetUid, EntityUid userUid, DumpableComponent dumpable, ServerStorageComponent storage, float multiplier = 1)
         {
             if (dumpable.CancelToken != null)
             {

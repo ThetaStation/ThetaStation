@@ -16,26 +16,22 @@ namespace Content.Server.Gravity.EntitySystems
         private void OnGravityInit(EntityUid uid, GravityComponent component, ComponentInit args)
         {
             // Incase there's already a generator on the grid we'll just set it now.
-            var gridId = Transform(component.Owner).GridUid;
-
-            if (gridId == null)
-                return;
-
-            GravityChangedEvent message;
+            var gridId = EntityManager.GetComponent<TransformComponent>(component.Owner).GridEntityId;
+            GravityChangedMessage message;
 
             foreach (var generator in EntityManager.EntityQuery<GravityGeneratorComponent>())
             {
-                if (Transform(generator.Owner).GridUid == gridId && generator.GravityActive)
+                if (EntityManager.GetComponent<TransformComponent>(generator.Owner).GridEntityId == gridId && generator.GravityActive)
                 {
                     component.Enabled = true;
-                    message = new GravityChangedEvent(gridId.Value, true);
+                    message = new GravityChangedMessage(gridId, true);
                     RaiseLocalEvent(message);
                     return;
                 }
             }
 
             component.Enabled = false;
-            message = new GravityChangedEvent(gridId.Value, false);
+            message = new GravityChangedMessage(gridId, false);
             RaiseLocalEvent(message);
         }
 
@@ -46,17 +42,11 @@ namespace Content.Server.Gravity.EntitySystems
 
         public void EnableGravity(GravityComponent comp)
         {
-            if (comp.Enabled)
-                return;
-
-            var gridId = Transform(comp.Owner).GridUid;
-            Dirty(comp);
-
-            if (gridId == null)
-                return;
-
+            if (comp.Enabled) return;
             comp.Enabled = true;
-            var message = new GravityChangedEvent(gridId.Value, true);
+
+            var gridId = EntityManager.GetComponent<TransformComponent>(comp.Owner).GridEntityId;
+            var message = new GravityChangedMessage(gridId, true);
             RaiseLocalEvent(message);
 
         }
@@ -69,11 +59,8 @@ namespace Content.Server.Gravity.EntitySystems
             comp.Enabled = false;
             Dirty(comp);
 
-            var gridId = Transform(comp.Owner).GridUid;
-            if (gridId == null)
-                return;
-
-            var message = new GravityChangedEvent(gridId.Value, false);
+            var gridId = EntityManager.GetComponent<TransformComponent>(comp.Owner).GridEntityId;
+            var message = new GravityChangedMessage(gridId, false);
             RaiseLocalEvent(message);
         }
     }

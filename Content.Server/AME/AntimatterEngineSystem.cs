@@ -5,7 +5,6 @@ using Content.Server.Hands.Components;
 using Content.Server.Popups;
 using Content.Server.Tools;
 using Content.Shared.Interaction;
-using Content.Shared.Popups;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Audio;
@@ -70,8 +69,7 @@ namespace Content.Server.AME
                 else
                 {
                     component.JarSlot.Insert(args.Used);
-                    _popupSystem.PopupEntity(Loc.GetString("ame-controller-component-interact-using-success"), uid,
-                        Filter.Entities(args.User), PopupType.Medium);
+                    _popupSystem.PopupEntity(Loc.GetString("ame-controller-component-interact-using-success"), uid, Filter.Entities(args.User));
                     component.UpdateUserInterface();
                 }
             }
@@ -92,7 +90,7 @@ namespace Content.Server.AME
             if (!_toolSystem.HasQuality(args.Used, component.QualityNeeded))
                 return;
 
-            if (!_mapManager.TryGetGrid(args.ClickLocation.GetGridUid(EntityManager), out var mapGrid))
+            if (!_mapManager.TryGetGrid(args.ClickLocation.GetGridEntityId(EntityManager), out var mapGrid))
                 return; // No AME in space.
 
             var snapPos = mapGrid.TileIndicesFor(args.ClickLocation);

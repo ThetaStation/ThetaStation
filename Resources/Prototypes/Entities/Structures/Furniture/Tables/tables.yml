@@ -9,7 +9,6 @@
     sprite: Structures/Furniture/Tables/frame.rsi
   - type: Icon
     sprite: Structures/Furniture/Tables/frame.rsi
-    state: full
   - type: Fixtures
     fixtures:
     - shape:
@@ -56,7 +55,6 @@
     sprite: Structures/Furniture/Tables/counterwood.rsi
   - type: Icon
     sprite: Structures/Furniture/Tables/counterwood.rsi
-    state: full
   - type: Fixtures
     fixtures:
     - shape:
@@ -64,9 +62,9 @@
         bounds: "-0.45,-0.45,0.45,0.45"
       mass: 50
       mask:
-      - TableMask
+      - MachineMask
       layer:
-      - TableLayer
+      - HalfWallLayer
   - type: Damageable
     damageContainer: Inorganic
     damageModifierSet: Wood
@@ -101,7 +99,7 @@
 
 - type: entity
   id: CounterMetalFrame
-  parent: CounterWoodFrame
+  parent: BaseStructure
   name: metal counter frame
   description: Pieces of metal that make the frame of a table.
   components:
@@ -109,7 +107,16 @@
     sprite: Structures/Furniture/Tables/countermetal.rsi
   - type: Icon
     sprite: Structures/Furniture/Tables/countermetal.rsi
-    state: full
+  - type: Fixtures
+    fixtures:
+    - shape:
+        !type:PhysShapeAabb
+        bounds: "-0.45,-0.45,0.45,0.45"
+      mass: 50
+      mask:
+      - MachineMask
+      layer:
+      - HalfWallLayer
   - type: Damageable
     damageContainer: Inorganic
     damageModifierSet: Metallic

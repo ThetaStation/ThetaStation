@@ -1,7 +1,6 @@
 using Content.Server.AI.Utility;
 using Content.Server.AI.WorldState.States.Inventory;
 using Content.Server.Storage.Components;
-using Content.Server.Storage.EntitySystems;
 using Content.Shared.Interaction;
 using Robust.Shared.Containers;
 
@@ -41,7 +40,8 @@ namespace Content.Server.AI.Operators.Inventory
 
             if (!storageComponent.Open)
             {
-                IoCManager.Resolve<EntityStorageSystem>().ToggleOpen(_owner, _target, storageComponent);
+                var activateArgs = new ActivateEventArgs(_owner, _target);
+                storageComponent.Activate(activateArgs);
             }
 
             var blackboard = UtilityAiHelpers.GetBlackboard(_owner);

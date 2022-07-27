@@ -1,5 +1,5 @@
 using Content.Shared.Movement.Components;
-using Content.Shared.Movement.Systems;
+using Content.Shared.Movement.EntitySystems;
 using Content.Shared.Nutrition.Components;
 using Robust.Shared.GameObjects;
 
@@ -22,6 +22,8 @@ namespace Content.Client.Nutrition.Components
             }
 
             _currentHungerThreshold = hunger.CurrentThreshold;
+
+            EntitySystem.Get<MovementSpeedModifierSystem>().RefreshMovementSpeedModifiers(Owner);
         }
     }
 }

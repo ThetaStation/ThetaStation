@@ -1,5 +1,4 @@
 using Content.Server.Storage.Components;
-using Content.Server.Storage.EntitySystems;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 
@@ -28,14 +27,13 @@ namespace Content.Server.Administration.Commands
 
             var entityManager = IoCManager.Resolve<IEntityManager>();
 
-            if (!entityManager.EntitySysManager.TryGetEntitySystem<EntityStorageSystem>(out var entstorage)) return;
             if (!entityManager.TryGetComponent<TransformComponent>(entityUid, out var transform)) return;
 
             var parent = transform.ParentUid;
 
             if (entityManager.TryGetComponent<EntityStorageComponent>(parent, out var storage))
             {
-                entstorage.Remove(entityUid, storage.Owner, storage);
+                storage.Remove(entityUid);
             }
             else
             {

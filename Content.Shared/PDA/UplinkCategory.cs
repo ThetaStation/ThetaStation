@@ -10,7 +10,6 @@ namespace Content.Shared.PDA
         Bundles,
         Tools,
         Utility,
-        Job,
         Armor,
         Pointless,
     }

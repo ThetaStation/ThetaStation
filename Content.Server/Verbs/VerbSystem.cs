@@ -91,7 +91,7 @@ namespace Content.Server.Verbs
             if (verb.ExecutionEventArgs != null)
             {
                 if (verb.EventTarget.IsValid())
-                    RaiseLocalEvent(verb.EventTarget, verb.ExecutionEventArgs, true);
+                    RaiseLocalEvent(verb.EventTarget, verb.ExecutionEventArgs);
                 else
                     RaiseLocalEvent(verb.ExecutionEventArgs);
             }

@@ -97,7 +97,7 @@ public sealed class SuspicionRuleSystem : GameRuleSystem
 
     private void OnRoundStartAttempt(RoundStartAttemptEvent ev)
     {
-        if (!RuleAdded)
+        if (!Enabled)
             return;
 
         var minPlayers = _cfg.GetCVar(CCVars.SuspicionMinPlayers);
@@ -119,7 +119,7 @@ public sealed class SuspicionRuleSystem : GameRuleSystem
 
     private void OnPlayersAssigned(RulePlayerJobsAssignedEvent ev)
     {
-        if (!RuleAdded)
+        if (!Enabled)
             return;
 
         var minTraitors = _cfg.GetCVar(CCVars.SuspicionMinTraitors);
@@ -203,7 +203,7 @@ public sealed class SuspicionRuleSystem : GameRuleSystem
         }
     }
 
-    public override void Started()
+    public override void Started(GameRuleConfiguration _)
     {
         _playerManager.PlayerStatusChanged += PlayerManagerOnPlayerStatusChanged;
 
@@ -269,7 +269,7 @@ public sealed class SuspicionRuleSystem : GameRuleSystem
         Timer.SpawnRepeating(DeadCheckDelay, CheckWinConditions, _checkTimerCancel.Token);
     }
 
-    public override void Ended()
+    public override void Ended(GameRuleConfiguration _)
     {
         _doorSystem.AccessType = SharedDoorSystem.AccessTypes.Id;
         EndTime = null;
@@ -288,7 +288,7 @@ public sealed class SuspicionRuleSystem : GameRuleSystem
 
     private void CheckWinConditions()
     {
-        if (!RuleAdded || !_cfg.GetCVar(CCVars.GameLobbyEnableWin))
+        if (!Enabled || !_cfg.GetCVar(CCVars.GameLobbyEnableWin))
             return;
 
         var traitorsAlive = 0;
@@ -457,7 +457,7 @@ public sealed class SuspicionRuleSystem : GameRuleSystem
 
     private void OnLateJoinRefresh(RefreshLateJoinAllowedEvent ev)
     {
-        if (!RuleAdded)
+        if (!Enabled)
             return;
 
         ev.Disallow();

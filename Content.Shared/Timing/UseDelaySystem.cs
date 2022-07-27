@@ -116,11 +116,6 @@ public sealed class UseDelaySystem : EntitySystem
         cooldown.CooldownEnd = component.DelayEndTime;
     }
 
-    public bool ActiveDelay(EntityUid uid, UseDelayComponent? component = null)
-    {
-        return Resolve(uid, ref component, false) && component.ActiveDelay;
-    }
-
     public void Cancel(UseDelayComponent component)
     {
         component.CancellationTokenSource?.Cancel();

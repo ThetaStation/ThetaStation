@@ -3,7 +3,7 @@ using Content.Shared.Atmos;
 namespace Content.Server.Atmos.Piping.Unary.Components
 {
     [RegisterComponent]
-    public sealed class GasCanisterComponent : Component, IGasMixtureHolder
+    public sealed class GasCanisterComponent : Component
     {
         [ViewVariables(VVAccess.ReadWrite)]
         [DataField("port")]
@@ -18,7 +18,7 @@ namespace Content.Server.Atmos.Piping.Unary.Components
 
         [ViewVariables(VVAccess.ReadWrite)]
         [DataField("gasMixture")]
-        public GasMixture Air { get; set; } = new();
+        public GasMixture Air { get; } = new();
 
         /// <summary>
         ///     Last recorded pressure, for appearance-updating purposes.

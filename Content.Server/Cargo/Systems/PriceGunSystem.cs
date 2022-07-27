@@ -1,6 +1,5 @@
-using Content.Server.Cargo.Components;
+﻿using Content.Server.Cargo.Components;
 using Content.Server.Popups;
-using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.Timing;
 using Robust.Shared.Player;
@@ -32,7 +31,7 @@ public sealed class PriceGunSystem : EntitySystem
 
         var price = _pricingSystem.GetPrice(args.Target.Value);
 
-        _popupSystem.PopupEntity(Loc.GetString("price-gun-pricing-result", ("object", Identity.Entity(args.Target.Value, EntityManager)), ("price", $"{price:F2}")), args.User, Filter.Entities(args.User));
+        _popupSystem.PopupEntity(Loc.GetString("price-gun-pricing-result", ("object", args.Target.Value), ("price", $"{price:F2}")), args.User, Filter.Entities(args.User));
         _useDelay.BeginDelay(uid, useDelay);
     }
 }

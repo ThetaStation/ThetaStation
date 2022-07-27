@@ -28,7 +28,6 @@ using Content.Server.Popups;
 using Content.Shared.Destructible;
 using static Content.Shared.Storage.SharedStorageComponent;
 using Content.Shared.ActionBlocker;
-using Content.Shared.Movement.Events;
 
 namespace Content.Server.Storage.EntitySystems
 {
@@ -40,7 +39,6 @@ namespace Content.Server.Storage.EntitySystems
         [Dependency] private readonly ContainerSystem _containerSystem = default!;
         [Dependency] private readonly DoAfterSystem _doAfterSystem = default!;
         [Dependency] private readonly EntityLookupSystem _entityLookupSystem = default!;
-        [Dependency] private readonly EntityStorageSystem _entityStorage = default!;
         [Dependency] private readonly InteractionSystem _interactionSystem = default!;
         [Dependency] private readonly PopupSystem _popupSystem = default!;
         [Dependency] private readonly SharedHandsSystem _sharedHandsSystem = default!;
@@ -67,7 +65,7 @@ namespace Content.Server.Storage.EntitySystems
             SubscribeLocalEvent<ServerStorageComponent, EntRemovedFromContainerMessage>(OnStorageItemRemoved);
 
             SubscribeLocalEvent<EntityStorageComponent, GetVerbsEvent<InteractionVerb>>(AddToggleOpenVerb);
-            SubscribeLocalEvent<EntityStorageComponent, ContainerRelayMovementEntityEvent>(OnRelayMovement);
+            SubscribeLocalEvent<EntityStorageComponent, RelayMovementEntityEvent>(OnRelayMovement);
 
             SubscribeLocalEvent<StorageFillComponent, MapInitEvent>(OnStorageFillMapInit);
         }
@@ -84,16 +82,17 @@ namespace Content.Server.Storage.EntitySystems
             UpdateStorageUI(uid, storageComp);
         }
 
-        private void OnRelayMovement(EntityUid uid, EntityStorageComponent component, ref ContainerRelayMovementEntityEvent args)
+        private void OnRelayMovement(EntityUid uid, EntityStorageComponent component, RelayMovementEntityEvent args)
         {
             if (!EntityManager.HasComponent<HandsComponent>(args.Entity))
                 return;
 
-            if (_gameTiming.CurTime < component.LastInternalOpenAttempt + EntityStorageComponent.InternalOpenAttemptDelay)
+            if (_gameTiming.CurTime <
+                component.LastInternalOpenAttempt + EntityStorageComponent.InternalOpenAttemptDelay)
                 return;
 
             component.LastInternalOpenAttempt = _gameTiming.CurTime;
-            _entityStorage.TryOpenStorage(args.Entity, component.Owner);
+            component.TryOpenStorage(args.Entity);
         }
 
 
@@ -102,7 +101,7 @@ namespace Content.Server.Storage.EntitySystems
             if (!args.CanAccess || !args.CanInteract)
                 return;
 
-            if (!_entityStorage.CanOpen(args.User, args.Target, silent: true, component))
+            if (!component.CanOpen(args.User, silent: true))
                 return;
 
             InteractionVerb verb = new();
@@ -116,7 +115,7 @@ namespace Content.Server.Storage.EntitySystems
                 verb.Text = Loc.GetString("verb-common-open");
                 verb.IconTexture = "/Textures/Interface/VerbIcons/open.svg.192dpi.png";
             }
-            verb.Act = () => _entityStorage.ToggleOpen(args.User, args.Target, component);
+            verb.Act = () => component.ToggleOpen(args.User);
             args.Verbs.Add(verb);
         }
 
@@ -474,49 +473,29 @@ namespace Content.Server.Storage.EntitySystems
         ///     Verifies if an entity can be stored and if it fits
         /// </summary>
         /// <param name="entity">The entity to check</param>
-        /// <param name="reason">If returning false, the reason displayed to the player</param>
         /// <returns>true if it can be inserted, false otherwise</returns>
-        public bool CanInsert(EntityUid uid, EntityUid insertEnt, out string? reason, ServerStorageComponent? storageComp = null)
+        public bool CanInsert(EntityUid uid, EntityUid insertEnt, ServerStorageComponent? storageComp = null)
         {
             if (!Resolve(uid, ref storageComp))
-            {
-                reason = null;
                 return false;
-            }
 
             if (TryComp(insertEnt, out ServerStorageComponent? storage) &&
                 storage.StorageCapacityMax >= storageComp.StorageCapacityMax)
-            {
-                reason = "comp-storage-insufficient-capacity";
                 return false;
-            }
 
             if (TryComp(insertEnt, out SharedItemComponent? itemComp) &&
                 itemComp.Size > storageComp.StorageCapacityMax - storageComp.StorageUsed)
-            {
-                reason = "comp-storage-insufficient-capacity";
                 return false;
-            }
 
             if (storageComp.Whitelist?.IsValid(insertEnt, EntityManager) == false)
-            {
-                reason = "comp-storage-invalid-container";
                 return false;
-            }
 
             if (storageComp.Blacklist?.IsValid(insertEnt, EntityManager) == true)
-            {
-                reason = "comp-storage-invalid-container";
                 return false;
-            }
 
             if (TryComp(insertEnt, out TransformComponent? transformComp) && transformComp.Anchored)
-            {
-                reason = "comp-storage-anchored-failure";
                 return false;
-            }
 
-            reason = null;
             return true;
         }
 
@@ -530,7 +509,7 @@ namespace Content.Server.Storage.EntitySystems
             if (!Resolve(uid, ref storageComp))
                 return false;
 
-            if (!CanInsert(uid, insertEnt, out _, storageComp) || storageComp.Storage?.Insert(insertEnt) == false)
+            if (!CanInsert(uid, insertEnt, storageComp) || storageComp.Storage?.Insert(insertEnt) == false)
                 return false;
 
             if (storageComp.StorageInsertSound is not null)
@@ -570,9 +549,9 @@ namespace Content.Server.Storage.EntitySystems
 
             var toInsert = hands.ActiveHandEntity;
 
-            if (!CanInsert(uid, toInsert.Value, out var reason, storageComp) || !_sharedHandsSystem.TryDrop(player, toInsert.Value, handsComp: hands))
+            if (!CanInsert(uid, toInsert.Value, storageComp) || !_sharedHandsSystem.TryDrop(player, toInsert.Value, handsComp: hands))
             {
-                Popup(uid, player, reason ?? "comp-storage-cant-insert", storageComp);
+                Popup(uid, player, "comp-storage-cant-insert", storageComp);
                 return false;
             }
 

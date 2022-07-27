@@ -35,7 +35,6 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: LandMine
-  - type: TriggerOnStepTrigger
   - type: StepTrigger
     requiredTriggeredSpeed: 0
 
@@ -45,7 +44,6 @@
   id: LandMineKick
   components:
   - type: GhostKickUserOnTrigger
-  - type: DeleteOnTrigger
 
 - type: entity
   name: modular mine
@@ -58,6 +56,7 @@
     graph: ModularMineGraph
     node: emptyCase
   - type: LandMine
+    deleteOnActivate: false
 
 - type: entity
   name: explosive mine
@@ -71,4 +70,3 @@
     intensitySlope: 3
     totalIntensity: 120 # about a ~4 tile radius
     canCreateVacuum: false
-  - type: DeleteOnTrigger

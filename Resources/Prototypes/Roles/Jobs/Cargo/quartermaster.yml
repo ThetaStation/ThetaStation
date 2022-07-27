@@ -1,12 +1,12 @@
 - type: job
   id: Quartermaster
-  name: job-name-qm
+  name: "quartermaster"
   weight: 10
   startingGear: QuartermasterGear
   departments:
   - Cargo
   icon: "QuarterMaster"
-  supervisors: job-supervisors-hop
+  supervisors: "the head of personnel"
   canBeAntag: false
   access:
   - Cargo
@@ -14,7 +14,6 @@
   - Quartermaster
   - Maintenance
   - External
-  - Command
 
 - type: startingGear
   id: QuartermasterGear
@@ -24,7 +23,7 @@
     back: ClothingBackpackFilled
     shoes: ClothingShoesColorBrown
     id: QuartermasterPDA
-    ears: ClothingHeadsetQM
+    ears: ClothingHeadsetCargo
   innerclothingskirt: ClothingUniformJumpskirtQM
   satchel: ClothingBackpackSatchelFilled
   duffelbag: ClothingBackpackDuffelFilled

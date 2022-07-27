@@ -6,7 +6,6 @@ using Robust.Shared.Containers;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 using Robust.Shared.Prototypes;
 using Content.Shared.MachineLinking;
-using System.Threading;
 
 namespace Content.Server.Light.Components
 {
@@ -67,13 +66,5 @@ namespace Content.Server.Light.Components
 
         [DataField("togglePort", customTypeSerializer: typeof(PrototypeIdSerializer<ReceiverPortPrototype>))]
         public string TogglePort = "Toggle";
-
-        public CancellationTokenSource? CancelToken;
-
-        /// <summary>
-        /// How long it takes to eject a bulb from this
-        /// </summary>
-        [DataField("ejectBulbDelay")]
-        public float EjectBulbDelay = 2;
     }
 }

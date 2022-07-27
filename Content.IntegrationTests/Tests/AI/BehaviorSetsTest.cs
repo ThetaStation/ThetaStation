@@ -12,13 +12,13 @@ namespace Content.IntegrationTests.Tests.AI
 {
     [TestFixture]
     [TestOf(typeof(BehaviorSetPrototype))]
-    public sealed class BehaviorSetsTest
+    public sealed class BehaviorSetsTest : ContentIntegrationTest
     {
         [Test]
         public async Task TestBehaviorSets()
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true});
-            var server = pairTracker.Pair.Server;
+            var server = StartServer();
+            await server.WaitIdleAsync();
 
             var protoManager = server.ResolveDependency<IPrototypeManager>();
             var reflectionManager = server.ResolveDependency<IReflectionManager>();
@@ -56,7 +56,6 @@ namespace Content.IntegrationTests.Tests.AI
                     }
                 }
             });
-            await pairTracker.CleanReturnAsync();
         }
     }
 }

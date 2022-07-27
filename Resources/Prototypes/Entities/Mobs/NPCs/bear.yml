@@ -4,9 +4,7 @@
   parent: SimpleSpaceMobBase
   description: It looks friendly. Why don't you give it a hug?
   components:
-  - type: InputMover
-  - type: MobMover
-  - type: UtilityNPC
+  - type: UtilityAI
     behaviorSets:
     - Idle
     - UnarmedAttackHostiles
@@ -24,7 +22,7 @@
     - shape:
         !type:PhysShapeCircle
         radius: 0.5
-      mass: 320
+      mass: 100
       mask:
       - MobMask
       layer:
@@ -32,17 +30,14 @@
   - type: MovementIgnoreGravity
   - type: MobState
     thresholds:
-      0: Alive
-      150: Dead
+      0: !type:NormalMobState {}
+      150: !type:DeadMobState {}
   - type: Appearance
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: bear
-      Critical:
-        Base: bear_dead
-      Dead:
-        Base: bear_dead
+    visuals:
+    - type: DamageStateVisualizer
+      normal: bear
+      crit: bear_dead
+      dead: bear_dead
   - type: Butcherable
     spawned:
     - id: FoodMeatBear
@@ -69,20 +64,3 @@
         Brute: 15
   - type: ReplacementAccent
     accent: genericAggressive
-  - type: GhostTakeoverAvailable
-    prob: 0.05
-    name: space bear
-    description: |
-      You're a bear! Do bear things.
-
-- type: entity
-  id: MobBearSpaceSalvage
-  parent: MobBearSpace
-  suffix: "Salvage Ruleset"
-  components:
-  - type: GhostTakeoverAvailable
-    prob: 0.05
-    name: space bear on salvage wreck
-    description: |
-      Defend the loot inside the salvage wreck!
-  - type: SalvageMobRestrictions

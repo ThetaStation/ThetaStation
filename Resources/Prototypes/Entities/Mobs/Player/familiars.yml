@@ -22,7 +22,6 @@
   - type: Mind
     showExamineInfo: true
   - type: Alerts
-  - type: Familiar
 
 - type: entity
   name: Cerberus
@@ -43,9 +42,7 @@
       types:
         Piercing: 8
         Slash: 7
-  - type: InputMover
-  - type: MobMover
-  - type: UtilityNPC
+  - type: UtilityAI
     behaviorSets:
     - Idle
   - type: AiFactionTag
@@ -57,9 +54,9 @@
     interactFailureString: petting-failure-corrupted-corgi
   - type: MobState
     thresholds:
-      0: Alive
-      80: Critical
-      160: Dead
+      0: !type:NormalMobState {}
+      80: !type:CriticalMobState {}
+      160: !type:DeadMobState {}
   - type: Grammar
     attributes:
       gender: male
@@ -72,4 +69,3 @@
     - Chapel
   - type: Mind
     showExamineInfo: true
-  - type: Familiar

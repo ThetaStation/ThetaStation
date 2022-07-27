@@ -14,13 +14,21 @@ namespace Content.IntegrationTests.Tests.Administration.Logs;
 
 [TestFixture]
 [TestOf(typeof(AdminLogSystem))]
-public sealed class QueryTests
+public sealed class QueryTests : ContentIntegrationTest
 {
     [Test]
     public async Task QuerySingleLog()
     {
-        await using var pairTracker = await PoolManager.GetServerClient();
-        var server = pairTracker.Pair.Server;
+        var serverOptions = new ServerContentIntegrationOption
+        {
+            CVarOverrides =
+            {
+                [CCVars.AdminLogsQueueSendDelay.Name] = "0"
+            }
+        };
+        var (client, server) = await StartConnectedServerClientPair(serverOptions: serverOptions);
+
+        await Task.WhenAll(client.WaitIdleAsync(), server.WaitIdleAsync());
 
         var sSystems = server.ResolveDependency<IEntitySystemManager>();
         var sPlayers = server.ResolveDependency<IPlayerManager>();
@@ -49,7 +57,7 @@ public sealed class QueryTests
             AnyPlayers = new[] {player.UserId.UserId}
         };
 
-        await PoolManager.WaitUntil(server, async () =>
+        await WaitUntil(server, async () =>
         {
             foreach (var _ in await sAdminLogSystem.All(filter))
             {
@@ -58,7 +66,5 @@ public sealed class QueryTests
 
             return false;
         });
-
-        await pairTracker.CleanReturnAsync();
     }
 }

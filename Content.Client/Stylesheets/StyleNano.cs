@@ -74,13 +74,7 @@ namespace Content.Client.Stylesheets
         public const string StyleClassLabelSecondaryColor = "LabelSecondaryColor";
         public const string StyleClassLabelBig = "LabelBig";
         public const string StyleClassButtonBig = "ButtonBig";
-
-        public const string StyleClassPopupMessageSmall = "PopupMessageSmall";
-        public const string StyleClassPopupMessageSmallCaution = "PopupMessageSmallCaution";
-        public const string StyleClassPopupMessageMedium = "PopupMessageMedium";
-        public const string StyleClassPopupMessageMediumCaution = "PopupMessageMediumCaution";
-        public const string StyleClassPopupMessageLarge = "PopupMessageLarge";
-        public const string StyleClassPopupMessageLargeCaution = "PopupMessageLargeCaution";
+        public const string StyleClassPopupMessage = "PopupMessage";
 
         public static readonly Color NanoGold = Color.FromHex("#A88B5E");
         public static readonly Color GoodGreenFore = Color.FromHex("#31843E");
@@ -140,8 +134,6 @@ namespace Content.Client.Stylesheets
             var notoSansItalic12 = resCache.NotoStack(variation: "Italic", size: 12);
             var notoSansBold12 = resCache.NotoStack(variation: "Bold", size: 12);
             var notoSansBoldItalic12 = resCache.NotoStack(variation: "BoldItalic", size: 12);
-            var notoSansBoldItalic14 = resCache.NotoStack(variation: "BoldItalic", size: 14);
-            var notoSansBoldItalic16 = resCache.NotoStack(variation: "BoldItalic", size: 16);
             var notoSansDisplayBold14 = resCache.NotoStack(variation: "Bold", display: true, size: 14);
             var notoSansDisplayBold16 = resCache.NotoStack(variation: "Bold", display: true, size: 16);
             var notoSans15 = resCache.NotoStack(variation: "Regular", size: 15);
@@ -1041,46 +1033,11 @@ namespace Content.Client.Stylesheets
                     }),
 
                 // Popup messages
-                new StyleRule(new SelectorElement(typeof(Label), new[] {StyleClassPopupMessageSmall}, null, null),
+                new StyleRule(new SelectorElement(typeof(Label), new[] {StyleClassPopupMessage}, null, null),
                     new[]
                     {
                         new StyleProperty("font", notoSansItalic10),
-                        new StyleProperty("font-color", Color.White),
-                    }),
-
-                new StyleRule(new SelectorElement(typeof(Label), new[] {StyleClassPopupMessageSmallCaution}, null, null),
-                    new[]
-                    {
-                        new StyleProperty("font", notoSansItalic10),
-                        new StyleProperty("font-color", Color.Red),
-                    }),
-
-                new StyleRule(new SelectorElement(typeof(Label), new[] {StyleClassPopupMessageMedium}, null, null),
-                    new[]
-                    {
-                        new StyleProperty("font", notoSansItalic12),
                         new StyleProperty("font-color", Color.LightGray),
-                    }),
-
-                new StyleRule(new SelectorElement(typeof(Label), new[] {StyleClassPopupMessageMediumCaution}, null, null),
-                    new[]
-                    {
-                        new StyleProperty("font", notoSansItalic12),
-                        new StyleProperty("font-color", Color.Red),
-                    }),
-
-                new StyleRule(new SelectorElement(typeof(Label), new[] {StyleClassPopupMessageLarge}, null, null),
-                    new[]
-                    {
-                        new StyleProperty("font", notoSansBoldItalic14),
-                        new StyleProperty("font-color", Color.LightGray),
-                    }),
-
-                new StyleRule(new SelectorElement(typeof(Label), new[] {StyleClassPopupMessageLargeCaution}, null, null),
-                    new[]
-                    {
-                        new StyleProperty("font", notoSansBoldItalic14),
-                        new StyleProperty("font-color", Color.Red),
                     }),
 
                 //APC and SMES power state label colors

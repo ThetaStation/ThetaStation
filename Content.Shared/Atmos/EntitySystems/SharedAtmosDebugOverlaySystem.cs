@@ -16,11 +16,10 @@ namespace Content.Shared.Atmos.EntitySystems
             public readonly float[] Moles;
             public readonly AtmosDirection PressureDirection;
             public readonly AtmosDirection LastPressureDirection;
-            public readonly int InExcitedGroup;
+            public readonly bool InExcitedGroup;
             public readonly AtmosDirection BlockDirection;
-            public readonly bool IsSpace;
 
-            public AtmosDebugOverlayData(float temperature, float[] moles, AtmosDirection pressureDirection, AtmosDirection lastPressureDirection, int inExcited, AtmosDirection blockDirection, bool isSpace)
+            public AtmosDebugOverlayData(float temperature, float[] moles, AtmosDirection pressureDirection, AtmosDirection lastPressureDirection, bool inExcited, AtmosDirection blockDirection)
             {
                 Temperature = temperature;
                 Moles = moles;
@@ -28,7 +27,6 @@ namespace Content.Shared.Atmos.EntitySystems
                 LastPressureDirection = lastPressureDirection;
                 InExcitedGroup = inExcited;
                 BlockDirection = blockDirection;
-                IsSpace = isSpace;
             }
         }
 

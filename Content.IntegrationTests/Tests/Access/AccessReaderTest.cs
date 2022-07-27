@@ -9,14 +9,12 @@ namespace Content.IntegrationTests.Tests.Access
 {
     [TestFixture]
     [TestOf(typeof(AccessReaderComponent))]
-    public sealed class AccessReaderTest
+    public sealed class AccessReaderTest : ContentIntegrationTest
     {
         [Test]
         public async Task TestTags()
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true});
-            var server = pairTracker.Pair.Server;
-
+            var server = StartServer();
             await server.WaitAssertion(() =>
             {
                 var system = EntitySystem.Get<AccessReaderSystem>();
@@ -71,7 +69,6 @@ namespace Content.IntegrationTests.Tests.Access
                 Assert.That(system.IsAllowed(new[] { "A", "B" }, reader), Is.False);
                 Assert.That(system.IsAllowed(new string[] { }, reader), Is.False);
             });
-            await pairTracker.CleanReturnAsync();
         }
 
     }

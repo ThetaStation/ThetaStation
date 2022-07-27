@@ -1,7 +1,6 @@
 ﻿using Content.Shared.Damage;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
-using Content.Shared.IdentityManagement;
 using Content.Shared.Verbs;
 using Robust.Shared.Utility;
 
@@ -61,7 +60,7 @@ public sealed class HealthExaminableSystem : EntitySystem
             foreach (var threshold in component.Thresholds)
             {
                 var str = $"health-examinable-{component.LocPrefix}-{type}-{threshold}";
-                var tempLocStr = Loc.GetString($"health-examinable-{component.LocPrefix}-{type}-{threshold}", ("target", Identity.Entity(uid, EntityManager)));
+                var tempLocStr = Loc.GetString($"health-examinable-{component.LocPrefix}-{type}-{threshold}", ("target", uid));
 
                 // i.e., this string doesn't exist, because theres nothing for that threshold
                 if (tempLocStr == str)
@@ -94,7 +93,7 @@ public sealed class HealthExaminableSystem : EntitySystem
         }
 
         // Anything else want to add on to this?
-        RaiseLocalEvent(uid, new HealthBeingExaminedEvent(msg), true);
+        RaiseLocalEvent(uid, new HealthBeingExaminedEvent(msg));
 
         return msg;
     }

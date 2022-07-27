@@ -4,12 +4,11 @@ using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Content.Shared.Sound;
-using Content.Server.Chemistry.EntitySystems;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Server.Body.Components
 {
-    [RegisterComponent, Access(typeof(BloodstreamSystem), (typeof(ChemistrySystem)))]
+    [RegisterComponent, Access(typeof(BloodstreamSystem))]
     public sealed class BloodstreamComponent : Component
     {
         public static string DefaultChemicalsSolutionName = "chemicals";

@@ -2,10 +2,6 @@ using Content.Server.Atmos.Components;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Doors.Systems;
 using Content.Shared.Doors.Components;
-using Robust.Server.GameObjects;
-using Robust.Shared.GameObjects;
-using Robust.Shared.IoC;
-using Robust.Shared.Serialization.Manager.Attributes;
 
 namespace Content.Server.Doors.Components
 {
@@ -46,20 +42,12 @@ namespace Content.Server.Doors.Components
 
         public bool IsHoldingPressure(float threshold = 20)
         {
-            var transform = _entMan.GetComponent<TransformComponent>(Owner);
-
-            if (transform.GridUid is not {} gridUid)
-                return false;
-
-            var atmosphereSystem = _entMan.EntitySysManager.GetEntitySystem<AtmosphereSystem>();
-            var transformSystem = _entMan.EntitySysManager.GetEntitySystem<TransformSystem>();
-
-            var position = transformSystem.GetGridOrMapTilePosition(Owner, transform);
+            var atmosphereSystem = EntitySystem.Get<AtmosphereSystem>();
 
             var minMoles = float.MaxValue;
             var maxMoles = 0f;
 
-            foreach (var adjacent in atmosphereSystem.GetAdjacentTileMixtures(gridUid, position))
+            foreach (var adjacent in atmosphereSystem.GetAdjacentTileMixtures(_entMan.GetComponent<TransformComponent>(Owner).Coordinates))
             {
                 var moles = adjacent.TotalMoles;
                 if (moles < minMoles)
@@ -73,25 +61,20 @@ namespace Content.Server.Doors.Components
 
         public bool IsHoldingFire()
         {
-            var atmosphereSystem = _entMan.EntitySysManager.GetEntitySystem<AtmosphereSystem>();
-            var transformSystem = _entMan.EntitySysManager.GetEntitySystem<TransformSystem>();
+            var atmosphereSystem = EntitySystem.Get<AtmosphereSystem>();
 
-            var transform = _entMan.GetComponent<TransformComponent>(Owner);
-            var position = transformSystem.GetGridOrMapTilePosition(Owner, transform);
-
-            // No grid, no fun.
-            if (transform.GridUid is not {} gridUid)
+            if (!atmosphereSystem.TryGetGridAndTile(_entMan.GetComponent<TransformComponent>(Owner).Coordinates, out var tuple))
                 return false;
 
-            if (atmosphereSystem.GetTileMixture(gridUid, null, position) == null)
+            if (atmosphereSystem.GetTileMixture(tuple.Value.Grid, tuple.Value.Tile) == null)
                 return false;
 
-            if (atmosphereSystem.IsHotspotActive(gridUid, position))
+            if (atmosphereSystem.IsHotspotActive(tuple.Value.Grid, tuple.Value.Tile))
                 return true;
 
-            foreach (var adjacent in atmosphereSystem.GetAdjacentTiles(gridUid, position))
+            foreach (var adjacent in atmosphereSystem.GetAdjacentTiles(_entMan.GetComponent<TransformComponent>(Owner).Coordinates))
             {
-                if (atmosphereSystem.IsHotspotActive(gridUid, adjacent))
+                if (atmosphereSystem.IsHotspotActive(tuple.Value.Grid, adjacent))
                     return true;
             }
 

@@ -1,5 +1,4 @@
 using System.Linq;
-using Content.Server.Damage.Systems;
 using Content.Server.Projectiles.Components;
 using Content.Server.Weapon.Melee;
 using Content.Server.Weapon.Ranged.Components;
@@ -7,6 +6,7 @@ using Content.Shared.Audio;
 using Content.Shared.Damage;
 using Content.Shared.Database;
 using Content.Shared.Sound;
+using Content.Shared.Throwing;
 using Content.Shared.Weapons.Ranged;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
@@ -15,6 +15,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.Map;
 using Robust.Shared.Physics;
 using Robust.Shared.Player;
+using Robust.Shared.Random;
 using Robust.Shared.Utility;
 using SharedGunSystem = Content.Shared.Weapons.Ranged.Systems.SharedGunSystem;
 
@@ -22,7 +23,7 @@ namespace Content.Server.Weapon.Ranged.Systems;
 
 public sealed partial class GunSystem : SharedGunSystem
 {
-    [Dependency] private readonly StaminaSystem _stamina = default!;
+    [Dependency] private readonly EffectSystem _effects = default!;
 
     public const float DamagePitchVariation = MeleeWeaponSystem.DamagePitchVariation;
 
@@ -115,9 +116,6 @@ public sealed partial class GunSystem : SharedGunSystem
                         var distance = result.Distance;
                         FireEffects(fromCoordinates, distance, entityDirection.ToAngle(), hitscan, result.HitEntity);
 
-                        if (hitscan.StaminaDamage > 0f)
-                            _stamina.TakeStaminaDamage(result.HitEntity, hitscan.StaminaDamage);
-
                         var dmg = hitscan.Damage;
 
                         if (dmg != null)
@@ -156,7 +154,7 @@ public sealed partial class GunSystem : SharedGunSystem
         }, false);
     }
 
-    public void ShootProjectile(EntityUid uid, Vector2 direction, EntityUid? user = null)
+    private void ShootProjectile(EntityUid uid, Vector2 direction, EntityUid? user = null)
     {
         var physics = EnsureComp<PhysicsComponent>(uid);
         physics.BodyStatus = BodyStatus.InAir;
@@ -165,7 +163,7 @@ public sealed partial class GunSystem : SharedGunSystem
         if (user != null)
         {
             var projectile = EnsureComp<ProjectileComponent>(uid);
-            Projectiles.SetShooter(projectile, user.Value);
+            projectile.IgnoreEntity(user.Value);
         }
 
         Transform(uid).WorldRotation = direction.ToWorldAngle();
@@ -214,14 +212,17 @@ public sealed partial class GunSystem : SharedGunSystem
 
     protected override void Popup(string message, EntityUid? uid, EntityUid? user) {}
 
-    protected override void CreateEffect(EntityUid uid, MuzzleFlashEvent message, EntityUid? user = null)
+    protected override void CreateEffect(EffectSystemMessage message, EntityUid? user = null)
     {
-        var filter = Filter.Pvs(uid, entityManager: EntityManager);
-
+        // TODO: Fucking bad
         if (TryComp<ActorComponent>(user, out var actor))
-            filter.RemovePlayer(actor.PlayerSession);
-
-        RaiseNetworkEvent(message, filter);
+        {
+            _effects.CreateParticle(message, actor.PlayerSession);
+        }
+        else
+        {
+            _effects.CreateParticle(message);
+        }
     }
 
     public void PlayImpactSound(EntityUid otherEntity, DamageSpecifier? modifiedDamage, SoundSpecifier? weaponSound, bool forceWeaponSound)

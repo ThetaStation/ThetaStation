@@ -24,19 +24,17 @@
     - shape:
         !type:PhysShapeCircle
         radius: 0.25
-      mass: 2
+      mass: 5
       mask:
       - FlyingMobMask
       layer:
       - FlyingMobLayer
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: bat
-      Critical:
-        Base: dead
-      Dead:
-        Base: dead
+  - type: Appearance
+    visuals:
+    - type: DamageStateVisualizer
+      normal: bat
+      crit: dead
+      dead: dead
   - type: Butcherable
     spawned:
     - id: FoodMeat
@@ -88,34 +86,28 @@
     - shape:
         !type:PhysShapeCircle
         radius: 0.1
-      mass: 1
+      mass: 5
       mask:
       - FlyingMobMask
       layer:
       - FlyingMobLayer
   - type: MobState
     thresholds:
-      0: Alive
-      5: Critical
-      10: Dead
+      0: !type:NormalMobState {}
+      5: !type:CriticalMobState {}
+      10: !type:DeadMobState {}
   - type: Appearance
-  - type: DamageStateVisuals
-    rotate: true
-    states:
-      Alive:
-        Base: 0
-      Critical:
-        Base: dead
-      Dead:
-        Base: dead
+    visuals:
+    - type: DamageStateVisualizer
+      normal: 0
+      crit: dead
+      dead: dead
   - type: Tag
     tags:
     - Bee
   - type: Bloodstream
     bloodMaxVolume: 0.1
   - type: NoSlip
-  - type: MobPrice
-    price: 50
 
 - type: entity
   name: bee
@@ -137,9 +129,7 @@
       types:
         Poison: 2
         Piercing: 1
-  - type: InputMover
-  - type: MobMover
-  - type: UtilityNPC
+  - type: UtilityAI
     behaviorSets:
     - UnarmedAttackHostiles
     - Idle
@@ -162,25 +152,12 @@
     - map: ["enum.DamageStateVisualLayers.Base"]
       state: chicken-0
       sprite: Mobs/Animals/chicken.rsi
-  - type: Fixtures
-    fixtures:
-    - shape:
-        !type:PhysShapeCircle
-        radius: 0.35
-      mass: 3
-      mask:
-      - MobMask
-      layer:
-      - MobLayer
   - type: Appearance
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: chicken-0
-      Critical:
-        Base: dead-0
-      Dead:
-        Base: dead-0
+    visuals:
+    - type: DamageStateVisualizer
+      normal: chicken-0
+      crit: dead-0
+      dead: dead-0
   - type: Butcherable
     spawned:
     - id: FoodMeatChicken
@@ -193,13 +170,6 @@
       path: /Audio/Animals/chicken_cluck_happy.ogg
   - type: Bloodstream
     bloodMaxVolume: 100
-  - type: EggLayer
-    eggSpawn:
-    - id: FoodEgg
-  - type: ReplacementAccent
-    accent: chicken
-  - type: SentienceTarget
-    flavorKind: organic
 
 - type: entity
   name: mallard duck #Quack
@@ -213,25 +183,12 @@
     - map: ["enum.DamageStateVisualLayers.Base"]
       state: duck-0
       sprite: Mobs/Animals/duck.rsi
-  - type: Fixtures
-    fixtures:
-    - shape:
-        !type:PhysShapeCircle
-        radius: 0.35
-      mass: 2 #They actually are pretty light, I looked it up
-      mask:
-      - MobMask
-      layer:
-      - MobLayer
   - type: Appearance
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: duck-0
-      Critical:
-        Base: dead-0
-      Dead:
-        Base: dead-0
+    visuals:
+    - type: DamageStateVisualizer
+      normal: duck-0
+      crit: dead-0
+      dead: dead-0
   - type: Butcherable
     spawned:
     - id: FoodMeatDuck
@@ -244,17 +201,10 @@
       path: /Audio/Animals/duck_quack_happy.ogg
   - type: Bloodstream
     bloodMaxVolume: 100
-  - type: EggLayer
-    eggSpawn:
-    - id: FoodEgg
-  - type: ReplacementAccent
-    accent: duck
-  - type: SentienceTarget
-    flavorKind: organic
 
 - type: entity
   name: white duck #Quack
-  parent: MobDuckMallard
+  parent: SimpleMobBase
   id: MobDuckWhite
   description: An adorable white duck, it's fluffy and soft!
   components:
@@ -265,18 +215,27 @@
       state: duck-1
       sprite: Mobs/Animals/duck.rsi
   - type: Appearance
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: duck-1
-      Critical:
-        Base: dead-1
-      Dead:
-        Base: dead-1
+    visuals:
+    - type: DamageStateVisualizer
+      normal: duck-1
+      crit: dead-1
+      dead: dead-1
+  - type: Butcherable
+    spawned:
+    - id: FoodMeatDuck
+      amount: 1
+  - type: InteractionPopup
+    successChance: 0.9
+    interactSuccessString: petting-success-bird
+    interactFailureString: petting-failure-generic
+    interactSuccessSound:
+      path: /Audio/Animals/duck_quack_happy.ogg
+  - type: Bloodstream
+    bloodMaxVolume: 100
 
 - type: entity
   name: brown duck #Quack
-  parent: MobDuckMallard
+  parent: SimpleMobBase
   id: MobDuckBrown
   description: An adorable brown duck, it's fluffy and soft!
   components:
@@ -287,14 +246,23 @@
       state: duck-2
       sprite: Mobs/Animals/duck.rsi
   - type: Appearance
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: duck-2
-      Critical:
-        Base: dead-2
-      Dead:
-        Base: dead-2
+    visuals:
+    - type: DamageStateVisualizer
+      normal: duck-2
+      crit: dead-2
+      dead: dead-2
+  - type: Butcherable
+    spawned:
+    - id: FoodMeatDuck
+      amount: 1
+  - type: InteractionPopup
+    successChance: 0.9
+    interactSuccessString: petting-success-bird
+    interactFailureString: petting-failure-generic
+    interactSuccessSound:
+      path: /Audio/Animals/duck_quack_happy.ogg
+  - type: Bloodstream
+    bloodMaxVolume: 100
 
 - type: entity
   name: butterfly
@@ -317,16 +285,16 @@
     - shape:
         !type:PhysShapeCircle
         radius: 0.2
-      mass: 1
+      mass: 5
       mask:
       - FlyingMobMask
       layer:
       - FlyingMobLayer
   - type: MobState
     thresholds:
-      0: Alive
-      5: Critical
-      10: Dead
+      0: !type:NormalMobState {}
+      5: !type:CriticalMobState {}
+      10: !type:DeadMobState {}
   - type: RandomSpriteColor
     state: butterfly
     colors:
@@ -338,19 +306,14 @@
       cyan: "#18a2d5"
       yellow: "#d58c18"
   - type: Appearance
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: butterfly
-      Critical:
-        Base: dead
-      Dead:
-        Base: dead
+    visuals:
+    - type: DamageStateVisualizer
+      normal: butterfly
+      crit: dead
+      dead: dead
   - type: Bloodstream
     bloodMaxVolume: 0.1
   - type: NoSlip
-  - type: MobPrice
-    price: 50
 
 - type: entity
   name: cow
@@ -370,20 +333,17 @@
     - shape:
         !type:PhysShapeCircle
         radius: 0.40
-      mass: 700
+      mass: 45
       mask:
       - MobMask
       layer:
       - MobLayer
   - type: Appearance
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: cow
-      Critical:
-        Base: dead
-      Dead:
-        Base: dead
+    visuals:
+    - type: DamageStateVisualizer
+      normal: cow
+      crit: dead
+      dead: dead
   - type: SolutionContainerManager
     solutions:
       udder:
@@ -410,8 +370,6 @@
     interactFailureString: petting-failure-generic
     interactSuccessSound:
       path: /Audio/Animals/cow_moo.ogg
-  - type: Perishable
-    molsPerSecondPerUnitMass: 0.0015
 
 
 - type: entity
@@ -432,20 +390,17 @@
     - shape:
         !type:PhysShapeCircle
         radius: 0.35
-      mass: 2
+      mass: 5
       mask:
       - MobMask
       layer:
       - MobLayer
   - type: Appearance
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: crab
-      Critical:
-        Base: dead
-      Dead:
-        Base: dead
+    visuals:
+    - type: DamageStateVisualizer
+      normal: crab
+      crit: dead
+      dead: dead
   - type: Butcherable
     spawned:
     - id: FoodMeatCrab
@@ -469,25 +424,12 @@
     - map: ["enum.DamageStateVisualLayers.Base"]
       state: goat
       sprite: Mobs/Animals/goat.rsi
-  - type: Fixtures
-    fixtures:
-    - shape:
-        !type:PhysShapeCircle
-        radius: 0.35
-      mass: 60
-      mask:
-      - MobMask
-      layer:
-      - MobLayer
   - type: Appearance
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: goat
-      Critical:
-        Base: dead
-      Dead:
-        Base: dead
+    visuals:
+    - type: DamageStateVisualizer
+      normal: goat
+      crit: dead
+      dead: dead
   - type: SolutionContainerManager
     solutions:
       udder:
@@ -528,24 +470,11 @@
       state: goose
       sprite: Mobs/Animals/goose.rsi
   - type: Appearance
-  - type: Fixtures
-    fixtures:
-    - shape:
-        !type:PhysShapeCircle
-        radius: 0.35
-      mass: 10
-      mask:
-      - MobMask
-      layer:
-      - MobLayer
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: goose
-      Critical:
-        Base: dead
-      Dead:
-        Base: dead
+    visuals:
+    - type: DamageStateVisualizer
+      normal: goose
+      crit: dead
+      dead: dead
   - type: Butcherable
     spawned:
     - id: FoodMeatChicken
@@ -578,20 +507,17 @@
     - shape:
         !type:PhysShapeCircle
         radius: 0.48
-      mass: 150
+      mass: 60
       mask:
       - MobMask
       layer:
       - MobLayer
   - type: Appearance
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: crawling
-      Critical:
-        Base: dead
-      Dead:
-        Base: dead
+    visuals:
+    - type: DamageStateVisualizer
+      normal: crawling
+      crit: dead
+      dead: dead
   - type: Butcherable
     spawned:
     - id: FoodMeat
@@ -615,27 +541,24 @@
       - map: ["enum.DamageStateVisualLayers.Base"]
         state: kangaroo
         sprite: Mobs/Animals/kangaroo.rsi
+  - type: Physics
   - type: Fixtures
     fixtures:
     - shape:
         !type:PhysShapeCircle
-        radius: 0.35
-      mass: 50
+        radius: 0.25
+      mass: 60
       mask:
       - MobMask
       layer:
       - MobLayer
-  - type: Physics
   - type: Appearance
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: kangaroo
-      # SKIPPY NO!
-      Critical:
-        Base: kangaroo-dead
-      Dead:
-        Base: kangaroo-dead
+    visuals:
+      - type: DamageStateVisualizer
+        normal: kangaroo
+        # SKIPPY NO!
+        crit: kangaroo-dead
+        dead: kangaroo-dead
   - type: Puller
 
 - type: entity
@@ -653,14 +576,11 @@
         state: kangaroo-boxing
         sprite: Mobs/Animals/kangaroo.rsi
   - type: Appearance
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: kangaroo-boxing
-      Critical:
-        Base: kangaroo-boxing-dead
-      Dead:
-        Base: kangaroo-boxing-dead
+    visuals:
+      - type: DamageStateVisualizer
+        normal: kangaroo-boxing
+        crit: kangaroo-boxing-dead
+        dead: kangaroo-boxing-dead
   - type: MeleeWeapon
     range: 1.5
     arcwidth: 0
@@ -668,9 +588,7 @@
     damage:
       types:
         Blunt: 10
-  - type: InputMover
-  - type: MobMover
-  - type: UtilityNPC
+  - type: UtilityAI
     behaviorSets:
     - UnarmedAttackHostiles
   - type: AiFactionTag
@@ -691,16 +609,6 @@
     flavorKind: primate
   - type: Inventory
     templateId: monkey
-  - type: Fixtures
-    fixtures:
-    - shape:
-        !type:PhysShapeCircle
-        radius: 0.35
-      mass: 30
-      mask:
-      - MobMask
-      layer:
-      - MobLayer
   - type: Strippable
   - type: UserInterface
     interfaces:
@@ -718,18 +626,15 @@
   - type: Body
     template: PrimateTemplate
     preset: PrimatePreset
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: monkey
-      Critical:
-        Base: dead
-      Dead:
-        Base: dead
   - type: Appearance
-  - type: FireVisuals
-    sprite: Mobs/Effects/onfire.rsi
-    normalState: Monkey_burning
+    visuals:
+    - type: DamageStateVisualizer
+      normal: monkey
+      crit: dead
+      dead: dead
+    - type: FireVisualizer
+      sprite: Mobs/Effects/onfire.rsi
+      normalState: Monkey_burning
   - type: Butcherable
     butcheringType: Spike
     spawned:
@@ -752,10 +657,10 @@
     speechSounds: Squeak
   - type: Sprite
     drawdepth: SmallMobs
-    sprite: Mobs/Animals/mouse.rsi
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
       state: mouse-0
+      sprite: Mobs/Animals/mouse.rsi
   - type: Clothing
     size: 5
     quickEquip: false
@@ -776,21 +681,18 @@
       - SmallMobLayer
   - type: MobState
     thresholds:
-      0: Alive
-      10: Critical
-      20: Dead
+      0: !type:NormalMobState {}
+      10: !type:CriticalMobState {}
+      20: !type:DeadMobState {}
   - type: MovementSpeedModifier
     baseWalkSpeed : 5
     baseSprintSpeed : 5
   - type: Appearance
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: mouse-0
-      Critical:
-        Base: dead-0
-      Dead:
-        Base: splat-0
+    visuals:
+    - type: DamageStateVisualizer
+      normal: mouse-0
+      crit: dead-0
+      dead: splat-0
   - type: Food
   - type: Hunger
     baseDecayRate: 0.5 # I'm very hungry! Give me. The cheese.
@@ -844,11 +746,8 @@
   - type: Bloodstream
     bloodMaxVolume: 50
   - type: DiseaseCarrier #The other class lab animal and disease vector
-    naturalImmunities:
-      - AMIV
   - type: CanEscapeInventory
-  - type: MobPrice
-    price: 50
+
 
 - type: entity
   parent: MobMouse
@@ -863,14 +762,11 @@
   - type: Clothing
     HeldPrefix: 1
   - type: Appearance
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: mouse-1
-      Critical:
-        Base: dead-1
-      Dead:
-        Base: splat-1
+    visuals:
+    - type: DamageStateVisualizer
+      normal: mouse-1
+      crit: dead-1
+      dead: splat-1
   - type: Bloodstream
     bloodMaxVolume: 50
   - type: DiseaseCarrier #Why doesn't this save if it's only on the parent wtf
@@ -889,14 +785,11 @@
   - type: Clothing
     HeldPrefix: 1
   - type: Appearance
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: mouse-1
-      Critical:
-        Base: dead-1
-      Dead:
-        Base: splat-1
+    visuals:
+    - type: DamageStateVisualizer
+      normal: mouse-2
+      crit: dead-2
+      dead: splat-2
   - type: Bloodstream
     bloodMaxVolume: 50
   - type: DiseaseCarrier
@@ -929,14 +822,11 @@
       layer:
       - MobLayer
   - type: Appearance
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: lizard
-      Critical:
-        Base: dead
-      Dead:
-        Base: dead
+    visuals:
+    - type: DamageStateVisualizer
+      normal: lizard
+      crit: dead
+      dead: dead
   - type: Butcherable
     spawned:
     - id: FoodMeat
@@ -974,20 +864,17 @@
     - shape:
         !type:PhysShapeCircle
         radius: 0.2
-      mass: 1
+      mass: 5
       mask:
       - MobMask
       layer:
       - MobLayer
   - type: Appearance
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: slug
-      Critical:
-        Base: dead
-      Dead:
-        Base: dead
+    visuals:
+    - type: DamageStateVisualizer
+      normal: slug
+      crit: dead
+      dead: dead
   - type: Butcherable
     spawned:
     - id: FoodMeat
@@ -1020,20 +907,17 @@
     - shape:
         !type:PhysShapeCircle
         radius: 0.2
-      mass: 1
+      mass: 2
       mask:
       - SmallMobMask
       layer:
       - SmallMobLayer
   - type: Appearance
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: frog
-      Critical:
-        Base: dead
-      Dead:
-        Base: dead
+    visuals:
+    - type: DamageStateVisualizer
+      normal: frog
+      crit: dead
+      dead: dead
   - type: Butcherable
     spawned:
     - id: FoodMeat
@@ -1069,20 +953,17 @@
     - shape:
         !type:PhysShapeCircle
         radius: 0.25
-      mass: 2
+      mass: 5
       mask:
       - FlyingMobMask
       layer:
       - FlyingMobLayer
   - type: Appearance
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: parrot
-      Critical:
-        Base: dead
-      Dead:
-        Base: dead
+    visuals:
+    - type: DamageStateVisualizer
+      normal: parrot
+      crit: dead
+      dead: dead
   - type: Butcherable
     spawned:
     - id: FoodMeat
@@ -1121,14 +1002,11 @@
       layer:
       - MobLayer
   - type: Appearance
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: penguin
-      Critical:
-        Base: penguin_dead
-      Dead:
-        Base: penguin_dead
+    visuals:
+    - type: DamageStateVisualizer
+      normal: penguin
+      crit: penguin_dead
+      dead: penguin_dead
   - type: Butcherable
     spawned:
     - id: FoodMeatPenguin
@@ -1149,9 +1027,7 @@
   - type: MovementSpeedModifier
     baseWalkSpeed : 7
     baseSprintSpeed : 7
-  - type: InputMover
-  - type: MobMover
-  - type: UtilityNPC
+  - type: UtilityAI
     behaviorSets:
     - UnarmedAttackHostiles
   - type: AiFactionTag
@@ -1169,20 +1045,17 @@
     - shape:
         !type:PhysShapeCircle
         radius: 0.25
-      mass: 5
+      mass: 10
       mask:
       - MobMask
       layer:
       - MobLayer
   - type: Appearance
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: penguin
-      Critical:
-        Base: dead
-      Dead:
-        Base: dead
+    visuals:
+    - type: DamageStateVisualizer
+      normal: penguin
+      crit: dead
+      dead: dead
   - type: Butcherable
     spawned:
     - id: FoodMeatPenguin
@@ -1227,18 +1100,16 @@
     - shape:
         !type:PhysShapeCircle
         radius: 0.25
-      mass: 2
+      mass: 8
       mask:
       - SmallMobMask
       layer:
       - SmallMobLayer
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: snake
   - type: Appearance
     visuals:
     - type: RotationVisualizer
+    - type: DamageStateVisualizer
+      normal: snake
 # It's death animation is animated so hopefully this should push for separation between "dying" and "death" states.
      # looks stupid, Rotation visualizer for now
      # dead: dead
@@ -1277,20 +1148,17 @@
     - shape:
         !type:PhysShapeCircle
         radius: 0.35
-      mass: 50
+      mass: 25
       mask:
       - MobMask
       layer:
       - MobLayer
   - type: Appearance
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: tarantula
-      Critical:
-        Base: tarantula_dead
-      Dead:
-        Base: tarantula_dead
+    visuals:
+    - type: DamageStateVisualizer
+      normal: tarantula
+      crit: tarantula_dead
+      dead: tarantula_dead
   - type: Butcherable
     spawned:
     - id: FoodMeatSpider
@@ -1317,9 +1185,7 @@
     - type: AiFactionTag
       factions:
         - Xeno
-    - type: InputMover
-    - type: MobMover
-    - type: UtilityNPC
+    - type: UtilityAI
       behaviorSets:
         - Idle
         - UnarmedAttackHostiles
@@ -1352,14 +1218,11 @@
       layer:
       - MobLayer
   - type: Appearance
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: possum
-      Critical:
-        Base: possum_dead
-      Dead:
-        Base: possum_dead
+    visuals:
+    - type: DamageStateVisualizer
+      normal: possum
+      crit: possum_dead # TODO: Make it so possums can "play dead." Probably need AI changes
+      dead: possum_dead
   - type: Butcherable
     spawned:
     - id: FoodMeat
@@ -1411,14 +1274,11 @@
       layer:
       - MobLayer
   - type: Appearance
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: raccoon
-      Critical:
-        Base: raccoon_dead
-      Dead:
-        Base: raccoon_dead
+    visuals:
+    - type: DamageStateVisualizer
+      normal: raccoon
+      crit: raccoon_dead
+      dead: raccoon_dead
   - type: Butcherable
     spawned:
     - id: FoodMeat
@@ -1464,20 +1324,17 @@
     - shape:
         !type:PhysShapeCircle
         radius: 0.35
-      mass: 20 #They actually are pretty light, I looked it up
+      mass: 20
       mask:
       - MobMask
       layer:
       - MobLayer
   - type: Appearance
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: fox
-      Critical:
-        Base: fox_dead
-      Dead:
-        Base: fox_dead
+    visuals:
+    - type: DamageStateVisualizer
+      normal: fox
+      crit: fox_dead
+      dead: fox_dead
   - type: Butcherable
     spawned:
     - id: FoodMeat

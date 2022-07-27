@@ -1,11 +1,11 @@
 - type: job
   id: Janitor
-  name: job-name-janitor
+  name: "janitor"
   startingGear: JanitorGear
   departments:
   - Civilian
   icon: "Janitor"
-  supervisors: job-supervisors-hop
+  supervisors: "the head of personnel"
   access:
   - Janitor
   - Maintenance

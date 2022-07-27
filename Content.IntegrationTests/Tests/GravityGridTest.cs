@@ -14,7 +14,7 @@ namespace Content.IntegrationTests.Tests
     /// making sure that gravity is applied to the correct grids.
     [TestFixture]
     [TestOf(typeof(GravityGeneratorComponent))]
-    public sealed class GravityGridTest
+    public sealed class GravityGridTest : ContentIntegrationTest
     {
         private const string Prototypes = @"
 - type: entity
@@ -30,10 +30,10 @@ namespace Content.IntegrationTests.Tests
         [Test]
         public async Task Test()
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true, ExtraPrototypes = Prototypes});
-            var server = pairTracker.Pair.Server;
+            var options = new ServerIntegrationOptions{ExtraPrototypes = Prototypes};
+            var server = StartServer(options);
 
-            var testMap = await PoolManager.CreateTestMap(pairTracker);
+            await server.WaitIdleAsync();
 
             EntityUid generator = default;
             var entityMan = server.ResolveDependency<IEntityManager>();
@@ -42,11 +42,11 @@ namespace Content.IntegrationTests.Tests
             IMapGrid grid2 = null;
 
             // Create grids
-            await server.WaitAssertion(() =>
+            server.Assert(() =>
             {
                 var mapMan = IoCManager.Resolve<IMapManager>();
 
-                var mapId = testMap.MapId;
+                var mapId = GetMainMapId(mapMan);
                 grid1 = mapMan.CreateGrid(mapId);
                 grid2 = mapMan.CreateGrid(mapId);
 
@@ -57,10 +57,9 @@ namespace Content.IntegrationTests.Tests
                 var powerComponent = entityMan.GetComponent<ApcPowerReceiverComponent>(generator);
                 powerComponent.NeedsPower = false;
             });
+            server.RunTicks(1);
 
-            await server.WaitRunTicks(5);
-
-            await server.WaitAssertion(() =>
+            server.Assert(() =>
             {
                 var generatorComponent = entityMan.GetComponent<GravityGeneratorComponent>(generator);
                 var powerComponent = entityMan.GetComponent<ApcPowerReceiverComponent>(generator);
@@ -77,10 +76,8 @@ namespace Content.IntegrationTests.Tests
                 // Charge rate is ridiculously high so it finishes in one tick.
                 powerComponent.NeedsPower = true;
             });
-
-            await server.WaitRunTicks(5);
-
-            await server.WaitAssertion(() =>
+            server.RunTicks(1);
+            server.Assert(() =>
             {
                 var generatorComponent = entityMan.GetComponent<GravityGeneratorComponent>(generator);
 
@@ -91,7 +88,7 @@ namespace Content.IntegrationTests.Tests
                 Assert.That(entityMan.GetComponent<GravityComponent>(grid2Entity).EnabledVV, Is.False);
             });
 
-            await pairTracker.CleanReturnAsync();
+            await server.WaitIdleAsync();
         }
     }
 }

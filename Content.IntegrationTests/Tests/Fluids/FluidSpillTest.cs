@@ -15,7 +15,7 @@ namespace Content.IntegrationTests.Tests.Fluids;
 
 [TestFixture]
 [TestOf(typeof(FluidSpreaderSystem))]
-public sealed class FluidSpill
+public sealed class FluidSpill : ContentIntegrationTest
 {
     private static PuddleComponent? GetPuddle(IEntityManager entityManager, IMapGrid mapGrid, Vector2i pos)
     {
@@ -46,8 +46,9 @@ public sealed class FluidSpill
     [Test]
     public async Task SpillEvenlyTest()
     {
-        await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true});
-        var server = pairTracker.Pair.Server;
+        // --- Setup
+        var server = StartServer();
+        await server.WaitIdleAsync();
 
         var mapManager = server.ResolveDependency<IMapManager>();
         var entityManager = server.ResolveDependency<IEntityManager>();
@@ -84,7 +85,7 @@ public sealed class FluidSpill
         var sTimeToWait = (int) Math.Ceiling(2f * gameTiming.TickRate);
         await server.WaitRunTicks(sTimeToWait);
 
-        await server.WaitAssertion(() =>
+        server.Assert(() =>
         {
             var grid = mapManager.GetGrid(gridId);
             var puddle = GetPuddle(entityManager, grid, _origin);
@@ -101,15 +102,16 @@ public sealed class FluidSpill
             }
         });
 
-        await pairTracker.CleanReturnAsync();
+        await server.WaitIdleAsync();
     }
 
 
     [Test]
     public async Task SpillSmallOverflowTest()
     {
-        await using var pairTracker = await PoolManager.GetServerClient();
-        var server = pairTracker.Pair.Server;
+        // --- Setup
+        var server = StartServer();
+        await server.WaitIdleAsync();
 
         var mapManager = server.ResolveDependency<IMapManager>();
         var entityManager = server.ResolveDependency<IEntityManager>();
@@ -145,9 +147,9 @@ public sealed class FluidSpill
         });
 
         var sTimeToWait = (int) Math.Ceiling(2f * gameTiming.TickRate);
-        await PoolManager.RunTicksSync(pairTracker.Pair, sTimeToWait);
+        await server.WaitRunTicks(sTimeToWait);
 
-        await server.WaitAssertion(() =>
+        server.Assert(() =>
         {
             var grid = mapManager.GetGrid(gridId);
             var puddle = GetPuddle(entityManager, grid, _origin);
@@ -176,6 +178,6 @@ public sealed class FluidSpill
             Assert.That(fullField, Is.EqualTo(1));
         });
 
-        await pairTracker.CleanReturnAsync();
+        await server.WaitIdleAsync();
     }
 }

@@ -9,7 +9,7 @@ namespace Content.Shared.Alert;
 /// falls back to the id.
 /// </summary>
 [Serializable, NetSerializable]
-public struct AlertKey :IPopulateDefaultValues
+public struct AlertKey : ISerializationHooks, IPopulateDefaultValues
 {
     public AlertType? AlertType { get; private set; }
     public readonly AlertCategory? AlertCategory;

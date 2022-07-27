@@ -5,12 +5,6 @@
   spawn: Ointment
 
 - type: stack
-  id: AloeCream
-  name: aloe cream
-  icon: "/Textures/Objects/Specific/Hydroponics/aloe.rsi/cream.png"
-  spawn: AloeCream
-
-- type: stack
   id: Gauze
   name: gauze
   icon: "/Textures/Objects/Specific/Medical/medical.rsi/gauze.png"

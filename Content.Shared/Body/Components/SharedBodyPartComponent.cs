@@ -255,29 +255,28 @@ namespace Content.Shared.Body.Components
 
         private void AddedToBody(SharedBodyComponent body)
         {
-            var transformComponent = _entMan.GetComponent<TransformComponent>(Owner);
-            transformComponent.LocalRotation = 0;
-            transformComponent.AttachParent(body.Owner);
+            _entMan.GetComponent<TransformComponent>(Owner).LocalRotation = 0;
+            _entMan.GetComponent<TransformComponent>(Owner).AttachParent(body.Owner);
             OnAddedToBody(body);
 
             foreach (var mechanism in _mechanisms)
             {
-                _entMan.EventBus.RaiseLocalEvent(mechanism.Owner, new AddedToBodyEvent(body), true);
+                _entMan.EventBus.RaiseLocalEvent(mechanism.Owner, new AddedToBodyEvent(body));
             }
         }
 
         private void RemovedFromBody(SharedBodyComponent old)
         {
-            if (_entMan.TryGetComponent<TransformComponent>(Owner, out var transformComponent))
+            if (!_entMan.GetComponent<TransformComponent>(Owner).Deleted)
             {
-                transformComponent.AttachToGridOrMap();
+                _entMan.GetComponent<TransformComponent>(Owner).AttachToGridOrMap();
             }
 
             OnRemovedFromBody(old);
 
             foreach (var mechanism in _mechanisms)
             {
-                _entMan.EventBus.RaiseLocalEvent(mechanism.Owner, new RemovedFromBodyEvent(old), true);
+                _entMan.EventBus.RaiseLocalEvent(mechanism.Owner, new RemovedFromBodyEvent(old));
             }
         }
 
@@ -288,17 +287,12 @@ namespace Content.Shared.Body.Components
         /// <summary>
         ///     Gibs the body part.
         /// </summary>
-        public virtual HashSet<EntityUid> Gib()
+        public virtual void Gib()
         {
-            var gibs = new HashSet<EntityUid>();
-
             foreach (var mechanism in _mechanisms)
             {
-                gibs.Add(mechanism.Owner);
                 RemoveMechanism(mechanism);
             }
-
-            return gibs;
         }
     }
 

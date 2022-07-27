@@ -128,10 +128,11 @@ namespace Content.Client.Chat.UI
                 Modulate = Color.White;
             }
 
-            var offset = (-_eyeManager.CurrentEye.Rotation).ToWorldVec() * -EntityVerticalOffset;
-            var worldPos = xform.WorldPosition + offset;
+            var worldPos = xform.WorldPosition;
+            var scale = _eyeManager.MainViewport.GetRenderScale();
+            var offset = new Vector2(0, EntityVerticalOffset * EyeManager.PixelsPerMeter * scale);
+            var lowerCenter = (_eyeManager.WorldToScreen(worldPos) - offset) / UIScale;
 
-            var lowerCenter = _eyeManager.WorldToScreen(worldPos) / UIScale;
             var screenPos = lowerCenter - (ContentSize.X / 2, ContentSize.Y + _verticalOffsetAchieved);
             // Round to nearest 0.5
             screenPos = (screenPos * 2).Rounded() / 2;

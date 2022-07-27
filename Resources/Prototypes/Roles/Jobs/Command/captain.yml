@@ -1,6 +1,6 @@
 - type: job
   id: Captain
-  name: job-name-captain
+  name: "captain"
   weight: 20
   startingGear: CaptainGear
   departments:
@@ -8,7 +8,7 @@
   icon: "Captain"
   requireAdminNotify: true
   joinNotifyCrew: true
-  supervisors: job-supervisors-centcom
+  supervisors: "Nanotrasen officials"
   canBeAntag: false
   accessGroups:
   - AllAccess

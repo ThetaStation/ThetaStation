@@ -2,7 +2,6 @@ using Content.Shared.Sound;
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio;
 using Robust.Shared.Containers;
-using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
@@ -15,7 +14,6 @@ namespace Content.Shared.Containers.ItemSlots
     /// </summary>
     [RegisterComponent]
     [Access(typeof(ItemSlotsSystem))]
-    [NetworkedComponent]
     public sealed class ItemSlotsComponent : Component
     {
         /// <summary>
@@ -44,11 +42,16 @@ namespace Content.Shared.Containers.ItemSlots
     [Serializable, NetSerializable]
     public sealed class ItemSlotsComponentState : ComponentState
     {
-        public readonly Dictionary<string, ItemSlot> Slots;
+        public readonly Dictionary<string, bool> SlotLocked;
 
         public ItemSlotsComponentState(Dictionary<string, ItemSlot> slots)
         {
-            Slots = slots;
+            SlotLocked = new(slots.Count);
+
+            foreach (var (key, slot) in slots)
+            {
+                SlotLocked[key] = slot.Locked;
+            }
         }
     }
 
@@ -58,17 +61,8 @@ namespace Content.Shared.Containers.ItemSlots
     /// </summary>
     [DataDefinition]
     [Access(typeof(ItemSlotsSystem))]
-    [Serializable, NetSerializable]
     public sealed class ItemSlot
     {
-        public ItemSlot() { }
-
-        public ItemSlot(ItemSlot other)
-        {
-            CopyFrom(other);
-        }
-
-
         [DataField("whitelist")]
         public EntityWhitelist? Whitelist;
 
@@ -82,7 +76,6 @@ namespace Content.Shared.Containers.ItemSlots
         ///     Options used for playing the insert/eject sounds.
         /// </summary>
         [DataField("soundOptions")]
-        [Obsolete("Use the sound specifer parameters instead")]
         public AudioParams SoundOptions = AudioParams.Default;
 
         /// <summary>
@@ -106,7 +99,6 @@ namespace Content.Shared.Containers.ItemSlots
         /// </remarks>
         [DataField("startingItem", readOnly: true, customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
         [Access(typeof(ItemSlotsSystem), Other = AccessPermissions.ReadWriteExecute)] // FIXME Friends
-        [NonSerialized]
         public string? StartingItem;
 
         /// <summary>
@@ -164,7 +156,7 @@ namespace Content.Shared.Containers.ItemSlots
         [DataField("ejectVerbText")]
         public string? EjectVerbText;
 
-        [ViewVariables, NonSerialized]
+        [ViewVariables]
         public ContainerSlot? ContainerSlot = default!;
 
         /// <summary>
@@ -175,7 +167,6 @@ namespace Content.Shared.Containers.ItemSlots
         ///     The actual deconstruction logic is handled by the server-side EmptyOnMachineDeconstructSystem.
         /// </remarks>
         [DataField("ejectOnDeconstruct")]
-        [NonSerialized]
         public bool EjectOnDeconstruct = true;
 
         /// <summary>
@@ -183,7 +174,6 @@ namespace Content.Shared.Containers.ItemSlots
         ///     ejected when it is broken or destroyed?
         /// </summary>
         [DataField("ejectOnBreak")]
-        [NonSerialized]
         public bool EjectOnBreak = false;
 
         /// <summary>
@@ -214,32 +204,5 @@ namespace Content.Shared.Containers.ItemSlots
         /// </summary>
         [DataField("priority")]
         public int Priority = 0;
-
-        /// <summary>
-        ///     If false, errors when adding an item slot with a duplicate key are suppressed. Local==true implies that
-        ///     the slot was added via client component state handling.
-        /// </summary>
-        [NonSerialized]
-        public bool Local = true;
-
-        public void CopyFrom(ItemSlot other)
-        {
-            // These fields are mutable reference types. But they generally don't get modified, so this should be fine.
-            Whitelist = other.Whitelist;
-            InsertSound = other.InsertSound;
-            EjectSound = other.EjectSound;
-
-            SoundOptions = other.SoundOptions;
-            Name = other.Name;
-            Locked = other.Locked;
-            InsertOnInteract = other.InsertOnInteract;
-            EjectOnInteract = other.EjectOnInteract;
-            EjectOnUse = other.EjectOnUse;
-            InsertVerbText = other.InsertVerbText;
-            EjectVerbText = other.EjectVerbText;
-            WhitelistFailPopup = other.WhitelistFailPopup;
-            Swap = other.Swap;
-            Priority = other.Priority;
-        }
     }
 }

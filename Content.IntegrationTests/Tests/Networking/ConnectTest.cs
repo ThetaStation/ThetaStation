@@ -11,14 +11,40 @@ using Robust.Shared.Network;
 namespace Content.IntegrationTests.Tests.Networking
 {
     [TestFixture]
-    public sealed class ConnectTest
+    public sealed class ConnectTest : ContentIntegrationTest
     {
         [Test]
         public async Task TestConnect()
         {
-            await using var pairTracker = await PoolManager.GetServerClient();
-            var server = pairTracker.Pair.Server;
-            var client = pairTracker.Pair.Client;
+            var client = StartClient();
+            var server = StartServer(new ServerContentIntegrationOption
+            {
+                Pool = false,
+                CVarOverrides =
+                {
+                    {CVars.NetPVS.Name, "false"}
+                }
+            });
+
+            await Task.WhenAll(client.WaitIdleAsync(), server.WaitIdleAsync());
+
+            // Connect.
+
+            client.SetConnectTarget(server);
+
+            client.Post(() => IoCManager.Resolve<IClientNetManager>().ClientConnect(null, 0, null));
+
+            // Run some ticks for the handshake to complete and such.
+
+            for (var i = 0; i < 10; i++)
+            {
+                server.RunTicks(1);
+                await server.WaitIdleAsync();
+                client.RunTicks(1);
+                await client.WaitIdleAsync();
+            }
+
+            await Task.WhenAll(client.WaitIdleAsync(), server.WaitIdleAsync());
 
             // Basic checks to ensure that they're connected and data got replicated.
 

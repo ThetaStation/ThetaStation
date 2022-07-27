@@ -8,35 +8,32 @@ using Robust.Server.Player;
 using Robust.Shared.GameObjects;
 using Robust.Shared.IoC;
 using Robust.Shared.Map;
-using Robust.Shared.Maths;
 
 namespace Content.IntegrationTests.Tests
 {
     // Tests various scenarios of deleting the entity that a player's mind is connected to.
     [TestFixture]
-    public sealed class MindEntityDeletionTest
+    public sealed class MindEntityDeletionTest : ContentIntegrationTest
     {
         [Test]
         public async Task TestDeleteVisiting()
         {
-            await using var pairTracker = await PoolManager.GetServerClient();
-            var server = pairTracker.Pair.Server;
+            var (_, server) = await StartConnectedServerDummyTickerClientPair();
 
             var entMan = server.ResolveDependency<IServerEntityManager>();
             EntityUid playerEnt = default;
             EntityUid visitEnt = default;
             Mind mind = null;
-            await server.WaitAssertion(() =>
+            server.Assert(() =>
             {
                 var player = IoCManager.Resolve<IPlayerManager>().ServerSessions.Single();
 
                 var mapMan = IoCManager.Resolve<IMapManager>();
 
-                var mapId = mapMan.GetAllMapIds().Last();
-                var pos = new MapCoordinates(Vector2.Zero, mapId);
+                mapMan.CreateNewMapEntity(MapId.Nullspace);
 
-                playerEnt = entMan.SpawnEntity(null, pos);
-                visitEnt = entMan.SpawnEntity(null, pos);
+                playerEnt = entMan.SpawnEntity(null, MapCoordinates.Nullspace);
+                visitEnt = entMan.SpawnEntity(null, MapCoordinates.Nullspace);
 
                 mind = new Mind(player.UserId);
                 mind.ChangeOwningPlayer(player.UserId);
@@ -47,52 +44,40 @@ namespace Content.IntegrationTests.Tests
                 Assert.That(player.AttachedEntity, Is.EqualTo(visitEnt));
                 Assert.That(mind.VisitingEntity, Is.EqualTo(visitEnt));
             });
-            await PoolManager.RunTicksSync(pairTracker.Pair, 5);
 
-            await server.WaitAssertion(() =>
+            server.RunTicks(1);
+
+            server.Assert(() =>
             {
                 entMan.DeleteEntity(visitEnt);
-                if (mind == null)
-                {
-                    Assert.Fail("Mind was null");
-                    return;
-                }
 
-                if (mind.VisitingEntity != null)
-                {
-                    Assert.Fail("Mind VisitingEntity was not null");
-                    return;
-                }
+                Assert.That(mind.VisitingEntity, Is.EqualTo(default));
 
                 // This used to throw so make sure it doesn't.
                 entMan.DeleteEntity(playerEnt);
             });
-            await PoolManager.RunTicksSync(pairTracker.Pair, 5);
 
-            await pairTracker.CleanReturnAsync();
+            await server.WaitIdleAsync();
         }
 
         [Test]
         public async Task TestGhostOnDelete()
         {
             // Has to be a non-dummy ticker so we have a proper map.
-
-            await using var pairTracker = await PoolManager.GetServerClient();
-            var server = pairTracker.Pair.Server;
+            var (_, server) = await StartConnectedServerClientPair();
 
             var entMan = server.ResolveDependency<IServerEntityManager>();
             EntityUid playerEnt = default;
             Mind mind = null;
-            await server.WaitAssertion(() =>
+            server.Assert(() =>
             {
                 var player = IoCManager.Resolve<IPlayerManager>().ServerSessions.Single();
 
                 var mapMan = IoCManager.Resolve<IMapManager>();
 
-                var mapId = mapMan.GetAllMapIds().Last();
-                var pos = new MapCoordinates(Vector2.Zero, mapId);
+                mapMan.CreateNewMapEntity(MapId.Nullspace);
 
-                playerEnt = entMan.SpawnEntity(null, pos);
+                playerEnt = entMan.SpawnEntity(null, MapCoordinates.Nullspace);
 
                 mind = new Mind(player.UserId);
                 mind.ChangeOwningPlayer(player.UserId);
@@ -102,33 +87,33 @@ namespace Content.IntegrationTests.Tests
                 Assert.That(mind.CurrentEntity, Is.EqualTo(playerEnt));
             });
 
-            await PoolManager.RunTicksSync(pairTracker.Pair, 5);
+            server.RunTicks(1);
 
-            await server.WaitPost(() =>
+            server.Post(() =>
             {
                 entMan.DeleteEntity(playerEnt);
             });
 
-            await PoolManager.RunTicksSync(pairTracker.Pair, 5);
+            server.RunTicks(1);
 
-            await server.WaitAssertion(() =>
+            server.Assert(() =>
             {
                 Assert.That(entMan.EntityExists(mind.CurrentEntity!.Value), Is.True);
             });
 
-            await pairTracker.CleanReturnAsync();
+            await server.WaitIdleAsync();
         }
 
         [Test]
         public async Task TestGhostOnDeleteMap()
         {
-            await using var pairTracker = await PoolManager.GetServerClient();
-            var server = pairTracker.Pair.Server;
+            // Has to be a non-dummy ticker so we have a proper map.
+            var (_, server) = await StartConnectedServerClientPair();
 
             EntityUid playerEnt = default;
             Mind mind = null;
             MapId map = default;
-            await server.WaitAssertion(() =>
+            server.Assert(() =>
             {
                 var player = IoCManager.Resolve<IPlayerManager>().ServerSessions.Single();
 
@@ -151,24 +136,24 @@ namespace Content.IntegrationTests.Tests
                 Assert.That(mind.CurrentEntity, Is.EqualTo(playerEnt));
             });
 
-            await PoolManager.RunTicksSync(pairTracker.Pair, 5);
+            server.RunTicks(1);
 
-            await server.WaitPost(() =>
+            server.Post(() =>
             {
                 var mapMan = IoCManager.Resolve<IMapManager>();
 
                 mapMan.DeleteMap(map);
             });
 
-            await PoolManager.RunTicksSync(pairTracker.Pair, 5);
+            server.RunTicks(1);
 
-            await server.WaitAssertion(() =>
+            server.Assert(() =>
             {
                 Assert.That(IoCManager.Resolve<IEntityManager>().EntityExists(mind.CurrentEntity!.Value), Is.True);
                 Assert.That(mind.CurrentEntity, Is.Not.EqualTo(playerEnt));
             });
 
-            await pairTracker.CleanReturnAsync();
+            await server.WaitIdleAsync();
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿- type: accessGroup
   id: AllAccess
   tags:
-  - EmergencyShuttleRepealAll
   - Captain
   - HeadOfPersonnel
   - ChiefEngineer

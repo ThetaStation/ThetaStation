@@ -1,6 +1,5 @@
 using Content.Server.Administration;
 using Content.Server.Atmos.Components;
-using Content.Server.Atmos.EntitySystems;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 
@@ -25,7 +24,7 @@ namespace Content.Server.Atmos.Commands
 
             var entMan = IoCManager.Resolve<IEntityManager>();
 
-            if (!EntityUid.TryParse(args[0], out var euid))
+            if(EntityUid.TryParse(args[0], out var euid))
             {
                 shell.WriteError($"Failed to parse euid '{args[0]}'.");
                 return;
@@ -37,9 +36,7 @@ namespace Content.Server.Atmos.Commands
                 return;
             }
 
-            var atmos = entMan.EntitySysManager.GetEntitySystem<AtmosphereSystem>();
-
-            if (atmos.HasAtmosphere(euid))
+            if (_entities.HasComponent<IAtmosphereComponent>(euid))
             {
                 shell.WriteLine("Grid already has an atmosphere.");
                 return;

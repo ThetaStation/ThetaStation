@@ -1,11 +1,11 @@
 - type: job
   id: Scientist
-  name: job-name-scientist
+  name: "scientist"
   startingGear: ScientistGear
   departments:
   - Science
   icon: "Scientist"
-  supervisors: job-supervisors-rd
+  supervisors: "the research director"
   access:
   - Research
   - Maintenance

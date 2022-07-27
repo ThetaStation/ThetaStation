@@ -14,10 +14,6 @@
         {
             "name": "sink_wide",
             "directions": 4
-        },
-        {
-            "name": "sink_stem",
-            "directions": 4
         }
     ]
 }

@@ -10,9 +10,11 @@ namespace Content.Server.Buckle.Components
 {
     [RegisterComponent]
     [ComponentReference(typeof(SharedStrapComponent))]
-    public sealed class StrapComponent : SharedStrapComponent
+    public sealed class StrapComponent : SharedStrapComponent, ISerializationHooks
     {
         [Dependency] private readonly IEntityManager _entityManager = default!;
+
+        private readonly HashSet<EntityUid> _buckledEntities = new();
 
         /// <summary>
         /// The angle in degrees to rotate the player by when they get strapped
@@ -25,6 +27,13 @@ namespace Content.Server.Buckle.Components
         /// </summary>
         [ViewVariables] [DataField("size")] private int _size = 100;
         private int _occupiedSize;
+
+        /// <summary>
+        /// The buckled entity will be offset by this amount from the center of the strap object.
+        /// If this offset it too big, it will be clamped to <see cref="MaxBuckleDistance"/>
+        /// </summary>
+        [DataField("buckleOffset", required: false)]
+        public Vector2 BuckleOffsetUnclamped = Vector2.Zero;
 
         private bool _enabled = true;
 
@@ -43,10 +52,37 @@ namespace Content.Server.Buckle.Components
         }
 
         /// <summary>
+        /// The distance above which a buckled entity will be automatically unbuckled.
+        /// Don't change it unless you really have to
+        /// </summary>
+        [DataField("maxBuckleDistance", required: false)]
+        public float MaxBuckleDistance = 0.1f;
+
+        /// <summary>
         /// You can specify the offset the entity will have after unbuckling.
         /// </summary>
         [DataField("unbuckleOffset", required: false)]
         public Vector2 UnbuckleOffset = Vector2.Zero;
+
+        /// <summary>
+        /// Gets and clamps the buckle offset to MaxBuckleDistance
+        /// </summary>
+        public Vector2 BuckleOffset => Vector2.Clamp(
+            BuckleOffsetUnclamped,
+            Vector2.One * -MaxBuckleDistance,
+            Vector2.One * MaxBuckleDistance);
+
+        /// <summary>
+        /// The entity that is currently buckled here, synced from <see cref="BuckleComponent.BuckledTo"/>
+        /// </summary>
+        public IReadOnlyCollection<EntityUid> BuckledEntities => _buckledEntities;
+
+        /// <summary>
+        /// The change in position to the strapped mob
+        /// </summary>
+        [DataField("position")]
+        public StrapPosition Position { get; } = StrapPosition.None;
+
         /// <summary>
         /// The sound to be played when a mob is buckled
         /// </summary>
@@ -102,7 +138,7 @@ namespace Content.Server.Buckle.Components
                 return false;
             }
 
-            if (!BuckledEntities.Add(buckle.Owner))
+            if (!_buckledEntities.Add(buckle.Owner))
             {
                 return false;
             }
@@ -118,7 +154,6 @@ namespace Content.Server.Buckle.Components
                 appearance.SetData("StrapState", true);
             }
 
-            Dirty();
             return true;
         }
 
@@ -129,7 +164,7 @@ namespace Content.Server.Buckle.Components
         /// <param name="buckle">The component to remove</param>
         public void Remove(BuckleComponent buckle)
         {
-            if (BuckledEntities.Remove(buckle.Owner))
+            if (_buckledEntities.Remove(buckle.Owner))
             {
                 if (IoCManager.Resolve<IEntityManager>().TryGetComponent<AppearanceComponent>(Owner, out var appearance))
                 {
@@ -137,7 +172,6 @@ namespace Content.Server.Buckle.Components
                 }
 
                 _occupiedSize -= buckle.Size;
-                Dirty();
             }
         }
 
@@ -152,7 +186,7 @@ namespace Content.Server.Buckle.Components
         {
             var entManager = IoCManager.Resolve<IEntityManager>();
 
-            foreach (var entity in BuckledEntities.ToArray())
+            foreach (var entity in _buckledEntities.ToArray())
             {
                 if (entManager.TryGetComponent<BuckleComponent>(entity, out var buckle))
                 {
@@ -160,9 +194,13 @@ namespace Content.Server.Buckle.Components
                 }
             }
 
-            BuckledEntities.Clear();
+            _buckledEntities.Clear();
             _occupiedSize = 0;
-            Dirty();
+        }
+
+        public override ComponentState GetComponentState()
+        {
+            return new StrapComponentState(Position);
         }
 
         public override bool DragDropOn(DragDropEvent eventArgs)

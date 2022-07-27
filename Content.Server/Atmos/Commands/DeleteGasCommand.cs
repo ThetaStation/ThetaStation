@@ -18,7 +18,7 @@ namespace Content.Server.Atmos.Commands
         public void Execute(IConsoleShell shell, string argStr, string[] args)
         {
             var player = shell.Player as IPlayerSession;
-            EntityUid? gridId;
+            EntityUid gridId;
             Gas? gas = null;
 
             var entMan = IoCManager.Resolve<IEntityManager>();
@@ -39,9 +39,9 @@ namespace Content.Server.Atmos.Commands
                         return;
                     }
 
-                    gridId = entMan.GetComponent<TransformComponent>(playerEntity).GridUid;
+                    gridId = entMan.GetComponent<TransformComponent>(playerEntity).GridEntityId;
 
-                    if (gridId == null)
+                    if (gridId == EntityUid.Invalid)
                     {
                         shell.WriteLine("You aren't on a grid to delete gas from.");
                         return;
@@ -66,9 +66,9 @@ namespace Content.Server.Atmos.Commands
                             return;
                         }
 
-                        gridId = entMan.GetComponent<TransformComponent>(playerEntity).GridUid;
+                        gridId = entMan.GetComponent<TransformComponent>(playerEntity).GridEntityId;
 
-                        if (gridId == null)
+                        if (gridId == EntityUid.Invalid)
                         {
                             shell.WriteLine("You aren't on a grid to delete gas from.");
                             return;
@@ -98,7 +98,7 @@ namespace Content.Server.Atmos.Commands
 
                     gridId = first;
 
-                    if (gridId.Value.IsValid())
+                    if (gridId == EntityUid.Invalid)
                     {
                         shell.WriteLine($"{gridId} is not a valid grid id.");
                         return;
@@ -134,7 +134,7 @@ namespace Content.Server.Atmos.Commands
 
             if (gas == null)
             {
-                foreach (var tile in atmosphereSystem.GetAllMixtures(gridId.Value, true))
+                foreach (var tile in atmosphereSystem.GetAllTileMixtures(gridId, true))
                 {
                     if (tile.Immutable) continue;
 
@@ -146,7 +146,7 @@ namespace Content.Server.Atmos.Commands
             }
             else
             {
-                foreach (var tile in atmosphereSystem.GetAllMixtures(gridId.Value, true))
+                foreach (var tile in atmosphereSystem.GetAllTileMixtures(gridId, true))
                 {
                     if (tile.Immutable) continue;
 

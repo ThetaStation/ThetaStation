@@ -11,25 +11,18 @@
     - type: Sprite
       netsync: false
       sprite: Structures/Storage/canister.rsi
-      layers:
-        - state: grey
+      state: grey
     - type: Appearance
-    - type: GenericVisualizer
       visuals:
-        enum.GasPortableVisuals.ConnectedState:
-          connectedToPort:
-            False: { state: can-connector, visible: false }
-            True: { state: can-connector, visible: true }
-        enum.GasCanisterVisuals.TankInserted:
-          tankInserted:
-            False: { state: can-open, visible: false }
-            True: { state: can-open, visible: true }
-        enum.GasCanisterVisuals.PressureState:
-          pressureLight:
-            0: { state: can-o0, shader: "unshaded" }
-            1: { state: can-o1, shader: "unshaded" }
-            2: { state: can-o2, shader: "unshaded" }
-            3: { state: can-o3, shader: "unshaded" }
+        - type: GasPortableVisualizer
+          stateConnected: can-connector
+        - type: GasCanisterVisualizer
+          insertedTankState: can-open
+          pressureStates:
+            - can-o0
+            - can-o1
+            - can-o2
+            - can-o3
     - type: UserInterface
       interfaces:
         - key: enum.GasCanisterUiKey.Key
@@ -87,8 +80,7 @@
   name: storage canister
   components:
     - type: Sprite
-      layers:
-        - state: yellow
+      state: yellow # Classic toxins canister
     - type: GasCanister
       gasMixture:
         volume: 1000
@@ -125,8 +117,7 @@
   name: air canister
   components:
   - type: Sprite
-    layers:
-      - state: grey
+    state: grey
   - type: GasCanister
     gasMixture:
       volume: 1000
@@ -157,8 +148,7 @@
   name: oxygen canister
   components:
   - type: Sprite
-    layers:
-      - state: blue
+    state: blue
   - type: GasCanister
     gasMixture:
       volume: 1000
@@ -188,8 +178,7 @@
   name: nitrogen canister
   components:
     - type: Sprite
-      layers:
-        - state: red
+      state: red
     - type: GasCanister
       gasMixture:
         volume: 1000
@@ -220,8 +209,7 @@
   name: carbon dioxide canister
   components:
     - type: Sprite
-      layers:
-        - state: black
+      state: black
     - type: GasCanister
       gasMixture:
         volume: 1000
@@ -253,8 +241,7 @@
   name: plasma canister
   components:
     - type: Sprite
-      layers:
-        - state: orange
+      state: orange
     - type: GasCanister
       gasMixture:
         volume: 1000
@@ -288,8 +275,7 @@
   name: tritium canister
   components:
     - type: Sprite
-      layers:
-        - state: green
+      state: green
     - type: GasCanister
       gasMixture:
         volume: 1000
@@ -323,8 +309,7 @@
   name: water vapor canister
   components:
     - type: Sprite
-      layers:
-        - state: water_vapor
+      state: water_vapor
     - type: GasCanister
       gasMixture:
         volume: 1000
@@ -352,120 +337,6 @@
               max: 1
         - !type:DoActsBehavior
           acts: [ "Destruction" ]
-
-- type: entity
-  parent: GasCanister
-  id: MiasmaCanister
-  name: miasma canister
-  components:
-    - type: Sprite
-      layers:
-        - state: greenys
-    - type: GasCanister
-      gasMixture:
-        volume: 1000
-        moles:
-          - 0 # oxygen
-          - 0 # nitrogen
-          - 0 # CO2
-          - 0 # Plasma
-          - 0 # Tritium
-          - 0 #  Water vapor
-          - 1871.71051 # Miasma
-        temperature: 293.15
-    - type: Destructible
-      thresholds:
-      - trigger:
-          !type:DamageTrigger
-          damage: 300
-        behaviors:
-        - !type:PlaySoundBehavior
-          sound:
-            path: /Audio/Effects/metalbreak.ogg
-        - !type:SpawnEntitiesBehavior
-          spawn:
-            MiasmaCanisterBroken:
-              min: 1
-              max: 1
-        - !type:DoActsBehavior
-          acts: [ "Destruction" ]
-
-- type: entity
-  parent: GasCanister
-  id: NitrousOxideCanister
-  name: nitrous oxide canister
-  components:
-    - type: Sprite
-      layers:
-        - state: redws
-    - type: GasCanister
-      gasMixture:
-        volume: 1000
-        moles:
-          - 0 # oxygen
-          - 0 # nitrogen
-          - 0 # CO2
-          - 0 # Plasma
-          - 0 # Tritium
-          - 0 #  Water vapor
-          - 0 # Miasma
-          - 1871.71051 # N2O
-        temperature: 293.15
-    - type: Destructible
-      thresholds:
-      - trigger:
-          !type:DamageTrigger
-          damage: 300
-        behaviors:
-        - !type:PlaySoundBehavior
-          sound:
-            path: /Audio/Effects/metalbreak.ogg
-        - !type:SpawnEntitiesBehavior
-          spawn:
-            NitrousOxideCanisterBroken:
-              min: 1
-              max: 1
-        - !type:DoActsBehavior
-          acts: [ "Destruction" ]
-
-- type: entity
-  parent: GasCanister
-  id: FrezonCanister
-  name: frezon canister
-  description: A coolant with light hallucinogenic properties. Proceed.
-  components:
-  - type: Sprite
-    layers:
-    - state: frezon
-  - type: GasCanister
-    gasMixture:
-      volume: 1000
-      moles:
-      - 0 # oxygen
-      - 0 # nitrogen
-      - 0 # CO2
-      - 0 # Plasma
-      - 0 # Tritium
-      - 0 #  Water vapor
-      - 0 # Miasma
-      - 1871.71051 # Frezon
-      temperature: 293.15
-  - type: Destructible
-    thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 300
-      behaviors:
-      - !type:PlaySoundBehavior
-        sound:
-          path: /Audio/Effects/metalbreak.ogg
-      - !type:SpawnEntitiesBehavior
-        spawn:
-          FrezonCanisterBroken:
-            min: 1
-            max: 1
-      - !type:DoActsBehavior
-        acts: [ "Destruction" ]
 
 # Broke Entities
 
@@ -582,30 +453,3 @@
   components:
     - type: Sprite
       state: water_vapor-1
-
-- type: entity
-  parent: GasCanisterBrokenBase
-  id: MiasmaCanisterBroken
-  name: broken miasma canister
-  noSpawn: true
-  components:
-    - type: Sprite
-      state: greenys-1
-
-- type: entity
-  parent: GasCanisterBrokenBase
-  id: NitrousOxideCanisterBroken
-  name: broken nitrous oxide canister
-  noSpawn: true
-  components:
-    - type: Sprite
-      state: redws-1
-
-- type: entity
-  parent: GasCanisterBrokenBase
-  id: FrezonCanisterBroken
-  name: broken frezon canister
-  noSpawn: true
-  components:
-  - type: Sprite
-    state: frezon-1

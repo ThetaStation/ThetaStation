@@ -14,13 +14,7 @@ namespace Content.Server.Objectives.Conditions
     {
         private Mind.Mind? _mind;
         [DataField("prototype")] private string _prototypeId = string.Empty;
-
-        /// <summary>
-        /// Help newer players by saying e.g. "steal the chief engineer's advanced magboots"
-        /// instead of "steal advanced magboots. Should be a loc string.
-        /// </summary>
-        [ViewVariables]
-        [DataField("owner", required: true)] private string _owner = string.Empty;
+        [DataField("amount")] private int _amount = 1;
 
         public IObjectiveCondition GetAssigned(Mind.Mind mind)
         {
@@ -28,8 +22,16 @@ namespace Content.Server.Objectives.Conditions
             {
                 _mind = mind,
                 _prototypeId = _prototypeId,
-                _owner = _owner
+                _amount = _amount
             };
+        }
+
+        void ISerializationHooks.AfterDeserialization()
+        {
+            if (_amount < 1)
+            {
+                Logger.Error("StealCondition has an amount less than 1 ({0})", _amount);
+            }
         }
 
         private string PrototypeName =>
@@ -37,7 +39,9 @@ namespace Content.Server.Objectives.Conditions
                 ? prototype.Name
                 : "[CANNOT FIND NAME]";
 
-        public string Title => Loc.GetString("objective-condition-steal-title", ("owner", Loc.GetString(_owner)), ("itemName", Loc.GetString(PrototypeName)));
+        public string Title => Loc.GetString("objective-condition-steal-title",
+                                             ("amount", _amount > 1 ? $"{_amount}x " : string.Empty),
+                                             ("itemName", Loc.GetString(PrototypeName)));
 
         public string Description => Loc.GetString("objective-condition-steal-description",("itemName", Loc.GetString(PrototypeName)));
 
@@ -50,12 +54,8 @@ namespace Content.Server.Objectives.Conditions
                 if (_mind?.OwnedEntity is not {Valid: true} owned) return 0f;
                 if (!IoCManager.Resolve<IEntityManager>().TryGetComponent<ContainerManagerComponent?>(owned, out var containerManagerComponent)) return 0f;
 
-                // slightly ugly but fixing it would just be duplicating it with a different return value
                 float count = containerManagerComponent.CountPrototypeOccurencesRecursive(_prototypeId);
-                if (count >= 1)
-                    return 1;
-                else
-                    return 0;
+                return count/_amount;
             }
         }
 
@@ -65,7 +65,7 @@ namespace Content.Server.Objectives.Conditions
         {
             return other is StealCondition stealCondition &&
                    Equals(_mind, stealCondition._mind) &&
-                   _prototypeId == stealCondition._prototypeId;
+                   _prototypeId == stealCondition._prototypeId && _amount == stealCondition._amount;
         }
 
         public override bool Equals(object? obj)
@@ -78,7 +78,7 @@ namespace Content.Server.Objectives.Conditions
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(_mind, _prototypeId);
+            return HashCode.Combine(_mind, _prototypeId, _amount);
         }
     }
 }

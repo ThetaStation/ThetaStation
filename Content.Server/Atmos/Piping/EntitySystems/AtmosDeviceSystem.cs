@@ -27,25 +27,20 @@ namespace Content.Server.Atmos.Piping.EntitySystems
             SubscribeLocalEvent<AtmosDeviceComponent, AnchorStateChangedEvent>(OnDeviceAnchorChanged);
         }
 
-        private bool CanJoinAtmosphere(AtmosDeviceComponent component, TransformComponent transform)
+        private bool CanJoinAtmosphere(AtmosDeviceComponent component)
         {
-            return (!component.RequireAnchored || transform.Anchored) && transform.GridUid != null;
+            return !component.RequireAnchored || EntityManager.GetComponent<TransformComponent>(component.Owner).Anchored;
         }
 
         public void JoinAtmosphere(AtmosDeviceComponent component)
         {
-            var transform = Transform(component.Owner);
-
-            if (!CanJoinAtmosphere(component, transform))
+            if (!CanJoinAtmosphere(component))
             {
                 return;
             }
 
-            // TODO: low-hanging fruit for perf improvements around here
-
-            // GridUid is not null because we can join atmosphere.
             // We try to add the device to a valid atmosphere, and if we can't, try to add it to the entity system.
-            if (!_atmosphereSystem.AddAtmosDevice(transform.GridUid!.Value, component))
+            if (!_atmosphereSystem.AddAtmosDevice(component))
             {
                 if (component.JoinSystem)
                 {
@@ -67,7 +62,7 @@ namespace Content.Server.Atmos.Piping.EntitySystems
         public void LeaveAtmosphere(AtmosDeviceComponent component)
         {
             // Try to remove the component from an atmosphere, and if not
-            if (component.JoinedGrid != null && !_atmosphereSystem.RemoveAtmosDevice(component.JoinedGrid.Value, component))
+            if (component.JoinedGrid != null && !_atmosphereSystem.RemoveAtmosDevice(component))
             {
                 // The grid might have been removed but not us... This usually shouldn't happen.
                 component.JoinedGrid = null;

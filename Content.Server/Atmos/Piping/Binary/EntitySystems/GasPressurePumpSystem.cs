@@ -29,7 +29,6 @@ namespace Content.Server.Atmos.Piping.Binary.EntitySystems
         {
             base.Initialize();
 
-            SubscribeLocalEvent<GasPressurePumpComponent, ComponentInit>(OnInit);
             SubscribeLocalEvent<GasPressurePumpComponent, AtmosDeviceUpdateEvent>(OnPumpUpdated);
             SubscribeLocalEvent<GasPressurePumpComponent, AtmosDeviceDisabledEvent>(OnPumpLeaveAtmosphere);
             SubscribeLocalEvent<GasPressurePumpComponent, ExaminedEvent>(OnExamined);
@@ -37,11 +36,6 @@ namespace Content.Server.Atmos.Piping.Binary.EntitySystems
             // Bound UI subscriptions
             SubscribeLocalEvent<GasPressurePumpComponent, GasPressurePumpChangeOutputPressureMessage>(OnOutputPressureChangeMessage);
             SubscribeLocalEvent<GasPressurePumpComponent, GasPressurePumpToggleStatusMessage>(OnToggleStatusMessage);
-        }
-
-        private void OnInit(EntityUid uid, GasPressurePumpComponent pump, ComponentInit args)
-        {
-            UpdateAppearance(uid, pump);
         }
 
         private void OnExamined(EntityUid uid, GasPressurePumpComponent pump, ExaminedEvent args)
@@ -58,11 +52,14 @@ namespace Content.Server.Atmos.Piping.Binary.EntitySystems
 
         private void OnPumpUpdated(EntityUid uid, GasPressurePumpComponent pump, AtmosDeviceUpdateEvent args)
         {
+            var appearance = EntityManager.GetComponentOrNull<AppearanceComponent>(pump.Owner);
+
             if (!pump.Enabled
                 || !EntityManager.TryGetComponent(uid, out NodeContainerComponent? nodeContainer)
                 || !nodeContainer.TryGetNode(pump.InletName, out PipeNode? inlet)
                 || !nodeContainer.TryGetNode(pump.OutletName, out PipeNode? outlet))
             {
+                appearance?.SetData(PumpVisuals.Enabled, false);
                 _ambientSoundSystem.SetAmbience(pump.Owner, false);
                 return;
             }
@@ -71,40 +68,42 @@ namespace Content.Server.Atmos.Piping.Binary.EntitySystems
 
             if (outputStartingPressure >= pump.TargetPressure)
             {
+                appearance?.SetData(PumpVisuals.Enabled, false);
                 _ambientSoundSystem.SetAmbience(pump.Owner, false);
                 return; // No need to pump gas if target has been reached.
             }
 
             if (inlet.Air.TotalMoles > 0 && inlet.Air.Temperature > 0)
             {
+                appearance?.SetData(PumpVisuals.Enabled, true);
+                _ambientSoundSystem.SetAmbience(pump.Owner, true);
+
                 // We calculate the necessary moles to transfer using our good ol' friend PV=nRT.
                 var pressureDelta = pump.TargetPressure - outputStartingPressure;
                 var transferMoles = (pressureDelta * outlet.Air.Volume) / (inlet.Air.Temperature * Atmospherics.R);
 
                 var removed = inlet.Air.Remove(transferMoles);
                 _atmosphereSystem.Merge(outlet.Air, removed);
-                _ambientSoundSystem.SetAmbience(pump.Owner, removed.TotalMoles > 0f);
             }
         }
 
-        private void OnPumpLeaveAtmosphere(EntityUid uid, GasPressurePumpComponent pump, AtmosDeviceDisabledEvent args)
+        private void OnPumpLeaveAtmosphere(EntityUid uid, GasPressurePumpComponent component, AtmosDeviceDisabledEvent args)
         {
-            pump.Enabled = false;
-            UpdateAppearance(uid, pump);
-
-            DirtyUI(uid, pump);
-            _userInterfaceSystem.TryCloseAll(uid, GasPressurePumpUiKey.Key);
+            if (EntityManager.TryGetComponent(uid, out AppearanceComponent? appearance))
+            {
+                appearance.SetData(PumpVisuals.Enabled, false);
+            }
         }
 
-        private void OnPumpInteractHand(EntityUid uid, GasPressurePumpComponent pump, InteractHandEvent args)
+        private void OnPumpInteractHand(EntityUid uid, GasPressurePumpComponent component, InteractHandEvent args)
         {
             if (!EntityManager.TryGetComponent(args.User, out ActorComponent? actor))
                 return;
 
-            if (EntityManager.GetComponent<TransformComponent>(pump.Owner).Anchored)
+            if (EntityManager.GetComponent<TransformComponent>(component.Owner).Anchored)
             {
                 _userInterfaceSystem.TryOpen(uid, GasPressurePumpUiKey.Key, actor.PlayerSession);
-                DirtyUI(uid, pump);
+                DirtyUI(uid, component);
             }
             else
             {
@@ -120,7 +119,6 @@ namespace Content.Server.Atmos.Piping.Binary.EntitySystems
             _adminLogger.Add(LogType.AtmosPowerChanged, LogImpact.Medium,
                 $"{ToPrettyString(args.Session.AttachedEntity!.Value):player} set the power on {ToPrettyString(uid):device} to {args.Enabled}");
             DirtyUI(uid, pump);
-            UpdateAppearance(uid, pump);
         }
 
         private void OnOutputPressureChangeMessage(EntityUid uid, GasPressurePumpComponent pump, GasPressurePumpChangeOutputPressureMessage args)
@@ -139,14 +137,6 @@ namespace Content.Server.Atmos.Piping.Binary.EntitySystems
 
             _userInterfaceSystem.TrySetUiState(uid, GasPressurePumpUiKey.Key,
                 new GasPressurePumpBoundUserInterfaceState(EntityManager.GetComponent<MetaDataComponent>(pump.Owner).EntityName, pump.TargetPressure, pump.Enabled));
-        }
-
-        private void UpdateAppearance(EntityUid uid, GasPressurePumpComponent? pump = null, AppearanceComponent? appearance = null)
-        {
-            if (!Resolve(uid, ref pump, ref appearance, false))
-                return;
-
-            appearance.SetData(PumpVisuals.Enabled, pump.Enabled);
         }
     }
 }

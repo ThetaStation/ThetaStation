@@ -21,9 +21,10 @@ public sealed class CreateGas : ReagentEffect
 
     public override void Effect(ReagentEffectArgs args)
     {
-        var atmosSys = args.EntityManager.EntitySysManager.GetEntitySystem<AtmosphereSystem>();
+        var atmosSys = EntitySystem.Get<AtmosphereSystem>();
 
-        var tileMix = atmosSys.GetContainingMixture(args.SolutionEntity, false, true);
+        var xform = args.EntityManager.GetComponent<TransformComponent>(args.SolutionEntity);
+        var tileMix = atmosSys.GetTileMixture(xform.Coordinates);
 
         if (tileMix != null)
         {

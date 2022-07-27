@@ -1,11 +1,11 @@
 - type: job
   id: Chemist
-  name: job-name-chemist
+  name: "chemist"
   startingGear: ChemistGear
   departments:
   - Medical
   icon: "Chemist"
-  supervisors: job-supervisors-cmo
+  supervisors: "the chief medical officer"
   access:
   - Medical
   - Chemistry

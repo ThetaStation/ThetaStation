@@ -1,7 +1,7 @@
 - type: entity
   parent: BaseItem
   id: SpaceCash
-  name: spacebucks
+  name: credit
   description: You gotta have money.
   components:
   - type: Material
@@ -44,20 +44,21 @@
 
 - type: material
   id: Credit
-  name: spacebuck
+  name: credit
   stack: Credit
   icon: /Textures/Objects/Economy/cash.rsi/cash.png
   price: 1
 
 - type: stack
   id: Credit
-  name: spacebuck
+  name: credit
   icon: /Textures/Objects/Economy/cash.rsi/cash.png
   spawn: SpaceCash
 
 - type: entity
   parent: SpaceCash
   id: SpaceCash10
+  name: credit
   suffix: 10
   components:
   - type: Icon
@@ -69,6 +70,7 @@
 - type: entity
   parent: SpaceCash
   id: SpaceCash100
+  name: credit
   suffix: 100
   components:
   - type: Icon
@@ -80,6 +82,7 @@
 - type: entity
   parent: SpaceCash
   id: SpaceCash500
+  name: credit
   suffix: 500
   components:
   - type: Icon
@@ -91,6 +94,7 @@
 - type: entity
   parent: SpaceCash
   id: SpaceCash1000
+  name: credit
   suffix: 1000
   components:
   - type: Icon
@@ -102,6 +106,7 @@
 - type: entity
   parent: SpaceCash
   id: SpaceCash1000000
+  name: credit
   suffix: 1000000
   components:
   - type: Icon

@@ -128,19 +128,6 @@
         - id: AcousticGuitarInstrument
         - id: SaxophoneInstrument
 
-- type: entity
-  noSpawn: true
-  parent: ClothingBackpack
-  id: ClothingBackpackDetectiveFilled
-  components:
-    - type: StorageFill
-      contents:
-      - id: BoxSurvival
-      - id: Lighter
-      - id: CigPackBlack
-      - id: HandLabeler
-      - id: BoxForensicPad
-
 # ERT
 
 - type: entity
@@ -156,7 +143,7 @@
         - id: MagazinePistolHighCapacityRubber
         - id: MagazinePistol
         - id: Handcuffs
-
+        
 
 - type: entity
   noSpawn: true
@@ -166,12 +153,12 @@
     - type: StorageFill
       contents:
         - id: BoxSurvival
-        - id: WeaponDisabler
+        - id: WeaponTaser
         - id: WeaponPulsePistol
         - id: WeaponPulseCarbine
         - id: BoxHandcuff
         - id: Handcuffs
-
+        
 - type: entity
   noSpawn: true
   parent: ClothingBackpackERTMedical
@@ -199,7 +186,7 @@
         - id: RCDAmmo
         - id: RCDAmmo
         - id: RCDAmmo
-
+        
 - type: entity
   noSpawn: true
   parent: ClothingBackpackERTJanitor

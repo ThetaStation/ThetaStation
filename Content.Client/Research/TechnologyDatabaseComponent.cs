@@ -21,14 +21,14 @@ namespace Content.Client.Research
 
             if (curState is not TechnologyDatabaseState state) return;
 
-            Technologies.Clear();
+            _technologies.Clear();
 
             var protoManager = IoCManager.Resolve<IPrototypeManager>();
 
             foreach (var techID in state.Technologies)
             {
                 if (!protoManager.TryIndex(techID, out TechnologyPrototype? technology)) continue;
-                Technologies.Add(technology);
+                _technologies.Add(technology);
             }
 
             OnDatabaseUpdated?.Invoke();

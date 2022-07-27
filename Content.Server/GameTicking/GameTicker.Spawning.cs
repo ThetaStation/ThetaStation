@@ -194,7 +194,7 @@ namespace Content.Server.GameTicking
 
             // We raise this event directed to the mob, but also broadcast it so game rules can do something now.
             var aev = new PlayerSpawnCompleteEvent(mob, player, jobId, lateJoin, station, character);
-            RaiseLocalEvent(mob, aev, true);
+            RaiseLocalEvent(mob, aev);
         }
 
         public void Respawn(IPlayerSession player)

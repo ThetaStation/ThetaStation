@@ -6,7 +6,6 @@ using Content.Server.Weapon.Melee;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.FixedPoint;
-using Content.Shared.IdentityManagement;
 using Content.Shared.MobState.Components;
 using Content.Shared.Popups;
 using Content.Shared.Sound;
@@ -67,7 +66,7 @@ namespace Content.Server.Chemistry.Components
             if (!solutionsSys.TryGetInjectableSolution(target.Value, out var targetSolution))
             {
                 user.PopupMessage(user,
-                    Loc.GetString("hypospray-cant-inject", ("target", Identity.Entity(target.Value, _entMan))));
+                    Loc.GetString("hypospray-cant-inject", ("target", target)));
                 return false;
             }
 

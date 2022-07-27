@@ -38,25 +38,25 @@ namespace Content.Client.Popups
 
         #region Actual Implementation
 
-        public void PopupCursor(string message, PopupType type=PopupType.Small)
+        public void PopupCursor(string message)
         {
             var label = new CursorPopupLabel(_inputManager.MouseScreenPosition)
             {
                 Text = message,
-                StyleClasses = { GetStyleClass(type) },
+                StyleClasses = { StyleNano.StyleClassPopupMessage },
             };
             _userInterfaceManager.PopupRoot.AddChild(label);
             _aliveCursorLabels.Add(label);
         }
 
-        public void PopupCoordinates(string message, EntityCoordinates coordinates, PopupType type=PopupType.Small)
+        public void PopupCoordinates(string message, EntityCoordinates coordinates)
         {
             if (_eyeManager.CurrentMap != Transform(coordinates.EntityId).MapID)
                 return;
-            PopupMessage(message, type, coordinates, null);
+            PopupMessage(message, coordinates, null);
         }
 
-        public void PopupEntity(string message, EntityUid uid, PopupType type=PopupType.Small)
+        public void PopupEntity(string message, EntityUid uid)
         {
             if (!EntityManager.EntityExists(uid))
                 return;
@@ -65,16 +65,16 @@ namespace Content.Client.Popups
             if (_eyeManager.CurrentMap != transform.MapID)
                 return; // TODO: entity may be outside of PVS, but enter PVS at a later time. So the pop-up should still get tracked?
 
-            PopupMessage(message, type, transform.Coordinates, uid);
+            PopupMessage(message, transform.Coordinates, uid);
         }
 
-        private void PopupMessage(string message, PopupType type, EntityCoordinates coordinates, EntityUid? entity = null)
+        private void PopupMessage(string message, EntityCoordinates coordinates, EntityUid? entity = null)
         {
             var label = new WorldPopupLabel(_eyeManager, EntityManager)
             {
                 Entity = entity,
                 Text = message,
-                StyleClasses = { GetStyleClass(type) },
+                StyleClasses = { StyleNano.StyleClassPopupMessage },
             };
 
             _userInterfaceManager.PopupRoot.AddChild(label);
@@ -88,28 +88,28 @@ namespace Content.Client.Popups
 
         #region Abstract Method Implementations
 
-        public override void PopupCursor(string message, Filter filter, PopupType type=PopupType.Small)
+        public override void PopupCursor(string message, Filter filter)
         {
             if (!filter.CheckPrediction)
                 return;
 
-            PopupCursor(message, type);
+            PopupCursor(message);
         }
 
-        public override void PopupCoordinates(string message, EntityCoordinates coordinates, Filter filter, PopupType type=PopupType.Small)
+        public override void PopupCoordinates(string message, EntityCoordinates coordinates, Filter filter)
         {
             if (!filter.CheckPrediction)
                 return;
 
-            PopupCoordinates(message, coordinates, type);
+            PopupCoordinates(message, coordinates);
         }
 
-        public override void PopupEntity(string message, EntityUid uid, Filter filter, PopupType type=PopupType.Small)
+        public override void PopupEntity(string message, EntityUid uid, Filter filter)
         {
             if (!filter.CheckPrediction)
                 return;
 
-            PopupEntity(message, uid, type);
+            PopupEntity(message, uid);
         }
 
         #endregion
@@ -118,17 +118,17 @@ namespace Content.Client.Popups
 
         private void OnPopupCursorEvent(PopupCursorEvent ev)
         {
-            PopupCursor(ev.Message, ev.Type);
+            PopupCursor(ev.Message);
         }
 
         private void OnPopupCoordinatesEvent(PopupCoordinatesEvent ev)
         {
-            PopupCoordinates(ev.Message, ev.Coordinates, ev.Type);
+            PopupCoordinates(ev.Message, ev.Coordinates);
         }
 
         private void OnPopupEntityEvent(PopupEntityEvent ev)
         {
-            PopupEntity(ev.Message, ev.Uid, ev.Type);
+            PopupEntity(ev.Message, ev.Uid);
         }
 
         private void OnRoundRestart(RoundRestartCleanupEvent ev)
@@ -142,18 +142,6 @@ namespace Content.Client.Popups
         }
 
         #endregion
-
-        private static string GetStyleClass(PopupType type) =>
-            type switch
-            {
-                PopupType.Small => StyleNano.StyleClassPopupMessageSmall,
-                PopupType.SmallCaution => StyleNano.StyleClassPopupMessageSmallCaution,
-                PopupType.Medium => StyleNano.StyleClassPopupMessageMedium,
-                PopupType.MediumCaution => StyleNano.StyleClassPopupMessageMediumCaution,
-                PopupType.Large => StyleNano.StyleClassPopupMessageLarge,
-                PopupType.LargeCaution => StyleNano.StyleClassPopupMessageLargeCaution,
-                _ => StyleNano.StyleClassPopupMessageSmall
-            };
 
         public override void FrameUpdate(float frameTime)
         {

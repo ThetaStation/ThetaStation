@@ -76,7 +76,6 @@
   - type: Construction
     graph: CrateGenericSteel
     node: crategenericsteel
-  - type: AntiRottingContainer
 
 - type: entity
   id: CrateHydroponics
@@ -580,7 +579,7 @@
   parent: CrateGeneric
   components:
   - type: EntityStorage
-    capacity: 500
+    Capacity: 500
   - type: Sprite
     sprite: Structures/Storage/Crates/livestock.rsi
     layers:

@@ -145,7 +145,7 @@ namespace Content.Client.Atmos.UI
                 PanelOverride = new StyleBoxFlat { BackgroundColor = Color.FromHex("#525252ff") }
             });
             CloseButton.OnPressed += _ => Close();
-            SetSize = (300, 420);
+            SetSize = (300, 200);
         }
 
 

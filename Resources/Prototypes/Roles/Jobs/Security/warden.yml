@@ -1,11 +1,11 @@
 - type: job
   id: Warden
-  name: job-name-warden
+  name: "warden"
   startingGear: WardenGear
   departments:
   - Security
   icon: "Warden"
-  supervisors: job-supervisors-hos
+  supervisors: "the head of security"
   canBeAntag: false
   access:
   - Security
@@ -13,7 +13,6 @@
   - Maintenance
   - Service
   - Brig
-  - External
 
 - type: startingGear
   id: WardenGear

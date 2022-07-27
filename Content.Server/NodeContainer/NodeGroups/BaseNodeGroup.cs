@@ -1,7 +1,6 @@
 using System.Linq;
 using Content.Server.NodeContainer.Nodes;
 using Robust.Shared.Map;
-using Robust.Shared.Utility;
 
 namespace Content.Server.NodeContainer.NodeGroups
 {
@@ -20,7 +19,7 @@ namespace Content.Server.NodeContainer.NodeGroups
 
         void Create(NodeGroupID groupId);
 
-        void Initialize(Node sourceNode, IEntityManager entMan);
+        void Initialize(Node sourceNode);
 
         void RemoveNode(Node node);
 
@@ -56,6 +55,9 @@ namespace Content.Server.NodeContainer.NodeGroups
         [ViewVariables]
         public bool Removed { get; set; } = false;
 
+        [ViewVariables]
+        protected EntityUid GridId { get; private set; }
+
         /// <summary>
         ///     Network ID of this group for client-side debug visualization of nodes.
         /// </summary>
@@ -70,8 +72,10 @@ namespace Content.Server.NodeContainer.NodeGroups
             GroupId = groupId;
         }
 
-        public virtual void Initialize(Node sourceNode, IEntityManager entMan)
+        public virtual void Initialize(Node sourceNode)
         {
+            // TODO: Can we get rid of this GridId?
+            GridId = IoCManager.Resolve<IEntityManager>().GetComponent<TransformComponent>(sourceNode.Owner).GridEntityId;
         }
 
         /// <summary>

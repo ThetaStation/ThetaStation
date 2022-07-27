@@ -7,14 +7,15 @@ using Robust.Shared.Network;
 namespace Content.IntegrationTests.Tests.Networking
 {
     [TestFixture]
-    sealed class NetworkIdsMatchTest
+    sealed class NetworkIdsMatchTest : ContentIntegrationTest
     {
         [Test]
         public async Task TestConnect()
         {
-            await using var pairTracker = await PoolManager.GetServerClient();
-            var server = pairTracker.Pair.Server;
-            var client = pairTracker.Pair.Client;
+            var client = StartClient();
+            var server = StartServer();
+
+            await ConnectNetworking(client, server);
 
             var clientCompFactory = client.ResolveDependency<IComponentFactory>();
             var serverCompFactory = server.ResolveDependency<IComponentFactory>();
@@ -33,7 +34,29 @@ namespace Content.IntegrationTests.Tests.Networking
             {
                 Assert.That(clientNetComps[netId].Name, Is.EqualTo(serverNetComps[netId].Name));
             }
-            await pairTracker.CleanReturnAsync();
+        }
+
+        private static async Task ConnectNetworking(ClientIntegrationInstance client, ServerIntegrationInstance server)
+        {
+            await Task.WhenAll(client.WaitIdleAsync(), server.WaitIdleAsync());
+
+            // Connect.
+
+            client.SetConnectTarget(server);
+
+            client.Post(() => IoCManager.Resolve<IClientNetManager>().ClientConnect(null, 0, null));
+
+            // Run some ticks for the handshake to complete and such.
+
+            for (var i = 0; i < 10; i++)
+            {
+                server.RunTicks(1);
+                await server.WaitIdleAsync();
+                client.RunTicks(1);
+                await client.WaitIdleAsync();
+            }
+
+            await Task.WhenAll(client.WaitIdleAsync(), server.WaitIdleAsync());
         }
     }
 }

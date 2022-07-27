@@ -8,15 +8,14 @@ namespace Content.IntegrationTests.Tests
 {
     [TestFixture]
     [TestOf(typeof(VendingMachineInventoryPrototype))]
-    public sealed class VendingMachineTest
+    public sealed class VendingMachineTest : ContentIntegrationTest
     {
         [Test]
         public async Task Test()
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true});
-            var server = pairTracker.Pair.Server;
+            var server = StartServer();
 
-            await server.WaitAssertion(() =>
+            server.Assert(() =>
             {
                 var prototypeManager = IoCManager.Resolve<IPrototypeManager>();
                 foreach (var vendorProto in prototypeManager.EnumeratePrototypes<VendingMachineInventoryPrototype>())
@@ -35,7 +34,7 @@ namespace Content.IntegrationTests.Tests
                 }
             });
 
-            await pairTracker.CleanReturnAsync();
+            await server.WaitIdleAsync();
         }
     }
 }

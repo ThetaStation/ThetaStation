@@ -1,9 +1,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Content.Server.Storage.Components;
-using Content.Server.Storage.EntitySystems;
 using NUnit.Framework;
 using Robust.Client.GameObjects;
+using Robust.Server.Player;
+using Robust.Shared;
 using Robust.Shared.GameObjects;
 using Robust.Shared.IoC;
 using Robust.Shared.Map;
@@ -11,9 +12,9 @@ using Robust.Shared.Maths;
 
 namespace Content.IntegrationTests.Tests
 {
-    public sealed class ContainerOcclusionTest
+    public sealed class ContainerOcclusionTest : ContentIntegrationTest
     {
-        private const string Prototypes = @"
+        private const string ExtraPrototypes = @"
 - type: entity
   id: ContainerOcclusionA
   components:
@@ -34,32 +35,63 @@ namespace Content.IntegrationTests.Tests
   - type: PointLight
 ";
 
+        private async Task<(ClientIntegrationInstance c, ServerIntegrationInstance s)> Start()
+        {
+            var optsServer = new ServerIntegrationOptions
+            {
+                CVarOverrides =
+                {
+                    {CVars.NetPVS.Name, "false"}
+                },
+                ExtraPrototypes = ExtraPrototypes
+            };
+            var optsClient = new ClientIntegrationOptions
+            {
+
+                CVarOverrides =
+                {
+                    {CVars.NetPVS.Name, "false"}
+                },
+                ExtraPrototypes = ExtraPrototypes
+            };
+
+            var (c, s) = await StartConnectedServerDummyTickerClientPair(optsClient, optsServer);
+
+            s.Post(() =>
+            {
+                IoCManager.Resolve<IPlayerManager>().ServerSessions.Single().JoinGame();
+
+                var mapMan = IoCManager.Resolve<IMapManager>();
+
+                mapMan.CreateMap(new MapId(1));
+            });
+
+            return (c, s);
+        }
+
         [Test]
         public async Task TestA()
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{ExtraPrototypes = Prototypes});
-            var s = pairTracker.Pair.Server;
-            var c = pairTracker.Pair.Client;
+            var (c, s) = await Start();
+
+            await c.WaitIdleAsync();
 
             var cEntities = c.ResolveDependency<IEntityManager>();
 
             EntityUid dummy = default;
-            var ent2 = s.ResolveDependency<IMapManager>();
-            await s.WaitPost(() =>
+            s.Post(() =>
             {
-                var mapId = ent2.GetAllMapIds().Last();
-                var pos = new MapCoordinates(Vector2.Zero, mapId);
+                var pos = new MapCoordinates(Vector2.Zero, new MapId(1));
                 var ent = IoCManager.Resolve<IEntityManager>();
-                var entStorage = ent.EntitySysManager.GetEntitySystem<EntityStorageSystem>();
                 var container = ent.SpawnEntity("ContainerOcclusionA", pos);
                 dummy = ent.SpawnEntity("ContainerOcclusionDummy", pos);
 
-                entStorage.Insert(dummy, container);
+                ent.GetComponent<EntityStorageComponent>(container).Insert(dummy);
             });
 
-            await PoolManager.RunTicksSync(pairTracker.Pair, 5);
+            await RunTicksSync(c, s, 5);
 
-            await c.WaitAssertion(() =>
+            c.Assert(() =>
             {
                 var sprite = cEntities.GetComponent<SpriteComponent>(dummy);
                 var light = cEntities.GetComponent<PointLightComponent>(dummy);
@@ -67,35 +99,32 @@ namespace Content.IntegrationTests.Tests
                 Assert.True(light.ContainerOccluded);
             });
 
-            await pairTracker.CleanReturnAsync();
+            await Task.WhenAll(c.WaitIdleAsync(), s.WaitIdleAsync());
         }
 
         [Test]
         public async Task TestB()
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{ExtraPrototypes = Prototypes});
-            var s = pairTracker.Pair.Server;
-            var c = pairTracker.Pair.Client;
+            var (c, s) = await Start();
+
+            await c.WaitIdleAsync();
 
             var cEntities = c.ResolveDependency<IEntityManager>();
-            var ent2 = s.ResolveDependency<IMapManager>();
 
             EntityUid dummy = default;
-            await s.WaitPost(() =>
+            s.Post(() =>
             {
-                var mapId = ent2.GetAllMapIds().Last();
-                var pos = new MapCoordinates(Vector2.Zero, mapId);
+                var pos = new MapCoordinates(Vector2.Zero, new MapId(1));
                 var ent = IoCManager.Resolve<IEntityManager>();
-                var entStorage = ent.EntitySysManager.GetEntitySystem<EntityStorageSystem>();
                 var container = ent.SpawnEntity("ContainerOcclusionB", pos);
                 dummy = ent.SpawnEntity("ContainerOcclusionDummy", pos);
 
-                entStorage.Insert(dummy, container);
+                ent.GetComponent<EntityStorageComponent>(container).Insert(dummy);
             });
 
-            await PoolManager.RunTicksSync(pairTracker.Pair, 5);
+            await RunTicksSync(c, s, 5);
 
-            await c.WaitAssertion(() =>
+            c.Assert(() =>
             {
                 var sprite = cEntities.GetComponent<SpriteComponent>(dummy);
                 var light = cEntities.GetComponent<PointLightComponent>(dummy);
@@ -103,37 +132,34 @@ namespace Content.IntegrationTests.Tests
                 Assert.False(light.ContainerOccluded);
             });
 
-            await pairTracker.CleanReturnAsync();
+            await Task.WhenAll(c.WaitIdleAsync(), s.WaitIdleAsync());
         }
 
         [Test]
         public async Task TestAb()
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{ExtraPrototypes = Prototypes});
-            var s = pairTracker.Pair.Server;
-            var c = pairTracker.Pair.Client;
+            var (c, s) = await Start();
 
-            var ent2 = s.ResolveDependency<IMapManager>();
+            await c.WaitIdleAsync();
+
             var cEntities = c.ResolveDependency<IEntityManager>();
 
             EntityUid dummy = default;
-            await s.WaitPost(() =>
+            s.Post(() =>
             {
-                var mapId = ent2.GetAllMapIds().Last();
-                var pos = new MapCoordinates(Vector2.Zero, mapId);
+                var pos = new MapCoordinates(Vector2.Zero, new MapId(1));
                 var ent = IoCManager.Resolve<IEntityManager>();
-                var entStorage = ent.EntitySysManager.GetEntitySystem<EntityStorageSystem>();
                 var containerA = ent.SpawnEntity("ContainerOcclusionA", pos);
                 var containerB = ent.SpawnEntity("ContainerOcclusionB", pos);
                 dummy = ent.SpawnEntity("ContainerOcclusionDummy", pos);
 
-                entStorage.Insert(containerB, containerA);
-                entStorage.Insert(dummy, containerB);
+                ent.GetComponent<EntityStorageComponent>(containerA).Insert(containerB);
+                ent.GetComponent<EntityStorageComponent>(containerB).Insert(dummy);
             });
 
-            await PoolManager.RunTicksSync(pairTracker.Pair, 5);
+            await RunTicksSync(c, s, 5);
 
-            await c.WaitAssertion(() =>
+            c.Assert(() =>
             {
                 var sprite = cEntities.GetComponent<SpriteComponent>(dummy);
                 var light = cEntities.GetComponent<PointLightComponent>(dummy);
@@ -141,7 +167,7 @@ namespace Content.IntegrationTests.Tests
                 Assert.True(light.ContainerOccluded);
             });
 
-            await pairTracker.CleanReturnAsync();
+            await Task.WhenAll(c.WaitIdleAsync(), s.WaitIdleAsync());
         }
     }
 }

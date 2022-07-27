@@ -1,5 +1,5 @@
 using Content.Server.Atmos.Components;
-using Content.Server.Shuttles.Systems;
+using Content.Server.Shuttles.EntitySystems;
 using Content.Shared.Maps;
 using Robust.Shared.Map;
 
@@ -12,7 +12,6 @@ namespace Content.Server.Atmos.EntitySystems;
 public sealed class AutomaticAtmosSystem : EntitySystem
 {
     [Dependency] private readonly ITileDefinitionManager _tileDefinitionManager = default!;
-    [Dependency] private readonly AtmosphereSystem _atmosphereSystem = default!;
 
     public override void Initialize()
     {
@@ -28,7 +27,7 @@ public sealed class AutomaticAtmosSystem : EntitySystem
         // TODO: a simple array lookup, as tile IDs are likely contiguous, and there's at most 2^16 possibilities anyway.
         if (!((ev.OldTile.IsSpace(_tileDefinitionManager) && !ev.NewTile.IsSpace(_tileDefinitionManager)) ||
             (!ev.OldTile.IsSpace(_tileDefinitionManager) && ev.NewTile.IsSpace(_tileDefinitionManager))) ||
-            _atmosphereSystem.HasAtmosphere(ev.Entity))
+            HasComp<IAtmosphereComponent>(ev.Entity))
             return;
 
         if (!TryComp<PhysicsComponent>(ev.Entity, out var physics))

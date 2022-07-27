@@ -98,16 +98,5 @@
         amount: 2
       - id: OmnizineChemistryBottle
         amount: 1
-      - id: MedkitCombatFilled
-
-- type: entity
-  parent: ClothingBeltWand
-  id: ClothingBeltWandFilled
-  suffix: Filled
-  components:
-  - type: StorageFill
-    contents:
-    - id: WeaponWandPolymorphCarp
-    - id: WeaponWandFireball
-    - id: WeaponWandDeath
-    - id: WeaponWandPolymorphDoor
+      - id: MedkitCombatFilled  
+      

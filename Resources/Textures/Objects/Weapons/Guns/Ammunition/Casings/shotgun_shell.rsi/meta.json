@@ -32,6 +32,12 @@
             "name": "flare-spent"
         },
         {
+            "name": "flash"
+        },
+        {
+            "name": "flash-spent"
+        },
+        {
             "name": "incendiary"
         },
         {

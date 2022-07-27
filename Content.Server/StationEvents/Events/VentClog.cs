@@ -11,9 +11,29 @@ using Robust.Shared.Random;
 namespace Content.Server.StationEvents.Events;
 
 [UsedImplicitly]
-public sealed class VentClog : StationEventSystem
+public sealed class VentClog : StationEvent
 {
-    public override string Prototype => "VentClog";
+    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+
+    public override string Name => "VentClog";
+
+    public override string? StartAnnouncement =>
+        Loc.GetString("station-event-vent-clog-start-announcement");
+
+    public override int EarliestStart => 15;
+
+    public override int MinimumPlayers => 15;
+
+    public override float Weight => WeightLow;
+
+    public override int? MaxOccurrences => 2;
+
+    // Give players time to reach cover.
+    protected override float StartAfter => 50f;
+
+    protected override float EndAfter => 51.0f; // This can, surprisingly, cause the event to end before it starts.
 
     public readonly IReadOnlyList<string> SafeishVentChemicals = new[]
     {
@@ -21,36 +41,33 @@ public sealed class VentClog : StationEventSystem
         "Nutriment", "Sugar", "SpaceLube", "Ethanol", "Mercury", "Ephedrine", "WeldingFuel", "VentCrud"
     };
 
-    public override void Started()
+    public override void Startup()
     {
-        base.Started();
+        base.Startup();
 
         // TODO: "safe random" for chems. Right now this includes admin chemicals.
-        var allReagents = PrototypeManager.EnumeratePrototypes<ReagentPrototype>()
+        var allReagents = _prototypeManager.EnumeratePrototypes<ReagentPrototype>()
             .Where(x => !x.Abstract)
             .Select(x => x.ID).ToList();
 
         // This is gross, but not much can be done until event refactor, which needs Dynamic.
         var sound = new SoundPathSpecifier("/Audio/Effects/extinguish.ogg");
 
-        foreach (var (_, transform) in EntityManager.EntityQuery<GasVentPumpComponent, TransformComponent>())
+        foreach (var (_, transform) in _entityManager.EntityQuery<GasVentPumpComponent, TransformComponent>())
         {
             var solution = new Solution();
 
-            if (!RobustRandom.Prob(0.33f))
-                continue;
-
-            if (RobustRandom.Prob(0.05f))
+            if (_random.Prob(0.05f))
             {
-                solution.AddReagent(RobustRandom.Pick(allReagents), 100);
+                solution.AddReagent(_random.Pick(allReagents), 100);
             }
             else
             {
-                solution.AddReagent(RobustRandom.Pick(SafeishVentChemicals), 100);
+                solution.AddReagent(_random.Pick(SafeishVentChemicals), 100);
             }
 
-            FoamAreaReactionEffect.SpawnFoam("Foam", transform.Coordinates, solution, RobustRandom.Next(2, 6), 20, 1,
-                1, sound, EntityManager);
+            FoamAreaReactionEffect.SpawnFoam("Foam", transform.Coordinates, solution, _random.Next(2, 6), 20, 1,
+                1, sound, _entityManager);
         }
     }
 

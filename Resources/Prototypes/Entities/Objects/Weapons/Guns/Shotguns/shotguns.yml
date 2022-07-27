@@ -63,7 +63,6 @@
       gun_magazine:
         name: Magazine
         startingItem: MagazineShotgun
-        priority: 2
         whitelist:
           tags:
           - MagazineShotgun
@@ -94,9 +93,6 @@
     fireRate: 8
   - type: BallisticAmmoProvider
     capacity: 2
-  - type: Construction
-    graph: ShotgunSawn
-    node: shotgundoublebarreled
 
 - type: entity
   name: Enforcer
@@ -127,7 +123,7 @@
   name: sawn-off shotgun
   parent: BaseWeaponShotgun
   id: WeaponShotgunSawn
-  description: Groovy!
+  description: Omar's coming!
   components:
   - type: Sprite
     sprite: Objects/Weapons/Guns/Shotguns/sawn.rsi
@@ -138,6 +134,3 @@
     fireRate: 4
   - type: BallisticAmmoProvider
     capacity: 2
-  - type: Construction
-    graph: ShotgunSawn
-    node: shotgunsawn

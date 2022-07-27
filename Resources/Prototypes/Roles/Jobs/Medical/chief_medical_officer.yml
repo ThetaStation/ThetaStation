@@ -2,7 +2,7 @@
 
 - type: job
   id: ChiefMedicalOfficer
-  name: job-name-cmo
+  name: "chief medical officer"
   weight: 10
   startingGear: CMOGear
   departments:
@@ -10,7 +10,7 @@
   - Medical
   icon: "ChiefMedicalOfficer"
   requireAdminNotify: true
-  supervisors: job-supervisors-captain
+  supervisors: "the captain"
   canBeAntag: false
   access:
   - Medical

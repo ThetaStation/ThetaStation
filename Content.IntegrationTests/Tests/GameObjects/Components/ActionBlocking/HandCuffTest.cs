@@ -16,7 +16,7 @@ namespace Content.IntegrationTests.Tests.GameObjects.Components.ActionBlocking
     [TestFixture]
     [TestOf(typeof(CuffableComponent))]
     [TestOf(typeof(HandcuffComponent))]
-    public sealed class HandCuffTest
+    public sealed class HandCuffTest : ContentIntegrationTest
     {
         private const string Prototypes = @"
 - type: entity
@@ -39,8 +39,8 @@ namespace Content.IntegrationTests.Tests.GameObjects.Components.ActionBlocking
         [Test]
         public async Task Test()
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true, ExtraPrototypes = Prototypes});
-            var server = pairTracker.Pair.Server;
+            var options = new ServerIntegrationOptions{ExtraPrototypes = Prototypes};
+            var server = StartServer(options);
 
             EntityUid human;
             EntityUid otherHuman;
@@ -49,7 +49,7 @@ namespace Content.IntegrationTests.Tests.GameObjects.Components.ActionBlocking
             CuffableComponent cuffed;
             HandsComponent hands;
 
-            await server.WaitAssertion(() =>
+            server.Assert(() =>
             {
                 var mapManager = IoCManager.Resolve<IMapManager>();
                 var mapId = mapManager.CreateMap();
@@ -89,7 +89,7 @@ namespace Content.IntegrationTests.Tests.GameObjects.Components.ActionBlocking
 
             });
 
-            await pairTracker.CleanReturnAsync();
+            await server.WaitIdleAsync();
         }
 
         private void AddHand(EntityUid to)

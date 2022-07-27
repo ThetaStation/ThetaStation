@@ -53,19 +53,16 @@ public sealed class SubFloorHideSystem : SharedSubFloorHideSystem
         }
 
         // Is there some layer that is always visible?
-        var hasVisibleLayer = false;
-        foreach (var layerKey in component.VisibleLayers)
+        if (args.Sprite.LayerMapTryGet(SubfloorLayers.FirstLayer, out var firstLayer))
         {
-            if (!args.Sprite.LayerMapTryGet(layerKey, out var layerIndex))
-                continue;
-
-            var layer = args.Sprite[layerIndex];
+            var layer = args.Sprite[firstLayer];
             layer.Visible = true;
             layer.Color = layer.Color.WithAlpha(1f);
-            hasVisibleLayer = true;
+            args.Sprite.Visible = true;
+            return;
         }
 
-        args.Sprite.Visible = hasVisibleLayer || revealed;
+        args.Sprite.Visible = revealed;
     }
 
     private void UpdateAll()
@@ -75,4 +72,9 @@ public sealed class SubFloorHideSystem : SharedSubFloorHideSystem
             _appearanceSystem.MarkDirty(appearance);
         }
     }
+}
+
+public enum SubfloorLayers : byte
+{
+    FirstLayer, // always visible. E.g. vent part of a vent..
 }

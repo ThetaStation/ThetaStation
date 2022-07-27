@@ -24,7 +24,7 @@ namespace Content.Server.Chat.Managers
         void SendAdminAnnouncement(string message);
 
         void ChatMessageToOne(ChatChannel channel, string message, string messageWrap, EntityUid source, bool hideChat,
-            INetChannel client, Color? colorOverride = null);
+            INetChannel client);
         void ChatMessageToMany(ChatChannel channel, string message, string messageWrap, EntityUid source, bool hideChat,
             List<INetChannel> clients, Color? colorOverride = null);
         void ChatMessageToManyFiltered(Filter filter, ChatChannel channel, string message, string messageWrap, EntityUid source, bool hideChat, Color? colorOverride);

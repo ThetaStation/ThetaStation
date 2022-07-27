@@ -10,13 +10,14 @@ namespace Content.IntegrationTests.Tests.Atmos
 {
     [TestFixture]
     [TestOf(typeof(Atmospherics))]
-    public sealed class ConstantsTest
+    public sealed class ConstantsTest : ContentIntegrationTest
     {
         [Test]
         public async Task TotalGasesTest()
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true});
-            var server = pairTracker.Pair.Server;
+            var server = StartServer();
+
+            await server.WaitIdleAsync();
 
             await server.WaitPost(() =>
             {
@@ -26,7 +27,6 @@ namespace Content.IntegrationTests.Tests.Atmos
 
                 Assert.That(Enum.GetValues(typeof(Gas)).Length, Is.EqualTo(Atmospherics.TotalNumberOfGases));
             });
-            await pairTracker.CleanReturnAsync();
         }
     }
 }

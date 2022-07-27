@@ -1,11 +1,11 @@
 ﻿- type: job
   id: ServiceWorker
-  name: job-name-serviceworker
+  name: "service worker"
   startingGear: ServiceWorkerGear
   departments:
   - Civilian
   icon: "ServiceWorker"
-  supervisors: job-supervisors-service
+  supervisors: "chefs, botanists, the bartender, and the head of personnel"
   canBeAntag: false
   access:
   - Service

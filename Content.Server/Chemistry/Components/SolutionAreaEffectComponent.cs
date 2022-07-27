@@ -69,11 +69,7 @@ namespace Content.Server.Chemistry.Components
 
             var xform = _entities.GetComponent<TransformComponent>(Owner);
             var solSys = _systems.GetEntitySystem<SolutionContainerSystem>();
-
-            if (!_entities.TryGetComponent(xform.GridUid, out IMapGridComponent? gridComp))
-                return;
-
-            var grid = gridComp.Grid;
+            var grid = MapManager.GetGrid(xform.GridEntityId);
             var origin = grid.TileIndicesFor(xform.Coordinates);
 
             DebugTools.Assert(xform.Anchored, "Area effect entity prototypes must be anchored.");
@@ -145,17 +141,14 @@ namespace Content.Server.Chemistry.Components
         /// with the other area effects from the inception.</param>
         public void React(float averageExposures)
         {
-
-            if (!_entities.EntitySysManager.GetEntitySystem<SolutionContainerSystem>().TryGetSolution(Owner, SolutionName, out var solution))
+            if (!EntitySystem.Get<SolutionContainerSystem>().TryGetSolution(Owner, SolutionName, out var solution))
                 return;
 
+            var chemistry = EntitySystem.Get<ReactiveSystem>();
             var xform = _entities.GetComponent<TransformComponent>(Owner);
-            if (!MapManager.TryGetGrid(xform.GridUid, out var mapGrid))
-                return;
-
+            var mapGrid = MapManager.GetGrid(xform.GridEntityId);
             var tile = mapGrid.GetTileRef(xform.Coordinates.ToVector2i(_entities, MapManager));
-            var chemistry = _entities.EntitySysManager.GetEntitySystem<ReactiveSystem>();
-            var lookup = _entities.EntitySysManager.GetEntitySystem<EntityLookupSystem>();
+            var lookup = EntitySystem.Get<EntityLookupSystem>();
 
             var solutionFraction = 1 / Math.Floor(averageExposures);
 

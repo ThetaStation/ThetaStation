@@ -1,11 +1,11 @@
 - type: job
   id: SalvageSpecialist
-  name: job-name-salvagespec
+  name: "salvage specialist"
   icon: "ShaftMiner"
   startingGear: SalvageSpecialistGear
   departments:
   - Cargo
-  supervisors: job-supervisors-hop-qm
+  supervisors: "the quartermaster and head of personnel"
   access:
   - Cargo
   - Salvage

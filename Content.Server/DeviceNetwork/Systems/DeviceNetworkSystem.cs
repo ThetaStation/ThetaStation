@@ -247,7 +247,7 @@ namespace Content.Server.DeviceNetwork.Systems
                 return true;
 
             var beforeBroadcastAttemptEvent = new BeforeBroadcastAttemptEvent(recipients);
-            RaiseLocalEvent(packet.Sender, beforeBroadcastAttemptEvent, true);
+            RaiseLocalEvent(packet.Sender, beforeBroadcastAttemptEvent);
 
             if (beforeBroadcastAttemptEvent.Cancelled || beforeBroadcastAttemptEvent.ModifiedRecipients == null)
                 return false;

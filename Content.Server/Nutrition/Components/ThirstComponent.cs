@@ -1,4 +1,5 @@
 using Content.Shared.Alert;
+using Content.Shared.Damage;
 
 namespace Content.Server.Nutrition.Components
 {
@@ -16,6 +17,7 @@ namespace Content.Server.Nutrition.Components
     [RegisterComponent]
     public sealed class ThirstComponent : Component
     {
+
         // Base stuff
         [ViewVariables(VVAccess.ReadWrite)]
         [DataField("baseDecayRate")]
@@ -44,9 +46,14 @@ namespace Content.Server.Nutrition.Components
 
         public static readonly Dictionary<ThirstThreshold, AlertType> ThirstThresholdAlertTypes = new()
         {
+            {ThirstThreshold.OverHydrated, AlertType.Overhydrated},
             {ThirstThreshold.Thirsty, AlertType.Thirsty},
             {ThirstThreshold.Parched, AlertType.Parched},
-            {ThirstThreshold.Dead, AlertType.Parched},
         };
+
+
+        [DataField("damage", required: true)]
+        [ViewVariables(VVAccess.ReadWrite)]
+        public DamageSpecifier Damage = default!;
     }
 }

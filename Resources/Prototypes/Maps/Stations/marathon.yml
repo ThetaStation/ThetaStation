@@ -1,7 +1,7 @@
 - type: gameMap
-  id: Marathon
+  id: marathonstation
   mapName: 'Marathon Station'
-  mapPath: /Maps/Stations/marathon.yml
+  mapPath: /Maps/marathon.yml
   minPlayers: 35
   maxPlayers: 70
   stations:
@@ -44,5 +44,3 @@
         MedicalIntern: [ 2, 2 ]
         ServiceWorker: [ 2, 2 ]
         SecurityCadet: [ 2, 2 ]
-        Psychologist: [ 1, 1 ]
-        Detective: [ 1, 1 ]

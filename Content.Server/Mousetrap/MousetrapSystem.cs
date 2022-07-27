@@ -5,7 +5,6 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory;
 using Content.Shared.Mousetrap;
 using Content.Shared.StepTrigger;
-using Content.Shared.StepTrigger.Systems;
 using Robust.Shared.Player;
 
 namespace Content.Server.Mousetrap;
@@ -19,9 +18,9 @@ public sealed class MousetrapSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<MousetrapComponent, UseInHandEvent>(OnUseInHand);
-        SubscribeLocalEvent<MousetrapComponent, BeforeDamageUserOnTriggerEvent>(BeforeDamageOnTrigger);
+        SubscribeLocalEvent<MousetrapComponent, BeforeDamageOnTriggerEvent>(BeforeDamageOnTrigger);
         SubscribeLocalEvent<MousetrapComponent, StepTriggerAttemptEvent>(OnStepTriggerAttempt);
-        SubscribeLocalEvent<MousetrapComponent, TriggerEvent>(OnTrigger);
+        SubscribeLocalEvent<MousetrapComponent, StepTriggeredEvent>(OnStepTrigger);
     }
 
     private void OnUseInHand(EntityUid uid, MousetrapComponent component, UseInHandEvent args)
@@ -38,11 +37,27 @@ public sealed class MousetrapSystem : EntitySystem
 
     private void OnStepTriggerAttempt(EntityUid uid, MousetrapComponent component, ref StepTriggerAttemptEvent args)
     {
-        args.Continue |= component.IsActive;
+        args.Continue = component.IsActive;
     }
 
-    private void BeforeDamageOnTrigger(EntityUid uid, MousetrapComponent component, BeforeDamageUserOnTriggerEvent args)
+    private void BeforeDamageOnTrigger(EntityUid uid, MousetrapComponent component, BeforeDamageOnTriggerEvent args)
     {
+        foreach (var slot in component.IgnoreDamageIfSlotFilled)
+        {
+            if (!_inventorySystem.TryGetSlotContainer(args.Tripper, slot, out var container, out _))
+            {
+                continue;
+            }
+
+            // This also means that wearing slippers won't
+            // hurt the entity.
+            if (container.ContainedEntity != null)
+            {
+                args.Damage *= 0;
+                return;
+            }
+        }
+
         if (TryComp(args.Tripper, out PhysicsComponent? physics) && physics.Mass != 0)
         {
             // The idea here is inverse,
@@ -54,9 +69,11 @@ public sealed class MousetrapSystem : EntitySystem
         }
     }
 
-    private void OnTrigger(EntityUid uid, MousetrapComponent component, TriggerEvent args)
+    private void OnStepTrigger(EntityUid uid, MousetrapComponent component, ref StepTriggeredEvent args)
     {
         component.IsActive = false;
+        _triggerSystem.Trigger(uid);
+
         UpdateVisuals(uid);
     }
 

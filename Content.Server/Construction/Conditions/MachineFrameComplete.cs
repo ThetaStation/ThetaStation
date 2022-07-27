@@ -25,7 +25,7 @@ namespace Content.Server.Construction.Conditions
             if (!entityManager.TryGetComponent(uid, out MachineFrameComponent? machineFrame))
                 return false;
 
-            return EntitySystem.Get<MachineFrameSystem>().IsComplete(machineFrame);
+            return machineFrame.IsComplete;
         }
 
         public bool DoExamine(ExaminedEvent args)
@@ -41,7 +41,7 @@ namespace Content.Server.Construction.Conditions
                 return true;
             }
 
-            if (EntitySystem.Get<MachineFrameSystem>().IsComplete(machineFrame)) return false;
+            if (machineFrame.IsComplete) return false;
 
             args.Message.AddMarkup(Loc.GetString("construction-condition-machine-frame-requirement-label") + "\n");
             foreach (var (part, required) in machineFrame.Requirements)

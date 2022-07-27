@@ -127,8 +127,6 @@
     sprite: Clothing/Back/Duffels/syndicate.rsi
   - type: Clothing
     sprite: Clothing/Back/Duffels/syndicate.rsi
-  - type: Storage
-    capacity: 131
 
 - type: entity
   parent: ClothingBackpackDuffelSyndicate

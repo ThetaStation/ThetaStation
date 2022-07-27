@@ -26,9 +26,6 @@ namespace Content.Shared.Roles
         [DataField("name")]
         public string Name { get; } = string.Empty;
 
-        [ViewVariables(VVAccess.ReadOnly)]
-        public string LocalizedName => Loc.GetString(Name);
-
         [DataField("joinNotifyCrew")]
         public bool JoinNotifyCrew { get; } = false;
 
@@ -50,14 +47,6 @@ namespace Content.Shared.Roles
 
         [DataField("startingGear", customTypeSerializer: typeof(PrototypeIdSerializer<StartingGearPrototype>))]
         public string? StartingGear { get; private set; }
-
-        /// <summary>
-        /// Use this to spawn in as a non-humanoid (borg, test subject, etc.)
-        /// Starting gear will be ignored.
-        /// If you want to just add special attributes to a humanoid, use AddComponentSpecial instead.
-        /// </summary>
-        [DataField("jobEntity", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
-        public string? JobEntity = null;
 
         [DataField("icon")] public string Icon { get; } = string.Empty;
 

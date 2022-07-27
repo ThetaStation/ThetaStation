@@ -192,7 +192,7 @@ namespace Content.Client.Preferences.UI
                 var highPriorityJob = humanoid?.JobPriorities.SingleOrDefault(p => p.Value == JobPriority.High).Key;
                 if (highPriorityJob != null)
                 {
-                    var jobName = IoCManager.Resolve<IPrototypeManager>().Index<JobPrototype>(highPriorityJob).LocalizedName;
+                    var jobName = IoCManager.Resolve<IPrototypeManager>().Index<JobPrototype>(highPriorityJob).Name;
                     description = $"{description}\n{jobName}";
                 }
 

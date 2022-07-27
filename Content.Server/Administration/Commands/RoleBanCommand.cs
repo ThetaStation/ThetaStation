@@ -1,11 +1,6 @@
-﻿using System.Linq;
-using Content.Server.Administration.Managers;
+﻿using Content.Server.Administration.Managers;
 using Content.Shared.Administration;
-using Content.Shared.Roles;
-using Robust.Server.Player;
 using Robust.Shared.Console;
-using Robust.Shared.Prototypes;
-using Serilog;
 
 namespace Content.Server.Administration.Commands;
 
@@ -13,8 +8,8 @@ namespace Content.Server.Administration.Commands;
 public sealed class RoleBanCommand : IConsoleCommand
 {
     public string Command => "roleban";
-    public string Description => Loc.GetString("cmd-roleban-desc");
-    public string Help => Loc.GetString("cmd-roleban-help");
+    public string Description => "Bans a player from a role";
+    public string Help => $"Usage: {Command} <name or user ID> <job> <reason> [duration in minutes, leave out or 0 for permanent ban]";
 
     public async void Execute(IConsoleShell shell, string argStr, string[] args)
     {
@@ -50,26 +45,5 @@ public sealed class RoleBanCommand : IConsoleCommand
         }
 
         IoCManager.Resolve<RoleBanManager>().CreateJobBan(shell, target, job, reason, minutes);
-    }
-
-    public CompletionResult GetCompletion(IConsoleShell shell, string[] args)
-    {
-        var durOpts = new CompletionOption[]
-        {
-            new("0", Loc.GetString("cmd-roleban-hint-duration-1")),
-            new("1440", Loc.GetString("cmd-roleban-hint-duration-2")),
-            new("10080", Loc.GetString("cmd-roleban-hint-duration-3")),
-        };
-
-        return args.Length switch
-        {
-            1 => CompletionResult.FromHintOptions(CompletionHelper.SessionNames(),
-                Loc.GetString("cmd-roleban-hint-1")),
-            2 => CompletionResult.FromHintOptions(CompletionHelper.PrototypeIDs<JobPrototype>(),
-                Loc.GetString("cmd-roleban-hint-2")),
-            3 => CompletionResult.FromHint(Loc.GetString("cmd-roleban-hint-3")),
-            4 => CompletionResult.FromHintOptions(durOpts, Loc.GetString("cmd-roleban-hint-4")),
-            _ => CompletionResult.Empty
-        };
     }
 }

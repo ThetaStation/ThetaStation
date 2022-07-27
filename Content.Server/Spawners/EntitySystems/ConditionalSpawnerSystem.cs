@@ -55,7 +55,7 @@ namespace Content.Server.Spawners.EntitySystems
 
             foreach (var rule in component.GameRules)
             {
-                if (!_ticker.IsGameRuleStarted(rule)) continue;
+                if (!_ticker.GameRuleStarted(rule)) continue;
                 Spawn(component);
                 return;
             }

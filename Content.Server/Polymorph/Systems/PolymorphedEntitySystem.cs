@@ -7,7 +7,6 @@ using Content.Shared.Actions;
 using Content.Shared.Actions.ActionTypes;
 using Content.Shared.Damage;
 using Content.Shared.Hands.EntitySystems;
-using Content.Shared.IdentityManagement;
 using Content.Shared.MobState.Components;
 using Content.Shared.Polymorph;
 using Robust.Server.Containers;
@@ -48,9 +47,6 @@ namespace Content.Server.Polymorph.Systems
                 return;
         
             if (!TryComp<PolymorphedEntityComponent>(uid, out var component))
-                return;
-
-            if (Deleted(component.Parent))
                 return;
 
             var proto = component.Prototype;
@@ -97,11 +93,7 @@ namespace Content.Server.Polymorph.Systems
                 mind.Mind.TransferTo(component.Parent);
             }
 
-            _popup.PopupEntity(Loc.GetString("polymorph-revert-popup-generic",
-                ("parent", Identity.Entity(uid, EntityManager)),
-                ("child", Identity.Entity(component.Parent, EntityManager))),
-                component.Parent,
-                Filter.Pvs(component.Parent));
+            _popup.PopupEntity(Loc.GetString("polymorph-revert-popup-generic", ("parent", uid), ("child", component.Parent)), component.Parent, Filter.Pvs(component.Parent));
             QueueDel(uid);
         }
 

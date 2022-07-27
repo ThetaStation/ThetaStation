@@ -14,17 +14,20 @@ namespace Content.IntegrationTests.Tests.Destructible
     [TestFixture]
     [TestOf(typeof(DamageTypeTrigger))]
     [TestOf(typeof(AndTrigger))]
-    public sealed class DestructibleDamageTypeTest
+    public sealed class DestructibleDamageTypeTest : ContentIntegrationTest
     {
         [Test]
         public async Task Test()
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true, ExtraPrototypes = Prototypes});
-            var server = pairTracker.Pair.Server;
+            var server = StartServer(new ServerContentIntegrationOption
+            {
+                ExtraPrototypes = Prototypes
+            });
 
-            var testMap = await PoolManager.CreateTestMap(pairTracker);
+            await server.WaitIdleAsync();
 
             var sEntityManager = server.ResolveDependency<IEntityManager>();
+            var sMapManager = server.ResolveDependency<IMapManager>();
             var sEntitySystemManager = server.ResolveDependency<IEntitySystemManager>();
 
             EntityUid sDestructibleEntity = default;
@@ -34,12 +37,12 @@ namespace Content.IntegrationTests.Tests.Destructible
 
             await server.WaitPost(() =>
             {
-                var coordinates = testMap.GridCoords;
+                var gridId = GetMainGrid(sMapManager).GridEntityId;
+                var coordinates = new EntityCoordinates(gridId, 0, 0);
 
                 sDestructibleEntity = sEntityManager.SpawnEntity(DestructibleDamageTypeEntityId, coordinates);
                 sDamageableComponent = IoCManager.Resolve<IEntityManager>().GetComponent<DamageableComponent>(sDestructibleEntity);
                 sTestThresholdListenerSystem = sEntitySystemManager.GetEntitySystem<TestDestructibleListenerSystem>();
-                sTestThresholdListenerSystem.ThresholdsReached.Clear();
                 sDamageableSystem = sEntitySystemManager.GetEntitySystem<DamageableSystem>();
             });
 
@@ -177,7 +180,6 @@ namespace Content.IntegrationTests.Tests.Destructible
                 // No new thresholds reached as triggers once is set to true and it already triggered before
                 Assert.IsEmpty(sTestThresholdListenerSystem.ThresholdsReached);
             });
-            await pairTracker.CleanReturnAsync();
         }
     }
 }

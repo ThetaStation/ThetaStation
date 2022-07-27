@@ -1,6 +1,5 @@
 using System.Linq;
 using Content.Server.Storage.Components;
-using Content.Server.Storage.EntitySystems;
 using Content.Shared.PDA;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -11,7 +10,6 @@ public sealed class SurplusBundleSystem : EntitySystem
 {
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly EntityStorageSystem _entityStorage = default!;
 
     private UplinkStoreListingPrototype[] _uplinks = default!;
 
@@ -33,12 +31,13 @@ public sealed class SurplusBundleSystem : EntitySystem
 
     private void OnMapInit(EntityUid uid, SurplusBundleComponent component, MapInitEvent args)
     {
-        FillStorage(uid, component);
+        FillStorage(uid, component: component);
     }
 
-    private void FillStorage(EntityUid uid, SurplusBundleComponent? component = null)
+    private void FillStorage(EntityUid uid, IStorageComponent? storage = null,
+        SurplusBundleComponent? component = null)
     {
-        if (!Resolve(uid, ref component))
+        if (!Resolve(uid, ref storage, ref component))
             return;
 
         var cords = Transform(uid).Coordinates;
@@ -47,7 +46,7 @@ public sealed class SurplusBundleSystem : EntitySystem
         foreach (var item in content)
         {
             var ent = EntityManager.SpawnEntity(item.ItemId, cords);
-            _entityStorage.Insert(ent, component.Owner);
+            storage.Insert(ent);
         }
     }
 

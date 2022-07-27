@@ -32,7 +32,8 @@
     netsync: false
     visible: false
   - type: Appearance
-  - type: PipeColorVisuals
+    visuals:
+    - type: PipeColorVisualizer
   - type: NodeContainer
   - type: AtmosUnsafeUnanchor
   - type: AtmosPipeColor
@@ -65,7 +66,7 @@
   - type: Sprite
     layers:
       - state: pipeHalf
-        map: [ "enum.PipeVisualLayers.Pipe" ]
+        map: [ "enum.PipeColorVisualizer+Layers.Pipe" ]
   - type: Construction
     graph: GasPipe
     node: half
@@ -84,7 +85,7 @@
   - type: Sprite
     layers:
       - state: pipeStraight
-        map: [ "enum.PipeVisualLayers.Pipe" ]
+        map: [ "enum.PipeColorVisualizer+Layers.Pipe" ]
   - type: Construction
     graph: GasPipe
     node: straight
@@ -103,7 +104,7 @@
   - type: Sprite
     layers:
       - state: pipeBend
-        map: [ "enum.PipeVisualLayers.Pipe" ]
+        map: [ "enum.PipeColorVisualizer+Layers.Pipe" ]
   - type: Construction
     graph: GasPipe
     node: bend
@@ -122,7 +123,7 @@
   - type: Sprite
     layers:
       - state: pipeTJunction
-        map: [ "enum.PipeVisualLayers.Pipe" ]
+        map: [ "enum.PipeColorVisualizer+Layers.Pipe" ]
   - type: Construction
     graph: GasPipe
     node: tjunction
@@ -143,7 +144,7 @@
   - type: Sprite
     layers:
       - state: pipeFourway
-        map: [ "enum.PipeVisualLayers.Pipe" ]
+        map: [ "enum.PipeColorVisualizer+Layers.Pipe" ]
   - type: Construction
     graph: GasPipe
     node: fourway

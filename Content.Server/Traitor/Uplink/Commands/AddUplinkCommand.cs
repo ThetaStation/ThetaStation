@@ -14,47 +14,27 @@ namespace Content.Server.Traitor.Uplink.Commands
     {
         public string Command => "adduplink";
 
-        public string Description => Loc.GetString("add-uplink-command-description");
+        public string Description => "Creates uplink on selected item and link it to users account";
 
-        public string Help => Loc.GetString("add-uplink-command-help");
-
-
-        public CompletionResult GetCompletion(IConsoleShell shell, string[] args)
-        {
-            return args.Length switch
-            {
-                1 => CompletionResult.FromHintOptions(CompletionHelper.SessionNames(), Loc.GetString("add-uplink-command-completion-1")),
-                2 => CompletionResult.FromHint(Loc.GetString("add-uplink-command-completion-2")),
-                _ => CompletionResult.Empty
-            };
-        }
+        public string Help => "Usage: adduplink <username> <item-id>";
 
         public void Execute(IConsoleShell shell, string argStr, string[] args)
         {
-            if (args.Length > 2)
+            if (args.Length < 1)
             {
                 shell.WriteError(Loc.GetString("shell-wrong-arguments-number"));
                 return;
             }
 
-            IPlayerSession? session;
-            if (args.Length > 0)
+            // Get player entity
+            if (!IoCManager.Resolve<IPlayerManager>().TryGetSessionByUsername(args[0], out var session))
             {
-                // Get player entity
-                if (!IoCManager.Resolve<IPlayerManager>().TryGetSessionByUsername(args[0], out session))
-                {
-                    shell.WriteLine(Loc.GetString("shell-target-player-does-not-exist"));
-                    return;
-                }
+                shell.WriteLine(Loc.GetString("shell-target-player-does-not-exist"));
+                return;
             }
-            else
+            if (session.AttachedEntity is not {} user)
             {
-                session = (IPlayerSession?) shell.Player;
-            }
-
-            if (session?.AttachedEntity is not { } user)
-            {
-                shell.WriteLine(Loc.GetString("add-uplink-command-error-1"));
+                shell.WriteLine(Loc.GetString("Selected player doesn't controll any entity"));
                 return;
             }
 
@@ -92,7 +72,7 @@ namespace Content.Server.Traitor.Uplink.Commands
             if (!entityManager.EntitySysManager.GetEntitySystem<UplinkSystem>()
                 .AddUplink(user, uplinkAccount, uplinkEntity))
             {
-                shell.WriteLine(Loc.GetString("add-uplink-command-error-2"));
+                shell.WriteLine(Loc.GetString("Failed to add uplink to the player"));
                 return;
             }
         }

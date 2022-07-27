@@ -74,7 +74,7 @@ public sealed class NetworkConfiguratorSystem : EntitySystem
 
     private void TryAddNetworkDevice(EntityUid? targetUid, EntityUid userUid, NetworkConfiguratorComponent configurator, DeviceNetworkComponent? device = null)
     {
-        if (!targetUid.HasValue || !Resolve(targetUid.Value, ref device, false))
+        if (!targetUid.HasValue || !Resolve(targetUid.Value, ref device))
             return;
 
         if (string.IsNullOrEmpty(device.Address))
@@ -91,7 +91,7 @@ public sealed class NetworkConfiguratorSystem : EntitySystem
 
         configurator.Devices.Add(device.Address, targetUid.Value);
         _popupSystem.PopupCursor(Loc.GetString("network-configurator-device-saved", ("address", device.Address), ("device", targetUid)),
-            Filter.Entities(userUid), PopupType.Medium);
+            Filter.Entities(userUid));
 
         UpdateUiState(configurator.Owner, configurator);
     }

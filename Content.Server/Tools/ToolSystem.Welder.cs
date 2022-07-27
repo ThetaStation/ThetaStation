@@ -78,10 +78,9 @@ namespace Content.Server.Tools
             SolutionContainerManagerComponent? solutionContainer = null,
             SharedItemComponent? item = null,
             PointLightComponent? light = null,
-            AppearanceComponent? appearance = null,
-            TransformComponent? transform = null)
+            AppearanceComponent? appearance = null)
         {
-            if (!Resolve(uid, ref welder, ref solutionContainer, ref transform))
+            if (!Resolve(uid, ref welder, ref solutionContainer))
                 return false;
 
             // Optional components.
@@ -114,11 +113,8 @@ namespace Content.Server.Tools
 
             SoundSystem.Play(welder.WelderOnSounds.GetSound(), Filter.Pvs(uid), uid, AudioHelpers.WithVariation(0.125f).WithVolume(-5f));
 
-            if (transform.GridUid is {} gridUid)
-            {
-                var position = _transformSystem.GetGridOrMapTilePosition(uid, transform);
-                _atmosphereSystem.HotspotExpose(gridUid, position, 700, 50, true);
-            }
+            // TODO: Use TransformComponent directly.
+            _atmosphereSystem.HotspotExpose(EntityManager.GetComponent<TransformComponent>(welder.Owner).Coordinates, 700, 50, true);
 
             welder.Dirty();
 
@@ -304,22 +300,17 @@ namespace Content.Server.Tools
             if (_welderTimer < WelderUpdateTimer)
                 return;
 
-            // TODO Use an "active welder" component instead, EntityQuery over that.
             foreach (var tool in _activeWelders.ToArray())
             {
                 if (!EntityManager.TryGetComponent(tool, out WelderComponent? welder)
-                    || !EntityManager.TryGetComponent(tool, out SolutionContainerManagerComponent? solutionContainer)
-                    || !EntityManager.TryGetComponent(tool, out TransformComponent? transform))
+                    || !EntityManager.TryGetComponent(tool, out SolutionContainerManagerComponent? solutionContainer))
                     continue;
 
                 if (!_solutionContainerSystem.TryGetSolution(tool, welder.FuelSolution, out var solution, solutionContainer))
                     continue;
 
-                if (transform.GridUid is { } gridUid)
-                {
-                    var position = _transformSystem.GetGridOrMapTilePosition(tool, transform);
-                    _atmosphereSystem.HotspotExpose(gridUid, position, 700, 50, true);
-                }
+                // TODO: Use TransformComponent directly.
+                _atmosphereSystem.HotspotExpose(EntityManager.GetComponent<TransformComponent>(welder.Owner).Coordinates, 700, 50, true);
 
                 solution.RemoveReagent(welder.FuelReagent, welder.FuelConsumption * _welderTimer);
 

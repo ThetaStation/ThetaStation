@@ -1,6 +1,6 @@
 - type: job
   id: HeadOfPersonnel
-  name: job-name-hop
+  name: "head of personnel"
   weight: 20
   startingGear: HoPGear
   departments:
@@ -8,7 +8,7 @@
   - Civilian
   icon: "HeadOfPersonnel"
   requireAdminNotify: true
-  supervisors: job-supervisors-captain
+  supervisors: "the captain"
   canBeAntag: false
   access:
   - Command

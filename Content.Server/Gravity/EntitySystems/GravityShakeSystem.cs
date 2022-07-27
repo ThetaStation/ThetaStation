@@ -16,7 +16,7 @@ namespace Content.Server.Gravity.EntitySystems
         [Dependency] private readonly IPlayerManager _playerManager = default!;
         [Dependency] private readonly IRobustRandom _random = default!;
 
-        [Dependency] private readonly SharedCameraRecoilSystem _sharedCameraRecoil = default!;
+        [Dependency] private readonly CameraRecoilSystem _cameraRecoil = default!;
 
         private Dictionary<EntityUid, uint> _gridsToShake = new();
 
@@ -76,14 +76,14 @@ namespace Content.Server.Gravity.EntitySystems
             foreach (var player in _playerManager.Sessions)
             {
                 if (player.AttachedEntity is not {Valid: true} attached
-                    || EntityManager.GetComponent<TransformComponent>(attached).GridUid != gridId
+                    || EntityManager.GetComponent<TransformComponent>(attached).GridEntityId != gridId
                     || !EntityManager.HasComponent<CameraRecoilComponent>(attached))
                 {
                     continue;
                 }
 
                 var kick = new Vector2(_random.NextFloat(), _random.NextFloat()) * GravityKick;
-                _sharedCameraRecoil.KickCamera(player.AttachedEntity.Value, kick);
+                _cameraRecoil.KickCamera(player.AttachedEntity.Value, kick);
             }
         }
     }

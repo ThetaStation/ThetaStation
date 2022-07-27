@@ -44,12 +44,13 @@ namespace Content.Server.Mind.Commands
 
         public static void MakeSentient(EntityUid uid, IEntityManager entityManager)
         {
-            entityManager.RemoveComponent<NPCComponent>(uid);
+            if(entityManager.HasComponent<AiControllerComponent>(uid))
+                entityManager.RemoveComponent<AiControllerComponent>(uid);
+
 
             entityManager.EnsureComponent<MindComponent>(uid);
-            entityManager.EnsureComponent<InputMoverComponent>(uid);
-            entityManager.EnsureComponent<MobMoverComponent>(uid);
-            entityManager.EnsureComponent<MovementSpeedModifierComponent>(uid);
+            entityManager.EnsureComponent<SharedPlayerInputMoverComponent>(uid);
+            entityManager.EnsureComponent<SharedPlayerMobMoverComponent>(uid);
             entityManager.EnsureComponent<SharedSpeechComponent>(uid);
             entityManager.EnsureComponent<SharedEmotingComponent>(uid);
             entityManager.EnsureComponent<ExaminerComponent>(uid);

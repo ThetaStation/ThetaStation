@@ -24,12 +24,6 @@ namespace Content.Server.Weapon.Melee.EnergySword
         [DataField("deActivateSound")]
         public SoundSpecifier DeActivateSound { get; set; } = new SoundPathSpecifier("/Audio/Weapons/ebladeoff.ogg");
 
-        [DataField("onHitOn")]
-        public SoundSpecifier OnHitOn { get; set; } = new SoundPathSpecifier("/Audio/Weapons/eblade1.ogg");
-
-        [DataField("onHitOff")]
-        public SoundSpecifier OnHitOff { get; set; } = new SoundPathSpecifier("/Audio/Weapons/genhit1.ogg");
-
         [DataField("colorOptions")]
         public List<Color> ColorOptions = new()
         {
@@ -42,8 +36,5 @@ namespace Content.Server.Weapon.Melee.EnergySword
 
         [DataField("litDamageBonus", required: true)]
         public DamageSpecifier LitDamageBonus = default!;
-
-        [DataField("litDisarmMalus", required: true)]
-        public float litDisarmMalus = 0.6f;
     }
 }

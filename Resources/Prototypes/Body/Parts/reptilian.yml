@@ -26,10 +26,10 @@
     size: 14
     compatibility: Biological
     mechanisms:
-    - OrganAnimalHeart
+    - OrganHumanHeart
     - OrganHumanLungs
-    - OrganReptilianStomach
-    - OrganAnimalLiver
+    - OrganHumanStomach
+    - OrganHumanLiver
     - OrganHumanKidneys
 #    criticalThreshold: 100
 #    deadThreshold: 150
@@ -58,10 +58,7 @@
 #    deadThreshold: 120
   - type: Input
     context: "ghost"
-  - type: MovementSpeedModifier
-    baseWalkSpeed: 0
-    baseSprintSpeed: 0
-  - type: InputMover
+  - type: DummyInputMover
   - type: GhostOnMove
 
 - type: entity

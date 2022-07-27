@@ -17,7 +17,8 @@ public sealed class KnockSpellEvent : InstantActionEvent
 
     /// <summary>
     /// Volume control for the spell.
+    /// -6f is default because the base soundfile is really loud
     /// </summary>
     [DataField("knockVolume")]
-    public float KnockVolume = 5f;
+    public float KnockVolume = -6f;
 }

@@ -16,12 +16,12 @@ public sealed class SecretRuleSystem : GameRuleSystem
 
     public override string Prototype => "Secret";
 
-    public override void Started()
+    public override void Started(GameRuleConfiguration _)
     {
         PickRule();
     }
 
-    public override void Ended()
+    public override void Ended(GameRuleConfiguration _)
     {
         // noop
         // Preset should already handle it.

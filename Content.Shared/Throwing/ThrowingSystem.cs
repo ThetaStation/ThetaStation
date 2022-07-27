@@ -1,6 +1,4 @@
-using Content.Shared.Gravity;
 using Content.Shared.Interaction;
-using Content.Shared.Movement.Components;
 using Content.Shared.Tag;
 using Robust.Shared.Physics;
 using Robust.Shared.Timing;
@@ -17,7 +15,6 @@ public sealed class ThrowingSystem : EntitySystem
     /// </summary>
     public const float FlyTime = 0.15f;
 
-    [Dependency] private readonly SharedGravitySystem _gravity = default!;
     [Dependency] private readonly SharedInteractionSystem _interactionSystem = default!;
     [Dependency] private readonly ThrownItemSystem _thrownSystem = default!;
     [Dependency] private readonly TagSystem _tagSystem = default!;
@@ -25,7 +22,7 @@ public sealed class ThrowingSystem : EntitySystem
     /// <summary>
     ///     Tries to throw the entity if it has a physics component, otherwise does nothing.
     /// </summary>
-    /// <param name="uid">The entity being thrown.</param>
+    /// <param name="entity">The entity being thrown.</param>
     /// <param name="direction">A vector pointing from the entity to its destination.</param>
     /// <param name="strength">How much the direction vector should be multiplied for velocity.</param>
     /// <param name="user"></param>
@@ -35,7 +32,7 @@ public sealed class ThrowingSystem : EntitySystem
         Vector2 direction,
         float strength = 1.0f,
         EntityUid? user = null,
-        float pushbackRatio = 5.0f,
+        float pushbackRatio = 10.0f,
         PhysicsComponent? physics = null,
         TransformComponent? transform = null,
         EntityQuery<PhysicsComponent>? physicsQuery = null,
@@ -48,7 +45,7 @@ public sealed class ThrowingSystem : EntitySystem
         if (physics == null && !physicsQuery.Value.TryGetComponent(uid, out physics))
             return;
 
-        if ((physics.BodyType & (BodyType.Dynamic | BodyType.KinematicController)) == 0x0)
+        if (physics.BodyType != BodyType.Dynamic)
         {
             Logger.Warning($"Tried to throw entity {ToPrettyString(uid)} but can't throw {physics.BodyType} bodies!");
             return;
@@ -96,13 +93,10 @@ public sealed class ThrowingSystem : EntitySystem
         }
 
         // Give thrower an impulse in the other direction
-        if (user != null &&
-            pushbackRatio > 0.0f &&
-            physicsQuery.Value.TryGetComponent(user.Value, out var userPhysics) &&
-            _gravity.IsWeightless(user.Value, userPhysics))
+        if (user != null && pushbackRatio > 0.0f && physicsQuery.Value.TryGetComponent(user.Value, out var userPhysics))
         {
             var msg = new ThrowPushbackAttemptEvent();
-            RaiseLocalEvent(physics.Owner, msg);
+            RaiseLocalEvent(physics.Owner, msg, false);
 
             if (!msg.Cancelled)
                 userPhysics.ApplyLinearImpulse(-impulseVector * pushbackRatio);

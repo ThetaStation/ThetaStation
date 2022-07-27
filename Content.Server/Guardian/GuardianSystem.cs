@@ -8,7 +8,6 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.MobState;
-using Content.Shared.Popups;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Containers;
@@ -99,7 +98,7 @@ namespace Content.Server.Guardian
             if (args.Cancelled || args.Target != component.Host)
                 return;
 
-            _popupSystem.PopupCursor(Loc.GetString("guardian-attack-host"), Filter.Entities(uid), PopupType.LargeCaution);
+            _popupSystem.PopupCursor(Loc.GetString("guardian-attack-host"), Filter.Entities(uid));
             args.Cancel();
         }
 

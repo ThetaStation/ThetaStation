@@ -11,7 +11,7 @@ using Robust.Shared.Utility;
 
 namespace Content.YAMLLinter
 {
-    internal class Program
+    internal class Program : ContentIntegrationTest
     {
         private static int Main(string[] args)
         {
@@ -45,36 +45,45 @@ namespace Content.YAMLLinter
 
         private async Task<Dictionary<string, HashSet<ErrorNode>>> ValidateClient()
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{DummyTicker = true, Disconnected = true});
-            var client = pairTracker.Pair.Client;
+            var client = StartClient(new ClientContentIntegrationOption()
+            {
+                FailureLogLevel = null,
+            });
+
+            await client.WaitIdleAsync();
 
             var cPrototypeManager = client.ResolveDependency<IPrototypeManager>();
             var clientErrors = new Dictionary<string, HashSet<ErrorNode>>();
 
-            await client.WaitPost(() =>
+            await client.WaitAssertion(() =>
             {
                 clientErrors = cPrototypeManager.ValidateDirectory(new ResourcePath("/Prototypes"));
             });
 
-            await pairTracker.CleanReturnAsync();
+            client.Stop();
 
             return clientErrors;
         }
 
         private async Task<Dictionary<string, HashSet<ErrorNode>>> ValidateServer()
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{DummyTicker = true, Disconnected = true});
-            var server = pairTracker.Pair.Server;
+            var server = StartServer(new ServerContentIntegrationOption()
+            {
+                FailureLogLevel = null,
+                CVarOverrides = { {CCVars.GameDummyTicker.Name, "true"} }
+            });
+
+            await server.WaitIdleAsync();
 
             var sPrototypeManager = server.ResolveDependency<IPrototypeManager>();
             var serverErrors = new Dictionary<string, HashSet<ErrorNode>>();
 
-            await server.WaitPost(() =>
+            await server.WaitAssertion(() =>
             {
                 serverErrors = sPrototypeManager.ValidateDirectory(new ResourcePath("/Prototypes"));
             });
 
-            await pairTracker.CleanReturnAsync();
+            server.Stop();
 
             return serverErrors;
         }
@@ -83,8 +92,9 @@ namespace Content.YAMLLinter
         {
             var allErrors = new Dictionary<string, HashSet<ErrorNode>>();
 
-            var serverErrors = await ValidateServer();
-            var clientErrors = await ValidateClient();
+            var tasks = await Task.WhenAll(ValidateClient(), ValidateServer());
+            var clientErrors = tasks[0];
+            var serverErrors = tasks[1];
 
             foreach (var (key, val) in serverErrors)
             {

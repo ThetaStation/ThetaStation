@@ -45,6 +45,9 @@
       types:
         Heat: 1 #per second, scales with number of fire 'stacks'
   - type: Appearance
-  - type: FireVisuals
-    sprite: Effects/fire.rsi
-    normalState: 1
+    visuals:
+    - type: FireVisualizer
+      sprite: Effects/fire.rsi
+      normalState: 1
+      Sprite:
+        drawdepth: Effects

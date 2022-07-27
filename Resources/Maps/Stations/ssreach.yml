@@ -4210,7 +4210,7 @@ entities:
   - canCollide: False
     type: Physics
 - uid: 153
-  type: PowerCellSmall
+  type: PowerCellSmallStandard
   components:
   - parent: 152
     type: Transform
@@ -4225,7 +4225,7 @@ entities:
   - canCollide: False
     type: Physics
 - uid: 155
-  type: PowerCellSmall
+  type: PowerCellSmallStandard
   components:
   - parent: 154
     type: Transform
@@ -20161,7 +20161,7 @@ entities:
     parent: 4
     type: Transform
 - uid: 1961
-  type: ComputerCargoOrders
+  type: ComputerSupplyOrdering
   components:
   - pos: 6.5,8.5
     parent: 4
@@ -20177,7 +20177,7 @@ entities:
     parent: 4
     type: Transform
 - uid: 1963
-  type: CargoTelepad
+  type: cargoTelepad
   components:
   - pos: 6.5,9.5
     parent: 4

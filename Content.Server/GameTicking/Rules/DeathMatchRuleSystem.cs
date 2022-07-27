@@ -34,14 +34,14 @@ public sealed class DeathMatchRuleSystem : GameRuleSystem
         SubscribeLocalEvent<DamageChangedEvent>(OnHealthChanged);
     }
 
-    public override void Started()
+    public override void Started(GameRuleConfiguration _)
     {
         _chatManager.DispatchServerAnnouncement(Loc.GetString("rule-death-match-added-announcement"));
 
         _playerManager.PlayerStatusChanged += OnPlayerStatusChanged;
     }
 
-    public override void Ended()
+    public override void Ended(GameRuleConfiguration _)
     {
         _deadCheckTimer = null;
         _restartTimer = null;
@@ -64,7 +64,7 @@ public sealed class DeathMatchRuleSystem : GameRuleSystem
 
     private void RunDelayedCheck()
     {
-        if (!RuleAdded || _deadCheckTimer != null)
+        if (!Enabled || _deadCheckTimer != null)
             return;
 
         _deadCheckTimer = DeadCheckDelay;
@@ -72,7 +72,7 @@ public sealed class DeathMatchRuleSystem : GameRuleSystem
 
     public override void Update(float frameTime)
     {
-        if (!RuleAdded)
+        if (!Enabled)
             return;
 
         // If the restart timer is active, that means the round is ending soon, no need to check for winners.

@@ -1,51 +1,7 @@
-using Content.Shared.Alert;
-using Content.Shared.Clothing;
-using Content.Shared.Inventory;
-using Content.Shared.Movement.Components;
-using Robust.Shared.GameStates;
-using Robust.Shared.Map;
-using Robust.Shared.Physics;
-using Robust.Shared.Serialization;
-
 namespace Content.Shared.Gravity
 {
     public abstract class SharedGravitySystem : EntitySystem
     {
-        [Dependency] private readonly AlertsSystem _alerts = default!;
-        [Dependency] private readonly InventorySystem _inventory = default!;
-
-        public bool IsWeightless(EntityUid uid, PhysicsComponent? body = null, TransformComponent? xform = null)
-        {
-            Resolve(uid, ref body, false);
-
-            if ((body?.BodyType & (BodyType.Static | BodyType.Kinematic)) != 0)
-                return false;
-
-            if (TryComp<MovementIgnoreGravityComponent>(uid, out var ignoreGravityComponent))
-                return ignoreGravityComponent.Weightless;
-
-            if (!Resolve(uid, ref xform))
-                return true;
-
-            // If grid / map has gravity
-            if ((TryComp<GravityComponent>(xform.GridUid, out var gravity) ||
-                 TryComp(xform.MapUid, out gravity)) && gravity.Enabled)
-            {
-                return false;
-            }
-
-            // Something holding us down
-            // If the planet has gravity component and no gravity it will still give gravity
-            // If there's no gravity comp at all (i.e. space) then they don't work.
-            if (gravity != null && _inventory.TryGetSlotEntity(uid, "shoes", out var ent))
-            {
-                if (TryComp<MagbootsComponent>(ent, out var boots) && boots.On)
-                    return false;
-            }
-
-            return true;
-        }
-
         public override void Initialize()
         {
             base.Initialize();

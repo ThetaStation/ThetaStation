@@ -85,7 +85,7 @@ public abstract class AlertsSystem : EntitySystem
 
             AfterShowAlert(alertsComponent);
 
-            Dirty(alertsComponent);
+            alertsComponent.Dirty();
         }
         else
         {
@@ -182,13 +182,13 @@ public abstract class AlertsSystem : EntitySystem
 
     protected virtual void HandleComponentShutdown(EntityUid uid, AlertsComponent component, ComponentShutdown args)
     {
-        RaiseLocalEvent(uid, new AlertSyncEvent(uid), true);
+        RaiseLocalEvent(uid, new AlertSyncEvent(uid));
         _metaSystem.RemoveFlag(uid, MetaDataFlags.EntitySpecific);
     }
 
     private void HandleComponentStartup(EntityUid uid, AlertsComponent component, ComponentStartup args)
     {
-        RaiseLocalEvent(uid, new AlertSyncEvent(uid), true);
+        RaiseLocalEvent(uid, new AlertSyncEvent(uid));
         _metaSystem.AddFlag(uid, MetaDataFlags.EntitySpecific);
     }
 

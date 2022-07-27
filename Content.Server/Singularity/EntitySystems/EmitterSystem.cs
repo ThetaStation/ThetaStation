@@ -2,7 +2,6 @@ using System.Threading;
 using Content.Server.Administration.Logs;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
-using Content.Server.Projectiles;
 using Content.Server.Projectiles.Components;
 using Content.Server.Singularity.Components;
 using Content.Server.Storage.Components;
@@ -188,7 +187,7 @@ namespace Content.Server.Singularity.EntitySystems
                 return;
             }
 
-            Get<ProjectileSystem>().SetShooter(projectileComponent, component.Owner);
+            projectileComponent.IgnoreEntity(component.Owner);
 
             physicsComponent
                 .LinearVelocity = EntityManager.GetComponent<TransformComponent>(component.Owner).WorldRotation.ToWorldVec() * 20f;

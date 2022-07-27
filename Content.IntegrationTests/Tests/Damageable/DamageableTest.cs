@@ -14,9 +14,9 @@ namespace Content.IntegrationTests.Tests.Damageable
     [TestFixture]
     [TestOf(typeof(DamageableComponent))]
     [TestOf(typeof(DamageableSystem))]
-    public sealed class DamageableTest
+    public sealed class DamageableTest : ContentIntegrationTest
     {
-        public const string Prototypes = @"
+        private const string Prototypes = @"
 # Define some damage groups
 - type: damageType
   id: TestDamage1
@@ -71,16 +71,29 @@ namespace Content.IntegrationTests.Tests.Damageable
     damageContainer: testDamageContainer
 ";
 
+        // public bool & function to determine whether dealing damage resulted in actual damage change
+        public bool DamageChanged = false;
+        public void DamageChangedListener(EntityUid _, DamageableComponent comp, DamageChangedEvent args)
+        {
+            DamageChanged = true;
+        }
+
         [Test]
         public async Task TestDamageableComponents()
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true, ExtraPrototypes = Prototypes});
-            var server = pairTracker.Pair.Server;
+            var server = StartServerDummyTicker(new ServerContentIntegrationOption
+            {
+                ExtraPrototypes = Prototypes
+            });
+
+            await server.WaitIdleAsync();
 
             var sEntityManager = server.ResolveDependency<IEntityManager>();
             var sMapManager = server.ResolveDependency<IMapManager>();
             var sPrototypeManager = server.ResolveDependency<IPrototypeManager>();
             var sEntitySystemManager = server.ResolveDependency<IEntitySystemManager>();
+
+            sEntityManager.EventBus.SubscribeLocalEvent<DamageableComponent, DamageChangedEvent>(DamageChangedListener);
 
             EntityUid sDamageableEntity = default;
             DamageableComponent sDamageableComponent = null;
@@ -140,7 +153,8 @@ namespace Content.IntegrationTests.Tests.Damageable
                 DamageSpecifier damage = new(group3, damageToDeal);
 
                 sDamageableSystem.TryChangeDamage(uid, damage, true);
-
+                Assert.That(DamageChanged);
+                DamageChanged = false;
                 Assert.That(sDamageableComponent.TotalDamage, Is.EqualTo(damageToDeal));
                 Assert.That(sDamageableComponent.DamagePerGroup[group3.ID], Is.EqualTo(damageToDeal));
                 foreach (var type in types)
@@ -151,7 +165,8 @@ namespace Content.IntegrationTests.Tests.Damageable
 
                 // Heal
                 sDamageableSystem.TryChangeDamage(uid, -damage);
-
+                Assert.That(DamageChanged);
+                DamageChanged = false;
                 Assert.That(sDamageableComponent.TotalDamage, Is.EqualTo(FixedPoint2.Zero));
                 Assert.That(sDamageableComponent.DamagePerGroup[group3.ID], Is.EqualTo(FixedPoint2.Zero));
                 foreach (var type in types)
@@ -165,7 +180,8 @@ namespace Content.IntegrationTests.Tests.Damageable
                 damageToDeal = FixedPoint2.New(types.Count() * 5 - 1);
                 damage = new DamageSpecifier(group3, damageToDeal);
                 sDamageableSystem.TryChangeDamage(uid, damage, true);
-
+                Assert.That(DamageChanged);
+                DamageChanged = false;
                 Assert.That(sDamageableComponent.TotalDamage, Is.EqualTo(damageToDeal));
                 Assert.That(sDamageableComponent.DamagePerGroup[group3.ID], Is.EqualTo(damageToDeal));
                 Assert.That(sDamageableComponent.Damage.DamageDict[type3a.ID], Is.EqualTo(damageToDeal / types.Count()));
@@ -176,6 +192,8 @@ namespace Content.IntegrationTests.Tests.Damageable
 
                 // Heal
                 sDamageableSystem.TryChangeDamage(uid, -damage);
+                Assert.That(DamageChanged);
+                DamageChanged = false;
                 Assert.That(sDamageableComponent.TotalDamage, Is.EqualTo(FixedPoint2.Zero));
                 Assert.That(sDamageableComponent.DamagePerGroup[group3.ID], Is.EqualTo(FixedPoint2.Zero));
                 foreach (var type in types)
@@ -188,6 +206,7 @@ namespace Content.IntegrationTests.Tests.Damageable
                 Assert.That(sDamageableComponent.TotalDamage, Is.EqualTo(FixedPoint2.Zero));
                 damage = new DamageSpecifier(group1, FixedPoint2.New(10)) + new DamageSpecifier(type2b, FixedPoint2.New(10));
                 sDamageableSystem.TryChangeDamage(uid, damage, true);
+                Assert.That(DamageChanged, Is.False);
                 Assert.That(sDamageableComponent.DamagePerGroup.TryGetValue(group1.ID, out groupDamage), Is.False);
                 Assert.That(sDamageableComponent.Damage.DamageDict.TryGetValue(type1.ID, out typeDamage), Is.False);
                 Assert.That(sDamageableComponent.TotalDamage, Is.EqualTo(FixedPoint2.Zero));
@@ -208,13 +227,15 @@ namespace Content.IntegrationTests.Tests.Damageable
 
                 // Test Over-Healing
                 sDamageableSystem.TryChangeDamage(uid, new DamageSpecifier(group3, FixedPoint2.New(-100)));
+                Assert.That(DamageChanged);
+                DamageChanged = false;
                 Assert.That(sDamageableComponent.TotalDamage, Is.EqualTo(FixedPoint2.Zero));
 
                 // Test that if no health change occurred, returns false
                 sDamageableSystem.TryChangeDamage(uid, new DamageSpecifier(group3, -100));
+                Assert.That(DamageChanged, Is.False);
                 Assert.That(sDamageableComponent.TotalDamage, Is.EqualTo(FixedPoint2.Zero));
             });
-            await pairTracker.CleanReturnAsync();
         }
     }
 }

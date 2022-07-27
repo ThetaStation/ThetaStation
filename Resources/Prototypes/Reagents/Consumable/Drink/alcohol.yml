@@ -1,6 +1,8 @@
 
 # Base Alcohol
 
+# TODO MIRROR: drunkenness
+
 - type: reagent
   id: Absinthe
   name: reagent-name-absinthe
@@ -112,10 +114,6 @@
         - !type:ReagentThreshold
           reagent: Ethanol
           min: 3
-    Alcohol:
-      effects:
-      - !type:Drunk
-        boozePower: 3
 
 - type: reagent
   id: Gin
@@ -425,7 +423,7 @@
 - type: reagent
   id: Bilk
   name: reagent-name-bilk
-  parent: BaseDrink
+  parent: BaseAlcohol
   desc: reagent-desc-bilk
   physicalDesc: reagent-physical-desc-bilky
   color: "#895C4C"
@@ -521,7 +519,7 @@
 - type: reagent
   id: DoctorsDelight
   name: reagent-name-doctors-delight
-  parent: BaseDrink
+  parent: BaseAlcohol
   desc: reagent-desc-doctors-delight
   physicalDesc: reagent-physical-desc-strong-smelling
   color: "#FF8CFF"

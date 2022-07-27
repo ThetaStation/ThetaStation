@@ -8,12 +8,10 @@
   },
   "states": [
     {
-        "name": "lampgreen",
-        "directions": 4
+      "name": "lampgreen"
     },
     {
-        "name": "lampgreen-on",
-        "directions": 4
+      "name": "lampgreen-on"
     },
     {
       "name": "off-inhand-left",

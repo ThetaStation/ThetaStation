@@ -4,9 +4,7 @@ using Content.Server.Chemistry.EntitySystems;
 using Content.Server.DoAfter;
 using Content.Server.Nutrition.Components;
 using Content.Server.Popups;
-using Content.Shared.IdentityManagement;
 using Content.Shared.Nutrition.Components;
-using Content.Shared.Popups;
 using Content.Shared.Verbs;
 using Robust.Shared.Player;
 
@@ -111,8 +109,7 @@ namespace Content.Server.Animals.Systems
             var split = _solutionContainerSystem.SplitSolution(uid, solution, quantity);
             _solutionContainerSystem.TryAddSolution(ev.ContainerUid, targetSolution, split);
 
-            _popupSystem.PopupEntity(Loc.GetString("udder-system-success", ("amount", quantity), ("target", Identity.Entity(ev.ContainerUid, EntityManager))), uid,
-                Filter.Entities(ev.UserUid), PopupType.Medium);
+            _popupSystem.PopupEntity(Loc.GetString("udder-system-success", ("amount", quantity), ("target", ev.ContainerUid)), uid, Filter.Entities(ev.UserUid));
         }
 
         private void OnMilkingFailed(EntityUid uid, UdderComponent component, MilkingFailEvent ev)

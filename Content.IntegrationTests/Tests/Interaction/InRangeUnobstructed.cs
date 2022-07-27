@@ -10,7 +10,7 @@ namespace Content.IntegrationTests.Tests.Interaction
 {
     [TestFixture]
     [TestOf(typeof(SharedInteractionSystem))]
-    public sealed class InRangeUnobstructed
+    public sealed class InRangeUnobstructed : ContentIntegrationTest
     {
         private const string HumanId = "MobHumanBase";
 
@@ -25,25 +25,30 @@ namespace Content.IntegrationTests.Tests.Interaction
         [Test]
         public async Task EntityEntityTest()
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true});
-            var server = pairTracker.Pair.Server;
+            var server = StartServer();
+
+            await server.WaitIdleAsync();
 
             var sEntities = server.ResolveDependency<IEntityManager>();
             var mapManager = server.ResolveDependency<IMapManager>();
-            var conSystem = sEntities.EntitySysManager.GetEntitySystem<SharedContainerSystem>();
 
             EntityUid origin = default;
             EntityUid other = default;
+            IContainer container = null;
+            IComponent component = null;
+            EntityCoordinates entityCoordinates = default;
             MapCoordinates mapCoordinates = default;
 
-            await server.WaitAssertion(() =>
+            server.Assert(() =>
             {
                 var mapId = mapManager.CreateMap();
                 var coordinates = new MapCoordinates(Vector2.Zero, mapId);
 
                 origin = sEntities.SpawnEntity(HumanId, coordinates);
                 other = sEntities.SpawnEntity(HumanId, coordinates);
-                conSystem.EnsureContainer<Container>(other, "InRangeUnobstructedTestOtherContainer");
+                container = other.EnsureContainer<Container>("InRangeUnobstructedTestOtherContainer");
+                component = sEntities.GetComponent<TransformComponent>(other);
+                entityCoordinates = sEntities.GetComponent<TransformComponent>(other).Coordinates;
                 mapCoordinates = sEntities.GetComponent<TransformComponent>(other).MapPosition;
             });
 
@@ -51,7 +56,7 @@ namespace Content.IntegrationTests.Tests.Interaction
 
             var interactionSys = server.ResolveDependency<IEntitySystemManager>().GetEntitySystem<SharedInteractionSystem>();
 
-            await server.WaitAssertion(() =>
+            server.Assert(() =>
             {
                 // Entity <-> Entity
                 Assert.True(interactionSys.InRangeUnobstructed(origin, other));
@@ -95,7 +100,7 @@ namespace Content.IntegrationTests.Tests.Interaction
                 Assert.True(interactionSys.InRangeUnobstructed(mapCoordinates, origin, InteractionRangeDivided15Times3));
             });
 
-            await pairTracker.CleanReturnAsync();
+            await server.WaitIdleAsync();
         }
     }
 }

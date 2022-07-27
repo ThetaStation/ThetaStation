@@ -10,10 +10,10 @@ namespace Content.IntegrationTests.Tests
 {
     [TestFixture]
     [TestOf(typeof(RoundRestartCleanupEvent))]
-    public sealed class ResettingEntitySystemTests
+    public sealed class ResettingEntitySystemTests : ContentIntegrationTest
     {
         [Reflect(false)]
-        public sealed class TestRoundRestartCleanupEvent : EntitySystem
+        private sealed class TestRoundRestartCleanupEvent : EntitySystem
         {
             public bool HasBeenReset { get; set; }
 
@@ -33,8 +33,15 @@ namespace Content.IntegrationTests.Tests
         [Test]
         public async Task ResettingEntitySystemResetTest()
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true});
-            var server = pairTracker.Pair.Server;
+            var server = StartServer(new ServerContentIntegrationOption
+            {
+                ContentBeforeIoC = () =>
+                {
+                    IoCManager.Resolve<IEntitySystemManager>().LoadExtraSystemType<TestRoundRestartCleanupEvent>();
+                }
+            });
+
+            await server.WaitIdleAsync();
 
             var entitySystemManager = server.ResolveDependency<IEntitySystemManager>();
             var gameTicker = entitySystemManager.GetEntitySystem<GameTicker>();
@@ -53,7 +60,6 @@ namespace Content.IntegrationTests.Tests
 
                 Assert.True(system.HasBeenReset);
             });
-            await pairTracker.CleanReturnAsync();
         }
     }
 }

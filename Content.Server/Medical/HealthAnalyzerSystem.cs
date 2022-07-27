@@ -4,7 +4,6 @@ using Content.Server.Medical.Components;
 using Content.Server.Disease;
 using Content.Server.Popups;
 using Content.Shared.Damage;
-using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.MobState.Components;
 using Robust.Server.GameObjects;
@@ -84,7 +83,7 @@ namespace Content.Server.Medical
                     args.User, Filter.Entities(args.User));
                 return;
             }
-            _popupSystem.PopupEntity(Loc.GetString("disease-scanner-gave-other", ("target", Identity.Entity(args.Target.Value, EntityManager)), ("disease", args.Component.Disease)),
+            _popupSystem.PopupEntity(Loc.GetString("disease-scanner-gave-other", ("target", args.Target), ("disease", args.Component.Disease)),
                 args.User, Filter.Entities(args.User));
         }
 

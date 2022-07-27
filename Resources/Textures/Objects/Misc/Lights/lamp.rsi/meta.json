@@ -8,12 +8,10 @@
   },
   "states": [
     {
-        "name": "lamp",
-        "directions": 4
+      "name": "lamp"
     },
     {
-        "name": "lamp-on",
-        "directions": 4
+      "name": "lamp-on"
     },
     {
       "name": "off-inhand-left",

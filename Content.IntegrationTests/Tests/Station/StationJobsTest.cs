@@ -6,6 +6,7 @@ using Content.Server.Maps;
 using Content.Server.Station.Systems;
 using Content.Shared.Preferences;
 using NUnit.Framework;
+using Robust.Server;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Log;
 using Robust.Shared.Map;
@@ -17,7 +18,7 @@ namespace Content.IntegrationTests.Tests.Station;
 
 [TestFixture]
 [TestOf(typeof(StationJobsSystem))]
-public sealed class StationJobsTest
+public sealed class StationJobsTest : ContentIntegrationTest
 {
     private const string Prototypes = @"
 - type: gameMap
@@ -63,10 +64,13 @@ public sealed class StationJobsTest
     [Test]
     public async Task AssignJobsTest()
     {
-        await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true, ExtraPrototypes = Prototypes});
-        var server = pairTracker.Pair.Server;
+        var options = new ServerContentIntegrationOption {ExtraPrototypes = Prototypes, Options = new ServerOptions() { LoadContentResources = false }};
+        var server = StartServer(options);
+
+        await server.WaitIdleAsync();
 
         var prototypeManager = server.ResolveDependency<IPrototypeManager>();
+        var mapManager = server.ResolveDependency<IMapManager>();
         var fooStationProto = prototypeManager.Index<GameMapPrototype>("FooStation");
         var entSysMan = server.ResolveDependency<IEntityManager>().EntitySysManager;
         var stationJobs = entSysMan.GetEntitySystem<StationJobsSystem>();
@@ -75,6 +79,7 @@ public sealed class StationJobsTest
         List<EntityUid> stations = new();
         await server.WaitPost(() =>
         {
+            mapManager.CreateNewMapEntity(MapId.Nullspace);
             for (var i = 0; i < StationCount; i++)
             {
                 stations.Add(stationSystem.InitializeNewStation(fooStationProto.Stations["Station"], null, $"Foo {StationCount}"));
@@ -83,6 +88,7 @@ public sealed class StationJobsTest
 
         await server.WaitAssertion(() =>
         {
+
             var fakePlayers = new Dictionary<NetUserId, HumanoidCharacterProfile>()
                 .AddJob("TAssistant", JobPriority.Medium, PlayerCount)
                 .AddPreference("TClown", JobPriority.Low)
@@ -91,12 +97,10 @@ public sealed class StationJobsTest
                     new Dictionary<NetUserId, HumanoidCharacterProfile>()
                     .AddJob("TCaptain", JobPriority.High, CaptainCount)
                 );
-            Assert.That(fakePlayers, Is.Not.Empty);
 
             var start = new Stopwatch();
             start.Start();
             var assigned = stationJobs.AssignJobs(fakePlayers, stations);
-            Assert.That(assigned, Is.Not.Empty);
             var time = start.Elapsed.TotalMilliseconds;
             Logger.Info($"Took {time} ms to distribute {TotalPlayers} players.");
 
@@ -127,14 +131,15 @@ public sealed class StationJobsTest
             // There must be captains present, too.
             Assert.That(assigned.Values.Select(x => x.Item1).ToList(), Does.Contain("TCaptain"));
         });
-        await pairTracker.CleanReturnAsync();
     }
 
     [Test]
     public async Task AdjustJobsTest()
     {
-        await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true, ExtraPrototypes = Prototypes});
-        var server = pairTracker.Pair.Server;
+        var options = new ServerContentIntegrationOption {ExtraPrototypes = Prototypes, Options = new ServerOptions() { LoadContentResources = false }};
+        var server = StartServer(options);
+
+        await server.WaitIdleAsync();
 
         var prototypeManager = server.ResolveDependency<IPrototypeManager>();
         var mapManager = server.ResolveDependency<IMapManager>();
@@ -149,8 +154,6 @@ public sealed class StationJobsTest
             mapManager.CreateNewMapEntity(MapId.Nullspace);
             station = stationSystem.InitializeNewStation(fooStationProto.Stations["Station"], null, $"Foo Station");
         });
-
-        await server.WaitRunTicks(1);
 
         await server.WaitAssertion(() =>
         {
@@ -179,7 +182,6 @@ public sealed class StationJobsTest
                 Assert.That(stationJobs.IsJobUnlimited(station, "TChaplain"), "Could not make TChaplain unlimited.");
             });
         });
-        await pairTracker.CleanReturnAsync();
     }
 }
 

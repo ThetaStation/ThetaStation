@@ -10,13 +10,14 @@ using Robust.Shared.Physics;
 namespace Content.IntegrationTests.Tests
 {
     [TestFixture]
-    public sealed class ShuttleTest
+    public sealed class ShuttleTest : ContentIntegrationTest
     {
         [Test]
         public async Task Test()
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true});
-            var server = pairTracker.Pair.Server;
+            var server = StartServer();
+
+            await server.WaitIdleAsync();
 
             var mapMan = server.ResolveDependency<IMapManager>();
             var sEntities = server.ResolveDependency<IEntityManager>();
@@ -42,7 +43,6 @@ namespace Content.IntegrationTests.Tests
             {
                 Assert.That<Vector2?>(sEntities.GetComponent<TransformComponent>(gridEnt).LocalPosition, Is.Not.EqualTo(Vector2.Zero));
             });
-            await pairTracker.CleanReturnAsync();
         }
     }
 }

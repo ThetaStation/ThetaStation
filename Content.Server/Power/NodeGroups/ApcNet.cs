@@ -20,13 +20,15 @@ namespace Content.Server.Power.NodeGroups
         void RemovePowerProvider(ApcPowerProviderComponent provider);
 
         void QueueNetworkReconnect();
+
+        EntityUid? GridId { get; }
     }
 
     [NodeGroup(NodeGroupID.Apc)]
     [UsedImplicitly]
     public sealed class ApcNet : BaseNetConnectorNodeGroup<IApcNet>, IApcNet
     {
-        private PowerNetSystem? _powerNetSystem;
+        private readonly PowerNetSystem _powerNetSystem = EntitySystem.Get<PowerNetSystem>();
 
         [ViewVariables] public readonly List<ApcComponent> Apcs = new();
         [ViewVariables] public readonly List<ApcPowerProviderComponent> Providers = new();
@@ -39,14 +41,15 @@ namespace Content.Server.Power.NodeGroups
         private IEnumerable<ApcPowerReceiverComponent> AllReceivers =>
             Providers.SelectMany(provider => provider.LinkedReceivers);
 
+        EntityUid? IApcNet.GridId => GridId;
+
         [ViewVariables]
         public PowerState.Network NetworkNode { get; } = new();
 
-        public override void Initialize(Node sourceNode, IEntityManager entMan)
+        public override void Initialize(Node sourceNode)
         {
-            base.Initialize(sourceNode, entMan);
+            base.Initialize(sourceNode);
 
-            _powerNetSystem = entMan.EntitySysManager.GetEntitySystem<PowerNetSystem>();
             _powerNetSystem.InitApcNet(this);
         }
 
@@ -54,7 +57,7 @@ namespace Content.Server.Power.NodeGroups
         {
             base.AfterRemake(newGroups);
 
-            _powerNetSystem?.DestroyApcNet(this);
+            _powerNetSystem.DestroyApcNet(this);
         }
 
         public void AddApc(ApcComponent apc)
@@ -105,7 +108,7 @@ namespace Content.Server.Power.NodeGroups
 
         public void QueueNetworkReconnect()
         {
-            _powerNetSystem?.QueueReconnectApcNet(this);
+            _powerNetSystem.QueueReconnectApcNet(this);
         }
 
         protected override void SetNetConnectorNet(IBaseNetConnectorComponent<IApcNet> netConnectorComponent)
@@ -115,9 +118,6 @@ namespace Content.Server.Power.NodeGroups
 
         public override string? GetDebugData()
         {
-            if (_powerNetSystem == null)
-                return null;
-
             // This is just recycling the multi-tool examine.
 
             var ps = _powerNetSystem.GetNetworkStatistics(NetworkNode);

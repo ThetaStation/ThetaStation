@@ -16,7 +16,6 @@ using Content.Shared.Atmos.Monitor;
 using Content.Shared.Atmos.Piping.Unary.Components;
 using Content.Shared.Atmos.Visuals;
 using Content.Shared.Audio;
-using Content.Shared.Examine;
 using JetBrains.Annotations;
 using Robust.Shared.Timing;
 
@@ -42,7 +41,6 @@ namespace Content.Server.Atmos.Piping.Unary.EntitySystems
             SubscribeLocalEvent<GasVentPumpComponent, PowerChangedEvent>(OnPowerChanged);
             SubscribeLocalEvent<GasVentPumpComponent, DeviceNetworkPacketEvent>(OnPacketRecv);
             SubscribeLocalEvent<GasVentPumpComponent, ComponentInit>(OnInit);
-            SubscribeLocalEvent<GasVentPumpComponent, ExaminedEvent>(OnExamine);
             SubscribeLocalEvent<GasVentPumpComponent, SignalReceivedEvent>(OnSignalReceived);
         }
 
@@ -69,7 +67,7 @@ namespace Content.Server.Atmos.Piping.Unary.EntitySystems
                 return;
             }
 
-            var environment = _atmosphereSystem.GetContainingMixture(uid, true, true);
+            var environment = _atmosphereSystem.GetTileMixture(EntityManager.GetComponent<TransformComponent>(vent.Owner).Coordinates, true);
 
             // We're in an air-blocked tile... Do nothing.
             if (environment == null)
@@ -84,13 +82,6 @@ namespace Content.Server.Atmos.Piping.Unary.EntitySystems
             {
                 if (environment.Pressure > vent.MaxPressure)
                     return;
-
-                if (environment.Pressure < vent.UnderPressureLockoutThreshold)
-                {
-                    vent.UnderPressureLockout = true;
-                    return;
-                }
-                vent.UnderPressureLockout = false;
 
                 if ((vent.PressureChecks & VentPressureBound.ExternalBound) != 0)
                     pressureDelta = MathF.Min(pressureDelta, vent.ExternalPressureBound - environment.Pressure);
@@ -262,19 +253,6 @@ namespace Content.Server.Atmos.Piping.Unary.EntitySystems
             {
                 _ambientSoundSystem.SetAmbience(uid, false);
                 appearance.SetData(VentPumpVisuals.State, VentPumpState.Welded);
-            }
-        }
-
-        private void OnExamine(EntityUid uid, GasVentPumpComponent component, ExaminedEvent args)
-        {
-            if (!TryComp<GasVentPumpComponent>(uid, out var pumpComponent))
-                return;
-            if (args.IsInDetailsRange)
-            {
-                if (pumpComponent.UnderPressureLockout)
-                {
-                    args.PushMarkup(Loc.GetString("gas-vent-pump-uvlo"));
-                }
             }
         }
     }

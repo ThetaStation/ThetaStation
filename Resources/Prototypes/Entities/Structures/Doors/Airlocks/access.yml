@@ -136,14 +136,6 @@
     access: [["Medical"]]
 
 - type: entity
-  parent: AirlockVirology
-  id: AirlockVirologyLocked
-  suffix: Virology, Locked
-  components:
-  - type: AccessReader
-    access: [["Medical"]]
-
-- type: entity
   parent: AirlockChemistry
   id: AirlockChemistryLocked
   suffix: Chemistry, Locked
@@ -335,7 +327,7 @@
   components:
   - type: AccessReader
     access: [["Atmospherics"]]
-
+    
 - type: entity
   parent: AirlockCargoGlass
   id: AirlockCargoGlassLocked
@@ -364,14 +356,6 @@
   parent: AirlockMedicalGlass
   id: AirlockMedicalGlassLocked
   suffix: Medical, Locked
-  components:
-  - type: AccessReader
-    access: [["Medical"]]
-
-- type: entity
-  parent: AirlockVirologyGlass
-  id: AirlockVirologyGlassLocked
-  suffix: Virology, Locked
   components:
   - type: AccessReader
     access: [["Medical"]]
@@ -490,14 +474,6 @@
     access: [["Maintenance"]]
 
 - type: entity
-  parent: AirlockMaintGlass
-  id: AirlockMaintGlassLocked
-  suffix: Locked
-  components:
-  - type: AccessReader
-    access: [["Maintenance"]]
-
-- type: entity
   parent: AirlockMaint
   id: AirlockMaintSalvageLocked
   suffix: Salvage, Locked
@@ -544,7 +520,7 @@
   components:
   - type: AccessReader
     access: [["Atmospherics"]]
-
+    
 - type: entity
   parent: AirlockMaint
   id: AirlockMaintBarLocked
@@ -674,15 +650,6 @@
   - type: AccessReader
     access: [["External"]]
 
-- type: entity
-  parent: AirlockGlassShuttle
-  id: AirlockExternalGlassShuttleEmergencyLocked
-  suffix: External, Emergency, Glass, Docking, Locked
-  components:
-    - type: EmergencyDock
-    - type: AccessReader
-      access: [["External"]]
-
 #HighSecDoors
 - type: entity
   parent: HighSecDoor
@@ -699,11 +666,3 @@
   components:
   - type: AccessReader
     access: [["Captain"]]
-
-- type: entity
-  parent: HighSecDoor
-  id: HighSecArmoryLocked
-  suffix: Armory, Locked
-  components:
-  - type: AccessReader
-    access: [["Armory"]]

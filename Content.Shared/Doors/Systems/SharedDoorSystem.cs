@@ -11,8 +11,6 @@ using Robust.Shared.Physics.Dynamics;
 using Robust.Shared.Timing;
 using System.Linq;
 using Content.Shared.Tag;
-using Content.Shared.Tools.Components;
-using Content.Shared.Verbs;
 
 namespace Content.Shared.Doors.Systems;
 
@@ -221,12 +219,12 @@ public abstract class SharedDoorSystem : EntitySystem
     #endregion
 
     #region Opening
-    public bool TryOpen(EntityUid uid, DoorComponent? door = null, EntityUid? user = null, bool predicted = false, bool quiet = false)
+    public bool TryOpen(EntityUid uid, DoorComponent? door = null, EntityUid? user = null, bool predicted = false)
     {
         if (!Resolve(uid, ref door))
             return false;
 
-        if (!CanOpen(uid, door, user, quiet))
+        if (!CanOpen(uid, door, user, false))
             return false;
 
         StartOpening(uid, door, user, predicted);

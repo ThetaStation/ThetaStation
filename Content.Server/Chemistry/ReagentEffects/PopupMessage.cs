@@ -11,10 +11,7 @@ namespace Content.Server.Chemistry.ReagentEffects
         public string[] Messages = default!;
 
         [DataField("type")]
-        public PopupRecipients Type = PopupRecipients.Local;
-
-        [DataField("visualType")]
-        public PopupType VisualType = PopupType.Small;
+        public PopupType Type = PopupType.Local;
 
         public override void Effect(ReagentEffectArgs args)
         {
@@ -22,14 +19,14 @@ namespace Content.Server.Chemistry.ReagentEffects
             var random = IoCManager.Resolve<IRobustRandom>();
 
             var msg = random.Pick(Messages);
-            if (Type == PopupRecipients.Local)
-                popupSys.PopupEntity(Loc.GetString(msg), args.SolutionEntity, Filter.Entities(args.SolutionEntity), VisualType);
-            else if (Type == PopupRecipients.Pvs)
-                popupSys.PopupEntity(Loc.GetString(msg), args.SolutionEntity, Filter.Pvs(args.SolutionEntity), VisualType);
+            if (Type == PopupType.Local)
+                popupSys.PopupEntity(Loc.GetString(msg), args.SolutionEntity, Filter.Entities(args.SolutionEntity));
+            else if (Type == PopupType.Pvs)
+                popupSys.PopupEntity(Loc.GetString(msg), args.SolutionEntity, Filter.Pvs(args.SolutionEntity));
         }
     }
 
-    public enum PopupRecipients
+    public enum PopupType
     {
         Pvs,
         Local

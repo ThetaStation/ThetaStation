@@ -89,7 +89,10 @@ namespace Content.Server.Atmos.EntitySystems
 
         private void OnGridRemoved(GridRemovalEvent ev)
         {
-            _overlay.Remove(ev.EntityUid);
+            if (_overlay.ContainsKey(ev.GridId))
+            {
+                _overlay.Remove(ev.GridId);
+            }
         }
 
         private void OnPlayerStatusChanged(object? sender, SessionStatusEventArgs e)
@@ -110,7 +113,35 @@ namespace Content.Server.Atmos.EntitySystems
 
         private void ReturnToPool(Dictionary<EntityUid, HashSet<Vector2i>> chunks)
         {
-            foreach (var (_, previous) in chunks)
+            var tile = _atmosphereSystem.GetTileAtmosphere(gridAtmosphere, indices);
+
+            if (tile == null)
+            {
+                overlayData = default;
+                return false;
+            }
+
+            var tileData = new List<GasData>();
+
+            if(tile.Air != null)
+                for (byte i = 0; i < Atmospherics.TotalNumberOfGases; i++)
+                {
+                    var gas = _atmosphereSystem.GetGas(i);
+                    var overlay = _atmosphereSystem.GetOverlay(i);
+                    if (overlay == null) continue;
+
+                    var moles = tile.Air.Moles[i];
+
+                    if (moles < gas.GasMolesVisible) continue;
+
+                    var opacity = (byte) (ContentHelpers.RoundToLevels(MathHelper.Clamp01(moles / gas.GasMolesVisibleMax) * 255, byte.MaxValue, _thresholds) * 255 / (_thresholds - 1));
+                    var data = new GasData(i, opacity);
+                    tileData.Add(data);
+                }
+
+            overlayData = new GasOverlayData(tile!.Hotspot.State, tile.Hotspot.Temperature, tileData.Count == 0 ? Array.Empty<GasData>() : tileData.ToArray());
+
+            if (overlayData.Equals(oldTile))
             {
                 previous.Clear();
                 _chunkIndexPool.Return(previous);

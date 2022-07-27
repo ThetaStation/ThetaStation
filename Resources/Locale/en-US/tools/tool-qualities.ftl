@@ -18,6 +18,3 @@ tool-quality-pulsing-tool-name = Multitool
 
 tool-quality-slicing-name = Slicing
 tool-quality-slicing-tool-name = Knife
-
-tool-quality-sawing-name = Sawing
-tool-quality-sawing-tool-name = Saw

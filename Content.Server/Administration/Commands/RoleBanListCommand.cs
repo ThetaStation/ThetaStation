@@ -1,8 +1,6 @@
-﻿using System.Linq;
-using System.Text;
+﻿using System.Text;
 using Content.Server.Database;
 using Content.Shared.Administration;
-using Robust.Server.Player;
 using Robust.Shared.Console;
 
 namespace Content.Server.Administration.Commands;
@@ -11,8 +9,8 @@ namespace Content.Server.Administration.Commands;
 public sealed class RoleBanListCommand : IConsoleCommand
 {
     public string Command => "rolebanlist";
-    public string Description => Loc.GetString("cmd-rolebanlist-desc");
-    public string Help => Loc.GetString("cmd-rolebanlist-help");
+    public string Description => "Lists the user's role bans";
+    public string Help => "Usage: <name or user ID> [include unbanned]";
 
     public async void Execute(IConsoleShell shell, string argStr, string[] args)
     {
@@ -89,17 +87,5 @@ public sealed class RoleBanListCommand : IConsoleCommand
         }
 
         shell.WriteLine(bansString.ToString());
-    }
-
-    public CompletionResult GetCompletion(IConsoleShell shell, string[] args)
-    {
-        return args.Length switch
-        {
-            1 => CompletionResult.FromHintOptions(CompletionHelper.SessionNames(),
-                Loc.GetString("cmd-rolebanlist-hint-1")),
-            2 => CompletionResult.FromHintOptions(CompletionHelper.Booleans,
-                Loc.GetString("cmd-rolebanlist-hint-2")),
-            _ => CompletionResult.Empty
-        };
     }
 }

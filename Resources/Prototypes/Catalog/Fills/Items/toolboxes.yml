@@ -76,7 +76,7 @@
       - id: Multitool
       - id: Wirecutter
       - id: ClothingHandsGlovesCombat
-      - id: ClothingBeltSyndieHolster
+      - id: ClothingBeltMilitaryWebbing
       - id: ClothingMaskGasSyndicate
 
 - type: entity

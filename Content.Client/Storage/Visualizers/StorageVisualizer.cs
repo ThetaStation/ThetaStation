@@ -15,8 +15,6 @@ namespace Content.Client.Storage.Visualizers
         /// </summary>
         [DataField("state")]
         private string? _stateBase;
-        [DataField("state_alt")]
-        private string? _stateBaseAlt;
         [DataField("state_open")]
         private string? _stateOpen;
         [DataField("state_closed")]
@@ -32,11 +30,6 @@ namespace Content.Client.Storage.Visualizers
             if (_stateBase != null)
             {
                 sprite.LayerSetState(0, _stateBase);
-            }
-
-            if (_stateBaseAlt == null)
-            {
-                _stateBaseAlt = _stateBase;
             }
         }
 
@@ -56,28 +49,13 @@ namespace Content.Client.Storage.Visualizers
             {
                 sprite.LayerSetVisible(StorageVisualLayers.Door, true);
 
-                if (open)
+                if (open && _stateOpen != null)
                 {
-                    if (_stateOpen != null)
-                    {
-                        sprite.LayerSetState(StorageVisualLayers.Door, _stateOpen);
-                        sprite.LayerSetVisible(StorageVisualLayers.Door, true);
-                    }
-                        
-                    if (_stateBaseAlt != null)
-                        sprite.LayerSetState(0, _stateBaseAlt);
+                    sprite.LayerSetState(StorageVisualLayers.Door, _stateOpen);
                 }
-                else if (!open)
+                else if (!open && _stateClosed != null)
                 {
-                    if (_stateClosed != null)
-                        sprite.LayerSetState(StorageVisualLayers.Door, _stateClosed);
-                    else
-                    {
-                        sprite.LayerSetVisible(StorageVisualLayers.Door, false);
-                    }
-
-                    if (_stateBase != null)
-                        sprite.LayerSetState(0, _stateBase);
+                    sprite.LayerSetState(StorageVisualLayers.Door, _stateClosed);
                 }
                 else
                 {

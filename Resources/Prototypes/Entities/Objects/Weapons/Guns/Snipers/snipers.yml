@@ -53,7 +53,7 @@
     whitelist:
       tags:
       - CartridgeAntiMaterial
-    capacity: 5
+    capacity: 1
     proto: CartridgeAntiMaterial
 
 - type: entity

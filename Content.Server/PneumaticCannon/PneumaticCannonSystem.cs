@@ -30,7 +30,6 @@ namespace Content.Server.PneumaticCannon
         [Dependency] private readonly IRobustRandom _random = default!;
         [Dependency] private readonly AtmosphereSystem _atmos = default!;
         [Dependency] private readonly CameraRecoilSystem _cameraRecoil = default!;
-        [Dependency] private readonly GasTankSystem _gasTank = default!;
         [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
         [Dependency] private readonly StorageSystem _storageSystem = default!;
         [Dependency] private readonly StunSystem _stun = default!;
@@ -137,7 +136,7 @@ namespace Content.Server.PneumaticCannon
             if (EntityManager.TryGetComponent<SharedItemComponent?>(args.Used, out var item)
                 && EntityManager.TryGetComponent<ServerStorageComponent?>(component.Owner, out var storage))
             {
-                if (_storageSystem.CanInsert(component.Owner, args.Used, out _, storage))
+                if (_storageSystem.CanInsert(component.Owner, args.Used, storage))
                 {
                     _storageSystem.Insert(component.Owner, args.Used, storage);
                     args.User.PopupMessage(Loc.GetString("pneumatic-cannon-component-insert-item-success",
@@ -238,6 +237,9 @@ namespace Content.Server.PneumaticCannon
 
             _throwingSystem.TryThrow(ent, data.Direction, data.Strength, data.User, GetPushbackRatioFromPower(comp.Power));
 
+            // lasagna, anybody?
+            ent.EnsureComponent<ForcefeedOnCollideComponent>();
+
             if(EntityManager.TryGetComponent<StatusEffectsComponent?>(data.User, out var status)
                && comp.Power == PneumaticCannonPower.High)
             {
@@ -251,8 +253,8 @@ namespace Content.Server.PneumaticCannon
             {
                 // we checked for this earlier in HasGas so a GetComp is okay
                 var gas = EntityManager.GetComponent<GasTankComponent>(contained);
-                var environment = _atmos.GetContainingMixture(comp.Owner, false, true);
-                var removed = _gasTank.RemoveAir(gas, GetMoleUsageFromPower(comp.Power));
+                var environment = _atmos.GetTileMixture(EntityManager.GetComponent<TransformComponent>(comp.Owner).Coordinates, true);
+                var removed = gas.RemoveAir(GetMoleUsageFromPower(comp.Power));
                 if (environment != null && removed != null)
                 {
                     _atmos.Merge(environment, removed);

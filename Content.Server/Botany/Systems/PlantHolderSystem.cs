@@ -8,8 +8,6 @@ using Content.Shared.Examine;
 using Content.Shared.Tag;
 using Content.Shared.FixedPoint;
 using Content.Shared.Audio;
-using Content.Shared.IdentityManagement;
-using Content.Shared.Popups;
 using Content.Shared.Random.Helpers;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
@@ -104,7 +102,7 @@ namespace Content.Server.Botany.Systems
 
                     _popupSystem.PopupCursor(Loc.GetString("plant-holder-component-plant-success-message",
                         ("seedName", seed.Name),
-                        ("seedNoun", seed.Noun)), Filter.Entities(args.User), PopupType.Medium);
+                        ("seedNoun", seed.Noun)), Filter.Entities(args.User));
 
                     component.Seed = seed;
                     component.Dead = false;
@@ -121,7 +119,7 @@ namespace Content.Server.Botany.Systems
                 }
 
                 _popupSystem.PopupCursor(Loc.GetString("plant-holder-component-already-seeded-message",
-                    ("name", Comp<MetaDataComponent>(uid).EntityName)), Filter.Entities(args.User), PopupType.Medium);
+                    ("name", Comp<MetaDataComponent>(uid).EntityName)), Filter.Entities(args.User));
                 return;
             }
 
@@ -130,9 +128,9 @@ namespace Content.Server.Botany.Systems
                 if (component.WeedLevel > 0)
                 {
                     _popupSystem.PopupCursor(Loc.GetString("plant-holder-component-remove-weeds-message",
-                        ("name", Comp<MetaDataComponent>(uid).EntityName)), Filter.Entities(args.User), PopupType.Medium);
+                        ("name", Comp<MetaDataComponent>(uid).EntityName)), Filter.Entities(args.User));
                     _popupSystem.PopupEntity(Loc.GetString("plant-holder-component-remove-weeds-others-message",
-                        ("otherName", Comp<MetaDataComponent>(args.User).EntityName)), uid, Filter.PvsExcept(args.User));
+                        ("otherName", Comp<MetaDataComponent>(args.User).EntityName)), uid, Filter.Pvs(args.User).RemoveWhereAttachedEntity(puid => puid == args.User));
                     component.WeedLevel = 0;
                     component.UpdateSprite();
                 }
@@ -149,9 +147,9 @@ namespace Content.Server.Botany.Systems
                 if (component.Seed != null)
                 {
                     _popupSystem.PopupCursor(Loc.GetString("plant-holder-component-remove-plant-message",
-                        ("name", Comp<MetaDataComponent>(uid).EntityName)), Filter.Entities(args.User), PopupType.Medium);
+                        ("name", Comp<MetaDataComponent>(uid).EntityName)), Filter.Entities(args.User));
                     _popupSystem.PopupEntity(Loc.GetString("plant-holder-component-remove-plant-others-message",
-                        ("name", Comp<MetaDataComponent>(args.User).EntityName)), uid, Filter.PvsExcept(args.User));
+                        ("name", Comp<MetaDataComponent>(args.User).EntityName)), uid, Filter.Pvs(args.User).RemoveWhereAttachedEntity(puid => puid == args.User));
                     component.RemovePlant();
                 }
                 else
@@ -187,7 +185,7 @@ namespace Content.Server.Botany.Systems
 
                 _popupSystem.PopupCursor(Loc.GetString("plant-holder-component-spray-message",
                     ("owner", uid),
-                    ("amount", split.TotalVolume)), Filter.Entities(args.User), PopupType.Medium);
+                    ("amount", split.TotalVolume)), Filter.Entities(args.User));
 
                _solutionSystem.TryAddSolution(targetEntity, targetSolution, split);
 
@@ -240,11 +238,11 @@ namespace Content.Server.Botany.Systems
             {
                 _popupSystem.PopupCursor(Loc.GetString("plant-holder-component-compost-message",
                     ("owner", uid),
-                    ("usingItem", args.Used)), Filter.Entities(args.User), PopupType.Medium);
+                    ("usingItem", args.Used)), Filter.Entities(args.User));
                 _popupSystem.PopupEntity(Loc.GetString("plant-holder-component-compost-others-message",
-                    ("user", Identity.Entity(args.User, EntityManager)),
+                    ("user", args.User),
                     ("usingItem", args.Used),
-                    ("owner", uid)), uid, Filter.PvsExcept(args.User));
+                    ("owner", uid)), uid, Filter.Pvs(args.User).RemoveWhereAttachedEntity(puid => puid == args.User));
 
                 if (_solutionSystem.TryGetSolution(args.Used, produce.SolutionName, out var solution2))
                 {

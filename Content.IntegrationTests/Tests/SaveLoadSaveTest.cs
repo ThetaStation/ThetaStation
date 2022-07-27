@@ -14,16 +14,16 @@ namespace Content.IntegrationTests.Tests
     ///     Tests that the
     /// </summary>
     [TestFixture]
-    public sealed class SaveLoadSaveTest
+    public sealed class SaveLoadSaveTest : ContentIntegrationTest
     {
         [Test]
         public async Task SaveLoadSave()
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new (){Fresh = true, Disconnected = true});
-            var server = pairTracker.Pair.Server;
+            var server = StartServer(new ServerContentIntegrationOption {Pool = false});
+            await server.WaitIdleAsync();
             var mapLoader = server.ResolveDependency<IMapLoader>();
             var mapManager = server.ResolveDependency<IMapManager>();
-            await server.WaitPost(() =>
+            server.Post(() =>
             {
                 // TODO: Properly find the "main" station grid.
                 var grid0 = mapManager.GetAllGrids().First();
@@ -71,7 +71,6 @@ namespace Content.IntegrationTests.Tests
                     TestContext.Error.WriteLine(twoTmp);
                 }
             });
-            await pairTracker.CleanReturnAsync();
         }
 
         /// <summary>
@@ -80,8 +79,12 @@ namespace Content.IntegrationTests.Tests
         [Test]
         public async Task LoadSaveTicksSaveSaltern()
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true});
-            var server = pairTracker.Pair.Server;
+            var server = StartServerDummyTicker(new ServerIntegrationOptions()
+            {
+                // Don't blame me look at SaveLoadMultiGridMap
+                FailureLogLevel = LogLevel.Error,
+            });
+            await server.WaitIdleAsync();
             var mapLoader = server.ResolveDependency<IMapLoader>();
             var mapManager = server.ResolveDependency<IMapManager>();
 
@@ -100,7 +103,7 @@ namespace Content.IntegrationTests.Tests
             // Run 5 ticks.
             server.RunTicks(5);
 
-            await server.WaitPost(() =>
+            server.Post(() =>
             {
                 mapLoader.SaveMap(mapId, "/load save ticks save 2.yml");
             });
@@ -141,7 +144,6 @@ namespace Content.IntegrationTests.Tests
                     TestContext.Error.WriteLine(twoTmp);
                 }
             });
-            await pairTracker.CleanReturnAsync();
         }
     }
 }

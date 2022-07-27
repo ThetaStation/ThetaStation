@@ -71,9 +71,6 @@
   abstract: true
   components:
   - type: Mechanism
-  - type: Sprite
-    netsync: false
-    sprite: Mobs/Species/Human/organs.rsi
 
 - type: entity
   id: OrganAnimalLungs
@@ -108,10 +105,11 @@
       stomach:
         maxVol: 100
   - type: Stomach
-    maxVolume: 10
+    maxVolume: 100
+    digestionDelay: 20
   - type: Metabolizer
     maxReagents: 3
-    metabolizerTypes: [Animal]
+    metabolizerTypes: [Human, Animal]
     groups:
     - id: Food
     - id: Drink
@@ -127,7 +125,7 @@
     compatibility: Biological
   - type: Metabolizer
     maxReagents: 1
-    metabolizerTypes: [Animal]
+    metabolizerTypes: [Human, Animal]
     groups:
     - id: Alcohol
       rateModifier: 0.1
@@ -143,7 +141,7 @@
     compatibility: Biological
   - type: Metabolizer
     maxReagents: 2
-    metabolizerTypes: [Animal]
+    metabolizerTypes: [Human, Animal]
     groups:
     - id: Medicine
     - id: Poison
@@ -160,5 +158,5 @@
     compatibility: Biological
   - type: Metabolizer
     maxReagents: 5
-    metabolizerTypes: [Animal]
+    metabolizerTypes: [Human, Animal]
     removeEmpty: true

@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Content.Server.Atmos.Components;
 using Content.Server.Body.Components;
 using Content.Server.Body.Systems;
@@ -13,7 +13,7 @@ namespace Content.IntegrationTests.Tests.Body
 {
     [TestFixture]
     [TestOf(typeof(LungSystem))]
-    public sealed class LungTest
+    public sealed class LungTest : ContentIntegrationTest
     {
         private const string Prototypes = @"
 - type: entity
@@ -27,7 +27,7 @@ namespace Content.IntegrationTests.Tests.Body
     centerSlot: torso
   - type: MobState
     thresholds:
-      0: Alive
+      0: !type:NormalMobState {}
   - type: ThermalRegulator
     metabolismHeat: 5000
     radiatedHeat: 400
@@ -49,8 +49,8 @@ namespace Content.IntegrationTests.Tests.Body
         public async Task AirConsistencyTest()
         {
             // --- Setup
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true, ExtraPrototypes = Prototypes});
-            var server = pairTracker.Pair.Server;
+            var options = new ServerContentIntegrationOption{ExtraPrototypes = Prototypes};
+            var server = StartServer(options);
 
             await server.WaitIdleAsync();
 
@@ -121,14 +121,16 @@ namespace Content.IntegrationTests.Tests.Body
                 });
             }
 
-            await pairTracker.CleanReturnAsync();
+            await server.WaitIdleAsync();
         }
 
         [Test]
         public async Task NoSuffocationTest()
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true, ExtraPrototypes = Prototypes});
-            var server = pairTracker.Pair.Server;
+            var options = new ServerContentIntegrationOption{ExtraPrototypes = Prototypes};
+            var server = StartServer(options);
+
+            await server.WaitIdleAsync();
 
             var mapLoader = server.ResolveDependency<IMapLoader>();
             var mapManager = server.ResolveDependency<IMapManager>();
@@ -171,7 +173,7 @@ namespace Content.IntegrationTests.Tests.Body
                 });
             }
 
-            await pairTracker.CleanReturnAsync();
+            await server.WaitIdleAsync();
         }
     }
 }

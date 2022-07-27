@@ -12,14 +12,15 @@ namespace Content.IntegrationTests.Tests.GameObjects.Components.Mobs
 {
     [TestFixture]
     [TestOf(typeof(AlertsComponent))]
-    public sealed class AlertsComponentTests
+    public sealed class AlertsComponentTests : ContentIntegrationTest
     {
         [Test]
         public async Task AlertsTest()
         {
-            await using var pairTracker = await PoolManager.GetServerClient();
-            var server = pairTracker.Pair.Server;
-            var client = pairTracker.Pair.Client;
+            var (client, server) = await StartConnectedServerClientPair();
+
+            await server.WaitIdleAsync();
+            await client.WaitIdleAsync();
 
             var serverPlayerManager = server.ResolveDependency<IPlayerManager>();
             var alertsSystem = server.ResolveDependency<IEntitySystemManager>().GetEntitySystem<AlertsSystem>();
@@ -38,6 +39,7 @@ namespace Content.IntegrationTests.Tests.GameObjects.Components.Mobs
 
             await server.WaitRunTicks(5);
             await client.WaitRunTicks(5);
+
             var clientPlayerMgr = client.ResolveDependency<Robust.Client.Player.IPlayerManager>();
             var clientUIMgr = client.ResolveDependency<IUserInterfaceManager>();
             await client.WaitAssertion(() =>
@@ -72,8 +74,8 @@ namespace Content.IntegrationTests.Tests.GameObjects.Components.Mobs
 
                 alertsSystem.ClearAlert(alertsComponent.Owner, AlertType.Debug1);
             });
-
-            await PoolManager.RunTicksSync(pairTracker.Pair, 5);
+            await server.WaitRunTicks(5);
+            await client.WaitRunTicks(5);
 
             await client.WaitAssertion(() =>
             {
@@ -97,7 +99,6 @@ namespace Content.IntegrationTests.Tests.GameObjects.Components.Mobs
                 var expectedIDs = new [] {AlertType.HumanHealth, AlertType.Debug2};
                 Assert.That(alertIDs, Is.SupersetOf(expectedIDs));
             });
-            await pairTracker.CleanReturnAsync();
         }
     }
 }

@@ -32,6 +32,8 @@ public sealed partial class StationJobsSystem : EntitySystem
         SubscribeLocalEvent<StationJobsComponent, ComponentShutdown>(OnStationDeletion);
         SubscribeLocalEvent<PlayerJoinedLobbyEvent>(OnPlayerJoinedLobby);
         _configurationManager.OnValueChanged(CCVars.GameDisallowLateJoins, _ => UpdateJobsAvailable(), true);
+
+        InitializeRoundStart();
     }
 
     public override void Update(float _)

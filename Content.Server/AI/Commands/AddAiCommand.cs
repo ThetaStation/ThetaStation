@@ -42,8 +42,14 @@ namespace Content.Server.AI.Commands
                 return;
             }
 
-            var comp = _entities.AddComponent<UtilityNPCComponent>(entId);
-            var npcSystem = IoCManager.Resolve<IEntityManager>().EntitySysManager.GetEntitySystem<NPCSystem>();
+            // TODO: IMover refffaaccctttooorrr
+            if (_entities.HasComponent<IMoverComponent>(entId))
+            {
+                _entities.RemoveComponent<IMoverComponent>(entId);
+            }
+
+            var comp = _entities.AddComponent<UtilityAi>(entId);
+            var behaviorManager = IoCManager.Resolve<INpcBehaviorManager>();
 
             for (var i = 1; i < args.Length; i++)
             {

@@ -3,7 +3,6 @@ using Content.Server.UserInterface;
 using Content.Server.Hands.Components;
 using Content.Shared.Destructible;
 using Content.Shared.Movement;
-using Content.Shared.Movement.Events;
 using Content.Shared.Verbs;
 using Content.Shared.Popups;
 using Robust.Server.GameObjects;
@@ -24,7 +23,7 @@ namespace Content.Server.Disposal.Tube
             base.Initialize();
 
             SubscribeLocalEvent<DisposalTubeComponent, PhysicsBodyTypeChangedEvent>(BodyTypeChanged);
-            SubscribeLocalEvent<DisposalTubeComponent, ContainerRelayMovementEntityEvent>(OnRelayMovement);
+            SubscribeLocalEvent<DisposalTubeComponent, RelayMovementEntityEvent>(OnRelayMovement);
             SubscribeLocalEvent<DisposalTubeComponent, BreakageEventArgs>(OnBreak);
             SubscribeLocalEvent<DisposalTaggerComponent, GetVerbsEvent<InteractionVerb>>(AddOpenUIVerbs);
             SubscribeLocalEvent<DisposalRouterComponent, GetVerbsEvent<InteractionVerb>>(AddOpenUIVerbs);
@@ -65,7 +64,7 @@ namespace Content.Server.Disposal.Tube
             args.Verbs.Add(verb);
         }
 
-        private void OnRelayMovement(EntityUid uid, DisposalTubeComponent component, ref ContainerRelayMovementEntityEvent args)
+        private void OnRelayMovement(EntityUid uid, DisposalTubeComponent component, RelayMovementEntityEvent args)
         {
             if (_gameTiming.CurTime < component.LastClang + DisposalTubeComponent.ClangDelay)
             {
@@ -126,11 +125,8 @@ namespace Content.Server.Disposal.Tube
                 return null;
             var oppositeDirection = nextDirection.GetOpposite();
 
-            var xform = Transform(targetTube.Owner);
-            if (!_mapManager.TryGetGrid(xform.GridUid, out var grid))
-                return null;
-
-            var position = xform.Coordinates;
+            var grid = _mapManager.GetGrid(EntityManager.GetComponent<TransformComponent>(targetTube.Owner).GridEntityId);
+            var position = EntityManager.GetComponent<TransformComponent>(targetTube.Owner).Coordinates;
             foreach (var entity in grid.GetInDir(position, nextDirection))
             {
                 if (!EntityManager.TryGetComponent(entity, out IDisposalTubeComponent? tube))

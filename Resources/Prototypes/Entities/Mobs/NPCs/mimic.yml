@@ -7,9 +7,7 @@
   - type: Tag
     tags:
     - FootstepSound
-  - type: InputMover
-  - type: MobMover
-  - type: UtilityNPC
+  - type: UtilityAI
     behaviorSets:
     - UnarmedAttackHostiles
   - type: AiFactionTag
@@ -30,7 +28,7 @@
     - shape:
         !type:PhysShapeAabb
         bounds: "-0.35,-0.35,0.35,0.35"
-      mass: 500
+      mass: 100
       mask:
       - MobMask
       layer:

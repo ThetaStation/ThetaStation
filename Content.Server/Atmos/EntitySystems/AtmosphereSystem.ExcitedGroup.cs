@@ -87,7 +87,7 @@ namespace Content.Server.Atmos.EntitySystems
 
                 Merge(combined, tile.Air);
 
-                if (!ExcitedGroupsSpaceIsAllConsuming || !tile.Space)
+                if (!ExcitedGroupsSpaceIsAllConsuming || !tile.Air.Immutable)
                     continue;
 
                 combined.Clear();

@@ -27,7 +27,7 @@ namespace Content.Server.Power.NodeGroups
     [UsedImplicitly]
     public sealed class PowerNet : BaseNetConnectorNodeGroup<IPowerNet>, IPowerNet
     {
-        private PowerNetSystem? _powerNetSystem;
+        private readonly PowerNetSystem _powerNetSystem = EntitySystem.Get<PowerNetSystem>();
 
         [ViewVariables] public readonly List<PowerSupplierComponent> Suppliers = new();
         [ViewVariables] public readonly List<PowerConsumerComponent> Consumers = new();
@@ -37,11 +37,10 @@ namespace Content.Server.Power.NodeGroups
         [ViewVariables]
         public PowerState.Network NetworkNode { get; } = new();
 
-        public override void Initialize(Node sourceNode, IEntityManager entMan)
+        public override void Initialize(Node sourceNode)
         {
-            base.Initialize(sourceNode, entMan);
+            base.Initialize(sourceNode);
 
-            _powerNetSystem = entMan.EntitySysManager.GetEntitySystem<PowerNetSystem>();
             _powerNetSystem.InitPowerNet(this);
         }
 
@@ -49,7 +48,7 @@ namespace Content.Server.Power.NodeGroups
         {
             base.AfterRemake(newGroups);
 
-            _powerNetSystem?.DestroyPowerNet(this);
+            _powerNetSystem.DestroyPowerNet(this);
         }
 
         protected override void SetNetConnectorNet(IBaseNetConnectorComponent<IPowerNet> netConnectorComponent)
@@ -61,28 +60,28 @@ namespace Content.Server.Power.NodeGroups
         {
             supplier.NetworkSupply.LinkedNetwork = default;
             Suppliers.Add(supplier);
-            _powerNetSystem?.QueueReconnectPowerNet(this);
+            _powerNetSystem.QueueReconnectPowerNet(this);
         }
 
         public void RemoveSupplier(PowerSupplierComponent supplier)
         {
             supplier.NetworkSupply.LinkedNetwork = default;
             Suppliers.Remove(supplier);
-            _powerNetSystem?.QueueReconnectPowerNet(this);
+            _powerNetSystem.QueueReconnectPowerNet(this);
         }
 
         public void AddConsumer(PowerConsumerComponent consumer)
         {
             consumer.NetworkLoad.LinkedNetwork = default;
             Consumers.Add(consumer);
-            _powerNetSystem?.QueueReconnectPowerNet(this);
+            _powerNetSystem.QueueReconnectPowerNet(this);
         }
 
         public void RemoveConsumer(PowerConsumerComponent consumer)
         {
             consumer.NetworkLoad.LinkedNetwork = default;
             Consumers.Remove(consumer);
-            _powerNetSystem?.QueueReconnectPowerNet(this);
+            _powerNetSystem.QueueReconnectPowerNet(this);
         }
 
         public void AddDischarger(BatteryDischargerComponent discharger)
@@ -90,7 +89,7 @@ namespace Content.Server.Power.NodeGroups
             var battery = IoCManager.Resolve<IEntityManager>().GetComponent<PowerNetworkBatteryComponent>(discharger.Owner);
             battery.NetworkBattery.LinkedNetworkCharging = default;
             Dischargers.Add(discharger);
-            _powerNetSystem?.QueueReconnectPowerNet(this);
+            _powerNetSystem.QueueReconnectPowerNet(this);
         }
 
         public void RemoveDischarger(BatteryDischargerComponent discharger)
@@ -100,7 +99,7 @@ namespace Content.Server.Power.NodeGroups
                 battery.NetworkBattery.LinkedNetworkCharging = default;
 
             Dischargers.Remove(discharger);
-            _powerNetSystem?.QueueReconnectPowerNet(this);
+            _powerNetSystem.QueueReconnectPowerNet(this);
         }
 
         public void AddCharger(BatteryChargerComponent charger)
@@ -108,7 +107,7 @@ namespace Content.Server.Power.NodeGroups
             var battery = IoCManager.Resolve<IEntityManager>().GetComponent<PowerNetworkBatteryComponent>(charger.Owner);
             battery.NetworkBattery.LinkedNetworkCharging = default;
             Chargers.Add(charger);
-            _powerNetSystem?.QueueReconnectPowerNet(this);
+            _powerNetSystem.QueueReconnectPowerNet(this);
         }
 
         public void RemoveCharger(BatteryChargerComponent charger)
@@ -118,14 +117,11 @@ namespace Content.Server.Power.NodeGroups
                 battery.NetworkBattery.LinkedNetworkCharging = default;
 
             Chargers.Remove(charger);
-            _powerNetSystem?.QueueReconnectPowerNet(this);
+            _powerNetSystem.QueueReconnectPowerNet(this);
         }
 
         public override string? GetDebugData()
         {
-            if (_powerNetSystem == null)
-                return null;
-
             // This is just recycling the multi-tool examine.
             var ps = _powerNetSystem.GetNetworkStatistics(NetworkNode);
 

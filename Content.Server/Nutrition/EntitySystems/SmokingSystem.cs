@@ -8,10 +8,8 @@ using Content.Server.Nutrition.Components;
 using Content.Shared.Chemistry;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.FixedPoint;
-using Content.Shared.Inventory;
 using Content.Shared.Smoking;
 using Content.Shared.Temperature;
-using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
 
 namespace Content.Server.Nutrition.EntitySystems
@@ -22,8 +20,7 @@ namespace Content.Server.Nutrition.EntitySystems
         [Dependency] private readonly SolutionContainerSystem _solutionContainerSystem = default!;
         [Dependency] private readonly BloodstreamSystem _bloodstreamSystem = default!;
         [Dependency] private readonly AtmosphereSystem _atmos = default!;
-        [Dependency] private readonly TransformSystem _transformSystem = default!;
-        [Dependency] private readonly InventorySystem _inventorySystem = default!;
+
         private const float UpdateTimer = 3f;
 
         private float _timer = 0f;
@@ -80,7 +77,6 @@ namespace Content.Server.Nutrition.EntitySystems
             if (_timer < UpdateTimer)
                 return;
 
-            // TODO Use an "active smoke" component instead, EntityQuery over that.
             foreach (var uid in _active.ToArray())
             {
                 if (!TryComp(uid, out SmokableComponent? smokable))
@@ -98,19 +94,14 @@ namespace Content.Server.Nutrition.EntitySystems
                 if (smokable.ExposeTemperature > 0 && smokable.ExposeVolume > 0)
                 {
                     var transform = Transform(uid);
-
-                    if (transform.GridUid is {} gridUid)
-                    {
-                        var position = _transformSystem.GetGridOrMapTilePosition(uid, transform);
-                        _atmos.HotspotExpose(gridUid, position, smokable.ExposeTemperature, smokable.ExposeVolume, true);
-                    }
+                    _atmos.HotspotExpose(transform.Coordinates, smokable.ExposeTemperature, smokable.ExposeVolume, true);
                 }
 
                 var inhaledSolution = _solutionContainerSystem.SplitSolution(uid, solution, smokable.InhaleAmount * _timer);
 
                 if (solution.TotalVolume == FixedPoint2.Zero)
                 {
-                    RaiseLocalEvent(uid, new SmokableSolutionEmptyEvent(), true);
+                    RaiseLocalEvent(uid, new SmokableSolutionEmptyEvent());
                 }
 
                 if (inhaledSolution.TotalVolume == FixedPoint2.Zero)
@@ -119,11 +110,8 @@ namespace Content.Server.Nutrition.EntitySystems
                 // This is awful. I hate this so much.
                 // TODO: Please, someone refactor containers and free me from this bullshit.
                 if (!smokable.Owner.TryGetContainerMan(out var containerManager) ||
-                    !(_inventorySystem.TryGetSlotEntity(containerManager.Owner, "mask", out var inMaskSlotUid) && inMaskSlotUid == smokable.Owner) ||
                     !TryComp(containerManager.Owner, out BloodstreamComponent? bloodstream))
-                {
                     continue;
-                }
 
                 _reactiveSystem.ReactionEntity(containerManager.Owner, ReactionMethod.Ingestion, inhaledSolution);
                 _bloodstreamSystem.TryAddToChemicals(containerManager.Owner, inhaledSolution, bloodstream);

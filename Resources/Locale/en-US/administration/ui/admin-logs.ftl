@@ -1,5 +1,4 @@
 ﻿admin-logs-title = Admin Logs Panel
-admin-logs-count = Showing {$showing}/{$total}
 admin-logs-pop-out = Pop Out
 
 # Round

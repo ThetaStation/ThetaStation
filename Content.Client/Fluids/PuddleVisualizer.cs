@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using Content.Shared.Fluids;
 using JetBrains.Annotations;
@@ -19,9 +19,6 @@ namespace Content.Client.Fluids
 
         // Whether the underlying solution color should be used
         [DataField("recolor")] public bool Recolor;
-
-        // Whether the puddle has a unique sprite we don't want to overwrite
-        [DataField("customPuddleSprite")] public bool CustomPuddleSprite;
 
         public override void InitializeEntity(EntityUid entity)
         {
@@ -78,7 +75,7 @@ namespace Content.Client.Fluids
                 spriteComponent.LayerSetState(0, "sparkles", "Fluids/wet_floor_sparkles.rsi");
                 spriteComponent.Color = spriteComponent.Color.WithAlpha(0.25f); //should be mostly transparent.
             }
-            else if(!CustomPuddleSprite)
+            else
             {
                 spriteComponent.LayerSetState(0, "smear-0", "Fluids/smear.rsi"); // TODO: need a way to implement the random smears again when the mop creates new puddles.
             }

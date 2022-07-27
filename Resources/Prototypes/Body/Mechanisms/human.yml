@@ -30,10 +30,7 @@
     compatibility: Biological
   - type: Input
     context: "ghost"
-  - type: InputMover
-  - type: MovementSpeedModifier
-    baseWalkSpeed: 0
-    baseSprintSpeed: 0
+  - type: DummyInputMover
   - type: GhostOnMove
   - type: Brain
 
@@ -150,6 +147,8 @@
       stomach:
         maxVol: 250
   - type: Stomach
+    maxVolume: 250
+    digestionDelay: 20
   # The stomach metabolizes stuff like foods and drinks.
   # TODO: Have it work off of the ent's solution container, and move this
   # to intestines instead.

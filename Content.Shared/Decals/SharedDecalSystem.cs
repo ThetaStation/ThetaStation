@@ -15,8 +15,6 @@ namespace Content.Shared.Decals
 
         protected readonly Dictionary<EntityUid, Dictionary<uint, Vector2i>> ChunkIndex = new();
 
-        // Note that this constant is effectively baked into all map files, because of how they save the grid decal component.
-        // So if this ever needs changing, the maps need converting.
         public const int ChunkSize = 32;
         public static Vector2i GetChunkIndices(Vector2 coordinates) => new ((int) Math.Floor(coordinates.X / ChunkSize), (int) Math.Floor(coordinates.Y / ChunkSize));
 
@@ -54,19 +52,9 @@ namespace Content.Shared.Decals
             }
         }
 
-        protected DecalGridComponent.DecalGridChunkCollection? DecalGridChunkCollection(EntityUid gridEuid, DecalGridComponent? comp = null)
-        {
-            if (!Resolve(gridEuid, ref comp))
-                return null;
-
-            return comp.ChunkCollection;
-        }
-
-        protected Dictionary<Vector2i, Dictionary<uint, Decal>>? ChunkCollection(EntityUid gridEuid, DecalGridComponent? comp = null)
-        {
-            var collection = DecalGridChunkCollection(gridEuid, comp);
-            return collection?.ChunkCollection;
-        }
+        protected DecalGridComponent.DecalGridChunkCollection DecalGridChunkCollection(EntityUid gridEuid) =>
+            Comp<DecalGridComponent>(gridEuid).ChunkCollection;
+        protected Dictionary<Vector2i, Dictionary<uint, Decal>> ChunkCollection(EntityUid gridEuid) => DecalGridChunkCollection(gridEuid).ChunkCollection;
 
         protected virtual void DirtyChunk(EntityUid id, Vector2i chunkIndices) {}
 
@@ -80,12 +68,12 @@ namespace Content.Shared.Decals
             }
 
             var chunkCollection = ChunkCollection(gridId);
-            if (chunkCollection == null || !chunkCollection.TryGetValue(indices, out var chunk) || !chunk.Remove(uid))
+            if (!chunkCollection.TryGetValue(indices, out var chunk) || !chunk.Remove(uid))
             {
                 return false;
             }
 
-            if (chunk.Count == 0)
+            if (chunkCollection[indices].Count == 0)
                 chunkCollection.Remove(indices);
 
             ChunkIndex[gridId].Remove(uid);

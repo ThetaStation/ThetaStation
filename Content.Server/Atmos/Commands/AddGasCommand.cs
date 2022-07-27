@@ -31,9 +31,9 @@ namespace Content.Server.Atmos.Commands
                 return;
             }
 
-            var atmosphereSystem = entMan.EntitySysManager.GetEntitySystem<AtmosphereSystem>();
+            var atmosphereSystem = EntitySystem.Get<AtmosphereSystem>();
             var indices = new Vector2i(x, y);
-            var tile = atmosphereSystem.GetTileMixture(euid, null, indices, true);
+            var tile = atmosphereSystem.GetTileMixture(euid, indices, true);
 
             if (tile == null)
             {

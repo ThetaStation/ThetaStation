@@ -14,7 +14,7 @@ namespace Content.IntegrationTests.Tests.Chemistry
 {
     [TestFixture]
     [TestOf(typeof(ReactionPrototype))]
-    public sealed class TryAllReactionsTest
+    public sealed class TryAllReactionsTest : ContentIntegrationTest
     {
         private const string Prototypes = @"
 - type: entity
@@ -24,16 +24,19 @@ namespace Content.IntegrationTests.Tests.Chemistry
     solutions:
       beaker:
         maxVol: 50";
+
         [Test]
         public async Task TryAllTest()
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true, ExtraPrototypes = Prototypes});
-            var server = pairTracker.Pair.Server;
+            var options = new ServerContentIntegrationOption{ExtraPrototypes = Prototypes};
+            var server = StartServer(options);
+
+            await server.WaitIdleAsync();
 
             var entityManager = server.ResolveDependency<IEntityManager>();
             var prototypeManager = server.ResolveDependency<IPrototypeManager>();
-            var testMap = await PoolManager.CreateTestMap(pairTracker);
-            var coordinates = testMap.GridCoords;
+            var mapManager = server.ResolveDependency<IMapManager>();
+            var coordinates = GetMainEntityCoordinates(mapManager);
 
             foreach (var reactionPrototype in prototypeManager.EnumeratePrototypes<ReactionPrototype>())
             {
@@ -43,7 +46,7 @@ namespace Content.IntegrationTests.Tests.Chemistry
                 EntityUid beaker;
                 Solution component = null;
 
-                await server.WaitAssertion(() =>
+                server.Assert(() =>
                 {
                     beaker = entityManager.SpawnEntity("TestSolutionContainer", coordinates);
                     Assert.That(EntitySystem.Get<SolutionContainerSystem>()
@@ -60,7 +63,7 @@ namespace Content.IntegrationTests.Tests.Chemistry
 
                 await server.WaitIdleAsync();
 
-                await server.WaitAssertion(() =>
+                server.Assert(() =>
                 {
                     //you just got linq'd fool
                     //(i'm sorry)
@@ -75,9 +78,8 @@ namespace Content.IntegrationTests.Tests.Chemistry
 
                     Assert.That(foundProductsMap.All(x => x.Value));
                 });
-
             }
-            await pairTracker.CleanReturnAsync();
+
         }
     }
 

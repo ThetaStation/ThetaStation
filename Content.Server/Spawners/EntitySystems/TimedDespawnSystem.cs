@@ -1,11 +1,19 @@
-using Content.Shared.Spawners.EntitySystems;
+﻿using Content.Server.Spawners.Components;
 
 namespace Content.Server.Spawners.EntitySystems;
 
-public sealed class TimedDespawnSystem : SharedTimedDespawnSystem
+public sealed class TimedDespawnSystem : EntitySystem
 {
-    protected override bool CanDelete(EntityUid uid)
+    public override void Update(float frameTime)
     {
-        return true;
+        base.Update(frameTime);
+
+        foreach (var entity in EntityQuery<TimedDespawnComponent>())
+        {
+            entity.Lifetime -= frameTime;
+
+            if (entity.Lifetime <= 0)
+                EntityManager.QueueDeleteEntity(entity.Owner);
+        }
     }
 }

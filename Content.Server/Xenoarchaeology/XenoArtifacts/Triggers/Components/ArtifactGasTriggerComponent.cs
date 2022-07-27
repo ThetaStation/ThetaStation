@@ -17,10 +17,7 @@ public sealed class ArtifactGasTriggerComponent : Component
         Gas.Oxygen,
         Gas.Plasma,
         Gas.Nitrogen,
-        Gas.CarbonDioxide,
-        Gas.Miasma,
-        Gas.NitrousOxide,
-        Gas.Frezon
+        Gas.CarbonDioxide
     };
 
     /// <summary>

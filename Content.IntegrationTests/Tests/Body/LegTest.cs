@@ -14,7 +14,7 @@ namespace Content.IntegrationTests.Tests.Body
     [TestFixture]
     [TestOf(typeof(SharedBodyComponent))]
     [TestOf(typeof(BodyComponent))]
-    public sealed class LegTest
+    public sealed class LegTest : ContentIntegrationTest
     {
         private const string Prototypes = @"
 - type: entity
@@ -32,8 +32,8 @@ namespace Content.IntegrationTests.Tests.Body
         [Test]
         public async Task RemoveLegsFallTest()
         {
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true, ExtraPrototypes = Prototypes});
-            var server = pairTracker.Pair.Server;
+            var options = new ServerContentIntegrationOption{ExtraPrototypes = Prototypes};
+            var server = StartServer(options);
 
             AppearanceComponent appearance = null;
 
@@ -64,7 +64,6 @@ namespace Content.IntegrationTests.Tests.Body
                 Assert.That(appearance.TryGetData(RotationVisuals.RotationState, out RotationState state));
                 Assert.That(state, Is.EqualTo(RotationState.Horizontal));
             });
-            await pairTracker.CleanReturnAsync();
         }
     }
 }

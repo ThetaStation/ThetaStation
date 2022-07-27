@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using Content.Server.Chat;
-using Content.Server.Chat.Systems;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Mind.Commands;
 using Content.Server.Station.Systems;
@@ -9,19 +8,26 @@ using Robust.Shared.Random;
 
 namespace Content.Server.StationEvents.Events;
 
-public sealed class RandomSentience : StationEventSystem
+public sealed class RandomSentience : StationEvent
 {
-    public override string Prototype => "RandomSentience";
+    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly IEntityManager _entityManager = default!;
 
-    public override void Started()
+    public override string Name => "RandomSentience";
+
+    public override float Weight => WeightNormal;
+
+    protected override float EndAfter => 1.0f;
+
+    public override void Startup()
     {
-        base.Started();
+        base.Startup();
         HashSet<EntityUid> stationsToNotify = new();
 
-        var targetList = EntityManager.EntityQuery<SentienceTargetComponent>().ToList();
-        RobustRandom.Shuffle(targetList);
+        var targetList = _entityManager.EntityQuery<SentienceTargetComponent>().ToList();
+        _random.Shuffle(targetList);
 
-        var toMakeSentient = RobustRandom.Next(2, 5);
+        var toMakeSentient = _random.Next(2, 5);
         var groups = new HashSet<string>();
 
         foreach (var target in targetList)
@@ -29,10 +35,10 @@ public sealed class RandomSentience : StationEventSystem
             if (toMakeSentient-- == 0)
                 break;
 
-            MakeSentientCommand.MakeSentient(target.Owner, EntityManager);
-            EntityManager.RemoveComponent<SentienceTargetComponent>(target.Owner);
-            var comp = EntityManager.AddComponent<GhostTakeoverAvailableComponent>(target.Owner);
-            comp.RoleName = EntityManager.GetComponent<MetaDataComponent>(target.Owner).EntityName;
+            MakeSentientCommand.MakeSentient(target.Owner, _entityManager);
+            _entityManager.RemoveComponent<SentienceTargetComponent>(target.Owner);
+            var comp = _entityManager.AddComponent<GhostTakeoverAvailableComponent>(target.Owner);
+            comp.RoleName = _entityManager.GetComponent<MetaDataComponent>(target.Owner).EntityName;
             comp.RoleDescription = Loc.GetString("station-event-random-sentience-role-description", ("name", comp.RoleName));
             groups.Add(target.FlavorKind);
         }
@@ -60,8 +66,8 @@ public sealed class RandomSentience : StationEventSystem
                 (EntityUid) station,
                 Loc.GetString("station-event-random-sentience-announcement",
                     ("kind1", kind1), ("kind2", kind2), ("kind3", kind3), ("amount", groupList.Count),
-                    ("data", Loc.GetString($"random-sentience-event-data-{RobustRandom.Next(1, 6)}")),
-                    ("strength", Loc.GetString($"random-sentience-event-strength-{RobustRandom.Next(1, 8)}"))),
+                    ("data", Loc.GetString($"random-sentience-event-data-{_random.Next(1, 6)}")),
+                    ("strength", Loc.GetString($"random-sentience-event-strength-{_random.Next(1, 8)}"))),
                 playDefaultSound: false,
                 colorOverride: Color.Gold
             );

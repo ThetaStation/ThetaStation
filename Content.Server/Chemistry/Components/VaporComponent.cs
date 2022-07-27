@@ -5,15 +5,17 @@ using Robust.Shared.Map;
 namespace Content.Server.Chemistry.Components
 {
     [RegisterComponent]
-    public sealed class VaporComponent : Component
+    internal sealed class VaporComponent : SharedVaporComponent
     {
-        public const string SolutionName = "vapor";
-
         [ViewVariables]
         [DataField("transferAmount")]
-        public FixedPoint2 TransferAmount = FixedPoint2.New(0.5);
+        internal FixedPoint2 TransferAmount = FixedPoint2.New(0.5);
 
-        public float ReactTimer;
-        public bool Active;
+        internal bool Reached;
+        internal float ReactTimer;
+        internal float Timer;
+        internal EntityCoordinates Target;
+        internal bool Active;
+        internal float AliveTime;
     }
 }

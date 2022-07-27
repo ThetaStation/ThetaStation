@@ -6,7 +6,6 @@
   components:
   - type: IngestionBlocker
   - type: FlashImmunity
-  - type: IdentityBlocker
 
 - type: entity
   parent: WeldingMaskBase

@@ -11,7 +11,7 @@ namespace Content.IntegrationTests.Tests.DoAfter
 {
     [TestFixture]
     [TestOf(typeof(DoAfterComponent))]
-    public sealed class DoAfterServerTest
+    public sealed class DoAfterServerTest : ContentIntegrationTest
     {
         private const string Prototypes = @"
 - type: entity
@@ -25,11 +25,11 @@ namespace Content.IntegrationTests.Tests.DoAfter
         public async Task TestFinished()
         {
             Task<DoAfterStatus> task = null;
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true, ExtraPrototypes = Prototypes});
-            var server = pairTracker.Pair.Server;
+            var options = new ServerIntegrationOptions{ExtraPrototypes = Prototypes};
+            var server = StartServer(options);
 
             // That it finishes successfully
-            await server.WaitPost(() =>
+            server.Post(() =>
             {
                 var tickTime = 1.0f / IoCManager.Resolve<IGameTiming>().TickRate;
                 var mapManager = IoCManager.Resolve<IMapManager>();
@@ -45,20 +45,16 @@ namespace Content.IntegrationTests.Tests.DoAfter
             Assert.That(task.Status, Is.EqualTo(TaskStatus.RanToCompletion));
 #pragma warning disable RA0004
             Assert.That(task.Result == DoAfterStatus.Finished);
-#pragma warning restore RA0004
-
-            await pairTracker.CleanReturnAsync();
         }
 
         [Test]
         public async Task TestCancelled()
         {
             Task<DoAfterStatus> task = null;
+            var options = new ServerIntegrationOptions{ExtraPrototypes = Prototypes};
+            var server = StartServer(options);
 
-            await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true, ExtraPrototypes = Prototypes});
-            var server = pairTracker.Pair.Server;
-
-            await server.WaitPost(() =>
+            server.Post(() =>
             {
                 var tickTime = 1.0f / IoCManager.Resolve<IGameTiming>().TickRate;
                 var mapManager = IoCManager.Resolve<IMapManager>();
@@ -72,12 +68,7 @@ namespace Content.IntegrationTests.Tests.DoAfter
             });
 
             await server.WaitRunTicks(3);
-            Assert.That(task.Status, Is.EqualTo(TaskStatus.RanToCompletion));
-#pragma warning disable RA0004
-            Assert.That(task.Result, Is.EqualTo(DoAfterStatus.Cancelled), $"Result was {task.Result}");
-#pragma warning restore RA0004
-
-            await pairTracker.CleanReturnAsync();
+            Assert.That(task.Result == DoAfterStatus.Cancelled, $"Result was {task.Result}");
         }
     }
 }

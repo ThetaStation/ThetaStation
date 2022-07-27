@@ -1,11 +1,11 @@
 - type: job
   id: Chaplain
-  name: job-name-chaplain
+  name: "chaplain"
   startingGear: ChaplainGear
   departments:
   - Civilian
   icon: "Chaplain"
-  supervisors: job-supervisors-hop
+  supervisors: "the head of personnel"
   access:
   - Chapel
   - Maintenance

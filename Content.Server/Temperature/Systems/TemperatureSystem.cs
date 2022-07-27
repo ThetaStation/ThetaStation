@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using Content.Server.Administration.Logs;
 using Content.Server.Atmos.Components;
@@ -9,15 +7,11 @@ using Content.Shared.Alert;
 using Content.Shared.Damage;
 using Content.Shared.Database;
 using Content.Shared.Inventory;
-using Robust.Server.GameObjects;
-using Robust.Shared.GameObjects;
-using Robust.Shared.IoC;
 
 namespace Content.Server.Temperature.Systems
 {
     public sealed class TemperatureSystem : EntitySystem
     {
-        [Dependency] private readonly TransformSystem _transformSystem = default!;
         [Dependency] private readonly DamageableSystem _damageableSystem = default!;
         [Dependency] private readonly AtmosphereSystem _atmosphereSystem = default!;
         [Dependency] private readonly AlertsSystem _alertsSystem = default!;
@@ -75,7 +69,7 @@ namespace Content.Server.Temperature.Systems
                 float lastTemp = temperature.CurrentTemperature;
                 float delta = temperature.CurrentTemperature - temp;
                 temperature.CurrentTemperature = temp;
-                RaiseLocalEvent(uid, new OnTemperatureChangeEvent(temperature.CurrentTemperature, lastTemp, delta), true);
+                RaiseLocalEvent(uid, new OnTemperatureChangeEvent(temperature.CurrentTemperature, lastTemp, delta));
             }
         }
 
@@ -94,21 +88,14 @@ namespace Content.Server.Temperature.Systems
                 temperature.CurrentTemperature += heatAmount / temperature.HeatCapacity;
                 float delta = temperature.CurrentTemperature - lastTemp;
 
-                RaiseLocalEvent(uid, new OnTemperatureChangeEvent(temperature.CurrentTemperature, lastTemp, delta), true);
+                RaiseLocalEvent(uid, new OnTemperatureChangeEvent(temperature.CurrentTemperature, lastTemp, delta));
             }
         }
 
         private void OnAtmosExposedUpdate(EntityUid uid, TemperatureComponent temperature, ref AtmosExposedUpdateEvent args)
         {
-            var transform = args.Transform;
-
-            if (transform.MapUid == null)
-                return;
-
-            var position = _transformSystem.GetGridOrMapTilePosition(uid, transform);
-
             var temperatureDelta = args.GasMixture.Temperature - temperature.CurrentTemperature;
-            var tileHeatCapacity = _atmosphereSystem.GetTileHeatCapacity(transform.GridUid, transform.MapUid.Value, position);
+            var tileHeatCapacity = _atmosphereSystem.GetTileHeatCapacity(args.Coordinates);
             var heat = temperatureDelta * (tileHeatCapacity * temperature.HeatCapacity / (tileHeatCapacity + temperature.HeatCapacity));
             ChangeHeat(uid, heat * temperature.AtmosTemperatureTransferEfficiency, temperature: temperature );
         }

@@ -14,7 +14,7 @@ namespace Content.Server.Cuffs.Components
 {
     [RegisterComponent]
     [ComponentReference(typeof(SharedHandcuffComponent))]
-    public sealed class HandcuffComponent : SharedHandcuffComponent
+    public sealed class HandcuffComponent : SharedHandcuffComponent, IAfterInteract
     {
         [Dependency] private readonly IEntityManager _entities = default!;
 
@@ -23,14 +23,14 @@ namespace Content.Server.Cuffs.Components
         /// </summary>
         [ViewVariables]
         [DataField("cuffTime")]
-        public float CuffTime { get; set; } = 3.5f;
+        public float CuffTime { get; set; } = 5f;
 
         /// <summary>
         ///     The time it takes to remove a <see cref="CuffedComponent"/> from an entity.
         /// </summary>
         [ViewVariables]
         [DataField("uncuffTime")]
-        public float UncuffTime { get; set; } = 3.5f;
+        public float UncuffTime { get; set; } = 5f;
 
         /// <summary>
         ///     The time it takes for a cuffed entity to remove <see cref="CuffedComponent"/> from itself.
@@ -129,17 +129,66 @@ namespace Content.Server.Cuffs.Components
         /// <summary>
         ///     Used to prevent DoAfter getting spammed.
         /// </summary>
-        public bool Cuffing;
+        private bool _cuffing;
 
         public override ComponentState GetComponentState()
         {
             return new HandcuffedComponentState(Broken ? BrokenState : string.Empty);
         }
 
+        async Task<bool> IAfterInteract.AfterInteract(AfterInteractEventArgs eventArgs)
+        {
+            if (_cuffing) return true;
+
+            if (eventArgs.Target is not {Valid: true} target ||
+                !_entities.TryGetComponent<CuffableComponent?>(eventArgs.Target.Value, out var cuffed))
+            {
+                return false;
+            }
+
+            if (Broken)
+            {
+                eventArgs.User.PopupMessage(Loc.GetString("handcuff-component-cuffs-broken-error"));
+                return true;
+            }
+
+            if (!_entities.TryGetComponent<HandsComponent?>(target, out var hands))
+            {
+                eventArgs.User.PopupMessage(Loc.GetString("handcuff-component-target-has-no-hands-error",("targetName", eventArgs.Target)));
+                return true;
+            }
+
+            if (cuffed.CuffedHandCount >= hands.Count)
+            {
+                eventArgs.User.PopupMessage(Loc.GetString("handcuff-component-target-has-no-free-hands-error",("targetName", eventArgs.Target)));
+                return true;
+            }
+
+            if (!eventArgs.CanReach)
+            {
+                eventArgs.User.PopupMessage(Loc.GetString("handcuff-component-too-far-away-error"));
+                return true;
+            }
+
+            if (eventArgs.Target == eventArgs.User)
+            {
+                eventArgs.User.PopupMessage(Loc.GetString("handcuff-component-target-self"));
+            }
+            else
+            {
+                eventArgs.User.PopupMessage(Loc.GetString("handcuff-component-start-cuffing-target-message",("targetName", eventArgs.Target)));
+                eventArgs.User.PopupMessage(target, Loc.GetString("handcuff-component-start-cuffing-by-other-message",("otherName", eventArgs.User)));
+            }
+            SoundSystem.Play(StartCuffSound.GetSound(), Filter.Pvs(Owner), Owner);
+
+            TryUpdateCuff(eventArgs.User, target, cuffed);
+            return true;
+        }
+
         /// <summary>
         /// Update the cuffed state of an entity
         /// </summary>
-        public async void TryUpdateCuff(EntityUid user, EntityUid target, CuffableComponent cuffs)
+        private async void TryUpdateCuff(EntityUid user, EntityUid target, CuffableComponent cuffs)
         {
             var cuffTime = CuffTime;
 
@@ -160,11 +209,11 @@ namespace Content.Server.Cuffs.Components
                 NeedHand = true
             };
 
-            Cuffing = true;
+            _cuffing = true;
 
             var result = await EntitySystem.Get<DoAfterSystem>().WaitDoAfter(doAfterEventArgs);
 
-            Cuffing = false;
+            _cuffing = false;
 
             if (result != DoAfterStatus.Cancelled)
             {

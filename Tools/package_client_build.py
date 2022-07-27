@@ -39,7 +39,8 @@ CLIENT_IGNORED_RESOURCES = {
     "Maps",
     "emotes.xml",
     "Groups",
-    "engineCommandPerms.yml"
+    "engineCommandPerms.yml",
+    "clientCommandPerms.yml"
 }
 
 CLIENT_CONTENT_ASSEMBLIES = [

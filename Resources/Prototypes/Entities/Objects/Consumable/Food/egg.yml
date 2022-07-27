@@ -23,12 +23,7 @@
         maxVol: 6
         reagents:
         - ReagentId: Egg
-          Quantity: 6
-  - type: SolutionSpiker
-    sourceSolution: food
-    ignoreEmpty: true
-    popup: spike-solution-egg
-  - type: DeleteOnTrigger
+          Quantity: 5
   - type: DamageOnLand
     damage:
       types:

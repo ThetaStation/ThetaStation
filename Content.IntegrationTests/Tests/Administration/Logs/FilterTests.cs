@@ -12,28 +12,36 @@ namespace Content.IntegrationTests.Tests.Administration.Logs;
 
 [TestFixture]
 [TestOf(typeof(AdminLogSystem))]
-public sealed class FilterTests
+public sealed class FilterTests : ContentIntegrationTest
 {
     [Test]
     [TestCase(DateOrder.Ascending)]
     [TestCase(DateOrder.Descending)]
     public async Task Date(DateOrder order)
     {
-        await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings{NoClient = true});
-        var server = pairTracker.Pair.Server;
+        var server = StartServer(new ServerContentIntegrationOption
+        {
+            CVarOverrides =
+            {
+                [CCVars.AdminLogsQueueSendDelay.Name] = "0"
+            },
+            Pool = true
+        });
+        await server.WaitIdleAsync();
 
         var sEntities = server.ResolveDependency<IEntityManager>();
+        var sMaps = server.ResolveDependency<IMapManager>();
+        var sSystems = server.ResolveDependency<IEntitySystemManager>();
 
         var sAdminLogSystem = server.ResolveDependency<IAdminLogManager>();
 
         var commonGuid = Guid.NewGuid();
         var firstGuid = Guid.NewGuid();
         var secondGuid = Guid.NewGuid();
-        var testMap = await PoolManager.CreateTestMap(pairTracker);
-        var coordinates = testMap.GridCoords;
 
         await server.WaitPost(() =>
         {
+            var coordinates = GetMainEntityCoordinates(sMaps);
             var entity = sEntities.SpawnEntity(null, coordinates);
 
             sAdminLogSystem.Add(LogType.Unknown, $"{entity:Entity} test log: {commonGuid} {firstGuid}");
@@ -43,12 +51,13 @@ public sealed class FilterTests
 
         await server.WaitPost(() =>
         {
+            var coordinates = GetMainEntityCoordinates(sMaps);
             var entity = sEntities.SpawnEntity(null, coordinates);
 
             sAdminLogSystem.Add(LogType.Unknown, $"{entity:Entity} test log: {commonGuid} {secondGuid}");
         });
 
-        await PoolManager.WaitUntil(server, async () =>
+        await WaitUntil(server, async () =>
         {
             var commonGuidStr = commonGuid.ToString();
 
@@ -101,6 +110,5 @@ public sealed class FilterTests
 
             return firstFound && secondFound;
         });
-        await pairTracker.CleanReturnAsync();
     }
 }

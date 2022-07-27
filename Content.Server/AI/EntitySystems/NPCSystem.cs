@@ -1,4 +1,5 @@
 using Content.Server.AI.Components;
+using Content.Server.MobState.States;
 using Content.Shared.CCVar;
 using Content.Shared.MobState;
 using JetBrains.Annotations;
@@ -103,12 +104,12 @@ namespace Content.Server.AI.EntitySystems
         {
             switch (args.CurrentMobState)
             {
-                case DamageState.Alive:
-                    WakeNPC(component);
+                case NormalMobState:
+                    component.Awake = true;
                     break;
-                case DamageState.Critical:
-                case DamageState.Dead:
-                    SleepNPC(component);
+                case CriticalMobState:
+                case DeadMobState:
+                    component.Awake = false;
                     break;
             }
         }

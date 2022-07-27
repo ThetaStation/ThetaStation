@@ -27,7 +27,7 @@
   components:
   - type: StorageFill
     contents:
-      - id: WeaponDisabler
+      - id: WeaponTaser
         amount: 3
       - id: Stunbaton
         amount: 3

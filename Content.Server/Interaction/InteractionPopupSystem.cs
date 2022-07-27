@@ -1,6 +1,5 @@
 using Content.Server.Popups;
 using Content.Server.Interaction.Components;
-using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.MobState.Components;
 using Robust.Shared.Audio;
@@ -47,7 +46,7 @@ public sealed class InteractionPopupSystem : EntitySystem
         if (_random.Prob(component.SuccessChance))
         {
             if (component.InteractSuccessString != null)
-                msg = Loc.GetString(component.InteractSuccessString, ("target", Identity.Entity(uid, EntityManager))); // Success message (localized).
+                msg = Loc.GetString(component.InteractSuccessString, ("target", uid)); // Success message (localized).
 
             if (component.InteractSuccessSound != null)
                 sfx = component.InteractSuccessSound.GetSound();
@@ -55,7 +54,7 @@ public sealed class InteractionPopupSystem : EntitySystem
         else
         {
             if (component.InteractFailureString != null)
-                msg = Loc.GetString(component.InteractFailureString, ("target", Identity.Entity(uid, EntityManager))); // Failure message (localized).
+                msg = Loc.GetString(component.InteractFailureString, ("target", uid)); // Failure message (localized).
 
             if (component.InteractFailureSound != null)
                 sfx = component.InteractFailureSound.GetSound();
@@ -63,8 +62,7 @@ public sealed class InteractionPopupSystem : EntitySystem
 
         if (component.MessagePerceivedByOthers != null)
         {
-            string msgOthers = Loc.GetString(component.MessagePerceivedByOthers,
-                ("user", Identity.Entity(args.User, EntityManager)), ("target", Identity.Entity(uid, EntityManager)));
+            string msgOthers = Loc.GetString(component.MessagePerceivedByOthers,("user", args.User), ("target", uid));
             _popupSystem.PopupEntity(msg, uid, Filter.Entities(args.User));
             _popupSystem.PopupEntity(msgOthers, uid, Filter.Pvs(uid, 2F, EntityManager).RemoveWhereAttachedEntity(puid => puid == args.User));
         }

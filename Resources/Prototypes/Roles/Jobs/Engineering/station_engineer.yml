@@ -1,11 +1,11 @@
 - type: job
   id: StationEngineer
-  name: job-name-engineer
+  name: "station engineer"
   startingGear: StationEngineerGear
   departments:
   - Engineering
   icon: "StationEngineer"
-  supervisors: job-supervisors-ce
+  supervisors: "the chief engineer"
   access:
   - Maintenance
   - Engineering

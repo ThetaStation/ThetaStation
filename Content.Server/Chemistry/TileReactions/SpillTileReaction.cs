@@ -5,7 +5,6 @@ using Content.Shared.Chemistry.Reagent;
 using Content.Shared.FixedPoint;
 using Content.Shared.Slippery;
 using Content.Shared.StepTrigger;
-using Content.Shared.StepTrigger.Systems;
 using JetBrains.Annotations;
 using Robust.Shared.Map;
 

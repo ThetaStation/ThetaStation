@@ -15,4 +15,7 @@ public sealed class MousetrapComponent : Component
     [ViewVariables(VVAccess.ReadWrite)]
     [DataField("massBalance")]
     public int MassBalance = 10;
+
+    [DataField("ignoreDamageIfInventorySlotsFilled")]
+    public List<string> IgnoreDamageIfSlotFilled = new();
 }

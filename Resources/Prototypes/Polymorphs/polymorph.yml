@@ -18,26 +18,6 @@
   revertOnCrit: true
   revertOnDeath: true
 
-- type: polymorph
-  id: WizardForcedCarp
-  entity: MobCarpMagic
-  forced: true
-  inventory: None
-  transferName: true
-  transferDamage: true
-  revertOnCrit: false
-  revertOnDeath: true
-
-- type: polymorph
-  id: WizardWallDoor
-  entity: WoodDoor
-  forced: true
-  inventory: None
-  transferName: false
-  transferDamage: false
-  revertOnCrit: false
-  revertOnDeath: false
-
 # this is a test for transferring some visual appearance stuff
 - type: polymorph
   id: TestHumanMorph
@@ -47,10 +27,19 @@
   inventory: Transfer
 
 - type: polymorph
-  id: AMIVMorph
+  id: AdminMonkeySmite
   entity: MobMonkey
   forced: true
-  inventory: Transfer
-  transferName: true
-  revertOnCrit: false
-  revertOnDeath: false
+  inventory: Drop
+
+- type: polymorph
+  id: AdminBreadSmite
+  entity: FoodBreadPlain
+  forced: true
+  inventory: Drop
+
+- type: polymorph
+  id: AdminInstrumentSmite
+  entity: SuperSynthesizerInstrument
+  forced: true
+  inventory: Drop

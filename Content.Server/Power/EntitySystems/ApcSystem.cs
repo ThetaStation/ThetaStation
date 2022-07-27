@@ -4,7 +4,6 @@ using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.APC;
 using Content.Shared.Emag.Systems;
-using Content.Shared.Popups;
 using JetBrains.Annotations;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
@@ -56,7 +55,7 @@ namespace Content.Server.Power.EntitySystems
             else
             {
                 _popupSystem.PopupCursor(Loc.GetString("apc-component-insufficient-access"),
-                    Filter.Entities(args.Session.AttachedEntity.Value), PopupType.Medium);
+                    Filter.Entities(args.Session.AttachedEntity.Value));
             }
         }
 

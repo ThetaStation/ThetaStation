@@ -1,33 +1,27 @@
-﻿using Content.Server.GameTicking.Rules.Configurations;
-using JetBrains.Annotations;
-using Robust.Shared.Audio;
-using Robust.Shared.Player;
+﻿using JetBrains.Annotations;
 
 namespace Content.Server.StationEvents.Events
 {
     [UsedImplicitly]
-    public sealed class FalseAlarm : StationEventSystem
+    public sealed class FalseAlarm : StationEvent
     {
-        public override string Prototype => "FalseAlarm";
+        public override string Name => "FalseAlarm";
+        public override float Weight => WeightHigh;
+        protected override float EndAfter => 1.0f;
+        public override int? MaxOccurrences => 5;
 
-        public override void Started()
+        public override void Announce()
         {
-            base.Started();
+            var stationEventSystem = EntitySystem.Get<StationEventSystem>();
+            var randomEvent = stationEventSystem.PickRandomEvent();
 
-            var ev = GetRandomEventUnweighted(PrototypeManager, RobustRandom);
-
-            if (ev.Configuration is not StationEventRuleConfiguration cfg)
-                return;
-
-            if (cfg.StartAnnouncement != null)
+            if (randomEvent != null)
             {
-                ChatSystem.DispatchGlobalAnnouncement(Loc.GetString(cfg.StartAnnouncement), playSound: false, colorOverride: Color.Gold);
+                StartAnnouncement = randomEvent.StartAnnouncement;
+                StartAudio = randomEvent.StartAudio;
             }
 
-            if (cfg.StartAudio != null)
-            {
-                SoundSystem.Play(cfg.StartAudio.GetSound(), Filter.Broadcast(), cfg.StartAudio.Params);
-            }
+            base.Announce();
         }
     }
 }

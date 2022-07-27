@@ -14,7 +14,6 @@ using Content.Shared.DragDrop;
 using Content.Shared.Interaction;
 using Content.Shared.MobState.Components;
 using Content.Shared.Movement;
-using Content.Shared.Movement.Events;
 using Content.Shared.Preferences;
 using Content.Shared.Verbs;
 using Robust.Shared.Containers;
@@ -41,7 +40,7 @@ namespace Content.Server.Medical
 
             SubscribeLocalEvent<MedicalScannerComponent, ComponentInit>(OnComponentInit);
             SubscribeLocalEvent<MedicalScannerComponent, ActivateInWorldEvent>(OnActivated);
-            SubscribeLocalEvent<MedicalScannerComponent, ContainerRelayMovementEntityEvent>(OnRelayMovement);
+            SubscribeLocalEvent<MedicalScannerComponent, RelayMovementEntityEvent>(OnRelayMovement);
             SubscribeLocalEvent<MedicalScannerComponent, GetVerbsEvent<InteractionVerb>>(AddInsertOtherVerb);
             SubscribeLocalEvent<MedicalScannerComponent, GetVerbsEvent<AlternativeVerb>>(AddAlternativeVerbs);
             SubscribeLocalEvent<MedicalScannerComponent, DestructionEventArgs>(OnDestroyed);
@@ -65,7 +64,7 @@ namespace Content.Server.Medical
             UpdateUserInterface(uid, scannerComponent);
         }
 
-        private void OnRelayMovement(EntityUid uid, MedicalScannerComponent scannerComponent, ref ContainerRelayMovementEntityEvent args)
+        private void OnRelayMovement(EntityUid uid, MedicalScannerComponent scannerComponent, RelayMovementEntityEvent args)
         {
             if (!_blocker.CanInteract(args.Entity, scannerComponent.Owner))
                 return;

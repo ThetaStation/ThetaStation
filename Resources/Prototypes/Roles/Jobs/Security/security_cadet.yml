@@ -1,12 +1,12 @@
 ﻿- type: job
   id: SecurityCadet
-  name: job-name-cadet
+  name: "security cadet"
   startingGear: SecurityCadetGear
   departments:
   - Civilian
   - Security
   icon: "SecurityCadet"
-  supervisors: job-supervisors-security
+  supervisors: "security officers, the warden, and the head of security"
   canBeAntag: false
   access:
   - Security

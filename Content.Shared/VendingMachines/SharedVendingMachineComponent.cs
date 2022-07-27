@@ -1,4 +1,3 @@
-using Content.Shared.Actions;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
@@ -128,6 +127,4 @@ namespace Content.Shared.VendingMachines
     {
         StatusKey,
     }
-
-    public sealed class VendingMachineSelfDispenseEvent : InstantActionEvent { };
 }

@@ -59,10 +59,7 @@
     #    deadThreshold: 120
     - type: Input
       context: "ghost"
-    - type: MovementSpeedModifier
-      baseWalkSpeed: 0
-      baseSprintSpeed: 0
-    - type: InputMover
+    - type: DummyInputMover
     - type: GhostOnMove
 
 - type: entity
