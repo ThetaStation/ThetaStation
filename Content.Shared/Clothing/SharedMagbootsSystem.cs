@@ -1,7 +1,10 @@
 using Content.Shared.Actions;
+using Content.Shared.Inventory;
+using Content.Shared.Item;
 using Content.Shared.Slippery;
 using Content.Shared.Toggleable;
 using Content.Shared.Verbs;
+using Robust.Shared.Containers;
 
 namespace Content.Shared.Clothing;
 

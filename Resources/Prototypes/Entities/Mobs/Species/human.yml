@@ -83,6 +83,7 @@
     - Electrocution
     - PressureImmunity
     - Muted
+    - ForcedSleep
   - type: DiseaseCarrier
   # Other
   - type: Inventory

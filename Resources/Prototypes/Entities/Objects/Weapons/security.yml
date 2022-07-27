@@ -6,7 +6,10 @@
   components:
   - type: Sprite
     sprite: Objects/Weapons/Melee/stunbaton.rsi
-    state: stunbaton_off
+    netsync: false
+    layers:
+    - state: stunbaton_off
+      map: [ "enum.ToggleVisuals.Layer" ]
   - type: Stunbaton
     energyPerUse: 100
   - type: MeleeWeapon

@@ -17,7 +17,7 @@ using static Content.Shared.VendingMachines.SharedVendingMachineComponent;
 
 namespace Content.Server.VendingMachines
 {
-    public sealed class VendingMachineSystem : EntitySystem
+    public sealed class VendingMachineSystem : SharedVendingMachineSystem
     {
         [Dependency] private readonly IRobustRandom _random = default!;
         [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
@@ -28,7 +28,7 @@ namespace Content.Server.VendingMachines
         public override void Initialize()
         {
             base.Initialize();
-            SubscribeLocalEvent<VendingMachineComponent, ComponentInit>(OnComponentInit);
+
             SubscribeLocalEvent<VendingMachineComponent, PowerChangedEvent>(OnPowerChanged);
             SubscribeLocalEvent<VendingMachineComponent, InventorySyncRequestMessage>(OnInventoryRequestMessage);
             SubscribeLocalEvent<VendingMachineComponent, VendingMachineEjectMessage>(OnInventoryEjectMessage);
@@ -36,9 +36,11 @@ namespace Content.Server.VendingMachines
             SubscribeLocalEvent<VendingMachineComponent, GotEmaggedEvent>(OnEmagged);
         }
 
-        private void OnComponentInit(EntityUid uid, VendingMachineComponent component, ComponentInit args)
+        protected override void OnComponentInit(EntityUid uid, SharedVendingMachineComponent sharedComponent, ComponentInit args)
         {
-            base.Initialize();
+            base.OnComponentInit(uid, sharedComponent, args);
+
+            var component = (VendingMachineComponent) sharedComponent;
 
             if (TryComp<ApcPowerReceiverComponent>(component.Owner, out var receiver))
             {
@@ -90,67 +92,6 @@ namespace Content.Server.VendingMachines
 
             component.Emagged = true;
             args.Handled = true;
-        }
-
-        public void InitializeFromPrototype(EntityUid uid, VendingMachineComponent? vendComponent = null)
-        {
-            if (!Resolve(uid, ref vendComponent))
-                return;
-
-            if (string.IsNullOrEmpty(vendComponent.PackPrototypeId)) { return; }
-
-            if (!_prototypeManager.TryIndex(vendComponent.PackPrototypeId, out VendingMachineInventoryPrototype? packPrototype))
-            {
-                return;
-            }
-
-            MetaData(uid).EntityName = packPrototype.Name;
-            vendComponent.AnimationDuration = TimeSpan.FromSeconds(packPrototype.AnimationDuration);
-            vendComponent.SpriteName = packPrototype.SpriteName;
-            if (!string.IsNullOrEmpty(vendComponent.SpriteName))
-            {
-                if (TryComp<SpriteComponent>(vendComponent.Owner, out var spriteComp)) {
-                    const string vendingMachineRSIPath = "Structures/Machines/VendingMachines/{0}.rsi";
-                    spriteComp.BaseRSIPath = string.Format(vendingMachineRSIPath, vendComponent.SpriteName);
-                }
-            }
-
-            AddInventoryFromPrototype(uid, packPrototype.StartingInventory, InventoryType.Regular, vendComponent);
-            AddInventoryFromPrototype(uid, packPrototype.EmaggedInventory, InventoryType.Emagged, vendComponent);
-            AddInventoryFromPrototype(uid, packPrototype.ContrabandInventory, InventoryType.Contraband, vendComponent);
-        }
-
-        private void AddInventoryFromPrototype(EntityUid uid, Dictionary<string, uint>? entries,
-            InventoryType type,
-            VendingMachineComponent? component = null)
-        {
-            if (!Resolve(uid, ref component) || entries == null)
-            {
-                return;
-            }
-
-            var inventory = new List<VendingMachineInventoryEntry>();
-
-            foreach (var (id, amount) in entries)
-            {
-                if (_prototypeManager.HasIndex<EntityPrototype>(id))
-                {
-                    inventory.Add(new VendingMachineInventoryEntry(type, id, amount));
-                }
-            }
-
-            switch (type)
-            {
-                case InventoryType.Regular:
-                    component.Inventory.AddRange(inventory);
-                    break;
-                case InventoryType.Emagged:
-                    component.EmaggedInventory.AddRange(inventory);
-                    break;
-                case InventoryType.Contraband:
-                    component.ContrabandInventory.AddRange(inventory);
-                    break;
-            }
         }
 
         public void Deny(EntityUid uid, VendingMachineComponent? vendComponent = null)

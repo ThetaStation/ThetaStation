@@ -16,7 +16,8 @@ namespace Content.Server.Atmos
         public static GasMixture SpaceGas => new() {Volume = Atmospherics.CellVolume, Temperature = Atmospherics.TCMB, Immutable = true};
 
         // This must always have a length that is a multiple of 4 for SIMD acceleration.
-        [DataField("moles")] [ViewVariables]
+        [DataField("moles")]
+        [ViewVariables(VVAccess.ReadWrite)]
         public float[] Moles = new float[Atmospherics.AdjustedNumberOfGases];
 
         public float[] MolesArchived = new float[Atmospherics.AdjustedNumberOfGases];
@@ -24,7 +25,8 @@ namespace Content.Server.Atmos
         [DataField("temperature")] [ViewVariables]
         private float _temperature = Atmospherics.TCMB;
 
-        [DataField("immutable")] [ViewVariables]
+        [DataField("immutable")]
+        [ViewVariables]
         public bool Immutable { get; private set; }
 
         [DataField("lastShare")] [ViewVariables]

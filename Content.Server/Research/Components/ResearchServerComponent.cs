@@ -17,7 +17,7 @@ namespace Content.Server.Research.Components
 
         [ViewVariables(VVAccess.ReadWrite)] [DataField("points")] private int _points = 0;
 
-        [ViewVariables(VVAccess.ReadOnly)] public int Id { get; private set; }
+        [ViewVariables(VVAccess.ReadOnly)] public int Id { get; set; }
 
         // You could optimize research by keeping a list of unlocked recipes too.
         [ViewVariables(VVAccess.ReadOnly)]

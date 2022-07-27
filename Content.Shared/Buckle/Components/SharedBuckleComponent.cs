@@ -40,10 +40,9 @@ namespace Content.Shared.Buckle.Components
     [Serializable, NetSerializable]
     public sealed class BuckleComponentState : ComponentState
     {
-        public BuckleComponentState(bool buckled, int? drawDepth, EntityUid? lastEntityBuckledTo, bool dontCollide)
+        public BuckleComponentState(bool buckled, EntityUid? lastEntityBuckledTo, bool dontCollide)
         {
             Buckled = buckled;
-            DrawDepth = drawDepth;
             LastEntityBuckledTo = lastEntityBuckledTo;
             DontCollide = dontCollide;
         }
@@ -51,7 +50,6 @@ namespace Content.Shared.Buckle.Components
         public bool Buckled { get; }
         public EntityUid? LastEntityBuckledTo { get; }
         public bool DontCollide { get; }
-        public int? DrawDepth;
     }
 
     public sealed class BuckleChangeEvent : EntityEventArgs

@@ -146,6 +146,22 @@
       reagent: BananaHonk
 
 - type: disease
+  id: MemeticAmirmir
+  name: Memetic Amirmir
+  effects:
+    - !type:DiseaseGenericStatusEffect
+      probability: 0.015
+      key: ForcedSleep
+      component: ForcedSleeping
+      time: 3
+      type: Add
+    - !type:DiseaseSnough
+      probability: 0.025
+      snoughMessage: disease-yawn
+      snoughSound:
+        collection: Yawns
+
+- type: disease
   id: BleedersBite
   name: Bleeder's Bite
   effects:

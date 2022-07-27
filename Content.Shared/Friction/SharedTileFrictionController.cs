@@ -22,6 +22,7 @@ namespace Content.Shared.Friction
 
         private float _stopSpeed;
         private float _frictionModifier;
+        private const float DefaultFriction = 0.3f;
 
         public override void Initialize()
         {

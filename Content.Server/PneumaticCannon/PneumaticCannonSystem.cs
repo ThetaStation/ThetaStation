@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Server.Atmos.Components;
 using Content.Server.Atmos.EntitySystems;
+using Content.Server.Camera;
 using Content.Server.Nutrition.Components;
 using Content.Server.Storage.EntitySystems;
 using Content.Server.Storage.Components;
@@ -27,12 +28,12 @@ namespace Content.Server.PneumaticCannon
     public sealed class PneumaticCannonSystem : EntitySystem
     {
         [Dependency] private readonly IRobustRandom _random = default!;
-        [Dependency] private readonly StunSystem _stun = default!;
         [Dependency] private readonly AtmosphereSystem _atmos = default!;
         [Dependency] private readonly CameraRecoilSystem _cameraRecoil = default!;
         [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
-        [Dependency] private readonly ThrowingSystem _throwingSystem = default!;
         [Dependency] private readonly StorageSystem _storageSystem = default!;
+        [Dependency] private readonly StunSystem _stun = default!;
+        [Dependency] private readonly ThrowingSystem _throwingSystem = default!;
 
         private HashSet<PneumaticCannonComponent> _currentlyFiring = new();
 
@@ -211,7 +212,7 @@ namespace Content.Server.PneumaticCannon
             {
                 data.User.PopupMessage(Loc.GetString("pneumatic-cannon-component-fire-no-gas",
                     ("cannon", comp.Owner)));
-                SoundSystem.Play("/Audio/Items/hiss.ogg", Filter.Pvs(((IComponent) comp).Owner), ((IComponent) comp).Owner, AudioParams.Default);
+                SoundSystem.Play("/Audio/Items/hiss.ogg", Filter.Pvs(comp.Owner), comp.Owner, AudioParams.Default);
                 return;
             }
 
@@ -227,7 +228,7 @@ namespace Content.Server.PneumaticCannon
             var ent = _random.Pick(storage.StoredEntities);
             _storageSystem.RemoveAndDrop(comp.Owner, ent, storage);
 
-            SoundSystem.Play(comp.FireSound.GetSound(), Filter.Pvs(data.User), ((IComponent) comp).Owner, AudioParams.Default);
+            SoundSystem.Play(comp.FireSound.GetSound(), Filter.Pvs(data.User), comp.Owner, AudioParams.Default);
             if (EntityManager.HasComponent<CameraRecoilComponent>(data.User))
             {
                 var kick = Vector2.One * data.Strength;

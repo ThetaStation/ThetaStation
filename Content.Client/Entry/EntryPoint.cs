@@ -182,10 +182,10 @@ namespace Content.Client.Entry
             ContentContexts.SetupContexts(inputMan.Contexts);
 
             IoCManager.Resolve<IGameHud>().Initialize();
-            IoCManager.Resolve<IParallaxManager>().LoadParallax(); // Have to do this later because prototypes are needed.
+            IoCManager.Resolve<IParallaxManager>().LoadDefaultParallax(); // Have to do this later because prototypes are needed.
 
             var overlayMgr = IoCManager.Resolve<IOverlayManager>();
-            overlayMgr.AddOverlay(new ParallaxOverlay());
+
             overlayMgr.AddOverlay(new SingularityOverlay());
             overlayMgr.AddOverlay(new CritOverlay()); //Hopefully we can cut down on this list... don't see why a death overlay needs to be instantiated here.
             overlayMgr.AddOverlay(new CircleMaskOverlay());

@@ -4,8 +4,10 @@ using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
 using Content.Server.Station.Components;
 using Content.Shared.CCVar;
+using Content.Shared.Station;
 using JetBrains.Annotations;
 using Robust.Shared.Configuration;
+using Robust.Shared.Enums;
 using Robust.Shared.Map;
 using Robust.Shared.Random;
 
@@ -57,6 +59,22 @@ public sealed class StationSystem : EntitySystem
         _configurationManager.OnValueChanged(CCVars.StationOffset, x => _randomStationOffset = x, true);
         _configurationManager.OnValueChanged(CCVars.MaxStationOffset, x => _maxRandomStationOffset = x, true);
         _configurationManager.OnValueChanged(CCVars.StationRotation, x => _randomStationRotation = x, true);
+
+        _player.PlayerStatusChanged += OnPlayerStatusChanged;
+    }
+
+    public override void Shutdown()
+    {
+        base.Shutdown();
+        _player.PlayerStatusChanged -= OnPlayerStatusChanged;
+    }
+
+    private void OnPlayerStatusChanged(object? sender, SessionStatusEventArgs e)
+    {
+        if (e.NewStatus == SessionStatus.Connected)
+        {
+            RaiseNetworkEvent(new StationsUpdatedEvent(_stations), Filter.SinglePlayer(e.Session));
+        }
     }
 
     #region Event handlers
@@ -64,11 +82,15 @@ public sealed class StationSystem : EntitySystem
     private void OnStationStartup(EntityUid uid, StationDataComponent component, ComponentAdd args)
     {
         _stations.Add(uid);
+
+        RaiseNetworkEvent(new StationsUpdatedEvent(_stations), Filter.Broadcast());
     }
 
     private void OnStationDeleted(EntityUid uid, StationDataComponent component, ComponentShutdown args)
     {
         _stations.Remove(uid);
+
+        RaiseNetworkEvent(new StationsUpdatedEvent(_stations), Filter.Broadcast());
     }
 
     private void OnPreGameMapLoad(PreGameMapLoad ev)

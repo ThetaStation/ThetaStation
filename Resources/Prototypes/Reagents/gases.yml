@@ -143,4 +143,11 @@
         ratios:
           CarbonDioxide: 1.0
           Nitrogen: -1.0
+      - !type:ModifyLungGas
+        conditions:
+        - !type:OrganType
+          type: Slime
+        ratios:
+          NitrousOxide: 1.0
+          Nitrogen: -1.0
 

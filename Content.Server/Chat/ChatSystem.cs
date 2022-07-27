@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.Chat.Managers;
@@ -10,6 +11,7 @@ using Content.Server.Popups;
 using Content.Server.Radio.EntitySystems;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
+using Content.Server.MobState;
 using Content.Shared.ActionBlocker;
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
@@ -45,12 +47,14 @@ public sealed class ChatSystem : SharedChatSystem
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly StationSystem _stationSystem = default!;
+    [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
 
     private const int VoiceRange = 7; // how far voice goes in world units
     private const int WhisperRange = 2; // how far whisper goes in world units
     private const string AnnouncementSound = "/Audio/Announcements/announce.ogg";
 
     private bool _loocEnabled = true;
+    private bool _deadLoocEnabled = false;
     private readonly bool _adminLoocEnabled = true;
 
     public override void Initialize()
@@ -134,7 +138,13 @@ public sealed class ChatSystem : SharedChatSystem
 
         message = SanitizeInGameOOCMessage(message);
 
-        switch (type)
+        var sendType = type;
+        // If dead player LOOC is disabled, unless you are an aghost, send dead messages to dead chat
+        if (!_adminManager.IsAdmin(player) && !_deadLoocEnabled &&
+            (HasComp<GhostComponent>(source) || _mobStateSystem.IsDead(source)))
+            sendType = InGameOOCChatType.Dead;
+
+        switch (sendType)
         {
             case InGameOOCChatType.Dead:
                 SendDeadChat(source, player, message, hideChat);
@@ -225,7 +235,8 @@ public sealed class ChatSystem : SharedChatSystem
 
     private void SendEntityWhisper(EntityUid source, string message, bool hideChat = false)
     {
-        if (!_actionBlocker.CanSpeak(source)) return;
+        if (!_actionBlocker.CanSpeak(source))
+            return;
 
         message = TransformSpeech(source, message);
         _listener.PingListeners(source, message);

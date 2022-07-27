@@ -195,6 +195,9 @@ namespace Content.Shared.Stunnable
             if (args.Handled || knocked.HelpTimer > 0f)
                 return;
 
+            if (HasComp<SleepingComponent>(uid))
+                return;
+
             // Set it to half the help interval so helping is actually useful...
             knocked.HelpTimer = knocked.HelpInterval/2f;
 

@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Content.Server.Administration.Managers;
 using Content.Shared.Administration;
+using Content.Shared.Chunking;
 using Content.Shared.Decals;
 using Content.Shared.Maps;
 using Microsoft.Extensions.ObjectPool;
@@ -18,6 +19,7 @@ namespace Content.Server.Decals
         [Dependency] private readonly IAdminManager _adminManager = default!;
         [Dependency] private readonly ITileDefinitionManager _tileDefMan = default!;
         [Dependency] private readonly SharedTransformSystem _transform = default!;
+        [Dependency] private readonly ChunkingSystem _chunking = default!;
 
         private readonly Dictionary<EntityUid, HashSet<Vector2i>> _dirtyChunks = new();
         private readonly Dictionary<IPlayerSession, Dictionary<EntityUid, HashSet<Vector2i>>> _previousSentChunks = new();
@@ -30,9 +32,6 @@ namespace Content.Server.Decals
         private ObjectPool<Dictionary<EntityUid, HashSet<Vector2i>>> _chunkViewerPool =
             new DefaultObjectPool<Dictionary<EntityUid, HashSet<Vector2i>>>(
                 new DefaultPooledObjectPolicy<Dictionary<EntityUid, HashSet<Vector2i>>>(), 64);
-
-        // Pool if we ever parallelise.
-        private HashSet<EntityUid> _viewers = new(64);
 
         public override void Initialize()
         {
@@ -357,6 +356,8 @@ namespace Content.Server.Decals
         public override void Update(float frameTime)
         {
             base.Update(frameTime);
+
+            var xformQuery = GetEntityQuery<TransformComponent>();
 
             foreach (var session in Filter.GetAllPlayers(_playerManager))
             {

@@ -202,6 +202,36 @@ namespace Content.Shared.Atmos
         public const float TritiumBurnOxyFactor = 100f;
         public const float TritiumBurnTritFactor = 10f;
 
+        public const float FrezonCoolLowerTemperature = 23.15f;
+
+        /// <summary>
+        ///     Frezon cools better at higher temperatures.
+        /// </summary>
+        public const float FrezonCoolMidTemperature = 373.15f;
+
+        public const float FrezonCoolMaximumEnergyModifier = 10f;
+
+        /// <summary>
+        ///     Remove X mol of nitrogen for each mol of frezon.
+        /// </summary>
+        public const float FrezonNitrogenCoolRatio = 5;
+        public const float FrezonCoolEnergyReleased = -3000000f;
+        public const float FrezonCoolRateModifier = 20f;
+
+        public const float FrezonProductionMaxEfficiencyTemperature = 73.15f;
+
+        /// <summary>
+        ///     1 mol of N2 is required per X mol of tritium and oxygen.
+        /// </summary>
+        public const float FrezonProductionNitrogenRatio = 10f;
+
+        public const float FrezonProductionConversionRate = 50f;
+
+        /// <summary>
+        ///     How many mol of frezon can be converted into miasma in one cycle.
+        /// </summary>
+        public const float MiasmicSubsumationMaxConversionRate = 5f;
+
         /// <summary>
         ///     Determines at what pressure the ultra-high pressure red icon is displayed.
         /// </summary>

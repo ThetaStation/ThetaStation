@@ -1,49 +1,35 @@
-using Content.Server.Atmos.EntitySystems;
-using Content.Server.Body.Components;
-using Content.Server.Explosion.EntitySystems;
-using Content.Server.UserInterface;
-using Content.Shared.Actions;
 using Content.Shared.Actions.ActionTypes;
 using Content.Shared.Atmos;
-using Content.Shared.Atmos.Components;
-using Content.Shared.Audio;
 using Content.Shared.Sound;
-using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
-using Robust.Shared.Containers;
-using Robust.Shared.Player;
 
 namespace Content.Server.Atmos.Components
 {
     [RegisterComponent]
-#pragma warning disable 618
     public sealed class GasTankComponent : Component, IGasMixtureHolder
-#pragma warning restore 618
     {
-        [Dependency] private readonly IEntityManager _entMan = default!;
-
-        private const float MaxExplosionRange = 14f;
+        public const float MaxExplosionRange = 14f;
         private const float DefaultOutputPressure = Atmospherics.OneAtmosphere;
 
-        private int _integrity = 3;
+        public int Integrity = 3;
 
-        [ViewVariables] public BoundUserInterface? UserInterface;
+        [ViewVariables(VVAccess.ReadWrite), DataField("ruptureSound")]
+        public SoundSpecifier RuptureSound = new SoundPathSpecifier("/Audio/Effects/spray.ogg");
 
-        [ViewVariables(VVAccess.ReadWrite), DataField("ruptureSound")] private SoundSpecifier _ruptureSound = new SoundPathSpecifier("/Audio/Effects/spray.ogg");
-
-        [ViewVariables(VVAccess.ReadWrite), DataField("connectSound")] private SoundSpecifier? _connectSound =
+        [ViewVariables(VVAccess.ReadWrite), DataField("connectSound")]
+        public SoundSpecifier? ConnectSound =
             new SoundPathSpecifier("/Audio/Effects/internals.ogg")
             {
-                Params = AudioParams.Default.WithVolume(10f),
+                Params = AudioParams.Default.WithVolume(5f),
             };
 
-        [ViewVariables(VVAccess.ReadWrite), DataField("disconnectSound")] private SoundSpecifier? _disconnectSound;
+        [ViewVariables(VVAccess.ReadWrite), DataField("disconnectSound")]
+        public SoundSpecifier? DisconnectSound;
 
         // Cancel toggles sounds if we re-toggle again.
 
-        private IPlayingAudioStream? _connectStream;
-        private IPlayingAudioStream? _disconnectStream;
-
+        public IPlayingAudioStream? ConnectStream;
+        public IPlayingAudioStream? DisconnectStream;
 
         [DataField("air")] [ViewVariables] public GasMixture Air { get; set; } = new();
 
@@ -52,17 +38,12 @@ namespace Content.Server.Atmos.Components
         /// </summary>
         [DataField("outputPressure")]
         [ViewVariables]
-        public float OutputPressure { get; private set; } = DefaultOutputPressure;
+        public float OutputPressure { get; set; } = DefaultOutputPressure;
 
         /// <summary>
         ///     Tank is connected to internals.
         /// </summary>
         [ViewVariables] public bool IsConnected { get; set; }
-
-        /// <summary>
-        ///     Represents that tank is functional and can be connected to internals.
-        /// </summary>
-        public bool IsFunctional => GetInternalsComponent() != null;
 
         /// <summary>
         ///     Pressure at which tanks start leaking.

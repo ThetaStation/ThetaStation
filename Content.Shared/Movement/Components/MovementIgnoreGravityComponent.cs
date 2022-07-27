@@ -64,7 +64,7 @@ namespace Content.Shared.Movement.Components
                     return false;
             }
 
-            if (!entityManager.GetComponent<GravityComponent>(grid.GridEntityId).Enabled)
+            if (!entityManager.GetComponent<GravityComponent>(grid.GridEntityId).EnabledVV)
             {
                 return true;
             }

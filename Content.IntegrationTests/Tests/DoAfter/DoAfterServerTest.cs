@@ -42,6 +42,8 @@ namespace Content.IntegrationTests.Tests.DoAfter
             });
 
             await server.WaitRunTicks(1);
+            Assert.That(task.Status, Is.EqualTo(TaskStatus.RanToCompletion));
+#pragma warning disable RA0004
             Assert.That(task.Result == DoAfterStatus.Finished);
         }
 

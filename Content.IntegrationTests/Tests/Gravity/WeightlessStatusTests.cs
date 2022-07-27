@@ -10,7 +10,7 @@ using Robust.Shared.Map;
 namespace Content.IntegrationTests.Tests.Gravity
 {
     [TestFixture]
-    [TestOf(typeof(WeightlessSystem))]
+    [TestOf(typeof(GravitySystem))]
     [TestOf(typeof(GravityGeneratorComponent))]
     public sealed class WeightlessStatusTests : ContentIntegrationTest
     {
@@ -20,6 +20,9 @@ namespace Content.IntegrationTests.Tests.Gravity
   id: HumanDummy
   components:
   - type: Alerts
+  - type: Physics
+    bodyType: Dynamic
+
 - type: entity
   name: GravityGeneratorDummy
   id: GravityGeneratorDummy
@@ -39,7 +42,6 @@ namespace Content.IntegrationTests.Tests.Gravity
 
             await server.WaitIdleAsync();
 
-            var mapManager = server.ResolveDependency<IMapManager>();
             var entityManager = server.ResolveDependency<IEntityManager>();
             var alertsSystem = server.ResolveDependency<IEntitySystemManager>().GetEntitySystem<AlertsSystem>();
 

@@ -12,6 +12,7 @@ namespace Content.Server.Zombies
 {
     public sealed class ZombieSystem : EntitySystem
     {
+        [Dependency] private readonly DamageableSystem _damage = default!;
         [Dependency] private readonly DiseaseSystem _disease = default!;
         [Dependency] private readonly BloodstreamSystem _bloodstream = default!;
         [Dependency] private readonly ZombifyOnDeathSystem _zombify = default!;
@@ -20,6 +21,13 @@ namespace Content.Server.Zombies
         {
             base.Initialize();
             SubscribeLocalEvent<ZombieComponent, MeleeHitEvent>(OnMeleeHit);
+            SubscribeLocalEvent<ZombieComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshSpeed);
+        }
+
+        private void OnRefreshSpeed(EntityUid uid, ZombieComponent component, RefreshMovementSpeedModifiersEvent args)
+        {
+            var mod = component.ZombieMovementSpeedDebuff;
+            args.ModifySpeed(mod, mod);
         }
 
         private void OnMeleeHit(EntityUid uid, ZombieComponent component, MeleeHitEvent args)

@@ -7,6 +7,7 @@ using Content.Shared.Maps;
 using Content.Shared.MobState.Components;
 using Content.Shared.Movement.Components;
 using Content.Shared.Pulling.Components;
+using Content.Shared.Sound;
 using Content.Shared.Tag;
 using Robust.Shared.Audio;
 using Robust.Shared.Configuration;
@@ -224,7 +225,6 @@ namespace Content.Shared.Movement
         private bool TryGetSound(IMoverComponent mover, IMobMoverComponent mobMover, TransformComponent xform, out float variation, [NotNullWhen(true)] out string? sound)
         {
             sound = null;
-            variation = 0f;
 
             if (!CanSound() || !_tags.HasTag(mover.Owner, "FootstepSound")) return false;
 
@@ -233,7 +233,7 @@ namespace Content.Shared.Movement
             var distanceNeeded = mover.Sprinting ? StepSoundMoveDistanceRunning : StepSoundMoveDistanceWalking;
 
             // Handle footsteps.
-            if (_mapManager.GridExists(gridId))
+            if (!weightless)
             {
                 // Can happen when teleporting between grids.
                 if (!coordinates.TryDistance(EntityManager, mobMover.LastPosition, out var distance) ||
@@ -262,19 +262,31 @@ namespace Content.Shared.Movement
             if (_inventory.TryGetSlotEntity(mover.Owner, "shoes", out var shoes) &&
                 EntityManager.TryGetComponent<FootstepModifierComponent>(shoes, out var modifier))
             {
-                sound = modifier.SoundCollection.GetSound();
-                variation = modifier.Variation;
+                sound = modifier.Sound;
                 return true;
             }
 
             return TryGetFootstepSound(gridId, coordinates, out variation, out sound);
         }
 
-        private bool TryGetFootstepSound(EntityUid gridId, EntityCoordinates coordinates, out float variation, [NotNullWhen(true)] out string? sound)
+        private bool TryGetFootstepSound(EntityCoordinates coordinates, [NotNullWhen(true)] out SoundSpecifier? sound)
         {
-            variation = 0f;
             sound = null;
-            var grid = _mapManager.GetGrid(gridId);
+            var gridUid = coordinates.GetGridUid(EntityManager);
+
+            // Fallback to the map
+            if (gridUid == null)
+            {
+                if (TryComp<FootstepModifierComponent>(coordinates.GetMapUid(EntityManager), out var modifier))
+                {
+                    sound = modifier.Sound;
+                    return true;
+                }
+
+                return false;
+            }
+
+            var grid = _mapManager.GetGrid(gridUid.Value);
             var tile = grid.GetTileRef(coordinates);
 
             if (tile.IsSpace(_tileDefinitionManager)) return false;
@@ -285,18 +297,15 @@ namespace Content.Shared.Movement
             {
                 if (EntityManager.TryGetComponent(maybeFootstep, out FootstepModifierComponent? footstep))
                 {
-                    sound = footstep.SoundCollection.GetSound();
-                    variation = footstep.Variation;
+                    sound = footstep.Sound;
                     return true;
                 }
             }
 
             // Walking on a tile.
             var def = (ContentTileDefinition) _tileDefinitionManager[tile.Tile.TypeId];
-            sound = def.FootstepSounds?.GetSound();
-            variation = FootstepVariation;
-
-            return !string.IsNullOrEmpty(sound);
+            sound = def.FootstepSounds;
+            return sound != null;
         }
     }
 }
