@@ -1,7 +1,6 @@
 name: 'Upstream Sync'
 
 on:
-  workflow_dispatch:
   schedule:
     - cron:  '0 10 * * *'
     # scheduled at 10:00 AM every day
