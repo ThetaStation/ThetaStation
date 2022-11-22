@@ -1,0 +1,31 @@
+name: 'Upstream Sync'
+
+on:
+  schedule:
+    - cron:  '0 10 * * *'
+    # scheduled at 10:00 AM every day
+
+  workflow_dispatch:  # click the button on Github repo!
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the current repo
+      - uses: actions/checkout@v2
+      # Fetch the history and unshallow the repo so that it can be used
+      - name: Fetch all history for all tags and branches
+        run: git fetch --prune --unshallow
+      # Pull the detached remote and do the magic
+      - name: Pull Detached Remote
+        uses: litetex/pull-detached-remote@v0.3.0
+        with:
+          upstreamrepo: https://github.com/space-syndicate/space-station-14
+          upstreambranch: master
+          originbranch: main
+          prlabels: auto-sync
+        env:
+          GITHUB_PAT: ${{ secrets.GH_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          NO_CREDITS: true
