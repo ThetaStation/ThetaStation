@@ -1,4 +1,4 @@
-name: Pull detached upstream automatically from https://github.com/space-syndicate/space-station-14
+name: Pull detached upstream
 
 on:
   # Possibility to run it manually
