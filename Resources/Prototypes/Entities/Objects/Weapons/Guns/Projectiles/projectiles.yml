@@ -289,6 +289,28 @@
     energy: 0.5
 
 - type: entity
+  id: BulletWeakRocketEvent
+  name: weak rocket
+  parent: BaseBulletTrigger
+  noSpawn: true
+  components:
+    - type: Sprite
+      sprite: Objects/Weapons/Guns/Projectiles/projectiles2.rsi
+      layers:
+        - state: frag
+    - type: ExplodeOnTrigger
+    - type: Explosive
+      explosionType: Default
+      maxIntensity: 2 # max 30 per tile
+      intensitySlope: 1
+      totalIntensity: 10 # 60 total damage to distribute over tiles
+      maxTileBreak: 2
+    - type: PointLight
+      radius: 3.5
+      color: orange
+      energy: 0.5
+
+- type: entity
   id: BulletWeakRocket
   name: weak rocket
   parent: BaseBulletTrigger

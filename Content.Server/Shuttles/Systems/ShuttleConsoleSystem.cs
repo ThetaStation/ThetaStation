@@ -39,6 +39,7 @@ namespace Content.Server.Shuttles.Systems
             SubscribeLocalEvent<ShuttleConsoleComponent, AnchorStateChangedEvent>(OnConsoleAnchorChange);
             SubscribeLocalEvent<ShuttleConsoleComponent, ActivatableUIOpenAttemptEvent>(OnConsoleUIOpenAttempt);
             SubscribeLocalEvent<ShuttleConsoleComponent, ShuttleConsoleDestinationMessage>(OnDestinationMessage);
+            SubscribeLocalEvent<ShuttleConsoleComponent, ShuttleConsoleChangeShipNameMessage>(OnChangeShipName);
             SubscribeLocalEvent<ShuttleConsoleComponent, BoundUIClosedEvent>(OnConsoleUIClose);
 
             SubscribeLocalEvent<DockEvent>(OnDock);
@@ -46,6 +47,21 @@ namespace Content.Server.Shuttles.Systems
 
             SubscribeLocalEvent<PilotComponent, MoveEvent>(HandlePilotMove);
             SubscribeLocalEvent<PilotComponent, ComponentGetState>(OnGetState);
+        }
+
+        private void OnChangeShipName(EntityUid uid, ShuttleConsoleComponent component, ShuttleConsoleChangeShipNameMessage args)
+        {
+            if(args.NewShipName == null)
+                return;
+            if(!TryComp<TransformComponent>(uid, out var xform))
+                return;
+            if(!TryComp<MetaDataComponent>(xform.GridUid, out var meta))
+                return;
+            meta.EntityName = args.NewShipName;
+            foreach (var comp in EntityQuery<ShuttleConsoleComponent>(true))
+            {
+                UpdateState(comp);
+            }
         }
 
         private void OnDestinationMessage(EntityUid uid, ShuttleConsoleComponent component, ShuttleConsoleDestinationMessage args)

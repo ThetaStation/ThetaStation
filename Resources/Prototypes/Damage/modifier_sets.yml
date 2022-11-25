@@ -111,6 +111,19 @@
     Poison: 0.9
 
 - type: damageModifierSet
+  id: Immortal
+  coefficients:
+    Blunt: 0
+    Slash: 0
+    Piercing: 0
+    Cold: 0.0
+    Poison: 0.0
+    Radiation: 0.0
+    Asphyxiation: 0.0
+    Bloodloss: 0.0
+    Cellular: 0.0
+
+- type: damageModifierSet
   id: Diona
   coefficients:
     Blunt: 0.7

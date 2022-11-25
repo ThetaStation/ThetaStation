@@ -204,9 +204,17 @@ namespace Content.Server.Ghost.Roles
 
             DebugTools.AssertNotNull(contentData);
 
+            var metaDataComponent = EntityManager.GetComponent<MetaDataComponent>(mob);
+            var characterName = metaDataComponent.EntityName;
+            if (HasComp<UseActorNameComponent>(mob))
+            {
+                characterName = player.Name;
+                metaDataComponent.EntityName = characterName;
+            }
+
             var newMind = new Mind.Mind(player.UserId)
             {
-                CharacterName = EntityManager.GetComponent<MetaDataComponent>(mob).EntityName
+                CharacterName = characterName
             };
             newMind.AddRole(new GhostRoleMarkerRole(newMind, role.RoleName));
 

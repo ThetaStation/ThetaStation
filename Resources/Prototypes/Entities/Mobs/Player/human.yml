@@ -55,3 +55,43 @@
   components:
     - type: NukeOperative
     - type: RandomHumanoidAppearance
+
+- type: entity
+  name: ShipTest Agent
+  id: MobHumanShipEvent
+  parent: MobHuman
+  suffix: SHIPEVENT
+  components:
+    - type: RandomHumanoidAppearance
+    - type: Eye
+      drawFov: false
+      zoom: 1.5, 1.5
+    - type: Loadout
+      prototype: ShipTestEventStandard
+      prototypes: [ShipTestEventStandard]
+    - type: UseActorName
+    - type: MovedByPressure
+      enabled: false
+    - type: Damageable
+      damageModifierSet: Immortal
+    - type: Barotrauma #no space damage.
+      damage:
+        types:
+          Blunt: 0
+    - type: Bloodstream
+      maxBleedAmount: 0
+      bloodReagent: Milk
+      bloodlossDamage: #no bloodloss damage. overriding base components
+        types:
+          Bloodloss: 0
+      bloodlossHealDamage:
+        types:
+          Bloodloss: 0
+    - type: Respirator
+      damage:
+        types:
+          Asphyxiation: 0
+      damageRecovery:
+        types:
+          Asphyxiation: 0
+      suffocationThreshold: -100000
