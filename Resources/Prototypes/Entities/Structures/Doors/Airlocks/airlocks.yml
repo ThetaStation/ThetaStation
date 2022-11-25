@@ -123,16 +123,6 @@
     resistance: 2
 
 - type: entity
-  id: AirlockGlassShipEvent
-  parent: AirlockGlass
-  name: glass airlock
-  suffix: SHIPEVENT
-  component:
-    - type: ApcPowerReceiver
-      needsPower: false
-      powerLoad: 0
-
-- type: entity
   parent: AirlockGlass
   id: AirlockEngineeringGlass
   suffix: Engineering
