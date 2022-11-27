@@ -69,7 +69,7 @@
     - type: Loadout
       prototype: ShipTestEventStandard
       prototypes: [ShipTestEventStandard]
-    - type: UseActorName
+    - type: UsePlayerNameForEntityName
     - type: MovedByPressure
       enabled: false
     - type: Damageable
