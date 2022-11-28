@@ -2,7 +2,7 @@ meta:
   format: 2
   name: DemoStation
   author: Space-Wizards
-  postmapinit: false
+  postmapinit: true
 tilemap:
   0: Space
   1: FloorArcadeBlue
@@ -112,7 +112,7 @@ entities:
   components:
   - type: MetaData
   - type: Transform
-  - index: 7
+  - index: 3
     type: Map
   - type: PhysicsMap
   - type: Broadphase
@@ -120,7 +120,7 @@ entities:
 - uid: 1
   components:
   - type: MetaData
-  - pos: 0.060387254,-0.013818383
+  - pos: 0.060387254,-0.013818264
     parent: 0
     type: Transform
   - type: MapGrid
@@ -323,149 +323,146 @@ entities:
   - chunkCollection: {}
     type: DecalGrid
   - tiles:
-      -3,-1: 0
       -2,-1: 0
-      -1,-1: 0
-      0,-1: 0
-      1,-1: 0
-      -3,0: 0
-      -2,0: 0
-      -1,0: 0
-      0,0: 0
-      -8,-9: 1
-      -8,-8: 1
-      -8,-7: 1
-      -7,-10: 1
-      -7,-9: 1
-      -7,-8: 1
-      -7,-7: 1
-      -7,-6: 1
-      -7,-5: 1
-      -7,-4: 1
-      -6,-10: 1
-      -6,-9: 1
-      -6,-8: 1
-      -6,-7: 1
-      -6,-6: 1
-      -6,-5: 1
-      -6,-4: 1
-      -6,-3: 1
-      -5,-10: 1
-      -5,-9: 1
-      -5,-8: 1
-      -5,-7: 1
-      -5,-6: 1
-      -5,-5: 1
-      -5,-4: 1
-      -5,-3: 1
-      -4,-10: 1
-      -4,-9: 1
-      -4,-8: 1
-      -4,-7: 1
-      -4,-6: 1
-      -4,-5: 1
-      -4,-4: 1
-      -4,-3: 1
-      -3,-10: 1
-      -3,-9: 1
-      -3,-8: 1
-      -3,-7: 1
-      -3,-6: 1
-      -3,-5: 1
-      -3,-4: 1
-      -3,-3: 1
-      -3,-2: 1
-      -2,-10: 1
-      -2,-9: 1
-      -2,-8: 1
-      -2,-7: 1
-      -2,-6: 1
-      -2,-5: 1
-      -2,-4: 1
-      -2,-3: 1
-      -2,-2: 1
-      -1,-10: 1
-      -1,-9: 1
-      -1,-8: 1
-      -1,-7: 1
-      -1,-6: 1
-      -1,-5: 1
-      -1,-4: 1
-      -1,-3: 1
-      -1,-2: 1
-      0,-10: 1
-      0,-9: 1
-      0,-8: 1
-      0,-7: 1
-      0,-6: 1
-      0,-5: 1
-      0,-4: 1
-      0,-3: 1
-      0,-2: 1
-      1,-10: 1
-      1,-9: 1
-      1,-8: 1
-      1,-7: 1
-      1,-6: 1
-      1,-5: 1
-      1,-4: 1
-      1,-3: 1
-      1,-2: 1
-      2,-10: 1
-      2,-9: 1
-      2,-8: 1
-      2,-7: 1
-      2,-6: 1
-      2,-5: 1
-      2,-4: 1
-      2,-3: 1
-      3,-10: 1
-      3,-9: 1
-      3,-8: 1
-      3,-7: 1
-      3,-6: 1
-      3,-5: 1
-      3,-4: 1
-      3,-3: 1
-      4,-10: 1
-      4,-9: 1
-      4,-8: 1
-      4,-7: 1
-      4,-6: 1
-      4,-5: 1
-      4,-4: 1
-      4,-3: 1
-      5,-10: 1
-      5,-9: 1
-      5,-8: 1
-      5,-7: 1
-      5,-6: 1
-      5,-5: 1
-      5,-4: 1
-      6,-9: 1
-      6,-8: 1
-      6,-7: 1
-      -4,0: 1
-      -4,1: 1
-      -3,1: 1
-      -3,2: 1
-      -2,1: 1
-      -2,2: 1
-      -1,1: 1
-      -1,2: 1
-      0,1: 1
-      0,2: 1
-      1,0: 1
-      1,1: 1
-      1,2: 1
-      2,0: 1
-      2,1: 1
+      -1,-1: 1
+      0,-1: 2
+      -2,0: 3
+      -1,0: 3
+      0,0: 4
+      -8,-8: 5
+      -8,-7: 5
+      -7,-5: 5
+      -6,-10: 5
+      -6,-8: 5
+      -6,-7: 5
+      -6,-6: 5
+      -6,-5: 5
+      -6,-4: 5
+      -6,-3: 5
+      -5,-10: 5
+      -5,-8: 5
+      -5,-7: 5
+      -5,-6: 5
+      -5,-5: 5
+      -5,-3: 5
+      -4,-10: 5
+      -4,-8: 5
+      -4,-7: 5
+      -4,-6: 5
+      -4,-5: 5
+      -4,-3: 5
+      -2,-10: 5
+      -2,-9: 5
+      -2,-8: 5
+      -2,-7: 5
+      -2,-6: 5
+      -2,-5: 5
+      -2,-3: 6
+      -2,-2: 3
+      -1,-10: 5
+      -1,-9: 5
+      -1,-8: 5
+      -1,-7: 5
+      -1,-6: 5
+      -1,-5: 5
+      -1,-3: 7
+      -1,-2: 0
+      0,-10: 5
+      0,-9: 5
+      0,-8: 5
+      0,-7: 5
+      0,-6: 5
+      0,-5: 5
+      0,-3: 8
+      0,-2: 9
+      2,-10: 5
+      2,-8: 5
+      2,-7: 5
+      2,-6: 5
+      2,-5: 5
+      2,-4: 5
+      2,-3: 5
+      3,-10: 5
+      3,-8: 5
+      3,-7: 5
+      3,-6: 5
+      3,-5: 5
+      3,-3: 5
+      4,-10: 5
+      4,-8: 5
+      4,-7: 5
+      4,-6: 5
+      4,-5: 5
+      4,-3: 5
+      5,-5: 5
+      6,-8: 5
+      6,-7: 5
     uniqueMixes:
     - volume: 2500
       temperature: 293.15
       moles:
-      - 21.824879
-      - 82.10312
+      - 10.912437
+      - 41.05155
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    - volume: 2500
+      temperature: 293.15
+      moles:
+      - 10.912441
+      - 41.051567
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    - volume: 2500
+      temperature: 293.15
+      moles:
+      - 10.912441
+      - 41.05156
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    - volume: 2500
+      temperature: 293.15
+      moles:
+      - 10.912439
+      - 41.05156
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    - volume: 2500
+      temperature: 293.15
+      moles:
+      - 10.912447
+      - 41.05159
       - 0
       - 0
       - 0
@@ -481,6 +478,66 @@ entities:
       moles:
       - 0
       - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    - volume: 2500
+      temperature: 293.15
+      moles:
+      - 10.912437
+      - 41.051556
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    - volume: 2500
+      temperature: 293.15
+      moles:
+      - 10.912438
+      - 41.051556
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    - volume: 2500
+      temperature: 293.15
+      moles:
+      - 10.912438
+      - 41.05155
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    - volume: 2500
+      temperature: 293.15
+      moles:
+      - 10.912436
+      - 41.05155
       - 0
       - 0
       - 0
@@ -792,7 +849,24 @@ entities:
   - pos: -0.5,0.5
     parent: 1
     type: Transform
+  - containers:
+    - board
+    type: Construction
+  - containers:
+      board: !type:Container
+        ents:
+        - 40
+    type: ContainerContainer
 - uid: 40
+  type: ShuttleConsoleCircuitboard
+  components:
+  - flags: InContainer
+    type: MetaData
+  - parent: 39
+    type: Transform
+  - canCollide: False
+    type: Physics
+- uid: 41
   type: Chair
   components:
   - type: MetaData
@@ -800,112 +874,112 @@ entities:
     pos: -0.5,-0.5
     parent: 1
     type: Transform
-- uid: 41
+- uid: 42
   type: WallReinforced
   components:
   - type: MetaData
   - pos: 1.5,-1.5
     parent: 1
     type: Transform
-- uid: 42
+- uid: 43
   type: WallReinforced
   components:
   - type: MetaData
   - pos: 1.5,-2.5
     parent: 1
     type: Transform
-- uid: 43
+- uid: 44
   type: WallReinforced
   components:
   - type: MetaData
   - pos: -2.5,-1.5
     parent: 1
     type: Transform
-- uid: 44
+- uid: 45
   type: WallReinforced
   components:
   - type: MetaData
   - pos: -2.5,-2.5
     parent: 1
     type: Transform
-- uid: 45
+- uid: 46
   type: ReinforcedWindow
   components:
   - type: MetaData
   - pos: -3.5,1.5
     parent: 1
     type: Transform
-- uid: 46
+- uid: 47
   type: ReinforcedWindow
   components:
   - type: MetaData
   - pos: -2.5,-0.5
     parent: 1
     type: Transform
-- uid: 47
+- uid: 48
   type: ReinforcedWindow
   components:
   - type: MetaData
   - pos: -3.5,0.5
     parent: 1
     type: Transform
-- uid: 48
+- uid: 49
   type: InflatableDoor
   components:
   - type: MetaData
   - pos: -2.5,-5.5
     parent: 1
     type: Transform
-- uid: 49
+- uid: 50
   type: InflatableDoor
   components:
   - type: MetaData
   - pos: 1.5,-5.5
     parent: 1
     type: Transform
-- uid: 50
+- uid: 51
   type: InflatableDoor
   components:
   - type: MetaData
   - pos: 1.5,-4.5
     parent: 1
     type: Transform
-- uid: 51
+- uid: 52
   type: AlwaysPoweredWallLight
   components:
   - type: MetaData
   - pos: 0.5,-4.5
     parent: 1
     type: Transform
-- uid: 52
+- uid: 53
   type: ReinforcedWindow
   components:
   - type: MetaData
   - pos: 1.5,-0.5
     parent: 1
     type: Transform
-- uid: 53
+- uid: 54
   type: InflatableDoor
   components:
   - type: MetaData
   - pos: -0.5,-3.5
     parent: 1
     type: Transform
-- uid: 54
+- uid: 55
   type: InflatableDoor
   components:
   - type: MetaData
   - pos: -2.5,-4.5
     parent: 1
     type: Transform
-- uid: 55
+- uid: 56
   type: ReinforcedWindow
   components:
   - type: MetaData
   - pos: -1.5,2.5
     parent: 1
     type: Transform
-- uid: 56
+- uid: 57
   type: DebugThruster
   components:
   - type: MetaData
@@ -942,21 +1016,21 @@ entities:
       hard: False
       id: thruster-burn
     type: Fixtures
-- uid: 57
+- uid: 58
   type: TableCarpet
   components:
   - type: MetaData
   - pos: -5.5,-7.5
     parent: 1
     type: Transform
-- uid: 58
+- uid: 59
   type: DebugGyroscope
   components:
   - type: MetaData
   - pos: 4.5,-7.5
     parent: 1
     type: Transform
-- uid: 59
+- uid: 60
   type: DebugThruster
   components:
   - type: MetaData
@@ -994,7 +1068,7 @@ entities:
       hard: False
       id: thruster-burn
     type: Fixtures
-- uid: 60
+- uid: 61
   type: DebugThruster
   components:
   - type: MetaData
@@ -1032,7 +1106,7 @@ entities:
       hard: False
       id: thruster-burn
     type: Fixtures
-- uid: 61
+- uid: 62
   type: DebugThruster
   components:
   - type: MetaData
@@ -1070,7 +1144,7 @@ entities:
       hard: False
       id: thruster-burn
     type: Fixtures
-- uid: 62
+- uid: 63
   type: DebugThruster
   components:
   - type: MetaData
@@ -1107,7 +1181,7 @@ entities:
       hard: False
       id: thruster-burn
     type: Fixtures
-- uid: 63
+- uid: 64
   type: DebugThruster
   components:
   - type: MetaData
@@ -1144,35 +1218,37 @@ entities:
       hard: False
       id: thruster-burn
     type: Fixtures
-- uid: 64
+- uid: 65
   type: TableReinforced
   components:
   - type: MetaData
   - pos: 0.5,-9.5
     parent: 1
     type: Transform
-- uid: 65
+- uid: 66
   type: WallReinforced
   components:
   - type: MetaData
   - pos: -7.5,-8.5
     parent: 1
     type: Transform
-- uid: 66
+- uid: 67
   type: WallReinforced
   components:
   - type: MetaData
   - pos: -6.5,-8.5
     parent: 1
     type: Transform
-- uid: 67
+- uid: 68
   type: DrinkGlass
   components:
   - type: MetaData
   - pos: 0.20055866,-0.26526916
     parent: 1
     type: Transform
-- uid: 68
+  - canCollide: False
+    type: Physics
+- uid: 69
   type: DebugThruster
   components:
   - type: MetaData
@@ -1210,7 +1286,7 @@ entities:
       hard: False
       id: thruster-burn
     type: Fixtures
-- uid: 69
+- uid: 70
   type: DebugThruster
   components:
   - type: MetaData
@@ -1248,49 +1324,49 @@ entities:
       hard: False
       id: thruster-burn
     type: Fixtures
-- uid: 70
+- uid: 71
   type: WallReinforced
   components:
   - type: MetaData
   - pos: 4.5,-8.5
     parent: 1
     type: Transform
-- uid: 71
+- uid: 72
   type: WallReinforced
   components:
   - type: MetaData
   - pos: 3.5,-8.5
     parent: 1
     type: Transform
-- uid: 72
+- uid: 73
   type: WallReinforced
   components:
   - type: MetaData
   - pos: 2.5,-8.5
     parent: 1
     type: Transform
-- uid: 73
+- uid: 74
   type: WallReinforced
   components:
   - type: MetaData
   - pos: -5.5,-8.5
     parent: 1
     type: Transform
-- uid: 74
+- uid: 75
   type: WallReinforced
   components:
   - type: MetaData
   - pos: -4.5,-8.5
     parent: 1
     type: Transform
-- uid: 75
+- uid: 76
   type: WallReinforced
   components:
   - type: MetaData
   - pos: -3.5,-8.5
     parent: 1
     type: Transform
-- uid: 76
+- uid: 77
   type: DebugThruster
   components:
   - type: MetaData
@@ -1327,7 +1403,7 @@ entities:
       hard: False
       id: thruster-burn
     type: Fixtures
-- uid: 77
+- uid: 78
   type: DebugThruster
   components:
   - type: MetaData
@@ -1365,7 +1441,7 @@ entities:
       hard: False
       id: thruster-burn
     type: Fixtures
-- uid: 78
+- uid: 79
   type: DebugThruster
   components:
   - type: MetaData
@@ -1403,14 +1479,14 @@ entities:
       hard: False
       id: thruster-burn
     type: Fixtures
-- uid: 79
+- uid: 80
   type: TableReinforced
   components:
   - type: MetaData
   - pos: -0.5,-9.5
     parent: 1
     type: Transform
-- uid: 80
+- uid: 81
   type: AlwaysPoweredWallLight
   components:
   - type: MetaData
@@ -1418,21 +1494,21 @@ entities:
     pos: -1.5,-1.5
     parent: 1
     type: Transform
-- uid: 81
+- uid: 82
   type: WallReinforced
   components:
   - type: MetaData
   - pos: -3.5,-3.5
     parent: 1
     type: Transform
-- uid: 82
+- uid: 83
   type: TableReinforced
   components:
   - type: MetaData
   - pos: -1.5,-9.5
     parent: 1
     type: Transform
-- uid: 83
+- uid: 84
   type: DebugThruster
   components:
   - type: MetaData
@@ -1470,7 +1546,7 @@ entities:
       hard: False
       id: thruster-burn
     type: Fixtures
-- uid: 84
+- uid: 85
   type: DebugThruster
   components:
   - type: MetaData
@@ -1508,84 +1584,84 @@ entities:
       hard: False
       id: thruster-burn
     type: Fixtures
-- uid: 85
+- uid: 86
   type: ReinforcedWindow
   components:
   - type: MetaData
   - pos: 0.5,2.5
     parent: 1
     type: Transform
-- uid: 86
+- uid: 87
   type: ReinforcedWindow
   components:
   - type: MetaData
   - pos: 1.5,2.5
     parent: 1
     type: Transform
-- uid: 87
+- uid: 88
   type: ReinforcedWindow
   components:
   - type: MetaData
   - pos: 2.5,1.5
     parent: 1
     type: Transform
-- uid: 88
+- uid: 89
   type: ReinforcedWindow
   components:
   - type: MetaData
   - pos: 2.5,0.5
     parent: 1
     type: Transform
-- uid: 89
+- uid: 90
   type: ReinforcedWindow
   components:
   - type: MetaData
   - pos: 1.5,0.5
     parent: 1
     type: Transform
-- uid: 90
+- uid: 91
   type: ReinforcedWindow
   components:
   - type: MetaData
   - pos: 1.5,1.5
     parent: 1
     type: Transform
-- uid: 91
+- uid: 92
   type: ReinforcedWindow
   components:
   - type: MetaData
   - pos: 0.5,1.5
     parent: 1
     type: Transform
-- uid: 92
+- uid: 93
   type: ReinforcedWindow
   components:
   - type: MetaData
   - pos: -0.5,1.5
     parent: 1
     type: Transform
-- uid: 93
+- uid: 94
   type: ReinforcedWindow
   components:
   - type: MetaData
   - pos: -1.5,1.5
     parent: 1
     type: Transform
-- uid: 94
+- uid: 95
   type: ReinforcedWindow
   components:
   - type: MetaData
   - pos: -2.5,1.5
     parent: 1
     type: Transform
-- uid: 95
+- uid: 96
   type: ReinforcedWindow
   components:
   - type: MetaData
   - pos: -2.5,0.5
     parent: 1
     type: Transform
-- uid: 96
+- uid: 97
   type: WindowReinforcedDirectional
   components:
   - type: MetaData
@@ -1593,7 +1669,7 @@ entities:
     pos: 0.5,0.5
     parent: 1
     type: Transform
-- uid: 97
+- uid: 98
   type: WindowReinforcedDirectional
   components:
   - type: MetaData
@@ -1601,154 +1677,154 @@ entities:
     pos: -1.5,0.5
     parent: 1
     type: Transform
-- uid: 98
+- uid: 99
   type: Grille
   components:
   - type: MetaData
   - pos: 1.5,-0.5
     parent: 1
     type: Transform
-- uid: 99
+- uid: 100
   type: Grille
   components:
   - type: MetaData
   - pos: 1.5,0.5
     parent: 1
     type: Transform
-- uid: 100
+- uid: 101
   type: Grille
   components:
   - type: MetaData
   - pos: 2.5,0.5
     parent: 1
     type: Transform
-- uid: 101
+- uid: 102
   type: Grille
   components:
   - type: MetaData
   - pos: 2.5,1.5
     parent: 1
     type: Transform
-- uid: 102
+- uid: 103
   type: Grille
   components:
   - type: MetaData
   - pos: 1.5,1.5
     parent: 1
     type: Transform
-- uid: 103
+- uid: 104
   type: Grille
   components:
   - type: MetaData
   - pos: 1.5,2.5
     parent: 1
     type: Transform
-- uid: 104
+- uid: 105
   type: Grille
   components:
   - type: MetaData
   - pos: -2.5,2.5
     parent: 1
     type: Transform
-- uid: 105
+- uid: 106
   type: Grille
   components:
   - type: MetaData
   - pos: -0.5,1.5
     parent: 1
     type: Transform
-- uid: 106
+- uid: 107
   type: Grille
   components:
   - type: MetaData
   - pos: -1.5,1.5
     parent: 1
     type: Transform
-- uid: 107
+- uid: 108
   type: Grille
   components:
   - type: MetaData
   - pos: -1.5,2.5
     parent: 1
     type: Transform
-- uid: 108
+- uid: 109
   type: Grille
   components:
   - type: MetaData
   - pos: 0.5,2.5
     parent: 1
     type: Transform
-- uid: 109
+- uid: 110
   type: Grille
   components:
   - type: MetaData
   - pos: 0.5,1.5
     parent: 1
     type: Transform
-- uid: 110
+- uid: 111
   type: Grille
   components:
   - type: MetaData
   - pos: -0.5,2.5
     parent: 1
     type: Transform
-- uid: 111
+- uid: 112
   type: Grille
   components:
   - type: MetaData
   - pos: -3.5,1.5
     parent: 1
     type: Transform
-- uid: 112
+- uid: 113
   type: Grille
   components:
   - type: MetaData
   - pos: -3.5,0.5
     parent: 1
     type: Transform
-- uid: 113
+- uid: 114
   type: Grille
   components:
   - type: MetaData
   - pos: -2.5,-0.5
     parent: 1
     type: Transform
-- uid: 114
-  type: Grille
-  components:
-  - type: MetaData
-  - pos: -2.5,0.5
-    parent: 1
-    type: Transform
 - uid: 115
   type: Grille
   components:
   - type: MetaData
-  - pos: -2.5,1.5
+  - pos: -2.5,0.5
     parent: 1
     type: Transform
 - uid: 116
   type: Grille
   components:
   - type: MetaData
-  - pos: 0.5,0.5
+  - pos: -2.5,1.5
     parent: 1
     type: Transform
 - uid: 117
   type: Grille
   components:
   - type: MetaData
-  - pos: -2.5,0.5
+  - pos: 0.5,0.5
     parent: 1
     type: Transform
 - uid: 118
   type: Grille
   components:
   - type: MetaData
-  - pos: -1.5,0.5
+  - pos: -2.5,0.5
     parent: 1
     type: Transform
 - uid: 119
+  type: Grille
+  components:
+  - type: MetaData
+  - pos: -1.5,0.5
+    parent: 1
+    type: Transform
+- uid: 120
   type: AlwaysPoweredWallLight
   components:
   - type: MetaData
@@ -1756,7 +1832,7 @@ entities:
     pos: -5.5,-6.5
     parent: 1
     type: Transform
-- uid: 120
+- uid: 121
   type: AlwaysPoweredWallLight
   components:
   - type: MetaData
@@ -1764,7 +1840,7 @@ entities:
     pos: 4.5,-6.5
     parent: 1
     type: Transform
-- uid: 121
+- uid: 122
   type: AlwaysPoweredWallLight
   components:
   - type: MetaData
@@ -1772,42 +1848,55 @@ entities:
     pos: 2.5,-7.5
     parent: 1
     type: Transform
-- uid: 122
+- uid: 123
   type: Table
   components:
   - type: MetaData
   - pos: -1.5,-0.5
     parent: 1
     type: Transform
-- uid: 123
+- uid: 124
   type: WeldingFuelTankFull
   components:
   - type: MetaData
   - pos: 2.5,-7.5
     parent: 1
     type: Transform
-- uid: 124
+- uid: 125
   type: KvassTankFull
   components:
   - type: MetaData
   - pos: -1.5,-2.5
     parent: 1
     type: Transform
-- uid: 125
+- uid: 126
   type: Table
   components:
   - type: MetaData
   - pos: 0.5,-0.5
     parent: 1
     type: Transform
-- uid: 126
+- uid: 127
   type: Lamp
   components:
   - type: MetaData
   - pos: -1.5953497,-0.2277335
     parent: 1
     type: Transform
-- uid: 127
+  - containers:
+      cell_slot: !type:ContainerSlot
+        ent: 128
+    type: ContainerContainer
+- uid: 128
+  type: PowerCellSmall
+  components:
+  - flags: InContainer
+    type: MetaData
+  - parent: 127
+    type: Transform
+  - canCollide: False
+    type: Physics
+- uid: 129
   type: Gyroscope
   components:
   - type: MetaData
@@ -1815,377 +1904,554 @@ entities:
     parent: 1
     type: Transform
 - uid: 130
-  type: DrinkGlass
+  type: WeaponLightMachineGunL6Event
   components:
   - type: MetaData
-  - pos: 0.38805866,-0.23401916
+  - pos: -3.572802,-7.5682464
     parent: 1
     type: Transform
+  - containers:
+      gun_magazine: !type:ContainerSlot
+        ent: 131
+      gun_chamber: !type:ContainerSlot
+        ent: 132
+    type: ContainerContainer
+  - canCollide: False
+    type: Physics
 - uid: 131
-  type: DrinkGlass
+  type: MagazineLightRifleBoxEvent
   components:
-  - type: MetaData
-  - pos: 0.54430866,-0.23401916
-    parent: 1
+  - flags: InContainer
+    type: MetaData
+  - parent: 130
     type: Transform
+  - unspawnedCount: 100
+    type: BallisticAmmoProvider
+  - canCollide: False
+    type: Physics
 - uid: 132
-  type: DrinkGlass
+  type: CartridgeLightRifleExplosive
   components:
-  - type: MetaData
-  - pos: 0.70055866,-0.20276916
-    parent: 1
+  - flags: InContainer
+    type: MetaData
+  - parent: 130
     type: Transform
+  - canCollide: False
+    type: Physics
 - uid: 133
+  type: WeaponLightMachineGunL6Event
+  components:
+  - type: MetaData
+  - pos: -3.572802,-7.4944997
+    parent: 1
+    type: Transform
+  - containers:
+      gun_magazine: !type:ContainerSlot
+        ent: 134
+      gun_chamber: !type:ContainerSlot
+        ent: 135
+    type: ContainerContainer
+  - canCollide: False
+    type: Physics
+- uid: 134
+  type: MagazineLightRifleBoxEvent
+  components:
+  - flags: InContainer
+    type: MetaData
+  - parent: 133
+    type: Transform
+  - unspawnedCount: 100
+    type: BallisticAmmoProvider
+  - canCollide: False
+    type: Physics
+- uid: 135
+  type: CartridgeLightRifleExplosive
+  components:
+  - flags: InContainer
+    type: MetaData
+  - parent: 133
+    type: Transform
+  - canCollide: False
+    type: Physics
+- uid: 136
   type: DrinkGlass
   components:
   - type: MetaData
-  - pos: 0.76305866,-0.49964416
+  - rot: -0.00016354583203792572 rad
+    pos: 0.39614645,-0.26402798
     parent: 1
     type: Transform
-- uid: 134
+  - canCollide: False
+    type: Physics
+- uid: 137
+  type: DrinkGlass
+  components:
+  - type: MetaData
+  - rot: 0.0002671830588951707 rad
+    pos: 0.54430866,-0.26376134
+    parent: 1
+    type: Transform
+  - canCollide: False
+    type: Physics
+- uid: 138
+  type: DrinkGlass
+  components:
+  - type: MetaData
+  - rot: 0.0003301922115497291 rad
+    pos: 0.70055866,-0.2635584
+    parent: 1
+    type: Transform
+  - canCollide: False
+    type: Physics
+- uid: 139
+  type: DrinkGlass
+  components:
+  - type: MetaData
+  - rot: 3.294464113423601E-05 rad
+    pos: 0.7351319,-0.49964416
+    parent: 1
+    type: Transform
+  - canCollide: False
+    type: Physics
+- uid: 140
   type: DrinkGlass
   components:
   - type: MetaData
   - pos: 0.60680866,-0.49964416
     parent: 1
     type: Transform
-- uid: 135
+  - canCollide: False
+    type: Physics
+- uid: 141
   type: DrinkGlass
   components:
   - type: MetaData
   - pos: 0.41930866,-0.51526916
     parent: 1
     type: Transform
-- uid: 136
+  - canCollide: False
+    type: Physics
+- uid: 142
   type: DrinkGlass
   components:
   - type: MetaData
   - pos: 0.27868366,-0.53089416
     parent: 1
     type: Transform
-- uid: 137
+  - canCollide: False
+    type: Physics
+- uid: 143
   type: DrinkGlass
   components:
   - type: MetaData
   - pos: 0.13805866,-0.73401916
     parent: 1
     type: Transform
-- uid: 138
+  - canCollide: False
+    type: Physics
+- uid: 144
   type: TableCarpet
   components:
   - type: MetaData
   - pos: -4.5,-7.5
     parent: 1
     type: Transform
-- uid: 139
+- uid: 145
   type: TableCarpet
   components:
   - type: MetaData
   - pos: -3.5,-7.5
     parent: 1
     type: Transform
-- uid: 140
-  type: WeaponLightMachineGunL6
-  components:
-  - type: MetaData
-  - pos: -3.498767,-7.644317
-    parent: 1
-    type: Transform
-- uid: 141
-  type: WeaponLightMachineGunL6
-  components:
-  - type: MetaData
-  - pos: -3.498767,-7.488067
-    parent: 1
-    type: Transform
-- uid: 142
-  type: WeaponLightMachineGunL6
-  components:
-  - type: MetaData
-  - pos: -3.498767,-7.378692
-    parent: 1
-    type: Transform
-- uid: 143
-  type: WeaponLightMachineGunL6
-  components:
-  - type: MetaData
-  - pos: -3.498767,-7.269317
-    parent: 1
-    type: Transform
-- uid: 144
-  type: WeaponLightMachineGunL6
-  components:
-  - type: MetaData
-  - pos: -3.498767,-7.175567
-    parent: 1
-    type: Transform
-- uid: 145
-  type: WeaponLightMachineGunL6
-  components:
-  - type: MetaData
-  - pos: -3.514392,-7.066192
-    parent: 1
-    type: Transform
 - uid: 146
-  type: WeaponLightMachineGunL6
+  type: WeaponLightMachineGunL6Event
   components:
   - type: MetaData
-  - pos: -3.498767,-7.722442
+  - pos: -3.572802,-7.391255
     parent: 1
     type: Transform
+  - containers:
+      gun_magazine: !type:ContainerSlot
+        ent: 147
+      gun_chamber: !type:ContainerSlot
+        ent: 148
+    type: ContainerContainer
+  - canCollide: False
+    type: Physics
 - uid: 147
-  type: MagazineLightRifleBox
+  type: MagazineLightRifleBoxEvent
   components:
-  - type: MetaData
-  - pos: -4.389392,-7.738067
-    parent: 1
+  - flags: InContainer
+    type: MetaData
+  - parent: 146
     type: Transform
+  - unspawnedCount: 100
+    type: BallisticAmmoProvider
+  - canCollide: False
+    type: Physics
 - uid: 148
-  type: WeaponLauncherMultipleRocketNerfed
+  type: CartridgeLightRifleExplosive
   components:
-  - type: MetaData
-  - pos: -5.585808,-7.244815
-    parent: 1
+  - flags: InContainer
+    type: MetaData
+  - parent: 146
     type: Transform
+  - canCollide: False
+    type: Physics
 - uid: 149
-  type: MagazineLightRifleBox
+  type: WeaponLightMachineGunL6Event
   components:
   - type: MetaData
-  - pos: -4.248767,-7.191192
+  - pos: -3.5580444,-7.28801
     parent: 1
     type: Transform
+  - containers:
+      gun_magazine: !type:ContainerSlot
+        ent: 150
+      gun_chamber: !type:ContainerSlot
+        ent: 151
+    type: ContainerContainer
+  - canCollide: False
+    type: Physics
 - uid: 150
-  type: MagazineLightRifleBox
+  type: MagazineLightRifleBoxEvent
   components:
-  - type: MetaData
-  - pos: -4.108142,-7.441192
-    parent: 1
+  - flags: InContainer
+    type: MetaData
+  - parent: 149
     type: Transform
+  - unspawnedCount: 100
+    type: BallisticAmmoProvider
+  - canCollide: False
+    type: Physics
 - uid: 151
-  type: MagazineLightRifleBox
+  type: CartridgeLightRifleExplosive
   components:
-  - type: MetaData
-  - pos: -4.139392,-7.628692
-    parent: 1
+  - flags: InContainer
+    type: MetaData
+  - parent: 149
     type: Transform
+  - canCollide: False
+    type: Physics
 - uid: 152
-  type: MagazineLightRifleBox
+  type: WeaponLightMachineGunL6Event
   components:
   - type: MetaData
-  - pos: -4.280017,-7.753692
+  - pos: -3.5875602,-7.170017
     parent: 1
     type: Transform
+  - containers:
+      gun_magazine: !type:ContainerSlot
+        ent: 153
+      gun_chamber: !type:ContainerSlot
+        ent: 154
+    type: ContainerContainer
+  - canCollide: False
+    type: Physics
 - uid: 153
-  type: MagazineLightRifleBox
+  type: MagazineLightRifleBoxEvent
   components:
-  - type: MetaData
-  - pos: -4.373767,-7.753692
-    parent: 1
+  - flags: InContainer
+    type: MetaData
+  - parent: 152
     type: Transform
+  - unspawnedCount: 100
+    type: BallisticAmmoProvider
+  - canCollide: False
+    type: Physics
 - uid: 154
-  type: MagazineLightRifleBox
+  type: CartridgeLightRifleExplosive
   components:
-  - type: MetaData
-  - pos: -4.420642,-7.722442
-    parent: 1
+  - flags: InContainer
+    type: MetaData
+  - parent: 152
     type: Transform
+  - canCollide: False
+    type: Physics
 - uid: 155
-  type: MagazineLightRifleBox
+  type: WeaponLightMachineGunL6Event
   components:
   - type: MetaData
-  - pos: -4.467517,-7.581817
+  - pos: -3.5580444,-7.6272435
     parent: 1
     type: Transform
+  - containers:
+      gun_magazine: !type:ContainerSlot
+        ent: 156
+      gun_chamber: !type:ContainerSlot
+        ent: 157
+    type: ContainerContainer
+  - canCollide: False
+    type: Physics
 - uid: 156
-  type: MagazineLightRifleBox
+  type: MagazineLightRifleBoxEvent
   components:
-  - type: MetaData
-  - pos: -4.451892,-7.472442
-    parent: 1
+  - flags: InContainer
+    type: MetaData
+  - parent: 155
     type: Transform
+  - unspawnedCount: 100
+    type: BallisticAmmoProvider
+  - canCollide: False
+    type: Physics
 - uid: 157
-  type: MagazineLightRifleBox
+  type: CartridgeLightRifleExplosive
   components:
-  - type: MetaData
-  - pos: -4.326892,-7.456817
-    parent: 1
+  - flags: InContainer
+    type: MetaData
+  - parent: 155
     type: Transform
+  - canCollide: False
+    type: Physics
 - uid: 158
-  type: MagazineLightRifleBox
+  type: MagazineLightRifleBoxEvent
   components:
   - type: MetaData
-  - pos: -4.155017,-7.409942
+  - pos: -4.532869,-7.533728
     parent: 1
     type: Transform
+  - unspawnedCount: 100
+    type: BallisticAmmoProvider
+  - canCollide: False
+    type: Physics
 - uid: 159
-  type: MagazineLightRifleBox
+  type: WeaponLauncherRocketEvent
   components:
   - type: MetaData
-  - pos: -4.201892,-7.191192
+  - rot: 0.00027083861641585827 rad
+    pos: -5.661437,-7.7362585
     parent: 1
     type: Transform
+  - unspawnedCount: 10
+    type: BallisticAmmoProvider
+  - canCollide: False
+    type: Physics
 - uid: 160
-  type: MagazineLightRifleBox
+  type: WeaponLauncherRocketEvent
   components:
   - type: MetaData
-  - pos: -4.514392,-7.191192
+  - pos: -5.2294793,-7.685704
     parent: 1
     type: Transform
+  - unspawnedCount: 10
+    type: BallisticAmmoProvider
+  - canCollide: False
+    type: Physics
 - uid: 161
-  type: MagazineLightRifleBox
+  type: MagazineLightRifleBoxEvent
   components:
   - type: MetaData
-  - pos: -4.576892,-7.269317
+  - pos: -4.2672324,-7.223994
     parent: 1
     type: Transform
+  - unspawnedCount: 100
+    type: BallisticAmmoProvider
+  - canCollide: False
+    type: Physics
 - uid: 162
-  type: MagazineLightRifleBox
+  type: MagazineLightRifleBoxEvent
   components:
   - type: MetaData
-  - pos: -4.576892,-7.488067
+  - pos: -4.2672324,-7.09125
     parent: 1
     type: Transform
+  - unspawnedCount: 100
+    type: BallisticAmmoProvider
+  - canCollide: False
+    type: Physics
 - uid: 163
-  type: MagazineLightRifleBox
+  type: MagazineLightRifleBoxEvent
   components:
   - type: MetaData
-  - pos: -4.576892,-7.706817
+  - pos: -4.532869,-7.3567367
     parent: 1
     type: Transform
+  - unspawnedCount: 100
+    type: BallisticAmmoProvider
+  - canCollide: False
+    type: Physics
 - uid: 164
-  type: MagazineLightRifleBox
+  type: WeaponLauncherRocketEvent
   components:
   - type: MetaData
-  - pos: -4.467517,-7.863067
+  - pos: -5.2589936,-7.331722
     parent: 1
     type: Transform
+  - unspawnedCount: 10
+    type: BallisticAmmoProvider
+  - canCollide: False
+    type: Physics
 - uid: 165
-  type: MagazineLightRifleBox
+  type: WeaponLauncherRocketEvent
   components:
   - type: MetaData
-  - pos: -4.561267,-7.956817
+  - pos: -5.6722054,-7.523462
     parent: 1
     type: Transform
+  - unspawnedCount: 10
+    type: BallisticAmmoProvider
+  - canCollide: False
+    type: Physics
 - uid: 166
-  type: MagazineLightRifleBox
+  type: WeaponLauncherRocketEvent
   components:
   - type: MetaData
-  - pos: -4.717517,-7.753692
+  - pos: -5.081904,-7.228477
     parent: 1
     type: Transform
+  - unspawnedCount: 10
+    type: BallisticAmmoProvider
+  - canCollide: False
+    type: Physics
 - uid: 167
-  type: MagazineLightRifleBox
+  type: WeaponLauncherRocketEvent
   components:
   - type: MetaData
-  - pos: -4.592517,-7.488067
+  - rot: -0.0005275183939374983 rad
+    pos: -5.264772,-7.736891
     parent: 1
     type: Transform
+  - unspawnedCount: 10
+    type: BallisticAmmoProvider
+  - canCollide: False
+    type: Physics
 - uid: 168
-  type: MagazineLightRifleBox
+  type: MagazineLightRifleBoxEvent
   components:
   - type: MetaData
-  - pos: -4.342517,-7.300567
+  - rot: 0.0003412917722016573 rad
+    pos: -4.28199,-7.7364874
     parent: 1
     type: Transform
+  - unspawnedCount: 100
+    type: BallisticAmmoProvider
+  - canCollide: False
+    type: Physics
 - uid: 169
-  type: MagazineLightRifleBox
+  type: WeaponLauncherRocketEvent
   components:
   - type: MetaData
-  - pos: -4.436267,-7.144317
+  - pos: -5.6722054,-7.331722
     parent: 1
     type: Transform
+  - unspawnedCount: 10
+    type: BallisticAmmoProvider
+  - canCollide: False
+    type: Physics
 - uid: 170
-  type: MagazineLightRifleBox
+  type: MagazineLightRifleBoxEvent
   components:
   - type: MetaData
-  - pos: -4.717517,-7.347442
+  - pos: -4.2672324,-7.341987
     parent: 1
     type: Transform
+  - unspawnedCount: 100
+    type: BallisticAmmoProvider
+  - canCollide: False
+    type: Physics
 - uid: 171
-  type: MagazineLightRifleBox
+  type: WeaponLightMachineGunL6Event
   components:
   - type: MetaData
-  - pos: -4.358142,-7.925567
+  - pos: -3.5875602,-7.09627
     parent: 1
     type: Transform
+  - containers:
+      gun_magazine: !type:ContainerSlot
+        ent: 172
+      gun_chamber: !type:ContainerSlot
+        ent: 173
+    type: ContainerContainer
+  - canCollide: False
+    type: Physics
 - uid: 172
-  type: MagazineLightRifleBox
+  type: MagazineLightRifleBoxEvent
   components:
-  - type: MetaData
-  - pos: -4.576892,-7.878692
-    parent: 1
+  - flags: InContainer
+    type: MetaData
+  - parent: 171
     type: Transform
+  - unspawnedCount: 100
+    type: BallisticAmmoProvider
+  - canCollide: False
+    type: Physics
 - uid: 173
-  type: MagazineLightRifleBox
+  type: CartridgeLightRifleExplosive
   components:
-  - type: MetaData
-  - pos: -4.623767,-7.488067
-    parent: 1
+  - flags: InContainer
+    type: MetaData
+  - parent: 171
     type: Transform
+  - canCollide: False
+    type: Physics
 - uid: 174
-  type: MagazineLightRifleBox
+  type: WeaponLauncherRocketEvent
   components:
   - type: MetaData
-  - pos: -4.498767,-7.363067
+  - pos: -5.2589936,-7.4792147
     parent: 1
     type: Transform
+  - unspawnedCount: 10
+    type: BallisticAmmoProvider
+  - canCollide: False
+    type: Physics
 - uid: 175
-  type: MagazineLightRifleBox
+  type: MagazineLightRifleBoxEvent
   components:
   - type: MetaData
-  - pos: -4.498767,-7.363067
+  - rot: 0.0003412775695323944 rad
+    pos: -4.518111,-7.7364874
     parent: 1
     type: Transform
+  - unspawnedCount: 100
+    type: BallisticAmmoProvider
+  - canCollide: False
+    type: Physics
 - uid: 176
-  type: WeaponLauncherMultipleRocketNerfed
+  type: MagazineLightRifleBoxEvent
   components:
   - type: MetaData
-  - pos: -5.632683,-7.44794
+  - pos: -4.28199,-7.636973
     parent: 1
     type: Transform
+  - unspawnedCount: 100
+    type: BallisticAmmoProvider
+  - canCollide: False
+    type: Physics
 - uid: 177
-  type: WeaponLauncherMultipleRocketNerfed
+  type: MagazineLightRifleBoxEvent
   components:
   - type: MetaData
-  - pos: -5.632683,-7.651065
+  - pos: -4.28199,-7.48948
     parent: 1
     type: Transform
+  - unspawnedCount: 100
+    type: BallisticAmmoProvider
+  - canCollide: False
+    type: Physics
 - uid: 178
-  type: WeaponLauncherMultipleRocketNerfed
+  type: MagazineLightRifleBoxEvent
   components:
   - type: MetaData
-  - pos: -5.695183,-7.82294
+  - pos: -4.532869,-7.09125
     parent: 1
     type: Transform
+  - unspawnedCount: 100
+    type: BallisticAmmoProvider
+  - canCollide: False
+    type: Physics
 - uid: 179
   type: WeaponLauncherRocketEvent
   components:
   - type: MetaData
-  - pos: -5.2478204,-7.338565
+  - pos: -5.6722054,-7.1399813
     parent: 1
     type: Transform
+  - unspawnedCount: 10
+    type: BallisticAmmoProvider
+  - canCollide: False
+    type: Physics
 - uid: 180
-  type: WeaponLauncherRocketEvent
-  components:
-  - type: MetaData
-  - pos: -5.2790704,-7.57294
-    parent: 1
-    type: Transform
-- uid: 181
-  type: WeaponLauncherRocketEvent
-  components:
-  - type: MetaData
-  - pos: -5.3103204,-7.776065
-    parent: 1
-    type: Transform
-- uid: 182
-  type: WeaponLauncherRocketEvent
-  components:
-  - type: MetaData
-  - pos: -5.2321954,-7.119815
-    parent: 1
-    type: Transform
-- uid: 183
   type: SpawnPointShipEvent
   components:
   - type: MetaData

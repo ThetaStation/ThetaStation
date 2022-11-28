@@ -77,16 +77,6 @@
       board: ShuttleConsoleCircuitboard
 
 - type: entity
-  parent: ComputerShuttle
-  id: ComputerShuttleEvent
-  name: shuttle console
-  suffix: SHIPEVENT
-  description: Used to pilot a shuttle.
-  components:
-    - type: ApcPowerReceiver
-      needsPower: false
-
-- type: entity
   parent: BaseComputerShuttle
   id: ComputerShuttleSyndie
   name: syndicate shuttle console
