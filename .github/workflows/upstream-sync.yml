@@ -1,12 +1,14 @@
-name: 'Upstream Sync'
+name: Pull detached upstream
 
 on:
+  # Possibility to run it manually
+  workflow_dispatch:
+  # Automated
   schedule:
-    - cron:  '0 10 * * *'
-    # scheduled at 10:00 AM every day
-
-  workflow_dispatch:  # click the button on Github repo!
-
+    # Run this every day at 02:22 UTC
+    - cron: '22 2 * * *'
+  
+  
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,13 +21,10 @@ jobs:
         run: git fetch --prune --unshallow
       # Pull the detached remote and do the magic
       - name: Pull Detached Remote
-        uses: litetex/pull-detached-remote@v0.3.0
+        uses: litetex/pull-detached-remote@v0.3.1
         with:
           upstreamrepo: https://github.com/space-syndicate/space-station-14
           upstreambranch: master
-          originbranch: main
-          prlabels: auto-sync
         env:
           GITHUB_PAT: ${{ secrets.GH_PAT }}
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-          NO_CREDITS: true
+          #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
