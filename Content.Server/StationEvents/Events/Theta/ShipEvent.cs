@@ -13,6 +13,8 @@ public sealed class ShipEvent : StationEventSystem
     {
         "/Maps/Shuttles/ship_test_1.yml",
         "/Maps/Shuttles/ship_test_2.yml",
+        "/Maps/Shuttles/syndicate_fighter.yml",
+
     };
 
     public override string Prototype => "ShipEvent";
