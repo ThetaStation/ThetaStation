@@ -11,7 +11,8 @@ public sealed class ShipEvent : StationEventSystem
 
     public static List<string> ShipGrids = new()
     {
-        "/Maps/Shuttles/ship_test_1.yml"
+        "/Maps/Shuttles/ship_test_1.yml",
+        "/Maps/Shuttles/ship_test_2.yml",
     };
 
     public override string Prototype => "ShipEvent";
