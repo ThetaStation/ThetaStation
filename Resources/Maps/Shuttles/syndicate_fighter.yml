@@ -95,33 +95,24 @@ tilemap:
   88: Plating
 entities:
 - uid: 0
+  type: WallShuttleDiagonal
   components:
-  - type: MetaData
-  - type: Transform
-  - index: 14
-    type: Map
-  - type: PhysicsMap
-  - type: Broadphase
-  - type: OccluderTree
+  - pos: 1.5,9.5
+    parent: 1
+    type: Transform
 - uid: 1
   components:
   - type: MetaData
   - pos: 1.479166,0.35416707
-    parent: 0
+    parent: null
     type: Transform
   - chunks:
-      -1,-1:
-        ind: -1,-1
-        tiles: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA0AAABJAAAAAAAAAAAAAABJAAAADQAAAEkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYAAAASQAAAFcAAAA0AAAAOgAAADoAAAA6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADQAAAA0AAAANAAAADoAAAA6AAAAOgAAAA==
       -1,0:
         ind: -1,0
-        tiles: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFcAAAA0AAAANAAAADoAAAA6AAAAOgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAVwAAADQAAAA6AAAAOgAAADoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA0AAAANAAAADQAAAA0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFcAAAAAAAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
-      0,-1:
-        ind: 0,-1
-        tiles: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASQAAAA0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA0AAAAVwAAAEkAAAA0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAADQAAAA0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+        tiles: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABXAAAAVwAAAFcAAABXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABXAAAANAAAADQAAAA0AAAANAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABXAAAAVwAAADQAAAA6AAAAOgAAADoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABXAAAAVwAAADQAAAA0AAAAOgAAADoAAAA6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABXAAAAVwAAADQAAAA0AAAANAAAADoAAAA6AAAAOgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABXAAAAVwAAADQAAAA0AAAAVwAAADQAAAA0AAAANAAAADQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAVwAAAFcAAAAOAAAANAAAAFcAAABXAAAANAAAAA4AAAA0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABXAAAAVwAAAFcAAABXAAAAVwAAAFcAAABXAAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
       0,0:
         ind: 0,0
-        tiles: WAAAADQAAABXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFgAAABXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+        tiles: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANAAAAFcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADQAAABXAAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA0AAAANAAAAFcAAABXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANAAAADQAAAA0AAAAVwAAAFcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADQAAABXAAAANAAAADQAAABXAAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABXAAAAVwAAADQAAAAOAAAAVwAAAFcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAVwAAAFcAAABXAAAAVwAAAFcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
     type: MapGrid
   - type: Broadphase
   - angularDamping: 0.05
@@ -149,6 +140,125 @@ entities:
       -3,0: 1
       -2,0: 0
       -1,0: 0
+      -7,-3: 0
+      -7,-2: 0
+      -6,-3: 0
+      -6,-2: 0
+      -6,-1: 0
+      -5,-2: 0
+      -5,-1: 0
+      -4,-2: 0
+      -4,-1: 0
+      -3,-3: 0
+      -2,-3: 0
+      -1,-3: 0
+      -6,0: 0
+      -5,0: 0
+      -5,1: 0
+      -4,0: 0
+      -4,1: 0
+      -4,2: 0
+      -3,1: 0
+      -3,2: 0
+      -3,3: 0
+      -2,1: 0
+      -2,2: 0
+      -1,1: 0
+      -1,2: 0
+      -1,3: 0
+      0,-2: 0
+      0,-1: 0
+      1,-2: 0
+      1,-1: 0
+      2,-3: 0
+      2,-2: 0
+      2,-1: 0
+      3,-3: 0
+      3,-2: 0
+      0,0: 0
+      0,1: 0
+      0,2: 0
+      1,0: 0
+      1,1: 0
+      2,0: 0
+      -8,9: 0
+      -8,10: 0
+      -8,11: 0
+      -7,8: 0
+      -7,9: 0
+      -7,10: 0
+      -7,11: 0
+      -6,7: 0
+      -6,8: 0
+      -6,9: 0
+      -6,10: 0
+      -6,11: 0
+      -5,6: 0
+      -5,7: 0
+      -5,8: 0
+      -5,9: 0
+      -5,10: 0
+      -5,11: 0
+      -5,12: 0
+      -4,5: 0
+      -4,6: 0
+      -4,7: 0
+      -4,8: 0
+      -4,9: 0
+      -4,10: 0
+      -4,11: 0
+      -4,12: 0
+      -3,5: 0
+      -3,6: 0
+      -3,7: 0
+      -3,8: 0
+      -3,9: 0
+      -3,10: 0
+      -3,11: 0
+      -3,12: 0
+      -2,5: 0
+      -2,6: 0
+      -2,7: 0
+      -2,8: 0
+      -2,9: 0
+      -2,10: 0
+      -2,11: 0
+      -2,12: 0
+      -1,5: 0
+      -1,6: 0
+      -1,7: 0
+      -1,8: 0
+      -1,9: 0
+      -1,10: 0
+      -1,11: 0
+      -1,12: 0
+      0,5: 0
+      0,6: 0
+      0,7: 0
+      0,8: 0
+      0,9: 0
+      0,10: 0
+      0,11: 0
+      0,12: 0
+      1,6: 0
+      1,7: 0
+      1,8: 0
+      1,9: 0
+      1,10: 0
+      1,11: 0
+      1,12: 0
+      2,7: 0
+      2,8: 0
+      2,9: 0
+      2,10: 0
+      2,11: 0
+      3,8: 0
+      3,9: 0
+      3,10: 0
+      3,11: 0
+      4,9: 0
+      4,10: 0
+      4,11: 0
     uniqueMixes:
     - volume: 2500
       temperature: 293.15
@@ -185,317 +295,775 @@ entities:
 - uid: 2
   type: WallShuttleDiagonal
   components:
-  - rot: 3.141592653589793 rad
-    pos: -4.5,-0.5
+  - rot: -1.5707963267948966 rad
+    pos: -0.5,10.5
     parent: 1
     type: Transform
 - uid: 3
-  type: ComputerShuttleEvent
+  type: SawAmmoGunCloset
   components:
-  - rot: 3.141592653589793 rad
-    pos: -1.5,-0.5
+  - pos: -2.5,7.5
     parent: 1
     type: Transform
 - uid: 4
-  type: LauncherGunCloset
+  type: DebugThruster
   components:
-  - pos: -2.5,0.5
+  - rot: 1.5707963267948966 rad
+    pos: 1.5,11.5
     parent: 1
     type: Transform
+  - fixtures:
+    - density: 60
+      shape: !type:PolygonShape
+        vertices:
+        - 0.45,-0.45
+        - 0.45,0.45
+        - -0.45,0.45
+        - -0.45,-0.45
+      mask:
+      - Impassable
+      - MidImpassable
+      - LowImpassable
+      layer:
+      - MidImpassable
+      - LowImpassable
+    - shape: !type:PolygonShape
+        vertices:
+        - 0.4,0.5
+        - 0.1,1.2
+        - -0.1,1.2
+        - -0.4,0.5
+      layer:
+      - Impassable
+      - MidImpassable
+      - HighImpassable
+      - LowImpassable
+      - InteractImpassable
+      hard: False
+      id: thruster-burn
+    type: Fixtures
 - uid: 5
-  type: SawAmmoGunCloset
+  type: LauncherGunCloset
   components:
-  - pos: -0.5,0.5
+  - pos: -2.5,8.5
     parent: 1
     type: Transform
 - uid: 6
-  type: SawGunCloset
+  type: WallShuttleDiagonal
   components:
-  - pos: -0.5,1.5
+  - rot: 3.141592653589793 rad
+    pos: 0.5,6.5
     parent: 1
     type: Transform
 - uid: 7
-  type: AlwaysPoweredWallLight
+  type: ReinforcedPlasmaWindow
   components:
-  - pos: -1.5,-2.5
+  - rot: 3.141592653589793 rad
+    pos: -3.5,9.5
     parent: 1
     type: Transform
 - uid: 8
   type: WallShuttleDiagonal
   components:
-  - rot: 3.141592653589793 rad
-    pos: -0.5,-1.5
+  - pos: -2.5,10.5
     parent: 1
     type: Transform
 - uid: 9
-  type: WallShuttleDiagonal
+  type: ReinforcedPlasmaWindow
   components:
-  - rot: 1.5707963267948966 rad
-    pos: -2.5,-1.5
+  - rot: 3.141592653589793 rad
+    pos: -1.5,10.5
     parent: 1
     type: Transform
 - uid: 10
-  type: ReinforcedPlasmaWindow
+  type: WallShuttleDiagonal
   components:
-  - rot: 3.141592653589793 rad
-    pos: -1.5,-1.5
+  - rot: 1.5707963267948966 rad
+    pos: -5.5,9.5
     parent: 1
     type: Transform
 - uid: 11
-  type: WallShuttleDiagonal
+  type: DebugThruster
   components:
-  - pos: -3.5,2.5
+  - rot: 3.141592653589793 rad
+    pos: 1.5,10.5
     parent: 1
     type: Transform
+  - fixtures:
+    - density: 60
+      shape: !type:PolygonShape
+        vertices:
+        - 0.45,-0.45
+        - 0.45,0.45
+        - -0.45,0.45
+        - -0.45,-0.45
+      mask:
+      - Impassable
+      - MidImpassable
+      - LowImpassable
+      layer:
+      - MidImpassable
+      - LowImpassable
+    - shape: !type:PolygonShape
+        vertices:
+        - 0.4,0.5
+        - 0.1,1.2
+        - -0.1,1.2
+        - -0.4,0.5
+      layer:
+      - Impassable
+      - MidImpassable
+      - HighImpassable
+      - LowImpassable
+      - InteractImpassable
+      hard: False
+      id: thruster-burn
+    type: Fixtures
 - uid: 12
   type: WallShuttleDiagonal
   components:
-  - rot: -1.5707963267948966 rad
-    pos: 0.5,2.5
+  - rot: 1.5707963267948966 rad
+    pos: -6.5,10.5
     parent: 1
     type: Transform
 - uid: 13
-  type: WallShuttle
+  type: WallShuttleDiagonal
   components:
-  - rot: 3.141592653589793 rad
-    pos: -3.5,1.5
+  - rot: 1.5707963267948966 rad
+    pos: -4.5,8.5
     parent: 1
     type: Transform
 - uid: 14
-  type: WallShuttle
+  type: DebugThruster
   components:
   - rot: 3.141592653589793 rad
-    pos: -3.5,0.5
+    pos: -4.5,10.5
     parent: 1
     type: Transform
+  - fixtures:
+    - density: 60
+      shape: !type:PolygonShape
+        vertices:
+        - 0.45,-0.45
+        - 0.45,0.45
+        - -0.45,0.45
+        - -0.45,-0.45
+      mask:
+      - Impassable
+      - MidImpassable
+      - LowImpassable
+      layer:
+      - MidImpassable
+      - LowImpassable
+    - shape: !type:PolygonShape
+        vertices:
+        - 0.4,0.5
+        - 0.1,1.2
+        - -0.1,1.2
+        - -0.4,0.5
+      layer:
+      - Impassable
+      - MidImpassable
+      - HighImpassable
+      - LowImpassable
+      - InteractImpassable
+      hard: False
+      id: thruster-burn
+    type: Fixtures
 - uid: 15
-  type: WallShuttle
+  type: ChairPilotSeat
   components:
   - rot: 3.141592653589793 rad
-    pos: 0.5,1.5
+    pos: -6.5,11.5
     parent: 1
     type: Transform
 - uid: 16
-  type: WallShuttle
+  type: WallShuttleDiagonal
   components:
   - rot: 3.141592653589793 rad
-    pos: 0.5,0.5
+    pos: 2.5,9.5
     parent: 1
     type: Transform
 - uid: 17
-  type: ReinforcedPlasmaWindow
+  type: ChairPilotSeat
   components:
   - rot: 3.141592653589793 rad
-    pos: -3.5,-0.5
+    pos: -1.5,8.5
     parent: 1
     type: Transform
 - uid: 18
-  type: ReinforcedPlasmaWindow
+  type: WallShuttleDiagonal
   components:
   - rot: 3.141592653589793 rad
-    pos: 0.5,-0.5
+    pos: -2.5,9.5
     parent: 1
     type: Transform
 - uid: 19
-  type: WallShuttleDiagonal
+  type: ReinforcedPlasmaWindow
   components:
-  - rot: -1.5707963267948966 rad
-    pos: -2.5,-0.5
+  - rot: 3.141592653589793 rad
+    pos: 0.5,9.5
     parent: 1
     type: Transform
 - uid: 20
   type: WallShuttleDiagonal
   components:
-  - pos: -0.5,-0.5
+  - rot: -1.5707963267948966 rad
+    pos: -4.5,9.5
     parent: 1
     type: Transform
 - uid: 21
-  type: WallShuttleDiagonal
+  type: LauncherGunCloset
   components:
-  - pos: -4.5,0.5
+  - pos: -0.5,11.5
     parent: 1
     type: Transform
 - uid: 22
-  type: WallShuttleDiagonal
+  type: SawAmmoGunCloset
   components:
-  - pos: -5.5,-0.5
+  - pos: 2.5,11.5
     parent: 1
     type: Transform
 - uid: 23
-  type: WallShuttleDiagonal
+  type: DebugThruster
   components:
-  - pos: -6.5,-1.5
+  - pos: -0.5,5.5
     parent: 1
     type: Transform
+  - fixtures:
+    - density: 60
+      shape: !type:PolygonShape
+        vertices:
+        - 0.45,-0.45
+        - 0.45,0.45
+        - -0.45,0.45
+        - -0.45,-0.45
+      mask:
+      - Impassable
+      - MidImpassable
+      - LowImpassable
+      layer:
+      - MidImpassable
+      - LowImpassable
+    - shape: !type:PolygonShape
+        vertices:
+        - 0.4,0.5
+        - 0.1,1.2
+        - -0.1,1.2
+        - -0.4,0.5
+      layer:
+      - Impassable
+      - MidImpassable
+      - HighImpassable
+      - LowImpassable
+      - InteractImpassable
+      hard: False
+      id: thruster-burn
+    type: Fixtures
 - uid: 24
-  type: WallShuttleDiagonal
+  type: DebugGyroscope
   components:
-  - rot: -1.5707963267948966 rad
-    pos: 1.5,0.5
+  - pos: -0.5,7.5
     parent: 1
     type: Transform
 - uid: 25
-  type: WallShuttleDiagonal
+  type: DebugThruster
   components:
-  - rot: -1.5707963267948966 rad
-    pos: 2.5,-0.5
+  - pos: 2.5,8.5
     parent: 1
     type: Transform
+  - fixtures:
+    - density: 60
+      shape: !type:PolygonShape
+        vertices:
+        - 0.45,-0.45
+        - 0.45,0.45
+        - -0.45,0.45
+        - -0.45,-0.45
+      mask:
+      - Impassable
+      - MidImpassable
+      - LowImpassable
+      layer:
+      - MidImpassable
+      - LowImpassable
+    - shape: !type:PolygonShape
+        vertices:
+        - 0.4,0.5
+        - 0.1,1.2
+        - -0.1,1.2
+        - -0.4,0.5
+      layer:
+      - Impassable
+      - MidImpassable
+      - HighImpassable
+      - LowImpassable
+      - InteractImpassable
+      hard: False
+      id: thruster-burn
+    type: Fixtures
 - uid: 26
-  type: WallShuttleDiagonal
+  type: SawGunCloset
   components:
-  - rot: -1.5707963267948966 rad
-    pos: 3.5,-1.5
+  - pos: -0.5,8.5
     parent: 1
     type: Transform
 - uid: 27
-  type: SawAmmoGunCloset
+  type: DebugThruster
   components:
-  - pos: 2.5,-2.5
+  - rot: -1.5707963267948966 rad
+    pos: -4.5,11.5
     parent: 1
     type: Transform
+  - fixtures:
+    - density: 60
+      shape: !type:PolygonShape
+        vertices:
+        - 0.45,-0.45
+        - 0.45,0.45
+        - -0.45,0.45
+        - -0.45,-0.45
+      mask:
+      - Impassable
+      - MidImpassable
+      - LowImpassable
+      layer:
+      - MidImpassable
+      - LowImpassable
+    - shape: !type:PolygonShape
+        vertices:
+        - 0.4,0.5
+        - 0.1,1.2
+        - -0.1,1.2
+        - -0.4,0.5
+      layer:
+      - Impassable
+      - MidImpassable
+      - HighImpassable
+      - LowImpassable
+      - InteractImpassable
+      hard: False
+      id: thruster-burn
+    type: Fixtures
 - uid: 28
-  type: SawAmmoGunCloset
+  type: ChairPilotSeat
   components:
-  - pos: -5.5,-2.5
+  - rot: 3.141592653589793 rad
+    pos: -1.5,11.5
     parent: 1
     type: Transform
 - uid: 29
-  type: SawGunCloset
+  type: MetalDoor
   components:
-  - pos: -5.5,-1.5
+  - rot: 3.141592653589793 rad
+    pos: -1.5,6.5
     parent: 1
     type: Transform
 - uid: 30
-  type: LauncherGunCloset
+  type: WallShuttleDiagonal
   components:
-  - pos: -2.5,-2.5
+  - pos: -3.5,10.5
     parent: 1
     type: Transform
 - uid: 31
-  type: LauncherGunCloset
+  type: SawAmmoGunCloset
   components:
-  - pos: -0.5,-2.5
+  - pos: -5.5,11.5
     parent: 1
     type: Transform
 - uid: 32
-  type: SawGunCloset
+  type: DebugThruster
   components:
-  - pos: 2.5,-1.5
+  - pos: -2.5,5.5
     parent: 1
     type: Transform
+  - fixtures:
+    - density: 60
+      shape: !type:PolygonShape
+        vertices:
+        - 0.45,-0.45
+        - 0.45,0.45
+        - -0.45,0.45
+        - -0.45,-0.45
+      mask:
+      - Impassable
+      - MidImpassable
+      - LowImpassable
+      layer:
+      - MidImpassable
+      - LowImpassable
+    - shape: !type:PolygonShape
+        vertices:
+        - 0.4,0.5
+        - 0.1,1.2
+        - -0.1,1.2
+        - -0.4,0.5
+      layer:
+      - Impassable
+      - MidImpassable
+      - HighImpassable
+      - LowImpassable
+      - InteractImpassable
+      hard: False
+      id: thruster-burn
+    type: Fixtures
 - uid: 33
-  type: ChairPilotSeat
+  type: WallShuttleDiagonal
   components:
-  - pos: -1.5,0.5
+  - rot: -1.5707963267948966 rad
+    pos: 0.5,10.5
     parent: 1
     type: Transform
 - uid: 34
-  type: ChairPilotSeat
+  type: WallShuttleDiagonal
   components:
-  - pos: -6.5,-2.5
+  - rot: 1.5707963267948966 rad
+    pos: -0.5,9.5
     parent: 1
     type: Transform
 - uid: 35
-  type: ChairPilotSeat
+  type: SawGunCloset
   components:
-  - pos: 3.5,-2.5
+  - pos: -5.5,10.5
     parent: 1
     type: Transform
 - uid: 36
   type: ChairPilotSeat
   components:
-  - pos: -1.5,0.5
+  - rot: 3.141592653589793 rad
+    pos: 3.5,11.5
     parent: 1
     type: Transform
 - uid: 37
-  type: ChairPilotSeat
+  type: DebugThruster
   components:
-  - pos: -1.5,-2.5
+  - rot: 1.5707963267948966 rad
+    pos: 4.5,10.5
     parent: 1
     type: Transform
+  - fixtures:
+    - density: 60
+      shape: !type:PolygonShape
+        vertices:
+        - 0.45,-0.45
+        - 0.45,0.45
+        - -0.45,0.45
+        - -0.45,-0.45
+      mask:
+      - Impassable
+      - MidImpassable
+      - LowImpassable
+      layer:
+      - MidImpassable
+      - LowImpassable
+    - shape: !type:PolygonShape
+        vertices:
+        - 0.4,0.5
+        - 0.1,1.2
+        - -0.1,1.2
+        - -0.4,0.5
+      layer:
+      - Impassable
+      - MidImpassable
+      - HighImpassable
+      - LowImpassable
+      - InteractImpassable
+      hard: False
+      id: thruster-burn
+    type: Fixtures
 - uid: 38
-  type: WallShuttle
+  type: WallShuttleDiagonal
   components:
-  - pos: 0.5,1.5
+  - rot: 1.5707963267948966 rad
+    pos: -3.5,6.5
     parent: 1
     type: Transform
 - uid: 39
-  type: WallShuttle
+  type: DebugThruster
   components:
-  - pos: 0.5,1.5
+  - rot: 3.141592653589793 rad
+    pos: -3.5,11.5
     parent: 1
     type: Transform
+  - fixtures:
+    - density: 60
+      shape: !type:PolygonShape
+        vertices:
+        - 0.45,-0.45
+        - 0.45,0.45
+        - -0.45,0.45
+        - -0.45,-0.45
+      mask:
+      - Impassable
+      - MidImpassable
+      - LowImpassable
+      layer:
+      - MidImpassable
+      - LowImpassable
+    - shape: !type:PolygonShape
+        vertices:
+        - 0.4,0.5
+        - 0.1,1.2
+        - -0.1,1.2
+        - -0.4,0.5
+      layer:
+      - Impassable
+      - MidImpassable
+      - HighImpassable
+      - LowImpassable
+      - InteractImpassable
+      hard: False
+      id: thruster-burn
+    type: Fixtures
 - uid: 40
-  type: WallShuttle
+  type: DebugThruster
   components:
-  - pos: -0.5,2.5
+  - rot: 1.5707963267948966 rad
+    pos: 4.5,11.5
     parent: 1
     type: Transform
+  - fixtures:
+    - density: 60
+      shape: !type:PolygonShape
+        vertices:
+        - 0.45,-0.45
+        - 0.45,0.45
+        - -0.45,0.45
+        - -0.45,-0.45
+      mask:
+      - Impassable
+      - MidImpassable
+      - LowImpassable
+      layer:
+      - MidImpassable
+      - LowImpassable
+    - shape: !type:PolygonShape
+        vertices:
+        - 0.4,0.5
+        - 0.1,1.2
+        - -0.1,1.2
+        - -0.4,0.5
+      layer:
+      - Impassable
+      - MidImpassable
+      - HighImpassable
+      - LowImpassable
+      - InteractImpassable
+      hard: False
+      id: thruster-burn
+    type: Fixtures
 - uid: 41
-  type: SpawnPointShipEvent
+  type: WallShuttle
   components:
-  - pos: -1.5,1.5
+  - pos: -3.5,8.5
     parent: 1
     type: Transform
 - uid: 42
+  type: DebugThruster
+  components:
+  - rot: 3.141592653589793 rad
+    pos: 0.5,11.5
+    parent: 1
+    type: Transform
+  - fixtures:
+    - density: 60
+      shape: !type:PolygonShape
+        vertices:
+        - 0.45,-0.45
+        - 0.45,0.45
+        - -0.45,0.45
+        - -0.45,-0.45
+      mask:
+      - Impassable
+      - MidImpassable
+      - LowImpassable
+      layer:
+      - MidImpassable
+      - LowImpassable
+    - shape: !type:PolygonShape
+        vertices:
+        - 0.4,0.5
+        - 0.1,1.2
+        - -0.1,1.2
+        - -0.4,0.5
+      layer:
+      - Impassable
+      - MidImpassable
+      - HighImpassable
+      - LowImpassable
+      - InteractImpassable
+      hard: False
+      id: thruster-burn
+    type: Fixtures
+- uid: 43
+  type: DebugThruster
+  components:
+  - pos: 1.5,7.5
+    parent: 1
+    type: Transform
+  - fixtures:
+    - density: 60
+      shape: !type:PolygonShape
+        vertices:
+        - 0.45,-0.45
+        - 0.45,0.45
+        - -0.45,0.45
+        - -0.45,-0.45
+      mask:
+      - Impassable
+      - MidImpassable
+      - LowImpassable
+      layer:
+      - MidImpassable
+      - LowImpassable
+    - shape: !type:PolygonShape
+        vertices:
+        - 0.4,0.5
+        - 0.1,1.2
+        - -0.1,1.2
+        - -0.4,0.5
+      layer:
+      - Impassable
+      - MidImpassable
+      - HighImpassable
+      - LowImpassable
+      - InteractImpassable
+      hard: False
+      id: thruster-burn
+    type: Fixtures
+- uid: 44
+  type: DebugThruster
+  components:
+  - pos: -5.5,8.5
+    parent: 1
+    type: Transform
+  - fixtures:
+    - density: 60
+      shape: !type:PolygonShape
+        vertices:
+        - 0.45,-0.45
+        - 0.45,0.45
+        - -0.45,0.45
+        - -0.45,-0.45
+      mask:
+      - Impassable
+      - MidImpassable
+      - LowImpassable
+      layer:
+      - MidImpassable
+      - LowImpassable
+    - shape: !type:PolygonShape
+        vertices:
+        - 0.4,0.5
+        - 0.1,1.2
+        - -0.1,1.2
+        - -0.4,0.5
+      layer:
+      - Impassable
+      - MidImpassable
+      - HighImpassable
+      - LowImpassable
+      - InteractImpassable
+      hard: False
+      id: thruster-burn
+    type: Fixtures
+- uid: 45
   type: WallShuttle
   components:
-  - pos: -2.5,2.5
-    parent: 1
-    type: Transform
-- uid: 43
-  type: DebugGyroscope
-  components:
-  - rot: 3.141592653589793 rad
-    pos: -2.5,1.5
-    parent: 1
-    type: Transform
-- uid: 44
-  type: SpawnPointShipEvent
-  components:
-  - rot: 3.141592653589793 rad
-    pos: -1.5,1.5
-    parent: 1
-    type: Transform
-- uid: 45
-  type: MetalDoor
-  components:
-  - rot: 3.141592653589793 rad
-    pos: -1.5,2.5
+  - pos: 0.5,7.5
     parent: 1
     type: Transform
 - uid: 46
   type: WallShuttleDiagonal
   components:
   - rot: 3.141592653589793 rad
-    pos: 0.5,-1.5
+    pos: 3.5,10.5
     parent: 1
     type: Transform
 - uid: 47
-  type: WallShuttleDiagonal
+  type: SawGunCloset
   components:
-  - rot: 1.5707963267948966 rad
-    pos: 1.5,-0.5
+  - pos: 2.5,10.5
     parent: 1
     type: Transform
 - uid: 48
-  type: CableApcExtension
+  type: DebugThruster
   components:
-  - pos: -1.5,1.5
+  - pos: -6.5,9.5
     parent: 1
     type: Transform
+  - fixtures:
+    - density: 60
+      shape: !type:PolygonShape
+        vertices:
+        - 0.45,-0.45
+        - 0.45,0.45
+        - -0.45,0.45
+        - -0.45,-0.45
+      mask:
+      - Impassable
+      - MidImpassable
+      - LowImpassable
+      layer:
+      - MidImpassable
+      - LowImpassable
+    - shape: !type:PolygonShape
+        vertices:
+        - 0.4,0.5
+        - 0.1,1.2
+        - -0.1,1.2
+        - -0.4,0.5
+      layer:
+      - Impassable
+      - MidImpassable
+      - HighImpassable
+      - LowImpassable
+      - InteractImpassable
+      hard: False
+      id: thruster-burn
+    type: Fixtures
 - uid: 49
-  type: WallShuttleDiagonal
+  type: DebugThruster
   components:
-  - rot: 1.5707963267948966 rad
-    pos: -3.5,-1.5
+  - rot: -1.5707963267948966 rad
+    pos: -7.5,10.5
     parent: 1
     type: Transform
+  - fixtures:
+    - density: 60
+      shape: !type:PolygonShape
+        vertices:
+        - 0.45,-0.45
+        - 0.45,0.45
+        - -0.45,0.45
+        - -0.45,-0.45
+      mask:
+      - Impassable
+      - MidImpassable
+      - LowImpassable
+      layer:
+      - MidImpassable
+      - LowImpassable
+    - shape: !type:PolygonShape
+        vertices:
+        - 0.4,0.5
+        - 0.1,1.2
+        - -0.1,1.2
+        - -0.4,0.5
+      layer:
+      - Impassable
+      - MidImpassable
+      - HighImpassable
+      - LowImpassable
+      - InteractImpassable
+      hard: False
+      id: thruster-burn
+    type: Fixtures
 - uid: 50
   type: DebugThruster
   components:
-  - pos: -5.5,0.5
+  - rot: -1.5707963267948966 rad
+    pos: -7.5,11.5
     parent: 1
     type: Transform
   - fixtures:
@@ -531,7 +1099,7 @@ entities:
 - uid: 51
   type: DebugThruster
   components:
-  - pos: 1.5,1.5
+  - pos: 3.5,9.5
     parent: 1
     type: Transform
   - fixtures:
@@ -565,82 +1133,22 @@ entities:
       id: thruster-burn
     type: Fixtures
 - uid: 52
-  type: DebugThruster
+  type: LauncherGunCloset
   components:
-  - pos: -0.5,3.5
+  - pos: -2.5,11.5
     parent: 1
     type: Transform
-  - fixtures:
-    - density: 60
-      shape: !type:PolygonShape
-        vertices:
-        - 0.45,-0.45
-        - 0.45,0.45
-        - -0.45,0.45
-        - -0.45,-0.45
-      mask:
-      - Impassable
-      - MidImpassable
-      - LowImpassable
-      layer:
-      - MidImpassable
-      - LowImpassable
-    - shape: !type:PolygonShape
-        vertices:
-        - 0.4,0.5
-        - 0.1,1.2
-        - -0.1,1.2
-        - -0.4,0.5
-      layer:
-      - Impassable
-      - MidImpassable
-      - HighImpassable
-      - LowImpassable
-      - InteractImpassable
-      hard: False
-      id: thruster-burn
-    type: Fixtures
 - uid: 53
-  type: DebugThruster
+  type: WallShuttleDiagonal
   components:
-  - pos: -2.5,3.5
+  - rot: 3.141592653589793 rad
+    pos: 1.5,8.5
     parent: 1
     type: Transform
-  - fixtures:
-    - density: 60
-      shape: !type:PolygonShape
-        vertices:
-        - 0.45,-0.45
-        - 0.45,0.45
-        - -0.45,0.45
-        - -0.45,-0.45
-      mask:
-      - Impassable
-      - MidImpassable
-      - LowImpassable
-      layer:
-      - MidImpassable
-      - LowImpassable
-    - shape: !type:PolygonShape
-        vertices:
-        - 0.4,0.5
-        - 0.1,1.2
-        - -0.1,1.2
-        - -0.4,0.5
-      layer:
-      - Impassable
-      - MidImpassable
-      - HighImpassable
-      - LowImpassable
-      - InteractImpassable
-      hard: False
-      id: thruster-burn
-    type: Fixtures
 - uid: 54
   type: DebugThruster
   components:
-  - rot: 3.141592653589793 rad
-    pos: 1.5,-1.5
+  - pos: -4.5,7.5
     parent: 1
     type: Transform
   - fixtures:
@@ -674,138 +1182,80 @@ entities:
       id: thruster-burn
     type: Fixtures
 - uid: 55
-  type: DebugThruster
+  type: WallShuttle
   components:
-  - rot: 3.141592653589793 rad
-    pos: -4.5,-1.5
+  - pos: -0.5,6.5
     parent: 1
     type: Transform
-  - fixtures:
-    - density: 60
-      shape: !type:PolygonShape
-        vertices:
-        - 0.45,-0.45
-        - 0.45,0.45
-        - -0.45,0.45
-        - -0.45,-0.45
-      mask:
-      - Impassable
-      - MidImpassable
-      - LowImpassable
-      layer:
-      - MidImpassable
-      - LowImpassable
-    - shape: !type:PolygonShape
-        vertices:
-        - 0.4,0.5
-        - 0.1,1.2
-        - -0.1,1.2
-        - -0.4,0.5
-      layer:
-      - Impassable
-      - MidImpassable
-      - HighImpassable
-      - LowImpassable
-      - InteractImpassable
-      hard: False
-      id: thruster-burn
-    type: Fixtures
 - uid: 56
-  type: DebugThruster
+  type: WallShuttle
   components:
-  - pos: -4.5,1.5
+  - pos: -3.5,7.5
     parent: 1
     type: Transform
-  - fixtures:
-    - density: 60
-      shape: !type:PolygonShape
-        vertices:
-        - 0.45,-0.45
-        - 0.45,0.45
-        - -0.45,0.45
-        - -0.45,-0.45
-      mask:
-      - Impassable
-      - MidImpassable
-      - LowImpassable
-      layer:
-      - MidImpassable
-      - LowImpassable
-    - shape: !type:PolygonShape
-        vertices:
-        - 0.4,0.5
-        - 0.1,1.2
-        - -0.1,1.2
-        - -0.4,0.5
-      layer:
-      - Impassable
-      - MidImpassable
-      - HighImpassable
-      - LowImpassable
-      - InteractImpassable
-      hard: False
-      id: thruster-burn
-    type: Fixtures
 - uid: 57
-  type: DebugThruster
+  type: WallShuttle
   components:
-  - pos: 2.5,0.5
+  - pos: 0.5,8.5
     parent: 1
     type: Transform
-  - fixtures:
-    - density: 60
-      shape: !type:PolygonShape
-        vertices:
-        - 0.45,-0.45
-        - 0.45,0.45
-        - -0.45,0.45
-        - -0.45,-0.45
-      mask:
-      - Impassable
-      - MidImpassable
-      - LowImpassable
-      layer:
-      - MidImpassable
-      - LowImpassable
-    - shape: !type:PolygonShape
-        vertices:
-        - 0.4,0.5
-        - 0.1,1.2
-        - -0.1,1.2
-        - -0.4,0.5
-      layer:
-      - Impassable
-      - MidImpassable
-      - HighImpassable
-      - LowImpassable
-      - InteractImpassable
-      hard: False
-      id: thruster-burn
-    type: Fixtures
 - uid: 58
-  type: AlwaysPoweredWallLight
+  type: WallShuttle
   components:
-  - rot: 1.5707963267948966 rad
-    pos: -2.5,0.5
+  - pos: -2.5,6.5
     parent: 1
     type: Transform
 - uid: 59
   type: AlwaysPoweredWallLight
   components:
-  - rot: -1.5707963267948966 rad
-    pos: -0.5,0.5
+  - pos: -1.5,5.5
     parent: 1
     type: Transform
 - uid: 60
-  type: AlwaysPoweredWallLight
+  type: ComputerShuttleEvent
   components:
-  - pos: 3.5,-2.5
+  - pos: -1.5,9.5
     parent: 1
     type: Transform
 - uid: 61
   type: AlwaysPoweredWallLight
   components:
-  - pos: -6.5,-2.5
+  - rot: 1.5707963267948966 rad
+    pos: -2.5,7.5
+    parent: 1
+    type: Transform
+- uid: 62
+  type: AlwaysPoweredWallLight
+  components:
+  - rot: -1.5707963267948966 rad
+    pos: -0.5,7.5
+    parent: 1
+    type: Transform
+- uid: 63
+  type: AlwaysPoweredWallLight
+  components:
+  - rot: 3.141592653589793 rad
+    pos: 3.5,11.5
+    parent: 1
+    type: Transform
+- uid: 64
+  type: AlwaysPoweredWallLight
+  components:
+  - rot: 3.141592653589793 rad
+    pos: -1.5,11.5
+    parent: 1
+    type: Transform
+- uid: 65
+  type: AlwaysPoweredWallLight
+  components:
+  - rot: 3.141592653589793 rad
+    pos: -6.5,11.5
+    parent: 1
+    type: Transform
+- uid: 66
+  type: AlwaysPoweredWallLight
+  components:
+  - pos: -1.5,9.5
     parent: 1
     type: Transform
 ...
