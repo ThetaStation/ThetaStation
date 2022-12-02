@@ -1,0 +1,43 @@
+﻿- type: entity
+  id: ShipEventCloset
+  name: closet
+  parent: ClosetBase
+  suffix: SHIPEVENT
+  components:
+    - type: Appearance
+      visuals:
+        - type: StorageVisualizer
+          state: bomb
+          state_open: bomb_open
+          state_closed: bomb_door
+
+- type: entity
+  name: SAW Closet
+  id: SawGunCloset
+  parent: ShipEventCloset
+  components:
+    - type: StorageFill
+      contents:
+        - id: WeaponLightMachineGunL6Event
+          amount: 7
+
+- type: entity
+  name: SAW Ammo Closet
+  id: SawAmmoGunCloset
+  parent: ShipEventCloset
+  components:
+    - type: StorageFill
+      contents:
+        - id: MagazineLightRifleBoxEvent
+          amount: 10
+
+- type: entity
+  name: RPG Closet
+  id: LauncherGunCloset
+  parent: ShipEventCloset
+  suffix: SHIPEVENT
+  components:
+    - type: StorageFill
+      contents:
+        - id: WeaponLauncherRocketEvent
+          amount: 7

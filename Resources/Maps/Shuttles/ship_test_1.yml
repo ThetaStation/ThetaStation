@@ -109,10 +109,10 @@ grids:
     tiles: PgAAAD4AAAA+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD4AAAA+AAAAPgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+AAAAPgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
 entities:
 - uid: 0
-  type: WeaponFlareGun
+  type: SawAmmoGunCloset
   components:
   - type: MetaData
-  - pos: -1.543641,-0.6057215
+  - pos: -4.5,-7.5
     parent: 1
     type: Transform
 - uid: 1
@@ -350,7 +350,7 @@ entities:
       -6,-3: 1
       -5,-10: 1
       -5,-9: 1
-      -5,-8: 1
+      -5,-8: 2
       -5,-7: 1
       -5,-6: 1
       -5,-5: 1
@@ -476,6 +476,21 @@ entities:
       - 0
     - volume: 2500
       temperature: 293.15
+      moles:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    - volume: 2500
+      temperature: 220.53748
       moles:
       - 0
       - 0
@@ -941,7 +956,7 @@ entities:
       id: thruster-burn
     type: Fixtures
 - uid: 57
-  type: TableCarpet
+  type: LauncherGunCloset
   components:
   - type: MetaData
   - pos: -5.5,-7.5
@@ -1813,17 +1828,10 @@ entities:
     parent: 1
     type: Transform
 - uid: 128
-  type: WeaponLightMachineGunL6Event
+  type: SawGunCloset
   components:
   - type: MetaData
-  - pos: -3.572802,-7.5682464
-    parent: 1
-    type: Transform
-- uid: 129
-  type: WeaponLightMachineGunL6Event
-  components:
-  - type: MetaData
-  - pos: -3.572802,-7.4944997
+  - pos: -3.5,-7.5
     parent: 1
     type: Transform
 - uid: 130
@@ -1882,186 +1890,11 @@ entities:
   - pos: 0.13805866,-0.73401916
     parent: 1
     type: Transform
-- uid: 138
-  type: TableCarpet
+- uid: 164
+  type: WeaponFlareGun
   components:
   - type: MetaData
-  - pos: -4.5,-7.5
-    parent: 1
-    type: Transform
-- uid: 139
-  type: TableCarpet
-  components:
-  - type: MetaData
-  - pos: -3.5,-7.5
-    parent: 1
-    type: Transform
-- uid: 140
-  type: WeaponLightMachineGunL6Event
-  components:
-  - type: MetaData
-  - pos: -3.572802,-7.391255
-    parent: 1
-    type: Transform
-- uid: 141
-  type: WeaponLightMachineGunL6Event
-  components:
-  - type: MetaData
-  - pos: -3.5580444,-7.28801
-    parent: 1
-    type: Transform
-- uid: 142
-  type: WeaponLightMachineGunL6Event
-  components:
-  - type: MetaData
-  - pos: -3.5875602,-7.170017
-    parent: 1
-    type: Transform
-- uid: 143
-  type: WeaponLightMachineGunL6Event
-  components:
-  - type: MetaData
-  - pos: -3.5580444,-7.6272435
-    parent: 1
-    type: Transform
-- uid: 144
-  type: MagazineLightRifleBoxEvent
-  components:
-  - type: MetaData
-  - pos: -4.532869,-7.533728
-    parent: 1
-    type: Transform
-- uid: 145
-  type: WeaponLauncherRocketEvent
-  components:
-  - type: MetaData
-  - pos: -5.661437,-7.7664714
-    parent: 1
-    type: Transform
-- uid: 146
-  type: WeaponLauncherRocketEvent
-  components:
-  - type: MetaData
-  - pos: -5.2294793,-7.685704
-    parent: 1
-    type: Transform
-- uid: 147
-  type: MagazineLightRifleBoxEvent
-  components:
-  - type: MetaData
-  - pos: -4.2672324,-7.223994
-    parent: 1
-    type: Transform
-- uid: 148
-  type: MagazineLightRifleBoxEvent
-  components:
-  - type: MetaData
-  - pos: -4.2672324,-7.09125
-    parent: 1
-    type: Transform
-- uid: 149
-  type: MagazineLightRifleBoxEvent
-  components:
-  - type: MetaData
-  - pos: -4.532869,-7.3567367
-    parent: 1
-    type: Transform
-- uid: 150
-  type: WeaponLauncherRocketEvent
-  components:
-  - type: MetaData
-  - pos: -5.2589936,-7.331722
-    parent: 1
-    type: Transform
-- uid: 151
-  type: WeaponLauncherRocketEvent
-  components:
-  - type: MetaData
-  - pos: -5.6722054,-7.523462
-    parent: 1
-    type: Transform
-- uid: 152
-  type: WeaponLauncherRocketEvent
-  components:
-  - type: MetaData
-  - pos: -5.081904,-7.228477
-    parent: 1
-    type: Transform
-- uid: 153
-  type: WeaponLauncherRocketEvent
-  components:
-  - type: MetaData
-  - pos: -5.2589936,-7.8774443
-    parent: 1
-    type: Transform
-- uid: 154
-  type: MagazineLightRifleBoxEvent
-  components:
-  - type: MetaData
-  - pos: -4.28199,-7.7992144
-    parent: 1
-    type: Transform
-- uid: 155
-  type: WeaponLauncherRocketEvent
-  components:
-  - type: MetaData
-  - pos: -5.6722054,-7.331722
-    parent: 1
-    type: Transform
-- uid: 156
-  type: MagazineLightRifleBoxEvent
-  components:
-  - type: MetaData
-  - pos: -4.2672324,-7.341987
-    parent: 1
-    type: Transform
-- uid: 157
-  type: WeaponLightMachineGunL6Event
-  components:
-  - type: MetaData
-  - pos: -3.5875602,-7.09627
-    parent: 1
-    type: Transform
-- uid: 158
-  type: WeaponLauncherRocketEvent
-  components:
-  - type: MetaData
-  - pos: -5.2589936,-7.4792147
-    parent: 1
-    type: Transform
-- uid: 159
-  type: MagazineLightRifleBoxEvent
-  components:
-  - type: MetaData
-  - pos: -4.518111,-7.7992144
-    parent: 1
-    type: Transform
-- uid: 160
-  type: MagazineLightRifleBoxEvent
-  components:
-  - type: MetaData
-  - pos: -4.28199,-7.636973
-    parent: 1
-    type: Transform
-- uid: 161
-  type: MagazineLightRifleBoxEvent
-  components:
-  - type: MetaData
-  - pos: -4.28199,-7.48948
-    parent: 1
-    type: Transform
-- uid: 162
-  type: MagazineLightRifleBoxEvent
-  components:
-  - type: MetaData
-  - pos: -4.532869,-7.09125
-    parent: 1
-    type: Transform
-- uid: 163
-  type: WeaponLauncherRocketEvent
-  components:
-  - type: MetaData
-  - pos: -5.6722054,-7.1399813
+  - pos: -1.543641,-0.6057215
     parent: 1
     type: Transform
 - uid: 183
