@@ -1,5 +1,5 @@
 meta:
-  format: 2
+  format: 3
   name: DemoStation
   author: Space-Wizards
   postmapinit: false
@@ -93,20 +93,6 @@ tilemap:
   86: FloorWoodTile
   87: Lattice
   88: Plating
-grids:
-- uid: 1
-  settings:
-    chunksize: 16
-    tilesize: 1
-  chunks:
-  - ind: -1,-1
-    tiles: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAAAAAABYAAAAWAAAAFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAA==
-  - ind: 0,-1
-    tiles: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFgAAABYAAAAAAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
-  - ind: 0,0
-    tiles: WAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFgAAABYAAAAAAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYAAAAAAAAAAAAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFgAAABYAAAAWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYAAAAWAAAAFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAFgAAABYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFgAAABYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
-  - ind: -1,0
-    tiles: AAAAAAAAAAAAAAAAAAAAAAAAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAAAAAABYAAAAWAAAAFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAAAAAAAAAAAAAFgAAABYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFgAAABYAAAAWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFgAAABYAAAAWAAAAFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYAAAAWAAAAFgAAABYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAFgAAABYAAAAWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYAAAAWAAAAFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
 entities:
 - uid: 1
   components:
@@ -114,326 +100,27 @@ entities:
   - pos: -4.5523047,1.6323096
     parent: null
     type: Transform
-  - type: MapGrid
+  - chunks:
+      -1,-1:
+        ind: -1,-1
+        tiles: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAAAAAABYAAAAWAAAAFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAA==
+      0,-1:
+        ind: 0,-1
+        tiles: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFgAAABYAAAAAAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+      0,0:
+        ind: 0,0
+        tiles: WAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFgAAABYAAAAAAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYAAAAAAAAAAAAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFgAAABYAAAAWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYAAAAWAAAAFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAFgAAABYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFgAAABYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+      -1,0:
+        ind: -1,0
+        tiles: AAAAAAAAAAAAAAAAAAAAAAAAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAAAAAABYAAAAWAAAAFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAAAAAAAAAAAAAFgAAABYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFgAAABYAAAAWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFgAAABYAAAAWAAAAFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYAAAAWAAAAFgAAABYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAFgAAABYAAAAWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYAAAAWAAAAFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+    type: MapGrid
   - type: Broadphase
   - angularDamping: 0.05
     linearDamping: 0.05
     fixedRotation: False
     bodyType: Dynamic
     type: Physics
-  - fixtures:
-    - density: 0.5
-      shape: !type:PolygonShape
-        vertices:
-        - -0.01,2.01
-        - -0.01,2.99
-        - -1.99,2.99
-        - -1.99,2.01
-      mask:
-      - MapGrid
-      layer:
-      - MapGrid
-      restitution: 0.1
-      id: grid_chunk--1,99-2,01
-    - density: 0.5
-      shape: !type:PolygonShape
-        vertices:
-        - 9.99,0.01
-        - 9.99,0.99
-        - 0.01,0.99
-        - 0.01,0.01
-      mask:
-      - MapGrid
-      layer:
-      - MapGrid
-      restitution: 0.1
-      id: grid_chunk-0,01-0,01
-    - density: 0.5
-      shape: !type:PolygonShape
-        vertices:
-        - -0.01,-1.99
-        - -0.01,-0.01
-        - -10.99,-0.01
-        - -10.99,-1.99
-      mask:
-      - MapGrid
-      layer:
-      - MapGrid
-      restitution: 0.1
-      id: grid_chunk--10,99--1,99
-    - density: 0.5
-      shape: !type:PolygonShape
-        vertices:
-        - -4.01,1.01
-        - -4.01,1.99
-        - -10.99,1.99
-        - -10.99,1.01
-      mask:
-      - MapGrid
-      layer:
-      - MapGrid
-      restitution: 0.1
-      id: grid_chunk--10,99-1,01
-    - density: 0.5
-      shape: !type:PolygonShape
-        vertices:
-        - 8.99,2.01
-        - 8.99,2.99
-        - 3.01,2.99
-        - 3.01,2.01
-      mask:
-      - MapGrid
-      layer:
-      - MapGrid
-      restitution: 0.1
-      id: grid_chunk-3,01-2,01
-    - density: 0.5
-      shape: !type:PolygonShape
-        vertices:
-        - 0.99,2.01
-        - 0.99,2.99
-        - 0.01,2.99
-        - 0.01,2.01
-      mask:
-      - MapGrid
-      layer:
-      - MapGrid
-      restitution: 0.1
-      id: grid_chunk-0,01-2,01
-    - density: 0.5
-      shape: !type:PolygonShape
-        vertices:
-        - -4.01,-2.99
-        - -4.01,-2.01
-        - -10.99,-2.01
-        - -10.99,-2.99
-      mask:
-      - MapGrid
-      layer:
-      - MapGrid
-      restitution: 0.1
-      id: grid_chunk--10,99--2,99
-    - density: 0.5
-      shape: !type:PolygonShape
-        vertices:
-        - 9.99,-2.99
-        - 9.99,-2.01
-        - 3.01,-2.01
-        - 3.01,-2.99
-      mask:
-      - MapGrid
-      layer:
-      - MapGrid
-      restitution: 0.1
-      id: grid_chunk-3,01--2,99
-    - density: 0.5
-      shape: !type:PolygonShape
-        vertices:
-        - -4.01,2.01
-        - -4.01,2.99
-        - -9.99,2.99
-        - -9.99,2.01
-      mask:
-      - MapGrid
-      layer:
-      - MapGrid
-      restitution: 0.1
-      id: grid_chunk--9,99-2,01
-    - density: 0.5
-      shape: !type:PolygonShape
-        vertices:
-        - 9.99,1.01
-        - 9.99,1.99
-        - 3.01,1.99
-        - 3.01,1.01
-      mask:
-      - MapGrid
-      layer:
-      - MapGrid
-      restitution: 0.1
-      id: grid_chunk-3,01-1,01
-    - density: 0.5
-      shape: !type:PolygonShape
-        vertices:
-        - -0.01,1.01
-        - -0.01,1.99
-        - -2.99,1.99
-        - -2.99,1.01
-      mask:
-      - MapGrid
-      layer:
-      - MapGrid
-      restitution: 0.1
-      id: grid_chunk--2,99-1,01
-    - density: 0.5
-      shape: !type:PolygonShape
-        vertices:
-        - 1.99,3.01
-        - 1.99,3.99
-        - 0.01,3.99
-        - 0.01,3.01
-      mask:
-      - MapGrid
-      layer:
-      - MapGrid
-      restitution: 0.1
-      id: grid_chunk-0,01-3,01
-    - density: 0.5
-      shape: !type:PolygonShape
-        vertices:
-        - -0.01,0.01
-        - -0.01,0.99
-        - -10.99,0.99
-        - -10.99,0.01
-      mask:
-      - MapGrid
-      layer:
-      - MapGrid
-      restitution: 0.1
-      id: grid_chunk--10,99-0,01
-    - density: 0.5
-      shape: !type:PolygonShape
-        vertices:
-        - -4.01,-3.99
-        - -4.01,-3.01
-        - -9.99,-3.01
-        - -9.99,-3.99
-      mask:
-      - MapGrid
-      layer:
-      - MapGrid
-      restitution: 0.1
-      id: grid_chunk--9,99--3,99
-    - density: 0.5
-      shape: !type:PolygonShape
-        vertices:
-        - -0.01,3.01
-        - -0.01,3.99
-        - -2.99,3.99
-        - -2.99,3.01
-      mask:
-      - MapGrid
-      layer:
-      - MapGrid
-      restitution: 0.1
-      id: grid_chunk--2,99-3,01
-    - density: 0.5
-      shape: !type:PolygonShape
-        vertices:
-        - 9.99,-1.99
-        - 9.99,-0.01
-        - 0.01,-0.01
-        - 0.01,-1.99
-      mask:
-      - MapGrid
-      layer:
-      - MapGrid
-      restitution: 0.1
-      id: grid_chunk-0,01--1,99
-    - density: 0.5
-      shape: !type:PolygonShape
-        vertices:
-        - 2.99,4.01
-        - 2.99,6.99
-        - 0.01,6.99
-        - 0.01,4.01
-      mask:
-      - MapGrid
-      layer:
-      - MapGrid
-      restitution: 0.1
-      id: grid_chunk-0,01-4,01
-    - density: 0.5
-      shape: !type:PolygonShape
-        vertices:
-        - 8.99,-3.99
-        - 8.99,-3.01
-        - 3.01,-3.01
-        - 3.01,-3.99
-      mask:
-      - MapGrid
-      layer:
-      - MapGrid
-      restitution: 0.1
-      id: grid_chunk-3,01--3,99
-    - density: 0.5
-      shape: !type:PolygonShape
-        vertices:
-        - 1.99,1.01
-        - 1.99,1.99
-        - 0.01,1.99
-        - 0.01,1.01
-      mask:
-      - MapGrid
-      layer:
-      - MapGrid
-      restitution: 0.1
-      id: grid_chunk-0,01-1,01
-    - density: 0.5
-      shape: !type:PolygonShape
-        vertices:
-        - 1.99,7.01
-        - 1.99,7.99
-        - 0.01,7.99
-        - 0.01,7.01
-      mask:
-      - MapGrid
-      layer:
-      - MapGrid
-      restitution: 0.1
-      id: grid_chunk-0,01-7,01
-    - density: 0.5
-      shape: !type:PolygonShape
-        vertices:
-        - -0.01,4.01
-        - -0.01,6.99
-        - -3.99,6.99
-        - -3.99,4.01
-      mask:
-      - MapGrid
-      layer:
-      - MapGrid
-      restitution: 0.1
-      id: grid_chunk--3,99-4,01
-    - density: 0.5
-      shape: !type:PolygonShape
-        vertices:
-        - 1.99,-2.99
-        - 1.99,-2.01
-        - 0.01,-2.01
-        - 0.01,-2.99
-      mask:
-      - MapGrid
-      layer:
-      - MapGrid
-      restitution: 0.1
-      id: grid_chunk-0,01--2,99
-    - density: 0.5
-      shape: !type:PolygonShape
-        vertices:
-        - -0.01,-2.99
-        - -0.01,-2.01
-        - -2.99,-2.01
-        - -2.99,-2.99
-      mask:
-      - MapGrid
-      layer:
-      - MapGrid
-      restitution: 0.1
-      id: grid_chunk--2,99--2,99
-    - density: 0.5
-      shape: !type:PolygonShape
-        vertices:
-        - -0.01,7.01
-        - -0.01,7.99
-        - -2.99,7.99
-        - -2.99,7.01
-      mask:
-      - MapGrid
-      layer:
-      - MapGrid
-      restitution: 0.1
-      id: grid_chunk--2,99-7,01
+  - fixtures: []
     type: Fixtures
   - type: OccluderTree
   - type: Shuttle
@@ -696,7 +383,6 @@ entities:
 - uid: 2
   type: AlwaysPoweredWallLight
   components:
-  - type: MetaData
   - rot: -1.5707963267948966 rad
     pos: 0.5,0.5
     parent: 1
@@ -704,651 +390,558 @@ entities:
 - uid: 3
   type: ComputerShuttleEvent
   components:
-  - type: MetaData
   - pos: -0.5,5.5
     parent: 1
     type: Transform
 - uid: 4
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: -2.5,1.5
     parent: 1
     type: Transform
 - uid: 5
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: -1.5,1.5
     parent: 1
     type: Transform
 - uid: 6
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: -1.5,2.5
     parent: 1
     type: Transform
 - uid: 7
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: 1.5,1.5
     parent: 1
     type: Transform
 - uid: 8
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: 0.5,1.5
     parent: 1
     type: Transform
 - uid: 9
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: 0.5,2.5
     parent: 1
     type: Transform
 - uid: 10
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: -2.5,-2.5
     parent: 1
     type: Transform
 - uid: 11
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: 1.5,-2.5
     parent: 1
     type: Transform
 - uid: 12
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: 1.5,-1.5
     parent: 1
     type: Transform
 - uid: 13
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: -2.5,-1.5
     parent: 1
     type: Transform
 - uid: 14
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: 2.5,0.5
     parent: 1
     type: Transform
 - uid: 15
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: 1.5,0.5
     parent: 1
     type: Transform
 - uid: 16
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: 2.5,-1.5
     parent: 1
     type: Transform
 - uid: 17
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: 3.5,-2.5
     parent: 1
     type: Transform
 - uid: 18
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: 3.5,-1.5
     parent: 1
     type: Transform
 - uid: 19
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: 3.5,0.5
     parent: 1
     type: Transform
 - uid: 20
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: 4.5,-2.5
     parent: 1
     type: Transform
 - uid: 21
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: 3.5,1.5
     parent: 1
     type: Transform
 - uid: 22
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: -7.5,-2.5
     parent: 1
     type: Transform
 - uid: 23
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: -8.5,-2.5
     parent: 1
     type: Transform
 - uid: 24
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: -9.5,-2.5
     parent: 1
     type: Transform
 - uid: 25
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: 5.5,-2.5
     parent: 1
     type: Transform
 - uid: 26
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: 6.5,-2.5
     parent: 1
     type: Transform
 - uid: 27
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: 7.5,-2.5
     parent: 1
     type: Transform
 - uid: 28
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: -5.5,-2.5
     parent: 1
     type: Transform
 - uid: 29
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: 8.5,-2.5
     parent: 1
     type: Transform
 - uid: 30
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: 8.5,-3.5
     parent: 1
     type: Transform
 - uid: 31
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: -6.5,-2.5
     parent: 1
     type: Transform
 - uid: 32
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: -2.5,0.5
     parent: 1
     type: Transform
 - uid: 33
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: -3.5,-1.5
     parent: 1
     type: Transform
 - uid: 34
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: -3.5,0.5
     parent: 1
     type: Transform
 - uid: 35
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: -4.5,0.5
     parent: 1
     type: Transform
 - uid: 36
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: -4.5,1.5
     parent: 1
     type: Transform
 - uid: 37
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: 5.5,1.5
     parent: 1
     type: Transform
 - uid: 38
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: 6.5,1.5
     parent: 1
     type: Transform
 - uid: 39
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: 6.5,2.5
     parent: 1
     type: Transform
 - uid: 40
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: -4.5,2.5
     parent: 1
     type: Transform
 - uid: 41
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: -5.5,1.5
     parent: 1
     type: Transform
 - uid: 42
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: -6.5,1.5
     parent: 1
     type: Transform
 - uid: 43
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: -7.5,1.5
     parent: 1
     type: Transform
 - uid: 44
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: -4.5,-3.5
     parent: 1
     type: Transform
 - uid: 45
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: 3.5,-3.5
     parent: 1
     type: Transform
 - uid: 46
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: 3.5,2.5
     parent: 1
     type: Transform
 - uid: 47
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: 4.5,1.5
     parent: 1
     type: Transform
 - uid: 48
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: -4.5,-1.5
     parent: 1
     type: Transform
 - uid: 49
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: -4.5,-2.5
     parent: 1
     type: Transform
 - uid: 50
   type: ReinforcedWindow
   components:
-  - type: MetaData
   - pos: -1.5,3.5
     parent: 1
     type: Transform
 - uid: 51
   type: ReinforcedWindow
   components:
-  - type: MetaData
   - pos: 0.5,3.5
     parent: 1
     type: Transform
 - uid: 52
   type: ReinforcedWindow
   components:
-  - type: MetaData
   - pos: -2.5,3.5
     parent: 1
     type: Transform
 - uid: 53
   type: ReinforcedWindow
   components:
-  - type: MetaData
   - pos: -2.5,4.5
     parent: 1
     type: Transform
 - uid: 54
   type: ReinforcedWindow
   components:
-  - type: MetaData
   - pos: -2.5,6.5
     parent: 1
     type: Transform
 - uid: 55
   type: ReinforcedWindow
   components:
-  - type: MetaData
   - pos: -2.5,5.5
     parent: 1
     type: Transform
 - uid: 56
   type: ReinforcedWindow
   components:
-  - type: MetaData
   - pos: -1.5,6.5
     parent: 1
     type: Transform
 - uid: 57
   type: ReinforcedWindow
   components:
-  - type: MetaData
   - pos: 1.5,6.5
     parent: 1
     type: Transform
 - uid: 58
   type: ReinforcedWindow
   components:
-  - type: MetaData
   - pos: 0.5,6.5
     parent: 1
     type: Transform
 - uid: 59
   type: ReinforcedWindow
   components:
-  - type: MetaData
   - pos: -0.5,6.5
     parent: 1
     type: Transform
 - uid: 60
   type: ReinforcedWindow
   components:
-  - type: MetaData
   - pos: 1.5,5.5
     parent: 1
     type: Transform
 - uid: 61
   type: ReinforcedWindow
   components:
-  - type: MetaData
   - pos: 1.5,4.5
     parent: 1
     type: Transform
 - uid: 62
   type: ReinforcedWindow
   components:
-  - type: MetaData
   - pos: 1.5,3.5
     parent: 1
     type: Transform
 - uid: 63
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: -9.5,-1.5
     parent: 1
     type: Transform
 - uid: 64
   type: ReinforcedWindow
   components:
-  - type: MetaData
   - pos: -3.5,4.5
     parent: 1
     type: Transform
 - uid: 65
   type: ReinforcedWindow
   components:
-  - type: MetaData
   - pos: -3.5,5.5
     parent: 1
     type: Transform
 - uid: 66
   type: ReinforcedWindow
   components:
-  - type: MetaData
   - pos: -3.5,6.5
     parent: 1
     type: Transform
 - uid: 67
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: -9.5,-3.5
     parent: 1
     type: Transform
 - uid: 68
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: 9.5,-2.5
     parent: 1
     type: Transform
 - uid: 69
   type: ReinforcedWindow
   components:
-  - type: MetaData
   - pos: -2.5,7.5
     parent: 1
     type: Transform
 - uid: 70
   type: ReinforcedWindow
   components:
-  - type: MetaData
   - pos: -1.5,7.5
     parent: 1
     type: Transform
 - uid: 71
   type: ReinforcedWindow
   components:
-  - type: MetaData
   - pos: -0.5,7.5
     parent: 1
     type: Transform
 - uid: 72
   type: ReinforcedWindow
   components:
-  - type: MetaData
   - pos: 0.5,7.5
     parent: 1
     type: Transform
 - uid: 73
   type: ReinforcedWindow
   components:
-  - type: MetaData
   - pos: 1.5,7.5
     parent: 1
     type: Transform
 - uid: 74
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: -7.5,2.5
     parent: 1
     type: Transform
 - uid: 75
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: 8.5,-1.5
     parent: 1
     type: Transform
 - uid: 76
   type: ReinforcedWindow
   components:
-  - type: MetaData
   - pos: 2.5,6.5
     parent: 1
     type: Transform
 - uid: 77
   type: ReinforcedWindow
   components:
-  - type: MetaData
   - pos: 2.5,5.5
     parent: 1
     type: Transform
 - uid: 78
   type: ReinforcedWindow
   components:
-  - type: MetaData
   - pos: 2.5,4.5
     parent: 1
     type: Transform
 - uid: 79
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: 8.5,-0.5
     parent: 1
     type: Transform
 - uid: 80
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: -9.5,-0.5
     parent: 1
     type: Transform
 - uid: 81
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: -10.5,-2.5
     parent: 1
     type: Transform
 - uid: 82
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: 9.5,-0.5
     parent: 1
     type: Transform
 - uid: 83
   type: WallReinforced
   components:
-  - type: MetaData
   - pos: -10.5,-0.5
     parent: 1
     type: Transform
 - uid: 84
   type: TableReinforced
   components:
-  - type: MetaData
   - pos: -10.5,0.5
     parent: 1
     type: Transform
 - uid: 85
   type: TableReinforced
   components:
-  - type: MetaData
   - pos: -10.5,1.5
     parent: 1
     type: Transform
 - uid: 86
   type: TableReinforced
   components:
-  - type: MetaData
   - pos: -9.5,2.5
     parent: 1
     type: Transform
 - uid: 87
   type: TableReinforced
   components:
-  - type: MetaData
   - pos: -8.5,2.5
     parent: 1
     type: Transform
 - uid: 88
   type: TableReinforced
   components:
-  - type: MetaData
   - pos: -1.5,-2.5
     parent: 1
     type: Transform
 - uid: 89
   type: TableReinforced
   components:
-  - type: MetaData
   - pos: -0.5,-2.5
     parent: 1
     type: Transform
 - uid: 90
   type: TableReinforced
   components:
-  - type: MetaData
   - pos: 0.5,-2.5
     parent: 1
     type: Transform
 - uid: 91
   type: TableReinforced
   components:
-  - type: MetaData
   - pos: 7.5,2.5
     parent: 1
     type: Transform
 - uid: 92
   type: TableReinforced
   components:
-  - type: MetaData
   - pos: 8.5,2.5
     parent: 1
     type: Transform
 - uid: 93
   type: TableReinforced
   components:
-  - type: MetaData
   - pos: 9.5,1.5
     parent: 1
     type: Transform
 - uid: 94
   type: TableReinforced
   components:
-  - type: MetaData
   - pos: 9.5,0.5
     parent: 1
     type: Transform
 - uid: 95
   type: DebugThruster
   components:
-  - type: MetaData
   - pos: -6.5,2.5
     parent: 1
     type: Transform
@@ -1385,7 +978,6 @@ entities:
 - uid: 96
   type: DebugThruster
   components:
-  - type: MetaData
   - pos: -5.5,2.5
     parent: 1
     type: Transform
@@ -1422,7 +1014,6 @@ entities:
 - uid: 97
   type: DebugThruster
   components:
-  - type: MetaData
   - pos: 5.5,2.5
     parent: 1
     type: Transform
@@ -1459,7 +1050,6 @@ entities:
 - uid: 98
   type: DebugThruster
   components:
-  - type: MetaData
   - pos: 4.5,2.5
     parent: 1
     type: Transform
@@ -1496,7 +1086,6 @@ entities:
 - uid: 99
   type: DebugThruster
   components:
-  - type: MetaData
   - rot: -1.5707963267948966 rad
     pos: 9.5,-1.5
     parent: 1
@@ -1534,7 +1123,6 @@ entities:
 - uid: 100
   type: DebugThruster
   components:
-  - type: MetaData
   - rot: 1.5707963267948966 rad
     pos: -10.5,-1.5
     parent: 1
@@ -1572,7 +1160,6 @@ entities:
 - uid: 101
   type: DebugThruster
   components:
-  - type: MetaData
   - rot: 3.141592653589793 rad
     pos: -8.5,-3.5
     parent: 1
@@ -1610,7 +1197,6 @@ entities:
 - uid: 102
   type: DebugThruster
   components:
-  - type: MetaData
   - rot: 3.141592653589793 rad
     pos: -7.5,-3.5
     parent: 1
@@ -1648,7 +1234,6 @@ entities:
 - uid: 103
   type: DebugThruster
   components:
-  - type: MetaData
   - rot: 3.141592653589793 rad
     pos: -6.5,-3.5
     parent: 1
@@ -1686,7 +1271,6 @@ entities:
 - uid: 104
   type: DebugThruster
   components:
-  - type: MetaData
   - rot: 3.141592653589793 rad
     pos: 4.5,-3.5
     parent: 1
@@ -1724,7 +1308,6 @@ entities:
 - uid: 105
   type: DebugThruster
   components:
-  - type: MetaData
   - rot: 3.141592653589793 rad
     pos: -5.5,-3.5
     parent: 1
@@ -1762,7 +1345,6 @@ entities:
 - uid: 106
   type: DebugThruster
   components:
-  - type: MetaData
   - rot: 3.141592653589793 rad
     pos: 5.5,-3.5
     parent: 1
@@ -1800,7 +1382,6 @@ entities:
 - uid: 107
   type: DebugThruster
   components:
-  - type: MetaData
   - rot: 3.141592653589793 rad
     pos: 6.5,-3.5
     parent: 1
@@ -1838,7 +1419,6 @@ entities:
 - uid: 108
   type: DebugThruster
   components:
-  - type: MetaData
   - rot: 3.141592653589793 rad
     pos: 7.5,-3.5
     parent: 1
@@ -1876,371 +1456,318 @@ entities:
 - uid: 109
   type: DebugGyroscope
   components:
-  - type: MetaData
   - pos: -8.5,-1.5
     parent: 1
     type: Transform
 - uid: 110
   type: DebugGyroscope
   components:
-  - type: MetaData
   - pos: 7.5,-1.5
     parent: 1
     type: Transform
 - uid: 111
   type: KvassTankFull
   components:
-  - type: MetaData
   - pos: 4.5,-1.5
     parent: 1
     type: Transform
 - uid: 112
   type: TableGlass
   components:
-  - type: MetaData
   - pos: 5.5,-1.5
     parent: 1
     type: Transform
 - uid: 113
   type: WeldingFuelTankFull
   components:
-  - type: MetaData
   - pos: 6.5,-1.5
     parent: 1
     type: Transform
 - uid: 114
   type: DrinkWaterCup
   components:
-  - type: MetaData
   - pos: 5.1123943,-1.1396987
     parent: 1
     type: Transform
 - uid: 115
   type: DrinkWaterCup
   components:
-  - type: MetaData
   - pos: 5.363273,-1.1691972
     parent: 1
     type: Transform
 - uid: 116
   type: DrinkWaterCup
   components:
-  - type: MetaData
   - pos: 5.584636,-1.1691972
     parent: 1
     type: Transform
 - uid: 117
   type: DrinkWaterCup
   components:
-  - type: MetaData
   - pos: 5.7322116,-1.1691972
     parent: 1
     type: Transform
 - uid: 118
   type: DrinkWaterCup
   components:
-  - type: MetaData
   - pos: 5.6731815,-1.4789315
     parent: 1
     type: Transform
 - uid: 119
   type: DrinkWaterCup
   components:
-  - type: MetaData
   - pos: 5.08288,-1.4936811
     parent: 1
     type: Transform
 - uid: 120
   type: DrinkWaterCup
   components:
-  - type: MetaData
   - pos: 5.3190007,-1.4936811
     parent: 1
     type: Transform
 - uid: 121
   type: DrinkWaterCup
   components:
-  - type: MetaData
   - pos: 5.2009397,-1.7001706
     parent: 1
     type: Transform
 - uid: 122
   type: DrinkWaterCup
   components:
-  - type: MetaData
   - pos: 5.879787,-1.6854211
     parent: 1
     type: Transform
 - uid: 123
   type: DrinkWaterCup
   components:
-  - type: MetaData
   - pos: 5.8945446,-1.3461883
     parent: 1
     type: Transform
 - uid: 124
   type: SawGunCloset
   components:
-  - type: MetaData
   - pos: -5.5,-1.5
     parent: 1
     type: Transform
 - uid: 125
   type: SawAmmoGunCloset
   components:
-  - type: MetaData
   - pos: -6.5,-1.5
     parent: 1
     type: Transform
 - uid: 126
   type: LauncherGunCloset
   components:
-  - type: MetaData
   - pos: -7.5,-1.5
     parent: 1
     type: Transform
 - uid: 127
   type: Grille
   components:
-  - type: MetaData
   - pos: -2.5,7.5
     parent: 1
     type: Transform
 - uid: 128
   type: Grille
   components:
-  - type: MetaData
   - pos: -1.5,7.5
     parent: 1
     type: Transform
 - uid: 129
   type: Grille
   components:
-  - type: MetaData
   - pos: -0.5,7.5
     parent: 1
     type: Transform
 - uid: 130
   type: Grille
   components:
-  - type: MetaData
   - pos: 0.5,7.5
     parent: 1
     type: Transform
 - uid: 131
   type: Grille
   components:
-  - type: MetaData
   - pos: 1.5,7.5
     parent: 1
     type: Transform
 - uid: 132
   type: Grille
   components:
-  - type: MetaData
   - pos: 1.5,6.5
     parent: 1
     type: Transform
 - uid: 133
   type: Grille
   components:
-  - type: MetaData
   - pos: 0.5,6.5
     parent: 1
     type: Transform
 - uid: 134
   type: Grille
   components:
-  - type: MetaData
   - pos: -0.5,6.5
     parent: 1
     type: Transform
 - uid: 135
   type: Grille
   components:
-  - type: MetaData
   - pos: -1.5,6.5
     parent: 1
     type: Transform
 - uid: 136
   type: Grille
   components:
-  - type: MetaData
   - pos: -2.5,6.5
     parent: 1
     type: Transform
 - uid: 137
   type: Grille
   components:
-  - type: MetaData
   - pos: -2.5,5.5
     parent: 1
     type: Transform
 - uid: 138
   type: Grille
   components:
-  - type: MetaData
   - pos: -2.5,4.5
     parent: 1
     type: Transform
 - uid: 139
   type: Grille
   components:
-  - type: MetaData
   - pos: -2.5,3.5
     parent: 1
     type: Transform
 - uid: 140
   type: Grille
   components:
-  - type: MetaData
   - pos: -1.5,3.5
     parent: 1
     type: Transform
 - uid: 141
   type: Grille
   components:
-  - type: MetaData
   - pos: 0.5,3.5
     parent: 1
     type: Transform
 - uid: 142
   type: Grille
   components:
-  - type: MetaData
   - pos: 1.5,3.5
     parent: 1
     type: Transform
 - uid: 143
   type: Grille
   components:
-  - type: MetaData
   - pos: 1.5,4.5
     parent: 1
     type: Transform
 - uid: 144
   type: Grille
   components:
-  - type: MetaData
   - pos: 1.5,5.5
     parent: 1
     type: Transform
 - uid: 145
   type: Grille
   components:
-  - type: MetaData
   - pos: 2.5,4.5
     parent: 1
     type: Transform
 - uid: 146
   type: Grille
   components:
-  - type: MetaData
   - pos: 2.5,5.5
     parent: 1
     type: Transform
 - uid: 147
   type: Grille
   components:
-  - type: MetaData
   - pos: 2.5,6.5
     parent: 1
     type: Transform
 - uid: 148
   type: Grille
   components:
-  - type: MetaData
   - pos: -3.5,6.5
     parent: 1
     type: Transform
 - uid: 149
   type: Grille
   components:
-  - type: MetaData
   - pos: -3.5,5.5
     parent: 1
     type: Transform
 - uid: 150
   type: Grille
   components:
-  - type: MetaData
   - pos: -3.5,4.5
     parent: 1
     type: Transform
 - uid: 151
   type: SpawnPointShipEvent
   components:
-  - type: MetaData
   - pos: 4.5,0.5
     parent: 1
     type: Transform
 - uid: 152
   type: TableGlass
   components:
-  - type: MetaData
   - pos: 0.5,5.5
     parent: 1
     type: Transform
 - uid: 153
   type: TableGlass
   components:
-  - type: MetaData
   - pos: -1.5,5.5
     parent: 1
     type: Transform
 - uid: 154
   type: InflatableDoor
   components:
-  - type: MetaData
   - pos: -2.5,-0.5
     parent: 1
     type: Transform
 - uid: 155
   type: InflatableDoor
   components:
-  - type: MetaData
   - pos: -4.5,-0.5
     parent: 1
     type: Transform
 - uid: 156
   type: InflatableDoor
   components:
-  - type: MetaData
   - pos: -0.5,1.5
     parent: 1
     type: Transform
 - uid: 157
   type: InflatableDoor
   components:
-  - type: MetaData
   - pos: -0.5,3.5
     parent: 1
     type: Transform
 - uid: 158
   type: InflatableDoor
   components:
-  - type: MetaData
   - pos: 1.5,-0.5
     parent: 1
     type: Transform
 - uid: 159
   type: InflatableDoor
   components:
-  - type: MetaData
   - pos: 3.5,-0.5
     parent: 1
     type: Transform
 - uid: 160
   type: AlwaysPoweredWallLight
   components:
-  - type: MetaData
   - pos: 6.5,0.5
     parent: 1
     type: Transform
 - uid: 161
   type: AlwaysPoweredWallLight
   components:
-  - type: MetaData
   - rot: 1.5707963267948966 rad
     pos: -1.5,-1.5
     parent: 1
@@ -2248,7 +1775,6 @@ entities:
 - uid: 162
   type: AlwaysPoweredWallLight
   components:
-  - type: MetaData
   - rot: 1.5707963267948966 rad
     pos: -1.5,0.5
     parent: 1
@@ -2256,14 +1782,12 @@ entities:
 - uid: 163
   type: AlwaysPoweredWallLight
   components:
-  - type: MetaData
   - pos: -7.5,0.5
     parent: 1
     type: Transform
 - uid: 164
   type: AlwaysPoweredWallLight
   components:
-  - type: MetaData
   - rot: 1.5707963267948966 rad
     pos: -8.5,-0.5
     parent: 1
@@ -2271,7 +1795,6 @@ entities:
 - uid: 165
   type: AlwaysPoweredWallLight
   components:
-  - type: MetaData
   - rot: -1.5707963267948966 rad
     pos: 0.5,-1.5
     parent: 1
@@ -2279,7 +1802,6 @@ entities:
 - uid: 166
   type: AlwaysPoweredWallLight
   components:
-  - type: MetaData
   - rot: -1.5707963267948966 rad
     pos: 7.5,-0.5
     parent: 1
@@ -2287,7 +1809,6 @@ entities:
 - uid: 167
   type: AlwaysPoweredWallLight
   components:
-  - type: MetaData
   - rot: 3.141592653589793 rad
     pos: 0.5,4.5
     parent: 1
@@ -2295,14 +1816,12 @@ entities:
 - uid: 168
   type: AlwaysPoweredWallLight
   components:
-  - type: MetaData
   - pos: 2.5,-0.5
     parent: 1
     type: Transform
 - uid: 169
   type: AlwaysPoweredWallLight
   components:
-  - type: MetaData
   - rot: -1.5707963267948966 rad
     pos: -0.5,2.5
     parent: 1
@@ -2310,14 +1829,12 @@ entities:
 - uid: 170
   type: AlwaysPoweredWallLight
   components:
-  - type: MetaData
   - pos: -3.5,-0.5
     parent: 1
     type: Transform
 - uid: 171
   type: Lamp
   components:
-  - type: MetaData
   - rot: 1.5707963267948966 rad
     pos: -1.4694662,5.7534127
     parent: 1
@@ -2325,14 +1842,12 @@ entities:
 - uid: 172
   type: WeaponFlareGun
   components:
-  - type: MetaData
   - pos: 0.4637742,5.591171
     parent: 1
     type: Transform
 - uid: 173
   type: ChairPilotSeat
   components:
-  - type: MetaData
   - rot: 3.141592653589793 rad
     pos: -0.5,4.5
     parent: 1
