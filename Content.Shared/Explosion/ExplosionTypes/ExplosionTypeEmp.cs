@@ -22,10 +22,6 @@ public sealed class ExplosionTypeEmp : ExplosionType
         if (damage == null || intensity == 0) { return; }
         foreach(IComponent component in _entityManager.GetComponents(entity))
         {
-            if (component.Name == "LightBulb")
-            {
-                int i = 0;
-            }
             if (component is IEmpable)
             {
                 _entityManager.EventBus.RaiseLocalEvent(entity, new EmpEvent(intensity), false);
