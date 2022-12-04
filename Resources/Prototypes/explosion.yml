@@ -70,3 +70,18 @@
   fireColor: Blue
   texturePath: /Textures/Effects/fire_greyscale.rsi
   fireStates: 3
+
+- type: explosion
+  id: Emp
+  damagePerIntensity:
+    types:
+      Blunt: 0
+  tileBreakChance: [ 0 ]
+  tileBreakIntensity: [ 0 ]
+  explosionType: !type:ExplosionTypeEmp
+  Sound: !type:SoundPathSpecifier
+    path: /Audio/Effects/empulse.ogg
+  tileBreakRerollReduction: 100
+  lightColor: Blue
+  texturePath: /Textures/Effects/emp.rsi
+  fireStates: 6

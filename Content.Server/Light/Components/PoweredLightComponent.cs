@@ -1,6 +1,7 @@
 using System.Threading;
 using Content.Server.Light.EntitySystems;
 using Content.Shared.Damage;
+using Content.Shared.Explosion.ExplosionTypes;
 using Content.Shared.Light;
 using Content.Shared.MachineLinking;
 using Robust.Shared.Audio;
@@ -14,7 +15,7 @@ namespace Content.Server.Light.Components
     ///     Component that represents a wall light. It has a light bulb that can be replaced when broken.
     /// </summary>
     [RegisterComponent, Access(typeof(PoweredLightSystem))]
-    public sealed class PoweredLightComponent : Component
+    public sealed class PoweredLightComponent : Component, IEmpable
     {
         [DataField("burnHandSound")]
         public SoundSpecifier BurnHandSound = new SoundPathSpecifier("/Audio/Effects/lightburn.ogg");

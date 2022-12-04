@@ -1,5 +1,6 @@
 using Content.Server.Power.Components;
 using Content.Shared.Examine;
+using Content.Shared.Explosion.ExplosionTypes;
 using Content.Shared.Power;
 using Robust.Server.GameObjects;
 
@@ -16,6 +17,7 @@ namespace Content.Server.Power.EntitySystems
 
             SubscribeLocalEvent<ApcPowerReceiverComponent, ExtensionCableSystem.ProviderConnectedEvent>(OnProviderConnected);
             SubscribeLocalEvent<ApcPowerReceiverComponent, ExtensionCableSystem.ProviderDisconnectedEvent>(OnProviderDisconnected);
+            SubscribeLocalEvent<ApcPowerReceiverComponent, EmpEvent>(OnReceiverEmp);
 
             SubscribeLocalEvent<ApcPowerProviderComponent, ComponentShutdown>(OnProviderShutdown);
             SubscribeLocalEvent<ApcPowerProviderComponent, ExtensionCableSystem.ReceiverConnectedEvent>(OnReceiverConnected);
@@ -76,6 +78,21 @@ namespace Content.Server.Power.EntitySystems
             {
                 provider.RemoveReceiver(receiver);
             }
+        }
+
+        private void OnReceiverEmp(EntityUid uid, ApcPowerReceiverComponent receiver, EmpEvent args)
+        {
+            if (args.Intensity > 2)
+            {
+                receiver.PowerDisabled = true;
+                EmpTimerComponent timer = EnsureComp<EmpTimerComponent>(uid);
+                timer.TimeRemaining += args.Intensity * 10;
+            }
+        }
+
+        private void OnReceiverEmpEnd(EntityUid uid, ApcPowerReceiverComponent receiver, EmpTimerEndEvent args)
+        {
+            receiver.PowerDisabled = false;
         }
 
         private void ProviderChanged(ApcPowerReceiverComponent receiver)

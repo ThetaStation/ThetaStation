@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Shared.CCVar;
 using Content.Shared.Damage;
 using Content.Shared.Explosion;
+using Content.Shared.Explosion.ExplosionTypes;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
 using Content.Shared.Spawners.Components;
@@ -186,9 +187,11 @@ public sealed partial class ExplosionSystem : EntitySystem
     /// <returns>True if the underlying tile can be uprooted, false if the tile is blocked by a dense entity</returns>
     internal bool ExplodeTile(BroadphaseComponent lookup,
         MapGridComponent grid,
+        ExplosionType explosionType,
         Vector2i tile,
         float throwForce,
         DamageSpecifier damage,
+        float intensity,
         MapCoordinates epicenter,
         HashSet<EntityUid> processed,
         string id,
@@ -213,7 +216,7 @@ public sealed partial class ExplosionSystem : EntitySystem
         // process those entities
         foreach (var xform in list)
         {
-            ProcessEntity(xform.Owner, epicenter, damage, throwForce, id, damageQuery, physicsQuery, xform);
+            explosionType.ProcessEntity(xform.Owner, epicenter, damage, intensity, throwForce, id, damageQuery, physicsQuery, xform);
         }
 
         // process anchored entities
@@ -222,7 +225,7 @@ public sealed partial class ExplosionSystem : EntitySystem
         foreach (var entity in anchoredList)
         {
             processed.Add(entity);
-            ProcessEntity(entity, epicenter, damage, throwForce, id, damageQuery, physicsQuery);
+            explosionType.ProcessEntity(entity, epicenter, damage, intensity, throwForce, id, damageQuery, physicsQuery, null);
         }
 
         // Walls and reinforced walls will break into girders. These girders will also be considered turf-blocking for
@@ -256,7 +259,7 @@ public sealed partial class ExplosionSystem : EntitySystem
         {
             // Here we only throw, no dealing damage. Containers n such might drop their entities after being destroyed, but
             // they should handle their own damage pass-through, with their own damage reduction calculation.
-            ProcessEntity(xform.Owner, epicenter, null, throwForce, id, damageQuery, physicsQuery, xform);
+            explosionType.ProcessEntity(xform.Owner, epicenter, null, intensity, throwForce, id, damageQuery, physicsQuery, xform);
         }
 
         return !tileBlocked;
@@ -286,9 +289,11 @@ public sealed partial class ExplosionSystem : EntitySystem
     internal void ExplodeSpace(BroadphaseComponent lookup,
         Matrix3 spaceMatrix,
         Matrix3 invSpaceMatrix,
+        ExplosionType explosionType,
         Vector2i tile,
         float throwForce,
         DamageSpecifier damage,
+        float intensity,
         MapCoordinates epicenter,
         HashSet<EntityUid> processed,
         string id,
@@ -311,7 +316,7 @@ public sealed partial class ExplosionSystem : EntitySystem
         foreach (var xform in state.Item1)
         {
             processed.Add(xform.Owner);
-            ProcessEntity(xform.Owner, epicenter, damage, throwForce, id, damageQuery, physicsQuery, xform);
+            explosionType.ProcessEntity(xform.Owner, epicenter, damage, intensity, throwForce, id, damageQuery, physicsQuery, xform);
         }
 
         if (throwForce <= 0)
@@ -325,7 +330,7 @@ public sealed partial class ExplosionSystem : EntitySystem
 
         foreach (var xform in list)
         {
-            ProcessEntity(xform.Owner, epicenter, null, throwForce, id, damageQuery, physicsQuery, xform);
+            explosionType.ProcessEntity(xform.Owner, epicenter, null, intensity, throwForce, id, damageQuery, physicsQuery, xform);
         }
     }
 
@@ -360,56 +365,6 @@ public sealed partial class ExplosionSystem : EntitySystem
     {
         var owner = proxy.Fixture.Body.Owner;
         return SpaceQueryCallback(ref state, in owner);
-    }
-
-    /// <summary>
-    ///     This function actually applies the explosion affects to an entity.
-    /// </summary>
-    private void ProcessEntity(
-        EntityUid uid,
-        MapCoordinates epicenter,
-        DamageSpecifier? damage,
-        float throwForce,
-        string id,
-        EntityQuery<DamageableComponent> damageQuery,
-        EntityQuery<PhysicsComponent> physicsQuery,
-        TransformComponent? xform = null)
-    {
-        // damage
-        if (damage != null && damageQuery.TryGetComponent(uid, out var damageable))
-        {
-            var ev = new GetExplosionResistanceEvent(id);
-            RaiseLocalEvent(uid, ev, false);
-
-            ev.DamageCoefficient = Math.Max(0, ev.DamageCoefficient);
-
-            //todo need a way to track origin of explosion
-            if (ev.DamageCoefficient == 1)
-            {
-                // no damage-dict multiplication required.
-                _damageableSystem.TryChangeDamage(uid, damage, ignoreResistances: true, damageable: damageable);
-            }
-            else
-            {
-                _damageableSystem.TryChangeDamage(uid, damage * ev.DamageCoefficient, ignoreResistances: true, damageable: damageable);
-            }
-        }
-
-        // throw
-        if (xform != null
-            && !xform.Anchored
-            && throwForce > 0
-            && !EntityManager.IsQueuedForDeletion(uid)
-            && physicsQuery.TryGetComponent(uid, out var physics)
-            && physics.BodyType == BodyType.Dynamic)
-        {
-            // TODO purge throw helpers and pass in physics component
-            _throwingSystem.TryThrow(uid, xform.WorldPosition - epicenter.Position, throwForce);
-        }
-
-        // TODO EXPLOSION puddle / flammable ignite?
-
-        // TODO EXPLOSION deaf/ear damage? other explosion effects?
     }
 
     /// <summary>
@@ -747,9 +702,11 @@ sealed class Explosion
                 // from being destroyed.
                 var canDamageFloor = _system.ExplodeTile(_currentLookup,
                     _currentGrid,
+                    ExplosionType.ExplosionType,
                     _currentEnumerator.Current,
                     _currentThrowForce,
                     _currentDamage,
+                    _currentIntensity,
                     Epicenter,
                     ProcessedEntities,
                     ExplosionType.ID,
@@ -768,9 +725,11 @@ sealed class Explosion
                 _system.ExplodeSpace(_currentLookup,
                     _spaceMatrix,
                     _invSpaceMatrix,
+                    ExplosionType.ExplosionType,
                     _currentEnumerator.Current,
                     _currentThrowForce,
                     _currentDamage,
+                    _currentIntensity,
                     Epicenter,
                     ProcessedEntities,
                     ExplosionType.ID,

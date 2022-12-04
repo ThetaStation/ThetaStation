@@ -1,4 +1,5 @@
 using Content.Shared.Damage;
+using Content.Shared.Explosion.ExplosionTypes;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
@@ -18,6 +19,12 @@ public sealed class ExplosionPrototype : IPrototype
 {
     [IdDataField]
     public string ID { get; } = default!;
+
+    /// <summary>
+    /// Type of the explosion. Changes how entities are processed during the explosion.
+    /// </summary>
+    //[DataField("explosionType")] todo: make serializer (or whatever) for ExplosionType
+    public ExplosionType ExplosionType = new ExplosionTypeEmp();
 
     /// <summary>
     ///     Damage to deal to entities. This is scaled by the explosion intensity.

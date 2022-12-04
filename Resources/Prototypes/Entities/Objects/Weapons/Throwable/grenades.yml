@@ -192,3 +192,44 @@
       states:
         enum.Trigger.TriggerVisualState.Primed: primed
         enum.Trigger.TriggerVisualState.Unprimed: complete
+
+- type: entity
+  name: emp grenade
+  description: Grenade that creates a powerful electromagnetic impulse. Harmless for hull and crew, but quite nasty for electrical devices.
+  parent: BaseItem
+  id: EmpGrenade
+  components:
+    - type: Sprite
+      sprite: Objects/Weapons/Grenades/grenade.rsi
+      layers:
+        - state: icon
+          map: ["enum.TriggerVisualLayers.Base"]
+    - type: Item
+      size: 5
+    - type: Clothing
+      quickEquip: false
+      slots:
+        - Belt
+    - type: OnUseTimerTrigger
+      delay: 3.5
+    - type: Explosive
+      explosionType: Emp
+      maxIntensity: 10
+      intensitySlope: 3
+      totalIntensity: 200
+      canCreateVacuum: false
+    - type: ExplodeOnTrigger
+    - type: Damageable
+      damageContainer: Inorganic
+    - type: Destructible
+      thresholds:
+        - trigger:
+            !type:DamageTrigger
+            damage: 10
+          behaviors:
+            - !type:TriggerBehavior
+            - !type:DoActsBehavior
+              acts: ["Destruction"]
+    - type: Appearance
+      visuals:
+        - type: TimerTriggerVisualizer

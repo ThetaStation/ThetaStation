@@ -1,5 +1,6 @@
 using Content.Server.Power.NodeGroups;
 using Content.Server.Power.Pow3r;
+using Content.Shared.Explosion.ExplosionTypes;
 
 namespace Content.Server.Power.Components
 {
@@ -8,7 +9,7 @@ namespace Content.Server.Power.Components
     ///     so that it can receive power from a <see cref="IApcNet"/>.
     /// </summary>
     [RegisterComponent]
-    public sealed class ApcPowerReceiverComponent : Component
+    public sealed class ApcPowerReceiverComponent : Component, IEmpable
     {
         [ViewVariables]
         public bool Powered => (MathHelper.CloseToPercent(NetworkLoad.ReceivingPower, Load) || !NeedsPower) && !PowerDisabled;

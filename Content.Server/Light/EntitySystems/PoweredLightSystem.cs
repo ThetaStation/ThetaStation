@@ -21,6 +21,8 @@ using Robust.Shared.Containers;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using System.Threading;
+using Content.Server.Fluids.Components;
+using Content.Shared.Explosion.ExplosionTypes;
 
 namespace Content.Server.Light.EntitySystems
 {
@@ -53,6 +55,7 @@ namespace Content.Server.Light.EntitySystems
 
             SubscribeLocalEvent<PoweredLightComponent, GhostBooEvent>(OnGhostBoo);
             SubscribeLocalEvent<PoweredLightComponent, DamageChangedEvent>(HandleLightDamaged);
+            SubscribeLocalEvent<PoweredLightComponent, EmpEvent>(HandleLightEmp);
 
             SubscribeLocalEvent<PoweredLightComponent, SignalReceivedEvent>(OnSignalReceived);
             SubscribeLocalEvent<PoweredLightComponent, DeviceNetworkPacketEvent>(OnPacketReceived);
@@ -319,6 +322,14 @@ namespace Content.Server.Light.EntitySystems
             if (args.DamageIncreased)
             {
                 // Eventually, this logic should all be done by this (or some other) system, not a component.
+                TryDestroyBulb(uid, component);
+            }
+        }
+
+        public void HandleLightEmp(EntityUid uid, PoweredLightComponent component, EmpEvent args)
+        {
+            if (args.Intensity > 4)
+            {
                 TryDestroyBulb(uid, component);
             }
         }
