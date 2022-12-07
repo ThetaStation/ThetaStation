@@ -1,6 +1,7 @@
 using Content.Server.Chat.Systems;
 using Content.Server.Radio.Components;
 using Content.Shared.Examine;
+using Content.Shared.Explosion.ExplosionTypes;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Radio;
 using Robust.Server.GameObjects;
@@ -22,6 +23,8 @@ public sealed class HeadsetSystem : EntitySystem
         SubscribeLocalEvent<HeadsetComponent, RadioReceiveEvent>(OnHeadsetReceive);
         SubscribeLocalEvent<HeadsetComponent, GotEquippedEvent>(OnGotEquipped);
         SubscribeLocalEvent<HeadsetComponent, GotUnequippedEvent>(OnGotUnequipped);
+        SubscribeLocalEvent<HeadsetComponent, EmpEvent>(OnEmp);
+        SubscribeLocalEvent<HeadsetComponent, EmpTimerEndEvent>(OnEmpEnd);
         SubscribeLocalEvent<WearingHeadsetComponent, EntitySpokeEvent>(OnSpeak);
     }
 
@@ -60,6 +63,9 @@ public sealed class HeadsetSystem : EntitySystem
             return;
 
         if (component.Enabled == value)
+            return;
+
+        if (CheckEmp(uid))
             return;
 
         if (!value)
@@ -102,5 +108,27 @@ public sealed class HeadsetSystem : EntitySystem
         }
 
         args.PushMarkup(Loc.GetString("examine-headset-chat-prefix", ("prefix", ";")));
+
+        if (!component.Enabled)
+        {
+            args.PushMarkup(Loc.GetString("examine-headset-disabled"));
+        }
+    }
+
+    private bool CheckEmp(EntityUid uid)
+    {
+        return EntityManager.HasComponent<EmpTimerComponent>(uid);
+    }
+
+    private void OnEmp(EntityUid uid, HeadsetComponent component, ref EmpEvent args)
+    {
+        SetEnabled(uid, false, component);
+        EmpTimerComponent timer = EnsureComp<EmpTimerComponent>(uid);
+        timer.TimeRemaining += args.Intensity * 10;
+    }
+
+    private void OnEmpEnd(EntityUid uid, HeadsetComponent component, ref EmpTimerEndEvent args)
+    {
+        SetEnabled(uid, true, component);
     }
 }

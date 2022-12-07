@@ -8,6 +8,17 @@ namespace Content.Shared.Explosion.ExplosionTypes;
 
 public sealed class ExplosionTypeStandard : ExplosionType
 {
+    private static ExplosionTypeStandard? _instance;
+
+    public new static ExplosionType GetInstance()
+    {
+        if (_instance == null)
+        {
+            _instance = new ExplosionTypeStandard();
+        }
+        return _instance;
+    }
+
     public override void ProcessEntity(
         EntityUid entity,
         MapCoordinates epicenter,

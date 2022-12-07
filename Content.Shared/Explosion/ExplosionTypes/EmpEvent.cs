@@ -4,7 +4,8 @@ namespace Content.Shared.Explosion.ExplosionTypes;
 /// <summary>
 /// Raised when component with IEmpable interface gets EMP'ed
 /// </summary>
-public sealed class EmpEvent : EntityEventArgs
+[ByRefEvent]
+public struct EmpEvent
 {
     public float Intensity { get; }
 
@@ -17,4 +18,5 @@ public sealed class EmpEvent : EntityEventArgs
 /// <summary>
 /// Raised when EMP timer wears off
 /// </summary>
-public sealed class EmpTimerEndEvent : EntityEventArgs { }
+[ByRefEvent]
+public struct EmpTimerEndEvent { }

@@ -1,4 +1,5 @@
-﻿using Content.Shared.Damage;
+﻿using System.Runtime.CompilerServices;
+using Content.Shared.Damage;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
 
@@ -6,6 +7,16 @@ namespace Content.Shared.Explosion.ExplosionTypes;
 
 public sealed class ExplosionTypeEmp : ExplosionType
 {
+    private static ExplosionTypeEmp? _instance;
+
+    public new static ExplosionType GetInstance()
+    {
+        if (_instance == null)
+        {
+            _instance = new ExplosionTypeEmp();
+        }
+        return _instance;
+    }
 
     public override void ProcessEntity(
         EntityUid entity,
@@ -24,7 +35,8 @@ public sealed class ExplosionTypeEmp : ExplosionType
         {
             if (component is IEmpable)
             {
-                _entityManager.EventBus.RaiseLocalEvent(entity, new EmpEvent(intensity), false);
+                var ev = new EmpEvent(intensity);
+                _entityManager.EventBus.RaiseLocalEvent(entity, ref ev, false);
                 break;
             }
         }

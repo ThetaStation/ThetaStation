@@ -4,6 +4,7 @@ examine-radio-frequency = Оно настроено вещать на { $frequen
 examine-headset = На небольшом экране гарнитуры отображаются следующие доступные частоты:
 examine-headset-channel = [color={ $color }]:{ $key } для { $id } ({ $freq })[/color]
 examine-headset-chat-prefix = Используйте { $prefix } для текущей настроенной частоты.
+examine-headset-disabled = [color=red]:Гарнитура похоже выключена.[/color]
 chat-radio-common = Общий
 chat-radio-centcom = Центком
 chat-radio-command = Командный

@@ -326,7 +326,7 @@ namespace Content.Server.Light.EntitySystems
             }
         }
 
-        public void HandleLightEmp(EntityUid uid, PoweredLightComponent component, EmpEvent args)
+        public void HandleLightEmp(EntityUid uid, PoweredLightComponent component, ref EmpEvent args)
         {
             if (args.Intensity > 4)
             {

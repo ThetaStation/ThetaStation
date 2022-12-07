@@ -6,5 +6,6 @@
 [RegisterComponent]
 public sealed class EmpTimerComponent : Component
 {
+    [ViewVariables(VVAccess.ReadWrite)]
     public float TimeRemaining = 0;
 }

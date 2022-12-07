@@ -1,4 +1,5 @@
 using Content.Server.Radio.EntitySystems;
+using Content.Shared.Explosion.ExplosionTypes;
 using Content.Shared.Inventory;
 using Content.Shared.Radio;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Set;
@@ -10,7 +11,7 @@ namespace Content.Server.Radio.Components;
 /// </summary>
 [RegisterComponent]
 [Access(typeof(HeadsetSystem))]
-public sealed class HeadsetComponent : Component
+public sealed class HeadsetComponent : Component, IEmpable
 {
     [DataField("channels", customTypeSerializer: typeof(PrototypeIdHashSetSerializer<RadioChannelPrototype>))]
     public readonly HashSet<string> Channels = new() { "Common" };

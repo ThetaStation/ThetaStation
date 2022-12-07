@@ -1,4 +1,6 @@
-﻿namespace Content.Shared.Explosion.ExplosionTypes;
+﻿using System.Linq;
+
+namespace Content.Shared.Explosion.ExplosionTypes;
 
 public sealed class EmpTimerSystem : EntitySystem
 {
@@ -6,14 +8,15 @@ public sealed class EmpTimerSystem : EntitySystem
     {
         base.Update(frameTime);
 
-        foreach(EmpTimerComponent timer in EntityQuery<EmpTimerComponent>())
+        var timers = EntityManager.EntityQuery<EmpTimerComponent>();
+        foreach(EmpTimerComponent timer in timers)
         {
             timer.TimeRemaining -= frameTime;
             if (timer.TimeRemaining <= 0)
             {
                 RemComp<EmpTimerComponent>(timer.Owner);
-                IEntityManager _entityManager = IoCManager.Resolve<IEntityManager>();
-                _entityManager.EventBus.RaiseLocalEvent(timer.Owner, new EmpTimerEndEvent());
+                var ev = new EmpTimerEndEvent();
+                EntityManager.EventBus.RaiseLocalEvent(timer.Owner, ref ev);
             }
         }
     }
