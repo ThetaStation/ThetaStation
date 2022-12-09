@@ -92,15 +92,10 @@ public sealed partial class GunSystem : SharedGunSystem
         var mapAngle = mapDirection.ToAngle();
         var angle = GetRecoilAngle(Timing.CurTime, gun, mapDirection.ToAngle());
 
-        // If applicable, this ensures the projectile is parented to grid on spawn, instead of the map.
-        EntityCoordinates fromEnt = MapManager.TryFindGridAt(fromMap, out var grid)
-            ? fromCoordinates.WithEntityId(grid.Owner, EntityManager)
-            : new(MapManager.GetMapEntityId(fromMap.MapId), fromMap.Position);
-
         // Update shot based on the recoil
         toMap = fromMap.Position + angle.ToVec() * mapDirection.Length;
         mapDirection = toMap - fromMap.Position;
-        var gunVelocity = Physics.GetMapLinearVelocity(gun.Owner);
+        var entityDirection = Transform(fromCoordinates.EntityId).InvWorldMatrix.Transform(toMap) - fromCoordinates.Position;
 
         // I must be high because this was getting tripped even when true.
         // DebugTools.Assert(direction != Vector2.Zero);
@@ -121,15 +116,15 @@ public sealed partial class GunSystem : SharedGunSystem
 
                             for (var i = 0; i < cartridge.Count; i++)
                             {
-                                var uid = Spawn(cartridge.Prototype, fromEnt);
-                                ShootProjectile(uid, angles[i].ToVec(), gunVelocity, user, gun.ProjectileSpeed);
+                                var uid = Spawn(cartridge.Prototype, fromMap);
+                                ShootProjectile(uid, angles[i].ToVec(), user, gun.ProjectileSpeed);
                                 shotProjectiles.Add(uid);
                             }
                         }
                         else
                         {
-                            var uid = Spawn(cartridge.Prototype, fromEnt);
-                            ShootProjectile(uid, mapDirection, gunVelocity, user, gun.ProjectileSpeed);
+                            var uid = Spawn(cartridge.Prototype, fromMap);
+                            ShootProjectile(uid, mapDirection, user, gun.ProjectileSpeed);
                             shotProjectiles.Add(uid);
                         }
 
@@ -172,7 +167,7 @@ public sealed partial class GunSystem : SharedGunSystem
                         break;
                     }
 
-                    ShootProjectile(newAmmo.Owner, mapDirection, gunVelocity, user, gun.ProjectileSpeed);
+                    ShootProjectile(newAmmo.Owner, mapDirection, user, gun.ProjectileSpeed);
                     break;
                 case HitscanPrototype hitscan:
                     var ray = new CollisionRay(fromMap.Position, mapDirection.Normalized, hitscan.CollisionMask);
@@ -234,15 +229,11 @@ public sealed partial class GunSystem : SharedGunSystem
         }, false);
     }
 
-    public void ShootProjectile(EntityUid uid, Vector2 direction, Vector2 gunVelocity, EntityUid? user = null, float speed = 20f)
+    public void ShootProjectile(EntityUid uid, Vector2 direction, EntityUid? user = null, float speed = 20f)
     {
         var physics = EnsureComp<PhysicsComponent>(uid);
         physics.BodyStatus = BodyStatus.InAir;
-
-        var targetMapVelocity = gunVelocity + direction.Normalized * speed;
-        var currentMapVelocity = Physics.GetMapLinearVelocity(uid, physics);
-        var finalLinear = physics.LinearVelocity + targetMapVelocity - currentMapVelocity;
-        Physics.SetLinearVelocity(physics, finalLinear);
+        Physics.SetLinearVelocity(physics, direction.Normalized * speed);
 
         if (user != null)
         {
