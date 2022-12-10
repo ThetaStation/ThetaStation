@@ -55,3 +55,16 @@
       layers:
         - state: green
         - texture: Markers/jobs.rsi/ertjanitoreva.png
+
+# Space Ship - Poverty
+- type: startingGear
+  id: ShipTestEventStandard
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitOperative
+    back: ClothingBackpackDuffelSyndicateOperative
+    shoes: ClothingShoesBootsMagAdv
+  innerclothingskirt: ClothingUniformJumpsuitOperative
+  satchel: ClothingBackpackDuffelSyndicateOperative
+  duffelbag: ClothingBackpackDuffelSyndicateOperative
+  inhand:
+    right hand: PocketRadar
