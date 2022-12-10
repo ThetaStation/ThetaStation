@@ -1,8 +1,7 @@
-﻿using JetBrains.Annotations;
-namespace Content.Shared.Explosion.ExplosionTypes;
+﻿namespace Content.Shared.Explosion.ExplosionTypes;
 
 /// <summary>
-/// Raised when component with IEmpable interface gets EMP'ed
+/// Raised when entity with EMP component gets EMP'ed
 /// </summary>
 [ByRefEvent]
 public struct EmpEvent

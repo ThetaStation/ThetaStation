@@ -31,13 +31,13 @@ public sealed class ExplosionTypeEmp : ExplosionType
     {
         IEntityManager _entityManager = IoCManager.Resolve<IEntityManager>();
         if (damage == null || intensity == 0) { return; }
-        foreach(IComponent component in _entityManager.GetComponents(entity))
+
+        if (_entityManager.TryGetComponent<EmpComponent>(entity, out var emp))
         {
-            if (component is IEmpable)
+            if (emp.Enabled)
             {
                 var ev = new EmpEvent(intensity);
                 _entityManager.EventBus.RaiseLocalEvent(entity, ref ev, false);
-                break;
             }
         }
     }

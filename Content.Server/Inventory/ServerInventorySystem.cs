@@ -2,6 +2,7 @@ using Content.Server.Storage.Components;
 using Content.Server.Storage.EntitySystems;
 using Content.Server.Temperature.Systems;
 using Content.Shared.Clothing.Components;
+using Content.Shared.Explosion.ExplosionTypes;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
@@ -19,6 +20,7 @@ namespace Content.Server.Inventory
             base.Initialize();
 
             SubscribeLocalEvent<ClothingComponent, UseInHandEvent>(OnUseInHand);
+            SubscribeLocalEvent<ServerStorageComponent, EmpEvent>(OnEmp);
 
             SubscribeNetworkEvent<OpenSlotStorageNetworkMessage>(OnOpenSlotStorage);
         }
@@ -39,6 +41,15 @@ namespace Content.Server.Inventory
             if (TryGetSlotEntity(uid, ev.Slot, out var entityUid) && TryComp<ServerStorageComponent>(entityUid, out var storageComponent))
             {
                 _storageSystem.OpenStorageUI(entityUid.Value, uid, storageComponent);
+            }
+        }
+
+        private void OnEmp(EntityUid uid, ServerStorageComponent component, ref EmpEvent args)
+        {
+            if (component.StoredEntities is null) { return; }
+            foreach (EntityUid entity in component.StoredEntities)
+            {
+                EntityManager.EventBus.RaiseLocalEvent(entity, args, false);
             }
         }
 

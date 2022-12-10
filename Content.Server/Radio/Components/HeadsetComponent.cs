@@ -11,7 +11,7 @@ namespace Content.Server.Radio.Components;
 /// </summary>
 [RegisterComponent]
 [Access(typeof(HeadsetSystem))]
-public sealed class HeadsetComponent : Component, IEmpable
+public sealed class HeadsetComponent : Component
 {
     [DataField("channels", customTypeSerializer: typeof(PrototypeIdHashSetSerializer<RadioChannelPrototype>))]
     public readonly HashSet<string> Channels = new() { "Common" };
