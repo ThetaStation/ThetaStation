@@ -1,0 +1,8 @@
+﻿- type: gameRule
+  id: ShipEvent
+  config:
+    !type:StationEventRuleConfiguration
+    id: ShipEvent
+    startAnnouncement: station-event-ship-event-event-announcement
+    maxOccurrences: 0 # only shitspawn
+    endAfter: 1

@@ -1,0 +1,30 @@
+name: Pull detached upstream
+
+on:
+  # Possibility to run it manually
+  workflow_dispatch:
+  # Automated
+  schedule:
+    # Run this every day at 02:22 UTC
+    - cron: '22 2 * * *'
+  
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the current repo
+      - uses: actions/checkout@v2
+      # Fetch the history and unshallow the repo so that it can be used
+      - name: Fetch all history for all tags and branches
+        run: git fetch --prune --unshallow
+      # Pull the detached remote and do the magic
+      - name: Pull Detached Remote
+        uses: litetex/pull-detached-remote@v0.3.1
+        with:
+          upstreamrepo: https://github.com/space-syndicate/space-station-14
+          upstreambranch: master
+        env:
+          GITHUB_PAT: ${{ secrets.GH_PAT }}
+          #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
