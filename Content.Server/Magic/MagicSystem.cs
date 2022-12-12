@@ -1,4 +1,4 @@
-﻿using System.Threading;
+using System.Threading;
 using Content.Server.Body.Components;
 using Content.Server.Body.Systems;
 using Content.Server.Coordinates.Helpers;
@@ -40,8 +40,8 @@ public sealed class MagicSystem : EntitySystem
     [Dependency] private readonly SharedActionsSystem _actionsSystem = default!;
     [Dependency] private readonly DoAfterSystem _doAfter = default!;
     [Dependency] private readonly GunSystem _gunSystem = default!;
-    [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
     [Dependency] private readonly PhysicsSystem _physics = default!;
+    [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
 
     public override void Initialize()
     {
