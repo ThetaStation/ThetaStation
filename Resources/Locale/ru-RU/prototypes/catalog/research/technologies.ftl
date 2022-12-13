@@ -50,5 +50,7 @@ technologies-archaeology = Археологическое оборудовани
 technologies-archaeology-description = Передовое оборудование для разгадывания секретов артефактов.
 technologies-adv-parts-technology = Продвинутые компоненты
 technologies-adv-parts-technology-description = Хорошо подходит для улучшения оборудования.
+technologies-ripley-technology = Экзокостюм: Рипли
+technologies-ripley-technology-description = Новейшая разработка в области механизации погрузочных работ.
 technologies-robotics-technology = Робототехника
 technologies-robotics-technology-description = Запчасти для роботов.
