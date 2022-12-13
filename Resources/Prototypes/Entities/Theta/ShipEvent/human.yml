@@ -16,6 +16,8 @@
       enabled: false
     - type: Damageable
       damageModifierSet: Immortal
+    - type: ExplosionResistance
+      damageCoefficient: 0.0
     - type: Barotrauma #no space damage.
       damage:
         types:

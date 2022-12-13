@@ -7,6 +7,7 @@
   components:
     - type: Gun
       fireRate: 4
+      projectileSpeed: 50
     - type: ItemSlots
       slots:
         gun_magazine:
@@ -58,10 +59,8 @@
     - type: ExplodeOnTrigger
     - type: Explosive
       explosionType: Default
-      maxIntensity: 10
-      totalIntensity: 15
+      totalIntensity: 5
       maxTileBreak: 1
-      tileBreakScale: 3
     - type: PointLight
       radius: 3.5
       color: orange
