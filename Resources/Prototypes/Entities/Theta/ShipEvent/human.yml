@@ -54,7 +54,8 @@
       sprite: Markers/jobs.rsi
       layers:
         - state: green
-        - texture: Markers/jobs.rsi/ertjanitoreva.png
+        - sprite: Markers/jobs.rsi
+          state: ertjanitoreva
 
 # Space Ship - Poverty
 - type: startingGear
