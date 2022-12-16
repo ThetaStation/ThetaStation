@@ -302,7 +302,11 @@ namespace Content.Server.Shuttles.Systems
                     range,
                     consoleXform?.Coordinates,
                     consoleXform?.LocalRotation,
-                    docks));
+                    docks,
+                    new List<MobInterfaceState>(),
+                    new List<ProjectilesInterfaceState>()
+                    )
+                );
         }
 
         public override void Update(float frameTime)
