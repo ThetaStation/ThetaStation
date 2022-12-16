@@ -34,7 +34,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 
         // check update rate
         _updateDif += frameTime;
-        if (_updateDif < 1f)
+        if (_updateDif < UpdateRate)
             return;
         _updateDif = 0f;
 
