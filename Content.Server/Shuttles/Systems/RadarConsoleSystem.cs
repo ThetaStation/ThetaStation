@@ -14,7 +14,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
     [Dependency] private readonly TransformSystem _transformSystem = default!;
 
-    private const float UpdateRate = 3f;
+    private float UpdateRate = 1f;
     private float _updateDif;
 
     public override void Initialize()
