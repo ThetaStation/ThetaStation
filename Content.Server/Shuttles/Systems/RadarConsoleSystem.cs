@@ -12,7 +12,6 @@ namespace Content.Server.Shuttles.Systems;
 public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 {
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
-    [Dependency] private readonly TransformSystem _transformSystem = default!;
 
     private float UpdateRate = 1f;
     private float _updateDif;
