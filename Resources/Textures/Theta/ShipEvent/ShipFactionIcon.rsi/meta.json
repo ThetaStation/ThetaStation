@@ -1,1 +1,11 @@
-﻿
+﻿{
+    "size": {
+        "x": 16,
+        "y": 16
+    },
+    "states": {
+        "name": "faction",
+        "flags": {},
+        "directions": 1
+    }
+}
