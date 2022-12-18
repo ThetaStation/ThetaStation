@@ -136,7 +136,7 @@ namespace Content.Server.Pointing.EntitySystems
 
             _rotateToFaceSystem.TryFaceCoordinates(player, mapCoords.Position);
 
-            var arrow = EntityManager.SpawnEntity("PointingArrow", mapCoords);
+            var arrow = EntityManager.SpawnEntity("PointingArrow", coords);
 
             if (TryComp<PointingArrowComponent>(arrow, out var pointing))
             {
