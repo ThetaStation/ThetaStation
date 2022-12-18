@@ -37,6 +37,7 @@
         types:
           Asphyxiation: 0
       suffocationThreshold: -100000
+    - type: ShipEventFaction
 
 - type: entity
   id: SpawnPointShipEvent
