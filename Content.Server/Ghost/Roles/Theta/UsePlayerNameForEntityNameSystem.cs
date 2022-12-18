@@ -1,4 +1,4 @@
-﻿using Content.Server.Ghost.Roles.Components;
+﻿using Content.Server.Ghost.Roles.Theta.Components;
 using Robust.Server.GameObjects;
 
 namespace Content.Server.Ghost.Roles.Theta;
