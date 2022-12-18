@@ -1,4 +1,4 @@
-﻿namespace Content.Server.Ghost.Roles.Components;
+﻿namespace Content.Server.Ghost.Roles.Theta.Components;
 
 /// <summary>
 /// This is used for...

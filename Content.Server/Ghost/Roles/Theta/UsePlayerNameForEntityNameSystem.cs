@@ -1,6 +1,6 @@
 ﻿using Robust.Server.GameObjects;
 
-namespace Content.Server.Ghost.Roles;
+namespace Content.Server.Ghost.Roles.Theta;
 
 public sealed class UsePlayerNameForEntityNameSystem : EntitySystem
 {
