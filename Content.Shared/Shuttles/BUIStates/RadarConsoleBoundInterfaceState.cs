@@ -21,17 +21,19 @@ public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
 
     public readonly List<DockingInterfaceState> Docks;
 
+    // Theta-radar-start
     public readonly List<MobInterfaceState> MobsAround;
 
     public readonly List<ProjectilesInterfaceState> Projectiles;
+    // Theta-radar-end
 
     public RadarConsoleBoundInterfaceState(
         float maxRange,
         EntityCoordinates? coordinates,
         Angle? angle,
         List<DockingInterfaceState> docks,
-        List<MobInterfaceState> mobs,
-        List<ProjectilesInterfaceState> projectiles
+        List<MobInterfaceState> mobs, // Theta-radar
+        List<ProjectilesInterfaceState> projectiles // Theta-radar
         )
     {
         MaxRange = maxRange;
@@ -43,6 +45,7 @@ public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
     }
 }
 
+// Theta-radar-start
 /// <summary>
 /// State of each mobs around radar
 /// </summary>
@@ -63,6 +66,7 @@ public sealed class MobInterfaceState
     public EntityCoordinates Coordinates;
     public EntityUid Entity;
 }
+// Theta-radar-end
 
 /// <summary>
 /// State of each individual docking port for interface purposes

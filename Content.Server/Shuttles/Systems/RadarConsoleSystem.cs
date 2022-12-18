@@ -13,8 +13,10 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 {
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
 
+    // Theta-radar-start
     private float UpdateRate = 1f;
     private float _updateDif;
+    // Theta-radar-end
 
     public override void Initialize()
     {
@@ -27,6 +29,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
         UpdateState(component);
     }
 
+    // Theta-radar-start
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
@@ -87,11 +90,13 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 
         return list;
     }
+    // Theta-radar-end
 
     protected override void UpdateState(RadarConsoleComponent component)
     {
         var xform = Transform(component.Owner);
         var onGrid = xform.ParentUid == xform.GridUid;
+        // Theta-radar-start
         Angle? angle = onGrid ? xform.LocalRotation : Angle.Zero;
         // find correct grid
         while (!onGrid && !xform.ParentUid.Equals(EntityUid.Invalid))
@@ -100,7 +105,9 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
             angle = Angle.Zero;
             onGrid = xform.ParentUid == xform.GridUid;
         }
+        // Theta-radar-end
         EntityCoordinates? coordinates = onGrid ? xform.Coordinates : null;
+        // Angle? angle = onGrid ? xform.LocalRotation : null;
 
         // Use ourself I guess.
         if (TryComp<IntrinsicUIComponent>(component.Owner, out var intrinsic))
@@ -116,18 +123,19 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
             }
         }
 
-        var mobs = GetMobsAround(component);
-        var projectiles = GetProjectilesAround(component);
+        var mobs = GetMobsAround(component); // Theta-radar
+        var projectiles = GetProjectilesAround(component); // Theta-radar
 
         var radarState = new RadarConsoleBoundInterfaceState(
             component.MaxRange,
             coordinates,
             angle,
             new List<DockingInterfaceState>(),
-            mobs,
-            projectiles
+            mobs, // Theta-radar
+            projectiles // Theta-radar
             );
 
-        _uiSystem.TrySetUiState(component.Owner, RadarConsoleUiKey.Key, radarState);
+        // _uiSystem.GetUiOrNull(component.Owner, RadarConsoleUiKey.Key)?.SetState(radarState);
+        _uiSystem.TrySetUiState(component.Owner, RadarConsoleUiKey.Key, radarState); // Theta-radar
     }
 }

@@ -28,8 +28,9 @@ public sealed class ShuttleConsoleBoundInterfaceState : RadarConsoleBoundInterfa
         EntityCoordinates? coordinates,
         Angle? angle,
         List<DockingInterfaceState> docks,
-        List<MobInterfaceState> mobs,
-        List<ProjectilesInterfaceState> projectiles) : base(maxRange, coordinates, angle, docks, mobs, projectiles)
+        List<MobInterfaceState> mobs, // Theta-radar
+        List<ProjectilesInterfaceState> projectiles // Theta-radar
+        ) : base(maxRange, coordinates, angle, docks, mobs, projectiles)
     {
         FTLState = ftlState;
         FTLTime = ftlTime;

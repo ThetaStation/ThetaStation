@@ -61,9 +61,11 @@ public sealed class RadarControl : Control
 
     private Dictionary<EntityUid, List<DockingInterfaceState>> _docks = new();
 
+    // Theta-radar-start
     private List<MobInterfaceState> _mobs = new();
 
     private List<ProjectilesInterfaceState> _projectiles = new();
+    // Theta-radar-end
 
     public bool ShowIFF { get; set; } = true;
     public bool ShowDocks { get; set; } = true;
@@ -109,9 +111,10 @@ public sealed class RadarControl : Control
             grid.Add(state);
         }
 
+        // Theta-radar-start
         _mobs = ls.MobsAround;
         _projectiles = ls.Projectiles;
-
+        // Theta-radar-end
     }
 
     protected override void MouseWheel(GUIMouseWheelEventArgs args)
@@ -200,6 +203,11 @@ public sealed class RadarControl : Control
         var invertedPosition = _coordinates.Value.Position - offset;
         invertedPosition.Y = -invertedPosition.Y;
         // Don't need to transform the InvWorldMatrix again as it's already offset to its position.
+
+        // Theta-radar-start
+        // Draw radar position on the station
+        // handle.DrawCircle(ScalePosition(invertedPosition), 5f, Color.Lime);
+        // Theta-radar-end
 
         var shown = new HashSet<EntityUid>();
 
@@ -291,12 +299,14 @@ public sealed class RadarControl : Control
             DrawDocks(handle, grid.Owner, matty);
         }
 
+        // Theta-radar-start
         DrawProjectiles(handle, offsetMatrix);
 
         DrawMobs(handle, offsetMatrix);
 
         // Draw radar position on the station
         handle.DrawCircle(ScalePosition(invertedPosition), 5f, Color.Lime);
+        // Theta-radar-end
 
         foreach (var (ent, _) in _iffControls)
         {
@@ -322,6 +332,7 @@ public sealed class RadarControl : Control
         _iffControls.Remove(uid);
     }
 
+    // Theta-radar-start
     private void DrawProjectiles(DrawingHandleScreen handle, Matrix3 matrix)
     {
         const float projectileScale = 3f;
@@ -361,6 +372,7 @@ public sealed class RadarControl : Control
             handle.DrawCircle(ScalePosition(uiPosition), 3f, color);
         }
     }
+    // Theta-radar-end
 
     private void DrawDocks(DrawingHandleScreen handle, EntityUid uid, Matrix3 matrix)
     {

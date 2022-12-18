@@ -30,10 +30,12 @@ namespace Content.Server.Shuttles.Systems
         [Dependency] private readonly ShuttleSystem _shuttle = default!;
         [Dependency] private readonly TagSystem _tags = default!;
         [Dependency] private readonly UserInterfaceSystem _ui = default!;
+        // Theta-radar-start
         [Dependency] private readonly RadarConsoleSystem _radarConsoleSystem = default!;
 
         private float UpdateRate = 1f;
         private float _updateDif;
+        // Theta-radar-end
 
         public override void Initialize()
         {
@@ -298,6 +300,7 @@ namespace Content.Server.Shuttles.Systems
             }
 
             docks ??= GetAllDocks();
+            // Theta-radar-start
             List<MobInterfaceState> mobs;
             List<ProjectilesInterfaceState> projectiles;
             if (radar != null)
@@ -310,6 +313,7 @@ namespace Content.Server.Shuttles.Systems
                 mobs = new List<MobInterfaceState>();
                 projectiles = new List<ProjectilesInterfaceState>();
             }
+            // Theta-radar-end
 
             _ui.GetUiOrNull(component.Owner, ShuttleConsoleUiKey.Key)
                 ?.SetState(new ShuttleConsoleBoundInterfaceState(
@@ -320,8 +324,8 @@ namespace Content.Server.Shuttles.Systems
                     consoleXform?.Coordinates,
                     consoleXform?.LocalRotation,
                     docks,
-                    mobs,
-                    projectiles
+                    mobs, // Theta-radar
+                    projectiles // Theta-radar
                     )
                 );
         }
@@ -347,6 +351,7 @@ namespace Content.Server.Shuttles.Systems
                 RemovePilot(comp);
             }
 
+            // Theta-radar-start
             // check update rate
             _updateDif += frameTime;
             if (_updateDif < UpdateRate)
@@ -357,7 +362,7 @@ namespace Content.Server.Shuttles.Systems
             {
                 UpdateState(shuttleConsole);
             }
-
+            // Theta-radar-end
         }
 
         /// <summary>
