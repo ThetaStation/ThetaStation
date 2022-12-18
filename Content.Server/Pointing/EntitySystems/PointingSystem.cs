@@ -136,7 +136,10 @@ namespace Content.Server.Pointing.EntitySystems
 
             _rotateToFaceSystem.TryFaceCoordinates(player, mapCoords.Position);
 
+            // Theta-fix-start
+            // var arrow = EntityManager.SpawnEntity("PointingArrow", mapCoords);
             var arrow = EntityManager.SpawnEntity("PointingArrow", coords);
+            // Theta-fix-end
 
             if (TryComp<PointingArrowComponent>(arrow, out var pointing))
             {
