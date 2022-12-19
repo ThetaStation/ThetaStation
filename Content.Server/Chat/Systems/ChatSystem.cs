@@ -151,22 +151,11 @@ public sealed partial class ChatSystem : SharedChatSystem
         if (string.IsNullOrEmpty(message))
             return;
 
-        // This message may have a radio prefix, and should then be whispered to the resolved radio channel
-        if (checkRadioPrefix)
-        {
-            var (radioMessage, channel) = GetRadioPrefix(source, message);
-            if (channel != null)
-            {
-                SendEntityWhisper(source, radioMessage, hideChat, hideGlobalGhostChat, channel, nameOverride);
-                return;
-            }
-        }
-
         // Otherwise, send whatever type.
         switch (desiredType)
         {
             case InGameICChatType.Speak:
-                SendEntitySpeak(source, message, hideChat, hideGlobalGhostChat, nameOverride);
+                SendEntitySpeak(source, message, hideChat, hideGlobalGhostChat, nameOverride, checkRadioPrefix);
                 break;
             case InGameICChatType.Whisper:
                 SendEntityWhisper(source, message, hideChat, hideGlobalGhostChat, null, nameOverride);
@@ -266,12 +255,26 @@ public sealed partial class ChatSystem : SharedChatSystem
 
     #region Private API
 
-    private void SendEntitySpeak(EntityUid source, string originalMessage, bool hideChat, bool hideGlobalGhostChat, string? nameOverride)
+    private void SendEntitySpeak(EntityUid source, string originalMessage, bool hideChat, bool hideGlobalGhostChat, string? nameOverride, bool checkRadioPrefix)
     {
         if (!_actionBlocker.CanSpeak(source))
             return;
 
-        var message = TransformSpeech(source, originalMessage);
+        RadioChannelPrototype? channel = null;
+        string message;
+
+        if (checkRadioPrefix)
+            (message, channel) = GetRadioPrefix(source, originalMessage);
+        else
+            message = originalMessage;
+
+        if (channel != null)
+        {
+            SendEntityWhisper(source, message, hideChat, hideGlobalGhostChat, channel, nameOverride);
+            return;
+        }
+
+        message = TransformSpeech(source, message);
         if (message.Length == 0)
             return;
 
@@ -294,7 +297,7 @@ public sealed partial class ChatSystem : SharedChatSystem
 
         SendInVoiceRange(ChatChannel.Local, message, wrappedMessage, source, hideChat, hideGlobalGhostChat);
 
-        var ev = new EntitySpokeEvent(source, message, null, null);
+        var ev = new EntitySpokeEvent(source, message, channel, null);
         RaiseLocalEvent(source, ev, true);
 
         // To avoid logging any messages sent by entities that are not players, like vendors, cloning, etc.

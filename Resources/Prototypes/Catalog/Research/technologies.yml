@@ -292,7 +292,6 @@
   requiredTechnologies:
   - BasicResearch
   unlockedRecipes:
-  - IntercomElectronics
   - ConveyorBeltAssembly
   - FlashlightLantern
   - FireExtinguisher
