@@ -18,6 +18,7 @@ public sealed class ShipEventFactionSystem : EntitySystem
 	[Dependency] private readonly IEntityManager entMan = default!;
 	[Dependency] private readonly ChatSystem chatSystem = default!;
     [Dependency] private readonly IChatManager chatMan = default!;
+    [Dependency] private readonly IdentitySystem identitySystem = default!;
 
     private const float TeamCheckInterval = 5;
     private float TeamCheckTimer = 0;
@@ -93,7 +94,7 @@ public sealed class ShipEventFactionSystem : EntitySystem
 			mindComp.Mind!.AddRole(shipEventRole);
 			teams[spawnerEntity].AddMember(shipEventRole);
             entMan.GetEntityQuery<MetaDataComponent>().GetComponent(entity).EntityName += $" ({teams[spawnerEntity].Name})";
-            if (entMan.TrySystem<IdentitySystem>(out IdentitySystem? system)) { system.QueueIdentityUpdate(entity); }
+            identitySystem.QueueIdentityUpdate(entity);
         }
 	}
 
