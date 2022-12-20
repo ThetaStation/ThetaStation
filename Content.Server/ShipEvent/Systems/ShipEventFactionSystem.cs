@@ -142,9 +142,9 @@ public sealed class ShipEventFactionSystem : EntitySystem
 			if (faction.GetLivingMembers().Count == 0 && faction.Members.Any())
 			{
 				RemoveTeam(
-				spawnerEntity,
-				false,
-				Loc.GetString("shipevent-remove-dead"));
+				    spawnerEntity,
+				    false,
+				    Loc.GetString("shipevent-remove-dead"));
 			}
             else if (!HasShuttleConsole(shipGrid))
             {
