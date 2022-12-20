@@ -19,6 +19,9 @@ public sealed class ShipEventFactionSystem : EntitySystem
 	[Dependency] private readonly ChatSystem chatSystem = default!;
     [Dependency] private readonly IChatManager chatMan = default!;
 
+    private const float TeamCheckInterval = 5;
+    private float TeamCheckTimer = 0;
+
 	private int LastTeamNumber;
 
 	/// <summary>
@@ -39,9 +42,18 @@ public sealed class ShipEventFactionSystem : EntitySystem
     }
 
 	public override void Update(float frametime)
-	{
-		CheckTeams();
-	}
+    {
+        if (TeamCheckTimer < TeamCheckInterval)
+        {
+            TeamCheckTimer += frametime;
+            return;
+        }
+        else
+        {
+            TeamCheckTimer -= TeamCheckInterval;
+            CheckTeams();
+        }
+    }
 
 	private void OnSpawn(EntityUid entity, ShipEventFactionComponent component, GhostRoleSpawnerUsedEvent args)
 	{
