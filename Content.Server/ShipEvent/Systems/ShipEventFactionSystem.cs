@@ -1,12 +1,15 @@
 ﻿using System.Linq;
+using Content.Server.Actions;
+using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
 using Content.Server.Ghost.Roles.Events;
+using Content.Server.IdentityManagement;
 using Content.Server.Mind.Components;
 using Content.Server.Roles;
 using Content.Server.ShipEvent.Components;
 using Content.Server.Shuttles.Components;
-using Content.Shared.IdentityManagement.Components;
-using Content.Shared.Shuttles.Components;
+using Content.Shared.Actions;
+using Content.Shared.Toggleable;
 
 namespace Content.Server.ShipEvent.Systems;
 
@@ -14,6 +17,7 @@ public sealed class ShipEventFactionSystem : EntitySystem
 {
 	[Dependency] private readonly IEntityManager entMan = default!;
 	[Dependency] private readonly ChatSystem chatSystem = default!;
+    [Dependency] private readonly IChatManager chatMan = default!;
 
 	private int LastTeamNumber;
 
@@ -24,11 +28,15 @@ public sealed class ShipEventFactionSystem : EntitySystem
 
 	private Dictionary<EntityUid, PlayerFaction> teams = new();
 
-	public override void Initialize()
+    private Dictionary<EntityUid, string> shipNames = new();
+
+    public override void Initialize()
 	{
 		base.Initialize();
 		SubscribeLocalEvent<ShipEventFactionComponent, GhostRoleSpawnerUsedEvent>(OnSpawn);
-	}
+        SubscribeLocalEvent<ShipEventFactionViewComponent, ToggleActionEvent>(OnView);
+        SubscribeLocalEvent<ShipEventFactionViewComponent, ComponentInit>(OnViewInit);
+    }
 
 	public override void Update(float frametime)
 	{
@@ -41,7 +49,30 @@ public sealed class ShipEventFactionSystem : EntitySystem
 		AddToTeam(args.Spawned, args.Spawner);
 	}
 
-	private void AddToTeam(EntityUid entity, EntityUid spawnerEntity)
+    private void OnView(EntityUid entity, ShipEventFactionViewComponent component, ToggleActionEvent args)
+    {
+        string result = $"\n{Loc.GetString("shipevent-teamview-heading")}";
+        result += $"\n{Loc.GetString("shipevent-teamview-heading2")}";
+        foreach (EntityUid spawnerEntity in teams.Keys)
+        {
+            result += $"\n'{teams[spawnerEntity].Name}' - '{shipNames[spawnerEntity]}' - {teams[spawnerEntity].GetLivingMembers().Count}";
+        }
+
+        if (entMan.TryGetComponent<MindComponent>(entity, out var mindComp))
+        {
+            if (mindComp.Mind!.TryGetSession(out var session)) { chatMan.DispatchServerMessage(session, result); }
+        }
+    }
+
+    private void OnViewInit(EntityUid entity, ShipEventFactionViewComponent view, ComponentInit args)
+    {
+        if (entMan.TryGetComponent<ActionsComponent>(entity, out var actComp))
+        {
+            if (entMan.TrySystem<ActionsSystem>(out var actSys)) { actSys.AddAction(entity, view.ToggleAction, null, actComp); }
+        }
+    }
+
+    private void AddToTeam(EntityUid entity, EntityUid spawnerEntity)
 	{
 		if (entMan.TryGetComponent<MindComponent>(entity, out var mindComp))
 		{
@@ -49,7 +80,8 @@ public sealed class ShipEventFactionSystem : EntitySystem
 			Role shipEventRole = new ShipEventRole(mindComp.Mind!);
 			mindComp.Mind!.AddRole(shipEventRole);
 			teams[spawnerEntity].AddMember(shipEventRole);
-            mindComp.Mind.CharacterName += $"(Team №{teams[spawnerEntity].Name})";
+            entMan.GetEntityQuery<MetaDataComponent>().GetComponent(entity).EntityName += $" ({teams[spawnerEntity].Name})";
+            if (entMan.TrySystem<IdentitySystem>(out IdentitySystem? system)) { system.QueueIdentityUpdate(entity); }
         }
 	}
 
@@ -57,6 +89,7 @@ public sealed class ShipEventFactionSystem : EntitySystem
 	{
 		(EntityUid shipGrid, string shipName) = GetShipData(spawnerEntity);
 		teams[spawnerEntity] = new PlayerFaction(GenerateTeamName(), "/Textures/Theta/ShipEvent/ShipFactionIcon.rsi");
+        shipNames[spawnerEntity] = shipName;
 		if(!silent)
 		{
 			Announce(Loc.GetString(
@@ -95,6 +128,17 @@ public sealed class ShipEventFactionSystem : EntitySystem
 		foreach (EntityUid spawnerEntity in teams.Keys)
 		{
 			PlayerFaction faction = teams[spawnerEntity];
+            (EntityUid shipGrid, string shipName) = GetShipData(spawnerEntity);
+            if (shipName != shipNames[spawnerEntity])
+            {
+                string message = Loc.GetString(
+                    "shipevent-team-shiprename",
+                    ("teamname", teams[spawnerEntity].Name),
+                    ("oldname", shipNames[spawnerEntity]),
+                    ("newname", shipName));
+                Announce(message);
+                shipNames[spawnerEntity] = shipName;
+            }
 			if (faction.GetLivingMembers().Count == 0 && faction.Members.Any())
 			{
 				RemoveTeam(
@@ -102,7 +146,7 @@ public sealed class ShipEventFactionSystem : EntitySystem
 				false,
 				Loc.GetString("shipevent-remove-dead"));
 			}
-            else if (!HasShuttleConsole(spawnerEntity))
+            else if (!HasShuttleConsole(shipGrid))
             {
                 RemoveTeam(
                     spawnerEntity,
@@ -132,12 +176,11 @@ public sealed class ShipEventFactionSystem : EntitySystem
 		return ((EntityUid)shipGrid, shipName);
 	}
 
-    private bool HasShuttleConsole(EntityUid spawnerEntity)
+    private bool HasShuttleConsole(EntityUid shipEntity)
     {
-        (EntityUid shipGrid, string shipName) = GetShipData(spawnerEntity);
         foreach (ShuttleConsoleComponent console in entMan.EntityQuery<ShuttleConsoleComponent>())
         {
-            if (Transform(console.Owner).GridUid == shipGrid) { return true; }
+            if (Transform(console.Owner).GridUid == shipEntity) { return true; }
         }
         return false;
     }

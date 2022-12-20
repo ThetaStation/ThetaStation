@@ -38,6 +38,14 @@
           Asphyxiation: 0
       suffocationThreshold: -100000
     - type: ShipEventFaction
+    - type: ShipEventFactionView
+      toggle:
+        icon: { sprite: "/Textures/Theta/ShipEvent/ShipFactionIcon.rsi", state: icon }
+        iconOn: "/Textures/Theta/ShipEvent/ShipFactionIcon.rsi"
+        name: shipevent-teamview-toggle-name
+        description: shipevent-teamview-toggle-desc
+        itemIconStyle: NoItem
+        event: !type:ToggleActionEvent
 
 - type: entity
   id: SpawnPointShipEvent

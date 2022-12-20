@@ -4,7 +4,7 @@
         "y": 16
     },
     "states": {
-        "name": "faction",
+        "name": "icon",
         "flags": {},
         "directions": 1
     }
