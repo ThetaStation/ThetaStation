@@ -19,6 +19,7 @@ public sealed class ShipEventFactionSystem : EntitySystem
 	[Dependency] private readonly ChatSystem chatSystem = default!;
     [Dependency] private readonly IChatManager chatMan = default!;
     [Dependency] private readonly IdentitySystem identitySystem = default!;
+    [Dependency] private readonly ActionsSystem actionsSystem = default!;
 
     private const float TeamCheckInterval = 5;
     private float TeamCheckTimer = 0;
@@ -79,10 +80,7 @@ public sealed class ShipEventFactionSystem : EntitySystem
 
     private void OnViewInit(EntityUid entity, ShipEventFactionViewComponent view, ComponentInit args)
     {
-        if (entMan.TryGetComponent<ActionsComponent>(entity, out var actComp))
-        {
-            if (entMan.TrySystem<ActionsSystem>(out var actSys)) { actSys.AddAction(entity, view.ToggleAction, null, actComp); }
-        }
+        if (entMan.TryGetComponent<ActionsComponent>(entity, out var actComp)) { actionsSystem.AddAction(entity, view.ToggleAction, null, actComp); }
     }
 
     private void AddToTeam(EntityUid entity, EntityUid spawnerEntity)
