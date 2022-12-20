@@ -158,7 +158,7 @@ public sealed class ShipEventFactionSystem : EntitySystem
 
 	private void Announce(string message)
 	{
-		chatSystem.DispatchGlobalAnnouncement(message, Loc.GetString("shipevent-announcement-title"));
+        chatSystem.DispatchGlobalAnnouncement(message, Loc.GetString("shipevent-announcement-title"));
 	}
 
 	private string GenerateTeamName()

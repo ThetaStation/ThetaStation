@@ -40,7 +40,7 @@
     - type: ShipEventFaction
     - type: ShipEventFactionView
       toggle:
-        icon: { sprite: "/Textures/Theta/ShipEvent/ShipFactionIcon.rsi", state: icon }
+        icon: { sprite: "/Textures/Theta/ShipEvent/ShipTeamView.rsi", state: icon }
         iconOn: "/Textures/Theta/ShipEvent/ShipFactionIcon.rsi"
         name: shipevent-teamview-toggle-name
         description: shipevent-teamview-toggle-desc
