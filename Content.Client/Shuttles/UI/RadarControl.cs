@@ -75,11 +75,22 @@ public sealed class RadarControl : Control
 
     public Action<float>? OnRadarRangeChanged;
 
+    private List<Vector2> lastClicks = new();
+
     public RadarControl()
     {
         IoCManager.InjectDependencies(this);
         MinSize = (SizeFull, SizeFull);
         RectClipContent = true;
+
+        OnKeyBindDown += CalculateMousePose;
+    }
+
+    private void CalculateMousePose(GUIBoundKeyEventArgs args)
+    {
+        var offsetMatrix = GetOffsetMatrix(0);
+        var relativePositionToCoordinates = RelativePositionToCoordinates(args.RelativePixelPosition, offsetMatrix);
+        lastClicks.Add(relativePositionToCoordinates);
     }
 
     public void SetMatrix(EntityCoordinates? coordinates, Angle? angle)
@@ -123,6 +134,21 @@ public sealed class RadarControl : Control
     public void AddRadarRange(float value)
     {
         _actualRadarRange = Math.Clamp(_actualRadarRange + value, _radarMinRange, _radarMaxRange);
+    }
+
+    private Matrix3 GetOffsetMatrix(Angle rotation)
+    {
+        if (_coordinates == null || _rotation == null)
+            return Matrix3.Zero;
+
+        var mapPosition = _coordinates.Value.ToMap(_entManager);
+        if (mapPosition.MapId == MapId.Nullspace)
+            return Matrix3.Zero;
+
+        var offsetMatrix = Matrix3.CreateTransform(
+            mapPosition.Position,
+            rotation);
+        return offsetMatrix;
     }
 
     protected override void Draw(DrawingHandleScreen handle)
@@ -170,17 +196,20 @@ public sealed class RadarControl : Control
         var bodyQuery = _entManager.GetEntityQuery<PhysicsComponent>();
 
         var mapPosition = _coordinates.Value.ToMap(_entManager);
-
-        if (mapPosition.MapId == MapId.Nullspace || !xformQuery.TryGetComponent(_coordinates.Value.EntityId, out var xform))
+        if (!xformQuery.TryGetComponent(_coordinates.Value.EntityId, out var xform))
+        {
+            Clear();
+            return;
+        }
+        var offsetMatrix = GetOffsetMatrix(xform.WorldRotation - _rotation.Value);
+        if (offsetMatrix.Equals(Matrix3.Zero))
         {
             Clear();
             return;
         }
 
+        offsetMatrix = offsetMatrix.Invert();
         var offset = _coordinates.Value.Position;
-        var offsetMatrix = Matrix3.CreateInverseTransform(
-            mapPosition.Position,
-            xform.WorldRotation - _rotation.Value);
 
         // Draw our grid in detail
         var ourGridId = _coordinates.Value.GetGridUid(_entManager);
@@ -297,6 +326,13 @@ public sealed class RadarControl : Control
 
         // Draw radar position on the station
         handle.DrawCircle(ScalePosition(invertedPosition), 5f, Color.Lime);
+
+        foreach (var vector2 in lastClicks)
+        {
+            var uiPosition = offsetMatrix.Transform(vector2);
+            uiPosition.Y = -uiPosition.Y;
+            handle.DrawCircle(ScalePosition(uiPosition), 5f, Color.Aqua);
+        }
 
         foreach (var (ent, _) in _iffControls)
         {
@@ -436,5 +472,11 @@ public sealed class RadarControl : Control
     private Vector2 ScalePosition(Vector2 value)
     {
         return value * MinimapScale + MidPoint;
+    }
+
+    private Vector2 RelativePositionToCoordinates(Vector2 pos, Matrix3 matrix)
+    {
+        var removeScale = (pos - MidPoint) / MinimapScale;
+        return matrix.Transform(removeScale);
     }
 }
