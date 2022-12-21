@@ -56,7 +56,7 @@ public sealed class ShipEventFactionSystem : EntitySystem
 
 	private void OnSpawn(EntityUid entity, ShipEventFactionComponent component, GhostRoleSpawnerUsedEvent args)
 	{
-		if (!teams.ContainsKey(args.Spawner)){ CreateTeam(args.Spawner); }
+		if (!_teams.ContainsKey(args.Spawner)){ CreateTeam(args.Spawner); }
 		AddToTeam(args.Spawned, args.Spawner);
 	}
 
@@ -64,9 +64,9 @@ public sealed class ShipEventFactionSystem : EntitySystem
     {
         string result = $"\n{Loc.GetString("shipevent-teamview-heading")}";
         result += $"\n{Loc.GetString("shipevent-teamview-heading2")}";
-        foreach (EntityUid spawnerEntity in teams.Keys)
+        foreach (EntityUid spawnerEntity in _teams.Keys)
         {
-            result += $"\n'{teams[spawnerEntity].Name}' - '{shipNames[spawnerEntity]}' - {teams[spawnerEntity].GetLivingMembers().Count}";
+            result += $"\n'{_teams[spawnerEntity].Name}' - '{shipNames[spawnerEntity]}' - {_teams[spawnerEntity].GetLivingMembers().Count}";
         }
 
         if (entMan.TryGetComponent<MindComponent>(entity, out var mindComp))
@@ -87,8 +87,8 @@ public sealed class ShipEventFactionSystem : EntitySystem
 			if (!mindComp.HasMind) { return; }
 			Role shipEventRole = new ShipEventRole(mindComp.Mind!);
 			mindComp.Mind!.AddRole(shipEventRole);
-			teams[spawnerEntity].AddMember(shipEventRole);
-            entMan.GetEntityQuery<MetaDataComponent>().GetComponent(entity).EntityName += $" ({teams[spawnerEntity].Name})";
+			_teams[spawnerEntity].AddMember(shipEventRole);
+            entMan.GetEntityQuery<MetaDataComponent>().GetComponent(entity).EntityName += $" ({_teams[spawnerEntity].Name})";
             identitySystem.QueueIdentityUpdate(entity);
         }
 	}
@@ -96,13 +96,13 @@ public sealed class ShipEventFactionSystem : EntitySystem
 	private void CreateTeam(EntityUid spawnerEntity, bool silent = false)
 	{
 		(EntityUid shipGrid, string shipName) = GetShipData(spawnerEntity);
-		teams[spawnerEntity] = new PlayerFaction(GenerateTeamName(), "/Textures/Theta/ShipEvent/ShipFactionIcon.rsi");
+		_teams[spawnerEntity] = new PlayerFaction(GenerateTeamName(), "/Textures/Theta/ShipEvent/ShipFactionIcon.rsi");
         shipNames[spawnerEntity] = shipName;
 		if(!silent)
 		{
 			Announce(Loc.GetString(
 				"shipevent-team-add",
-				("teamname", teams[spawnerEntity].Name),
+				("teamname", _teams[spawnerEntity].Name),
 				("shipname", shipName)));
 		}
 	}
@@ -117,13 +117,13 @@ public sealed class ShipEventFactionSystem : EntitySystem
 			if (removeReason != "") { _removeReason = removeReason; }
 			string message = Loc.GetString(
 				"shipevent-team-remove",
-				("teamname", teams[spawnerEntity].Name),
+				("teamname", _teams[spawnerEntity].Name),
 				("shipname", shipName),
 				("removereason", _removeReason));
 			Announce(message);
 		}
 
-		teams.Remove(spawnerEntity);
+		_teams.Remove(spawnerEntity);
 		if (shipGrid != EntityUid.Invalid)
 		{
 			entMan.DeleteEntity(shipGrid);
@@ -133,15 +133,15 @@ public sealed class ShipEventFactionSystem : EntitySystem
 
 	private void CheckTeams()
 	{
-		foreach (EntityUid spawnerEntity in teams.Keys)
+		foreach (EntityUid spawnerEntity in _teams.Keys)
 		{
-			PlayerFaction faction = teams[spawnerEntity];
+			PlayerFaction faction = _teams[spawnerEntity];
             (EntityUid shipGrid, string shipName) = GetShipData(spawnerEntity);
             if (shipName != shipNames[spawnerEntity])
             {
                 string message = Loc.GetString(
                     "shipevent-team-shiprename",
-                    ("teamname", teams[spawnerEntity].Name),
+                    ("teamname", _teams[spawnerEntity].Name),
                     ("oldname", shipNames[spawnerEntity]),
                     ("newname", shipName));
                 Announce(message);
