@@ -29,9 +29,9 @@ public sealed class ShipEventFactionSystem : EntitySystem
 	/// <summary>
 	/// Dictionary with all the teams, where spawner uid is the key, and faction is the value
 	/// </summary>
-	public Dictionary<EntityUid, PlayerFaction> Teams => teams;
+	public Dictionary<EntityUid, PlayerFaction> Teams => _teams;
 
-	private Dictionary<EntityUid, PlayerFaction> teams = new();
+	private Dictionary<EntityUid, PlayerFaction> _teams = new();
 
     private Dictionary<EntityUid, string> shipNames = new();
 
