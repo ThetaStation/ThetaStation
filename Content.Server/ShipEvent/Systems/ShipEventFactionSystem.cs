@@ -50,11 +50,8 @@ public sealed class ShipEventFactionSystem : EntitySystem
             TeamCheckTimer += frametime;
             return;
         }
-        else
-        {
-            TeamCheckTimer -= TeamCheckInterval;
-            CheckTeams();
-        }
+        TeamCheckTimer = 0;
+        CheckTeams();
     }
 
 	private void OnSpawn(EntityUid entity, ShipEventFactionComponent component, GhostRoleSpawnerUsedEvent args)
