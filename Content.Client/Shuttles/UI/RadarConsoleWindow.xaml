@@ -2,5 +2,5 @@
                       xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
                       xmlns:ui="clr-namespace:Content.Client.Shuttles.UI"
                       Title="{Loc 'radar-console-window-title'}">
-    <ui:RadarControl Name="RadarScreen"/>
+    <ui:RadarControl Name="RadarScreen" MouseFilter="Stop"/>
 </controls:FancyWindow>

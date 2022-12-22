@@ -88,9 +88,10 @@ public sealed class RadarControl : Control
 
     private void CalculateMousePose(GUIBoundKeyEventArgs args)
     {
-        var offsetMatrix = GetOffsetMatrix(0);
-        var relativePositionToCoordinates = RelativePositionToCoordinates(args.RelativePixelPosition, offsetMatrix);
+        var offsetMatrix = GetOffsetMatrix();
+        var relativePositionToCoordinates = RelativePositionToCoordinates(args.RelativePosition, offsetMatrix);
         lastClicks.Add(relativePositionToCoordinates);
+        args.Handle();
     }
 
     public void SetMatrix(EntityCoordinates? coordinates, Angle? angle)
@@ -136,7 +137,7 @@ public sealed class RadarControl : Control
         _actualRadarRange = Math.Clamp(_actualRadarRange + value, _radarMinRange, _radarMaxRange);
     }
 
-    private Matrix3 GetOffsetMatrix(Angle rotation)
+    private Matrix3 GetOffsetMatrix()
     {
         if (_coordinates == null || _rotation == null)
             return Matrix3.Zero;
@@ -145,9 +146,14 @@ public sealed class RadarControl : Control
         if (mapPosition.MapId == MapId.Nullspace)
             return Matrix3.Zero;
 
+        var xformQuery = _entManager.GetEntityQuery<TransformComponent>();
+
+        if (!xformQuery.TryGetComponent(_coordinates.Value.EntityId, out var xform))
+            return Matrix3.Zero;
+
         var offsetMatrix = Matrix3.CreateTransform(
             mapPosition.Position,
-            rotation);
+            xform.WorldRotation - _rotation.Value);
         return offsetMatrix;
     }
 
@@ -196,12 +202,7 @@ public sealed class RadarControl : Control
         var bodyQuery = _entManager.GetEntityQuery<PhysicsComponent>();
 
         var mapPosition = _coordinates.Value.ToMap(_entManager);
-        if (!xformQuery.TryGetComponent(_coordinates.Value.EntityId, out var xform))
-        {
-            Clear();
-            return;
-        }
-        var offsetMatrix = GetOffsetMatrix(xform.WorldRotation - _rotation.Value);
+        var offsetMatrix = GetOffsetMatrix();
         if (offsetMatrix.Equals(Matrix3.Zero))
         {
             Clear();
@@ -477,6 +478,7 @@ public sealed class RadarControl : Control
     private Vector2 RelativePositionToCoordinates(Vector2 pos, Matrix3 matrix)
     {
         var removeScale = (pos - MidPoint) / MinimapScale;
+        removeScale.Y = -removeScale.Y;
         return matrix.Transform(removeScale);
     }
 }
