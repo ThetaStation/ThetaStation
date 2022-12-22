@@ -331,7 +331,6 @@ public sealed class RadarControl : Control
         foreach (var vector2 in lastClicks)
         {
             var uiPosition = offsetMatrix.Transform(vector2);
-            uiPosition.Y = -uiPosition.Y;
             handle.DrawCircle(ScalePosition(uiPosition), 5f, Color.Aqua);
         }
 
@@ -478,7 +477,6 @@ public sealed class RadarControl : Control
     private Vector2 RelativePositionToCoordinates(Vector2 pos, Matrix3 matrix)
     {
         var removeScale = (pos - MidPoint) / MinimapScale;
-        removeScale.Y = -removeScale.Y;
         return matrix.Transform(removeScale);
     }
 }
