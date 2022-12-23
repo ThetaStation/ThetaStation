@@ -1,6 +1,7 @@
 using Content.Client.Stylesheets;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
+using Content.Shared.Theta.ShipEvent;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
@@ -77,6 +78,10 @@ public sealed class RadarControl : Control
 
     private List<Vector2> lastClicks = new();
 
+    private List<EntityUid> _cannons = new();
+
+    private int MouseCD = 0;
+
     public RadarControl()
     {
         IoCManager.InjectDependencies(this);
@@ -86,12 +91,32 @@ public sealed class RadarControl : Control
         OnKeyBindDown += CalculateMousePose;
     }
 
+    protected override void MouseMove(GUIMouseMoveEventArgs args)
+    {
+        base.MouseMove(args);
+        if (MouseCD < 60)
+        {
+            MouseCD++;
+            return;
+        }
+
+        MouseCD = 0;
+        //RotateCannons(args.RelativePosition);
+        args.Handle();
+    }
+
     private void CalculateMousePose(GUIBoundKeyEventArgs args)
     {
-        var offsetMatrix = GetOffsetMatrix();
-        var relativePositionToCoordinates = RelativePositionToCoordinates(args.RelativePosition, offsetMatrix);
-        lastClicks.Add(relativePositionToCoordinates);
+        lastClicks.Add(RotateCannons(args.RelativePosition));
         args.Handle();
+    }
+
+    private Vector2 RotateCannons(Vector2 mouseRelativePosition)
+    {
+        var offsetMatrix = GetOffsetMatrix();
+        var relativePositionToCoordinates = RelativePositionToCoordinates(mouseRelativePosition, offsetMatrix);
+        _entManager.RaisePredictiveEvent(new RotateCannonEvent(relativePositionToCoordinates, _cannons));
+        return relativePositionToCoordinates;
     }
 
     public void SetMatrix(EntityCoordinates? coordinates, Angle? angle)
@@ -123,6 +148,8 @@ public sealed class RadarControl : Control
 
         _mobs = ls.MobsAround;
         _projectiles = ls.Projectiles;
+
+        _cannons = ls.Cannons;
 
     }
 
@@ -210,7 +237,6 @@ public sealed class RadarControl : Control
         }
 
         offsetMatrix = offsetMatrix.Invert();
-        var offset = _coordinates.Value.Position;
 
         // Draw our grid in detail
         var ourGridId = _coordinates.Value.GetGridUid(_entManager);
@@ -226,10 +252,6 @@ public sealed class RadarControl : Control
 
             DrawDocks(handle, ourGridId.Value, matrix);
         }
-
-        var invertedPosition = _coordinates.Value.Position - offset;
-        invertedPosition.Y = -invertedPosition.Y;
-        // Don't need to transform the InvWorldMatrix again as it's already offset to its position.
 
         var shown = new HashSet<EntityUid>();
 
@@ -325,12 +347,18 @@ public sealed class RadarControl : Control
 
         DrawMobs(handle, offsetMatrix);
 
+        var offset = _coordinates.Value.Position;
+        var invertedPosition = _coordinates.Value.Position - offset;
+        invertedPosition.Y = -invertedPosition.Y;
+        // Don't need to transform the InvWorldMatrix again as it's already offset to its position.
+
         // Draw radar position on the station
         handle.DrawCircle(ScalePosition(invertedPosition), 5f, Color.Lime);
 
         foreach (var vector2 in lastClicks)
         {
             var uiPosition = offsetMatrix.Transform(vector2);
+            uiPosition.Y = -uiPosition.Y;
             handle.DrawCircle(ScalePosition(uiPosition), 5f, Color.Aqua);
         }
 
@@ -477,6 +505,7 @@ public sealed class RadarControl : Control
     private Vector2 RelativePositionToCoordinates(Vector2 pos, Matrix3 matrix)
     {
         var removeScale = (pos - MidPoint) / MinimapScale;
+        removeScale.Y = -removeScale.Y;
         return matrix.Transform(removeScale);
     }
 }

@@ -1,0 +1,60 @@
+﻿- type: entity
+  id: ShipEventCannon
+  parent: BaseStructure
+  suffix: SHIPEVENT
+  abstract: true
+  components:
+    - type: Cannon
+    - type: ContainerContainer
+      containers:
+        ballistic-ammo: !type:Container
+    - type: Sprite
+      netsync: false
+      sprite: Objects/Weapons/Guns/turrets.rsi
+      drawdepth: WallMountedItems
+      layers:
+        - state: syndie_broken
+    - type: InteractionPopup
+      interactDelay: 0.2
+      successChance: 0.8
+      interactSuccessString: petting-success-generic
+      interactFailureString: petting-failure-generic
+      interactSuccessSound:
+        path: /Audio/Effects/double_beep.ogg
+    - type: Damageable
+      damageContainer: Inorganic
+
+- type: entity
+  id: ShipEventCannonBallistic
+  parent: ShipEventCannon
+  name: ballistic cannon
+  description: A ballistic machine gun auto-turret.
+  components:
+    - type: Sprite
+      layers:
+        - state: syndie_lethal
+    - type: Gun
+      fireRate: 6
+      selectedMode: FullAuto
+      availableModes:
+        - FullAuto
+      soundGunshot: /Audio/Weapons/Guns/Gunshots/gun_sentry.ogg
+    - type: BallisticAmmoProvider
+      proto: CartridgeCaselessRifle
+      capacity: 500
+    - type: Destructible
+      thresholds:
+        - trigger:
+            !type:DamageTrigger
+            damage: 300
+          behaviors:
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+            - !type:PlaySoundBehavior
+              sound:
+                path: /Audio/Effects/metalbreak.ogg
+            - !type:SpawnEntitiesBehavior
+              spawn:
+                SheetSteel1:
+                  min: 3
+                  max: 5

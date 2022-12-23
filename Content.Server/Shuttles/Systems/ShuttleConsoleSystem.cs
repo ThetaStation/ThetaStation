@@ -300,15 +300,18 @@ namespace Content.Server.Shuttles.Systems
             docks ??= GetAllDocks();
             List<MobInterfaceState> mobs;
             List<ProjectilesInterfaceState> projectiles;
+            List<EntityUid> cannons;
             if (radar != null)
             {
                 mobs = _radarConsoleSystem.GetMobsAround(radar);
                 projectiles = _radarConsoleSystem.GetProjectilesAround(radar);
+                cannons = _radarConsoleSystem.GetCannonsOnGrid(radar);
             }
             else
             {
                 mobs = new List<MobInterfaceState>();
                 projectiles = new List<ProjectilesInterfaceState>();
+                cannons = new List<EntityUid>();
             }
 
             _ui.GetUiOrNull(component.Owner, ShuttleConsoleUiKey.Key)
@@ -321,7 +324,8 @@ namespace Content.Server.Shuttles.Systems
                     consoleXform?.LocalRotation,
                     docks,
                     mobs,
-                    projectiles
+                    projectiles,
+                    cannons
                     )
                 );
         }

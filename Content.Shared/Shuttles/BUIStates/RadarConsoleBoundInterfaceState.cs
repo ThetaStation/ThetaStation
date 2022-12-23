@@ -25,14 +25,16 @@ public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
 
     public readonly List<ProjectilesInterfaceState> Projectiles;
 
+    public readonly List<EntityUid> Cannons;
+
     public RadarConsoleBoundInterfaceState(
         float maxRange,
         EntityCoordinates? coordinates,
         Angle? angle,
         List<DockingInterfaceState> docks,
         List<MobInterfaceState> mobs,
-        List<ProjectilesInterfaceState> projectiles
-        )
+        List<ProjectilesInterfaceState> projectiles,
+        List<EntityUid> cannons)
     {
         MaxRange = maxRange;
         Coordinates = coordinates;
@@ -40,6 +42,7 @@ public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
         Docks = docks;
         MobsAround = mobs;
         Projectiles = projectiles;
+        Cannons = cannons;
     }
 }
 

@@ -4,6 +4,7 @@ using Content.Server.UserInterface;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
+using Content.Shared.Theta.ShipEvent;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
 
@@ -88,13 +89,27 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
         return list;
     }
 
+    public List<EntityUid> GetCannonsOnGrid(RadarConsoleComponent component)
+    {
+        var list = new List<EntityUid>();
+        var myGrid = Transform(component.Owner).GridUid;
+        foreach (var cannon in EntityQuery<CannonComponent>())
+        {
+            if(Transform(cannon.Owner).GridUid != myGrid)
+                continue;
+            list.Add(cannon.Owner);
+        }
+
+        return list;
+    }
+
     protected override void UpdateState(RadarConsoleComponent component)
     {
         var xform = Transform(component.Owner);
         var onGrid = xform.ParentUid == xform.GridUid;
         Angle? angle = onGrid ? xform.LocalRotation : Angle.Zero;
         // find correct grid
-        while (!onGrid && !xform.ParentUid.Equals(EntityUid.Invalid))
+        while (!onGrid && !xform.ParentUid.IsValid())
         {
             xform = Transform(xform.ParentUid);
             angle = Angle.Zero;
@@ -118,6 +133,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 
         var mobs = GetMobsAround(component);
         var projectiles = GetProjectilesAround(component);
+        var cannons = GetCannonsOnGrid(component);
 
         var radarState = new RadarConsoleBoundInterfaceState(
             component.MaxRange,
@@ -125,9 +141,11 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
             angle,
             new List<DockingInterfaceState>(),
             mobs,
-            projectiles
+            projectiles,
+            cannons
             );
 
         _uiSystem.TrySetUiState(component.Owner, RadarConsoleUiKey.Key, radarState);
     }
+
 }
