@@ -1,12 +1,13 @@
 ﻿using Content.Shared.Interaction;
+using Robust.Shared.Network;
 using Robust.Shared.Serialization;
-using Serilog;
 
 namespace Content.Shared.Theta.ShipEvent;
 
 public sealed class SharedCannonSystem : EntitySystem
 {
-    [Dependency] private RotateToFaceSystem _rotateToFaceSystem = default!;
+    [Dependency] private readonly RotateToFaceSystem _rotateToFaceSystem = default!;
+    [Dependency] private readonly INetManager _net = default!;
 
     private Dictionary<EntityUid, Vector2> _toUpdateRotation = new();
 
@@ -18,9 +19,11 @@ public sealed class SharedCannonSystem : EntitySystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
+
         foreach (var (uid, coordinates) in _toUpdateRotation)
         {
-            _rotateToFaceSystem.TryFaceCoordinates(uid, coordinates);
+            if(_net.IsServer)
+                _rotateToFaceSystem.TryFaceCoordinates(uid, coordinates);
         }
         _toUpdateRotation.Clear();
     }
