@@ -5,6 +5,7 @@ using Content.Shared.Theta.ShipEvent;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Input;
 using Robust.Shared.Map;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Collision.Shapes;
@@ -102,11 +103,13 @@ public sealed class RadarControl : Control
 
         MouseCD = 0;
         //RotateCannons(args.RelativePosition);
-        args.Handle();
+        //args.Handle();
     }
 
     private void CalculateMousePose(GUIBoundKeyEventArgs args)
     {
+        if(args.Function != EngineKeyFunctions.Use)
+            return;
         lastClicks.Add(RotateCannons(args.RelativePosition));
         args.Handle();
     }
