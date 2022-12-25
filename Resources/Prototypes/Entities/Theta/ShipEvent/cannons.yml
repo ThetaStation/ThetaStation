@@ -4,6 +4,7 @@
   suffix: SHIPEVENT
   abstract: true
   components:
+    - type: CombatMode
     - type: Cannon
     - type: ContainerContainer
       containers:
@@ -34,7 +35,12 @@
       layers:
         - state: syndie_lethal
     - type: Gun
-      fireRate: 6
+      minAngle: 4
+      maxAngle: 20
+      angleIncrease: 4
+      angleDecay: 16
+      fireRate: 4
+      projectileSpeed: 50
       selectedMode: FullAuto
       availableModes:
         - FullAuto

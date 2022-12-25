@@ -1,52 +1,86 @@
-﻿using Content.Shared.Interaction;
+﻿using Content.Shared.Weapons.Ranged.Systems;
+using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Serialization;
+using Robust.Shared.Timing;
 
 namespace Content.Shared.Theta.ShipEvent;
 
-public sealed class SharedCannonSystem : EntitySystem
+public abstract class SharedCannonSystem : EntitySystem
 {
-    [Dependency] private readonly RotateToFaceSystem _rotateToFaceSystem = default!;
-    [Dependency] private readonly INetManager _net = default!;
-
-    private Dictionary<EntityUid, Vector2> _toUpdateRotation = new();
+    [Dependency] private readonly SharedGunSystem _gunSystem = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     public override void Initialize()
     {
-        SubscribeAllEvent<RotateCannonEvent>(RotateCannons);
+        base.Initialize();
+        SubscribeAllEvent<RequestCannonShootEvent>(OnShootRequest);
+        SubscribeAllEvent<RequestStopCannonShootEvent>(OnStopShootRequest);
     }
 
-    public override void Update(float frameTime)
+    private void OnShootRequest(RequestCannonShootEvent ev)
     {
-        base.Update(frameTime);
+        // Я не могу сделать ебучий предикшен он работает как говно В ДАННОМ СЛУЧАЕ и я хз как это пофиксить
+        // Если не смогу, то будет онли лагающий неткод.
+        // На клиенте, какого-то хуя, GunComponent.NextFire У МОЕЙ ХУЙНИ корректно обновляется после AttemptShoot здесь
+        // НО КОГДА ТЫ ПЫТАЕШЬСЯ ОПЯТЬ СТРЕЛЬНУТЬ NextFire у компоненты ПОЧЕМУ-ТО ВСЕ ЕЩЕ СТАРЫЙ, БУДТО БЫ AttemptShoot НИКОГДА И НЕ ВЫЗЫВАЕЛСЯ И ТАК НЕСКОЛЬКО ИТЕРАЦИЙ ПОДРЯД
+        // ИЗ-ЗА ЭТОЙ ХУЙНИ НА КЛИЕНТЕ ТУРЕЛЬ ПЫТАЕТСЯ ВЫСТРЕЛЬНУТЬ СТОЛЬКО РАЗ СКОЛЬКО ПРОКАЕТ UPDATE КЛИЕНТА И ПОКА ОНО НЕ ОБНОВИТСЯ КАК-ТО.
+        // С ХУЯ ЛИ Я ХЗ. ТОТ ЖЕ САМЫЙ НАХУЙ КОД ЛИТТЕРАЛИ ПОЧТИ ПОЛНАЯ КОПИПАСТА У GunSystem РАБОТАЕТ КОРРЕКТНО А У МЕНЯ НЕ РАБОАТЕТ ПОЧЕМУ????????????
+        // Ето присто пиздец нахуй я заебался помогите убить кодеров этоу йхуйни с предикшеном я ебал просто рот сука рот ебал нахуй РОТ ЕБАЛ
+        //var netManager = IoCManager.Resolve<INetManager>();
+       //if(netManager.IsClient)
+       //    return;
+        var gun = _gunSystem.GetGun(ev.Cannon);
+        if (gun == null || !_gunSystem.CanShoot(gun))
+            return;
 
-        foreach (var (uid, coordinates) in _toUpdateRotation)
-        {
-            if(_net.IsServer)
-                _rotateToFaceSystem.TryFaceCoordinates(uid, coordinates);
-        }
-        _toUpdateRotation.Clear();
+        var coords = EntityCoordinates.FromMap(ev.Cannon, new MapCoordinates(ev.Coordinates, Transform(ev.Cannon).MapID));
+        _gunSystem.AttemptShoot(ev.Cannon, gun, coords);
+
     }
 
-    private void RotateCannons(RotateCannonEvent args)
+    private void OnStopShootRequest(RequestStopCannonShootEvent ev)
     {
-        foreach (var uid in args.Cannons)
-        {
-            _toUpdateRotation[uid] = args.Coordinates;
-        }
+        var gun = _gunSystem.GetGun(ev.Cannon);
+        if (gun == null || gun.ShotCounter == 0)
+            return;
+
+        gun.ShotCounter = 0;
+        gun.ShootCoordinates = null;
+        Dirty(gun);
     }
 }
 
 [Serializable, NetSerializable]
-public sealed class RotateCannonEvent : EntityEventArgs
+public sealed class RotateCannonsEvent : EntityEventArgs
 {
     public readonly Vector2 Coordinates;
 
     public readonly List<EntityUid> Cannons;
 
-    public RotateCannonEvent(Vector2 coordinates, List<EntityUid> cannons)
+    public RotateCannonsEvent(Vector2 coordinates, List<EntityUid> cannons)
     {
         Coordinates = coordinates;
         Cannons = cannons;
     }
 }
+
+/// <summary>
+/// Raised on the client to indicate it'd like to shoot.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class RequestCannonShootEvent : EntityEventArgs
+{
+    public EntityUid Cannon;
+    public Vector2 Coordinates;
+}
+
+/// <summary>
+/// Raised on the client to request it would like to stop shooting.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class RequestStopCannonShootEvent : EntityEventArgs
+{
+    public EntityUid Cannon;
+}
+

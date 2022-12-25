@@ -1,4 +1,5 @@
 using Content.Client.Stylesheets;
+using Content.Client.Theta.ShipEvent;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Theta.ShipEvent;
@@ -89,36 +90,60 @@ public sealed class RadarControl : Control
         MinSize = (SizeFull, SizeFull);
         RectClipContent = true;
 
-        OnKeyBindDown += CalculateMousePose;
+        OnKeyBindDown += StartFiring;
+        OnKeyBindUp += StopFiring;
     }
 
     protected override void MouseMove(GUIMouseMoveEventArgs args)
     {
         base.MouseMove(args);
-        if (MouseCD < 60)
+        if (MouseCD < 20)
         {
             MouseCD++;
             return;
         }
 
         MouseCD = 0;
-        //RotateCannons(args.RelativePosition);
-        //args.Handle();
+        RotateCannons(args.RelativePosition);
+        args.Handle();
     }
 
-    private void CalculateMousePose(GUIBoundKeyEventArgs args)
+    private void StartFiring(GUIBoundKeyEventArgs args)
     {
         if(args.Function != EngineKeyFunctions.Use)
             return;
-        lastClicks.Add(RotateCannons(args.RelativePosition));
+        var coordinates = RotateCannons(args.RelativePosition);
+        lastClicks.Add(coordinates);
+
+        var ev = new StartCannonFiringEvent(coordinates);
+        foreach (var entityUid in _cannons)
+        {
+            _entManager.EventBus.RaiseLocalEvent(entityUid, ref ev);
+        }
+
         args.Handle();
+    }
+
+    private void StopFiring(GUIBoundKeyEventArgs args)
+    {
+        if(args.Function != EngineKeyFunctions.Use)
+            return;
+        var ev = new StopCannonFiringEventEvent();
+        foreach (var entityUid in _cannons)
+        {
+            _entManager.EventBus.RaiseLocalEvent(entityUid, ref ev);
+        }
     }
 
     private Vector2 RotateCannons(Vector2 mouseRelativePosition)
     {
         var offsetMatrix = GetOffsetMatrix();
         var relativePositionToCoordinates = RelativePositionToCoordinates(mouseRelativePosition, offsetMatrix);
-        _entManager.RaisePredictiveEvent(new RotateCannonEvent(relativePositionToCoordinates, _cannons));
+        foreach (var entityUid in _cannons)
+        {
+            var ev = new RotateCannonEvent(relativePositionToCoordinates);
+            _entManager.EventBus.RaiseLocalEvent(entityUid, ref ev);
+        }
         return relativePositionToCoordinates;
     }
 
@@ -150,7 +175,7 @@ public sealed class RadarControl : Control
         }
 
         _mobs = ls.MobsAround;
-        _projectiles = ls.Projectiles;
+            _projectiles = ls.Projectiles;
 
         _cannons = ls.Cannons;
 
