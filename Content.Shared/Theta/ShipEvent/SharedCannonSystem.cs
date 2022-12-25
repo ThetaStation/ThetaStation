@@ -1,15 +1,17 @@
-﻿using Content.Shared.Weapons.Ranged.Systems;
+﻿using System.Linq;
+using Content.Shared.Physics;
+using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Map;
-using Robust.Shared.Network;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Systems;
 using Robust.Shared.Serialization;
-using Robust.Shared.Timing;
 
 namespace Content.Shared.Theta.ShipEvent;
 
 public abstract class SharedCannonSystem : EntitySystem
 {
     [Dependency] private readonly SharedGunSystem _gunSystem = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
 
     public override void Initialize()
     {
@@ -24,7 +26,21 @@ public abstract class SharedCannonSystem : EntitySystem
         if (gun == null || !_gunSystem.CanShoot(gun))
             return;
 
-        var coords = EntityCoordinates.FromMap(ev.Cannon, new MapCoordinates(ev.Coordinates, Transform(ev.Cannon).MapID));
+        var cannonTransform = Transform(ev.Cannon);
+        var dir = ev.Coordinates - cannonTransform.WorldPosition;
+        var ray = new CollisionRay(cannonTransform.WorldPosition, dir.Normalized, (int) (CollisionGroup.Impassable));
+
+        var averageShipLength = 25;
+
+        var rayCastResult = _physics.IntersectRay(cannonTransform.MapID, ray, averageShipLength).ToList();
+
+        foreach (var result in rayCastResult)
+        {
+           if (Transform(result.HitEntity).GridUid == cannonTransform.GridUid)
+               return;
+        }
+
+        var coords = EntityCoordinates.FromMap(ev.Cannon, new MapCoordinates(ev.Coordinates, cannonTransform.MapID));
         _gunSystem.AttemptShoot(ev.Pilot, gun, coords);
 
     }
