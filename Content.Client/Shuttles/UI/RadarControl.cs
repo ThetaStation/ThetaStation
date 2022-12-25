@@ -4,6 +4,7 @@ using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Theta.ShipEvent;
 using Robust.Client.Graphics;
+using Robust.Client.Player;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Input;
@@ -24,6 +25,7 @@ public sealed class RadarControl : Control
     [Dependency] private readonly IEntityManager _entManager = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private readonly IPlayerManager _player = default!;
 
     private const float ScrollSensitivity = 8f;
 
@@ -115,7 +117,10 @@ public sealed class RadarControl : Control
         var coordinates = RotateCannons(args.RelativePosition);
         lastClicks.Add(coordinates);
 
-        var ev = new StartCannonFiringEvent(coordinates);
+        var player = _player.LocalPlayer?.ControlledEntity;
+        if(player == null)
+            return;
+        var ev = new StartCannonFiringEvent(coordinates, player.Value);
         foreach (var entityUid in _cannons)
         {
             _entManager.EventBus.RaiseLocalEvent(entityUid, ref ev);
@@ -139,9 +144,12 @@ public sealed class RadarControl : Control
     {
         var offsetMatrix = GetOffsetMatrix();
         var relativePositionToCoordinates = RelativePositionToCoordinates(mouseRelativePosition, offsetMatrix);
+        var player = _player.LocalPlayer?.ControlledEntity;
+        if(player == null)
+            return relativePositionToCoordinates;
         foreach (var entityUid in _cannons)
         {
-            var ev = new RotateCannonEvent(relativePositionToCoordinates);
+            var ev = new RotateCannonEvent(relativePositionToCoordinates, player.Value);
             _entManager.EventBus.RaiseLocalEvent(entityUid, ref ev);
         }
         return relativePositionToCoordinates;

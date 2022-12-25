@@ -14,7 +14,7 @@ public sealed class CannonSystem : SharedCannonSystem
 
     private readonly Dictionary<EntityUid, Vector2> _toUpdateRotation = new();
 
-    private readonly Dictionary<EntityUid, Vector2> _firingCannons = new();
+    private readonly Dictionary<EntityUid, (EntityUid, Vector2)> _firingCannons = new();
 
     public override void Initialize()
     {
@@ -28,7 +28,7 @@ public sealed class CannonSystem : SharedCannonSystem
 
     private void RequestCannonShoot(EntityUid uid, CannonComponent component, ref StartCannonFiringEvent args)
     {
-        _firingCannons[uid] = args.Coordinates;
+        _firingCannons[uid] = (args.Pilot, args.Coordinates);
     }
 
     private void RequestStopCannonShoot(EntityUid uid, CannonComponent component, ref StopCannonFiringEventEvent args)
@@ -45,14 +45,14 @@ public sealed class CannonSystem : SharedCannonSystem
     private void RotateCannons(EntityUid uid, CannonComponent component, ref RotateCannonEvent args)
     {
         _toUpdateRotation[uid] = args.Coordinates;
-        UpdateCoordinates(uid, args.Coordinates);
+        UpdateCoordinates(uid, args.Coordinates, args.Pilot);
     }
 
-    private void UpdateCoordinates(EntityUid uid, Vector2 coords)
+    private void UpdateCoordinates(EntityUid uid, Vector2 coords, EntityUid pilot)
     {
         if(!_firingCannons.ContainsKey(uid))
             return;
-        _firingCannons[uid] = coords;
+        _firingCannons[uid] = (pilot, coords);
     }
 
     public override void Update(float frameTime)
@@ -85,7 +85,7 @@ public sealed class CannonSystem : SharedCannonSystem
 
     private void Firing()
     {
-        foreach (var (uid, vector2) in _firingCannons)
+        foreach (var (uid, (pilot, vector2)) in _firingCannons)
         {
             var gun = _gunSystem.GetGun(uid);
             if (gun == null)
@@ -96,7 +96,8 @@ public sealed class CannonSystem : SharedCannonSystem
             RaisePredictiveEvent(new RequestCannonShootEvent
             {
                 Cannon = uid,
-                Coordinates = vector2
+                Coordinates = vector2,
+                Pilot = pilot
             });
         }
     }
@@ -107,9 +108,12 @@ public readonly struct StartCannonFiringEvent
 {
     public readonly Vector2 Coordinates;
 
-    public StartCannonFiringEvent(Vector2 coordinates)
+    public readonly EntityUid Pilot;
+
+    public StartCannonFiringEvent(Vector2 coordinates, EntityUid pilot)
     {
         Coordinates = coordinates;
+        Pilot = pilot;
     }
 }
 
@@ -123,8 +127,11 @@ public readonly struct RotateCannonEvent
 {
     public readonly Vector2 Coordinates;
 
-    public RotateCannonEvent(Vector2 coordinates)
+    public readonly EntityUid Pilot;
+
+    public RotateCannonEvent(Vector2 coordinates, EntityUid pilot)
     {
         Coordinates = coordinates;
+        Pilot = pilot;
     }
 }

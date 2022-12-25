@@ -18,24 +18,14 @@ public abstract class SharedCannonSystem : EntitySystem
         SubscribeAllEvent<RequestStopCannonShootEvent>(OnStopShootRequest);
     }
 
-    private void OnShootRequest(RequestCannonShootEvent ev)
+    private void OnShootRequest(RequestCannonShootEvent ev, EntitySessionEventArgs args)
     {
-        // Я не могу сделать ебучий предикшен он работает как говно В ДАННОМ СЛУЧАЕ и я хз как это пофиксить
-        // Если не смогу, то будет онли лагающий неткод.
-        // На клиенте, какого-то хуя, GunComponent.NextFire У МОЕЙ ХУЙНИ корректно обновляется после AttemptShoot здесь
-        // НО КОГДА ТЫ ПЫТАЕШЬСЯ ОПЯТЬ СТРЕЛЬНУТЬ NextFire у компоненты ПОЧЕМУ-ТО ВСЕ ЕЩЕ СТАРЫЙ, БУДТО БЫ AttemptShoot НИКОГДА И НЕ ВЫЗЫВАЕЛСЯ И ТАК НЕСКОЛЬКО ИТЕРАЦИЙ ПОДРЯД
-        // ИЗ-ЗА ЭТОЙ ХУЙНИ НА КЛИЕНТЕ ТУРЕЛЬ ПЫТАЕТСЯ ВЫСТРЕЛЬНУТЬ СТОЛЬКО РАЗ СКОЛЬКО ПРОКАЕТ UPDATE КЛИЕНТА И ПОКА ОНО НЕ ОБНОВИТСЯ КАК-ТО.
-        // С ХУЯ ЛИ Я ХЗ. ТОТ ЖЕ САМЫЙ НАХУЙ КОД ЛИТТЕРАЛИ ПОЧТИ ПОЛНАЯ КОПИПАСТА У GunSystem РАБОТАЕТ КОРРЕКТНО А У МЕНЯ НЕ РАБОАТЕТ ПОЧЕМУ????????????
-        // Ето присто пиздец нахуй я заебался помогите убить кодеров этоу йхуйни с предикшеном я ебал просто рот сука рот ебал нахуй РОТ ЕБАЛ
-        //var netManager = IoCManager.Resolve<INetManager>();
-       //if(netManager.IsClient)
-       //    return;
         var gun = _gunSystem.GetGun(ev.Cannon);
         if (gun == null || !_gunSystem.CanShoot(gun))
             return;
 
         var coords = EntityCoordinates.FromMap(ev.Cannon, new MapCoordinates(ev.Coordinates, Transform(ev.Cannon).MapID));
-        _gunSystem.AttemptShoot(ev.Cannon, gun, coords);
+        _gunSystem.AttemptShoot(ev.Pilot, gun, coords);
 
     }
 
@@ -72,6 +62,7 @@ public sealed class RotateCannonsEvent : EntityEventArgs
 public sealed class RequestCannonShootEvent : EntityEventArgs
 {
     public EntityUid Cannon;
+    public EntityUid Pilot;
     public Vector2 Coordinates;
 }
 
