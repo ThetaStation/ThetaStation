@@ -5,6 +5,11 @@
   abstract: true
   components:
     - type: CombatMode
+      combatToggleAction:
+        enabled: false
+        autoPopulate: false
+        name: action-name-combat
+    - type: Actions
     - type: Cannon
     - type: ContainerContainer
       containers:

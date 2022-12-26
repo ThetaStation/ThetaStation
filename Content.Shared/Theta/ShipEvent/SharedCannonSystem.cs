@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Content.Shared.CombatMode;
 using Content.Shared.Physics;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Map;
@@ -40,6 +41,11 @@ public abstract class SharedCannonSystem : EntitySystem
                return;
         }
 
+        if (TryComp<SharedCombatModeComponent>(ev.Cannon, out var combatMode))
+        {
+            combatMode.IsInCombatMode = true;
+        }
+
         var coords = EntityCoordinates.FromMap(ev.Cannon, new MapCoordinates(ev.Coordinates, cannonTransform.MapID));
         _gunSystem.AttemptShoot(ev.Pilot, gun, coords);
 
@@ -50,6 +56,11 @@ public abstract class SharedCannonSystem : EntitySystem
         var gun = _gunSystem.GetGun(ev.Cannon);
         if (gun == null || gun.ShotCounter == 0)
             return;
+
+        if (TryComp<SharedCombatModeComponent>(ev.Cannon, out var combatMode))
+        {
+            combatMode.IsInCombatMode = false;
+        }
 
         gun.ShotCounter = 0;
         gun.ShootCoordinates = null;

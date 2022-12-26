@@ -11,7 +11,6 @@ public sealed class CannonSystem : SharedCannonSystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<CannonComponent, ComponentStartup>(OnCannonStartup);
         SubscribeNetworkEvent<RotateCannonsEvent>(OnRotateCannons);
     }
 
@@ -20,15 +19,6 @@ public sealed class CannonSystem : SharedCannonSystem
         foreach (var uid in ev.Cannons)
         {
             _rotateToFaceSystem.TryFaceCoordinates(uid, ev.Coordinates);
-        }
-    }
-
-    private void OnCannonStartup(EntityUid uid, CannonComponent component, ComponentStartup args)
-    {
-        // gun component required true
-        if (TryComp<CombatModeComponent>(uid, out var combatMode))
-        {
-            combatMode.IsInCombatMode = true;
         }
     }
 }
