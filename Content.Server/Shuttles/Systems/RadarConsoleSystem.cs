@@ -7,6 +7,7 @@ using Content.Shared.Shuttles.Systems;
 using Content.Shared.Theta.ShipEvent;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
+using Robust.Shared.Network.Messages;
 
 namespace Content.Server.Shuttles.Systems;
 

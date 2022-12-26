@@ -80,8 +80,6 @@ public sealed class RadarControl : Control
 
     public Action<float>? OnRadarRangeChanged;
 
-    private List<Vector2> lastClicks = new();
-
     private List<EntityUid> _cannons = new();
 
     private int MouseCD = 0;
@@ -115,7 +113,6 @@ public sealed class RadarControl : Control
         if(args.Function != EngineKeyFunctions.Use)
             return;
         var coordinates = RotateCannons(args.RelativePosition);
-        lastClicks.Add(coordinates);
 
         var player = _player.LocalPlayer?.ControlledEntity;
         if(player == null)
@@ -183,7 +180,7 @@ public sealed class RadarControl : Control
         }
 
         _mobs = ls.MobsAround;
-            _projectiles = ls.Projectiles;
+        _projectiles = ls.Projectiles;
 
         _cannons = ls.Cannons;
 
@@ -383,6 +380,8 @@ public sealed class RadarControl : Control
 
         DrawMobs(handle, offsetMatrix);
 
+        DrawCannons(handle, offsetMatrix, xformQuery);
+
         var offset = _coordinates.Value.Position;
         var invertedPosition = _coordinates.Value.Position - offset;
         invertedPosition.Y = -invertedPosition.Y;
@@ -390,13 +389,6 @@ public sealed class RadarControl : Control
 
         // Draw radar position on the station
         handle.DrawCircle(ScalePosition(invertedPosition), 5f, Color.Lime);
-
-        foreach (var vector2 in lastClicks)
-        {
-            var uiPosition = offsetMatrix.Transform(vector2);
-            uiPosition.Y = -uiPosition.Y;
-            handle.DrawCircle(ScalePosition(uiPosition), 5f, Color.Aqua);
-        }
 
         foreach (var (ent, _) in _iffControls)
         {
@@ -424,7 +416,7 @@ public sealed class RadarControl : Control
 
     private void DrawProjectiles(DrawingHandleScreen handle, Matrix3 matrix)
     {
-        const float projectileScale = 3f;
+        const float projectileSize = 1.5f;
         foreach (var state in _projectiles)
         {
             var position = state.Coordinates.ToMapPos(_entManager);
@@ -433,10 +425,10 @@ public sealed class RadarControl : Control
 
             var verts = new[]
             {
-                matrix.Transform(position + angle.RotateVec(new Vector2(-projectileScale/2, 0))),
-                matrix.Transform(position + angle.RotateVec(new Vector2(projectileScale/2, 0))),
-                matrix.Transform(position + angle.RotateVec(new Vector2(0, -projectileScale))),
-                matrix.Transform(position + angle.RotateVec(new Vector2(-projectileScale/2, 0))),
+                matrix.Transform(position + angle.RotateVec(new Vector2(-projectileSize/2, 0))),
+                matrix.Transform(position + angle.RotateVec(new Vector2(projectileSize/2, 0))),
+                matrix.Transform(position + angle.RotateVec(new Vector2(0, -projectileSize))),
+                matrix.Transform(position + angle.RotateVec(new Vector2(-projectileSize/2, 0))),
             };
             for (var i = 0; i < verts.Length; i++)
             {
@@ -444,6 +436,35 @@ public sealed class RadarControl : Control
                 vert.Y = -vert.Y;
                 verts[i] = ScalePosition(vert);
             }
+            handle.DrawPrimitives(DrawPrimitiveTopology.LineStrip, verts, color);
+        }
+    }
+
+    // transform components on the client should be enough to get the angle
+    private void DrawCannons(DrawingHandleScreen handle, Matrix3 matrix, EntityQuery<TransformComponent> entityQuery)
+    {
+        const float cannonSize = 3f;
+        foreach (var cannon in _cannons)
+        {
+            var transform = entityQuery.GetComponent(cannon);
+            var position = transform.WorldPosition;
+            var angle = transform.WorldRotation;
+            var color = Color.Lime;
+
+            var verts = new[]
+            {
+                matrix.Transform(position + angle.RotateVec(new Vector2(-cannonSize/2, cannonSize/4))),
+                matrix.Transform(position + angle.RotateVec(new Vector2(0, -cannonSize/1.5f))),
+                matrix.Transform(position + angle.RotateVec(new Vector2(cannonSize/2, cannonSize/4))),
+                matrix.Transform(position + angle.RotateVec(new Vector2(-cannonSize/2, cannonSize/4))),
+            };
+            for (var i = 0; i < verts.Length; i++)
+            {
+                var vert = verts[i];
+                vert.Y = -vert.Y;
+                verts[i] = ScalePosition(vert);
+            }
+
             handle.DrawPrimitives(DrawPrimitiveTopology.LineStrip, verts, color);
         }
     }

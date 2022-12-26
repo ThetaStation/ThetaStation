@@ -24,15 +24,10 @@ public abstract class SharedCannonSystem : EntitySystem
 
     private void OnShootRequest(RequestCannonShootEvent ev, EntitySessionEventArgs args)
     {
-        var gun = _gunSystem.GetGun(ev.Cannon);
+        var gun = GetCannonGun(ev.Cannon);
         if (gun == null || !CanShoot(ev, gun))
         {
             return;
-        }
-
-        if (TryComp<SharedCombatModeComponent>(ev.Cannon, out var combatMode))
-        {
-            combatMode.IsInCombatMode = true;
         }
 
         var coords = EntityCoordinates.FromMap(ev.Cannon, new MapCoordinates(ev.Coordinates, Transform(ev.Cannon).MapID));
@@ -62,16 +57,16 @@ public abstract class SharedCannonSystem : EntitySystem
         return true;
     }
 
+    public GunComponent? GetCannonGun(EntityUid uid)
+    {
+        return !TryComp<GunComponent>(uid, out var gun) ? null : gun;
+    }
+
     private void OnStopShootRequest(RequestStopCannonShootEvent ev)
     {
-        var gun = _gunSystem.GetGun(ev.Cannon);
+        var gun = GetCannonGun(ev.Cannon);
         if (gun == null || gun.ShotCounter == 0)
             return;
-
-        if (TryComp<SharedCombatModeComponent>(ev.Cannon, out var combatMode))
-        {
-            combatMode.IsInCombatMode = false;
-        }
 
         gun.ShotCounter = 0;
         gun.ShootCoordinates = null;

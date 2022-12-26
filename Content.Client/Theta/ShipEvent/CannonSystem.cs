@@ -1,7 +1,5 @@
 ﻿using Content.Client.Weapons.Ranged.Systems;
 using Content.Shared.Theta.ShipEvent;
-using Robust.Client.GameObjects;
-using Robust.Shared.Input;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -20,7 +18,6 @@ public sealed class CannonSystem : SharedCannonSystem
     {
         base.Initialize();
         UpdatesOutsidePrediction = true;
-        UpdatesAfter.Add(typeof(GunSystem));
         SubscribeLocalEvent<CannonComponent, RotateCannonEvent>(RotateCannons);
         SubscribeLocalEvent<CannonComponent, StartCannonFiringEvent>(RequestCannonShoot);
         SubscribeLocalEvent<CannonComponent, StopCannonFiringEventEvent>(RequestStopCannonShoot);
@@ -50,7 +47,7 @@ public sealed class CannonSystem : SharedCannonSystem
 
     private void UpdateCoordinates(EntityUid uid, Vector2 coords, EntityUid pilot)
     {
-        if(!_firingCannons.ContainsKey(uid))
+        if (!_firingCannons.ContainsKey(uid))
             return;
         _firingCannons[uid] = (pilot, coords);
     }
@@ -87,10 +84,10 @@ public sealed class CannonSystem : SharedCannonSystem
     {
         foreach (var (uid, (pilot, vector2)) in _firingCannons)
         {
-            var gun = _gunSystem.GetGun(uid);
+            var gun = GetCannonGun(uid);
             if (gun == null)
                 return;
-            if(!_gunSystem.CanShoot(gun))
+            if (!_gunSystem.CanShoot(gun))
                 return;
 
             RaisePredictiveEvent(new RequestCannonShootEvent

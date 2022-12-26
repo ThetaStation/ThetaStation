@@ -353,7 +353,7 @@ namespace Content.Server.Shuttles.Systems
 
             // check update rate
             _updateDif += frameTime;
-            if (_updateDif < UpdateRate)
+            if (_updateDif < 0)
                 return;
             _updateDif = 0f;
 
