@@ -454,7 +454,7 @@ public sealed class RadarControl : Control
             var verts = new[]
             {
                 matrix.Transform(position + angle.RotateVec(new Vector2(-cannonSize/2, cannonSize/4))),
-                matrix.Transform(position + angle.RotateVec(new Vector2(0, -cannonSize/1.5f))),
+                matrix.Transform(position + angle.RotateVec(new Vector2(0, -cannonSize/2 - cannonSize/4))),
                 matrix.Transform(position + angle.RotateVec(new Vector2(cannonSize/2, cannonSize/4))),
                 matrix.Transform(position + angle.RotateVec(new Vector2(-cannonSize/2, cannonSize/4))),
             };
