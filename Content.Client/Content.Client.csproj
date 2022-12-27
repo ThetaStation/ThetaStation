@@ -33,9 +33,6 @@
     <Compile Update="UserInterface\Systems\Inventory\Windows\StrippingWindow.xaml.cs">
       <DependentUpon>StrippingWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Theta\UI\TeamViewWindow.xaml.cs">
-      <DependentUpon>TeamViewWindow.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <Import Project="..\RobustToolbox\MSBuild\XamlIL.targets" />
   <Import Project="..\RobustToolbox\MSBuild\Robust.Analyzers.targets" />

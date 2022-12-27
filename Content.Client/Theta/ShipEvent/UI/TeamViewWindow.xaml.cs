@@ -2,7 +2,7 @@
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Client.UserInterface.XAML;
 
-namespace Content.Client.Theta.UI;
+namespace Content.Client.Theta.ShipEvent.UI;
 
 /// <summary>
 /// Window for ship event team-view action

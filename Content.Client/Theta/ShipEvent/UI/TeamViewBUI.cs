@@ -1,7 +1,7 @@
 ﻿using Content.Shared.Theta.ShipEvent;
 using Robust.Client.GameObjects;
 
-namespace Content.Client.Theta.UI;
+namespace Content.Client.Theta.ShipEvent.UI;
 
 public sealed class TeamViewBoundUserInterface : BoundUserInterface
 {
