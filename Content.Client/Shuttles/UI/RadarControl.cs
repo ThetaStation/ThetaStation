@@ -2,7 +2,6 @@ using Content.Client.Stylesheets;
 using Content.Client.Theta.ShipEvent;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
-using Content.Shared.Theta.ShipEvent;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Client.UserInterface;
@@ -20,55 +19,56 @@ namespace Content.Client.Shuttles.UI;
 /// <summary>
 /// Displays nearby grids inside of a control.
 /// </summary>
-public sealed class RadarControl : Control
+public abstract class RadarControl : Control
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] protected readonly IEntityManager _entManager = default!;
+    [Dependency] protected readonly IGameTiming _timing = default!;
+    [Dependency] protected readonly IMapManager _mapManager = default!;
 
-    private const float ScrollSensitivity = 8f;
+    protected const float ScrollSensitivity = 8f;
 
     public const int MinimapRadius = 320;
-    private const int MinimapMargin = 4;
-    private const float GridLinesDistance = 32f;
+    protected const int MinimapMargin = 4;
+    protected const float GridLinesDistance = 32f;
 
     /// <summary>
     /// Used to transform all of the radar objects. Typically is a shuttle console parented to a grid.
     /// </summary>
-    private EntityCoordinates? _coordinates;
+    protected EntityCoordinates? _coordinates;
 
-    private Angle? _rotation;
+    protected Angle? _rotation;
 
-    private float _radarMinRange = 64f;
-    private float _radarMaxRange = 256f;
+    protected float _radarMinRange = 64f;
+    protected float _radarMaxRange = 256f;
     public float RadarRange { get; private set; } = 256f;
 
     /// <summary>
     /// We'll lerp between the radarrange and actual range
     /// </summary>
-    private float _actualRadarRange = 256f;
+    protected float _actualRadarRange = 256f;
 
     /// <summary>
     /// Controls the maximum distance that IFF labels will display.
     /// </summary>
     public float MaxRadarRange { get; private set; } = 256f * 10f;
 
-    private int MidPoint => SizeFull / 2;
-    private int SizeFull => (int) ((MinimapRadius + MinimapMargin) * 2 * UIScale);
-    private int ScaledMinimapRadius => (int) (MinimapRadius * UIScale);
-    private float MinimapScale => RadarRange != 0 ? ScaledMinimapRadius / RadarRange : 0f;
+    protected int MidPoint => SizeFull / 2;
+    protected int SizeFull => (int) ((MinimapRadius + MinimapMargin) * 2 * UIScale);
+    protected int ScaledMinimapRadius => (int) (MinimapRadius * UIScale);
+    protected float MinimapScale => RadarRange != 0 ? ScaledMinimapRadius / RadarRange : 0f;
 
     /// <summary>
     /// Shows a label on each radar object.
     /// </summary>
-    private Dictionary<EntityUid, Control> _iffControls = new();
+    protected Dictionary<EntityUid, Control> _iffControls = new();
 
-    private Dictionary<EntityUid, List<DockingInterfaceState>> _docks = new();
+    protected Dictionary<EntityUid, List<DockingInterfaceState>> _docks = new();
 
-    private List<MobInterfaceState> _mobs = new();
+    protected List<MobInterfaceState> _mobs = new();
 
-    private List<ProjectilesInterfaceState> _projectiles = new();
+    protected List<ProjectilesInterfaceState> _projectiles = new();
+
+    protected List<EntityUid> _cannons = new();
 
     public bool ShowIFF { get; set; } = true;
     public bool ShowDocks { get; set; } = true;
@@ -80,76 +80,11 @@ public sealed class RadarControl : Control
 
     public Action<float>? OnRadarRangeChanged;
 
-    private List<EntityUid> _cannons = new();
-
-    private int MouseCD = 0;
-
     public RadarControl()
     {
         IoCManager.InjectDependencies(this);
         MinSize = (SizeFull, SizeFull);
         RectClipContent = true;
-
-        OnKeyBindDown += StartFiring;
-        OnKeyBindUp += StopFiring;
-    }
-
-    protected override void MouseMove(GUIMouseMoveEventArgs args)
-    {
-        base.MouseMove(args);
-        if (MouseCD < 20)
-        {
-            MouseCD++;
-            return;
-        }
-
-        MouseCD = 0;
-        RotateCannons(args.RelativePosition);
-        args.Handle();
-    }
-
-    private void StartFiring(GUIBoundKeyEventArgs args)
-    {
-        if(args.Function != EngineKeyFunctions.Use)
-            return;
-        var coordinates = RotateCannons(args.RelativePosition);
-
-        var player = _player.LocalPlayer?.ControlledEntity;
-        if(player == null)
-            return;
-        var ev = new StartCannonFiringEvent(coordinates, player.Value);
-        foreach (var entityUid in _cannons)
-        {
-            _entManager.EventBus.RaiseLocalEvent(entityUid, ref ev);
-        }
-
-        args.Handle();
-    }
-
-    private void StopFiring(GUIBoundKeyEventArgs args)
-    {
-        if(args.Function != EngineKeyFunctions.Use)
-            return;
-        var ev = new StopCannonFiringEventEvent();
-        foreach (var entityUid in _cannons)
-        {
-            _entManager.EventBus.RaiseLocalEvent(entityUid, ref ev);
-        }
-    }
-
-    private Vector2 RotateCannons(Vector2 mouseRelativePosition)
-    {
-        var offsetMatrix = GetOffsetMatrix();
-        var relativePositionToCoordinates = RelativePositionToCoordinates(mouseRelativePosition, offsetMatrix);
-        var player = _player.LocalPlayer?.ControlledEntity;
-        if(player == null)
-            return relativePositionToCoordinates;
-        foreach (var entityUid in _cannons)
-        {
-            var ev = new RotateCannonEvent(relativePositionToCoordinates, player.Value);
-            _entManager.EventBus.RaiseLocalEvent(entityUid, ref ev);
-        }
-        return relativePositionToCoordinates;
     }
 
     public void SetMatrix(EntityCoordinates? coordinates, Angle? angle)
@@ -197,7 +132,7 @@ public sealed class RadarControl : Control
         _actualRadarRange = Math.Clamp(_actualRadarRange + value, _radarMinRange, _radarMaxRange);
     }
 
-    private Matrix3 GetOffsetMatrix()
+    protected Matrix3 GetOffsetMatrix()
     {
         if (_coordinates == null || _rotation == null)
             return Matrix3.Zero;
@@ -440,6 +375,11 @@ public sealed class RadarControl : Control
         }
     }
 
+    protected virtual Color GetCannonColor(EntityUid cannon)
+    {
+        return Color.YellowGreen;
+    }
+
     // transform components on the client should be enough to get the angle
     private void DrawCannons(DrawingHandleScreen handle, Matrix3 matrix, EntityQuery<TransformComponent> entityQuery)
     {
@@ -449,7 +389,7 @@ public sealed class RadarControl : Control
             var transform = entityQuery.GetComponent(cannon);
             var position = transform.WorldPosition;
             var angle = transform.WorldRotation;
-            var color = Color.Lime;
+            var color = GetCannonColor(cannon);
 
             var verts = new[]
             {
@@ -557,12 +497,5 @@ public sealed class RadarControl : Control
     private Vector2 ScalePosition(Vector2 value)
     {
         return value * MinimapScale + MidPoint;
-    }
-
-    private Vector2 RelativePositionToCoordinates(Vector2 pos, Matrix3 matrix)
-    {
-        var removeScale = (pos - MidPoint) / MinimapScale;
-        removeScale.Y = -removeScale.Y;
-        return matrix.Transform(removeScale);
     }
 }

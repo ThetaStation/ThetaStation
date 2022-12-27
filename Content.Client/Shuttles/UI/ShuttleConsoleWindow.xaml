@@ -34,8 +34,8 @@
             </BoxContainer>
         </BoxContainer>
         <PanelContainer>
-            <ui:RadarControl Name="RadarScreen"
-                             MouseFilter="Stop"/>
+            <ui:DefaultRadarControl Name="RadarScreen"
+                                    MouseFilter="Stop"/>
             <ui:DockingControl Name="DockingScreen"
                                Visible="False"
                                MouseFilter="Stop"/>

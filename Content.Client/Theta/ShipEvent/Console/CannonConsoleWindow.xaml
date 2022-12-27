@@ -1,0 +1,6 @@
+﻿<controls:FancyWindow xmlns="https://spacestation14.io"
+                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                      xmlns:ui="clr-namespace:Content.Client.Theta.ShipEvent.Console"
+                      Title="{Loc 'radar-console-window-title'}">
+    <ui:CannonRadarControl Name="RadarScreen" MouseFilter="Stop"/>
+</controls:FancyWindow>
