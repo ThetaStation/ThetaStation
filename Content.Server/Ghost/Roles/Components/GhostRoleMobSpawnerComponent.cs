@@ -20,10 +20,10 @@ namespace Content.Server.Ghost.Roles.Components
         private bool _deleteOnSpawn = true;
 
         [ViewVariables(VVAccess.ReadWrite)] [DataField("availableTakeovers")]
-        private int _availableTakeovers = 1;
+        public int AvailableTakeovers = 1;
 
         [ViewVariables]
-        private int _currentTakeovers = 0;
+        public int CurrentTakeovers = 0;
 
         [CanBeNull]
         [ViewVariables(VVAccess.ReadWrite)]
@@ -33,7 +33,12 @@ namespace Content.Server.Ghost.Roles.Components
         public override bool Take(IPlayerSession session)
         {
             if (Taken)
-                return false;
+            {
+                if (CurrentTakeovers < AvailableTakeovers)
+                    Taken = false;
+                else
+                    return false;
+            }
 
             if (string.IsNullOrEmpty(Prototype))
                 throw new NullReferenceException("Prototype string cannot be null or empty!");
@@ -53,7 +58,7 @@ namespace Content.Server.Ghost.Roles.Components
             var spawnedEvent = new GhostRoleSpawnerUsedEvent(Owner, mob);
             _entMan.EventBus.RaiseLocalEvent(mob, spawnedEvent, false);
 
-            if (++_currentTakeovers < _availableTakeovers)
+            if (++CurrentTakeovers < AvailableTakeovers)
                 return true;
 
             Taken = true;

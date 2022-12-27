@@ -1318,7 +1318,7 @@ entities:
     parent: 0
     type: Transform
 - uid: 96
-  type: SpawnPointShipEvent
+  type: TeamSpawnerShipEvent
   components:
   - pos: -1.5,-2.5
     parent: 0
