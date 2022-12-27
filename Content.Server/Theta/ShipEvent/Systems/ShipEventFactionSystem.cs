@@ -60,7 +60,8 @@ public sealed class ShipEventFactionSystem : EntitySystem
 	private void OnSpawn(EntityUid entity, ShipEventFactionComponent component, GhostRoleSpawnerUsedEvent args)
     {
         EntityUid shipEntity = GetSpawnerShip(args.Spawner);
-		if (!_teams.ContainsKey(args.Spawner)){ CreateTeam(shipEntity); }
+        if (shipEntity == EntityUid.Invalid) { return; }
+		if (!_teams.ContainsKey(shipEntity)){ CreateTeam(shipEntity); }
 		AddToTeam(args.Spawned, shipEntity);
         entMan.GetComponent<GhostRoleMobSpawnerComponent>(args.Spawner).CurrentTakeovers = _teams[shipEntity].GetLivingMembers().Count;
     }
