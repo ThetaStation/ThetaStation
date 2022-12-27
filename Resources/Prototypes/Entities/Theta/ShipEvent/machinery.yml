@@ -35,4 +35,4 @@
       visuals:
         - type: ComputerVisualizer
           key: generic_key
-          screen: shuttle
+          screen: comm_syndie
