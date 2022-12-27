@@ -1,5 +1,4 @@
 ﻿using Content.Shared.MachineLinking;
-using Content.Shared.Theta.ShipEvent;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Server.Theta.ShipEvent.Console;
@@ -12,7 +11,4 @@ public sealed class CannonConsoleComponent : Component
     /// </summary>
     [DataField("linkingPort", customTypeSerializer: typeof(PrototypeIdSerializer<TransmitterPortPrototype>))]
     public readonly string LinkingPort = "CannonConsoleSender";
-
-    [ViewVariables(VVAccess.ReadOnly)]
-    public List<CannonComponent> LinkedCannons = new();
 }

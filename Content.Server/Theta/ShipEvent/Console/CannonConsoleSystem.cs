@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Content.Server.MachineLinking.Components;
 using Content.Server.MachineLinking.Events;
 using Content.Server.MachineLinking.System;
 using Content.Server.Shuttles.Systems;
@@ -18,27 +19,6 @@ public sealed class CannonConsoleSystem : EntitySystem
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
     [Dependency] private readonly SignalLinkerSystem _signalSystem = default!;
 
-    public override void Initialize()
-    {
-        base.Initialize();
-        SubscribeLocalEvent<CannonConsoleComponent, NewLinkEvent>(OnNewLink);
-        SubscribeLocalEvent<CannonConsoleComponent, PortDisconnectedEvent>(OnPortDisconnected);
-    }
-
-    private void OnNewLink(EntityUid uid, CannonConsoleComponent component, NewLinkEvent args)
-    {
-        if (!TryComp<CannonComponent>(args.Receiver, out var analyzer))
-            return;
-
-        component.LinkedCannons.Add(analyzer);
-    }
-
-    private void OnPortDisconnected(EntityUid uid, CannonConsoleComponent component, PortDisconnectedEvent args)
-    {
-        if (args.Port != component.LinkingPort)
-            return;
-    }
-
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
@@ -47,6 +27,20 @@ public sealed class CannonConsoleSystem : EntitySystem
         {
             UpdateState(cannon, radar);
         }
+    }
+
+    public List<EntityUid> GetLinkedCannons(EntityUid console)
+    {
+        List<EntityUid> cannons = new();
+        if(!TryComp<SignalTransmitterComponent>(console, out var signalTransmitter))
+            return cannons;
+
+        foreach (var (_, list) in signalTransmitter.Outputs)
+        {
+            cannons.AddRange(list.Select(i => i.Uid));
+        }
+
+        return cannons;
     }
 
     private void UpdateState(CannonConsoleComponent cannonConsole, RadarConsoleComponent radarConsole)
@@ -58,7 +52,7 @@ public sealed class CannonConsoleSystem : EntitySystem
         var mobs = _radarConsoleSystem.GetMobsAround(radarConsole);
         var projectiles = _radarConsoleSystem.GetProjectilesAround(radarConsole);
         var cannonsOnGrid = _radarConsoleSystem.GetCannonsOnGrid(radarConsole);
-        var controlledCannons = cannonConsole.LinkedCannons.Select(cannon => cannon.Owner).ToList();
+        var controlledCannons = GetLinkedCannons(cannonConsole.Owner);
 
         var radarState = new CannonConsoleBoundInterfaceState(
             radarConsole.MaxRange,
