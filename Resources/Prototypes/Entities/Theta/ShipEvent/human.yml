@@ -1,0 +1,82 @@
+﻿- type: entity
+  name: ShipTest Agent
+  id: MobHumanShipEvent
+  parent: MobHuman
+  suffix: SHIPEVENT
+  components:
+    - type: RandomHumanoidAppearance
+    - type: Eye
+      drawFov: false
+      zoom: 1.5, 1.5
+    - type: Loadout
+      prototype: ShipTestEventStandard
+      prototypes: [ShipTestEventStandard]
+    - type: UsePlayerNameForEntityName
+    - type: MovedByPressure
+      enabled: false
+    - type: Damageable
+      damageModifierSet: Immortal
+    - type: ExplosionResistance
+      damageCoefficient: 0.0
+    - type: Barotrauma #no space damage.
+      damage:
+        types:
+          Blunt: 0
+    - type: Bloodstream
+      maxBleedAmount: 0
+      bloodReagent: Milk
+      bloodlossDamage: #no bloodloss damage. overriding base components
+        types:
+          Bloodloss: 0
+      bloodlossHealDamage:
+        types:
+          Bloodloss: 0
+    - type: Respirator
+      damage:
+        types:
+          Asphyxiation: 0
+      damageRecovery:
+        types:
+          Asphyxiation: 0
+      suffocationThreshold: -100000
+    - type: ShipEventFaction
+    - type: ShipEventFactionView
+      toggle:
+        icon: { sprite: "/Textures/Theta/ShipEvent/ShipTeamView.rsi", state: icon }
+        iconOn: "/Textures/Theta/ShipEvent/ShipFactionIcon.rsi"
+        name: shipevent-teamview-toggle-name
+        description: shipevent-teamview-toggle-desc
+        itemIconStyle: NoItem
+        event: !type:ToggleActionEvent
+
+- type: entity
+  id: SpawnPointShipEvent
+  name: ship event spawner
+  suffix: SHIPEVENT
+  parent: MarkerBase
+  components:
+    - type: GhostRoleMobSpawner
+      prototype: MobHumanShipEvent
+      availableTakeovers: 5
+      name: Ship Team
+      description: Уничтожь своих врагов!
+      rules: You are an antagonist, scavenge, attack, and grow your hoard!
+    - type: Sprite
+      sprite: Markers/jobs.rsi
+      layers:
+        - state: green
+        - sprite: Markers/jobs.rsi
+          state: ertjanitoreva
+
+# Space Ship - Poverty
+- type: startingGear
+  id: ShipTestEventStandard
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitOperative
+    back: ClothingBackpackDuffelSyndicateOperative
+    shoes: ClothingShoesBootsMagAdv
+  innerclothingskirt: ClothingUniformJumpsuitOperative
+  satchel: ClothingBackpackDuffelSyndicateOperative
+  duffelbag: ClothingBackpackDuffelSyndicateOperative
+  inhand:
+    right hand: PocketRadar

@@ -61,6 +61,10 @@ public sealed class RadarControl : Control
 
     private Dictionary<EntityUid, List<DockingInterfaceState>> _docks = new();
 
+    private List<MobInterfaceState> _mobs = new();
+
+    private List<ProjectilesInterfaceState> _projectiles = new();
+
     public bool ShowIFF { get; set; } = true;
     public bool ShowDocks { get; set; } = true;
 
@@ -104,6 +108,10 @@ public sealed class RadarControl : Control
             var grid = _docks.GetOrNew(coordinates.EntityId);
             grid.Add(state);
         }
+
+        _mobs = ls.MobsAround;
+        _projectiles = ls.Projectiles;
+
     }
 
     protected override void MouseWheel(GUIMouseWheelEventArgs args)
@@ -192,9 +200,6 @@ public sealed class RadarControl : Control
         var invertedPosition = _coordinates.Value.Position - offset;
         invertedPosition.Y = -invertedPosition.Y;
         // Don't need to transform the InvWorldMatrix again as it's already offset to its position.
-
-        // Draw radar position on the station
-        handle.DrawCircle(ScalePosition(invertedPosition), 5f, Color.Lime);
 
         var shown = new HashSet<EntityUid>();
 
@@ -286,6 +291,13 @@ public sealed class RadarControl : Control
             DrawDocks(handle, grid.Owner, matty);
         }
 
+        DrawProjectiles(handle, offsetMatrix);
+
+        DrawMobs(handle, offsetMatrix);
+
+        // Draw radar position on the station
+        handle.DrawCircle(ScalePosition(invertedPosition), 5f, Color.Lime);
+
         foreach (var (ent, _) in _iffControls)
         {
             if (shown.Contains(ent)) continue;
@@ -308,6 +320,46 @@ public sealed class RadarControl : Control
         if (!_iffControls.TryGetValue(uid, out var label)) return;
         label.Dispose();
         _iffControls.Remove(uid);
+    }
+
+    private void DrawProjectiles(DrawingHandleScreen handle, Matrix3 matrix)
+    {
+        const float projectileScale = 3f;
+        foreach (var state in _projectiles)
+        {
+            var position = state.Coordinates.ToMapPos(_entManager);
+            var angle = state.Angle;
+            var color = Color.Brown;
+
+            var verts = new[]
+            {
+                matrix.Transform(position + angle.RotateVec(new Vector2(-projectileScale/2, 0))),
+                matrix.Transform(position + angle.RotateVec(new Vector2(projectileScale/2, 0))),
+                matrix.Transform(position + angle.RotateVec(new Vector2(0, -projectileScale))),
+                matrix.Transform(position + angle.RotateVec(new Vector2(-projectileScale/2, 0))),
+            };
+            for (var i = 0; i < verts.Length; i++)
+            {
+                var vert = verts[i];
+                vert.Y = -vert.Y;
+                verts[i] = ScalePosition(vert);
+            }
+            handle.DrawPrimitives(DrawPrimitiveTopology.LineStrip, verts, color);
+        }
+    }
+
+    private void DrawMobs(DrawingHandleScreen handle, Matrix3 matrix)
+    {
+        foreach (var state in _mobs)
+        {
+            var position = state.Coordinates.ToMapPos(_entManager);
+            var uiPosition = matrix.Transform(position);
+            var color = Color.Red;
+
+            uiPosition.Y = -uiPosition.Y;
+
+            handle.DrawCircle(ScalePosition(uiPosition), 3f, color);
+        }
     }
 
     private void DrawDocks(DrawingHandleScreen handle, EntityUid uid, Matrix3 matrix)

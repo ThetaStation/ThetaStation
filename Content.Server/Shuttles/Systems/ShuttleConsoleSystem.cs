@@ -1,5 +1,6 @@
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
+using Content.Server.Projectiles.Components;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Events;
 using Content.Server.UserInterface;
@@ -29,6 +30,10 @@ namespace Content.Server.Shuttles.Systems
         [Dependency] private readonly ShuttleSystem _shuttle = default!;
         [Dependency] private readonly TagSystem _tags = default!;
         [Dependency] private readonly UserInterfaceSystem _ui = default!;
+        [Dependency] private readonly RadarConsoleSystem _radarConsoleSystem = default!;
+
+        private float UpdateRate = 1f;
+        private float _updateDif;
 
         public override void Initialize()
         {
@@ -39,6 +44,7 @@ namespace Content.Server.Shuttles.Systems
             SubscribeLocalEvent<ShuttleConsoleComponent, AnchorStateChangedEvent>(OnConsoleAnchorChange);
             SubscribeLocalEvent<ShuttleConsoleComponent, ActivatableUIOpenAttemptEvent>(OnConsoleUIOpenAttempt);
             SubscribeLocalEvent<ShuttleConsoleComponent, ShuttleConsoleDestinationMessage>(OnDestinationMessage);
+            SubscribeLocalEvent<ShuttleConsoleComponent, ShuttleConsoleChangeShipNameMessage>(OnChangeShipName);
             SubscribeLocalEvent<ShuttleConsoleComponent, BoundUIClosedEvent>(OnConsoleUIClose);
 
             SubscribeLocalEvent<DockEvent>(OnDock);
@@ -46,6 +52,21 @@ namespace Content.Server.Shuttles.Systems
 
             SubscribeLocalEvent<PilotComponent, MoveEvent>(HandlePilotMove);
             SubscribeLocalEvent<PilotComponent, ComponentGetState>(OnGetState);
+        }
+
+        private void OnChangeShipName(EntityUid uid, ShuttleConsoleComponent component, ShuttleConsoleChangeShipNameMessage args)
+        {
+            if(args.NewShipName == null)
+                return;
+            if(!TryComp<TransformComponent>(uid, out var xform))
+                return;
+            if(!TryComp<MetaDataComponent>(xform.GridUid, out var meta))
+                return;
+            meta.EntityName = args.NewShipName;
+            foreach (var comp in EntityQuery<ShuttleConsoleComponent>(true))
+            {
+                UpdateState(comp);
+            }
         }
 
         private void OnDestinationMessage(EntityUid uid, ShuttleConsoleComponent component, ShuttleConsoleDestinationMessage args)
@@ -273,6 +294,18 @@ namespace Content.Server.Shuttles.Systems
             }
 
             docks ??= GetAllDocks();
+            List<MobInterfaceState> mobs;
+            List<ProjectilesInterfaceState> projectiles;
+            if (radar != null)
+            {
+                mobs = _radarConsoleSystem.GetMobsAround(radar);
+                projectiles = _radarConsoleSystem.GetProjectilesAround(radar);
+            }
+            else
+            {
+                mobs = new List<MobInterfaceState>();
+                projectiles = new List<ProjectilesInterfaceState>();
+            }
 
             _ui.GetUiOrNull(component.Owner, ShuttleConsoleUiKey.Key)
                 ?.SetState(new ShuttleConsoleBoundInterfaceState(
@@ -282,7 +315,11 @@ namespace Content.Server.Shuttles.Systems
                     range,
                     consoleXform?.Coordinates,
                     consoleXform?.LocalRotation,
-                    docks));
+                    docks,
+                    mobs,
+                    projectiles
+                    )
+                );
         }
 
         public override void Update(float frameTime)
@@ -305,6 +342,18 @@ namespace Content.Server.Shuttles.Systems
             {
                 RemovePilot(comp);
             }
+
+            // check update rate
+            _updateDif += frameTime;
+            if (_updateDif < UpdateRate)
+                return;
+            _updateDif = 0f;
+
+            foreach (var shuttleConsole in EntityManager.EntityQuery<ShuttleConsoleComponent>())
+            {
+                UpdateState(shuttleConsole);
+            }
+
         }
 
         /// <summary>

@@ -18,12 +18,12 @@ SERVER_FILES = [
     "SS14.Server_win-x64.zip",
     "SS14.Server_osx-x64.zip"
 ]
-
 VERSION = os.environ['GITHUB_SHA']
-FORK_ID = "syndicate"
-BUILD_URL = f"https://builds.station14.ru/syndicate/builds/{{FORK_VERSION}}/{FILE}"
-MANIFEST_URL = f"https://builds.station14.ru/cdn/version/{{FORK_VERSION}}/manifest"
-MANIFEST_DOWNLOAD_URL = f"https://builds.station14.ru/cdn/version/{{FORK_VERSION}}/download"
+FORK_ID = "theta"
+BUILD_URL = f"https://cdn.theta.dushess.net/builds/{{FORK_VERSION}}/{FILE}"
+MANIFEST_URL = f"https://cdn.theta.dushess.net/version/{{FORK_VERSION}}/manifest"
+MANIFEST_DOWNLOAD_URL = f"https://cdn.theta.dushess.net/version/{{FORK_VERSION}}/download"
+
 
 def main() -> None:
     client_file = os.path.join("release", FILE)
@@ -56,6 +56,7 @@ def generate_build_json(file: str) -> str:
         "manifest_hash": manifest_hash
     })
 
+
 def generate_manifest_hash(file: str) -> str:
     zip = ZipFile(file)
     infos = zip.infolist()
@@ -77,11 +78,13 @@ def generate_manifest_hash(file: str) -> str:
 
     return manifestHash.hexdigest().upper()
 
+
 def get_engine_version() -> str:
-    proc = subprocess.run(["git", "describe","--tags", "--abbrev=0"], stdout=subprocess.PIPE, cwd="RobustToolbox", check=True, encoding="UTF-8")
+    proc = subprocess.run(["git", "describe", "--tags", "--abbrev=0"],
+                          stdout=subprocess.PIPE, cwd="RobustToolbox", check=True, encoding="UTF-8")
     tag = proc.stdout.strip()
     assert tag.startswith("v")
-    return tag[1:] # Cut off v prefix.
+    return tag[1:]  # Cut off v prefix.
 
 
 def sha256_file(path: str) -> str:
@@ -91,6 +94,7 @@ def sha256_file(path: str) -> str:
             h.update(b)
 
         return h.hexdigest()
+
 
 if __name__ == '__main__':
     main()
