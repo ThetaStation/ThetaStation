@@ -5,9 +5,6 @@
   suffix: SHIPEVENT
   components:
     - type: RandomHumanoidAppearance
-    - type: Eye
-      drawFov: false
-      zoom: 1.5, 1.5
     - type: Loadout
       prototype: ShipTestEventStandard
       prototypes: [ShipTestEventStandard]
