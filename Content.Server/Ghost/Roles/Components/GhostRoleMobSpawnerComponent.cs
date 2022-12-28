@@ -20,10 +20,10 @@ namespace Content.Server.Ghost.Roles.Components
         private bool _deleteOnSpawn = true;
 
         [ViewVariables(VVAccess.ReadWrite)] [DataField("availableTakeovers")]
-        public int AvailableTakeovers = 1;
+        private int _availableTakeovers = 1;
 
         [ViewVariables]
-        public int CurrentTakeovers = 0;
+        private int _currentTakeovers = 0;
 
         [CanBeNull]
         [ViewVariables(VVAccess.ReadWrite)]
@@ -34,7 +34,7 @@ namespace Content.Server.Ghost.Roles.Components
         {
             if (Taken)
             {
-                if (CurrentTakeovers < AvailableTakeovers)
+                if (_currentTakeovers < _availableTakeovers)
                     Taken = false;
                 else
                     return false;
@@ -58,7 +58,7 @@ namespace Content.Server.Ghost.Roles.Components
             var spawnedEvent = new GhostRoleSpawnerUsedEvent(Owner, mob);
             _entMan.EventBus.RaiseLocalEvent(mob, spawnedEvent, false);
 
-            if (++CurrentTakeovers < AvailableTakeovers)
+            if (++_currentTakeovers < _availableTakeovers)
                 return true;
 
             Taken = true;
@@ -68,5 +68,7 @@ namespace Content.Server.Ghost.Roles.Components
 
             return true;
         }
+
+        public void SetCurrentTakeovers(int takeovers) { _currentTakeovers = takeovers; }
     }
 }
