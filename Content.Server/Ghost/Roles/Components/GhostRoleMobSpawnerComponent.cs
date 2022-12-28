@@ -42,9 +42,6 @@ namespace Content.Server.Ghost.Roles.Components
             var xform = _entMan.GetComponent<TransformComponent>(mob);
             xform.AttachToGridOrMap();
 
-            var spawnedEvent = new GhostRoleSpawnerUsedEvent(Owner, mob);
-            _entMan.EventBus.RaiseLocalEvent(mob, spawnedEvent, false);
-
             if (MakeSentient)
                 MakeSentientCommand.MakeSentient(mob, _entMan, AllowMovement, AllowSpeech);
 
@@ -52,6 +49,9 @@ namespace Content.Server.Ghost.Roles.Components
 
             var ghostRoleSystem = EntitySystem.Get<GhostRoleSystem>();
             ghostRoleSystem.GhostRoleInternalCreateMindAndTransfer(session, Owner, mob, this);
+
+            var spawnedEvent = new GhostRoleSpawnerUsedEvent(Owner, mob);
+            _entMan.EventBus.RaiseLocalEvent(mob, spawnedEvent, false);
 
             if (++_currentTakeovers < _availableTakeovers)
                 return true;
