@@ -1,6 +1,6 @@
-using Content.Server.Humanoid;
-using Content.Server.Projectiles.Components;
 using Content.Server.UserInterface;
+using Content.Shared.Humanoid;
+using Content.Shared.Projectiles;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
