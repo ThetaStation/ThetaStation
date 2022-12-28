@@ -194,7 +194,7 @@ public sealed class ShipEventFactionSystem : EntitySystem
 
     private string GetShipName(EntityUid shipEntity)
     {
-       return entMan.GetEntityQuery<MetaDataComponent>().GetComponent((EntityUid)shipEntity).EntityName;
+       return entMan.GetEntityQuery<MetaDataComponent>().GetComponent(shipEntity).EntityName;
     }
 
     private bool HasShuttleConsole(EntityUid shipEntity)
