@@ -1,6 +1,5 @@
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
-using Content.Server.Projectiles.Components;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Events;
 using Content.Server.UserInterface;
@@ -15,7 +14,6 @@ using Content.Shared.Tag;
 using Robust.Server.GameObjects;
 using Robust.Shared.GameStates;
 using Robust.Shared.Physics.Components;
-using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -92,17 +90,13 @@ namespace Content.Server.Shuttles.Systems
 
             if (HasComp<FTLComponent>(xform.GridUid))
             {
-                if (args.Session.AttachedEntity != null)
-                    _popup.PopupCursor(Loc.GetString("shuttle-console-in-ftl"), Filter.Entities(args.Session.AttachedEntity.Value));
-
+                _popup.PopupCursor(Loc.GetString("shuttle-console-in-ftl"), args.Session);
                 return;
             }
 
             if (!_shuttle.CanFTL(shuttle.Owner, out var reason))
             {
-                if (args.Session.AttachedEntity != null)
-                    _popup.PopupCursor(reason, Filter.Entities(args.Session.AttachedEntity.Value));
-
+                _popup.PopupCursor(reason, args.Session);
                 return;
             }
 
