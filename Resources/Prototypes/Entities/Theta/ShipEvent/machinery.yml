@@ -7,3 +7,22 @@
   components:
     - type: ApcPowerReceiver
       needsPower: false
+
+- type: entity
+  id: TeamSpawnerShipEvent
+  name: team spawner
+  suffix: SHIPEVENT
+  description: High-tech machinery capable of creating new crewmembers from thin air. Can only create new crewmembers if amount of living team members is lower than threshold.
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: /Textures/Structures/Machines/cloning.rsi
+    state: pod_1
+  - type: GhostRoleMobSpawner
+    prototype: MobHumanShipEvent
+    name: Ship Team
+    description: Уничтожь своих врагов!
+    rules: You are an antagonist, scavenge, attack, and grow your hoard!
+    availableTakeovers: 5
+    deleteOnSpawn: false

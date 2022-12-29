@@ -1,7 +1,7 @@
 ﻿using Content.Server.Chat.Managers;
 using Content.Server.Roles;
 
-namespace Content.Server.ShipEvent;
+namespace Content.Server.Theta.ShipEvent;
 
 public sealed class ShipEventRole : Role
 {

@@ -40,7 +40,16 @@ public class PlayerFaction
 		Members.Remove(member);
 	}
 
-	public List<Mind.Mind> GetLivingMembers()
+    public EntityUid GetMemberEntity(Role member)
+    {
+        if (!Members.Contains(member)) { return EntityUid.Invalid; }
+
+        EntityUid? entity = member.Mind.OwnedEntity;
+        if (entity != null) { return (EntityUid)entity; }
+        return EntityUid.Invalid;
+    }
+
+    public List<Mind.Mind> GetLivingMembers()
 	{
 		List<Mind.Mind> living = new();
 		foreach (Role member in Members)

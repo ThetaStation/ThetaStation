@@ -1347,7 +1347,7 @@ entities:
       id: thruster-burn
     type: Fixtures
 - uid: 69
-  type: SpawnPointShipEvent
+  type: TeamSpawnerShipEvent
   components:
   - pos: -1.5,7.5
     parent: 1
