@@ -45,6 +45,10 @@
         description: shipevent-teamview-toggle-desc
         itemIconStyle: NoItem
         event: !type:ToggleActionEvent
+    - type: UserInterface
+      interfaces:
+      - key: enum.TeamViewUiKey.Key
+        type: TeamViewBoundUserInterface
 
 - type: entity
   id: SpawnPointShipEvent
