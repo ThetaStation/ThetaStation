@@ -21,11 +21,17 @@ public sealed class CannonSystem : SharedCannonSystem
         SubscribeLocalEvent<CannonComponent, RotateCannonEvent>(RotateCannons);
         SubscribeLocalEvent<CannonComponent, StartCannonFiringEvent>(RequestCannonShoot);
         SubscribeLocalEvent<CannonComponent, StopCannonFiringEventEvent>(RequestStopCannonShoot);
+        SubscribeLocalEvent<CannonComponent, ComponentRemove>(OnComponentRemove);
     }
 
     private void RequestCannonShoot(EntityUid uid, CannonComponent component, ref StartCannonFiringEvent args)
     {
         _firingCannons[uid] = (args.Pilot, args.Coordinates);
+    }
+
+    private void OnComponentRemove(EntityUid uid, CannonComponent component, ComponentRemove args)
+    {
+        _firingCannons.Remove(uid);
     }
 
     private void RequestStopCannonShoot(EntityUid uid, CannonComponent component, ref StopCannonFiringEventEvent args)
@@ -86,7 +92,10 @@ public sealed class CannonSystem : SharedCannonSystem
         {
             var gun = GetCannonGun(uid);
             if (gun == null)
+            {
+                _firingCannons.Remove(uid);
                 return;
+            }
             if (!_gunSystem.CanShoot(gun))
                 return;
 

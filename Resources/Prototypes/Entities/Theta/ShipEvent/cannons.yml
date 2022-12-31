@@ -11,9 +11,6 @@
         name: action-name-combat
     - type: Actions
     - type: Cannon
-    - type: ContainerContainer
-      containers:
-        ballistic-ammo: !type:Container
     - type: Sprite
       netsync: false
       sprite: Objects/Weapons/Guns/turrets.rsi
@@ -36,26 +33,12 @@
 - type: entity
   id: ShipEventCannonBallistic
   parent: ShipEventCannon
-  name: ballistic cannon
+  name: rocket cannon
   description: A ballistic machine gun auto-turret.
   components:
     - type: Sprite
       layers:
         - state: syndie_lethal
-    - type: Gun
-      minAngle: 4
-      maxAngle: 20
-      angleIncrease: 4
-      angleDecay: 16
-      fireRate: 4
-      projectileSpeed: 50
-      selectedMode: FullAuto
-      availableModes:
-        - FullAuto
-      soundGunshot: /Audio/Weapons/Guns/Gunshots/gun_sentry.ogg
-    - type: BallisticAmmoProvider
-      proto: CartridgeCaselessRifle
-      capacity: 500
     - type: Destructible
       thresholds:
         - trigger:
@@ -72,3 +55,56 @@
                 SheetSteel1:
                   min: 3
                   max: 5
+    - type: Gun
+      minAngle: 4
+      maxAngle: 20
+      angleIncrease: 4
+      angleDecay: 16
+      fireRate: 4
+      projectileSpeed: 50
+      selectedMode: SemiAuto
+      availableModes:
+        - SemiAuto
+      soundGunshot: /Audio/Weapons/Guns/Gunshots/gun_sentry.ogg
+    - type: ChamberMagazineAmmoProvider
+    - type: ItemSlots
+      slots:
+        gun_magazine:
+          name: Magazine
+          startingItem: MagazineLightRifleBoxEvent
+          insertSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
+          ejectSound: /Audio/Weapons/Guns/MagOut/batrifle_magout.ogg
+          priority: 2
+          whitelist:
+            tags:
+              - MagazineLightRifleBox
+        gun_chamber:
+          name: Chamber
+          startingItem: CartridgeLightRifleExplosive
+          priority: 1
+          whitelist:
+            tags:
+              - CartridgeLightRifle
+    - type: ContainerContainer
+      containers:
+        gun_magazine: !type:ContainerSlot
+        gun_chamber: !type:ContainerSlot
+
+- type: entity
+  id: MagazineLightRifleBoxEvent
+  name: rocket cannon magazine box
+  suffix: SHIPEVENT
+  parent: MagazineLightRifleBox
+  components:
+    - type: BallisticAmmoProvider
+      proto: CartridgeLightRifleExplosive
+      capacity: 100
+
+- type: entity
+  id: CartridgeLightRifleExplosive
+  name: cartridge (explosive)
+  parent: CartridgeLightRifle
+  suffix: SHIPEVENT
+  components:
+    - type: CartridgeAmmo
+      proto: LightRifleBulletExplosive

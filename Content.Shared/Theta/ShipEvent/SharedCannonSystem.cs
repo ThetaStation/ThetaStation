@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Content.Shared.CombatMode;
 using Content.Shared.Physics;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
@@ -32,7 +31,6 @@ public abstract class SharedCannonSystem : EntitySystem
 
         var coords = EntityCoordinates.FromMap(ev.Cannon, new MapCoordinates(ev.Coordinates, Transform(ev.Cannon).MapID));
         _gunSystem.AttemptShoot(ev.Pilot, gun, coords);
-
     }
 
     public bool CanShoot(RequestCannonShootEvent args, GunComponent gun)
@@ -107,4 +105,3 @@ public sealed class RequestStopCannonShootEvent : EntityEventArgs
 {
     public EntityUid Cannon;
 }
-
