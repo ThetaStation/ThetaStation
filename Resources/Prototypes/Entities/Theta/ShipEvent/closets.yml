@@ -23,7 +23,7 @@
 
 - type: entity
   name: Shotgun Ammo Closet
-  id: SawAmmoGunCloset
+  id: ShotgunAmmoGunCloset
   parent: ShipEventCloset
   components:
     - type: StorageFill
