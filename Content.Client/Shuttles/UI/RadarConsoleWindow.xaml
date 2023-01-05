@@ -4,8 +4,8 @@
                       Title="{Loc 'radar-console-window-title'}"
                       MinSize="256 256">
     <ui:DefaultRadarControl Name="RadarScreen"
+                            MouseFilter="Stop"
                             Margin="4"
-                            HorizontalExpand = "True"
-                            VerticalExpand = "True"
-                            MouseFilter="Stop"/>
+                            HorizontalExpand="True"
+                            VerticalExpand="True" />
 </controls:FancyWindow>
