@@ -50,10 +50,10 @@ public abstract class RadarControl : Control
     public float MaxRadarRange { get; private set; } = 256f * 10f;
 
     private int MinimapRadius => (int) Math.Min(Size.X, Size.Y) / 2;
-    private Vector2 MidPoint => Size / 2;
+    protected Vector2 MidPoint => Size / 2;
     private int SizeFull => (int) (MinimapRadius * 2 * UIScale);
     private int ScaledMinimapRadius => (int) (MinimapRadius * UIScale);
-    private float MinimapScale => RadarRange != 0 ? ScaledMinimapRadius / RadarRange : 0f;
+    protected float MinimapScale => RadarRange != 0 ? ScaledMinimapRadius / RadarRange : 0f;
 
     /// <summary>
     /// Shows a label on each radar object.
