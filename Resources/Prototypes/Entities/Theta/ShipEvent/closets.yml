@@ -20,3 +20,15 @@
       contents:
         - id: MagazineLightRifleBoxEvent
           amount: 10
+
+- type: entity
+  name: Shotgun Ammo Closet
+  id: SawAmmoGunCloset
+  parent: ShipEventCloset
+  components:
+    - type: StorageFill
+      contents:
+        - id: MagazineShotgunShipEvent
+          amount: 10
+        - id: MagazineShotgunIncendiaryShipEvent
+          amount: 10
