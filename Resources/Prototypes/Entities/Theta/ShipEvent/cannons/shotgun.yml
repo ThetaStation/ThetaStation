@@ -54,7 +54,7 @@
   id: MagazineShotgunShipEvent
   name: cannon shotgun magazine (slug)
   parent: BaseMagazineShotgun
-  prefix: SHIPEVENT
+  suffix: SHIPEVENT
   components:
     - type: BallisticAmmoProvider
       proto: ShellShotgunSlugEvent
@@ -70,7 +70,7 @@
   id: ShellShotgunSlugEvent
   name: shell (.50 slug)
   parent: ShellShotgunSlug
-  prefix: SHIPEVENT
+  suffix: SHIPEVENT
   components:
   - type: CartridgeAmmo
     proto: PelletShotgunSlugEvent
@@ -82,7 +82,7 @@
   name: pellet (.50 slug)
   noSpawn: true
   parent: PelletShotgunSlug
-  prefix: SHIPEVENT
+  suffix: SHIPEVENT
   components:
   - type: Projectile
     damage:
@@ -93,7 +93,7 @@
   id: MagazineShotgunIncendiaryShipEvent
   name: cannon shotgun magazine (incendiary)
   parent: BaseMagazineShotgun
-  prefix: SHIPEVENT
+  suffix: SHIPEVENT
   components:
   - type: BallisticAmmoProvider
     proto: ShellShotgunIncendiary
