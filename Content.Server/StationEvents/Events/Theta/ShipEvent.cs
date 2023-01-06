@@ -23,35 +23,40 @@ public sealed class ShipEvent : StationEventSystem
         Vector2i? lastDir = null;
         var spawnCount = 2;
         var spawned = 0;
-        while (true)
+        var failsafe = 0;
+        while (++failsafe != 100)
         {
             if (spawnCount == spawned)
             {
                 break;
             }
-            if (TryFindRandomTile(out _, out _, out var targetGrid, out var targetTile))
+
+            if (!TryFindRandomTile(out _, out _, out var targetGrid, out var targetTile))
             {
-                var mapPos = (Vector2i) targetTile.ToMapPos(EntityManager);
-                if (lastDir is null)
-                {
-                    lastDir = RobustRandom.NextAngle().GetDir().ToIntVec();
-                }
-                else
-                {
-                    lastDir = lastDir.Value * -1; // invert vector
-                }
-                mapPos += lastDir.Value * RobustRandom.Next(500, 750);
-                var mapLoadOptions = new MapLoadOptions
-                {
-                    Rotation = RobustRandom.NextAngle(),
-                    Offset = mapPos,
-                    LoadMap = false,
-                };
-                _map.Load(Transform(targetGrid).MapID, RobustRandom.Pick(ShipGrids), mapLoadOptions);
-                Sawmill.Info($"Spawning the ship test shuttle at {targetTile}");
-                spawned++;
+                continue;
             }
 
+            spawned++;
+
+            var mapPos = (Vector2i) targetTile.ToMapPos(EntityManager);
+            if (lastDir is null)
+            {
+                lastDir = RobustRandom.NextAngle().GetDir().ToIntVec();
+            }
+            else
+            {
+                lastDir = lastDir.Value * -1; // invert vector
+            }
+
+            mapPos += lastDir.Value * RobustRandom.Next(500, 750);
+            var mapLoadOptions = new MapLoadOptions
+            {
+                Rotation = RobustRandom.NextAngle(),
+                Offset = mapPos,
+                LoadMap = false,
+            };
+            _map.Load(Transform(targetGrid).MapID, RobustRandom.Pick(ShipGrids), mapLoadOptions);
+            Sawmill.Info($"Spawning the ship test shuttle at {targetTile}");
         }
     }
 }
