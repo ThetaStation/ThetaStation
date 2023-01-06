@@ -30,9 +30,6 @@ namespace Content.Server.Shuttles.Systems
         [Dependency] private readonly UserInterfaceSystem _ui = default!;
         [Dependency] private readonly RadarConsoleSystem _radarConsoleSystem = default!;
 
-        private float UpdateRate = 1f;
-        private float _updateDif;
-
         public override void Initialize()
         {
             base.Initialize();
@@ -344,12 +341,6 @@ namespace Content.Server.Shuttles.Systems
             {
                 RemovePilot(comp);
             }
-
-            // check update rate
-            _updateDif += frameTime;
-            if (_updateDif < 0)
-                return;
-            _updateDif = 0f;
 
             foreach (var shuttleConsole in EntityManager.EntityQuery<ShuttleConsoleComponent>())
             {

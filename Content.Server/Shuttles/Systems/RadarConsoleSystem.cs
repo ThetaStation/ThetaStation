@@ -15,9 +15,6 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 {
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
 
-    private float UpdateRate = 1f;
-    private float _updateDif;
-
     public override void Initialize()
     {
         base.Initialize();
@@ -32,12 +29,6 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
-
-        // check update rate
-        _updateDif += frameTime;
-        if (_updateDif < 0)
-            return;
-        _updateDif = 0f;
 
         foreach (var radar in EntityManager.EntityQuery<RadarConsoleComponent>())
         {
