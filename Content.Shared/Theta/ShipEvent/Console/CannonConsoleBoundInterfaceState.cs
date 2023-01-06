@@ -15,7 +15,7 @@ public sealed class CannonConsoleBoundInterfaceState : RadarConsoleBoundInterfac
         List<DockingInterfaceState> docks,
         List<MobInterfaceState> mobs,
         List<ProjectilesInterfaceState> projectiles,
-        List<EntityUid> cannons,
+        List<CannonInterfaceState> cannons,
         List<EntityUid> controlledCannons) : base(maxRange, coordinates, angle, docks, mobs, projectiles, cannons)
     {
         ControlledCannons = controlledCannons;

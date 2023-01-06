@@ -294,7 +294,7 @@ namespace Content.Server.Shuttles.Systems
             docks ??= GetAllDocks();
             List<MobInterfaceState> mobs;
             List<ProjectilesInterfaceState> projectiles;
-            List<EntityUid> cannons;
+            List<CannonInterfaceState> cannons;
             if (radar != null)
             {
                 mobs = _radarConsoleSystem.GetMobsAround(radar);
@@ -305,7 +305,7 @@ namespace Content.Server.Shuttles.Systems
             {
                 mobs = new List<MobInterfaceState>();
                 projectiles = new List<ProjectilesInterfaceState>();
-                cannons = new List<EntityUid>();
+                cannons = new List<CannonInterfaceState>();
             }
 
             _ui.GetUiOrNull(component.Owner, ShuttleConsoleUiKey.Key)

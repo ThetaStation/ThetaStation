@@ -87,7 +87,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 50
+        Piercing: 100
 
 - type: entity
   id: MagazineShotgunIncendiaryShipEvent

@@ -90,15 +90,21 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
         return list;
     }
 
-    public List<EntityUid> GetCannonsOnGrid(RadarConsoleComponent component)
+    public List<CannonInterfaceState> GetCannonsOnGrid(RadarConsoleComponent component)
     {
-        var list = new List<EntityUid>();
+        var list = new List<CannonInterfaceState>();
         var myGrid = Transform(component.Owner).GridUid;
         foreach (var cannon in EntityQuery<CannonComponent>())
         {
-            if(Transform(cannon.Owner).GridUid != myGrid)
+            var transform = Transform(cannon.Owner);
+            if(transform.GridUid != myGrid)
                 continue;
-            list.Add(cannon.Owner);
+            list.Add(new CannonInterfaceState
+            {
+                Coordinates = transform.Coordinates,
+                Entity = cannon.Owner,
+                Angle = transform.WorldRotation
+            });
         }
 
         return list;

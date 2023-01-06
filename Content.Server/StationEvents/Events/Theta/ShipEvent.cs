@@ -21,8 +21,14 @@ public sealed class ShipEvent : StationEventSystem
         base.Started();
 
         Vector2i? lastDir = null;
-        for (var i = 0; i < 2; i++)
+        var spawnCount = 2;
+        var spawned = 0;
+        while (true)
         {
+            if (spawnCount == spawned)
+            {
+                break;
+            }
             if (TryFindRandomTile(out _, out _, out var targetGrid, out var targetTile))
             {
                 var mapPos = (Vector2i) targetTile.ToMapPos(EntityManager);
@@ -43,7 +49,9 @@ public sealed class ShipEvent : StationEventSystem
                 };
                 _map.Load(Transform(targetGrid).MapID, RobustRandom.Pick(ShipGrids), mapLoadOptions);
                 Sawmill.Info($"Spawning the ship test shuttle at {targetTile}");
+                spawned++;
             }
+
         }
     }
 }

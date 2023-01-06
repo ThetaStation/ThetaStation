@@ -66,7 +66,7 @@ public abstract class RadarControl : Control
 
     protected List<ProjectilesInterfaceState> _projectiles = new();
 
-    protected List<EntityUid> _cannons = new();
+    protected List<CannonInterfaceState> _cannons = new();
 
     public bool ShowIFF { get; set; } = true;
     public bool ShowDocks { get; set; } = true;
@@ -384,10 +384,9 @@ public abstract class RadarControl : Control
         const float cannonSize = 3f;
         foreach (var cannon in _cannons)
         {
-            var transform = entityQuery.GetComponent(cannon);
-            var position = transform.WorldPosition;
-            var angle = transform.WorldRotation;
-            var color = GetCannonColor(cannon);
+            var position = cannon.Coordinates.ToMapPos(_entManager);
+            var angle = cannon.Angle;
+            var color = GetCannonColor(cannon.Entity);
 
             var verts = new[]
             {
