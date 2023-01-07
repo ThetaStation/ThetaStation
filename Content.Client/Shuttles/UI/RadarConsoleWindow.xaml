@@ -3,8 +3,9 @@
                       xmlns:ui="clr-namespace:Content.Client.Shuttles.UI"
                       Title="{Loc 'radar-console-window-title'}"
                       MinSize="256 256">
-    <ui:RadarControl Name="RadarScreen"
-                     Margin="4"
-                     HorizontalExpand = "True"
-                     VerticalExpand = "True"/>
+    <ui:DefaultRadarControl Name="RadarScreen"
+                            MouseFilter="Stop"
+                            Margin="4"
+                            HorizontalExpand="True"
+                            VerticalExpand="True" />
 </controls:FancyWindow>

@@ -183,6 +183,13 @@ public abstract partial class SharedGunSystem : EntitySystem
         return !TryComp(entity, out gun) ? null : gun;
     }
 
+    // 1 level of deep
+    public EntityUid GetGunOwner(EntityUid gun)
+    {
+        var transform = Transform(gun);
+        return transform.GridUid == transform.ParentUid ? gun : transform.ParentUid;
+    }
+
     private void StopShooting(GunComponent gun)
     {
         if (gun.ShotCounter == 0) return;
@@ -253,7 +260,7 @@ public abstract partial class SharedGunSystem : EntitySystem
                 throw new ArgumentOutOfRangeException($"No implemented shooting behavior for {gun.SelectedMode}!");
         }
 
-        var fromCoordinates = Transform(user).Coordinates;
+        var fromCoordinates = Transform(gun.Owner).Coordinates;
         // Remove ammo
         var ev = new TakeAmmoEvent(shots, new List<IShootable>(), fromCoordinates, user);
 
@@ -289,9 +296,9 @@ public abstract partial class SharedGunSystem : EntitySystem
         // Shoot confirmed - sounds also played here in case it's invalid (e.g. cartridge already spent).
         Shoot(gun, ev.Ammo, fromCoordinates, toCoordinates.Value, user);
         // Projectiles cause impulses especially important in non gravity environments
-        if (TryComp<PhysicsComponent>(user, out var userPhysics))
+        if (TryComp<PhysicsComponent>(gun.Owner, out var userPhysics))
         {
-            if (Gravity.IsWeightless(user, userPhysics))
+            if (Gravity.IsWeightless(gun.Owner, userPhysics))
                 CauseImpulse(fromCoordinates, toCoordinates.Value, userPhysics);
         }
         Dirty(gun);
@@ -371,7 +378,7 @@ public abstract partial class SharedGunSystem : EntitySystem
         if (sprite == null)
             return;
 
-        var ev = new MuzzleFlashEvent(gun, sprite, user == gun);
+        var ev = new MuzzleFlashEvent(gun, sprite, user == gun || GetGunOwner(gun) != user);
         CreateEffect(gun, ev, user);
     }
 

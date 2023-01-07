@@ -30,9 +30,6 @@ namespace Content.Server.Shuttles.Systems
         [Dependency] private readonly UserInterfaceSystem _ui = default!;
         [Dependency] private readonly RadarConsoleSystem _radarConsoleSystem = default!;
 
-        private float UpdateRate = 1f;
-        private float _updateDif;
-
         public override void Initialize()
         {
             base.Initialize();
@@ -294,15 +291,18 @@ namespace Content.Server.Shuttles.Systems
             docks ??= GetAllDocks();
             List<MobInterfaceState> mobs;
             List<ProjectilesInterfaceState> projectiles;
+            List<CannonInterfaceState> cannons;
             if (radar != null)
             {
                 mobs = _radarConsoleSystem.GetMobsAround(radar);
                 projectiles = _radarConsoleSystem.GetProjectilesAround(radar);
+                cannons = _radarConsoleSystem.GetCannonsOnGrid(radar);
             }
             else
             {
                 mobs = new List<MobInterfaceState>();
                 projectiles = new List<ProjectilesInterfaceState>();
+                cannons = new List<CannonInterfaceState>();
             }
 
             _ui.GetUiOrNull(component.Owner, ShuttleConsoleUiKey.Key)
@@ -315,7 +315,8 @@ namespace Content.Server.Shuttles.Systems
                     consoleXform?.LocalRotation,
                     docks,
                     mobs,
-                    projectiles
+                    projectiles,
+                    cannons
                     )
                 );
         }
@@ -340,12 +341,6 @@ namespace Content.Server.Shuttles.Systems
             {
                 RemovePilot(comp);
             }
-
-            // check update rate
-            _updateDif += frameTime;
-            if (_updateDif < UpdateRate)
-                return;
-            _updateDif = 0f;
 
             foreach (var shuttleConsole in EntityManager.EntityQuery<ShuttleConsoleComponent>())
             {

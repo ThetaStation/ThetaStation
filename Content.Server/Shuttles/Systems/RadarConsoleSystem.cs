@@ -4,17 +4,16 @@ using Content.Shared.Projectiles;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
+using Content.Shared.Theta.ShipEvent;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
+using Robust.Shared.Network.Messages;
 
 namespace Content.Server.Shuttles.Systems;
 
 public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 {
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
-
-    private float UpdateRate = 1f;
-    private float _updateDif;
 
     public override void Initialize()
     {
@@ -30,12 +29,6 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
-
-        // check update rate
-        _updateDif += frameTime;
-        if (_updateDif < UpdateRate)
-            return;
-        _updateDif = 0f;
 
         foreach (var radar in EntityManager.EntityQuery<RadarConsoleComponent>())
         {
@@ -88,13 +81,33 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
         return list;
     }
 
+    public List<CannonInterfaceState> GetCannonsOnGrid(RadarConsoleComponent component)
+    {
+        var list = new List<CannonInterfaceState>();
+        var myGrid = Transform(component.Owner).GridUid;
+        foreach (var cannon in EntityQuery<CannonComponent>())
+        {
+            var transform = Transform(cannon.Owner);
+            if(transform.GridUid != myGrid)
+                continue;
+            list.Add(new CannonInterfaceState
+            {
+                Coordinates = transform.Coordinates,
+                Entity = cannon.Owner,
+                Angle = transform.WorldRotation
+            });
+        }
+
+        return list;
+    }
+
     protected override void UpdateState(RadarConsoleComponent component)
     {
         var xform = Transform(component.Owner);
         var onGrid = xform.ParentUid == xform.GridUid;
         Angle? angle = onGrid ? xform.LocalRotation : Angle.Zero;
         // find correct grid
-        while (!onGrid && !xform.ParentUid.Equals(EntityUid.Invalid))
+        while (!onGrid && !xform.ParentUid.IsValid())
         {
             xform = Transform(xform.ParentUid);
             angle = Angle.Zero;
@@ -118,6 +131,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 
         var mobs = GetMobsAround(component);
         var projectiles = GetProjectilesAround(component);
+        var cannons = GetCannonsOnGrid(component);
 
         var radarState = new RadarConsoleBoundInterfaceState(
             component.MaxRange,
@@ -125,9 +139,11 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
             angle,
             new List<DockingInterfaceState>(),
             mobs,
-            projectiles
+            projectiles,
+            cannons
             );
 
         _uiSystem.TrySetUiState(component.Owner, RadarConsoleUiKey.Key, radarState);
     }
+
 }

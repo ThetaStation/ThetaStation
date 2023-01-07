@@ -42,9 +42,6 @@ namespace Content.IntegrationTests.Tests
             "/Maps/Shuttles/cargo.yml",
             "/Maps/Shuttles/emergency.yml",
             "/Maps/Shuttles/ship_test_1.yml",
-            "/Maps/Shuttles/ship_test_2.yml",
-            "/Maps/Shuttles/syndicate_fighter.yml",
-            "/Maps/Shuttles/beetle.yml",
             "/Maps/infiltrator.yml",
         };
 

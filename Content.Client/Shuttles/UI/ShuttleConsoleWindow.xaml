@@ -40,11 +40,11 @@
                         HorizontalAlignment = "Stretch"
                         HorizontalExpand = "True"
                         VerticalExpand = "True">
-            <ui:RadarControl Name="RadarScreen"
-                             MouseFilter="Stop"
-                             Margin="4"
-                             HorizontalExpand = "True"
-                             VerticalExpand = "True"/>
+            <ui:DefaultRadarControl Name="RadarScreen"
+                                    MouseFilter="Stop"
+                                    Margin="4"
+                                    HorizontalExpand = "True"
+                                    VerticalExpand = "True"/>
             <ui:DockingControl Name="DockingScreen"
                                Visible="False"
                                MouseFilter="Stop"

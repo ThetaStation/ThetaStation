@@ -2,11 +2,40 @@
   parent: ComputerShuttle
   id: ComputerShuttleEvent
   name: shuttle console
-  suffix: SHIPEVENT
   description: Used to pilot a shuttle.
+  suffix: SHIPEVENT
   components:
     - type: ApcPowerReceiver
       needsPower: false
+
+- type: entity
+  parent: BaseComputer
+  id: CannonComputerShuttleEvent
+  name: cannon console
+  suffix: SHIPEVENT
+  components:
+    - type: CannonConsole
+    - type: SignalTransmitter
+      outputs:
+        CannonConsoleSender: []
+    - type: ActivatableUI
+      key: enum.CannonConsoleUiKey.Key
+    - type: UserInterface
+      interfaces:
+        - key: enum.CannonConsoleUiKey.Key
+          type: CannonConsoleBoundUserInterface
+    - type: RadarConsole
+    - type: PointLight
+      radius: 1.5
+      energy: 1.6
+      color: "#43ccb5"
+    - type: ApcPowerReceiver
+      needsPower: false
+    - type: Appearance
+      visuals:
+        - type: ComputerVisualizer
+          key: generic_key
+          screen: comm_syndie
 
 - type: entity
   id: TeamSpawnerShipEvent
