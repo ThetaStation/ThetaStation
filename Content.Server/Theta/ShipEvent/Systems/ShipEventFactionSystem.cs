@@ -9,6 +9,7 @@ using Content.Server.Roles;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Server.Shuttles.Components;
 using Content.Shared.Actions;
+using Content.Shared.GameTicking;
 using Content.Shared.Toggleable;
 using Content.Shared.Theta.ShipEvent;
 using Robust.Server.GameObjects;
@@ -44,6 +45,7 @@ public sealed class ShipEventFactionSystem : EntitySystem
 		SubscribeLocalEvent<ShipEventFactionComponent, GhostRoleSpawnerUsedEvent>(OnSpawn);
         SubscribeLocalEvent<ShipEventFactionViewComponent, ToggleActionEvent>(OnView);
         SubscribeLocalEvent<ShipEventFactionViewComponent, ComponentInit>(OnViewInit);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
     }
 
 	public override void Update(float frametime)
@@ -219,4 +221,6 @@ public sealed class ShipEventFactionSystem : EntitySystem
 
         return null;
     }
+
+    public void OnRoundRestart(RoundRestartCleanupEvent ev) { Teams.Clear(); }
 }
