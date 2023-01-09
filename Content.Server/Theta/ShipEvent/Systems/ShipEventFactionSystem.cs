@@ -222,5 +222,9 @@ public sealed class ShipEventFactionSystem : EntitySystem
         return null;
     }
 
-    public void OnRoundRestart(RoundRestartCleanupEvent ev) { Teams.Clear(); }
+    public void OnRoundRestart(RoundRestartCleanupEvent ev)
+    {
+        Teams.Clear();
+        LastTeamNumber = 0;
+    }
 }
