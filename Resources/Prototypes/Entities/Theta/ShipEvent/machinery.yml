@@ -40,12 +40,16 @@
 - type: entity
   id: TeamSpawnerShipEvent
   name: team spawner
+  parent: BaseStructure
   suffix: SHIPEVENT
+  placement:
+    mode: SnapgridCenter
   description: High-tech machinery capable of creating new crewmembers from thin air. Can only create new crewmembers if amount of living team members is lower than threshold.
   components:
   - type: Transform
     anchored: true
   - type: Sprite
+    drawdepth: Mobs
     sprite: /Textures/Structures/Machines/cloning.rsi
     state: pod_1
   - type: GhostRoleMobSpawner
@@ -55,3 +59,38 @@
     rules: You are an antagonist, scavenge, attack, and grow your hoard!
     availableTakeovers: 5
     deleteOnSpawn: false
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+    - shape:
+        !type:PhysShapeAabb {}
+      mask:
+      - FullTileMask
+      layer:
+      - WallLayer
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: Glass
+  - type: Repairable
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 150
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: GlassBreak
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          ShardGlass:
+            min: 1
+            max: 2
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: MeleeSound
+    soundGroups:
+      Brute:
+        path:
+          "/Audio/Effects/glass_hit.ogg"
