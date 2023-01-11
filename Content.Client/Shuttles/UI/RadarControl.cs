@@ -1,9 +1,12 @@
 using Content.Client.Stylesheets;
+using Content.Client.Theta.ShipEvent;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using Robust.Client.Graphics;
+using Robust.Client.Player;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Input;
 using Robust.Shared.Map;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Collision.Shapes;
@@ -16,11 +19,11 @@ namespace Content.Client.Shuttles.UI;
 /// <summary>
 /// Displays nearby grids inside of a control.
 /// </summary>
-public sealed class RadarControl : Control
+public abstract class RadarControl : Control
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] protected readonly IEntityManager _entManager = default!;
+    [Dependency] protected readonly IGameTiming _timing = default!;
+    [Dependency] protected readonly IMapManager _mapManager = default!;
 
     private const float ScrollSensitivity = 8f;
     private const float GridLinesDistance = 32f;
@@ -28,18 +31,18 @@ public sealed class RadarControl : Control
     /// <summary>
     /// Used to transform all of the radar objects. Typically is a shuttle console parented to a grid.
     /// </summary>
-    private EntityCoordinates? _coordinates;
+    protected EntityCoordinates? _coordinates;
 
-    private Angle? _rotation;
+    protected Angle? _rotation;
 
-    private float _radarMinRange = 64f;
-    private float _radarMaxRange = 256f;
+    protected float _radarMinRange = 64f;
+    protected float _radarMaxRange = 256f;
     public float RadarRange { get; private set; } = 256f;
 
     /// <summary>
     /// We'll lerp between the radarrange and actual range
     /// </summary>
-    private float _actualRadarRange = 256f;
+    protected float _actualRadarRange = 256f;
 
     /// <summary>
     /// Controls the maximum distance that IFF labels will display.
@@ -47,17 +50,23 @@ public sealed class RadarControl : Control
     public float MaxRadarRange { get; private set; } = 256f * 10f;
 
     private int MinimapRadius => (int) Math.Min(Size.X, Size.Y) / 2;
-    private Vector2 MidPoint => (Size / 2) * UIScale;
+    protected Vector2 MidPoint => (Size / 2) * UIScale;
     private int SizeFull => (int) (MinimapRadius * 2 * UIScale);
     private int ScaledMinimapRadius => (int) (MinimapRadius * UIScale);
-    private float MinimapScale => RadarRange != 0 ? ScaledMinimapRadius / RadarRange : 0f;
+    protected float MinimapScale => RadarRange != 0 ? ScaledMinimapRadius / RadarRange : 0f;
 
     /// <summary>
     /// Shows a label on each radar object.
     /// </summary>
-    private Dictionary<EntityUid, Control> _iffControls = new();
+    protected Dictionary<EntityUid, Control> _iffControls = new();
 
-    private Dictionary<EntityUid, List<DockingInterfaceState>> _docks = new();
+    protected Dictionary<EntityUid, List<DockingInterfaceState>> _docks = new();
+
+    protected List<MobInterfaceState> _mobs = new();
+
+    protected List<ProjectilesInterfaceState> _projectiles = new();
+
+    protected List<CannonInterfaceState> _cannons = new();
 
     public bool ShowIFF { get; set; } = true;
     public bool ShowDocks { get; set; } = true;
@@ -102,6 +111,12 @@ public sealed class RadarControl : Control
             var grid = _docks.GetOrNew(coordinates.EntityId);
             grid.Add(state);
         }
+
+        _mobs = ls.MobsAround;
+        _projectiles = ls.Projectiles;
+
+        _cannons = ls.Cannons;
+
     }
 
     protected override void MouseWheel(GUIMouseWheelEventArgs args)
@@ -113,6 +128,26 @@ public sealed class RadarControl : Control
     public void AddRadarRange(float value)
     {
         _actualRadarRange = Math.Clamp(_actualRadarRange + value, _radarMinRange, _radarMaxRange);
+    }
+
+    protected Matrix3 GetOffsetMatrix()
+    {
+        if (_coordinates == null || _rotation == null)
+            return Matrix3.Zero;
+
+        var mapPosition = _coordinates.Value.ToMap(_entManager);
+        if (mapPosition.MapId == MapId.Nullspace)
+            return Matrix3.Zero;
+
+        var xformQuery = _entManager.GetEntityQuery<TransformComponent>();
+
+        if (!xformQuery.TryGetComponent(_coordinates.Value.EntityId, out var xform))
+            return Matrix3.Zero;
+
+        var offsetMatrix = Matrix3.CreateTransform(
+            mapPosition.Position,
+            xform.WorldRotation - _rotation.Value);
+        return offsetMatrix;
     }
 
     protected override void Draw(DrawingHandleScreen handle)
@@ -160,17 +195,14 @@ public sealed class RadarControl : Control
         var bodyQuery = _entManager.GetEntityQuery<PhysicsComponent>();
 
         var mapPosition = _coordinates.Value.ToMap(_entManager);
-
-        if (mapPosition.MapId == MapId.Nullspace || !xformQuery.TryGetComponent(_coordinates.Value.EntityId, out var xform))
+        var offsetMatrix = GetOffsetMatrix();
+        if (offsetMatrix.Equals(Matrix3.Zero))
         {
             Clear();
             return;
         }
 
-        var offset = _coordinates.Value.Position;
-        var offsetMatrix = Matrix3.CreateInverseTransform(
-            mapPosition.Position,
-            xform.WorldRotation - _rotation.Value);
+        offsetMatrix = offsetMatrix.Invert();
 
         // Draw our grid in detail
         var ourGridId = _coordinates.Value.GetGridUid(_entManager);
@@ -186,13 +218,6 @@ public sealed class RadarControl : Control
 
             DrawDocks(handle, ourGridId.Value, matrix);
         }
-
-        var invertedPosition = _coordinates.Value.Position - offset;
-        invertedPosition.Y = -invertedPosition.Y;
-        // Don't need to transform the InvWorldMatrix again as it's already offset to its position.
-
-        // Draw radar position on the station
-        handle.DrawCircle(ScalePosition(invertedPosition), 5f, Color.Lime);
 
         var shown = new HashSet<EntityUid>();
 
@@ -284,6 +309,20 @@ public sealed class RadarControl : Control
             DrawDocks(handle, grid.Owner, matty);
         }
 
+        DrawProjectiles(handle, offsetMatrix);
+
+        DrawMobs(handle, offsetMatrix);
+
+        DrawCannons(handle, offsetMatrix, xformQuery);
+
+        var offset = _coordinates.Value.Position;
+        var invertedPosition = _coordinates.Value.Position - offset;
+        invertedPosition.Y = -invertedPosition.Y;
+        // Don't need to transform the InvWorldMatrix again as it's already offset to its position.
+
+        // Draw radar position on the station
+        handle.DrawCircle(ScalePosition(invertedPosition), 5f, Color.Lime);
+
         foreach (var (ent, _) in _iffControls)
         {
             if (shown.Contains(ent)) continue;
@@ -306,6 +345,79 @@ public sealed class RadarControl : Control
         if (!_iffControls.TryGetValue(uid, out var label)) return;
         label.Dispose();
         _iffControls.Remove(uid);
+    }
+
+    private void DrawProjectiles(DrawingHandleScreen handle, Matrix3 matrix)
+    {
+        const float projectileSize = 1.5f;
+        foreach (var state in _projectiles)
+        {
+            var position = state.Coordinates.ToMapPos(_entManager);
+            var angle = state.Angle;
+            var color = Color.Brown;
+
+            var verts = new[]
+            {
+                matrix.Transform(position + angle.RotateVec(new Vector2(-projectileSize/2, 0))),
+                matrix.Transform(position + angle.RotateVec(new Vector2(projectileSize/2, 0))),
+                matrix.Transform(position + angle.RotateVec(new Vector2(0, -projectileSize))),
+                matrix.Transform(position + angle.RotateVec(new Vector2(-projectileSize/2, 0))),
+            };
+            for (var i = 0; i < verts.Length; i++)
+            {
+                var vert = verts[i];
+                vert.Y = -vert.Y;
+                verts[i] = ScalePosition(vert);
+            }
+            handle.DrawPrimitives(DrawPrimitiveTopology.LineStrip, verts, color);
+        }
+    }
+
+    protected virtual Color GetCannonColor(EntityUid cannon)
+    {
+        return Color.YellowGreen;
+    }
+
+    // transform components on the client should be enough to get the angle
+    private void DrawCannons(DrawingHandleScreen handle, Matrix3 matrix, EntityQuery<TransformComponent> entityQuery)
+    {
+        const float cannonSize = 3f;
+        foreach (var cannon in _cannons)
+        {
+            var position = cannon.Coordinates.ToMapPos(_entManager);
+            var angle = cannon.Angle;
+            var color = GetCannonColor(cannon.Entity);
+
+            var verts = new[]
+            {
+                matrix.Transform(position + angle.RotateVec(new Vector2(-cannonSize/2, cannonSize/4))),
+                matrix.Transform(position + angle.RotateVec(new Vector2(0, -cannonSize/2 - cannonSize/4))),
+                matrix.Transform(position + angle.RotateVec(new Vector2(cannonSize/2, cannonSize/4))),
+                matrix.Transform(position + angle.RotateVec(new Vector2(-cannonSize/2, cannonSize/4))),
+            };
+            for (var i = 0; i < verts.Length; i++)
+            {
+                var vert = verts[i];
+                vert.Y = -vert.Y;
+                verts[i] = ScalePosition(vert);
+            }
+
+            handle.DrawPrimitives(DrawPrimitiveTopology.LineStrip, verts, color);
+        }
+    }
+
+    private void DrawMobs(DrawingHandleScreen handle, Matrix3 matrix)
+    {
+        foreach (var state in _mobs)
+        {
+            var position = state.Coordinates.ToMapPos(_entManager);
+            var uiPosition = matrix.Transform(position);
+            var color = Color.Red;
+
+            uiPosition.Y = -uiPosition.Y;
+
+            handle.DrawCircle(ScalePosition(uiPosition), 3f, color);
+        }
     }
 
     private void DrawDocks(DrawingHandleScreen handle, EntityUid uid, Matrix3 matrix)

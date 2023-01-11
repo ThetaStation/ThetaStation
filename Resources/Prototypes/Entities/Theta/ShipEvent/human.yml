@@ -1,0 +1,64 @@
+﻿- type: entity
+  name: ShipTest Agent
+  id: MobHumanShipEvent
+  parent: MobHuman
+  suffix: SHIPEVENT
+  components:
+    - type: RandomHumanoidAppearance
+    - type: Loadout
+      prototype: ShipTestEventStandard
+      prototypes: [ShipTestEventStandard]
+    - type: UsePlayerNameForEntityName
+    - type: ShipEventFaction
+    - type: ShipEventFactionView
+      toggle:
+        icon: { sprite: "/Textures/Theta/ShipEvent/ShipTeamView.rsi", state: icon }
+        iconOn: "/Textures/Theta/ShipEvent/ShipFactionIcon.rsi"
+        name: shipevent-teamview-toggle-name
+        description: shipevent-teamview-toggle-desc
+        itemIconStyle: NoItem
+        event: !type:ToggleActionEvent
+    - type: UserInterface
+      interfaces:
+      - key: enum.TeamViewUiKey.Key
+        type: TeamViewBoundUserInterface
+
+- type: entity
+  id: SpawnPointShipEvent
+  name: ship event spawner
+  suffix: SHIPEVENT
+  parent: MarkerBase
+  components:
+    - type: GhostRoleMobSpawner
+      prototype: MobHumanShipEvent
+      availableTakeovers: 5
+      name: Ship Team
+      description: Уничтожь своих врагов!
+      rules: You are an antagonist, scavenge, attack, and grow your hoard!
+    - type: Sprite
+      sprite: Markers/jobs.rsi
+      layers:
+        - state: green
+        - sprite: Markers/jobs.rsi
+          state: ertjanitoreva
+
+# Space Ship - Poverty
+- type: startingGear
+  id: ShipTestEventStandard
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitOperative
+    back: ClothingBackpackDuffelSyndicateOperative
+    shoes: ClothingShoesBootsMagAdv
+    mask: ClothingMaskGasSyndicate
+    # eyes: Night Vision Goggles whenever they're made
+    eyes: ClothingEyesGlassesMeson
+    ears: ClothingHeadsetAltSyndicate
+    gloves: ClothingHandsGlovesCombat
+    outerClothing: ClothingOuterHardsuitSyndie
+    id: AgentIDCard
+    pocket1: ExtendedEmergencyOxygenTankFilled
+    pocket2: BaseUplinkRadio40TC
+    belt: ClothingBeltMilitaryWebbing
+  innerclothingskirt: ClothingUniformJumpskirtOperative
+  satchel: ClothingBackpackDuffelSyndicateOperative
+  duffelbag: ClothingBackpackDuffelSyndicateOperative
