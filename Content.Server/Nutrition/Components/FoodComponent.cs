@@ -1,4 +1,3 @@
-using System.Threading;
 using Content.Server.Chemistry.EntitySystems;
 using Content.Server.Nutrition.EntitySystems;
 using Content.Shared.FixedPoint;
@@ -42,6 +41,18 @@ namespace Content.Server.Nutrition.Components
         public string EatMessage = "food-nom";
 
         /// <summary>
+        /// Is this entity being forcefed?
+        /// </summary>
+        [DataField("forceFeed")]
+        public bool ForceFeed;
+
+        /// <summary>
+        /// Is this entity eating or being fed?
+        /// </summary>
+        [DataField(("eating"))]
+        public bool Eating;
+
+        /// <summary>
         /// How long it takes to eat the food personally.
         /// </summary>
         [DataField("delay")]
@@ -54,12 +65,6 @@ namespace Content.Server.Nutrition.Components
         [DataField("forceFeedDelay")]
         public float ForceFeedDelay = 3;
 
-        /// <summary>
-        ///     Token for interrupting a do-after action (e.g., force feeding). If not null, implies component is
-        ///     currently "in use".
-        /// </summary>
-        public CancellationTokenSource? CancelToken;
-
         [ViewVariables]
         public int UsesRemaining
         {
@@ -71,11 +76,11 @@ namespace Content.Server.Nutrition.Components
                 }
 
                 if (TransferAmount == null)
-                    return solution.CurrentVolume == 0 ? 0 : 1;
+                    return solution.Volume == 0 ? 0 : 1;
 
-                return solution.CurrentVolume == 0
+                return solution.Volume == 0
                     ? 0
-                    : Math.Max(1, (int) Math.Ceiling((solution.CurrentVolume / (FixedPoint2)TransferAmount).Float()));
+                    : Math.Max(1, (int) Math.Ceiling((solution.Volume / (FixedPoint2)TransferAmount).Float()));
             }
         }
     }

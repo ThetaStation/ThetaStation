@@ -9,7 +9,7 @@
       prototype: ShipTestEventStandard
       prototypes: [ShipTestEventStandard]
     - type: UsePlayerNameForEntityName
-    - type: ShipEventFaction
+    - type: ShipEventFactionMarker
     - type: ShipEventFactionView
       toggle:
         icon: { sprite: "/Textures/Theta/ShipEvent/ShipTeamView.rsi", state: icon }
@@ -22,6 +22,7 @@
       interfaces:
       - key: enum.TeamViewUiKey.Key
         type: TeamViewBoundUserInterface
+    - type: MobHUD
 
 - type: entity
   id: SpawnPointShipEvent

@@ -5,7 +5,6 @@ using Content.Server.Administration.Managers;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
 using Content.Server.Ghost.Components;
-using Content.Server.MobState;
 using Content.Server.Players;
 using Content.Server.Popups;
 using Content.Server.Station.Components;
@@ -14,8 +13,10 @@ using Content.Shared.ActionBlocker;
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
 using Content.Shared.Database;
+using Content.Shared.Humanoid;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Inventory;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Radio;
 using Robust.Server.GameObjects;
 using Robust.Server.Player;
@@ -52,10 +53,12 @@ public sealed partial class ChatSystem : SharedChatSystem
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly StationSystem _stationSystem = default!;
     [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
 
     public const int VoiceRange = 10; // how far voice goes in world units
     public const int WhisperRange = 2; // how far whisper goes in world units
     public const string DefaultAnnouncementSound = "/Audio/Announcements/announce.ogg";
+    public const string CentComAnnouncementSound = "/Audio/Corvax/Announcements/centcomm.ogg"; // Corvax-Announcements
 
     private bool _loocEnabled = true;
     private bool _deadLoocEnabled = false;
@@ -63,7 +66,8 @@ public sealed partial class ChatSystem : SharedChatSystem
 
     public override void Initialize()
     {
-        InitializeRadio();
+        base.Initialize();
+        InitializeEmotes();
         _configurationManager.OnValueChanged(CCVars.LoocEnabled, OnLoocEnabledChanged, true);
         _configurationManager.OnValueChanged(CCVars.DeadLoocEnabled, OnDeadLoocEnabledChanged, true);
 
@@ -72,8 +76,10 @@ public sealed partial class ChatSystem : SharedChatSystem
 
     public override void Shutdown()
     {
-        ShutdownRadio();
+        base.Shutdown();
+        ShutdownEmotes();
         _configurationManager.UnsubValueChanged(CCVars.LoocEnabled, OnLoocEnabledChanged);
+        _configurationManager.UnsubValueChanged(CCVars.DeadLoocEnabled, OnDeadLoocEnabledChanged);
     }
 
     private void OnLoocEnabledChanged(bool val)
@@ -96,13 +102,17 @@ public sealed partial class ChatSystem : SharedChatSystem
 
     private void OnGameChange(GameRunLevelChangedEvent ev)
     {
-        if (_configurationManager.GetCVar(CCVars.OocEnableDuringRound))
-            return;
-
-        if (ev.New == GameRunLevel.InRound)
-            _configurationManager.SetCVar(CCVars.OocEnabled, false);
-        else if (ev.New == GameRunLevel.PostRound)
-            _configurationManager.SetCVar(CCVars.OocEnabled, true);
+        switch(ev.New)
+        {
+            case GameRunLevel.InRound:
+                if(!_configurationManager.GetCVar(CCVars.OocEnableDuringRound))
+                    _configurationManager.SetCVar(CCVars.OocEnabled, false);
+                break;
+            case GameRunLevel.PostRound:
+                if(!_configurationManager.GetCVar(CCVars.OocEnableDuringRound))
+                    _configurationManager.SetCVar(CCVars.OocEnabled, true);
+                break;
+        }
     }
 
     /// <summary>
@@ -135,6 +145,13 @@ public sealed partial class ChatSystem : SharedChatSystem
         if (!CanSendInGame(message, shell, player))
             return;
 
+        if (desiredType == InGameICChatType.Speak && message.StartsWith(LocalPrefix))
+        {
+            // prevent radios and remove prefix.
+            checkRadioPrefix = false;
+            message = message[1..];
+        }
+
         hideGlobalGhostChat |= hideChat;
         bool shouldCapitalize = (desiredType != InGameICChatType.Emote);
         bool shouldPunctuate = _configurationManager.GetCVar(CCVars.ChatPunctuation);
@@ -154,10 +171,9 @@ public sealed partial class ChatSystem : SharedChatSystem
         // This message may have a radio prefix, and should then be whispered to the resolved radio channel
         if (checkRadioPrefix)
         {
-            var (radioMessage, channel) = GetRadioPrefix(source, message);
-            if (channel != null)
+            if (TryProccessRadioMessage(source, message, out var modMessage, out var channel))
             {
-                SendEntityWhisper(source, radioMessage, hideChat, hideGlobalGhostChat, channel, nameOverride);
+                SendEntityWhisper(source, modMessage, hideChat, hideGlobalGhostChat, channel, nameOverride);
                 return;
             }
         }
@@ -207,6 +223,11 @@ public sealed partial class ChatSystem : SharedChatSystem
         }
     }
 
+    public void SendSimpleMessage(string message, IPlayerSession player, ChatChannel channel = ChatChannel.Local, Color? color = null)
+    {
+        _chatManager.ChatMessageToOne(channel, message, message, default, false, player.ConnectedClient, color);
+    }
+
     #region Announcements
 
     /// <summary>
@@ -223,7 +244,8 @@ public sealed partial class ChatSystem : SharedChatSystem
         _chatManager.ChatMessageToAll(ChatChannel.Radio, message, wrappedMessage, default, false, true, colorOverride);
         if (playSound)
         {
-            SoundSystem.Play(announcementSound?.GetSound() ?? DefaultAnnouncementSound, Filter.Broadcast(), AudioParams.Default.WithVolume(-2f));
+            if (sender == Loc.GetString("admin-announce-announcer-default")) announcementSound = new SoundPathSpecifier(CentComAnnouncementSound); // Corvax-Announcements: Support custom alert sound from admin panel
+            SoundSystem.Play(announcementSound?.GetSound() ?? DefaultAnnouncementSound, Filter.Broadcast(), announcementSound?.Params ?? AudioParams.Default.WithVolume(-2f));
         }
         _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Global station announcement from {sender}: {message}");
     }
@@ -289,6 +311,10 @@ public sealed partial class ChatSystem : SharedChatSystem
         }
 
         name = FormattedMessage.EscapeText(name);
+        // Corvax-SpeakerColor-Start
+        if (TryComp<HumanoidAppearanceComponent>(source, out var comp))
+            name = $"[color={comp.SpeakerColor.ToHex()}]{name}[/color]";
+        // Corvax-SpeakerColor-End
         var wrappedMessage = Loc.GetString("chat-manager-entity-say-wrap-message",
             ("entityName", name), ("message", FormattedMessage.EscapeText(message)));
 
@@ -302,9 +328,21 @@ public sealed partial class ChatSystem : SharedChatSystem
             return;
 
         if (originalMessage == message)
-            _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Say from {ToPrettyString(source):user}: {originalMessage}.");
+        {
+            if (name != Name(source))
+                _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Say from {ToPrettyString(source):user} as {name}: {originalMessage}.");
+            else
+                _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Say from {ToPrettyString(source):user}: {originalMessage}.");
+        }
         else
-            _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Say from {ToPrettyString(source):user}, original: {originalMessage}, transformed: {message}.");
+        {
+            if (name != Name(source))
+                _adminLogger.Add(LogType.Chat, LogImpact.Low,
+                    $"Say from {ToPrettyString(source):user} as {name}, original: {originalMessage}, transformed: {message}.");
+            else
+                _adminLogger.Add(LogType.Chat, LogImpact.Low,
+                    $"Say from {ToPrettyString(source):user}, original: {originalMessage}, transformed: {message}.");
+        }
     }
 
     private void SendEntityWhisper(EntityUid source, string originalMessage, bool hideChat, bool hideGlobalGhostChat, RadioChannelPrototype? channel, string? nameOverride)
@@ -331,7 +369,10 @@ public sealed partial class ChatSystem : SharedChatSystem
             name = nameEv.Name;
         }
         name = FormattedMessage.EscapeText(name);
-
+        // Corvax-SpeakerColor-Start
+        if (TryComp<HumanoidAppearanceComponent>(source, out var comp))
+            name = $"[color={comp.SpeakerColor.ToHex()}]{name}[/color]";
+        // Corvax-SpeakerColor-End
 
         var wrappedMessage = Loc.GetString("chat-manager-entity-whisper-wrap-message",
             ("entityName", name), ("message", FormattedMessage.EscapeText(message)));
@@ -361,12 +402,25 @@ public sealed partial class ChatSystem : SharedChatSystem
         RaiseLocalEvent(source, ev, true);
 
         if (originalMessage == message)
-            _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Whisper from {ToPrettyString(source):user}: {originalMessage}.");
+        {
+            if (name != Name(source))
+                _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Whisper from {ToPrettyString(source):user} as {name}: {originalMessage}.");
+            else
+                _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Whisper from {ToPrettyString(source):user}: {originalMessage}.");
+        }
         else
-            _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Whisper from {ToPrettyString(source):user}, original: {originalMessage}, transformed: {message}.");
+        {
+            if (name != Name(source))
+                _adminLogger.Add(LogType.Chat, LogImpact.Low,
+                    $"Whisper from {ToPrettyString(source):user} as {name}, original: {originalMessage}, transformed: {message}.");
+            else
+                _adminLogger.Add(LogType.Chat, LogImpact.Low,
+                    $"Whisper from {ToPrettyString(source):user}, original: {originalMessage}, transformed: {message}.");
+        }
     }
 
-    private void SendEntityEmote(EntityUid source, string action, bool hideChat, bool hideGlobalGhostChat, string? nameOverride)
+    private void SendEntityEmote(EntityUid source, string action, bool hideChat,
+        bool hideGlobalGhostChat, string? nameOverride, bool checkEmote = true)
     {
         if (!_actionBlocker.CanEmote(source)) return;
 
@@ -378,8 +432,14 @@ public sealed partial class ChatSystem : SharedChatSystem
             ("entityName", name),
             ("message", FormattedMessage.EscapeText(action)));
 
+        if (checkEmote)
+            TryEmoteChatInput(source, action);
         SendInVoiceRange(ChatChannel.Emotes, action, wrappedMessage, source, hideChat, hideGlobalGhostChat);
-        _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Emote from {ToPrettyString(source):user}: {action}");
+
+        if (name != Name(source))
+            _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Emote from {ToPrettyString(source):user} as {name}: {action}");
+        else
+            _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Emote from {ToPrettyString(source):user}: {action}");
     }
 
     // ReSharper disable once InconsistentNaming
@@ -473,6 +533,7 @@ public sealed partial class ChatSystem : SharedChatSystem
     private string SanitizeInGameICMessage(EntityUid source, string message, out string? emoteStr, bool capitalize = true, bool punctuate = false)
     {
         var newMessage = message.Trim();
+        newMessage = ReplaceWords(newMessage); // Corvax-ChatSanitize
         if (capitalize)
             newMessage = SanitizeMessageCapital(newMessage);
         if (punctuate)
@@ -506,15 +567,6 @@ public sealed partial class ChatSystem : SharedChatSystem
             .Recipients
             .Union(_adminManager.ActiveAdmins)
             .Select(p => p.ConnectedClient);
-    }
-
-    private string SanitizeMessageCapital(string message)
-    {
-        if (string.IsNullOrEmpty(message))
-            return message;
-        // Capitalize first letter
-        message = message[0].ToString().ToUpper() + message.Remove(0, 1);
-        return message;
     }
 
     private string SanitizeMessagePeriod(string message)
@@ -600,7 +652,7 @@ public sealed partial class ChatSystem : SharedChatSystem
 ///     This event is raised before chat messages are sent out to clients. This enables some systems to send the chat
 ///     messages to otherwise out-of view entities (e.g. for multiple viewports from cameras).
 /// </summary>
-public record class ExpandICChatRecipientstEvent(EntityUid Source, float VoiceRange, Dictionary<ICommonSession, ChatSystem.ICChatRecipientData> Recipients)
+public record ExpandICChatRecipientstEvent(EntityUid Source, float VoiceRange, Dictionary<ICommonSession, ChatSystem.ICChatRecipientData> Recipients)
 {
 }
 

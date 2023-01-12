@@ -29,8 +29,9 @@ public abstract class SharedCannonSystem : EntitySystem
             return;
         }
 
-        var coords = EntityCoordinates.FromMap(ev.Cannon, new MapCoordinates(ev.Coordinates, Transform(ev.Cannon).MapID));
-        _gunSystem.AttemptShoot(ev.Pilot, gun, coords);
+        var coords =
+            EntityCoordinates.FromMap(ev.Cannon, new MapCoordinates(ev.Coordinates, Transform(ev.Cannon).MapID));
+        _gunSystem.AttemptShoot(ev.Pilot, ev.Cannon, gun, coords);
     }
 
     public bool CanShoot(RequestCannonShootEvent args, GunComponent gun)

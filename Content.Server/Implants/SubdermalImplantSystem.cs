@@ -1,14 +1,16 @@
-﻿using Content.Server.Cuffs.Components;
+﻿using Content.Server.Cuffs;
+using Content.Shared.Cuffs.Components;
 using Content.Shared.Implants;
 using Content.Shared.Implants.Components;
 using Content.Shared.Interaction.Events;
-using Content.Shared.MobState;
+using Content.Shared.Mobs;
 using Robust.Shared.Containers;
 
 namespace Content.Server.Implants;
 
 public sealed class SubdermalImplantSystem : SharedSubdermalImplantSystem
 {
+    [Dependency] private readonly CuffableSystem _cuffable = default!;
     [Dependency] private readonly SharedContainerSystem _container = default!;
 
     public override void Initialize()
@@ -26,24 +28,30 @@ public sealed class SubdermalImplantSystem : SharedSubdermalImplantSystem
         if (!TryComp<CuffableComponent>(component.ImplantedEntity, out var cuffs) || cuffs.Container.ContainedEntities.Count < 1)
             return;
 
-        if (TryComp<HandcuffComponent>(cuffs.LastAddedCuffs, out var cuff))
-        {
-            cuffs.Uncuff(component.ImplantedEntity.Value, cuffs.LastAddedCuffs, cuff, true);
-        }
+        _cuffable.Uncuff(component.ImplantedEntity.Value, cuffs.LastAddedCuffs, cuffs.LastAddedCuffs);
     }
 
     #region Relays
 
-
     //Relays from the implanted to the implant
-    private void RelayToImplantEvent<T>(EntityUid uid, ImplantedComponent component, T args) where T : EntityEventArgs
+    private void RelayToImplantEvent<T>(EntityUid uid, ImplantedComponent component, T args) where T: notnull
     {
         if (!_container.TryGetContainer(uid, ImplanterComponent.ImplantSlotId, out var implantContainer))
             return;
-
         foreach (var implant in implantContainer.ContainedEntities)
         {
             RaiseLocalEvent(implant, args);
+        }
+    }
+
+    //Relays from the implanted to the implant
+    private void RelayToImplantEventByRef<T>(EntityUid uid, ImplantedComponent component, ref T args) where T: notnull
+    {
+        if (!_container.TryGetContainer(uid, ImplanterComponent.ImplantSlotId, out var implantContainer))
+            return;
+        foreach (var implant in implantContainer.ContainedEntities)
+        {
+            RaiseLocalEvent(implant,ref args);
         }
     }
 
@@ -53,6 +61,14 @@ public sealed class SubdermalImplantSystem : SharedSubdermalImplantSystem
         if (component.ImplantedEntity != null)
         {
             RaiseLocalEvent(component.ImplantedEntity.Value, args);
+        }
+    }
+
+    private void RelayToImplantedEventByRef<T>(EntityUid uid, SubdermalImplantComponent component, ref T args) where T : EntityEventArgs
+    {
+        if (component.ImplantedEntity != null)
+        {
+            RaiseLocalEvent(component.ImplantedEntity.Value, ref args);
         }
     }
 
