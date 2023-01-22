@@ -1,18 +1,12 @@
-using Robust.Server.GameObjects;
-using Robust.Server.Maps;
+using Content.Server.Theta.ShipEvent.Systems;
 using Robust.Shared.Map;
-using Robust.Shared.Random;
 
 namespace Content.Server.StationEvents.Events.Theta;
 
 public sealed class ShipEvent : StationEventSystem
 {
-    [Dependency] private readonly MapLoaderSystem _map = default!;
-
-    public static List<string> ShipGrids = new()
-    {
-        "/Maps/Shuttles/ship_test_1.yml",
-    };
+    [Dependency] private ShipEventFactionSystem _shipSys = default!;
+    [Dependency] private readonly IMapManager _mapMan = default!;
 
     public override string Prototype => "ShipEvent";
 
@@ -20,43 +14,14 @@ public sealed class ShipEvent : StationEventSystem
     {
         base.Started();
 
-        Vector2i? lastDir = null;
-        var spawnCount = 2;
-        var spawned = 0;
-        var failsafe = 0;
-        while (++failsafe != 100)
+        int mid = 1;
+        for (int i = 0; i < 100; i++)
         {
-            if (spawnCount == spawned)
-            {
-                break;
-            }
-
-            if (!TryFindRandomTile(out _, out _, out var targetGrid, out var targetTile))
-            {
-                continue;
-            }
-
-            spawned++;
-
-            var mapPos = (Vector2i) targetTile.ToMapPos(EntityManager);
-            if (lastDir is null)
-            {
-                lastDir = RobustRandom.NextAngle().GetDir().ToIntVec();
-            }
-            else
-            {
-                lastDir = lastDir.Value * -1; // invert vector
-            }
-
-            mapPos += lastDir.Value * RobustRandom.Next(500, 750);
-            var mapLoadOptions = new MapLoadOptions
-            {
-                Rotation = RobustRandom.NextAngle(),
-                Offset = mapPos,
-                LoadMap = false,
-            };
-            _map.Load(Transform(targetGrid).MapID, RobustRandom.Pick(ShipGrids), mapLoadOptions);
-            Sawmill.Info($"Spawning the ship test shuttle at {targetTile}");
+            if (!_mapMan.MapExists(new MapId(mid))) { break; }
+            mid++;
         }
+
+        _mapMan.CreateMap(new MapId(mid));
+        _shipSys.TargetMap = new MapId(mid);
     }
 }

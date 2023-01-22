@@ -76,3 +76,23 @@
   components:
   - type: CartridgeAmmo
     proto: LightRifleBulletExplosive
+
+- type: entity
+  id: LightRifleBulletExplosive
+  name: bullet
+  parent: BaseBulletTrigger
+  suffix: SHIPEVENT
+  components:
+    - type: Sprite
+      sprite: Objects/Weapons/Guns/Projectiles/projectiles2.rsi
+      layers:
+        - state: frag
+    - type: ExplodeOnTrigger
+    - type: Explosive
+      explosionType: Default
+      totalIntensity: 5
+      maxTileBreak: 1
+    - type: PointLight
+      radius: 3.5
+      color: orange
+      energy: 0.5

@@ -1,5 +1,4 @@
-﻿using Content.Server.CombatMode;
-using Content.Shared.Interaction;
+﻿using Content.Shared.Interaction;
 using Content.Shared.Theta.ShipEvent;
 
 namespace Content.Server.Theta.ShipEvent;
