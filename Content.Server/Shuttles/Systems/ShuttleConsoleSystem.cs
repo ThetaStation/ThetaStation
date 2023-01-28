@@ -296,7 +296,7 @@ namespace Content.Server.Shuttles.Systems
             {
                 mobs = _radarConsoleSystem.GetMobsAround(radar);
                 projectiles = _radarConsoleSystem.GetProjectilesAround(radar);
-                cannons = _radarConsoleSystem.GetCannonsOnGrid(radar);
+                cannons = _radarConsoleSystem.GetCannonsOnGrid(radar, null);
             }
             else
             {

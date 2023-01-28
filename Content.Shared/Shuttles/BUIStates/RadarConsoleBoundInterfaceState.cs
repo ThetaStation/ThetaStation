@@ -53,7 +53,6 @@ public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
 public sealed class ProjectilesInterfaceState
 {
     public EntityCoordinates Coordinates;
-    public EntityUid Entity;
     public Angle Angle;
 }
 
@@ -64,7 +63,6 @@ public sealed class ProjectilesInterfaceState
 public sealed class MobInterfaceState
 {
     public EntityCoordinates Coordinates;
-    public EntityUid Entity;
 }
 
 /// <summary>
@@ -74,7 +72,7 @@ public sealed class MobInterfaceState
 public sealed class CannonInterfaceState
 {
     public EntityCoordinates Coordinates;
-    public EntityUid Entity;
+    public Color Color;
     public Angle Angle;
 }
 

@@ -13,6 +13,7 @@ namespace Content.Server.Shuttles.Systems;
 public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 {
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
+    [Dependency] private readonly TransformSystem _transformSystem = default!;
 
     public override void Initialize()
     {
@@ -51,7 +52,6 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
             list.Add(new MobInterfaceState()
             {
                 Coordinates = transform.Coordinates,
-                Entity = transform.Owner
             });
         }
 
@@ -73,28 +73,33 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
             list.Add(new ProjectilesInterfaceState()
             {
                 Coordinates = transform.Coordinates,
-                Angle = transform.WorldRotation,
-                Entity = transform.Owner
+                Angle = _transformSystem.GetWorldRotation(xform),
             });
         }
 
         return list;
     }
 
-    public List<CannonInterfaceState> GetCannonsOnGrid(RadarConsoleComponent component)
+    public List<CannonInterfaceState> GetCannonsOnGrid(RadarConsoleComponent component,
+        List<EntityUid>? controlledCannons)
     {
         var list = new List<CannonInterfaceState>();
         var myGrid = Transform(component.Owner).GridUid;
-        foreach (var cannon in EntityQuery<CannonComponent>())
+        foreach (var (cannon, transform) in EntityQuery<CannonComponent, TransformComponent>())
         {
-            var transform = Transform(cannon.Owner);
-            if(transform.GridUid != myGrid)
+            if (transform.GridUid != myGrid)
                 continue;
+            var color = Color.YellowGreen;
+            if (controlledCannons != null)
+            {
+                color = controlledCannons.Contains(cannon.Owner) ? Color.Lime : Color.LightGreen;
+            }
+
             list.Add(new CannonInterfaceState
             {
                 Coordinates = transform.Coordinates,
-                Entity = cannon.Owner,
-                Angle = transform.WorldRotation
+                Color = color,
+                Angle = _transformSystem.GetWorldRotation(transform),
             });
         }
 
@@ -113,6 +118,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
             angle = Angle.Zero;
             onGrid = xform.ParentUid == xform.GridUid;
         }
+
         EntityCoordinates? coordinates = onGrid ? xform.Coordinates : null;
 
         // Use ourself I guess.
@@ -131,7 +137,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 
         var mobs = GetMobsAround(component);
         var projectiles = GetProjectilesAround(component);
-        var cannons = GetCannonsOnGrid(component);
+        var cannons = GetCannonsOnGrid(component, null);
 
         var radarState = new RadarConsoleBoundInterfaceState(
             component.MaxRange,
@@ -141,9 +147,8 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
             mobs,
             projectiles,
             cannons
-            );
+        );
 
         _uiSystem.TrySetUiState(component.Owner, RadarConsoleUiKey.Key, radarState);
     }
-
 }

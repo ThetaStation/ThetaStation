@@ -51,8 +51,8 @@ public sealed class CannonConsoleSystem : EntitySystem
 
         var mobs = _radarConsoleSystem.GetMobsAround(radarConsole);
         var projectiles = _radarConsoleSystem.GetProjectilesAround(radarConsole);
-        var cannonsOnGrid = _radarConsoleSystem.GetCannonsOnGrid(radarConsole);
         var controlledCannons = GetLinkedCannons(cannonConsole.Owner);
+        var cannonsOnGrid = _radarConsoleSystem.GetCannonsOnGrid(radarConsole, controlledCannons);
 
         var radarState = new CannonConsoleBoundInterfaceState(
             radarConsole.MaxRange,
@@ -62,7 +62,7 @@ public sealed class CannonConsoleSystem : EntitySystem
             mobs,
             projectiles,
             cannonsOnGrid,
-             controlledCannons
+            controlledCannons
         );
 
         _uiSystem.TrySetUiState(cannonConsole.Owner, CannonConsoleUiKey.Key, radarState);

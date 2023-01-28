@@ -40,7 +40,7 @@
                         HorizontalAlignment = "Stretch"
                         HorizontalExpand = "True"
                         VerticalExpand = "True">
-            <ui:DefaultRadarControl Name="RadarScreen"
+            <ui:RadarControl Name="RadarScreen"
                                     MouseFilter="Stop"
                                     Margin="4"
                                     HorizontalExpand = "True"
