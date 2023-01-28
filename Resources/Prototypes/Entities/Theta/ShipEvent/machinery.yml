@@ -31,11 +31,16 @@
       color: "#43ccb5"
     - type: ApcPowerReceiver
       needsPower: false
-    - type: Appearance
-      visuals:
-        - type: ComputerVisualizer
-          key: generic_key
-          screen: comm_syndie
+    - type: Sprite
+      layers:
+        - map: ["computerLayerBody"]
+          state: computer
+        - map: ["computerLayerKeyboard"]
+          state: generic_keyboard
+        - map: ["computerLayerScreen"]
+          state: comm_syndie
+        - map: ["computerLayerKeys"]
+          state: syndie_key
 
 - type: entity
   id: TeamSpawnerShipEvent
