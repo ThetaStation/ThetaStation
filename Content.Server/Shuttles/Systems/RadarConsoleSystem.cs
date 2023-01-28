@@ -7,7 +7,6 @@ using Content.Shared.Shuttles.Systems;
 using Content.Shared.Theta.ShipEvent;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
-using Robust.Shared.Network.Messages;
 
 namespace Content.Server.Shuttles.Systems;
 
@@ -43,7 +42,8 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
         if (!TryComp<TransformComponent>(component.Owner, out var xform))
             return list;
 
-        foreach (var (_, transform) in EntityManager.EntityQuery<HumanoidComponent, TransformComponent>())
+        // TODO: replace HumanoidAppearanceComponent on the component denoting the player any species
+        foreach (var (_, transform) in EntityManager.EntityQuery<HumanoidAppearanceComponent, TransformComponent>())
         {
             if (!xform.MapPosition.InRange(transform.MapPosition, component.MaxRange))
                 continue;
