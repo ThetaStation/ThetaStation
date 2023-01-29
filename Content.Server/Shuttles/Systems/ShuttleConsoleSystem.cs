@@ -1,6 +1,5 @@
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
-using Content.Server.Projectiles.Components;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Events;
 using Content.Server.UserInterface;
@@ -15,7 +14,6 @@ using Content.Shared.Tag;
 using Robust.Server.GameObjects;
 using Robust.Shared.GameStates;
 using Robust.Shared.Physics.Components;
-using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -31,9 +29,6 @@ namespace Content.Server.Shuttles.Systems
         [Dependency] private readonly TagSystem _tags = default!;
         [Dependency] private readonly UserInterfaceSystem _ui = default!;
         [Dependency] private readonly RadarConsoleSystem _radarConsoleSystem = default!;
-
-        private float UpdateRate = 1f;
-        private float _updateDif;
 
         public override void Initialize()
         {
@@ -92,17 +87,13 @@ namespace Content.Server.Shuttles.Systems
 
             if (HasComp<FTLComponent>(xform.GridUid))
             {
-                if (args.Session.AttachedEntity != null)
-                    _popup.PopupCursor(Loc.GetString("shuttle-console-in-ftl"), Filter.Entities(args.Session.AttachedEntity.Value));
-
+                _popup.PopupCursor(Loc.GetString("shuttle-console-in-ftl"), args.Session);
                 return;
             }
 
             if (!_shuttle.CanFTL(shuttle.Owner, out var reason))
             {
-                if (args.Session.AttachedEntity != null)
-                    _popup.PopupCursor(reason, Filter.Entities(args.Session.AttachedEntity.Value));
-
+                _popup.PopupCursor(reason, args.Session);
                 return;
             }
 
@@ -300,15 +291,18 @@ namespace Content.Server.Shuttles.Systems
             docks ??= GetAllDocks();
             List<MobInterfaceState> mobs;
             List<ProjectilesInterfaceState> projectiles;
+            List<CannonInterfaceState> cannons;
             if (radar != null)
             {
                 mobs = _radarConsoleSystem.GetMobsAround(radar);
                 projectiles = _radarConsoleSystem.GetProjectilesAround(radar);
+                cannons = _radarConsoleSystem.GetCannonsOnGrid(radar);
             }
             else
             {
                 mobs = new List<MobInterfaceState>();
                 projectiles = new List<ProjectilesInterfaceState>();
+                cannons = new List<CannonInterfaceState>();
             }
 
             _ui.GetUiOrNull(component.Owner, ShuttleConsoleUiKey.Key)
@@ -321,7 +315,8 @@ namespace Content.Server.Shuttles.Systems
                     consoleXform?.LocalRotation,
                     docks,
                     mobs,
-                    projectiles
+                    projectiles,
+                    cannons
                     )
                 );
         }
@@ -346,12 +341,6 @@ namespace Content.Server.Shuttles.Systems
             {
                 RemovePilot(comp);
             }
-
-            // check update rate
-            _updateDif += frameTime;
-            if (_updateDif < UpdateRate)
-                return;
-            _updateDif = 0f;
 
             foreach (var shuttleConsole in EntityManager.EntityQuery<ShuttleConsoleComponent>())
             {

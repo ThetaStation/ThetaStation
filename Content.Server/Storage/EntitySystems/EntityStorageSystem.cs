@@ -18,6 +18,8 @@ using Robust.Server.Containers;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Physics;
+using Robust.Shared.Physics.Components;
+using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
 
 namespace Content.Server.Storage.EntitySystems;
@@ -33,6 +35,7 @@ public sealed class EntityStorageSystem : EntitySystem
     [Dependency] private readonly PlaceableSurfaceSystem _placeableSurface = default!;
     [Dependency] private readonly PopupSystem _popupSystem = default!;
     [Dependency] private readonly AtmosphereSystem _atmos = default!;
+    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly IMapManager _map = default!;
 
     public const string ContainerName = "entity_storage";
@@ -46,8 +49,9 @@ public sealed class EntityStorageSystem : EntitySystem
         SubscribeLocalEvent<EntityStorageComponent, WeldableAttemptEvent>(OnWeldableAttempt);
         SubscribeLocalEvent<EntityStorageComponent, WeldableChangedEvent>(OnWelded);
         SubscribeLocalEvent<EntityStorageComponent, LockToggleAttemptEvent>(OnLockToggleAttempt);
-        SubscribeLocalEvent<EntityStorageComponent, DestructionEventArgs>(OnDestroy);
+        SubscribeLocalEvent<EntityStorageComponent, DestructionEventArgs>(OnDestruction);
 
+        SubscribeLocalEvent<InsideEntityStorageComponent, EntGotRemovedFromContainerMessage>(OnRemoved);
         SubscribeLocalEvent<InsideEntityStorageComponent, InhaleLocationEvent>(OnInsideInhale);
         SubscribeLocalEvent<InsideEntityStorageComponent, ExhaleLocationEvent>(OnInsideExhale);
         SubscribeLocalEvent<InsideEntityStorageComponent, AtmosExposedGetAirEvent>(OnInsideExposed);
@@ -94,7 +98,7 @@ public sealed class EntityStorageSystem : EntitySystem
         if (component.Contents.Contains(args.User))
         {
             var msg = Loc.GetString("entity-storage-component-already-contains-user-message");
-            _popupSystem.PopupEntity(msg, args.User, Filter.Entities(args.User));
+            _popupSystem.PopupEntity(msg, args.User, args.User);
             args.Cancel();
         }
     }
@@ -115,11 +119,19 @@ public sealed class EntityStorageSystem : EntitySystem
             args.Cancelled = true;
     }
 
-    private void OnDestroy(EntityUid uid, EntityStorageComponent component, DestructionEventArgs args)
+    private void OnDestruction(EntityUid uid, EntityStorageComponent component, DestructionEventArgs args)
     {
         component.Open = true;
         if (!component.DeleteContentsOnDestruction)
+        {
             EmptyContents(uid, component);
+            return;
+        }
+
+        foreach (var ent in new List<EntityUid>(component.Contents.ContainedEntities))
+        {
+            EntityManager.DeleteEntity(ent);
+        }
     }
 
     public void ToggleOpen(EntityUid user, EntityUid target, EntityStorageComponent? component = null)
@@ -146,12 +158,7 @@ public sealed class EntityStorageSystem : EntitySystem
         var containedArr = component.Contents.ContainedEntities.ToArray();
         foreach (var contained in containedArr)
         {
-            if (!component.Contents.Remove(contained))
-                continue;
-
-            RemComp<InsideEntityStorageComponent>(contained);
-            Transform(contained).WorldPosition =
-                uidXform.WorldPosition + uidXform.WorldRotation.RotateVec(component.EnteringOffset);
+            Remove(contained, uid, component, uidXform);
         }
     }
 
@@ -160,6 +167,7 @@ public sealed class EntityStorageSystem : EntitySystem
         if (!Resolve(uid, ref component))
             return;
 
+        RaiseLocalEvent(uid, new StorageBeforeOpenEvent());
         component.Open = true;
         EmptyContents(uid, component);
         ModifyComponents(uid, component);
@@ -178,8 +186,8 @@ public sealed class EntityStorageSystem : EntitySystem
 
         var entities = _lookup.GetEntitiesInRange(targetCoordinates, component.EnteringRange, LookupFlags.Approximate | LookupFlags.Dynamic | LookupFlags.Sundries);
 
-        var ev = new StorageBeforeCloseEvent(uid, entities);
-        RaiseLocalEvent(uid, ev, true);
+        var ev = new StorageBeforeCloseEvent(entities);
+        RaiseLocalEvent(uid, ev);
         var count = 0;
         foreach (var entity in ev.Contents)
         {
@@ -191,9 +199,6 @@ public sealed class EntityStorageSystem : EntitySystem
 
             if (!AddToContents(entity, uid, component))
                 continue;
-
-            var inside = EnsureComp<InsideEntityStorageComponent>(entity);
-            inside.Storage = uid;
 
             count++;
             if (count >= component.Capacity)
@@ -218,15 +223,20 @@ public sealed class EntityStorageSystem : EntitySystem
             return true;
         }
 
+        var inside = EnsureComp<InsideEntityStorageComponent>(toInsert);
+        inside.Storage = container;
         return component.Contents.Insert(toInsert, EntityManager);
     }
 
-    public bool Remove(EntityUid toRemove, EntityUid container, EntityStorageComponent? component = null)
+    public bool Remove(EntityUid toRemove, EntityUid container, EntityStorageComponent? component = null, TransformComponent? xform = null)
     {
-        if (!Resolve(container, ref component))
+        if (!Resolve(container, ref component, ref xform, false))
             return false;
 
-        return component.Contents.Remove(toRemove, EntityManager);
+        RemComp<InsideEntityStorageComponent>(toRemove);
+        component.Contents.Remove(toRemove, EntityManager);
+        Transform(toRemove).WorldPosition = xform.WorldPosition + xform.WorldRotation.RotateVec(component.EnteringOffset);
+        return true;
     }
 
     public bool CanInsert(EntityUid container, EntityStorageComponent? component = null)
@@ -274,7 +284,7 @@ public sealed class EntityStorageSystem : EntitySystem
         if (component.IsWeldedShut)
         {
             if (!silent && !component.Contents.Contains(user))
-                _popupSystem.PopupEntity(Loc.GetString("entity-storage-component-welded-shut-message"), target, Filter.Pvs(target));
+                _popupSystem.PopupEntity(Loc.GetString("entity-storage-component-welded-shut-message"), target);
 
             return false;
         }
@@ -286,7 +296,7 @@ public sealed class EntityStorageSystem : EntitySystem
             if (!_interactionSystem.InRangeUnobstructed(target, newCoords, 0, collisionMask: component.EnteringOffsetCollisionFlags))
             {
                 if (!silent)
-                    _popupSystem.PopupEntity(Loc.GetString("entity-storage-component-cannot-open-no-space"), target, Filter.Pvs(target));
+                    _popupSystem.PopupEntity(Loc.GetString("entity-storage-component-cannot-open-no-space"), target);
                 return false;
             }
         }
@@ -313,9 +323,11 @@ public sealed class EntityStorageSystem : EntitySystem
         if (toAdd == container)
             return false;
 
-        if (TryComp<IPhysBody>(toAdd, out var phys))
+        if (TryComp<PhysicsComponent>(toAdd, out var phys))
         {
-            if (component.MaxSize < phys.GetWorldAABB().Size.X || component.MaxSize < phys.GetWorldAABB().Size.Y)
+            var aabb = _physics.GetWorldAABB(toAdd, body: phys);
+
+            if (component.MaxSize < aabb.Size.X || component.MaxSize < aabb.Size.Y)
                 return false;
         }
 
@@ -379,11 +391,11 @@ public sealed class EntityStorageSystem : EntitySystem
             if (component.Open)
             {
                 component.RemovedMasks = fixture.CollisionLayer & component.MasksToRemove;
-                fixture.CollisionLayer &= ~component.MasksToRemove;
+                _physics.SetCollisionLayer(uid, fixture, fixture.CollisionLayer & ~component.MasksToRemove, manager: fixtures);
             }
             else
             {
-                fixture.CollisionLayer |= component.RemovedMasks;
+                _physics.SetCollisionLayer(uid, fixture, fixture.CollisionLayer | component.RemovedMasks, manager: fixtures);
                 component.RemovedMasks = 0;
             }
         }
@@ -408,7 +420,7 @@ public sealed class EntityStorageSystem : EntitySystem
         }
     }
 
-    private void ReleaseGas(EntityUid uid, EntityStorageComponent component)
+    public void ReleaseGas(EntityUid uid, EntityStorageComponent component)
     {
         if (!component.Airtight)
             return;
@@ -432,6 +444,13 @@ public sealed class EntityStorageSystem : EntitySystem
         }
 
         return null;
+    }
+
+    private void OnRemoved(EntityUid uid, InsideEntityStorageComponent component, EntGotRemovedFromContainerMessage args)
+    {
+        if (args.Container.Owner != component.Storage)
+            return;
+        RemComp(uid, component);
     }
 
     #region Gas mix event handlers

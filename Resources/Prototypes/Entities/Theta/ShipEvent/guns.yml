@@ -28,25 +28,6 @@
               - CartridgeLightRifle
 
 - type: entity
-  id: MagazineLightRifleBoxEvent
-  name: L6 SAW magazine box (explosive)
-  suffix: SHIPEVENT
-  parent: MagazineLightRifleBox
-  components:
-    - type: BallisticAmmoProvider
-      proto: CartridgeLightRifleExplosive
-      capacity: 100
-
-- type: entity
-  id: CartridgeLightRifleExplosive
-  name: cartridge (explosive)
-  parent: CartridgeLightRifle
-  suffix: SHIPEVENT
-  components:
-    - type: CartridgeAmmo
-      proto: LightRifleBulletExplosive
-
-- type: entity
   id: LightRifleBulletExplosive
   name: bullet
   parent: BaseBulletTrigger

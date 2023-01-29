@@ -5,7 +5,6 @@ using Content.Server.Administration.Managers;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
 using Content.Server.Ghost.Components;
-using Content.Server.MobState;
 using Content.Server.Players;
 using Content.Server.Popups;
 using Content.Server.Station.Components;
@@ -16,6 +15,7 @@ using Content.Shared.Chat;
 using Content.Shared.Database;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Inventory;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Radio;
 using Robust.Server.GameObjects;
 using Robust.Server.Player;
@@ -52,6 +52,7 @@ public sealed partial class ChatSystem : SharedChatSystem
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly StationSystem _stationSystem = default!;
     [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
 
     public const int VoiceRange = 10; // how far voice goes in world units
     public const int WhisperRange = 2; // how far whisper goes in world units
@@ -63,7 +64,9 @@ public sealed partial class ChatSystem : SharedChatSystem
 
     public override void Initialize()
     {
+        base.Initialize();
         InitializeRadio();
+        InitializeEmotes();
         _configurationManager.OnValueChanged(CCVars.LoocEnabled, OnLoocEnabledChanged, true);
         _configurationManager.OnValueChanged(CCVars.DeadLoocEnabled, OnDeadLoocEnabledChanged, true);
 
@@ -72,7 +75,9 @@ public sealed partial class ChatSystem : SharedChatSystem
 
     public override void Shutdown()
     {
+        base.Shutdown();
         ShutdownRadio();
+        ShutdownEmotes();
         _configurationManager.UnsubValueChanged(CCVars.LoocEnabled, OnLoocEnabledChanged);
     }
 
@@ -151,11 +156,22 @@ public sealed partial class ChatSystem : SharedChatSystem
         if (string.IsNullOrEmpty(message))
             return;
 
+        // This message may have a radio prefix, and should then be whispered to the resolved radio channel
+        if (checkRadioPrefix)
+        {
+            var (radioMessage, channel) = GetRadioPrefix(source, message);
+            if (channel != null)
+            {
+                SendEntityWhisper(source, radioMessage, hideChat, hideGlobalGhostChat, channel, nameOverride);
+                return;
+            }
+        }
+
         // Otherwise, send whatever type.
         switch (desiredType)
         {
             case InGameICChatType.Speak:
-                SendEntitySpeak(source, message, hideChat, hideGlobalGhostChat, nameOverride, checkRadioPrefix);
+                SendEntitySpeak(source, message, hideChat, hideGlobalGhostChat, nameOverride);
                 break;
             case InGameICChatType.Whisper:
                 SendEntityWhisper(source, message, hideChat, hideGlobalGhostChat, null, nameOverride);
@@ -255,26 +271,12 @@ public sealed partial class ChatSystem : SharedChatSystem
 
     #region Private API
 
-    private void SendEntitySpeak(EntityUid source, string originalMessage, bool hideChat, bool hideGlobalGhostChat, string? nameOverride, bool checkRadioPrefix)
+    private void SendEntitySpeak(EntityUid source, string originalMessage, bool hideChat, bool hideGlobalGhostChat, string? nameOverride)
     {
         if (!_actionBlocker.CanSpeak(source))
             return;
 
-        RadioChannelPrototype? channel = null;
-        string message;
-
-        if (checkRadioPrefix)
-            (message, channel) = GetRadioPrefix(source, originalMessage);
-        else
-            message = originalMessage;
-
-        if (channel != null)
-        {
-            SendEntityWhisper(source, message, hideChat, hideGlobalGhostChat, channel, nameOverride);
-            return;
-        }
-
-        message = TransformSpeech(source, message);
+        var message = TransformSpeech(source, originalMessage);
         if (message.Length == 0)
             return;
 
@@ -297,7 +299,7 @@ public sealed partial class ChatSystem : SharedChatSystem
 
         SendInVoiceRange(ChatChannel.Local, message, wrappedMessage, source, hideChat, hideGlobalGhostChat);
 
-        var ev = new EntitySpokeEvent(source, message, channel, null);
+        var ev = new EntitySpokeEvent(source, message, originalMessage, null, null);
         RaiseLocalEvent(source, ev, true);
 
         // To avoid logging any messages sent by entities that are not players, like vendors, cloning, etc.
@@ -360,7 +362,7 @@ public sealed partial class ChatSystem : SharedChatSystem
 
         _replay.QueueReplayMessage(new ChatMessage(ChatChannel.Whisper, message, wrappedMessage, source, hideChat));
 
-        var ev = new EntitySpokeEvent(source, message, channel, obfuscatedMessage);
+        var ev = new EntitySpokeEvent(source, message, originalMessage, channel, obfuscatedMessage);
         RaiseLocalEvent(source, ev, true);
 
         if (originalMessage == message)
@@ -369,7 +371,8 @@ public sealed partial class ChatSystem : SharedChatSystem
             _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Whisper from {ToPrettyString(source):user}, original: {originalMessage}, transformed: {message}.");
     }
 
-    private void SendEntityEmote(EntityUid source, string action, bool hideChat, bool hideGlobalGhostChat, string? nameOverride)
+    private void SendEntityEmote(EntityUid source, string action, bool hideChat,
+        bool hideGlobalGhostChat, string? nameOverride, bool checkEmote = true)
     {
         if (!_actionBlocker.CanEmote(source)) return;
 
@@ -381,6 +384,8 @@ public sealed partial class ChatSystem : SharedChatSystem
             ("entityName", name),
             ("message", FormattedMessage.EscapeText(action)));
 
+        if (checkEmote)
+            TryEmoteChatInput(source, action);
         SendInVoiceRange(ChatChannel.Emotes, action, wrappedMessage, source, hideChat, hideGlobalGhostChat);
         _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Emote from {ToPrettyString(source):user}: {action}");
     }
@@ -476,6 +481,7 @@ public sealed partial class ChatSystem : SharedChatSystem
     private string SanitizeInGameICMessage(EntityUid source, string message, out string? emoteStr, bool capitalize = true, bool punctuate = false)
     {
         var newMessage = message.Trim();
+        newMessage = ReplaceWords(newMessage); // Corvax-ChatSanitize
         if (capitalize)
             newMessage = SanitizeMessageCapital(newMessage);
         if (punctuate)
@@ -603,7 +609,7 @@ public sealed partial class ChatSystem : SharedChatSystem
 ///     This event is raised before chat messages are sent out to clients. This enables some systems to send the chat
 ///     messages to otherwise out-of view entities (e.g. for multiple viewports from cameras).
 /// </summary>
-public record class ExpandICChatRecipientstEvent(EntityUid Source, float VoiceRange, Dictionary<ICommonSession, ChatSystem.ICChatRecipientData> Recipients)
+public record ExpandICChatRecipientstEvent(EntityUid Source, float VoiceRange, Dictionary<ICommonSession, ChatSystem.ICChatRecipientData> Recipients)
 {
 }
 
@@ -641,6 +647,7 @@ public sealed class EntitySpokeEvent : EntityEventArgs
 {
     public readonly EntityUid Source;
     public readonly string Message;
+    public readonly string OriginalMessage;
     public readonly string? ObfuscatedMessage; // not null if this was a whisper
 
     /// <summary>
@@ -649,10 +656,11 @@ public sealed class EntitySpokeEvent : EntityEventArgs
     /// </summary>
     public RadioChannelPrototype? Channel;
 
-    public EntitySpokeEvent(EntityUid source, string message, RadioChannelPrototype? channel, string? obfuscatedMessage)
+    public EntitySpokeEvent(EntityUid source, string message, string originalMessage, RadioChannelPrototype? channel, string? obfuscatedMessage)
     {
         Source = source;
         Message = message;
+        OriginalMessage = originalMessage; // Corvax-TTS: Spec symbol sanitize
         Channel = channel;
         ObfuscatedMessage = obfuscatedMessage;
     }

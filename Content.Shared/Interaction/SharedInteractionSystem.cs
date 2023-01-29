@@ -532,9 +532,9 @@ namespace Content.Shared.Interaction
                 TryComp<TransformComponent>(origin, out var xformA))
             {
                 var (worldPosA, worldRotA) = xformA.GetWorldPositionRotation();
-                var xfA = new Robust.Shared.Physics.Transform(worldPosA, worldRotA);
+                var xfA = new Transform(worldPosA, worldRotA);
                 var parentRotB = _transform.GetWorldRotation(otherCoordinates.EntityId);
-                var xfB = new Robust.Shared.Physics.Transform(targetPos.Position, parentRotB + otherAngle);
+                var xfB = new Transform(targetPos.Position, parentRotB + otherAngle);
 
                 // Different map or the likes.
                 if (!_sharedBroadphaseSystem.TryGetNearest(origin, other,
@@ -578,7 +578,7 @@ namespace Content.Shared.Interaction
             if (!inRange && popup && _gameTiming.IsFirstTimePredicted)
             {
                 var message = Loc.GetString("interaction-system-user-interaction-cannot-reach");
-                _popupSystem.PopupEntity(message, origin, Filter.Entities(origin));
+                _popupSystem.PopupEntity(message, origin, origin);
             }
 
             return inRange;
@@ -723,7 +723,7 @@ namespace Content.Shared.Interaction
             if (!inRange && popup && _gameTiming.IsFirstTimePredicted)
             {
                 var message = Loc.GetString("interaction-system-user-interaction-cannot-reach");
-                _popupSystem.PopupEntity(message, origin, Filter.Entities(origin));
+                _popupSystem.PopupEntity(message, origin, origin);
             }
 
             return inRange;
@@ -870,7 +870,8 @@ namespace Content.Shared.Interaction
 
             DoContactInteraction(user, used, activateMsg);
             _useDelay.BeginDelay(used, delayComponent);
-            _adminLogger.Add(LogType.InteractActivate, LogImpact.Low, $"{ToPrettyString(user):user} activated {ToPrettyString(used):used}");
+            if (!activateMsg.WasLogged)
+                _adminLogger.Add(LogType.InteractActivate, LogImpact.Low, $"{ToPrettyString(user):user} activated {ToPrettyString(used):used}");
             return true;
         }
         #endregion

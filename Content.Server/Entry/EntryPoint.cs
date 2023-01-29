@@ -7,6 +7,7 @@ using Content.Server.Chat.Managers;
 using Content.Server.Connection;
 using Content.Server.Corvax.JoinQueue;
 using Content.Server.Corvax.Sponsors;
+using Content.Server.Corvax.TTS;
 using Content.Server.Database;
 using Content.Server.EUI;
 using Content.Server.GameTicking;
@@ -39,6 +40,9 @@ namespace Content.Server.Entry
 {
     public sealed class EntryPoint : GameServer
     {
+        private const string ConfigPresetsDir = "/ConfigPresets/";
+        private const string ConfigPresetsDirBuild = $"{ConfigPresetsDir}Build/";
+
         private EuiManager _euiManager = default!;
         private IVoteManager _voteManager = default!;
         private ServerUpdateManager _updateManager = default!;
@@ -49,6 +53,12 @@ namespace Content.Server.Entry
         public override void Init()
         {
             base.Init();
+
+            var cfg = IoCManager.Resolve<IConfigurationManager>();
+            var res = IoCManager.Resolve<IResourceManager>();
+            var logManager = IoCManager.Resolve<ILogManager>();
+
+            LoadConfigPresets(cfg, res, logManager.GetSawmill("configpreset"));
 
             var aczProvider = new ContentMagicAczProvider(IoCManager.Resolve<IDependencyCollection>());
             IoCManager.Resolve<IStatusHost>().SetMagicAczProvider(aczProvider);
@@ -65,6 +75,7 @@ namespace Content.Server.Entry
             }
 
             prototypes.RegisterIgnore("parallax");
+            prototypes.RegisterIgnore("guideEntry");
 
             ServerContentIoC.Register();
 
@@ -87,7 +98,6 @@ namespace Content.Server.Entry
                 _playTimeTracking = IoCManager.Resolve<PlayTimeTrackingManager>();
                 _sysMan = IoCManager.Resolve<IEntitySystemManager>();
 
-                var logManager = IoCManager.Resolve<ILogManager>();
                 logManager.GetSawmill("Storage").Level = LogLevel.Info;
                 logManager.GetSawmill("db.ef").Level = LogLevel.Info;
 
@@ -101,6 +111,7 @@ namespace Content.Server.Entry
                 IoCManager.Resolve<GhostKickManager>().Initialize();
                 IoCManager.Resolve<SponsorsManager>().Initialize(); // Corvax-Sponsors
                 IoCManager.Resolve<JoinQueueManager>().Initialize(); // Corvax-Queue
+                IoCManager.Resolve<TTSManager>().Initialize(); // Corvax-TTS
                 IoCManager.Resolve<ServerInfoManager>().Initialize();
 
                 _voteManager.Initialize();
@@ -168,6 +179,48 @@ namespace Content.Server.Entry
         {
             _playTimeTracking?.Shutdown();
             _sysMan?.GetEntitySystemOrNull<StationSystem>()?.OnServerDispose();
+        }
+
+        private static void LoadConfigPresets(IConfigurationManager cfg, IResourceManager res, ISawmill sawmill)
+        {
+            LoadBuildConfigPresets(cfg, res, sawmill);
+
+            var presets = cfg.GetCVar(CCVars.ConfigPresets);
+            if (presets == "")
+                return;
+
+            foreach (var preset in presets.Split(','))
+            {
+                var path = $"{ConfigPresetsDir}{preset}.toml";
+                if (!res.TryContentFileRead(path, out var file))
+                {
+                    sawmill.Error("Unable to load config preset {Preset}!", path);
+                    continue;
+                }
+
+                cfg.LoadDefaultsFromTomlStream(file);
+                sawmill.Info("Loaded config preset: {Preset}", path);
+            }
+        }
+
+        private static void LoadBuildConfigPresets(IConfigurationManager cfg, IResourceManager res, ISawmill sawmill)
+        {
+#if !FULL_RELEASE
+            Load(CCVars.ConfigPresetDevelopment, "development");
+#endif
+#if DEBUG
+            Load(CCVars.ConfigPresetDebug, "debug");
+#endif
+
+            void Load(CVarDef<bool> cVar, string name)
+            {
+                var path = $"{ConfigPresetsDirBuild}{name}.toml";
+                if (cfg.GetCVar(cVar) && res.TryContentFileRead(path, out var file))
+                {
+                    cfg.LoadDefaultsFromTomlStream(file);
+                    sawmill.Info("Loaded config preset: {Preset}", path);
+                }
+            }
         }
     }
 }

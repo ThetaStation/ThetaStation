@@ -25,14 +25,16 @@ public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
 
     public readonly List<ProjectilesInterfaceState> Projectiles;
 
+    public readonly List<CannonInterfaceState> Cannons;
+
     public RadarConsoleBoundInterfaceState(
         float maxRange,
         EntityCoordinates? coordinates,
         Angle? angle,
         List<DockingInterfaceState> docks,
         List<MobInterfaceState> mobs,
-        List<ProjectilesInterfaceState> projectiles
-        )
+        List<ProjectilesInterfaceState> projectiles,
+        List<CannonInterfaceState> cannons)
     {
         MaxRange = maxRange;
         Coordinates = coordinates;
@@ -40,6 +42,7 @@ public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
         Docks = docks;
         MobsAround = mobs;
         Projectiles = projectiles;
+        Cannons = cannons;
     }
 }
 
@@ -62,6 +65,17 @@ public sealed class MobInterfaceState
 {
     public EntityCoordinates Coordinates;
     public EntityUid Entity;
+}
+
+/// <summary>
+/// State of each cannon on shuttle grid
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class CannonInterfaceState
+{
+    public EntityCoordinates Coordinates;
+    public EntityUid Entity;
+    public Angle Angle;
 }
 
 /// <summary>

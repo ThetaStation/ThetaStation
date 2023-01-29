@@ -5,40 +5,23 @@
   suffix: SHIPEVENT
   components:
     - type: RandomHumanoidAppearance
-    - type: Eye
-      drawFov: false
-      zoom: 1.5, 1.5
     - type: Loadout
       prototype: ShipTestEventStandard
       prototypes: [ShipTestEventStandard]
     - type: UsePlayerNameForEntityName
-    - type: MovedByPressure
-      enabled: false
-    - type: Damageable
-      damageModifierSet: Immortal
-    - type: ExplosionResistance
-      damageCoefficient: 0.0
-    - type: Barotrauma #no space damage.
-      damage:
-        types:
-          Blunt: 0
-    - type: Bloodstream
-      maxBleedAmount: 0
-      bloodReagent: Milk
-      bloodlossDamage: #no bloodloss damage. overriding base components
-        types:
-          Bloodloss: 0
-      bloodlossHealDamage:
-        types:
-          Bloodloss: 0
-    - type: Respirator
-      damage:
-        types:
-          Asphyxiation: 0
-      damageRecovery:
-        types:
-          Asphyxiation: 0
-      suffocationThreshold: -100000
+    - type: ShipEventFaction
+    - type: ShipEventFactionView
+      toggle:
+        icon: { sprite: "/Textures/Theta/ShipEvent/ShipTeamView.rsi", state: icon }
+        iconOn: "/Textures/Theta/ShipEvent/ShipFactionIcon.rsi"
+        name: shipevent-teamview-toggle-name
+        description: shipevent-teamview-toggle-desc
+        itemIconStyle: NoItem
+        event: !type:ToggleActionEvent
+    - type: UserInterface
+      interfaces:
+      - key: enum.TeamViewUiKey.Key
+        type: TeamViewBoundUserInterface
 
 - type: entity
   id: SpawnPointShipEvent
@@ -66,8 +49,16 @@
     jumpsuit: ClothingUniformJumpsuitOperative
     back: ClothingBackpackDuffelSyndicateOperative
     shoes: ClothingShoesBootsMagAdv
-  innerclothingskirt: ClothingUniformJumpsuitOperative
+    mask: ClothingMaskGasSyndicate
+    # eyes: Night Vision Goggles whenever they're made
+    eyes: ClothingEyesGlassesMeson
+    ears: ClothingHeadsetAltSyndicate
+    gloves: ClothingHandsGlovesCombat
+    outerClothing: ClothingOuterHardsuitSyndie
+    id: AgentIDCard
+    pocket1: ExtendedEmergencyOxygenTankFilled
+    pocket2: BaseUplinkRadio40TC
+    belt: ClothingBeltMilitaryWebbing
+  innerclothingskirt: ClothingUniformJumpskirtOperative
   satchel: ClothingBackpackDuffelSyndicateOperative
   duffelbag: ClothingBackpackDuffelSyndicateOperative
-  inhand:
-    right hand: PocketRadar

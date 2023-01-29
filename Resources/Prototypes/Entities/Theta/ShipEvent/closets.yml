@@ -12,17 +12,7 @@
           state_closed: bomb_door
 
 - type: entity
-  name: SAW Closet
-  id: SawGunCloset
-  parent: ShipEventCloset
-  components:
-    - type: StorageFill
-      contents:
-        - id: WeaponLightMachineGunL6Event
-          amount: 7
-
-- type: entity
-  name: SAW Ammo Closet
+  name: Rocket Ammo Closet
   id: SawAmmoGunCloset
   parent: ShipEventCloset
   components:
@@ -32,12 +22,13 @@
           amount: 10
 
 - type: entity
-  name: RPG Closet
-  id: LauncherGunCloset
+  name: Shotgun Ammo Closet
+  id: ShotgunAmmoGunCloset
   parent: ShipEventCloset
-  suffix: SHIPEVENT
   components:
     - type: StorageFill
       contents:
-        - id: WeaponLauncherRocketEvent
-          amount: 7
+        - id: MagazineShotgunShipEvent
+          amount: 10
+        - id: MagazineShotgunIncendiaryShipEvent
+          amount: 10

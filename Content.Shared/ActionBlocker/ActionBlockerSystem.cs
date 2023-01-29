@@ -146,7 +146,8 @@ namespace Content.Shared.ActionBlocker
 
         public bool CanAttack(EntityUid uid, EntityUid? target = null)
         {
-            if (_container.IsEntityInContainer(uid))
+            _container.TryGetOuterContainer(uid, Transform(uid), out var outerContainer);
+            if (target != null &&  target != outerContainer?.Owner && _container.IsEntityInContainer(uid))
             {
                 var containerEv = new CanAttackFromContainerEvent(uid, target);
                 RaiseLocalEvent(uid, containerEv);
@@ -156,7 +157,17 @@ namespace Content.Shared.ActionBlocker
             var ev = new AttackAttemptEvent(uid, target);
             RaiseLocalEvent(uid, ev);
 
-            return !ev.Cancelled;
+            if (ev.Cancelled)
+                return false;
+
+            if (target != null)
+            {
+                var tev = new GettingAttackedAttemptEvent();
+                RaiseLocalEvent(target.Value, ref tev);
+                return !tev.Cancelled;
+            }
+
+            return true;
         }
 
         public bool CanChangeDirection(EntityUid uid)

@@ -4,9 +4,9 @@ using Content.Shared.Access.Systems;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
 using Content.Shared.Actions.ActionTypes;
-using Content.Shared.Body.Components;
 using Content.Shared.Destructible;
 using Content.Shared.FixedPoint;
+using Content.Shared.Hands.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Components;
 using Content.Shared.Interaction.Events;
@@ -18,7 +18,6 @@ using Content.Shared.Popups;
 using Content.Shared.Weapons.Melee;
 using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
-using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
@@ -57,6 +56,7 @@ public abstract class SharedMechSystem : EntitySystem
 
         SubscribeLocalEvent<MechPilotComponent, GetMeleeWeaponEvent>(OnGetMeleeWeapon);
         SubscribeLocalEvent<MechPilotComponent, CanAttackFromContainerEvent>(OnCanAttackFromContainer);
+        SubscribeLocalEvent<MechPilotComponent, AttackAttemptEvent>(OnAttackAttempt);
     }
 
     #region State Handling
@@ -237,7 +237,8 @@ public abstract class SharedMechSystem : EntitySystem
             : Loc.GetString("mech-equipment-select-none-popup");
 
         if (_timing.IsFirstTimePredicted)
-            _popup.PopupEntity(popupString, uid, Filter.Pvs(uid));
+            _popup.PopupEntity(popupString, uid);
+
         Dirty(component);
     }
 
@@ -373,7 +374,7 @@ public abstract class SharedMechSystem : EntitySystem
         if (!Resolve(uid, ref component))
             return false;
 
-        return IsEmpty(component) && _actionBlocker.CanMove(toInsert) && HasComp<BodyComponent>(toInsert);
+        return IsEmpty(component) && _actionBlocker.CanMove(toInsert) && HasComp<SharedHandsComponent>(toInsert);
     }
 
     /// <summary>
@@ -449,6 +450,12 @@ public abstract class SharedMechSystem : EntitySystem
     private void OnCanAttackFromContainer(EntityUid uid, MechPilotComponent component, CanAttackFromContainerEvent args)
     {
         args.CanAttack = true;
+    }
+
+    private void OnAttackAttempt(EntityUid uid, MechPilotComponent component, AttackAttemptEvent args)
+    {
+        if (args.Target == component.Mech)
+            args.Cancel();
     }
 
     private void UpdateAppearance(EntityUid uid, SharedMechComponent ? component = null, AppearanceComponent? appearance = null)

@@ -75,6 +75,9 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         if (component.AttackRate.Equals(0f))
             return;
 
+        if (!component.ResetOnHandSelected)
+            return;
+
         // If someone swaps to this weapon then reset its cd.
         var curTime = Timing.CurTime;
         var minimum = curTime + TimeSpan.FromSeconds(1 / component.AttackRate);
@@ -295,8 +298,21 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         if (!CombatMode.IsInCombatMode(user))
             return;
 
-        if (!Blocker.CanAttack(user))
-            return;
+        switch (attack)
+        {
+            case LightAttackEvent light:
+                if (!Blocker.CanAttack(user, light.Target))
+                    return;
+                break;
+            case DisarmAttackEvent disarm:
+                if (!Blocker.CanAttack(user, disarm.Target))
+                    return;
+                break;
+            default:
+                if (!Blocker.CanAttack(user))
+                    return;
+                break;
+        }
 
         // Windup time checked elsewhere.
 
