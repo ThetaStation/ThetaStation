@@ -291,18 +291,18 @@ namespace Content.Server.Shuttles.Systems
             docks ??= GetAllDocks();
             List<MobInterfaceState> mobs;
             List<ProjectilesInterfaceState> projectiles;
-            List<CannonInterfaceState> cannons;
+            List<CannonInformationInterfaceState> cannons;
             if (radar != null)
             {
                 mobs = _radarConsoleSystem.GetMobsAround(radar);
                 projectiles = _radarConsoleSystem.GetProjectilesAround(radar);
-                cannons = _radarConsoleSystem.GetCannonsOnGrid(radar, null);
+                cannons = _radarConsoleSystem.GetCannonsInfoGetOnGrid(radar);
             }
             else
             {
                 mobs = new List<MobInterfaceState>();
                 projectiles = new List<ProjectilesInterfaceState>();
-                cannons = new List<CannonInterfaceState>();
+                cannons = new List<CannonInformationInterfaceState>();
             }
 
             _ui.GetUiOrNull(component.Owner, ShuttleConsoleUiKey.Key)
@@ -344,6 +344,8 @@ namespace Content.Server.Shuttles.Systems
 
             foreach (var shuttleConsole in EntityManager.EntityQuery<ShuttleConsoleComponent>())
             {
+                if(!_ui.IsUiOpen(shuttleConsole.Owner, ShuttleConsoleUiKey.Key))
+                    continue;
                 UpdateState(shuttleConsole);
             }
 

@@ -7,7 +7,6 @@ namespace Content.Shared.Theta.ShipEvent.Console;
 [Serializable, NetSerializable]
 public sealed class CannonConsoleBoundInterfaceState : RadarConsoleBoundInterfaceState
 {
-    public List<EntityUid> ControlledCannons;
     public CannonConsoleBoundInterfaceState(
         float maxRange,
         EntityCoordinates? coordinates,
@@ -15,10 +14,8 @@ public sealed class CannonConsoleBoundInterfaceState : RadarConsoleBoundInterfac
         List<DockingInterfaceState> docks,
         List<MobInterfaceState> mobs,
         List<ProjectilesInterfaceState> projectiles,
-        List<CannonInterfaceState> cannons,
-        List<EntityUid> controlledCannons) : base(maxRange, coordinates, angle, docks, mobs, projectiles, cannons)
+        List<CannonInformationInterfaceState> cannons) : base(maxRange, coordinates, angle, docks, mobs, projectiles, cannons)
     {
-        ControlledCannons = controlledCannons;
     }
 }
 

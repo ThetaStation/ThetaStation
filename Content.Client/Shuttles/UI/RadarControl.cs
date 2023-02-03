@@ -1,8 +1,7 @@
-using Content.Client.Stylesheets;
+using System.Linq;
 using Content.Client.Theta.ShipEvent;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
-using Content.Shared.Theta.ShipEvent.Console;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Client.UserInterface;
@@ -68,7 +67,7 @@ public sealed class RadarControl : Control
 
     private List<ProjectilesInterfaceState> _projectiles = new();
 
-    private List<CannonInterfaceState> _cannons = new();
+    private List<CannonInformationInterfaceState> _cannons = new();
 
     public bool ShowIFF { get; set; } = true;
     public bool ShowDocks { get; set; } = true;
@@ -128,11 +127,11 @@ public sealed class RadarControl : Control
 
         _cannons = ls.Cannons;
 
-    }
+        _controlledCannons = _cannons
+            .Where(i => i.IsControlling)
+            .Select(i => i.Uid)
+            .ToList();
 
-    public void UpdateControlledCannons(CannonConsoleBoundInterfaceState state)
-    {
-        _controlledCannons = state.ControlledCannons;
     }
 
     protected override void MouseMove(GUIMouseMoveEventArgs args)
@@ -144,6 +143,9 @@ public sealed class RadarControl : Control
             return;
         }
 
+        if (_controlledCannons.Count == 0)
+            return;
+
         _nextMouseHandle = 0;
         RotateCannons(args.RelativePosition);
         args.Handle();
@@ -152,6 +154,9 @@ public sealed class RadarControl : Control
     private void StartFiring(GUIBoundKeyEventArgs args)
     {
         if(args.Function != EngineKeyFunctions.Use)
+            return;
+
+        if (_controlledCannons.Count == 0)
             return;
 
         var coordinates = RotateCannons(args.RelativePosition);
@@ -172,6 +177,9 @@ public sealed class RadarControl : Control
     private void StopFiring(GUIBoundKeyEventArgs args)
     {
         if(args.Function != EngineKeyFunctions.Use)
+            return;
+
+        if (_controlledCannons.Count == 0)
             return;
 
         var ev = new StopCannonFiringEventEvent();

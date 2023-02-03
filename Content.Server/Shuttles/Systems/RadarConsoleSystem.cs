@@ -1,5 +1,10 @@
+using System.Linq;
+using Content.Server.MachineLinking.Components;
+using Content.Server.Mind.Components;
+using Content.Server.Theta.ShipEvent.Console;
 using Content.Server.UserInterface;
-using Content.Shared.Humanoid;
+using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Projectiles;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
@@ -14,6 +19,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 {
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
     [Dependency] private readonly TransformSystem _transformSystem = default!;
+    [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
 
     public override void Initialize()
     {
@@ -32,6 +38,8 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 
         foreach (var radar in EntityManager.EntityQuery<RadarConsoleComponent>())
         {
+            if(!_uiSystem.IsUiOpen(radar.Owner, RadarConsoleUiKey.Key))
+                continue;
             UpdateState(radar);
         }
     }
@@ -43,13 +51,14 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
         if (!TryComp<TransformComponent>(component.Owner, out var xform))
             return list;
 
-        // TODO: replace HumanoidAppearanceComponent on the component denoting the player any species
-        foreach (var (_, transform) in EntityManager.EntityQuery<HumanoidAppearanceComponent, TransformComponent>())
+        foreach (var (_, mobState, transform) in EntityManager.EntityQuery<MindComponent, MobStateComponent, TransformComponent>())
         {
+            if (_mobStateSystem.IsIncapacitated(mobState.Owner, mobState))
+                continue;
             if (!xform.MapPosition.InRange(transform.MapPosition, component.MaxRange))
                 continue;
 
-            list.Add(new MobInterfaceState()
+            list.Add(new MobInterfaceState
             {
                 Coordinates = transform.Coordinates,
             });
@@ -80,26 +89,50 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
         return list;
     }
 
-    public List<CannonInterfaceState> GetCannonsOnGrid(RadarConsoleComponent component,
-        List<EntityUid>? controlledCannons)
+    public List<CannonInformationInterfaceState> GetCannonsInfoGetOnGrid(RadarConsoleComponent component)
     {
-        var list = new List<CannonInterfaceState>();
+        var list = new List<CannonInformationInterfaceState>();
         var myGrid = Transform(component.Owner).GridUid;
+        var isCannonConsole = TryComp<CannonConsoleComponent>(component.Owner, out _);
+
+        var hasSignalTransmitter = TryComp<SignalTransmitterComponent>(component.Owner, out var signalTransmitter);
+        List<EntityUid>? controlledCannons = null;
+        if (hasSignalTransmitter && signalTransmitter != null)
+        {
+            controlledCannons = new List<EntityUid>();
+            foreach (var (_, cannons) in signalTransmitter.Outputs)
+            {
+                controlledCannons.AddRange(cannons.Select(i => i.Uid));
+            }
+        }
+
         foreach (var (cannon, transform) in EntityQuery<CannonComponent, TransformComponent>())
         {
             if (transform.GridUid != myGrid)
                 continue;
-            var color = Color.YellowGreen;
-            if (controlledCannons != null)
+
+            var controlled = false;
+            if (hasSignalTransmitter && controlledCannons != null)
             {
-                color = controlledCannons.Contains(cannon.Owner) ? Color.Lime : Color.LightGreen;
+                controlled = controlledCannons.Contains(cannon.Owner);
             }
 
-            list.Add(new CannonInterfaceState
+            Color color;
+            if (isCannonConsole)
+            {
+                color = controlled ? Color.Lime : Color.LightGreen;
+            }
+            else
+            {
+                color = controlled ? Color.Lime : Color.YellowGreen;
+            }
+
+            list.Add(new CannonInformationInterfaceState
             {
                 Coordinates = transform.Coordinates,
                 Color = color,
                 Angle = _transformSystem.GetWorldRotation(transform),
+                IsControlling = controlled,
             });
         }
 
@@ -137,7 +170,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 
         var mobs = GetMobsAround(component);
         var projectiles = GetProjectilesAround(component);
-        var cannons = GetCannonsOnGrid(component, null);
+        var cannons = GetCannonsInfoGetOnGrid(component);
 
         var radarState = new RadarConsoleBoundInterfaceState(
             component.MaxRange,
