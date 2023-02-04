@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Content.Server.Actions;
 using Content.Server.Chat.Systems;
+using Content.Server.Explosion.Components;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Ghost.Roles.Events;
 using Content.Server.IdentityManagement;
@@ -10,6 +11,7 @@ using Content.Server.Theta.ShipEvent.Components;
 using Content.Server.Shuttles.Components;
 using Content.Shared.Actions;
 using Content.Shared.Chat;
+using Content.Shared.Explosion;
 using Content.Shared.GameTicking;
 using Content.Shared.Humanoid;
 using Content.Shared.Projectiles;
@@ -21,6 +23,7 @@ using Robust.Server.Player;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Events;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
@@ -52,17 +55,18 @@ public sealed class ShipEventFactionSystem : EntitySystem
 {
 	[Dependency] private readonly IEntityManager _entMan = default!;
     [Dependency] private readonly MapLoaderSystem _mapSys = default!;
+    [Dependency] private readonly IPrototypeManager _protMan = default!;
     [Dependency] private readonly ChatSystem _chatSys = default!;
     [Dependency] private readonly IdentitySystem _idSys = default!;
     [Dependency] private readonly ActionsSystem _actSys = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSys = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
 
-    public int PointsPerHit = 1;
-    public int PointsPerKill = 100;
-    public int PointsPerAssist = 25;
-    public int PointsPerInterval = 25; //points for surviving longer than BonusInterval without respawn
-    public int BonusInterval = 1200; //in seconds
+    public float PointsPerHitMultiplier = 0.01f;
+    public int PointsPerKill = 5000;
+    public int PointsPerAssist = 1000;
+    public int PointsPerInterval = 1000; //points for surviving longer than BonusInterval without respawn
+    public int BonusInterval = 600; //in seconds
     public int RespawnDelay = 60; //in seconds
 
     private const float TeamCheckInterval = 5;
@@ -81,6 +85,9 @@ public sealed class ShipEventFactionSystem : EntitySystem
     public MapId TargetMap;
     public int MaxSpawnOffset = 500;
 
+    //cached DamagePerIntensity for different explosion types, since in 90% cases explosion is the default one,
+    //no need to bother prototype manager again, and again, and again.
+    private Dictionary<string, int> explosionDamage = new();
     public override void Initialize()
 	{
 		base.Initialize();
@@ -104,14 +111,11 @@ public sealed class ShipEventFactionSystem : EntitySystem
 
 	private void OnSpawn(EntityUid entity, ShipEventFactionMarkerComponent component, GhostRoleSpawnerUsedEvent args)
     {
-        EntityUid shipEntity = GetSpawnerShip(args.Spawner);
-        if (shipEntity == EntityUid.Invalid) { return; }
-
-        if (TryGetTeam(shipEntity, out var team))
+        if (_entMan.TryGetComponent<ShipEventFactionMarkerComponent>(args.Spawner, out var teamMarker))
         {
-            AddToTeam(args.Spawned, team);
-            component.Team = team;
-            _entMan.GetComponent<GhostRoleMobSpawnerComponent>(args.Spawner).SetCurrentTakeovers(team.Members.Count);
+            AddToTeam(args.Spawned, teamMarker.Team!);
+            component.Team = teamMarker.Team;
+            _entMan.GetComponent<GhostRoleMobSpawnerComponent>(args.Spawner).SetCurrentTakeovers(teamMarker.Team!.Members.Count);
         }
     }
 
@@ -148,17 +152,35 @@ public sealed class ShipEventFactionSystem : EntitySystem
     {
         if (component.Team == null) { return; }
 
-        //todo: remove Body.Owner by adding other fixture entity into event itself (or use component query alternatives when they will be ready)
-        if (_entMan.TryGetComponent<ProjectileComponent>(args.OtherFixture.Body.Owner, out ProjectileComponent? projComp))
+        if (_entMan.TryGetComponent<ProjectileComponent>(entity, out ProjectileComponent? projComp))
         {
-            if(_entMan.TryGetComponent<ShipEventFactionMarkerComponent>(Transform(projComp.Shooter).GridUid, out ShipEventFactionMarkerComponent? markComp))
+            if(_entMan.TryGetComponent<ShipEventFactionMarkerComponent>(Transform(args.OtherFixture.Body.Owner).GridUid, out var marker))
             {
-                if (markComp.Team == null || markComp.Team == component.Team) { return; }
+                if (marker.Team == null || marker.Team == component.Team) { return; }
 
-                component.Team.Hits[markComp.Team]++;
-                markComp.Team.Points += PointsPerHit;
+                component.Team.Points += (int)Math.Ceiling(GetProjectileDamage(entity) * PointsPerHitMultiplier);
+                if(!marker.Team.Hits.Keys.Contains(component.Team)){ marker.Team.Hits[component.Team] = 0; }
+                marker.Team.Hits[component.Team]++;
             }
         }
+    }
+
+    public int GetProjectileDamage(EntityUid entity)
+    {
+        int damage = 0;
+        if (_entMan.TryGetComponent<ProjectileComponent>(entity, out var proj)) { damage += (int)proj.Damage.Total; }
+        if(_entMan.TryGetComponent<ExplosiveComponent>(entity, out var exp))
+        {
+            int damagePerIntensity = 0;
+            if (!explosionDamage.ContainsKey(exp.ExplosionType))
+            {
+                explosionDamage[exp.ExplosionType] = (int)_protMan.Index<ExplosionPrototype>(exp.ExplosionType).DamagePerIntensity.Total;
+            }
+            else { damagePerIntensity = explosionDamage[exp.ExplosionType]; }
+            damage += (int)(exp.TotalIntensity * damagePerIntensity);
+        }
+
+        return damage;
     }
 
     public void OnRoundRestart(RoundRestartCleanupEvent ev)
@@ -202,8 +224,7 @@ public sealed class ShipEventFactionSystem : EntitySystem
 				("shipname", shipName)));
 		}
 
-        var marker = _entMan.AddComponent<ShipEventFactionMarkerComponent>(shipEntity);
-        marker.Team = team;
+        SetMarkers(shipEntity, team);
 
         return team;
     }
@@ -222,6 +243,31 @@ public sealed class ShipEventFactionSystem : EntitySystem
         if (_mapSys.TryLoad(TargetMap, _random.Pick(ShipTypes), out var rootUids, loadOptions)) { return rootUids[0]; }
 
         return EntityUid.Invalid;
+    }
+
+    /// <summary>
+    /// Sets ShipEventFactionMarker components teams on spawner, cannons, etc.
+    /// </summary>
+    /// <param name="shipEntity">Ship in question</param>
+    /// <param name="team">Team in question</param>
+    public void SetMarkers(EntityUid shipEntity, ShipEventFaction team)
+    {
+        List<EntityUid> spawners = GetShipComponents<GhostRoleMobSpawnerComponent>(shipEntity);
+        foreach (var spawner in spawners)
+        {
+            var marker = _entMan.EnsureComponent<ShipEventFactionMarkerComponent>(spawner);
+            marker.Team = team;
+        }
+
+        List<EntityUid> cannons = GetShipComponents<CannonComponent>(shipEntity);
+        foreach (var cannon in cannons)
+        {
+            var marker = _entMan.EnsureComponent<ShipEventFactionMarkerComponent>(cannon);
+            marker.Team = team;
+        }
+
+        var markerShip = _entMan.EnsureComponent<ShipEventFactionMarkerComponent>(shipEntity);
+        markerShip.Team = team;
     }
 
     /// <summary>
@@ -266,28 +312,25 @@ public sealed class ShipEventFactionSystem : EntitySystem
     private void ImmediateRespawn(ShipEventFaction team, string oldShipName = "")
     {
         EntityUid newShip = CreateShip();
-        if (!TryGetShipComponent(newShip, out GhostRoleMobSpawnerComponent spawnerComp)) { return; }
 
-        ShipEventFactionMarkerComponent markComp = _entMan.AddComponent<ShipEventFactionMarkerComponent>(newShip);
-        markComp.Team = team;
+        List<EntityUid> spawners = GetShipComponents<GhostRoleMobSpawnerComponent>(newShip);
+        if (!spawners.Any()) { return; }
+
+        SetMarkers(newShip, team);
 
         if(oldShipName != ""){ SetName(newShip, oldShipName); }
         team.Ship = newShip;
         _shipNames[team.Ship] = GetName(newShip);
 
-        if (TryGetShipComponent<GhostRoleMobSpawnerComponent>(newShip, out var shipSpawner))
+        List<IPlayerSession> sessions = new();
+        foreach(Role member in team.Members)
         {
-            List<IPlayerSession> sessions = new();
-            foreach(Role member in team.Members)
-            {
-                IPlayerSession? session = GetSession(member.Mind);
-                if (session != null) { sessions.Add(session); }
-            }
-
-            team.Members.Clear();
-            foreach(IPlayerSession session in sessions) { spawnerComp.Take(session); }
+            IPlayerSession? session = GetSession(member.Mind);
+            if (session != null) { sessions.Add(session); }
         }
-        else { Logger.Error($"Could not respawn team, as ship is missing spawner. Team: {team.Name}; Ship uid: {newShip};"); }
+
+        team.Members.Clear();
+        foreach(IPlayerSession session in sessions) { _entMan.GetComponent<GhostRoleMobSpawnerComponent>(spawners.First()).Take(session); }
 
         team.Respawns++;
         team.ShouldRespawn = false;
@@ -354,7 +397,7 @@ public sealed class ShipEventFactionSystem : EntitySystem
 	{
 		foreach (ShipEventFaction team in _teams)
         {
-            if (team.GetLivingMembersMinds().Count == 0 && team.Members.Any() && !team.ShouldRespawn)
+            if (!team.GetLivingMembersMinds().Any() && team.Members.Any() && !team.ShouldRespawn)
 			{
 				RespawnTeam(
 				    team,
@@ -362,7 +405,7 @@ public sealed class ShipEventFactionSystem : EntitySystem
                 break;
             }
 
-            if (!TryGetShipComponent<ShuttleConsoleComponent>(team.Ship, out var shuttleConsole) && !team.ShouldRespawn)
+            if (!GetShipComponents<ShuttleConsoleComponent>(team.Ship).Any() && !team.ShouldRespawn)
             {
                 RespawnTeam(
                     team,
@@ -439,14 +482,6 @@ public sealed class ShipEventFactionSystem : EntitySystem
 		return $"Team №{_lastTeamNumber}";
 	}
 
-    private EntityUid GetSpawnerShip(EntityUid shipEntity)
-	{
-		EntityUid? shipGrid = Transform(shipEntity).GridUid;
-		if (shipGrid == null) { return EntityUid.Invalid; }
-
-        return (EntityUid)shipGrid;
-	}
-
     private string GetName(EntityUid entity)
     {
         if (_entMan.TryGetComponent<MetaDataComponent>(entity, out MetaDataComponent? metaComp)) { return metaComp.EntityName; }
@@ -459,19 +494,15 @@ public sealed class ShipEventFactionSystem : EntitySystem
         _idSys.QueueIdentityUpdate(entity);
     }
 
-    private bool TryGetShipComponent<T>(EntityUid shipEntity, out T component) where T : IComponent
+    private List<EntityUid> GetShipComponents<T>(EntityUid shipEntity) where T : IComponent
     {
-        component = default!;
+        List<EntityUid> entities = new();
         foreach (T comp in _entMan.EntityQuery<T>())
         {
-            if (Transform(comp.Owner).GridUid == shipEntity)
-            {
-                component = comp;
-                return true;
-            }
+            if (Transform(comp.Owner).GridUid == shipEntity) { entities.Add(comp.Owner); }
         }
 
-        return false;
+        return entities;
     }
 
     private IPlayerSession? GetSession(EntityUid entity)
@@ -494,21 +525,6 @@ public sealed class ShipEventFactionSystem : EntitySystem
         if (session != null) { return session; }
 
         return null;
-    }
-
-    public bool TryGetTeam(EntityUid shipEntity, out ShipEventFaction team)
-    {
-        team = default!;
-        foreach (ShipEventFaction fact in _teams)
-        {
-            if (fact.Ship == shipEntity)
-            {
-                team = fact;
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public bool IsValidName(string name)

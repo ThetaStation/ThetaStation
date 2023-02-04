@@ -8,5 +8,6 @@ namespace Content.Server.Theta.ShipEvent.Components;
 [RegisterComponent]
 public sealed class ShipEventFactionMarkerComponent : Component
 {
+    [ViewVariables(VVAccess.ReadOnly)]
     public ShipEventFaction? Team;
 }
