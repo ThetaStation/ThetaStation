@@ -18,11 +18,21 @@ shipevent-respawn-tech = уничтожения жизненно важных к
 
 shipevent-remove-default = недовольства адмирала
 
-shipevent-role-name = Лётчик-испытатель
+shipevent-role-name = Пилот
 shipevent-role-greet = Вы - член испытательной группы, созданной Нанотрейзен для тестирования кораблей лёгкого класса и развлечения её начальства. Уничтожьте своих врагов любой ценой!
 
-shipevent-teamview-window-title = Список команд
 shipevent-teamview-heading = Активные команды:
 shipevent-teamview-heading2 = Название команды - Название корабля - Кол-во живых членов - Очки
 shipevent-teamview-toggle-name = Активные команды
 shipevent-teamview-toggle-desc = Просмотр списка активных команд
+
+shipevent-spawner-desc = Сверх-высокотехнологичная блюспейс машинерия, способная создавать пушечное мясо из ничего! Не будет спавнить новых членов команды, если все места заняты.
+shipevent-teamconsole-desc = Консоль позволяющая создать свою команду для участия в соревнованиях.
+
+shipevent-blacklist = Вы в блеклисте сией команды. Наверное вы чем-то обидели капитана.
+
+shipevent-teamcreation-response-invalidname = Данное имя уже занято/недоступно по другой причине.
+shipevent-teamcreation-response-blacklistself = Зачем вы пытаетесь добавить себя же в блеклист?
+shipevent-teamcreation-namelabel = Имя команды:
+shipevent-teamcreation-blacklistlabel = Блеклист (сикеи через запятую):
+shipevent-teamcreation-creationbutton = СОЗДАТЬ КОМАНДУ

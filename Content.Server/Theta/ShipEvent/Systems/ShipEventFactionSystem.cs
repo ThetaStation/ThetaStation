@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Net.Sockets;
 using Content.Server.Actions;
 using Content.Server.Chat.Systems;
 using Content.Server.Explosion.Components;
@@ -13,15 +14,14 @@ using Content.Shared.Actions;
 using Content.Shared.Chat;
 using Content.Shared.Explosion;
 using Content.Shared.GameTicking;
-using Content.Shared.Humanoid;
 using Content.Shared.Projectiles;
 using Content.Shared.Toggleable;
 using Content.Shared.Theta.ShipEvent;
+using Content.Shared.Theta.ShipEvent.UI;
 using Robust.Server.GameObjects;
 using Robust.Server.Maps;
 using Robust.Server.Player;
 using Robust.Shared.Map;
-using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -41,12 +41,14 @@ public sealed class ShipEventFaction : PlayerFaction
     public Dictionary<ShipEventFaction, int> Hits = new(); //hits from other teams, not vice-versa
     public EntityUid Captain;
     public EntityUid Ship;
+    public List<string>? Blacklist; //blacklist for ckeys
 
-    public ShipEventFaction(string name, string iconPath, EntityUid ship, EntityUid captain, int points = 0) : base(name, iconPath)
+    public ShipEventFaction(string name, string iconPath, EntityUid ship, EntityUid captain, int points = 0, List<string>? blacklist = null) : base(name, iconPath)
     {
         Ship = ship;
         Captain = captain;
         Points = points;
+        Blacklist = blacklist;
     }
 }
 
@@ -95,10 +97,11 @@ public sealed class ShipEventFactionSystem : EntitySystem
         SubscribeLocalEvent<ShipEventFactionViewComponent, ComponentInit>(OnViewInit);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, GhostRoleSpawnerUsedEvent>(OnSpawn);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, StartCollideEvent>(OnCollision);
+        SubscribeLocalEvent<ShipEventFactionMarkerComponent, TeamCreationRequest>(OnTeamCreationRequest);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
     }
 
-	public override void Update(float frametime)
+    public override void Update(float frametime)
     {
         if (_teamCheckTimer < TeamCheckInterval)
         {
@@ -111,8 +114,21 @@ public sealed class ShipEventFactionSystem : EntitySystem
 
 	private void OnSpawn(EntityUid entity, ShipEventFactionMarkerComponent component, GhostRoleSpawnerUsedEvent args)
     {
+        var session = GetSession(entity);
+        if (session == null) { return; }
+
         if (_entMan.TryGetComponent<ShipEventFactionMarkerComponent>(args.Spawner, out var teamMarker))
         {
+            if (teamMarker.Team == null) { return; }
+            if (teamMarker.Team.Blacklist != null)
+            {
+                if (teamMarker.Team.Blacklist.Contains(session.Name))
+                {
+                    _chatSys.SendSimpleMessage(Loc.GetString("shipevent-blacklist"), session);
+                    _entMan.DeleteEntity(entity);
+                    return;
+                }
+            }
             AddToTeam(args.Spawned, teamMarker.Team!);
             component.Team = teamMarker.Team;
             _entMan.GetComponent<GhostRoleMobSpawnerComponent>(args.Spawner).SetCurrentTakeovers(teamMarker.Team!.Members.Count);
@@ -146,6 +162,56 @@ public sealed class ShipEventFactionSystem : EntitySystem
     private void OnViewInit(EntityUid entity, ShipEventFactionViewComponent view, ComponentInit args)
     {
         if (_entMan.TryGetComponent<ActionsComponent>(entity, out var actComp)) { _actSys.AddAction(entity, view.ToggleAction, null, actComp); }
+    }
+
+    private void OnTeamCreationRequest(EntityUid entity, ShipEventFactionMarkerComponent component, TeamCreationRequest args)
+    {
+        string _name = "";
+        List<string> _blacklist = new();
+
+        if (!args.Name.Any()) { _name = GenerateTeamName(); }
+        else
+        {
+            if (!IsValidName(args.Name))
+            {
+                if (_uiSys.TryGetUi(entity, args.UiKey, out var bui))
+                {
+                    _uiSys.SetUiState(bui, new TeamCreationBoundUserInterfaceState(Loc.GetString("shipevent-teamcreation-response-invalidname")));
+                }
+
+                return;
+            }
+
+            _name = args.Name;
+        }
+
+        if (args.Blacklist.Any())
+        {
+            _blacklist = args.Blacklist.Split(",").ToList();
+            _blacklist.Select(ckey => ckey.Trim());
+        }
+
+        if (_blacklist.Contains(args.Session.Name))
+        {
+            if (_uiSys.TryGetUi(entity, args.UiKey, out var bui))
+            {
+                _uiSys.SetUiState(bui, new TeamCreationBoundUserInterfaceState(Loc.GetString("shipevent-teamcreation-response-blacklistself")));
+            }
+
+            return;
+        }
+
+        if (args.Session.AttachedEntity == null) { return; }
+
+        EntityUid newShip = CreateShip();
+        List<EntityUid> spawners = GetShipComponents<GhostRoleMobSpawnerComponent>(newShip);
+        if (!spawners.Any()) { return; }
+
+        var team = CreateTeam(newShip, (EntityUid)args.Session.AttachedEntity, _name, _blacklist);
+        SetMarkers(newShip, team);
+
+        _entMan.DeleteEntity((EntityUid)args.Session.AttachedEntity);
+        _entMan.GetComponent<GhostRoleMobSpawnerComponent>(spawners.First()).Take((IPlayerSession)args.Session);
     }
 
     private void OnCollision(EntityUid entity, ShipEventFactionMarkerComponent component, ref StartCollideEvent args)
@@ -205,7 +271,7 @@ public sealed class ShipEventFactionSystem : EntitySystem
         }
     }
 
-    public ShipEventFaction CreateTeam(EntityUid shipEntity, EntityUid captain, string name = "", bool silent = false)
+    public ShipEventFaction CreateTeam(EntityUid shipEntity, EntityUid captain, string name = "", List<string>? blacklist = null, bool silent = false)
     {
         string shipName = GetName(shipEntity);
         string teamName = !IsValidName(name) ? GenerateTeamName() : name;
@@ -213,7 +279,8 @@ public sealed class ShipEventFactionSystem : EntitySystem
             teamName,
             "/Textures/Theta/ShipEvent/ShipFactionIcon.rsi",
             shipEntity,
-            captain);
+            captain,
+            blacklist: blacklist);
         _teams.Add(team);
         _shipNames[shipEntity] = shipName;
 		if(!silent)
