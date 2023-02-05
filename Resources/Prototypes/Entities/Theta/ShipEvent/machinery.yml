@@ -57,11 +57,6 @@
       color: "#43ccb5"
     - type: ApcPowerReceiver
       needsPower: false
-    - type: Appearance
-      visuals:
-        - type: ComputerVisualizer
-          key: generic_key
-          screen: comm_syndie
 
 - type: entity
   id: TeamSpawnerShipEvent
