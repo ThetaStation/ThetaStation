@@ -105,7 +105,7 @@ public sealed class ShipEventFactionSystem : EntitySystem
 
     private void OnRoundEnd(RoundEndTextAppendEvent args)
     {
-        if (!RuleSelected) { return; }
+        if (!RuleSelected || !_teams.Any()) { return; }
 
         ShipEventFaction winner = _teams.First();
         args.AddLine(Loc.GetString("shipevent-roundend-heading"));
