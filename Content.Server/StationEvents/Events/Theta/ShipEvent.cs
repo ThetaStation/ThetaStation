@@ -23,5 +23,6 @@ public sealed class ShipEvent : StationEventSystem
 
         _mapMan.CreateMap(new MapId(mid));
         _shipSys.TargetMap = new MapId(mid);
+        _shipSys.RuleSelected = true;
     }
 }

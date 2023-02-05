@@ -1,8 +1,8 @@
 ﻿using System.Linq;
-using System.Net.Sockets;
 using Content.Server.Actions;
 using Content.Server.Chat.Systems;
 using Content.Server.Explosion.Components;
+using Content.Server.GameTicking;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Ghost.Roles.Events;
 using Content.Server.IdentityManagement;
@@ -65,9 +65,9 @@ public sealed class ShipEventFactionSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
 
     public float PointsPerHitMultiplier = 0.01f;
-    public int PointsPerKill = 5000;
-    public int PointsPerAssist = 1000;
-    public int PointsPerInterval = 1000; //points for surviving longer than BonusInterval without respawn
+    public int PointsPerKill = 10000;
+    public int PointsPerAssist = 5000;
+    public int PointsPerInterval = 5000; //points for surviving longer than BonusInterval without respawn
     public int BonusInterval = 600; //in seconds
     public int RespawnDelay = 60; //in seconds
 
@@ -84,6 +84,7 @@ public sealed class ShipEventFactionSystem : EntitySystem
     private List<ShipEventFaction> _teams = new();
     private Dictionary<EntityUid, string> _shipNames = new();
 
+    public bool RuleSelected = false;
     public MapId TargetMap;
     public int MaxSpawnOffset = 500;
 
@@ -98,7 +99,33 @@ public sealed class ShipEventFactionSystem : EntitySystem
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, GhostRoleSpawnerUsedEvent>(OnSpawn);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, StartCollideEvent>(OnCollision);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, TeamCreationRequest>(OnTeamCreationRequest);
+        SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEnd);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
+    }
+
+    private void OnRoundEnd(RoundEndTextAppendEvent args)
+    {
+        if (!RuleSelected) { return; }
+
+        ShipEventFaction winner = _teams.First();
+        args.AddLine(Loc.GetString("shipevent-roundend-heading"));
+        foreach (var team in _teams)
+        {
+            if (team.Points > winner.Points) { winner = team; }
+            args.AddLine(Loc.GetString("shipevent-roundend-team",
+                ("name", team.Name),
+                ("shipname", _shipNames[team.Ship]),
+                ("capname", GetName(team.Captain))
+            ));
+            args.AddLine(Loc.GetString("shipevent-roundend-teamstats",
+                ("points", team.Points),
+                ("kills", team.Kills),
+                ("assists", team.Assists),
+                ("respawns", team.Respawns)
+            ));
+            args.AddLine("");
+        }
+        args.AddLine(Loc.GetString("shipevent-roundend-winner", ("name", winner.Name)));
     }
 
     public override void Update(float frametime)

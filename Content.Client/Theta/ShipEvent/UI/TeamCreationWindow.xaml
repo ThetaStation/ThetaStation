@@ -1,7 +1,7 @@
 ﻿<DefaultWindow xmlns="https://spacestation14.io"
                Title="{Loc 'shipevent-teamview-window-title'}"
-               MinSize="600 500"
-               SetSize="600 500">
+               MinSize="600 320"
+               SetSize="600 320">
     <BoxContainer Orientation="Vertical" SeparationOverride="4">
         <Label Name="UserMessage"
                Text="" />
