@@ -14,7 +14,6 @@ using Content.Shared.Tag;
 using Robust.Server.GameObjects;
 using Robust.Shared.GameStates;
 using Robust.Shared.Physics.Components;
-using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -29,6 +28,7 @@ namespace Content.Server.Shuttles.Systems
         [Dependency] private readonly ShuttleSystem _shuttle = default!;
         [Dependency] private readonly TagSystem _tags = default!;
         [Dependency] private readonly UserInterfaceSystem _ui = default!;
+        [Dependency] private readonly RadarConsoleSystem _radarConsoleSystem = default!;
 
         public override void Initialize()
         {
@@ -39,6 +39,7 @@ namespace Content.Server.Shuttles.Systems
             SubscribeLocalEvent<ShuttleConsoleComponent, AnchorStateChangedEvent>(OnConsoleAnchorChange);
             SubscribeLocalEvent<ShuttleConsoleComponent, ActivatableUIOpenAttemptEvent>(OnConsoleUIOpenAttempt);
             SubscribeLocalEvent<ShuttleConsoleComponent, ShuttleConsoleDestinationMessage>(OnDestinationMessage);
+            SubscribeLocalEvent<ShuttleConsoleComponent, ShuttleConsoleChangeShipNameMessage>(OnChangeShipName);
             SubscribeLocalEvent<ShuttleConsoleComponent, BoundUIClosedEvent>(OnConsoleUIClose);
 
             SubscribeLocalEvent<DockEvent>(OnDock);
@@ -46,6 +47,21 @@ namespace Content.Server.Shuttles.Systems
 
             SubscribeLocalEvent<PilotComponent, MoveEvent>(HandlePilotMove);
             SubscribeLocalEvent<PilotComponent, ComponentGetState>(OnGetState);
+        }
+
+        private void OnChangeShipName(EntityUid uid, ShuttleConsoleComponent component, ShuttleConsoleChangeShipNameMessage args)
+        {
+            if(args.NewShipName == null)
+                return;
+            if(!TryComp<TransformComponent>(uid, out var xform))
+                return;
+            if(!TryComp<MetaDataComponent>(xform.GridUid, out var meta))
+                return;
+            meta.EntityName = args.NewShipName;
+            foreach (var comp in EntityQuery<ShuttleConsoleComponent>(true))
+            {
+                UpdateState(comp);
+            }
         }
 
         private void OnDestinationMessage(EntityUid uid, ShuttleConsoleComponent component, ShuttleConsoleDestinationMessage args)
@@ -273,6 +289,21 @@ namespace Content.Server.Shuttles.Systems
             }
 
             docks ??= GetAllDocks();
+            List<MobInterfaceState> mobs;
+            List<ProjectilesInterfaceState> projectiles;
+            List<CannonInterfaceState> cannons;
+            if (radar != null)
+            {
+                mobs = _radarConsoleSystem.GetMobsAround(radar);
+                projectiles = _radarConsoleSystem.GetProjectilesAround(radar);
+                cannons = _radarConsoleSystem.GetCannonsOnGrid(radar);
+            }
+            else
+            {
+                mobs = new List<MobInterfaceState>();
+                projectiles = new List<ProjectilesInterfaceState>();
+                cannons = new List<CannonInterfaceState>();
+            }
 
             _ui.GetUiOrNull(component.Owner, ShuttleConsoleUiKey.Key)
                 ?.SetState(new ShuttleConsoleBoundInterfaceState(
@@ -282,7 +313,12 @@ namespace Content.Server.Shuttles.Systems
                     range,
                     consoleXform?.Coordinates,
                     consoleXform?.LocalRotation,
-                    docks));
+                    docks,
+                    mobs,
+                    projectiles,
+                    cannons
+                    )
+                );
         }
 
         public override void Update(float frameTime)
@@ -305,6 +341,12 @@ namespace Content.Server.Shuttles.Systems
             {
                 RemovePilot(comp);
             }
+
+            foreach (var shuttleConsole in EntityManager.EntityQuery<ShuttleConsoleComponent>())
+            {
+                UpdateState(shuttleConsole);
+            }
+
         }
 
         /// <summary>
