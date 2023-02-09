@@ -55,7 +55,7 @@ public sealed class ShipEventFaction : PlayerFaction
 
 public sealed class ShipEventFactionSystem : EntitySystem
 {
-	[Dependency] private readonly IEntityManager _entMan = default!;
+    [Dependency] private readonly IEntityManager _entMan = default!;
     [Dependency] private readonly MapLoaderSystem _mapSys = default!;
     [Dependency] private readonly IPrototypeManager _protMan = default!;
     [Dependency] private readonly ChatSystem _chatSys = default!;
@@ -80,7 +80,7 @@ public sealed class ShipEventFactionSystem : EntitySystem
         "/Maps/Shuttles/ship_test_1.yml"
     };
 
-	public List<ShipEventFaction> Teams => _teams;
+    public List<ShipEventFaction> Teams => _teams;
     private List<ShipEventFaction> _teams = new();
     private Dictionary<EntityUid, string> _shipNames = new();
 
@@ -92,8 +92,8 @@ public sealed class ShipEventFactionSystem : EntitySystem
     //no need to bother prototype manager again, and again, and again.
     private Dictionary<string, int> explosionDamage = new();
     public override void Initialize()
-	{
-		base.Initialize();
+    {
+        base.Initialize();
         SubscribeLocalEvent<ShipEventFactionViewComponent, ToggleActionEvent>(OnView);
         SubscribeLocalEvent<ShipEventFactionViewComponent, ComponentInit>(OnViewInit);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, GhostRoleSpawnerUsedEvent>(OnSpawn);
@@ -139,7 +139,7 @@ public sealed class ShipEventFactionSystem : EntitySystem
         CheckTeams(TeamCheckInterval);
     }
 
-	private void OnSpawn(EntityUid entity, ShipEventFactionMarkerComponent component, GhostRoleSpawnerUsedEvent args)
+    private void OnSpawn(EntityUid entity, ShipEventFactionMarkerComponent component, GhostRoleSpawnerUsedEvent args)
     {
         var session = GetSession(entity);
         if (session == null) { return; }
@@ -283,16 +283,16 @@ public sealed class ShipEventFactionSystem : EntitySystem
     }
 
     private void AddToTeam(EntityUid entity, ShipEventFaction team)
-	{
+    {
         if (_entMan.TryGetComponent<MindComponent>(entity, out var mindComp))
-		{
+        {
             if (!mindComp.HasMind) { return; }
             if (mindComp.Mind!.HasRole<ShipEventRole>()) { return; }
 
             SetName(entity, GetName(entity) + $"({team.Name})");
 
-			Role shipEventRole = new ShipEventRole(mindComp.Mind!);
-			mindComp.Mind!.AddRole(shipEventRole);
+            Role shipEventRole = new ShipEventRole(mindComp.Mind!);
+            mindComp.Mind!.AddRole(shipEventRole);
             team.AddMember(shipEventRole);
             TeamMessage(team, Loc.GetString("shipevent-team-newmember", ("name", GetName(entity))), color: Color.Magenta);
         }
@@ -310,13 +310,13 @@ public sealed class ShipEventFactionSystem : EntitySystem
             blacklist: blacklist);
         _teams.Add(team);
         _shipNames[shipEntity] = shipName;
-		if(!silent)
-		{
-			Announce(Loc.GetString(
-				"shipevent-team-add",
-				("teamname", team.Name),
-				("shipname", shipName)));
-		}
+        if(!silent)
+        {
+            Announce(Loc.GetString(
+                "shipevent-team-add",
+                ("teamname", team.Name),
+                ("shipname", shipName)));
+        }
 
         SetMarkers(shipEntity, team);
 
@@ -440,14 +440,14 @@ public sealed class ShipEventFactionSystem : EntitySystem
     private void RemoveTeam(ShipEventFaction team, string removeReason = "", bool silent = false, bool killPoints = true)
     {
         if (!silent)
-		{
+        {
             string message = Loc.GetString(
-				"shipevent-team-remove",
-				("teamname", team.Name),
-				("shipname", GetName(team.Ship)),
-				("removereason", removeReason == "" ? Loc.GetString("shipevent-remove-default") : removeReason));
-			Announce(message);
-		}
+                "shipevent-team-remove",
+                ("teamname", team.Name),
+                ("shipname", GetName(team.Ship)),
+                ("removereason", removeReason == "" ? Loc.GetString("shipevent-remove-default") : removeReason));
+            Announce(message);
+        }
 
         if(killPoints){ AddKillPoints(team); }
 
@@ -487,14 +487,14 @@ public sealed class ShipEventFactionSystem : EntitySystem
     /// Checks teams periodically
     /// </summary>
     /// <param name="deltaTime">How much time passed since last call</param>
-	private void CheckTeams(float deltaTime)
-	{
-		foreach (ShipEventFaction team in _teams)
+    private void CheckTeams(float deltaTime)
+    {
+        foreach (ShipEventFaction team in _teams)
         {
             if (!team.GetLivingMembersMinds().Any() && team.Members.Any() && !team.ShouldRespawn)
-			{
-				RespawnTeam(
-				    team,
+            {
+                RespawnTeam(
+                    team,
                     Loc.GetString("shipevent-respawn-dead"));
                 break;
             }
@@ -552,12 +552,12 @@ public sealed class ShipEventFactionSystem : EntitySystem
             team.TimeSinceRemoval += deltaTime;
             if(!team.ShouldRespawn) { team.BonusIntervalTimer += deltaTime; }
         }
-	}
+    }
 
     private void Announce(string message)
-	{
+    {
         _chatSys.DispatchGlobalAnnouncement(message, Loc.GetString("shipevent-announcement-title"));
-	}
+    }
 
     private void TeamMessage(ShipEventFaction team, string message, ChatChannel chatChannel = ChatChannel.Local, Color? color = null)
     {
@@ -570,11 +570,11 @@ public sealed class ShipEventFactionSystem : EntitySystem
         }
     }
 
-	private string GenerateTeamName()
-	{
-		_lastTeamNumber += 1;
-		return $"Team №{_lastTeamNumber}";
-	}
+    private string GenerateTeamName()
+    {
+        _lastTeamNumber += 1;
+        return $"Team №{_lastTeamNumber}";
+    }
 
     private string GetName(EntityUid entity)
     {
