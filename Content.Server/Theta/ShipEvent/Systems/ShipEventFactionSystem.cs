@@ -88,9 +88,9 @@ public sealed class ShipEventFactionSystem : EntitySystem
     public MapId TargetMap;
     public int MaxSpawnOffset = 500;
 
-    //cached DamagePerIntensity for different explosion types, since in 90% cases explosion is the default one,
-    //no need to bother prototype manager again, and again, and again.
-    private Dictionary<string, int> explosionDamage = new();
+    //cached damage for projectile prototypes
+    private Dictionary<string, int> projectileDamage = new();
+    
     public override void Initialize()
     {
         base.Initialize();
@@ -260,20 +260,30 @@ public sealed class ShipEventFactionSystem : EntitySystem
 
     public int GetProjectileDamage(EntityUid entity)
     {
-        int damage = 0;
-        if (_entMan.TryGetComponent<ProjectileComponent>(entity, out var proj)) { damage += (int)proj.Damage.Total; }
-        if(_entMan.TryGetComponent<ExplosiveComponent>(entity, out var exp))
+        if(_entMan.TryGetComponent<MetaDataComponent>(entity, out var meta))
         {
-            int damagePerIntensity = 0;
-            if (!explosionDamage.ContainsKey(exp.ExplosionType))
+            if (meta.EntityPrototype == null) { return 0; }
+            
+            if (projectileDamage.ContainsKey(meta.EntityPrototype.ID)) { return projectileDamage[meta.EntityPrototype.ID]; }
+            else
             {
-                explosionDamage[exp.ExplosionType] = (int)_protMan.Index<ExplosionPrototype>(exp.ExplosionType).DamagePerIntensity.Total;
+                int damage = 0;
+                
+                if (_entMan.TryGetComponent<ProjectileComponent>(entity, out var proj)) { damage += (int)proj.Damage.Total; }
+                
+                if(_entMan.TryGetComponent<ExplosiveComponent>(entity, out var exp))
+                {
+                    int damagePerIntensity = (int)_protMan.Index<ExplosionPrototype>(exp.ExplosionType).DamagePerIntensity.Total;
+                    damage += (int)(exp.TotalIntensity * damagePerIntensity);
+                }
+
+                projectileDamage[meta.EntityPrototype.ID] = damage;
+
+                return damage;
             }
-            else { damagePerIntensity = explosionDamage[exp.ExplosionType]; }
-            damage += (int)(exp.TotalIntensity * damagePerIntensity);
         }
 
-        return damage;
+        return 0;
     }
 
     public void OnRoundRestart(RoundRestartCleanupEvent ev)
