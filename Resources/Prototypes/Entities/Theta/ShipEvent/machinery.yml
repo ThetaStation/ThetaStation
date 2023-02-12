@@ -43,13 +43,34 @@
           state: syndie_key
 
 - type: entity
+  parent: BaseComputer
+  id: TeamCreationConsoleShipEvent
+  name: team console
+  suffix: SHIPEVENT
+  description: shipevent-teamconsole-desc
+  components:
+    - type: ShipEventFactionMarker
+    - type: ActivatableUI
+      key: enum.TeamCreationUiKey.Key
+    - type: UserInterface
+      interfaces:
+        - key: enum.TeamCreationUiKey.Key
+          type: TeamCreationBoundUserInterface
+    - type: PointLight
+      radius: 1.5
+      energy: 1.6
+      color: "#43ccb5"
+    - type: ApcPowerReceiver
+      needsPower: false
+
+- type: entity
   id: TeamSpawnerShipEvent
   name: team spawner
   parent: BaseStructure
   suffix: SHIPEVENT
   placement:
     mode: SnapgridCenter
-  description: High-tech machinery capable of creating new crewmembers from thin air. Can only create new crewmembers if amount of living team members is lower than threshold.
+  description: shipevent-spawner-desc
   components:
   - type: Transform
     anchored: true

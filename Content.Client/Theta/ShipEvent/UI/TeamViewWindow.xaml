@@ -4,7 +4,6 @@
                SetSize="600 500">
     <BoxContainer Orientation="Vertical">
         <Label Name="TeamViewText"
-               Access="Public"
                Text="." />
         <Control MinSize="0 10" />
     </BoxContainer>
