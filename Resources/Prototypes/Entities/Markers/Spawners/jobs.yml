@@ -114,14 +114,6 @@
     job_id: SecurityCadet
 
 - type: entity
-  id: SpawnPointResearchAssistant
-  parent: SpawnPointAssistant
-  name: research assistant
-  components:
-  - type: SpawnPoint
-    job_id: ResearchAssistant
-
-- type: entity
   id: SpawnPointServiceWorker
   parent: SpawnPointAssistant
   name: service worker

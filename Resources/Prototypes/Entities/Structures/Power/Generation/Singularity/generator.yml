@@ -31,6 +31,3 @@
     noRot: true
   - type: Anchorable
   - type: Pullable
-  - type: GuideHelp
-    guides: [ Singularity, Power ]
-  

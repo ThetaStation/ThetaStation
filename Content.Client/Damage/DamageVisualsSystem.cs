@@ -345,7 +345,7 @@ public sealed class DamageVisualsSystem : VisualizerSystem<DamageVisualsComponen
         // If this was passed into the component, we update
         // the data to ensure that the current disabled
         // bool matches.
-        if (AppearanceSystem.TryGetData<bool>(uid, DamageVisualizerKeys.Disabled, out var disabledStatus, args.Component))
+        if (args.Component.TryGetData<bool>(DamageVisualizerKeys.Disabled, out var disabledStatus))
             damageVisComp.Disabled = disabledStatus;
 
         if (damageVisComp.Disabled)
@@ -366,7 +366,7 @@ public sealed class DamageVisualsSystem : VisualizerSystem<DamageVisualsComponen
         if (damageVisComp.Overlay && damageVisComp.DamageOverlayGroups != null && damageVisComp.TargetLayers == null)
             CheckOverlayOrdering(spriteComponent, damageVisComp);
 
-        if (AppearanceSystem.TryGetData<bool>(component.Owner, DamageVisualizerKeys.ForceUpdate, out var update, component)
+        if (component.TryGetData<bool>(DamageVisualizerKeys.ForceUpdate, out var update)
             && update)
         {
             ForceUpdateLayers(damageComponent, spriteComponent, damageVisComp);
@@ -377,7 +377,7 @@ public sealed class DamageVisualsSystem : VisualizerSystem<DamageVisualsComponen
         {
             UpdateDamageVisuals(damageComponent, spriteComponent, damageVisComp);
         }
-        else if (AppearanceSystem.TryGetData<DamageVisualizerGroupData>(component.Owner, DamageVisualizerKeys.DamageUpdateGroups, out var data, component))
+        else if (component.TryGetData(DamageVisualizerKeys.DamageUpdateGroups, out DamageVisualizerGroupData data))
         {
             UpdateDamageVisuals(data.GroupList, damageComponent, spriteComponent, damageVisComp);
         }
@@ -394,7 +394,7 @@ public sealed class DamageVisualsSystem : VisualizerSystem<DamageVisualsComponen
         foreach (var layer in damageVisComp.TargetLayerMapKeys)
         {
             bool? layerStatus = null;
-            if (AppearanceSystem.TryGetData<bool>(component.Owner, layer, out var layerStateEnum, component))
+            if (component.TryGetData<bool>(layer, out var layerStateEnum))
                 layerStatus = layerStateEnum;
 
             if (layerStatus == null)

@@ -6,7 +6,6 @@ using Content.Shared.Audio;
 using Content.Shared.Examine;
 using Content.Shared.Interaction;
 using JetBrains.Annotations;
-using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Player;
 
@@ -16,7 +15,6 @@ namespace Content.Server.Atmos.Piping.Binary.EntitySystems
     public sealed class GasValveSystem : EntitySystem
     {
         [Dependency] private readonly SharedAmbientSoundSystem _ambientSoundSystem = default!;
-        [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
 
         public override void Initialize()
         {
@@ -60,7 +58,7 @@ namespace Content.Server.Atmos.Piping.Binary.EntitySystems
             {
                 if (TryComp<AppearanceComponent>(component.Owner,out var appearance))
                 {
-                    _appearance.SetData(uid, FilterVisuals.Enabled, component.Open, appearance);
+                    appearance.SetData(FilterVisuals.Enabled, component.Open);
                 }
                 if (component.Open)
                 {

@@ -1,6 +1,6 @@
 - type: entity
   id: RollerBed
-  parent: [BaseItem, BaseFoldable]
+  parent: BaseItem
   name: rollerbed
   description: Used to carry patients around without damaging them.
   components:
@@ -14,10 +14,7 @@
       noRot: true
       layers:
       - state: rollerbed
-        map: ["unfoldedLayer"]
-      - state: rollerbed_folded
-        map: ["foldedLayer"]
-        visible: false
+        map: ["enum.FoldableVisualLayers.Base"]
     - type: MovedByPressure
     - type: DamageOnHighSpeedImpact
       soundHit: /Audio/Effects/bang.ogg
@@ -51,8 +48,11 @@
       rotation: -90
       buckleOffset: "0,0.15"
       unbuckleOffset: "0,0.15"
+    - type: Foldable
     - type: Appearance
       visuals:
+      - type: FoldableVisualizer
+        key: rollerbed
       - type: RollerbedVisualizer
         key: rollerbed
     - type: StaticPrice
@@ -75,12 +75,11 @@
   - type: Sprite
     layers:
     - state: cheap_rollerbed
-      map: ["unfoldedLayer"]
-    - state: cheap_rollerbed_folded
-      map: ["foldedLayer"]
-      visible: false
+      map: [ "enum.FoldableVisualLayers.Base" ]
   - type: Appearance
     visuals:
+    - type: FoldableVisualizer
+      key: cheap_rollerbed
     - type: RollerbedVisualizer
       key: cheap_rollerbed
 
@@ -101,12 +100,11 @@
   - type: Sprite
     layers:
     - state: emergency_rollerbed
-      map: ["unfoldedLayer"]
-    - state: emergency_rollerbed_folded
-      map: ["foldedLayer"]
-      visible: false
+      map: [ "enum.FoldableVisualLayers.Base" ]
   - type: Appearance
     visuals:
+    - type: FoldableVisualizer
+      key: emergency_rollerbed
     - type: RollerbedVisualizer
       key: emergency_rollerbed
 

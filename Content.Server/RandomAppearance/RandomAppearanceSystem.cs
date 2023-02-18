@@ -1,12 +1,10 @@
-﻿using Robust.Server.GameObjects;
-using Robust.Shared.Random;
+﻿using Robust.Shared.Random;
 
 namespace Content.Server.RandomAppearance;
 
 public sealed class RandomAppearanceSystem : EntitySystem
 {
     [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
 
     public override void Initialize()
     {
@@ -19,7 +17,7 @@ public sealed class RandomAppearanceSystem : EntitySystem
     {
         if (TryComp(uid, out AppearanceComponent? appearance) && component.EnumKey != null)
         {
-            _appearance.SetData(uid, component.EnumKey, _random.Pick(component.SpriteStates), appearance);
+            appearance.SetData(component.EnumKey, _random.Pick(component.SpriteStates));
         }
     }
 }

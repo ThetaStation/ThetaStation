@@ -77,11 +77,12 @@
     Steel: 5
 
 - type: latheRecipe
-  id: CartridgeRifle
-  result: CartridgeRifle
+  id: CartridgeCaselessRifleRubber
+  result: CartridgeCaselessRifleRubber
   completetime: 2
   materials:
-    Steel: 15
+    Plastic: 10
+    Steel: 5
 
 - type: latheRecipe
   id: CartridgeLightRifleRubber
@@ -150,7 +151,7 @@
   completetime: 5
   applyMaterialDiscount: false # ingredients dropped when destroyed
   materials:
-    Steel: 500
+    Steel: 10
 
 - type: latheRecipe
   id: TargetClown
@@ -158,7 +159,7 @@
   completetime: 5
   applyMaterialDiscount: false # ingredients dropped when destroyed
   materials:
-    Steel: 500
+    Steel: 10
 
 - type: latheRecipe
   id: TargetSyndicate
@@ -166,64 +167,4 @@
   completetime: 5
   applyMaterialDiscount: false # ingredients dropped when destroyed
   materials:
-    Steel: 500
-
-- type: latheRecipe
-  id: MagazineBoxPistol
-  result: MagazineBoxPistol
-  completetime: 5
-  materials:
-    Steel: 650
-
-- type: latheRecipe
-  id: MagazineBoxPistolRubber
-  result: MagazineBoxPistolRubber
-  completetime: 5
-  materials:
-    Steel: 350
-    Plastic: 300
-
-- type: latheRecipe
-  id: MagazineBoxMagnum
-  result: MagazineBoxMagnum
-  completetime: 5
-  materials:
-    Steel: 1250
-
-- type: latheRecipe
-  id: MagazineBoxMagnumRubber
-  result: MagazineBoxMagnumRubber
-  completetime: 5
-  materials:
-    Steel: 350
-    Plastic: 300
-
-- type: latheRecipe
-  id: MagazineBoxRifle
-  result: MagazineBoxRifle
-  completetime: 5
-  materials: 
-    Steel: 950
-
-- type: latheRecipe
-  id: MagazineBoxRifleRubber
-  result: MagazineBoxRifleRubber
-  completetime: 5
-  materials:
-    Steel: 350
-    Plastic: 600
-
-- type: latheRecipe
-  id: MagazineBoxLightRifle
-  result: MagazineBoxLightRifle
-  completetime: 5
-  materials:
-    Steel: 1800
-
-- type: latheRecipe
-  id: MagazineBoxLightRifleRubber
-  result: MagazineBoxLightRifleRubber
-  completetime: 5
-  materials:
-    Steel: 350
-    Plastic: 600
+    Steel: 10

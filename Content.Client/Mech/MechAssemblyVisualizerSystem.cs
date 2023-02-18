@@ -14,7 +14,7 @@ public sealed class MechAssemblyVisualizerSystem : VisualizerSystem<MechAssembly
     {
         base.OnAppearanceChange(uid, component, ref args);
 
-        if (!AppearanceSystem.TryGetData<int>(uid, MechAssemblyVisuals.State, out var stage, args.Component))
+        if (!args.Component.TryGetData(MechAssemblyVisuals.State, out int stage))
             return;
 
         var state = component.StatePrefix + stage;

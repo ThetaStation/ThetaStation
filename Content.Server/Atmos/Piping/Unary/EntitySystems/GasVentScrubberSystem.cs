@@ -28,7 +28,6 @@ namespace Content.Server.Atmos.Piping.Unary.EntitySystems
         [Dependency] private readonly DeviceNetworkSystem _deviceNetSystem = default!;
         [Dependency] private readonly SharedAmbientSoundSystem _ambientSoundSystem = default!;
         [Dependency] private readonly TransformSystem _transformSystem = default!;
-        [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
 
         public override void Initialize()
         {
@@ -186,20 +185,20 @@ namespace Content.Server.Atmos.Piping.Unary.EntitySystems
             if (!scrubber.Enabled)
             {
                 _ambientSoundSystem.SetAmbience(uid, false);
-                _appearance.SetData(uid, ScrubberVisuals.State, ScrubberState.Off, appearance);
+                appearance.SetData(ScrubberVisuals.State, ScrubberState.Off);
             }
             else if (scrubber.PumpDirection == ScrubberPumpDirection.Scrubbing)
             {
-                _appearance.SetData(uid, ScrubberVisuals.State, scrubber.WideNet ? ScrubberState.WideScrub : ScrubberState.Scrub, appearance);
+                appearance.SetData(ScrubberVisuals.State, scrubber.WideNet ? ScrubberState.WideScrub : ScrubberState.Scrub);
             }
             else if (scrubber.PumpDirection == ScrubberPumpDirection.Siphoning)
             {
-                _appearance.SetData(uid, ScrubberVisuals.State, ScrubberState.Siphon, appearance);
+                appearance.SetData(ScrubberVisuals.State, ScrubberState.Siphon);
             }
             else if (scrubber.Welded)
             {
                 _ambientSoundSystem.SetAmbience(uid, false);
-                _appearance.SetData(uid, ScrubberVisuals.State, ScrubberState.Welded, appearance);
+                appearance.SetData(ScrubberVisuals.State, ScrubberState.Welded);
             }
         }
     }

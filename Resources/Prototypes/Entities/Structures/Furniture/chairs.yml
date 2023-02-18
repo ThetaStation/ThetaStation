@@ -220,7 +220,7 @@
     node: chairCursed
 
 - type: entity
-  parent: [SeatBase, BaseFoldable]
+  parent: SeatBase
   id: ChairFolding
   name: folding chair
   description: If you carry six of these you become the coolest kid at church.
@@ -230,13 +230,14 @@
     sprite: Structures/Furniture/folding_chair.rsi
     layers:
     - state: folding
-      map: ["unfoldedLayer"]
-    - state: folding_folded
-      map: ["foldedLayer"]
-      visible: false
+      map: ["enum.FoldableVisualLayers.Base"]
   - type: Item
     size: 50
+  - type: Foldable
   - type: Appearance
+    visuals:
+    - type: FoldableVisualizer
+      key: folding
   - type: MeleeWeapon
     damage:
       types:

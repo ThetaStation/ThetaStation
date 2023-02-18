@@ -23,7 +23,6 @@ namespace Content.Server.Atmos.Piping.Trinary.EntitySystems
         [Dependency] private IAdminLogManager _adminLogger = default!;
         [Dependency] private readonly AtmosphereSystem _atmosphereSystem = default!;
         [Dependency] private readonly SharedAmbientSoundSystem _ambientSoundSystem = default!;
-        [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
 
         public override void Initialize()
         {
@@ -175,7 +174,7 @@ namespace Content.Server.Atmos.Piping.Trinary.EntitySystems
             if (!Resolve(uid, ref mixer, ref appearance, false))
                 return;
 
-            _appearance.SetData(uid, FilterVisuals.Enabled, mixer.Enabled, appearance);
+            appearance.SetData(FilterVisuals.Enabled, mixer.Enabled);
         }
 
         private void OnToggleStatusMessage(EntityUid uid, GasMixerComponent mixer, GasMixerToggleStatusMessage args)

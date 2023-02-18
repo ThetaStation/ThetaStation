@@ -1,8 +1,6 @@
-﻿using Robust.Shared.GameStates;
+﻿namespace Content.Shared.Anomaly.Effects.Components;
 
-namespace Content.Shared.Anomaly.Effects.Components;
-
-[RegisterComponent, NetworkedComponent]
+[RegisterComponent]
 public sealed class GravityAnomalyComponent : Component
 {
     /// <summary>

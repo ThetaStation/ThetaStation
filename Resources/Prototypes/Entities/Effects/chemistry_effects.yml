@@ -8,7 +8,8 @@
     sprite: Effects/chemsmoke.rsi
     state: chemsmoke
   - type: Appearance
-  - type: SmokeVisuals
+    visuals:
+      - type: SmokeVisualizer
   - type: Occluder
   - type: Transform
     anchored: true
@@ -35,9 +36,10 @@
         map: ["enum.FoamVisualLayers.Base"]
   - type: AnimationPlayer
   - type: Appearance
-  - type: FoamVisuals
-    animationTime: 0.6
-    animationState: foam-dissolve
+    visuals:
+      - type: FoamVisualizer
+        animationTime: 0.6
+        animationState: foam-dissolve
   - type: Transform
     anchored: true
   - type: Physics
@@ -72,9 +74,10 @@
     - state: mfoam
       map: ["enum.FoamVisualLayers.Base"]
   - type: Appearance
-  - type: FoamVisuals
-    animationTime: 0.6
-    animationState: mfoam-dissolve
+    visuals:
+    - type: FoamVisualizer
+      animationTime: 0.6
+      animationState: mfoam-dissolve
   - type: FoamSolutionAreaEffect
     foamedMetalPrototype: FoamedIronMetal
 
@@ -90,9 +93,10 @@
       - state: mfoam
         map: ["enum.FoamVisualLayers.Base"]
   - type: Appearance
-  - type: FoamVisuals
-    animationTime: 0.6
-    animationState: mfoam-dissolve
+    visuals:
+      - type: FoamVisualizer
+        animationTime: 0.6
+        animationState: mfoam-dissolve
   - type: FoamSolutionAreaEffect
     foamedMetalPrototype: FoamedAluminiumMetal
 

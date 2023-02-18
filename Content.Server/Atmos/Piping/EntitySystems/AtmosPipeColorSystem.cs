@@ -1,13 +1,10 @@
 using Content.Server.Atmos.Piping.Components;
 using Content.Shared.Atmos.Piping;
-using Robust.Server.GameObjects;
 
 namespace Content.Server.Atmos.Piping.EntitySystems
 {
     public sealed class AtmosPipeColorSystem : EntitySystem
     {
-        [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-
         public override void Initialize()
         {
             base.Initialize();
@@ -21,7 +18,7 @@ namespace Content.Server.Atmos.Piping.EntitySystems
             if (!EntityManager.TryGetComponent(uid, out AppearanceComponent? appearance))
                 return;
 
-            _appearance.SetData(uid, PipeColorVisuals.Color, component.Color, appearance);
+            appearance.SetData(PipeColorVisuals.Color, component.Color);
         }
 
         private void OnShutdown(EntityUid uid, AtmosPipeColorComponent component, ComponentShutdown args)
@@ -29,7 +26,7 @@ namespace Content.Server.Atmos.Piping.EntitySystems
             if (!EntityManager.TryGetComponent(uid, out AppearanceComponent? appearance))
                 return;
 
-            _appearance.SetData(uid, PipeColorVisuals.Color, Color.White, appearance);
+            appearance.SetData(PipeColorVisuals.Color, Color.White);
         }
 
         public void SetColor(EntityUid uid, AtmosPipeColorComponent component, Color color)
@@ -39,7 +36,7 @@ namespace Content.Server.Atmos.Piping.EntitySystems
             if (!EntityManager.TryGetComponent(uid, out AppearanceComponent? appearance))
                 return;
 
-            _appearance.SetData(uid, PipeColorVisuals.Color, color, appearance);
+            appearance.SetData(PipeColorVisuals.Color, color);
         }
     }
 }

@@ -39,7 +39,6 @@ namespace Content.Server.Light.EntitySystems
         [Dependency] private readonly SignalLinkerSystem _signalSystem = default!;
         [Dependency] private readonly SharedContainerSystem _containerSystem = default!;
         [Dependency] private readonly DoAfterSystem _doAfterSystem = default!;
-        [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
 
         private static readonly TimeSpan ThunkDelay = TimeSpan.FromSeconds(2);
         public const string LightBulbContainer = "light_bulb";
@@ -271,7 +270,7 @@ namespace Content.Server.Light.EntitySystems
             {
                 SetLight(uid, false, light: light);
                 powerReceiver.Load = 0;
-                _appearance.SetData(uid, PoweredLightVisuals.BulbState, PoweredLightState.Empty, appearance);
+                appearance?.SetData(PoweredLightVisuals.BulbState, PoweredLightState.Empty);
                 return;
             }
 
@@ -281,7 +280,7 @@ namespace Content.Server.Light.EntitySystems
                     if (powerReceiver.Powered && light.On)
                     {
                         SetLight(uid, true, lightBulb.Color, light, lightBulb.LightRadius, lightBulb.LightEnergy, lightBulb.LightSoftness);
-                        _appearance.SetData(uid, PoweredLightVisuals.BulbState, PoweredLightState.On, appearance);
+                        appearance?.SetData(PoweredLightVisuals.BulbState, PoweredLightState.On);
                         var time = _gameTiming.CurTime;
                         if (time > light.LastThunk + ThunkDelay)
                         {
@@ -292,16 +291,16 @@ namespace Content.Server.Light.EntitySystems
                     else
                     {
                         SetLight(uid, false, light: light);
-                        _appearance.SetData(uid, PoweredLightVisuals.BulbState, PoweredLightState.Off, appearance);
+                        appearance?.SetData(PoweredLightVisuals.BulbState, PoweredLightState.Off);
                     }
                     break;
                 case LightBulbState.Broken:
                     SetLight(uid, false, light: light);
-                    _appearance.SetData(uid, PoweredLightVisuals.BulbState, PoweredLightState.Broken, appearance);
+                    appearance?.SetData(PoweredLightVisuals.BulbState, PoweredLightState.Broken);
                     break;
                 case LightBulbState.Burned:
                     SetLight(uid, false, light: light);
-                    _appearance.SetData(uid, PoweredLightVisuals.BulbState, PoweredLightState.Burned, appearance);
+                    appearance?.SetData(PoweredLightVisuals.BulbState, PoweredLightState.Burned);
                     break;
             }
 
@@ -336,10 +335,10 @@ namespace Content.Server.Light.EntitySystems
 
             light.LastGhostBlink = time;
 
-            ToggleBlinkingLight(uid, light, true);
+            ToggleBlinkingLight(light, true);
             light.Owner.SpawnTimer(light.GhostBlinkingTime, () =>
             {
-                ToggleBlinkingLight(uid, light, false);
+                ToggleBlinkingLight(light, false);
             });
 
             args.Handled = true;
@@ -350,7 +349,7 @@ namespace Content.Server.Light.EntitySystems
             UpdateLight(uid, component);
         }
 
-        public void ToggleBlinkingLight(EntityUid uid, PoweredLightComponent light, bool isNowBlinking)
+        public void ToggleBlinkingLight(PoweredLightComponent light, bool isNowBlinking)
         {
             if (light.IsBlinking == isNowBlinking)
                 return;
@@ -359,8 +358,7 @@ namespace Content.Server.Light.EntitySystems
 
             if (!EntityManager.TryGetComponent(light.Owner, out AppearanceComponent? appearance))
                 return;
-
-            _appearance.SetData(uid, PoweredLightVisuals.Blinking, isNowBlinking, appearance);
+            appearance.SetData(PoweredLightVisuals.Blinking, isNowBlinking);
         }
 
         private void OnSignalReceived(EntityUid uid, PoweredLightComponent component, SignalReceivedEvent args)

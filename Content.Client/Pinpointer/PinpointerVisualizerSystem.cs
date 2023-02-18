@@ -15,7 +15,7 @@ namespace Content.Client.Pinpointer
                 return;
 
             // check if pinpointer screen is active
-            if (!AppearanceSystem.TryGetData<bool>(uid, PinpointerVisuals.IsActive, out var isActive, args.Component) || !isActive)
+            if (!args.Component.TryGetData(PinpointerVisuals.IsActive, out bool isActive) || !isActive)
             {
                 sprite.LayerSetVisible(PinpointerLayers.Screen, false);
                 return;
@@ -24,8 +24,8 @@ namespace Content.Client.Pinpointer
             sprite.LayerSetVisible(PinpointerLayers.Screen, true);
 
             // check distance and direction to target
-            if (!AppearanceSystem.TryGetData<Distance>(uid, PinpointerVisuals.TargetDistance, out var dis, args.Component) ||
-                !AppearanceSystem.TryGetData<Angle>(uid, PinpointerVisuals.ArrowAngle, out var angle, args.Component))
+            if (!args.Component.TryGetData(PinpointerVisuals.TargetDistance, out Distance dis) ||
+                !args.Component.TryGetData(PinpointerVisuals.ArrowAngle, out Angle angle))
             {
                 sprite.LayerSetState(PinpointerLayers.Screen, "pinonnull");
                 sprite.LayerSetRotation(PinpointerLayers.Screen, Angle.Zero);

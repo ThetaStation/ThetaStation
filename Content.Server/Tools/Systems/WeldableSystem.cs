@@ -4,7 +4,6 @@ using Content.Shared.Database;
 using Content.Shared.Examine;
 using Content.Shared.Interaction;
 using Content.Shared.Tools.Components;
-using Robust.Server.GameObjects;
 
 namespace Content.Server.Tools.Systems;
 
@@ -12,7 +11,6 @@ public sealed class WeldableSystem : EntitySystem
 {
     [Dependency] private readonly IAdminLogManager _adminLogger = default!;
     [Dependency] private readonly ToolSystem _toolSystem = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
 
     public override void Initialize()
     {
@@ -104,7 +102,7 @@ public sealed class WeldableSystem : EntitySystem
 
         if (!TryComp(uid, out AppearanceComponent? appearance))
             return;
-        _appearance.SetData(uid, WeldableVisuals.IsWelded, component.IsWelded, appearance);
+        appearance.SetData(WeldableVisuals.IsWelded, component.IsWelded);
     }
 
     public void ForceWeldedState(EntityUid uid, bool state, WeldableComponent? component = null)

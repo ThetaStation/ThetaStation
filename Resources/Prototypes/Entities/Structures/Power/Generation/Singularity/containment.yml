@@ -64,9 +64,6 @@
         connectedLight:
           True: { visible: true }
           False: { visible: false }
-  - type: GuideHelp
-    guides: [ Singularity, Power ]
-
 
 - type: entity
   id: ContainmentField
@@ -98,7 +95,3 @@
     state: field
   - type: ContainmentField
     throwForce: 50
-  - type: GuideHelp
-    guides: [ Singularity, Power ]
-
-

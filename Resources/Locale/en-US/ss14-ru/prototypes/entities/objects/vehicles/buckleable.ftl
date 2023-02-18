@@ -1,11 +1,11 @@
 ent-BaseVehicle = Vehicle
     .desc = { "" }
     .suffix = { "" }
-ent-VehicleJanicart = janicart
+ent-VehiclePussyWagon = janicart
     .desc = The janitor's trusty steed.
     .suffix = { "" }
-ent-VehicleJanicartDestroyed = destroyed janicart
-    .desc = { ent-MachineFrameDestroyed.desc }
+ent-VehiclePussyWagonDestroyed = destroyed janicart
+    .desc = R.I.P. (Rest In Pussy)
     .suffix = { "" }
 ent-VehicleSecway = secway
     .desc = The future of transportation. Popularized by St. James, the patron saint of security officers and internet forum moderators.

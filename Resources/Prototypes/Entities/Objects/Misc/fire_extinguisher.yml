@@ -65,6 +65,7 @@
   - type: Physics
     bodyType: Dynamic
   - type: Appearance
-  - type: VaporVisuals
-    animationTime: 0.8
-    animationState: extinguish
+    visuals:
+      - type: VaporVisualizer
+        animation_delay: 0.8
+        animation_state: extinguish

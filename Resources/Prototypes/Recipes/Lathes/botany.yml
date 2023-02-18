@@ -32,6 +32,9 @@
     
 - type: latheRecipe
   id: Clippers
+  icon:
+    sprite: Objects/Tools/Hydroponics/clippers.rsi
+    state: icon
   result: HydroponicsToolClippers
   completetime: 2
   materials:

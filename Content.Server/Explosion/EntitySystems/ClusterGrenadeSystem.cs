@@ -4,7 +4,6 @@ using Content.Shared.Explosion;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Throwing;
-using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.Random;
 
@@ -16,7 +15,6 @@ public sealed class ClusterGrenadeSystem : EntitySystem
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly TriggerSystem _trigger = default!;
     [Dependency] private readonly ThrowingSystem _throwingSystem = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
 
     public override void Initialize()
     {
@@ -37,7 +35,7 @@ public sealed class ClusterGrenadeSystem : EntitySystem
         if (component.FillPrototype != null)
         {
             component.UnspawnedCount = Math.Max(0, component.MaxGrenades - component.GrenadesContainer.ContainedEntities.Count);
-            UpdateAppearance(uid, component);
+            UpdateAppearance(component);
         }
     }
 
@@ -51,7 +49,7 @@ public sealed class ClusterGrenadeSystem : EntitySystem
             return;
 
         component.GrenadesContainer.Insert(args.Used);
-        UpdateAppearance(uid, component);
+        UpdateAppearance(component);
         args.Handled = true;
     }
 
@@ -124,10 +122,10 @@ public sealed class ClusterGrenadeSystem : EntitySystem
         return false;
     }
 
-    private void UpdateAppearance(EntityUid uid, ClusterGrenadeComponent component)
+    private void UpdateAppearance(ClusterGrenadeComponent component)
     {
         if (!TryComp<AppearanceComponent>(component.Owner, out var appearance)) return;
 
-        _appearance.SetData(uid, ClusterGrenadeVisuals.GrenadesCounter, component.GrenadesContainer.ContainedEntities.Count + component.UnspawnedCount, appearance);
+        appearance.SetData(ClusterGrenadeVisuals.GrenadesCounter, component.GrenadesContainer.ContainedEntities.Count + component.UnspawnedCount);
     }
 }

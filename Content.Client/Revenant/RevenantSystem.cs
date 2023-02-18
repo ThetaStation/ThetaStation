@@ -6,8 +6,6 @@ namespace Content.Client.Revenant;
 
 public sealed class RevenantSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-
     public override void Initialize()
     {
         base.Initialize();
@@ -20,15 +18,15 @@ public sealed class RevenantSystem : EntitySystem
         if (args.Sprite == null)
             return;
 
-        if (_appearance.TryGetData<bool>(uid, RevenantVisuals.Harvesting, out var harvesting, args.Component) && harvesting)
+        if (args.Component.TryGetData(RevenantVisuals.Harvesting, out bool harvesting) && harvesting)
         {
             args.Sprite.LayerSetState(0, component.HarvestingState);
         }
-        else if (_appearance.TryGetData<bool>(uid, RevenantVisuals.Stunned, out var stunned, args.Component) && stunned)
+        else if (args.Component.TryGetData(RevenantVisuals.Stunned, out bool stunned) && stunned)
         {
             args.Sprite.LayerSetState(0, component.StunnedState);
         }
-        else if (_appearance.TryGetData<bool>(uid, RevenantVisuals.Corporeal, out var corporeal, args.Component))
+        else if (args.Component.TryGetData(RevenantVisuals.Corporeal, out bool corporeal))
         {
             if (corporeal)
                 args.Sprite.LayerSetState(0, component.CorporealState);
