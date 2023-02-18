@@ -82,7 +82,6 @@ tiles-asteroid-ironsand-pebbles = галька железопесочного а
 tiles-asteroid-ironsand-rock = камни железопесочного астероида
 tiles-cave = пещера
 tiles-cave-drought = сухая пещера
-tiles-flesh-floor = мясистый пол
 tiles-techmaint3-floor = решётчатый технический пол
 tiles-techmaint2-floor = стальной технический пол
 tiles-wood2 = деревянный узорчатый пол

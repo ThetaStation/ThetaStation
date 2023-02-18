@@ -1,4 +1,4 @@
-ent-VehicleKeyJanicart = janicart keys
+ent-VehicleKeyPussyWagon = janicart keys
     .desc = Interesting design.
     .suffix = { "" }
 ent-VehicleKeySecway = secway keys

@@ -21,7 +21,6 @@ namespace Content.Server.Light.EntitySystems
         [Dependency] private readonly ClothingSystem _clothing = default!;
         [Dependency] private readonly TagSystem _tagSystem = default!;
         [Dependency] private readonly SharedAudioSystem _audio = default!;
-        [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
 
         public override void Initialize()
         {
@@ -108,20 +107,20 @@ namespace Content.Server.Light.EntitySystems
         {
             if (!Resolve(component.Owner, ref appearance, false)) return;
 
-            _appearance.SetData(appearance.Owner, ExpendableLightVisuals.State, component.CurrentState, appearance);
+            appearance.SetData(ExpendableLightVisuals.State, component.CurrentState);
 
             switch (component.CurrentState)
             {
                 case ExpendableLightState.Lit:
-                    _appearance.SetData(appearance.Owner, ExpendableLightVisuals.Behavior, component.TurnOnBehaviourID, appearance);
+                    appearance.SetData(ExpendableLightVisuals.Behavior, component.TurnOnBehaviourID);
                     break;
 
                 case ExpendableLightState.Fading:
-                    _appearance.SetData(appearance.Owner, ExpendableLightVisuals.Behavior, component.FadeOutBehaviourID, appearance);
+                    appearance.SetData(ExpendableLightVisuals.Behavior, component.FadeOutBehaviourID);
                     break;
 
                 case ExpendableLightState.Dead:
-                    _appearance.SetData(appearance.Owner, ExpendableLightVisuals.Behavior, string.Empty, appearance);
+                    appearance.SetData(ExpendableLightVisuals.Behavior, string.Empty);
                     var isHotEvent = new IsHotEvent() {IsHot = true};
                     RaiseLocalEvent(component.Owner, isHotEvent);
                     break;

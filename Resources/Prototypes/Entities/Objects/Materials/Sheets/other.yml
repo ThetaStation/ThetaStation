@@ -152,14 +152,7 @@
   - type: Stack
     stackType: Uranium
   - type: Sprite
-    state: uranium_3
-  - type: Appearance
-    visuals:
-    - type: StackVisualizer
-      stackLayers:
-      - uranium
-      - uranium_2
-      - uranium_3
+    state: uranium
   - type: Item
     heldPrefix: uranium
   - type: Extractable

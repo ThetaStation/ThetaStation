@@ -11,7 +11,6 @@ namespace Content.Server.NPC.HTN;
 /// </summary>
 public sealed class HTNPlanJob : Job<HTNPlan>
 {
-    private readonly HTNSystem _htn;
     private readonly HTNCompoundTask _rootTask;
     private NPCBlackboard _blackboard;
 
@@ -22,13 +21,11 @@ public sealed class HTNPlanJob : Job<HTNPlan>
 
     public HTNPlanJob(
         double maxTime,
-        HTNSystem htn,
         HTNCompoundTask rootTask,
         NPCBlackboard blackboard,
         List<int>? branchTraversal,
         CancellationToken cancellationToken = default) : base(maxTime, cancellationToken)
     {
-        _htn = htn;
         _rootTask = rootTask;
         _blackboard = blackboard;
         _branchTraversal = branchTraversal;
@@ -159,8 +156,6 @@ public sealed class HTNPlanJob : Job<HTNPlan>
     /// </summary>
     private bool TryFindSatisfiedMethod(HTNCompoundTask compound, Queue<HTNTask> tasksToProcess, NPCBlackboard blackboard, ref int mtrIndex)
     {
-        var compBranches = _htn.CompoundBranches[compound];
-
         for (var i = mtrIndex; i < compound.Branches.Count; i++)
         {
             var branch = compound.Branches[i];
@@ -178,9 +173,7 @@ public sealed class HTNPlanJob : Job<HTNPlan>
             if (!isValid)
                 continue;
 
-            var branchTasks = compBranches[i];
-
-            foreach (var task in branchTasks)
+            foreach (var task in branch.Tasks)
             {
                 tasksToProcess.Enqueue(task);
             }

@@ -26,7 +26,6 @@ namespace Content.Client.Tabletop
         [Dependency] private readonly IUserInterfaceManager _uiManger = default!;
         [Dependency] private readonly IPlayerManager _playerManager = default!;
         [Dependency] private readonly IGameTiming _gameTiming = default!;
-        [Dependency] private readonly AppearanceSystem _appearance = default!;
 
         // Time in seconds to wait until sending the location of a dragged entity to the server again
         private const float Delay = 1f / 10; // 10 Hz
@@ -49,7 +48,6 @@ namespace Content.Client.Tabletop
             SubscribeNetworkEvent<TabletopPlayEvent>(OnTabletopPlay);
             SubscribeLocalEvent<TabletopDraggableComponent, ComponentHandleState>(HandleComponentState);
             SubscribeLocalEvent<TabletopDraggableComponent, ComponentRemove>(HandleDraggableRemoved);
-            SubscribeLocalEvent<TabletopDraggableComponent, AppearanceChangeEvent>(OnAppearanceChange);
         }
 
         private void HandleDraggableRemoved(EntityUid uid, TabletopDraggableComponent component, ComponentRemove args)
@@ -203,24 +201,6 @@ namespace Content.Client.Tabletop
         {
             StopDragging();
             return false;
-        }
-
-        private void OnAppearanceChange(EntityUid uid, TabletopDraggableComponent comp, ref AppearanceChangeEvent args)
-        {
-            if (args.Sprite == null)
-                return;
-
-            // TODO: maybe this can work more nicely, by maybe only having to set the item to "being dragged", and have
-            //  the appearance handle the rest
-            if (_appearance.TryGetData<Vector2>(uid, TabletopItemVisuals.Scale, out var scale, args.Component))
-            {
-                args.Sprite.Scale = scale;
-            }
-
-            if (_appearance.TryGetData<int>(uid, TabletopItemVisuals.DrawDepth, out var drawDepth, args.Component))
-            {
-                args.Sprite.DrawDepth = drawDepth;
-            }
         }
 
         #endregion

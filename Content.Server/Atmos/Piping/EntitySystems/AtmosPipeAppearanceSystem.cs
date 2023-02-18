@@ -3,7 +3,6 @@ using Content.Server.NodeContainer.EntitySystems;
 using Content.Server.NodeContainer.Nodes;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
-using Robust.Server.GameObjects;
 using Robust.Shared.Map;
 
 namespace Content.Server.Atmos.Piping.EntitySystems;
@@ -11,7 +10,6 @@ namespace Content.Server.Atmos.Piping.EntitySystems;
 public sealed class AtmosPipeAppearanceSystem : EntitySystem
 {
     [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
 
     public override void Initialize()
     {
@@ -71,6 +69,6 @@ public sealed class AtmosPipeAppearanceSystem : EntitySystem
             };
         }
 
-        _appearance.SetData(uid, PipeVisuals.VisualState, netConnectedDirections, appearance);
+        appearance.SetData(PipeVisuals.VisualState, netConnectedDirections);
     }
 }

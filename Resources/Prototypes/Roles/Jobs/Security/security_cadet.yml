@@ -22,9 +22,9 @@
 - type: startingGear
   id: SecurityCadetGear
   equipment:
-    jumpsuit: ClothingUniformJumpsuitSecGrey # Corvax-Resprite
+    jumpsuit: ClothingUniformJumpsuitColorRed
     back: ClothingBackpackSecurityFilled
-    shoes: ClothingShoesBootsJackSec # Corvax-Resprite
+    shoes: ClothingShoesBootsJack
     id: SecurityCadetPDA
     ears: ClothingHeadsetSecurity
   innerclothingskirt: ClothingUniformJumpskirtColorRed

@@ -10,7 +10,6 @@ namespace Content.Server.Chat.TypingIndicator;
 public sealed class TypingIndicatorSystem : SharedTypingIndicatorSystem
 {
     [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
 
     public override void Initialize()
     {
@@ -56,9 +55,9 @@ public sealed class TypingIndicatorSystem : SharedTypingIndicatorSystem
 
     private void SetTypingIndicatorState(EntityUid uid, TypingIndicatorState state, AppearanceComponent? appearance = null) // Corvax-TypingIndicator
     {
-        // if (!Resolve(uid, ref appearance, false)) // Corvax-TypingIndicator
-        //     return;
+        if (!Resolve(uid, ref appearance, false))
+            return;
 
-        _appearance.SetData(uid, TypingIndicatorVisuals.State, state); // Corvax-TypingIndicator
+        appearance.SetData(TypingIndicatorVisuals.State, state); // Corvax-TypingIndicator
     }
 }

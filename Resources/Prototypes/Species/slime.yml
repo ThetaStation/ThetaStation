@@ -18,8 +18,6 @@
     Hair: MobSlimeMarkingFollowSkin
     FacialHair: MobSlimeMarkingFollowSkin
     Chest: MobSlimeTorso
-    HeadTop: MobHumanoidAnyMarking # Corvax Sponsors
-    Tail: MobHumanoidAnyMarking # Corvax Sponsors
     Eyes: MobHumanoidEyes
     LArm: MobSlimeLArm
     RArm: MobSlimeRArm
@@ -38,12 +36,6 @@
       required: false
     FacialHair:
       points: 1
-      required: false
-    Tail: # :despair:
-      points: 1 # Corvax Sponsors
-      required: false
-    HeadTop: # :skull:
-      points: 1 # Corvax Sponsors
       required: false
     Legs:
       points: 2

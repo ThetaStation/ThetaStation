@@ -25,7 +25,7 @@
     state: icon
     layers:
       - state: icon
-        map: ["drinkCanIcon"]
+        map: ["enum.DrinkCanVisualLayers.Icon"]
     netsync: false
   - type: FitsInDispenser
     solution: drink
@@ -36,12 +36,10 @@
   - type: DrainableSolution
     solution: drink
   - type: Appearance
-  - type: GenericVisualizer
     visuals:
-      enum.DrinkCanStateVisual.Opened:
-        drinkCanIcon:
-          True: {state: "icon_open"}
-          False: {state: "icon"}
+    - type: DrinkCanVisualizer
+      stateClosed: icon
+      stateOpen: icon_open
   - type: Spillable
     solution: drink
   - type: ItemCooldown

@@ -6,7 +6,6 @@ using Content.Server.NodeContainer.Nodes;
 using Content.Shared.Atmos.Piping.Unary.Components;
 using Content.Shared.Construction.Components;
 using JetBrains.Annotations;
-using Robust.Server.GameObjects;
 using Robust.Shared.Map;
 
 namespace Content.Server.Atmos.Piping.Unary.EntitySystems
@@ -15,7 +14,6 @@ namespace Content.Server.Atmos.Piping.Unary.EntitySystems
     public sealed class GasPortableSystem : EntitySystem
     {
         [Dependency] private readonly IMapManager _mapManager = default!;
-        [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
 
         public override void Initialize()
         {
@@ -48,7 +46,7 @@ namespace Content.Server.Atmos.Piping.Unary.EntitySystems
 
             if (EntityManager.TryGetComponent(uid, out AppearanceComponent? appearance))
             {
-                _appearance.SetData(uid, GasPortableVisuals.ConnectedState, args.Anchored, appearance);
+                appearance.SetData(GasPortableVisuals.ConnectedState, args.Anchored);
             }
         }
 

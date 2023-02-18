@@ -4,7 +4,6 @@ using Content.Shared.Cabinet;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Interaction;
 using Content.Shared.Verbs;
-using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Containers;
 using Robust.Shared.Player;
@@ -15,7 +14,6 @@ namespace Content.Server.Cabinet
     {
         [Dependency] private readonly IComponentFactory _factory = default!;
         [Dependency] private readonly ItemSlotsSystem _itemSlotsSystem = default!;
-        [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
 
         public override void Initialize()
         {
@@ -56,8 +54,8 @@ namespace Content.Server.Cabinet
             if (!Resolve(uid, ref cabinet, ref appearance, false))
                 return;
 
-            _appearance.SetData(uid, ItemCabinetVisuals.IsOpen, cabinet.Opened, appearance);
-            _appearance.SetData(uid, ItemCabinetVisuals.ContainsItem, cabinet.CabinetSlot.HasItem, appearance);
+            appearance.SetData(ItemCabinetVisuals.IsOpen, cabinet.Opened);
+            appearance.SetData(ItemCabinetVisuals.ContainsItem, cabinet.CabinetSlot.HasItem);
         }
 
         private void OnContainerModified(EntityUid uid, ItemCabinetComponent cabinet, ContainerModifiedMessage args)

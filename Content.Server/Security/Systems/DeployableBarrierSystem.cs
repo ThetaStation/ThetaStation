@@ -7,8 +7,6 @@ namespace Content.Server.Security.Systems
 {
     public sealed class DeployableBarrierSystem : EntitySystem
     {
-        [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-
         public override void Initialize()
         {
             base.Initialize();
@@ -21,23 +19,23 @@ namespace Content.Server.Security.Systems
             if (!EntityManager.TryGetComponent(component.Owner, out LockComponent? lockComponent))
                 return;
 
-            ToggleBarrierDeploy(uid, component, lockComponent.Locked);
+            ToggleBarrierDeploy(component, lockComponent.Locked);
         }
 
         private void OnLockToggled(EntityUid uid, DeployableBarrierComponent component, LockToggledEvent args)
         {
-            ToggleBarrierDeploy(uid, component, args.Locked);
+            ToggleBarrierDeploy(component, args.Locked);
         }
 
-        private void ToggleBarrierDeploy(EntityUid uid, DeployableBarrierComponent component, bool isDeployed)
+        private void ToggleBarrierDeploy(DeployableBarrierComponent component, bool isDeployed)
         {
             EntityManager.GetComponent<TransformComponent>(component.Owner).Anchored = isDeployed;
 
-            if (!EntityManager.TryGetComponent(component.Owner, out AppearanceComponent? appearance))
+            if (!EntityManager.TryGetComponent(component.Owner, out AppearanceComponent? appearanceComponent))
                 return;
 
             var state = isDeployed ? DeployableBarrierState.Deployed : DeployableBarrierState.Idle;
-            _appearance.SetData(uid, DeployableBarrierVisuals.State, state, appearance);
+            appearanceComponent.SetData(DeployableBarrierVisuals.State, state);
 
             if (EntityManager.TryGetComponent(component.Owner, out PointLightComponent? light))
                 light.Enabled = isDeployed;

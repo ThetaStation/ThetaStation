@@ -15,8 +15,6 @@ namespace Content.Shared.Disposal.Components
         /// </summary>
         public List<EntityUid> RecentlyEjected = new();
 
-        [DataField("flushTime", required: true)]
-        public readonly float FlushTime;
 
         [DataField("mobsCanEnter")]
         public bool MobsCanEnter = true;
@@ -46,12 +44,12 @@ namespace Content.Shared.Disposal.Components
         }
 
         [Serializable, NetSerializable]
-        public enum LightStates : byte
+        public enum LightState : byte
         {
-            Off = 0,
-            Charging = 1 << 0,
-            Full = 1 << 1,
-            Ready = 1 << 2
+            Off,
+            Charging,
+            Full,
+            Ready
         }
 
         [Serializable, NetSerializable]

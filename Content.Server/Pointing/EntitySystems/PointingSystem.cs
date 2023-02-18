@@ -218,7 +218,7 @@ namespace Content.Server.Pointing.EntitySystems
                 var name = Loc.GetString(tileDef.Name);
                 selfMessage = Loc.GetString("pointing-system-point-at-tile", ("tileName", name));
 
-                viewerMessage = Loc.GetString("pointing-system-other-point-at-tile", ("otherName", playerName), ("tileName", name));
+                viewerMessage = Loc.GetString("pointing-system-other-point-at-tile", ("otherName", playerName), ("tileName", tileDef.Name));
 
                 _adminLogger.Add(LogType.Action, LogImpact.Low, $"{ToPrettyString(player):user} pointed at {name} {(position == null ? mapCoords : position)}");
             }

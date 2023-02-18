@@ -9,7 +9,6 @@ namespace Content.Shared.Nutrition.EntitySystems
     public abstract class SharedCreamPieSystem : EntitySystem
     {
         [Dependency] private SharedStunSystem _stunSystem = default!;
-        [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
 
         public override void Initialize()
         {
@@ -42,7 +41,7 @@ namespace Content.Shared.Nutrition.EntitySystems
 
             if (EntityManager.TryGetComponent(uid, out AppearanceComponent? appearance))
             {
-                _appearance.SetData(uid, CreamPiedVisuals.Creamed, value, appearance);
+                appearance.SetData(CreamPiedVisuals.Creamed, value);
             }
         }
 

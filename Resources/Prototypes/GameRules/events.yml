@@ -6,10 +6,6 @@
     weight: 10
     startAfter: 30
     endAfter: 35
-    startAudio: # Corvax-Announcements
-      path: /Audio/Corvax/Announcements/flux.ogg
-      params:
-        volume: -4
 
 - type: gameRule
   id: BluespaceArtifact
@@ -19,10 +15,6 @@
     weight: 5
     startAfter: 30
     endAfter: 35
-    startAudio: # Corvax-Announcements
-      path: /Audio/Corvax/Announcements/blusp_anomalies.ogg
-      params:
-        volume: -4
 
 - type: gameRule
   id: BluespaceLockerLink
@@ -141,7 +133,7 @@
       params:
         volume: -4
     endAudio:
-      path: /Audio/Announcements/meteors_end.ogg # Corvax-Announcements
+      path: /Audio/Announcements/meteors_end.ogg
       params:
         volume: -4
     startAfter: 30
@@ -178,7 +170,7 @@
     weight: 10
     endAfter: 1
     startAudio:
-      path: /Audio/Announcements/sentience.ogg # Corvax-Announcements
+      path: /Audio/Announcements/sentience.ogg
       params:
         volume: -4
 
@@ -189,7 +181,7 @@
     id: VentClog
     startAnnouncement: station-event-vent-clog-start-announcement
     startAudio:
-      path: /Audio/Announcements/ventclog.ogg # Corvax-Announcements
+      path: /Audio/Announcements/ventclog.ogg
       params:
         volume: -4
     earliestStart: 15

@@ -1,21 +1,22 @@
 using Content.Shared.Bed;
 using Robust.Client.GameObjects;
 
-namespace Content.Client.Bed;
-
-public sealed class StasisBedSystem : VisualizerSystem<StasisBedVisualsComponent>
+namespace Content.Client.Bed
 {
-    protected override void OnAppearanceChange(EntityUid uid, StasisBedVisualsComponent component, ref AppearanceChangeEvent args)
+    public sealed class StasisBedSystem : VisualizerSystem<StasisBedVisualsComponent>
     {
-        if (args.Sprite != null
-            && AppearanceSystem.TryGetData<bool>(uid, StasisBedVisuals.IsOn, out var isOn, args.Component))
+        protected override void OnAppearanceChange(EntityUid uid, StasisBedVisualsComponent component, ref AppearanceChangeEvent args)
         {
-            args.Sprite.LayerSetVisible(StasisBedVisualLayers.IsOn, isOn);
+            if (args.Sprite != null
+                && args.Component.TryGetData(StasisBedVisuals.IsOn, out bool isOn))
+            {
+                args.Sprite.LayerSetVisible(StasisBedVisualLayers.IsOn, isOn);
+            }
         }
     }
-}
 
-public enum StasisBedVisualLayers : byte
-{
-    IsOn,
+    public enum StasisBedVisualLayers : byte
+    {
+        IsOn,
+    }
 }

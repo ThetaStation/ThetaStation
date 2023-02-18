@@ -15,7 +15,7 @@ namespace Content.Shared.AirlockPainter
         {
             base.Initialize();
 
-            SortedSet<string> styles = new();
+            HashSet<string> styles = new();
             foreach (AirlockGroupPrototype grp in _prototypeManager.EnumeratePrototypes<AirlockGroupPrototype>())
             {
                 Groups.Add(grp);

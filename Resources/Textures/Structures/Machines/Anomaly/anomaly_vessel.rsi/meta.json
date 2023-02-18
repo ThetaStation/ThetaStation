@@ -1,20 +1,14 @@
 {
   "version": 1,
   "license": "CC0-1.0",
-  "copyright": "Created by EmoGarbage404 (github)",
+  "copyright": "Created by EmoGarbage404",
   "size": {
     "x": 32,
     "y": 32
   },
   "states": [
     {
-      "name": "anomaly-1"
-    },
-    {
-      "name": "anomaly-2"
-    },
-    {
-      "name": "anomaly-3"
+      "name": "anomaly"
     },
     {
       "name": "base"
@@ -23,13 +17,7 @@
       "name": "panel"
     },
     {
-      "name": "powered-1"
-    },
-    {
-      "name": "powered-2"
-    },
-    {
-      "name": "powered-3"
+      "name": "powered"
     }
   ]
 }

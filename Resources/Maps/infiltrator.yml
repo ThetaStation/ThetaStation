@@ -1,7 +1,7 @@
 meta:
   format: 3
-  name: Infiltrator
-  author: Emisse,TStalker
+  name: DemoStation
+  author: Space-Wizards
   postmapinit: false
 tilemap:
   0: Space

@@ -71,7 +71,7 @@
   - type: WallMount
   - type: Damageable
     damageContainer: Inorganic
-    damageModifierSet: StrongMetallic
+    damageModifierSet: Metallic
   - type: Destructible
     thresholds:
     - trigger:

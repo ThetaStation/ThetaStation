@@ -35,9 +35,6 @@ public sealed class ExplosionOverlay : Overlay
 
         foreach (var (comp, appearance) in _entMan.EntityQuery<ExplosionVisualsComponent, AppearanceComponent>(true))
         {
-            if (comp.Epicenter.MapId != args.MapId)
-                continue;
-
             if (!appearance.TryGetData(ExplosionAppearanceData.Progress, out int index))
                 continue;
 

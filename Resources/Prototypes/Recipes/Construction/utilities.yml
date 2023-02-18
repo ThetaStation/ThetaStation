@@ -23,10 +23,9 @@
   description: "A surveillance camera monitor for the wall."
   icon:
     sprite: Structures/Machines/computers.rsi
-    state: telescreen_frame
+    state: telescreen
   objectType: Structure
   placementMode: SnapgridCenter
-  canBuildInImpassable: true
 
 # POWER
 - type: construction
@@ -59,13 +58,7 @@
   placementMode: SnapgridCenter
   canBuildInImpassable: false
   conditions:
-    - !type:TileNotBlocked
-      failIfSpace: false
-    - !type:TileType
-      targets:
-        - Lattice
-        - Plating
-        - UnderPlating
+    - !type:TileNotBlocked {}
 
 - type: construction
   name: cable terminal

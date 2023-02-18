@@ -172,7 +172,7 @@ public sealed class WiresSystem : EntitySystem
                     if (!d.Action.AddWire(d, types[actionType]))
                         d.Action = null;
                 }
-
+                
                 data.Add(id, new WireLayout.WireData(d.Letter, d.Color, i));
                 wires.WiresList[i] = wireSet[id];
             }
@@ -261,7 +261,7 @@ public sealed class WiresSystem : EntitySystem
     /// <param name="key">The key used to cancel the action.</param>
     public bool TryCancelWireAction(EntityUid owner, object key)
     {
-        if (TryGetData<CancellationTokenSource?>(owner, key, out var token))
+        if (TryGetData(owner, key, out CancellationTokenSource? token))
         {
             token.Cancel();
             return true;

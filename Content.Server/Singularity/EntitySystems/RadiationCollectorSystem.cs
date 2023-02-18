@@ -4,7 +4,6 @@ using Content.Shared.Singularity.Components;
 using Content.Server.Popups;
 using Content.Server.Power.Components;
 using Content.Shared.Radiation.Events;
-using Robust.Server.GameObjects;
 using Robust.Shared.Timing;
 using Robust.Shared.Player;
 
@@ -14,8 +13,6 @@ namespace Content.Server.Singularity.EntitySystems
     {
         [Dependency] private readonly IGameTiming _gameTiming = default!;
         [Dependency] private readonly PopupSystem _popupSystem = default!;
-        [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-
         public override void Initialize()
         {
             base.Initialize();
@@ -81,7 +78,7 @@ namespace Content.Server.Singularity.EntitySystems
                 return;
 
             var state = component.Enabled ? RadiationCollectorVisualState.Active : RadiationCollectorVisualState.Deactive;
-            _appearance.SetData(uid, RadiationCollectorVisuals.VisualState, state, appearance);
+            appearance.SetData(RadiationCollectorVisuals.VisualState, state);
         }
     }
 }

@@ -24,10 +24,13 @@ public sealed class MorgueSystem : EntitySystem
     /// </summary>
     private void OnExamine(EntityUid uid, MorgueComponent component, ExaminedEvent args)
     {
+        if (!TryComp<AppearanceComponent>(uid, out var appearance))
+            return;
+
         if (!args.IsInDetailsRange)
             return;
 
-        _appearance.TryGetData<MorgueContents>(uid, MorgueVisuals.Contents, out var contents);
+        appearance.TryGetData(MorgueVisuals.Contents, out MorgueContents contents);
 
         var text = contents switch
         {
@@ -89,7 +92,7 @@ public sealed class MorgueSystem : EntitySystem
 
             comp.AccumulatedFrameTime -= comp.BeepTime;
 
-            if (comp.DoSoulBeep && _appearance.TryGetData<MorgueContents>(appearance.Owner, MorgueVisuals.Contents, out var contents, appearance) && contents == MorgueContents.HasSoul)
+            if (comp.DoSoulBeep && appearance.TryGetData(MorgueVisuals.Contents, out MorgueContents contents) && contents == MorgueContents.HasSoul)
             {
                 _audio.PlayPvs(comp.OccupantHasSoulAlarmSound, comp.Owner);
             }

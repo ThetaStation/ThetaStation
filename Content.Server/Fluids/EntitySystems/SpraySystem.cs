@@ -4,11 +4,14 @@ using Content.Server.Cooldown;
 using Content.Server.Extinguisher;
 using Content.Server.Fluids.Components;
 using Content.Server.Popups;
+using Content.Shared.Audio;
 using Content.Shared.Cooldown;
 using Content.Shared.FixedPoint;
 using Content.Shared.Interaction;
 using Content.Shared.Vapor;
-using Robust.Server.GameObjects;
+using Robust.Shared.Audio;
+using Robust.Shared.Map;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
@@ -20,16 +23,14 @@ public sealed class SpraySystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly PopupSystem _popupSystem = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SolutionContainerSystem _solutionContainer = default!;
-    [Dependency] private readonly VaporSystem _vapor = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
+    [Dependency] private readonly SolutionContainerSystem _solutionContainerSystem = default!;
+    [Dependency] private readonly VaporSystem _vaporSystem = default!;
 
     public override void Initialize()
     {
         base.Initialize();
 
-        SubscribeLocalEvent<SprayComponent, AfterInteractEvent>(OnAfterInteract, after: new[] { typeof(FireExtinguisherSystem) });
+        SubscribeLocalEvent<SprayComponent, AfterInteractEvent>(OnAfterInteract, after: new []{ typeof(FireExtinguisherSystem) });
     }
 
     private void OnAfterInteract(EntityUid uid, SprayComponent component, AfterInteractEvent args)
@@ -39,11 +40,11 @@ public sealed class SpraySystem : EntitySystem
 
         args.Handled = true;
 
-        if (!_solutionContainer.TryGetSolution(uid, SprayComponent.SolutionName, out var solution))
+        if (!_solutionContainerSystem.TryGetSolution(uid, SprayComponent.SolutionName, out var solution))
             return;
 
         var ev = new SprayAttemptEvent(args.User);
-        RaiseLocalEvent(uid, ev);
+        RaiseLocalEvent(uid, ev, false);
         if (ev.Cancelled)
             return;
 
@@ -93,7 +94,7 @@ public sealed class SpraySystem : EntitySystem
             if (distance > component.SprayDistance)
                 target = userMapPos.Offset(diffNorm * component.SprayDistance);
 
-            var newSolution = _solutionContainer.SplitSolution(uid, solution, component.TransferAmount);
+            var newSolution = _solutionContainerSystem.SplitSolution(uid, solution, component.TransferAmount);
 
             if (newSolution.Volume <= FixedPoint2.Zero)
                 break;
@@ -103,21 +104,21 @@ public sealed class SpraySystem : EntitySystem
             var vapor = Spawn(component.SprayedPrototype, vaporPos);
             var vaporXform = xformQuery.GetComponent(vapor);
 
-            _transform.SetWorldRotation(vaporXform, rotation);
+            vaporXform.WorldRotation = rotation;
 
             if (TryComp(vapor, out AppearanceComponent? appearance))
             {
-                _appearance.SetData(vapor, VaporVisuals.Color, solution.GetColor(_proto).WithAlpha(1f), appearance);
-                _appearance.SetData(vapor, VaporVisuals.State, true, appearance);
+                appearance.SetData(VaporVisuals.Color, solution.GetColor(_proto).WithAlpha(1f));
+                appearance.SetData(VaporVisuals.State, true);
             }
 
             // Add the solution to the vapor and actually send the thing
             var vaporComponent = Comp<VaporComponent>(vapor);
-            _vapor.TryAddSolution(vaporComponent, newSolution);
+            _vaporSystem.TryAddSolution(vaporComponent, newSolution);
 
             // impulse direction is defined in world-coordinates, not local coordinates
             var impulseDirection = rotation.ToVec();
-            _vapor.Start(vaporComponent, vaporXform, impulseDirection, component.SprayVelocity, target, component.SprayAliveTime, args.User);
+            _vaporSystem.Start(vaporComponent, vaporXform, impulseDirection, component.SprayVelocity, target, component.SprayAliveTime, args.User);
         }
 
         _audio.PlayPvs(component.SpraySound, uid, component.SpraySound.Params.WithVariation(0.125f));

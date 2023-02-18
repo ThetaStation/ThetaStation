@@ -10,8 +10,6 @@
     baseSprintSpeed : 5.00
   - type: InputMover
   - type: MobMover
-  - type: HTN
-    rootTask: SimpleHostileCompound
   - type: Reactive
     groups:
       Flammable: [Touch]

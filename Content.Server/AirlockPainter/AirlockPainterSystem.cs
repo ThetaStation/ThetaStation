@@ -24,7 +24,6 @@ namespace Content.Server.AirlockPainter
         [Dependency] private readonly UserInterfaceSystem _userInterfaceSystem = default!;
         [Dependency] private readonly DoAfterSystem _doAfterSystem = default!;
         [Dependency] private readonly PopupSystem _popupSystem = default!;
-        [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
 
         public override void Initialize()
         {
@@ -41,10 +40,10 @@ namespace Content.Server.AirlockPainter
         {
             ev.Component.IsSpraying = false;
             if (TryComp<AppearanceComponent>(ev.Target, out var appearance) &&
-                TryComp(ev.Target, out PaintableAirlockComponent? _))
+                TryComp(ev.Target, out PaintableAirlockComponent? airlock))
             {
                 SoundSystem.Play(ev.Component.SpraySound.GetSound(), Filter.Pvs(ev.UsedTool, entityManager:EntityManager), ev.UsedTool);
-                _appearance.SetData(ev.Target, DoorVisuals.BaseRSI, ev.Sprite, appearance);
+                appearance.SetData(DoorVisuals.BaseRSI, ev.Sprite);
 
                 // Log success
                 _adminLogger.Add(LogType.Action, LogImpact.Low, $"{ToPrettyString(ev.User):user} painted {ToPrettyString(ev.Target):target}");

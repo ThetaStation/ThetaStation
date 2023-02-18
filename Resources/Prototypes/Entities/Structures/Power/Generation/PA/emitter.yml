@@ -22,9 +22,6 @@
     - type: Construction
       graph: ParticleAcceleratorEmitterLeft
       node: completed
-    - type: GuideHelp
-      guides: [ Singularity, Power ]
-
 
 - type: entity
   parent: ParticleAcceleratorBase
@@ -50,9 +47,7 @@
     - type: Construction
       graph: ParticleAcceleratorEmitterCenter
       node: completed
-    - type: GuideHelp
-      guides: [ Singularity, Power ]
-      
+
 - type: entity
   parent: ParticleAcceleratorBase
   id: ParticleAcceleratorEmitterRight
@@ -77,9 +72,7 @@
     - type: Construction
       graph: ParticleAcceleratorEmitterRight
       node: completed
-    - type: GuideHelp
-      guides: [ Singularity, Power ]
-      
+
 # Unfinished
 
 - type: entity
@@ -98,8 +91,6 @@
       graph: ParticleAcceleratorEmitterLeft
       node: start
       defaultTarget: completed
-    - type: GuideHelp
-      guides: [ Singularity, Power ]
 
 - type: entity
   parent: ParticleAcceleratorBase
@@ -117,8 +108,6 @@
       graph: ParticleAcceleratorEmitterCenter
       node: start
       defaultTarget: completed
-    - type: GuideHelp
-      guides: [ Singularity, Power ]
 
 - type: entity
   parent: ParticleAcceleratorBase
@@ -136,5 +125,3 @@
       graph: ParticleAcceleratorEmitterRight
       node: start
       defaultTarget: completed
-    - type: GuideHelp
-      guides: [ Singularity, Power ]

@@ -7,14 +7,12 @@ namespace Content.Client.Explosion;
 [ComponentReference(typeof(SharedExplosionVisualsComponent))]
 public sealed class ExplosionVisualsComponent : SharedExplosionVisualsComponent
 {
-    /// <summary>
-    ///     Uid of the client-side point light entity for this explosion.
-    /// </summary>
     public EntityUid LightEntity;
-
     /// <summary>
-    ///     How intense an explosion needs to be at a given tile in order to progress to the next fire-intensity RSI state. See also <see cref="FireFrames"/>
+    ///     How long have we been drawing this explosion, starting from the time the explosion was fully drawn.
     /// </summary>
+    public float Lifetime;
+
     public float IntensityPerState;
 
     /// <summary>

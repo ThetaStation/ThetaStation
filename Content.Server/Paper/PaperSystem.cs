@@ -20,7 +20,6 @@ namespace Content.Server.Paper
         [Dependency] private readonly PopupSystem _popupSystem = default!;
         [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
         [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-        [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
 
         public override void Initialize()
         {
@@ -41,10 +40,10 @@ namespace Content.Server.Paper
             if (TryComp<AppearanceComponent>(uid, out var appearance))
             {
                 if (paperComp.Content != "")
-                    _appearance.SetData(uid, PaperVisuals.Status, PaperStatus.Written, appearance);
+                    appearance.SetData(PaperVisuals.Status, PaperStatus.Written);
 
                 if (paperComp.StampState != null)
-                    _appearance.SetData(uid, PaperVisuals.Stamp, paperComp.StampState, appearance);
+                    appearance.SetData(PaperVisuals.Stamp, paperComp.StampState);
             }
 
         }
@@ -112,7 +111,7 @@ namespace Content.Server.Paper
                 paperComp.Content += text + '\n';
 
             if (TryComp<AppearanceComponent>(uid, out var appearance))
-                _appearance.SetData(uid, PaperVisuals.Status, PaperStatus.Written, appearance);
+                appearance.SetData(PaperVisuals.Status, PaperStatus.Written);
 
             if (TryComp<MetaDataComponent>(uid, out var meta))
                 meta.EntityDescription = "";
@@ -138,7 +137,7 @@ namespace Content.Server.Paper
                 if (paperComp.StampState == null && TryComp<AppearanceComponent>(uid, out var appearance))
                 {
                     paperComp.StampState = stampState;
-                    _appearance.SetData(uid, PaperVisuals.Stamp, paperComp.StampState, appearance);
+                    appearance.SetData(PaperVisuals.Stamp, paperComp.StampState);
                 }
             }
             return true;
@@ -159,7 +158,7 @@ namespace Content.Server.Paper
                 ? PaperStatus.Blank
                 : PaperStatus.Written;
 
-            _appearance.SetData(uid, PaperVisuals.Status, status, appearance);
+            appearance.SetData(PaperVisuals.Status, status);
         }
 
         public void UpdateUserInterface(EntityUid uid, PaperComponent? paperComp = null)

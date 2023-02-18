@@ -11,7 +11,7 @@ public sealed class WeldableVisualizerSystem : VisualizerSystem<WeldableComponen
         if (args.Sprite == null)
             return;
 
-        AppearanceSystem.TryGetData<bool>(uid, WeldableVisuals.IsWelded, out var isWelded, args.Component);
+        args.Component.TryGetData(WeldableVisuals.IsWelded, out bool isWelded);
         if (args.Sprite.LayerMapTryGet(WeldableLayers.BaseWelded, out var layer))
         {
             args.Sprite.LayerSetVisible(layer, isWelded);
