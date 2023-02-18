@@ -1,0 +1,122 @@
+﻿- type: entity
+  parent: ComputerShuttle
+  id: ComputerShuttleEvent
+  name: shuttle console
+  description: Used to pilot a shuttle.
+  suffix: SHIPEVENT
+  components:
+    - type: ApcPowerReceiver
+      needsPower: false
+
+- type: entity
+  parent: BaseComputer
+  id: CannonComputerShuttleEvent
+  name: cannon console
+  suffix: SHIPEVENT
+  components:
+    - type: CannonConsole
+    - type: SignalTransmitter
+      outputs:
+        CannonConsoleSender: []
+    - type: ActivatableUI
+      key: enum.CannonConsoleUiKey.Key
+    - type: UserInterface
+      interfaces:
+        - key: enum.CannonConsoleUiKey.Key
+          type: CannonConsoleBoundUserInterface
+    - type: RadarConsole
+    - type: PointLight
+      radius: 1.5
+      energy: 1.6
+      color: "#43ccb5"
+    - type: ApcPowerReceiver
+      needsPower: false
+    - type: Sprite
+      layers:
+        - map: ["computerLayerBody"]
+          state: computer
+        - map: ["computerLayerKeyboard"]
+          state: generic_keyboard
+        - map: ["computerLayerScreen"]
+          state: comm_syndie
+        - map: ["computerLayerKeys"]
+          state: syndie_key
+
+- type: entity
+  parent: BaseComputer
+  id: TeamCreationConsoleShipEvent
+  name: team console
+  suffix: SHIPEVENT
+  description: shipevent-teamconsole-desc
+  components:
+    - type: ShipEventFactionMarker
+    - type: ActivatableUI
+      key: enum.TeamCreationUiKey.Key
+    - type: UserInterface
+      interfaces:
+        - key: enum.TeamCreationUiKey.Key
+          type: TeamCreationBoundUserInterface
+    - type: PointLight
+      radius: 1.5
+      energy: 1.6
+      color: "#43ccb5"
+    - type: ApcPowerReceiver
+      needsPower: false
+
+- type: entity
+  id: TeamSpawnerShipEvent
+  name: team spawner
+  parent: BaseStructure
+  suffix: SHIPEVENT
+  placement:
+    mode: SnapgridCenter
+  description: shipevent-spawner-desc
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: /Textures/Structures/Machines/cloning.rsi
+    state: pod_1
+  - type: GhostRoleMobSpawner
+    prototype: MobHumanShipEvent
+    name: Ship Team
+    description: Уничтожь своих врагов!
+    rules: You are an antagonist, scavenge, attack, and grow your hoard!
+    availableTakeovers: 5
+    deleteOnSpawn: false
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+    - shape:
+        !type:PhysShapeAabb {}
+      mask:
+      - FullTileMask
+      layer:
+      - WallLayer
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: Glass
+  - type: Repairable
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 150
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: GlassBreak
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          ShardGlass:
+            min: 1
+            max: 2
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: MeleeSound
+    soundGroups:
+      Brute:
+        path:
+          "/Audio/Effects/glass_hit.ogg"

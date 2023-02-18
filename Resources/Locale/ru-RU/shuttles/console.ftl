@@ -19,12 +19,13 @@ shuttle-console-orientation = Ориент:
 shuttle-console-linear-velocity = Линейн. скр:
 shuttle-console-angular-velocity = Угл. скр:
 shuttle-console-dock-label = Стык. порты
+shuttle-console-name-label = Название корабля
 shuttle-console-docked = { $index } (Пристыкован)
 shuttle-console-dock-button = Пристыковать { $suffix }
 shuttle-console-hyperspace-label = Пункты назначения БСС
 shuttle-console-hyperspace-none = Пункты назначения не найдены
 shuttle-console-unknown = Неизвестно
-shuttle-console-iff-label = "{ $name } ({ $distance }м)
+shuttle-console-iff-label = { $name } ({ $distance }м)
 # Buttons
 shuttle-console-strafing = Режим стрейфа
 shuttle-console-iff-toggle = Показать "свой-чужой"
