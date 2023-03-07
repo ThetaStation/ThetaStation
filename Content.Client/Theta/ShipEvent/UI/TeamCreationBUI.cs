@@ -17,7 +17,7 @@ public sealed class TeamCreationBoundUserInterface : BoundUserInterface
         _window.OpenCentered();
 
         _window.OnClose += Close;
-        _window.CreationButtonPressed += _ => { SendMessage(new TeamCreationRequest(_window._Name, _window._Blacklist)); };
+        _window.CreationButtonPressed += _ => { SendMessage(new TeamCreationRequest(_window._Name, _window._Blacklist, _window._Color)); };
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)

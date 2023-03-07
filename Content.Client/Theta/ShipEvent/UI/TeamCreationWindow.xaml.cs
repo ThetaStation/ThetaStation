@@ -14,6 +14,9 @@ public sealed partial class TeamCreationWindow : DefaultWindow
 {
     public event Action<BaseButton.ButtonEventArgs>? CreationButtonPressed;
     public string _Name => NameEdit.Text;
+
+    public string _Color => ColorEdit.Text;
+    
     public string _Blacklist => BlacklistEdit.Text;
 
     public TeamCreationWindow()

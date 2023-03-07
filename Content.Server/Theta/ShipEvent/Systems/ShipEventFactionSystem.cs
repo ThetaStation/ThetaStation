@@ -10,11 +10,13 @@ using Content.Server.Mind.Components;
 using Content.Server.Roles;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Server.Shuttles.Components;
+using Content.Server.Theta.MobHUD;
 using Content.Shared.Actions;
 using Content.Shared.Chat;
 using Content.Shared.Explosion;
 using Content.Shared.GameTicking;
 using Content.Shared.Projectiles;
+using Content.Shared.Theta.MobHUD;
 using Content.Shared.Toggleable;
 using Content.Shared.Theta.ShipEvent;
 using Content.Shared.Theta.ShipEvent.UI;
@@ -43,9 +45,12 @@ public sealed class ShipEventFaction : PlayerFaction
     public EntityUid Ship;
     public List<string>? Blacklist; //blacklist for ckeys
 
-    public ShipEventFaction(string name, string iconPath, EntityUid ship, EntityUid captain, int points = 0,
+    public string Color; //for recolouring HUDs, specify in hex
+
+    public ShipEventFaction(string name, string iconPath, string color, EntityUid ship, EntityUid captain, int points = 0,
         List<string>? blacklist = null) : base(name, iconPath)
     {
+        Color = color;
         Ship = ship;
         Captain = captain;
         Points = points;
@@ -63,6 +68,7 @@ public sealed class ShipEventFactionSystem : EntitySystem
     [Dependency] private readonly ActionsSystem _actSys = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSys = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly MobHUDSystem _hudSys = default!;
 
     public float PointsPerHitMultiplier = 0.01f;
     public int PointsPerKill = 10000;
@@ -90,6 +96,8 @@ public sealed class ShipEventFactionSystem : EntitySystem
 
     //cached damage for projectile prototypes
     private Dictionary<string, int> projectileDamage = new();
+    
+    private string HUDPrototypeId = "ShipeventHUD";
 
     public override void Initialize()
     {
@@ -156,6 +164,8 @@ public sealed class ShipEventFactionSystem : EntitySystem
             return;
         }
 
+        ShipEventFaction team = default!;
+
         if (_entMan.TryGetComponent<ShipEventFactionMarkerComponent>(args.Spawner, out var teamMarker))
         {
             if (teamMarker.Team == null)
@@ -163,9 +173,11 @@ public sealed class ShipEventFactionSystem : EntitySystem
                 return;
             }
 
-            if (teamMarker.Team.Blacklist != null)
+            team = teamMarker.Team;
+
+            if (team.Blacklist != null)
             {
-                if (teamMarker.Team.Blacklist.Contains(session.Name))
+                if (team.Blacklist.Contains(session.Name))
                 {
                     _chatSys.SendSimpleMessage(Loc.GetString("shipevent-blacklist"), session);
                     _entMan.DeleteEntity(entity);
@@ -173,10 +185,17 @@ public sealed class ShipEventFactionSystem : EntitySystem
                 }
             }
 
-            AddToTeam(args.Spawned, teamMarker.Team!);
-            component.Team = teamMarker.Team;
+            AddToTeam(args.Spawned, team);
+            component.Team = team;
             _entMan.GetComponent<GhostRoleMobSpawnerComponent>(args.Spawner)
-                .SetCurrentTakeovers(teamMarker.Team!.Members.Count);
+                .SetCurrentTakeovers(team.Members.Count);
+        }
+
+        if (_entMan.TryGetComponent<MobHUDComponent>(args.Spawned, out var hud))
+        {
+            var hudProt = _protMan.Index<MobHUDPrototype>(HUDPrototypeId);
+            hudProt.Color = team.Color;
+            _hudSys.SetActiveHUDs(hud, new List<MobHUDPrototype>{ hudProt });
         }
     }
 
@@ -225,29 +244,36 @@ public sealed class ShipEventFactionSystem : EntitySystem
     private void OnTeamCreationRequest(EntityUid entity, ShipEventFactionMarkerComponent component,
         TeamCreationRequest args)
     {
-        string _name = "";
         List<string> _blacklist = new();
-
-        if (!args.Name.Any())
+        
+        if (!IsValidName(args.Name))
         {
-            _name = GenerateTeamName();
+            if (_uiSys.TryGetUi(entity, args.UiKey, out var bui))
+            {
+                _uiSys.SetUiState(bui,
+                    new TeamCreationBoundUserInterfaceState(
+                        Loc.GetString("shipevent-teamcreation-response-invalidname"))); 
+            }
+            return;
         }
-        else
+
+        string _color = string.Empty;
+        if (args.Color.Any())
         {
-            if (!IsValidName(args.Name))
+            if (!IsValidColor(args.Color))
             {
                 if (_uiSys.TryGetUi(entity, args.UiKey, out var bui))
                 {
                     _uiSys.SetUiState(bui,
                         new TeamCreationBoundUserInterfaceState(
-                            Loc.GetString("shipevent-teamcreation-response-invalidname")));
+                            Loc.GetString("shipevent-teamcreation-response-invalidcolor"))); 
                 }
-
                 return;
             }
 
-            _name = args.Name;
+            _color = args.Color;
         }
+        else _color = Color.White.ToHex();
 
         if (args.Blacklist.Any())
         {
@@ -279,7 +305,7 @@ public sealed class ShipEventFactionSystem : EntitySystem
             return;
         }
 
-        var team = CreateTeam(newShip, (EntityUid) args.Session.AttachedEntity, _name, _blacklist);
+        var team = CreateTeam(newShip, (EntityUid) args.Session.AttachedEntity, args.Name, _color, _blacklist);
         SetMarkers(newShip, team);
 
         _entMan.DeleteEntity((EntityUid) args.Session.AttachedEntity);
@@ -382,14 +408,17 @@ public sealed class ShipEventFactionSystem : EntitySystem
         }
     }
 
-    public ShipEventFaction CreateTeam(EntityUid shipEntity, EntityUid captain, string name = "",
+    public ShipEventFaction CreateTeam(EntityUid shipEntity, EntityUid captain, string name = "", string color = "",
         List<string>? blacklist = null, bool silent = false)
     {
         string shipName = GetName(shipEntity);
-        string teamName = !IsValidName(name) ? GenerateTeamName() : name;
+        string teamName = IsValidName(name) ? name : GenerateTeamName();
+        string teamColor = IsValidColor(color) ? color : GenerateTeamColor();
+        
         ShipEventFaction team = new ShipEventFaction(
             teamName,
             "/Textures/Theta/ShipEvent/ShipFactionIcon.rsi",
+            teamColor,
             shipEntity,
             captain,
             blacklist: blacklist);
@@ -795,6 +824,51 @@ public sealed class ShipEventFactionSystem : EntitySystem
         }
 
         return true;
+    }
+
+    public string GenerateTeamColor()
+    {
+        var failsafe = 0;
+        while (failsafe < 100)
+        {
+            failsafe++;
+            var newColor = new Color(_random.NextFloat(0, 1), _random.NextFloat(0, 1), _random.NextFloat(0, 1));
+            if (IsValidColor(newColor)) return newColor.ToHex();
+        }
+        
+        return string.Empty;
+    }
+
+    public bool IsValidColor(Color color)
+    {
+        var minimalColorDelta = 200; //not based on anything, simply a magic number for comparison
+        
+        foreach (ShipEventFaction team in _teams)
+        {
+            var otherColor = Color.FromHex(team.Color);
+            var delta = RedmeanColorDelta(color, otherColor);
+            if (delta < minimalColorDelta) return false;
+        }
+
+        return true;
+    }
+    
+    public bool IsValidColor(string color)
+    {
+        var newColor = Color.TryFromHex(color);
+        if (newColor == null) return false;
+
+        return IsValidColor((Color)newColor);
+    }
+    
+    public double RedmeanColorDelta(Color a, Color b)
+    {
+        var deltaR = a.R - b.R;
+        var deltaG = a.G - b.G;
+        var deltaB = a.B - b.B;
+        var avgR = (a.R + b.R)/2;
+        var delta = (2 + avgR / 256) * deltaR * deltaR + 4 * deltaG * deltaG + (2 + (255 - avgR) / 256) * deltaB;
+        return Math.Sqrt(delta);
     }
 
     public bool IsActive(EntityUid entity)

@@ -53,6 +53,8 @@ public sealed class MobHUDSystem : SharedMobHUDSystem
     public override void SetHUDState(EntityUid entity, MobHUDComponent hud, ref ComponentHandleState args)
     {
         base.SetHUDState(entity, hud, ref args);
+        
+        if(!UsedLayers.ContainsKey(hud)) UsedLayers[hud] = new List<int>();
 
         if (hud == PlayerHUD)
         {
@@ -99,6 +101,7 @@ public sealed class MobHUDSystem : SharedMobHUDSystem
     public void ApplyHUD(SpriteComponent sprite, MobHUDComponent hud, MobHUDPrototype hudPrototype)
     {
         var l = sprite.AddLayer(hudPrototype.Sprite);
+        sprite.LayerSetColor(l, Color.FromHex(hudPrototype.Color));
         UsedLayers[hud].Add(l);
     }
 

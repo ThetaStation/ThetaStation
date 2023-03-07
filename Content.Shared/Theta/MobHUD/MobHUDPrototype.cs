@@ -1,4 +1,6 @@
-﻿using Robust.Shared.Prototypes;
+﻿using Nett;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.TypeSerializers.Implementations;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.List;
 using Robust.Shared.Utility;
 
@@ -20,6 +22,12 @@ public sealed class MobHUDPrototype : IPrototype, IEquatable<MobHUDPrototype>
     [DataField("allowedHUDs", required: true, customTypeSerializer: typeof(PrototypeIdListSerializer<MobHUDPrototype>))] 
     public List<string> AllowedHUDs = default!;
     
+    /// <summary>
+    /// Color of this HUD, in hex. Leave empty if you don't want to recolor your sprite.
+    /// </summary>
+    [DataField("color")]
+    public string Color = Robust.Shared.Maths.Color.White.ToHex();
+
     public bool Equals(MobHUDPrototype? other)
     {
         if (other == null){return false;}

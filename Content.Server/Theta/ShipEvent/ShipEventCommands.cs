@@ -34,6 +34,6 @@ public sealed class ShipEventCreateTeamCommand : IConsoleCommand
 
         if (args.Length > 1) { ship = EntityUid.Parse(args[1]); }
         if (args.Length > 2) { captain = EntityUid.Parse(args[2]); }
-        _shipSys.CreateTeam(ship, captain, name);
+        _shipSys.CreateTeam(ship, captain, name, "#ff0000");
     }
 }
