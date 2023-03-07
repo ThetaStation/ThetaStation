@@ -21,8 +21,7 @@ public abstract class SharedMobHUDSystem : EntitySystem
     {
         args.State = new MobHUDState
         {
-            ActiveHUDs = hud.ActiveHUDs,
-            UsedLayers = hud.UsedLayers
+            ActiveHUDs = hud.ActiveHUDs
         };
     }
 
@@ -30,6 +29,5 @@ public abstract class SharedMobHUDSystem : EntitySystem
     {
         if (args.Current is not MobHUDState state) return;
         hud.ActiveHUDs = state.ActiveHUDs;
-        hud.UsedLayers = state.UsedLayers;
     }
 }

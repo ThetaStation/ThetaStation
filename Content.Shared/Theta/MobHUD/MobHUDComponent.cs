@@ -9,8 +9,6 @@ public sealed class MobHUDComponent : Component
 {
     [ViewVariables(VVAccess.ReadWrite)]
     public List<MobHUDPrototype> ActiveHUDs = new();
-    
-    public List<int> UsedLayers = new();
 }
 
 [Serializable, NetSerializable]

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Content.Server.Administration;
+﻿using Content.Server.Administration;
 using Content.Shared.Administration;
 using Content.Shared.Theta.MobHUD;
 using Robust.Shared.Console;
@@ -36,7 +35,9 @@ public sealed class AddTestHUD : IConsoleCommand
         }
         var hud = entMan.EnsureComponent<MobHUDComponent>((EntityUid) shell.Player!.AttachedEntity!);
         var hudSys = entMan.EntitySysManager.GetEntitySystem<MobHUDSystem>();
-        hudSys.SetActiveHUDs(hud, new List<MobHUDPrototype>{hudProt});
+        var l = hud.ActiveHUDs;
+        l.Add(hudProt);
+        hudSys.SetActiveHUDs(hud, l);
     }
 }
 
