@@ -863,10 +863,10 @@ public sealed class ShipEventFactionSystem : EntitySystem
     
     public double RedmeanColorDelta(Color a, Color b)
     {
-        var deltaR = a.R - b.R;
-        var deltaG = a.G - b.G;
-        var deltaB = a.B - b.B;
-        var avgR = (a.R + b.R)/2;
+        var deltaR = a.RByte - b.RByte;
+        var deltaG = a.GByte - b.GByte;
+        var deltaB = a.BByte - b.BByte;
+        var avgR = (a.RByte + b.RByte)/2;
         var delta = (2 + avgR / 256) * deltaR * deltaR + 4 * deltaG * deltaG + (2 + (255 - avgR) / 256) * deltaB;
         return Math.Sqrt(delta);
     }
