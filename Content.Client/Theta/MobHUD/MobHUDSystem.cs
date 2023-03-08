@@ -102,9 +102,9 @@ public sealed class MobHUDSystem : SharedMobHUDSystem
 
     public void ApplyHUD(SpriteComponent sprite, MobHUDComponent hud, MobHUDPrototype hudPrototype)
     {
-        var l = sprite.AddLayer(hudPrototype.Sprite);
-        sprite.LayerSetColor(l, Color.FromHex(hudPrototype.Color));
-        UsedLayers[hud].Add(l);
+        var layerIndex = sprite.AddLayer(hudPrototype.Sprite);
+        sprite.LayerSetColor(layerIndex, Color.FromHex(hudPrototype.Color));
+        UsedLayers[hud].Add(layerIndex);
     }
 
     public void UpdateAll()
