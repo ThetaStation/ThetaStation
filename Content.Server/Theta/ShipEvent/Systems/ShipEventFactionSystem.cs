@@ -129,6 +129,7 @@ public sealed class ShipEventFactionSystem : EntitySystem
 
             args.AddLine(Loc.GetString("shipevent-roundend-team",
                 ("name", team.Name),
+                ("color", team.Color),
                 ("shipname", _shipNames[team.Ship]),
                 ("capname", GetName(team.Captain))
             ));
@@ -207,12 +208,11 @@ public sealed class ShipEventFactionSystem : EntitySystem
         {
             if (team.ShouldRespawn)
             {
-                result += $"\n '{team.Name}' - N/A - N/A - {team.Points}";
+                result += $"\n'[color={team.Color}]{team.Name}[/color]' - N/A - N/A - {team.Points}";
             }
             else
             {
-                result +=
-                    $"\n'{team.Name}' - '{_shipNames[team.Ship]}' - {team.GetLivingMembersMinds().Count} - {team.Points}";
+                result += $"\n'[color={team.Color}]{team.Name}[/color]' - '{_shipNames[team.Ship]}' - {team.GetLivingMembersMinds().Count} - {team.Points}";
             }
         }
 

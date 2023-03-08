@@ -42,6 +42,6 @@ shipevent-teamcreation-blacklistlabel = Блеклист (сикеи через 
 shipevent-teamcreation-creationbutton = СОЗДАТЬ КОМАНДУ
 
 shipevent-roundend-heading = Соревнование окончено. Команды принявшие участие:
-shipevent-roundend-team = Команда '{ $name }' (корабль - '{ $shipname }') под руководством '{ $capname }':
+shipevent-roundend-team = Команда '[color={ $color }]{ $name }[/color]' (корабль - '{ $shipname }') под руководством '{ $capname }':
 shipevent-roundend-teamstats = Набрала { $points } очков, { $kills } фрагов и { $assists } ассистов, а также зареспавнилась { $respawns } раз.
 shipevent-roundend-winner = ПОБЕДИТЕЛЬ - КОМАНДА '{ $name }'! Поздравьте их в ООЦ (или полейте грязью).
