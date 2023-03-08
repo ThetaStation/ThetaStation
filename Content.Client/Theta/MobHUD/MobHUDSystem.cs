@@ -15,6 +15,8 @@ public sealed class MobHUDSystem : SharedMobHUDSystem
     public override void Initialize()
     {
         base.Initialize();
+        SubscribeLocalEvent<MobHUDComponent, ComponentInit>(OnHUDInit);
+        SubscribeLocalEvent<MobHUDComponent, ComponentShutdown>(OnHUDShutdown);
         SubscribeLocalEvent<PlayerAttachedEvent>(OnPlayerAttach);
         SubscribeLocalEvent<PlayerDetachedEvent>(OnPlayerDetach);
     }
@@ -32,13 +34,13 @@ public sealed class MobHUDSystem : SharedMobHUDSystem
         UpdateAll();
     }
 
-    public override void OnHUDInit(EntityUid entity, MobHUDComponent hud, ComponentInit args)
+    public void OnHUDInit(EntityUid entity, MobHUDComponent hud, ComponentInit args)
     {
         UsedLayers[hud] = new List<int>();
         UpdateSprite(EntityManager.GetComponent<SpriteComponent>(entity), hud);
     }
 
-    public override void OnHUDShutdown(EntityUid entity, MobHUDComponent hud, ComponentShutdown args)
+    public void OnHUDShutdown(EntityUid entity, MobHUDComponent hud, ComponentShutdown args)
     {
         if (hud == PlayerHUD)
         {
