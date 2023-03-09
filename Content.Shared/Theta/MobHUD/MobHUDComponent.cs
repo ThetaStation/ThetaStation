@@ -15,5 +15,4 @@ public sealed class MobHUDComponent : Component
 public sealed class MobHUDState : ComponentState
 {
     public List<MobHUDPrototype> ActiveHUDs = default!;
-    public List<int> UsedLayers = default!;
 }

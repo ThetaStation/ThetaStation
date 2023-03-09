@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Content.Shared.Theta.MobHUD;
 using Robust.Client.GameObjects;
+using Robust.Client.GameStates;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
@@ -9,8 +10,10 @@ namespace Content.Client.Theta.MobHUD;
 public sealed class MobHUDSystem : SharedMobHUDSystem
 {
     [Dependency] private readonly IPrototypeManager protMan = default!;
+    [Dependency] private readonly IClientGameStateManager statMan = default!;
     public MobHUDComponent PlayerHUD = default!;
     public Dictionary<MobHUDComponent, List<int>> UsedLayers = new();
+    public HashSet<EntityUid> DetachedEntities = new();
 
     public override void Initialize()
     {
@@ -19,6 +22,28 @@ public sealed class MobHUDSystem : SharedMobHUDSystem
         SubscribeLocalEvent<MobHUDComponent, ComponentShutdown>(OnHUDShutdown);
         SubscribeLocalEvent<PlayerAttachedEvent>(OnPlayerAttach);
         SubscribeLocalEvent<PlayerDetachedEvent>(OnPlayerDetach);
+        statMan.GameStateApplied += OnGameStateApplied;
+    }
+
+    private void OnGameStateApplied(GameStateAppliedArgs args)
+    {
+        foreach (EntityUid entity in args.Detached)
+        {
+            if (EntityManager.HasComponent<MobHUDComponent>(entity))
+            {
+                DetachedEntities.Add(entity);
+            }
+        }
+        
+        foreach (MobHUDComponent hud in EntityManager.EntityQuery<MobHUDComponent>())
+        {
+            var entity = hud.Owner;
+            if (DetachedEntities.Contains(entity))
+            {
+                DetachedEntities.Remove(entity);
+                UpdateSprite(EntityManager.GetComponent<SpriteComponent>(entity), hud);
+            }
+        }
     }
 
     public void OnPlayerAttach(PlayerAttachedEvent args)
