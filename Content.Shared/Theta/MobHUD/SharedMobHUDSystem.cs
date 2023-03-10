@@ -21,7 +21,8 @@ public abstract class SharedMobHUDSystem : EntitySystem
 
     public virtual void SetHUDState(EntityUid entity, MobHUDComponent hud, ref ComponentHandleState args)
     {
-        if (args.Current is not MobHUDState state) return;
+        if (args.Current is not MobHUDState state) 
+            return;
         hud.ActiveHUDs = state.ActiveHUDs;
     }
 }

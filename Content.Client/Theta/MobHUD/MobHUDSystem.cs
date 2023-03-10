@@ -11,9 +11,9 @@ public sealed class MobHUDSystem : SharedMobHUDSystem
 {
     [Dependency] private readonly IPrototypeManager protMan = default!;
     [Dependency] private readonly IClientGameStateManager statMan = default!;
+    public HashSet<EntityUid> DetachedEntities = new();
     public MobHUDComponent PlayerHUD = default!;
     public Dictionary<MobHUDComponent, List<int>> UsedLayers = new();
-    public HashSet<EntityUid> DetachedEntities = new();
 
     public override void Initialize()
     {
@@ -27,15 +27,13 @@ public sealed class MobHUDSystem : SharedMobHUDSystem
 
     private void OnGameStateApplied(GameStateAppliedArgs args)
     {
-        foreach (EntityUid entity in args.Detached)
+        foreach (var entity in args.Detached)
         {
             if (EntityManager.HasComponent<MobHUDComponent>(entity))
-            {
                 DetachedEntities.Add(entity);
-            }
         }
-        
-        foreach (MobHUDComponent hud in EntityManager.EntityQuery<MobHUDComponent>())
+
+        foreach (var hud in EntityManager.EntityQuery<MobHUDComponent>())
         {
             var entity = hud.Owner;
             if (DetachedEntities.Contains(entity))
@@ -49,7 +47,8 @@ public sealed class MobHUDSystem : SharedMobHUDSystem
     public void OnPlayerAttach(PlayerAttachedEvent args)
     {
         PlayerHUD = default!;
-        if (EntityManager.TryGetComponent<MobHUDComponent>(args.Entity, out var hud)) PlayerHUD = hud;
+        if (EntityManager.TryGetComponent<MobHUDComponent>(args.Entity, out var hud))
+            PlayerHUD = hud;
         UpdateAll();
     }
 
@@ -80,8 +79,8 @@ public sealed class MobHUDSystem : SharedMobHUDSystem
     public override void SetHUDState(EntityUid entity, MobHUDComponent hud, ref ComponentHandleState args)
     {
         base.SetHUDState(entity, hud, ref args);
-        
-        if(!UsedLayers.ContainsKey(hud)) UsedLayers[hud] = new List<int>();
+
+        if (!UsedLayers.ContainsKey(hud)) UsedLayers[hud] = new List<int>();
 
         if (hud == PlayerHUD)
         {
