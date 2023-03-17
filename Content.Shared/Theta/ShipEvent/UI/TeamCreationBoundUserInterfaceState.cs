@@ -15,11 +15,13 @@ public sealed class TeamCreationRequest : BoundUserInterfaceMessage
 {
     public readonly string Name;
     public readonly string Blacklist;
+    public readonly string Color;
 
-    public TeamCreationRequest(string name, string blacklist)
+    public TeamCreationRequest(string name, string blacklist, string color)
     {
         Name = name;
         Blacklist = blacklist;
+        Color = color;
     }
 }
 

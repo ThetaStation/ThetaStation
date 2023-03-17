@@ -1,10 +1,9 @@
 ﻿<DefaultWindow xmlns="https://spacestation14.io"
-               Title="{Loc 'shipevent-teamview-window-title'}"
+               Title="{Loc 'shipevent-teamview-windowtitle'}"
                MinSize="600 500"
                SetSize="600 500">
     <BoxContainer Orientation="Vertical">
-        <Label Name="TeamViewText"
-               Text="." />
+        <RichTextLabel Name="TeamViewText"/>
         <Control MinSize="0 10" />
     </BoxContainer>
 </DefaultWindow>
