@@ -7,19 +7,19 @@
                Text="" />
         <Control MinSize="0 10" />
         <Label Name="NameLabel"
-               Text="{Loc 'shipevent-teamcreation-namelabel'}"/>
+               Text="{Loc 'shipevent-teamcreation-name'}"/>
         <Control MinSize="0 10" />
         <LineEdit Name="NameEdit"
                   HorizontalExpand="True"
         />
         <Label Name="ColorLabel"
-               Text="{Loc 'shipevent-teamcreation-colorlabel'}" />
+               Text="{Loc 'shipevent-teamcreation-color'}" />
         <Control MinSize="0 10" />
         <LineEdit Name="ColorEdit"
                   HorizontalExpand="True"
         />
         <Label Name="BlacklistLabel"
-               Text="{Loc 'shipevent-teamcreation-blacklistlabel'}" />
+               Text="{Loc 'shipevent-teamcreation-blacklist'}" />
         <Control MinSize="0 10" />
         <LineEdit Name="BlacklistEdit"
                   HorizontalExpand="True"
