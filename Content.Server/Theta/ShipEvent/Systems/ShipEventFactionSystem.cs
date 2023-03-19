@@ -44,18 +44,18 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     private int _lastTeamNumber;
     private float _teamCheckTimer;
 
-    public float TeamCheckInterval = 5; //in seconds
-    public float RespawnDelay = 60; //in seconds
+    public float TeamCheckInterval; //in seconds
+    public float RespawnDelay; //in seconds
     
-    public int MaxSpawnOffset = 500; //both for ships & obstacles
-    public int CollisionCheckRange = 200;
+    public int MaxSpawnOffset; //both for ships & obstacles
+    public int CollisionCheckRange;
     
-    public int BonusInterval = 600; //in seconds
-    public int PointsPerInterval = 5000; //points for surviving longer than BonusInterval without respawn
+    public int BonusInterval; //in seconds
+    public int PointsPerInterval; //points for surviving longer than BonusInterval without respawn
     
-    public float PointsPerHitMultiplier = 0.01f;
-    public int PointsPerAssist = 5000;
-    public int PointsPerKill = 10000;
+    public float PointsPerHitMultiplier;
+    public int PointsPerAssist;
+    public int PointsPerKill;
 
     public string HUDPrototypeId = "ShipeventHUD";
 
