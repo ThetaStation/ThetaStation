@@ -220,7 +220,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         if (args.Session.AttachedEntity == null) return;
 
-        var newShip = RandomPlace(_random.Pick(ShipTypes));
+        var newShip = RandomPosSpawn(_random.Pick(ShipTypes));
         var spawners = GetShipComponents<GhostRoleMobSpawnerComponent>(newShip);
         if (!spawners.Any()) return;
 
@@ -422,7 +422,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// </param>
     private void ImmediateRespawn(ShipEventFaction team, string oldShipName = "")
     {
-        var newShip = RandomPlace(_random.Pick(ShipTypes));
+        var newShip = RandomPosSpawn(_random.Pick(ShipTypes));
 
         var spawners = GetShipComponents<GhostRoleMobSpawnerComponent>(newShip);
         if (!spawners.Any())
@@ -592,7 +592,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         List<EntityUid> spawnedObstacles = new();
         for (int i = 0; i < amount; i++)
         {
-            spawnedObstacles.Add(RandomPlace(_random.Pick(ObstacleTypes)));
+            spawnedObstacles.Add(RandomPosSpawn(_random.Pick(ObstacleTypes)));
         }
 
         return spawnedObstacles;

@@ -222,7 +222,7 @@ public sealed partial class ShipEventFactionSystem
         return false;
     }
     
-    public EntityUid RandomPlace(string mapPath)
+    public EntityUid RandomPosSpawn(string mapPath)
     {
         var failsafe = 0;
         Vector2i mapPos = Vector2i.Zero;
