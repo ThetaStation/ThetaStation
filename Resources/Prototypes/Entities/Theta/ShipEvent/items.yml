@@ -1,0 +1,27 @@
+﻿- type: entity
+  name: pocket radar
+  description: Helps to fight without voice chat
+  parent: BaseItem
+  id: PocketRadar
+  suffix: SHIPEVENT
+  components:
+    - type: Sprite
+      sprite: Objects/Devices/gps.rsi
+      netsync: false
+      layers:
+        - state: icon
+        - state: active
+    - type: Item
+      sprite: Objects/Devices/gps.rsi
+    - type: RadarConsole
+      maxRange: 150
+    - type: ActivatableUI
+      key: enum.RadarConsoleUiKey.Key
+      inHandsOnly: true
+      singleUser: true
+      requireHands: false
+      closeOnHandDeselect: false
+    - type: UserInterface
+      interfaces:
+        - key: enum.RadarConsoleUiKey.Key
+          type: RadarConsoleBoundUserInterface

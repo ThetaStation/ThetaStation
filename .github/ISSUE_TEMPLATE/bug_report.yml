@@ -1,6 +1,6 @@
 name: "Сообщить о проблеме"
 description: "Если что-то работает не так, как ожидалось."
-labels: ["triage"]
+labels: ["Bug"]
 body:
   - type: textarea
     id: description
