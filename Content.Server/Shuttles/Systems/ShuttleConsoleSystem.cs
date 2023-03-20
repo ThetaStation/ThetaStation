@@ -47,6 +47,19 @@ namespace Content.Server.Shuttles.Systems
 
             SubscribeLocalEvent<PilotComponent, MoveEvent>(HandlePilotMove);
             SubscribeLocalEvent<PilotComponent, ComponentGetState>(OnGetState);
+
+            SubscribeLocalEvent<FTLDestinationComponent, ComponentStartup>(OnFtlDestStartup);
+            SubscribeLocalEvent<FTLDestinationComponent, ComponentShutdown>(OnFtlDestShutdown);
+        }
+
+        private void OnFtlDestStartup(EntityUid uid, FTLDestinationComponent component, ComponentStartup args)
+        {
+            RefreshShuttleConsoles();
+        }
+
+        private void OnFtlDestShutdown(EntityUid uid, FTLDestinationComponent component, ComponentShutdown args)
+        {
+            RefreshShuttleConsoles();
         }
 
         private void OnChangeShipName(EntityUid uid, ShuttleConsoleComponent component, ShuttleConsoleChangeShipNameMessage args)
@@ -97,7 +110,7 @@ namespace Content.Server.Shuttles.Systems
                 return;
             }
 
-            _shuttle.FTLTravel(shuttle, args.Destination, hyperspaceTime: _shuttle.TransitTime);
+            _shuttle.FTLTravel(shuttle, args.Destination);
         }
 
         private void OnDock(DockEvent ev)
@@ -275,7 +288,6 @@ namespace Content.Server.Shuttles.Systems
 
                     var canTravel = !locked &&
                                     comp.Enabled &&
-                                    !Paused(comp.Owner, meta) &&
                                     (!TryComp<FTLComponent>(comp.Owner, out var ftl) || ftl.State == FTLState.Cooldown);
 
                     // Can't travel to same map.
