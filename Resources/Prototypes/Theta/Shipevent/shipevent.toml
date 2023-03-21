@@ -1,0 +1,26 @@
+﻿TeamCheckInterval = 5.0 #float, in seconds
+RespawnDelay = 60.0 #float, in seconds
+
+InitialObstacleAmount = 25
+MaxSpawnOffset = 500 #both for ships & obstacles
+CollisionCheckRange = 200
+
+BonusInterval = 600 #in seconds
+PointsPerInterval = 5000 #points for surviving longer than BonusInterval without respawn
+
+PointsPerHitMultiplier = 0.01 #float
+PointsPerAssist = 5000
+PointsPerKill = 10000
+
+HUDPrototypeId = "ShipeventHUD"
+
+ShipTypes = ["/Maps/Shuttles/ship_test_1.yml"]
+ObstacleTypes = ["/Maps/Salvage/asteroid-base.yml", 
+    "/Maps/Salvage/medium-1.yml", 
+    "/Maps/Salvage/small-1.yml", 
+    "/Maps/Salvage/small-2.yml",
+    "/Maps/Salvage/small-3.yml",
+    "/Maps/Salvage/small-4.yml",
+    "/Maps/Salvage/medium-library.yml",
+    "/Maps/Salvage/medium-pirate.yml"
+]
