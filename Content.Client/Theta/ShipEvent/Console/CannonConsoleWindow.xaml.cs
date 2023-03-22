@@ -21,7 +21,6 @@ public sealed partial class CannonConsoleWindow : FancyWindow,
     public CannonConsoleWindow()
     {
         RobustXamlLoader.Load(this);
-        IoCManager.InjectDependencies(this);
     }
 
     public void UpdateState(CannonConsoleBoundInterfaceState scc)

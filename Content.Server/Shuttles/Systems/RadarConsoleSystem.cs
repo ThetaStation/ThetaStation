@@ -91,12 +91,12 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
         return list;
     }
 
-    public List<CannonInformationInterfaceState> GetCannonsInfoOnGrid(RadarConsoleComponent component)
+    public List<CannonInformationInterfaceState> GetCannonInfosByMyGrid(RadarConsoleComponent component)
     {
         var list = new List<CannonInformationInterfaceState>();
 
         var myGrid = Transform(component.Owner).GridUid;
-        var isCannonConsole = TryComp<CannonConsoleComponent>(component.Owner, out _);
+        var isCannonConsole = HasComp<CannonConsoleComponent>(component.Owner);
 
         var controlledCannons = GetControlledCannons(component.Owner);
 
@@ -111,15 +111,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
                 controlled = controlledCannons.Contains(cannon.Owner);
             }
 
-            Color color;
-            if (isCannonConsole)
-            {
-                color = controlled ? Color.Lime : Color.LightGreen;
-            }
-            else
-            {
-                color = controlled ? Color.Lime : Color.YellowGreen;
-            }
+            var color = controlled ? Color.Lime : (isCannonConsole ? Color.LightGreen : Color.YellowGreen);
 
             var ammoCountEv = new GetAmmoCountEvent();
             RaiseLocalEvent(cannon.Owner, ref ammoCountEv);
@@ -186,7 +178,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 
         var mobs = GetMobsAround(component);
         var projectiles = GetProjectilesAround(component);
-        var cannons = GetCannonsInfoOnGrid(component);
+        var cannons = GetCannonInfosByMyGrid(component);
 
         var radarState = new RadarConsoleBoundInterfaceState(
             component.MaxRange,
