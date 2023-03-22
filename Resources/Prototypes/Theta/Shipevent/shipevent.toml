@@ -1,9 +1,9 @@
 ﻿TeamCheckInterval = 5.0 #float, in seconds
 RespawnDelay = 60.0 #float, in seconds
 
-InitialObstacleAmount = 25
+InitialObstacleAmount = 50
 MaxSpawnOffset = 500 #both for ships & obstacles
-CollisionCheckRange = 200
+CollisionCheckRange = 100
 
 BonusInterval = 600 #in seconds
 PointsPerInterval = 5000 #points for surviving longer than BonusInterval without respawn
@@ -22,5 +22,11 @@ ObstacleTypes = ["/Maps/Salvage/asteroid-base.yml",
     "/Maps/Salvage/small-3.yml",
     "/Maps/Salvage/small-4.yml",
     "/Maps/Salvage/medium-library.yml",
-    "/Maps/Salvage/medium-pirate.yml"
+    "/Maps/Salvage/medium-pirate.yml",
+    "/Maps/Theta/Shipevent/asteroid-1.yml",
+    "/Maps/Theta/Shipevent/asteroid-2.yml",
+    "/Maps/Theta/Shipevent/wreck-1.yml",
+    "/Maps/Theta/Shipevent/wreck-2.yml",
+    "/Maps/Theta/Shipevent/wreck-3.yml",
+    "/Maps/Theta/Shipevent/wreck-4.yml"
 ]
