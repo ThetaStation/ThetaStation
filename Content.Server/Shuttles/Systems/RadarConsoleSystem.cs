@@ -10,6 +10,7 @@ using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
 using Content.Shared.Theta.ShipEvent;
+using Content.Shared.Weapons.Ranged.Events;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
 
@@ -38,7 +39,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 
         foreach (var radar in EntityManager.EntityQuery<RadarConsoleComponent>())
         {
-            if(!_uiSystem.IsUiOpen(radar.Owner, RadarConsoleUiKey.Key))
+            if (!_uiSystem.IsUiOpen(radar.Owner, RadarConsoleUiKey.Key))
                 continue;
             UpdateState(radar);
         }
@@ -51,7 +52,8 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
         if (!TryComp<TransformComponent>(component.Owner, out var xform))
             return list;
 
-        foreach (var (_, mobState, transform) in EntityManager.EntityQuery<MindComponent, MobStateComponent, TransformComponent>())
+        foreach (var (_, mobState, transform) in EntityManager
+                     .EntityQuery<MindComponent, MobStateComponent, TransformComponent>())
         {
             if (_mobStateSystem.IsIncapacitated(mobState.Owner, mobState))
                 continue;
@@ -89,22 +91,14 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
         return list;
     }
 
-    public List<CannonInformationInterfaceState> GetCannonsInfoGetOnGrid(RadarConsoleComponent component)
+    public List<CannonInformationInterfaceState> GetCannonsInfoOnGrid(RadarConsoleComponent component)
     {
         var list = new List<CannonInformationInterfaceState>();
+
         var myGrid = Transform(component.Owner).GridUid;
         var isCannonConsole = TryComp<CannonConsoleComponent>(component.Owner, out _);
 
-        var hasSignalTransmitter = TryComp<SignalTransmitterComponent>(component.Owner, out var signalTransmitter);
-        List<EntityUid>? controlledCannons = null;
-        if (hasSignalTransmitter && signalTransmitter != null)
-        {
-            controlledCannons = new List<EntityUid>();
-            foreach (var (_, cannons) in signalTransmitter.Outputs)
-            {
-                controlledCannons.AddRange(cannons.Select(i => i.Uid));
-            }
-        }
+        var controlledCannons = GetControlledCannons(component.Owner);
 
         foreach (var (cannon, transform) in EntityQuery<CannonComponent, TransformComponent>())
         {
@@ -112,7 +106,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
                 continue;
 
             var controlled = false;
-            if (hasSignalTransmitter && controlledCannons != null)
+            if (controlledCannons != null)
             {
                 controlled = controlledCannons.Contains(cannon.Owner);
             }
@@ -127,16 +121,38 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
                 color = controlled ? Color.Lime : Color.YellowGreen;
             }
 
+            var ammoCountEv = new GetAmmoCountEvent();
+            RaiseLocalEvent(cannon.Owner, ref ammoCountEv);
+
             list.Add(new CannonInformationInterfaceState
             {
+                Uid = cannon.Owner,
                 Coordinates = transform.Coordinates,
                 Color = color,
                 Angle = _transformSystem.GetWorldRotation(transform),
                 IsControlling = controlled,
+                Ammo = ammoCountEv.Count,
+                Capacity = ammoCountEv.Capacity,
             });
         }
 
         return list;
+    }
+
+    private List<EntityUid>? GetControlledCannons(EntityUid uid)
+    {
+        List<EntityUid>? controlledCannons = null;
+        var hasSignalTransmitter = TryComp<SignalTransmitterComponent>(uid, out var signalTransmitter);
+        if (!hasSignalTransmitter || signalTransmitter == null)
+            return controlledCannons;
+
+        controlledCannons = new List<EntityUid>();
+        foreach (var (_, cannons) in signalTransmitter.Outputs)
+        {
+            controlledCannons.AddRange(cannons.Select(i => i.Uid));
+        }
+
+        return controlledCannons;
     }
 
     protected override void UpdateState(RadarConsoleComponent component)
@@ -170,7 +186,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 
         var mobs = GetMobsAround(component);
         var projectiles = GetProjectilesAround(component);
-        var cannons = GetCannonsInfoGetOnGrid(component);
+        var cannons = GetCannonsInfoOnGrid(component);
 
         var radarState = new RadarConsoleBoundInterfaceState(
             component.MaxRange,

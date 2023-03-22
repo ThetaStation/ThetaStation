@@ -32,7 +32,7 @@ public sealed class CannonConsoleSystem : EntitySystem
 
         var mobs = _radarConsoleSystem.GetMobsAround(radarConsole);
         var projectiles = _radarConsoleSystem.GetProjectilesAround(radarConsole);
-        var cannonsInformation = _radarConsoleSystem.GetCannonsInfoGetOnGrid(radarConsole);
+        var cannonsInformation = _radarConsoleSystem.GetCannonsInfoOnGrid(radarConsole);
 
         var radarState = new CannonConsoleBoundInterfaceState(
             radarConsole.MaxRange,

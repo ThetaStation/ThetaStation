@@ -60,6 +60,8 @@ shipevent-teamcreation-color = Цвет команды (hex):
 shipevent-teamcreation-blacklist = Блеклист (сикеи через запятую):
 shipevent-teamcreation-creationbutton = СОЗДАТЬ КОМАНДУ
 
+## Cannon console
+shipevent-cannonconsole-ammostatus = Боезапас
 
 ## Roundend messages
 

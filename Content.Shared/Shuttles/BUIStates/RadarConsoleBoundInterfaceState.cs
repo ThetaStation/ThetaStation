@@ -76,6 +76,8 @@ public sealed class CannonInformationInterfaceState
     public Color Color;
     public Angle Angle;
     public bool IsControlling;
+    public int Ammo;
+    public int Capacity;
 }
 
 /// <summary>
