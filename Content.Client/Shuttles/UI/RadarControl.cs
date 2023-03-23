@@ -300,7 +300,8 @@ public sealed class RadarControl : Control
         var ourGridId = _coordinates.Value.GetGridUid(_entManager);
         if (ourGridId != null)
         {
-            var ourGridMatrix = xformQuery.GetComponent(ourGridId.Value).WorldMatrix;
+            var transformGridComp = xformQuery.GetComponent(ourGridId.Value);
+            var ourGridMatrix = transformGridComp.WorldMatrix;
             var ourGridFixtures = fixturesQuery.GetComponent(ourGridId.Value);
 
             Matrix3.Multiply(in ourGridMatrix, in offsetMatrix, out var matrix);
@@ -309,6 +310,15 @@ public sealed class RadarControl : Control
             DrawGrid(handle, matrix, ourGridFixtures, Color.Yellow);
 
             DrawDocks(handle, ourGridId.Value, matrix);
+
+            var worldRot = transformGridComp.WorldRotation;
+            // Get the positive reduced angle.
+            var displayRot = -worldRot.Reduced();
+
+            var gridPhysic = bodyQuery.GetComponent(ourGridId.Value);
+            var gridVelocity = displayRot.RotateVec(gridPhysic.LinearVelocity);
+
+            DrawVelocityArrow(handle, gridVelocity);
         }
 
         var shown = new HashSet<EntityUid>();
@@ -462,6 +472,36 @@ public sealed class RadarControl : Control
             }
             handle.DrawPrimitives(DrawPrimitiveTopology.LineStrip, verts, color);
         }
+    }
+
+    private void DrawVelocityArrow(DrawingHandleScreen handle, Vector2 gridVelocity)
+    {
+        const float arrowSize = 3f;
+
+        var (x, y) = (gridVelocity.X, gridVelocity.Y);
+        if (x == 0f && y == 0f)
+            return;
+
+        var angle = Angle.FromWorldVec(gridVelocity);
+        var verts = new[]
+        {
+            gridVelocity + angle.RotateVec(new Vector2(-arrowSize / 2, arrowSize / 4)),
+            gridVelocity + angle.RotateVec(new Vector2(0, -arrowSize / 2 - arrowSize / 4)),
+            gridVelocity + angle.RotateVec(new Vector2(arrowSize / 2, arrowSize / 4)),
+            gridVelocity + angle.RotateVec(new Vector2(arrowSize / 4, arrowSize / 4)),
+            gridVelocity + angle.RotateVec(new Vector2(arrowSize / 4, arrowSize)),
+            gridVelocity + angle.RotateVec(new Vector2(-arrowSize / 4, arrowSize)),
+            gridVelocity + angle.RotateVec(new Vector2(-arrowSize / 4, arrowSize / 4)),
+            gridVelocity + angle.RotateVec(new Vector2(-arrowSize / 2, arrowSize / 4)),
+        };
+        for (var i = 0; i < verts.Length; i++)
+        {
+            var vert = verts[i];
+            vert.Y = -vert.Y;
+            verts[i] = ScalePosition(vert);
+        }
+
+        handle.DrawPrimitives(DrawPrimitiveTopology.LineStrip, verts, Color.White);
     }
 
     // transform components on the client should be enough to get the angle
