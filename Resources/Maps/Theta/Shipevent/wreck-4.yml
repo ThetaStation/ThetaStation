@@ -1,0 +1,462 @@
+meta:
+  format: 3
+  name: DemoStation
+  author: Space-Wizards
+  postmapinit: false
+tilemap:
+  0: Space
+  1: FloorArcadeBlue
+  2: FloorArcadeBlue2
+  3: FloorArcadeRed
+  4: FloorAsteroidCoarseSand0
+  5: FloorAsteroidCoarseSandDug
+  6: FloorAsteroidIronsand1
+  7: FloorAsteroidIronsand2
+  8: FloorAsteroidIronsand3
+  9: FloorAsteroidIronsand4
+  10: FloorAsteroidSand
+  11: FloorAsteroidTile
+  12: FloorBar
+  13: FloorBasalt
+  14: FloorBasaslt
+  15: FloorBlue
+  16: FloorBlueCircuit
+  17: FloorBoxing
+  18: FloorCarpetClown
+  19: FloorCarpetOffice
+  20: FloorCave
+  21: FloorCaveDrought
+  22: FloorClown
+  23: FloorDark
+  24: FloorDarkDiagonal
+  25: FloorDarkDiagonalMini
+  26: FloorDarkHerringbone
+  27: FloorDarkMini
+  28: FloorDarkMono
+  29: FloorDarkOffset
+  30: FloorDarkPavement
+  31: FloorDarkPavementVertical
+  32: FloorDarkPlastic
+  33: FloorDesert
+  34: FloorDirt
+  35: FloorEighties
+  36: FloorElevatorShaft
+  37: FloorFlesh
+  38: FloorFreezer
+  39: FloorGlass
+  40: FloorGold
+  41: FloorGrass
+  42: FloorGrassDark
+  43: FloorGrassJungle
+  44: FloorGrassLight
+  45: FloorGreenCircuit
+  46: FloorGym
+  47: FloorHydro
+  48: FloorKitchen
+  49: FloorLaundry
+  50: FloorLino
+  51: FloorLowDesert
+  52: FloorMetalDiamond
+  53: FloorMime
+  54: FloorMono
+  55: FloorPlanetGrass
+  56: FloorPlastic
+  57: FloorRGlass
+  58: FloorReinforced
+  59: FloorRockVault
+  60: FloorShowroom
+  61: FloorShuttleBlue
+  62: FloorShuttleOrange
+  63: FloorShuttlePurple
+  64: FloorShuttleRed
+  65: FloorShuttleWhite
+  66: FloorSilver
+  67: FloorSnow
+  68: FloorSteel
+  69: FloorSteelDiagonal
+  70: FloorSteelDiagonalMini
+  71: FloorSteelDirty
+  72: FloorSteelHerringbone
+  73: FloorSteelMini
+  74: FloorSteelMono
+  75: FloorSteelOffset
+  76: FloorSteelPavement
+  77: FloorSteelPavementVertical
+  78: FloorTechMaint
+  79: FloorTechMaint2
+  80: FloorTechMaint3
+  81: FloorWhite
+  82: FloorWhiteDiagonal
+  83: FloorWhiteDiagonalMini
+  84: FloorWhiteHerringbone
+  85: FloorWhiteMini
+  86: FloorWhiteMono
+  87: FloorWhiteOffset
+  88: FloorWhitePavement
+  89: FloorWhitePavementVertical
+  90: FloorWhitePlastic
+  91: FloorWood
+  92: FloorWoodTile
+  93: Lattice
+  94: Plating
+entities:
+- uid: 0
+  components:
+  - type: MetaData
+  - pos: 19.732439,-21.367239
+    parent: invalid
+    type: Transform
+  - chunks:
+      -1,-1:
+        ind: -1,-1
+        tiles: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAF0AAABdAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAF4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAF4AAABeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABdAAAAXQAAAF4AAABdAAAAXgAAAA==
+      0,-1:
+        ind: 0,-1
+        tiles: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABeAAAAXgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXgAAAF4AAABdAAAAXgAAAAAAAAAAAAAAXQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEcAAABHAAAAXgAAAF4AAAAAAAAAXQAAAF0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABeAAAARwAAAF4AAABdAAAAXQAAAF0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXgAAAEcAAABeAAAAAAAAAF4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+      0,0:
+        ind: 0,0
+        tiles: RwAAAF4AAABeAAAARwAAAF0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEcAAABHAAAAXgAAAF0AAABeAAAAXQAAAAAAAABdAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABHAAAAXgAAAF0AAABeAAAARwAAAF4AAABdAAAAXQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXQAAAF4AAAAAAAAAAAAAAF4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAF0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+      -1,0:
+        ind: -1,0
+        tiles: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXQAAAF0AAABeAAAAXgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXQAAAF4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXgAAAF4AAABeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXgAAAF4AAABHAAAARwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXQAAAAAAAABeAAAAXgAAAF0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+    type: MapGrid
+  - type: Broadphase
+  - angularDamping: 0.05
+    linearDamping: 0.05
+    fixedRotation: False
+    bodyType: Dynamic
+    type: Physics
+  - fixtures: []
+    type: Fixtures
+  - type: OccluderTree
+  - type: Shuttle
+  - nextUpdate: 327.5899103
+    type: GridPathfinding
+  - gravityShakeSound: !type:SoundPathSpecifier
+      path: /Audio/Effects/alert.ogg
+    type: Gravity
+  - chunkCollection: {}
+    type: DecalGrid
+  - tiles:
+      -1,-2: 0
+      -1,-1: 0
+      0,-2: 0
+      0,-1: 0
+      1,-1: 0
+      0,0: 0
+      0,1: 0
+      1,0: 0
+      1,1: 0
+    uniqueMixes:
+    - volume: 2500
+      temperature: 293.15
+      moles:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    type: GridAtmosphere
+  - type: GasTileOverlay
+  - type: RadiationGridResistance
+  - mobsToKill:
+    - invalid
+    - invalid
+    type: SalvageMobRestrictionsGrid
+- uid: 1
+  type: WallSolid
+  components:
+  - pos: -1.5,2.5
+    parent: 0
+    type: Transform
+- uid: 2
+  type: WallSolid
+  components:
+  - pos: -2.5,4.5
+    parent: 0
+    type: Transform
+- uid: 3
+  type: WallSolid
+  components:
+  - pos: -1.5,4.5
+    parent: 0
+    type: Transform
+- uid: 4
+  type: WallSolid
+  components:
+  - pos: 2.5,1.5
+    parent: 0
+    type: Transform
+- uid: 5
+  type: WallSolid
+  components:
+  - pos: 2.5,0.5
+    parent: 0
+    type: Transform
+- uid: 6
+  type: WallSolid
+  components:
+  - pos: 2.5,-1.5
+    parent: 0
+    type: Transform
+- uid: 7
+  type: WallSolid
+  components:
+  - pos: -0.5,-3.5
+    parent: 0
+    type: Transform
+- uid: 8
+  type: Window
+  components:
+  - pos: -0.5,1.5
+    parent: 0
+    type: Transform
+- uid: 9
+  type: Window
+  components:
+  - pos: -0.5,0.5
+    parent: 0
+    type: Transform
+- uid: 10
+  type: Window
+  components:
+  - pos: -0.5,-0.5
+    parent: 0
+    type: Transform
+- uid: 11
+  type: Grille
+  components:
+  - pos: -0.5,1.5
+    parent: 0
+    type: Transform
+- uid: 12
+  type: Grille
+  components:
+  - pos: -0.5,0.5
+    parent: 0
+    type: Transform
+- uid: 13
+  type: Grille
+  components:
+  - pos: -0.5,-0.5
+    parent: 0
+    type: Transform
+- uid: 14
+  type: WallSolid
+  components:
+  - pos: -0.5,2.5
+    parent: 0
+    type: Transform
+- uid: 15
+  type: Firelock
+  components:
+  - pos: 0.5,2.5
+    parent: 0
+    type: Transform
+- uid: 16
+  type: Firelock
+  components:
+  - pos: 1.5,2.5
+    parent: 0
+    type: Transform
+- uid: 17
+  type: WallSolid
+  components:
+  - pos: -0.5,-2.5
+    parent: 0
+    type: Transform
+- uid: 18
+  type: WallSolid
+  components:
+  - pos: 1.5,-4.5
+    parent: 0
+    type: Transform
+- uid: 19
+  type: SheetSteel1
+  components:
+  - pos: 0.61343384,-0.4759102
+    parent: 0
+    type: Transform
+- uid: 20
+  type: Girder
+  components:
+  - pos: 3.5,-2.5
+    parent: 0
+    type: Transform
+- uid: 21
+  type: Girder
+  components:
+  - pos: 2.5,-0.5
+    parent: 0
+    type: Transform
+- uid: 22
+  type: Girder
+  components:
+  - pos: 0.5,-4.5
+    parent: 0
+    type: Transform
+- uid: 23
+  type: Girder
+  components:
+  - pos: 1.5,5.5
+    parent: 0
+    type: Transform
+- uid: 24
+  type: Girder
+  components:
+  - pos: 5.5,1.5
+    parent: 0
+    type: Transform
+- uid: 25
+  type: SheetSteel1
+  components:
+  - pos: 2.0196838,-3.1634102
+    parent: 0
+    type: Transform
+- uid: 26
+  type: SheetSteel1
+  components:
+  - pos: 4.566559,-1.3196602
+    parent: 0
+    type: Transform
+- uid: 27
+  type: SheetSteel1
+  components:
+  - pos: 6.8336964,2.4021778
+    parent: 0
+    type: Transform
+- uid: 28
+  type: CrateGenericSteel
+  components:
+  - pos: 0.5,-3.5
+    parent: 0
+    type: Transform
+- uid: 29
+  type: PartRodMetal1
+  components:
+  - pos: 1.2399464,3.6521778
+    parent: 0
+    type: Transform
+- uid: 30
+  type: PartRodMetal1
+  components:
+  - pos: -2.637024,-0.4415722
+    parent: 0
+    type: Transform
+- uid: 31
+  type: PartRodMetal1
+  components:
+  - pos: 3.2772007,-1.5042553
+    parent: 0
+    type: Transform
+- uid: 32
+  type: PartRodMetal1
+  components:
+  - pos: 6.1522007,-2.6448803
+    parent: 0
+    type: Transform
+- uid: 33
+  type: CableApcExtension
+  components:
+  - pos: 1.5,0.5
+    parent: 0
+    type: Transform
+- uid: 34
+  type: CableApcExtension
+  components:
+  - pos: 1.5,-0.5
+    parent: 0
+    type: Transform
+- uid: 35
+  type: CableApcExtension
+  components:
+  - pos: 1.5,-1.5
+    parent: 0
+    type: Transform
+- uid: 36
+  type: CableApcExtension
+  components:
+  - pos: 1.5,-2.5
+    parent: 0
+    type: Transform
+- uid: 37
+  type: CableApcExtension
+  components:
+  - pos: 1.5,-3.5
+    parent: 0
+    type: Transform
+- uid: 38
+  type: CableApcExtension
+  components:
+  - pos: 0.5,-1.5
+    parent: 0
+    type: Transform
+- uid: 39
+  type: CableApcExtension
+  components:
+  - pos: 3.5,2.5
+    parent: 0
+    type: Transform
+- uid: 40
+  type: CableApcExtension
+  components:
+  - pos: 4.5,2.5
+    parent: 0
+    type: Transform
+- uid: 41
+  type: CableApcExtension
+  components:
+  - pos: 4.5,1.5
+    parent: 0
+    type: Transform
+- uid: 42
+  type: PosterLegit12Gauge
+  components:
+  - rot: 3.141592653589793 rad
+    pos: 2.5,1.5
+    parent: 0
+    type: Transform
+- uid: 43
+  type: WeaponShotgunKammerer
+  components:
+  - pos: 0.37373924,0.53731155
+    parent: 0
+    type: Transform
+- uid: 44
+  type: ClothingHeadHelmetEVA
+  components:
+  - pos: 1.2231598,1.5725384
+    parent: 0
+    type: Transform
+- uid: 45
+  type: CableApcStack1
+  components:
+  - pos: 3.678484,1.6935616
+    parent: 0
+    type: Transform
+- uid: 46
+  type: CableApcStack1
+  components:
+  - pos: 1.412859,-3.5720634
+    parent: 0
+    type: Transform
+- uid: 47
+  type: CableApcStack1
+  components:
+  - pos: -0.54026604,-1.4783134
+    parent: 0
+    type: Transform
+- uid: 48
+  type: RandomFoodSingle
+  components:
+  - pos: 1.5,-1.5
+    parent: 0
+    type: Transform
+...

@@ -132,6 +132,9 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     private void OnView(EntityUid entity, ShipEventFactionViewComponent component, ToggleActionEvent args)
     {
+        if (!RuleSelected)
+            return;
+        
         var result = $"\n{Loc.GetString("shipevent-teamview-heading")}";
         result += $"\n{Loc.GetString("shipevent-teamview-heading2")}";
         foreach (var team in Teams)
@@ -166,6 +169,9 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     private void OnTeamCreationRequest(EntityUid entity, ShipEventFactionMarkerComponent component,
         TeamCreationRequest args)
     {
+        if (!RuleSelected)
+            return;
+        
         List<string> _blacklist = new();
 
         if (!IsValidName(args.Name))
