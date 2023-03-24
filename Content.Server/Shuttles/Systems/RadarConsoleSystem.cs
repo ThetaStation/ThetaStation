@@ -1,10 +1,16 @@
+using System.Linq;
+using Content.Server.MachineLinking.Components;
+using Content.Server.Mind.Components;
+using Content.Server.Theta.ShipEvent.Console;
 using Content.Server.UserInterface;
-using Content.Shared.Humanoid;
+using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Projectiles;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
 using Content.Shared.Theta.ShipEvent;
+using Content.Shared.Weapons.Ranged.Events;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
 
@@ -13,6 +19,8 @@ namespace Content.Server.Shuttles.Systems;
 public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 {
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
+    [Dependency] private readonly TransformSystem _transformSystem = default!;
+    [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
 
     public override void Initialize()
     {
@@ -31,6 +39,8 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 
         foreach (var radar in EntityManager.EntityQuery<RadarConsoleComponent>())
         {
+            if (!_uiSystem.IsUiOpen(radar.Owner, RadarConsoleUiKey.Key))
+                continue;
             UpdateState(radar);
         }
     }
@@ -42,16 +52,17 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
         if (!TryComp<TransformComponent>(component.Owner, out var xform))
             return list;
 
-        // TODO: replace HumanoidAppearanceComponent on the component denoting the player any species
-        foreach (var (_, transform) in EntityManager.EntityQuery<HumanoidAppearanceComponent, TransformComponent>())
+        foreach (var (_, mobState, transform) in EntityManager
+                     .EntityQuery<MindComponent, MobStateComponent, TransformComponent>())
         {
+            if (_mobStateSystem.IsIncapacitated(mobState.Owner, mobState))
+                continue;
             if (!xform.MapPosition.InRange(transform.MapPosition, component.MaxRange))
                 continue;
 
-            list.Add(new MobInterfaceState()
+            list.Add(new MobInterfaceState
             {
                 Coordinates = transform.Coordinates,
-                Entity = transform.Owner
             });
         }
 
@@ -73,32 +84,67 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
             list.Add(new ProjectilesInterfaceState()
             {
                 Coordinates = transform.Coordinates,
-                Angle = transform.WorldRotation,
-                Entity = transform.Owner
+                Angle = _transformSystem.GetWorldRotation(xform),
             });
         }
 
         return list;
     }
 
-    public List<CannonInterfaceState> GetCannonsOnGrid(RadarConsoleComponent component)
+    public List<CannonInformationInterfaceState> GetCannonInfosByMyGrid(RadarConsoleComponent component)
     {
-        var list = new List<CannonInterfaceState>();
+        var list = new List<CannonInformationInterfaceState>();
+
         var myGrid = Transform(component.Owner).GridUid;
-        foreach (var cannon in EntityQuery<CannonComponent>())
+        var isCannonConsole = HasComp<CannonConsoleComponent>(component.Owner);
+
+        var controlledCannons = GetControlledCannons(component.Owner);
+
+        foreach (var (cannon, transform) in EntityQuery<CannonComponent, TransformComponent>())
         {
-            var transform = Transform(cannon.Owner);
-            if(transform.GridUid != myGrid)
+            if (transform.GridUid != myGrid)
                 continue;
-            list.Add(new CannonInterfaceState
+
+            var controlled = false;
+            if (controlledCannons != null)
             {
+                controlled = controlledCannons.Contains(cannon.Owner);
+            }
+
+            var color = controlled ? Color.Lime : (isCannonConsole ? Color.LightGreen : Color.YellowGreen);
+
+            var ammoCountEv = new GetAmmoCountEvent();
+            RaiseLocalEvent(cannon.Owner, ref ammoCountEv);
+
+            list.Add(new CannonInformationInterfaceState
+            {
+                Uid = cannon.Owner,
                 Coordinates = transform.Coordinates,
-                Entity = cannon.Owner,
-                Angle = transform.WorldRotation
+                Color = color,
+                Angle = _transformSystem.GetWorldRotation(transform),
+                IsControlling = controlled,
+                Ammo = ammoCountEv.Count,
+                Capacity = ammoCountEv.Capacity,
             });
         }
 
         return list;
+    }
+
+    private List<EntityUid>? GetControlledCannons(EntityUid uid)
+    {
+        List<EntityUid>? controlledCannons = null;
+        var hasSignalTransmitter = TryComp<SignalTransmitterComponent>(uid, out var signalTransmitter);
+        if (!hasSignalTransmitter || signalTransmitter == null)
+            return controlledCannons;
+
+        controlledCannons = new List<EntityUid>();
+        foreach (var (_, cannons) in signalTransmitter.Outputs)
+        {
+            controlledCannons.AddRange(cannons.Select(i => i.Uid));
+        }
+
+        return controlledCannons;
     }
 
     protected override void UpdateState(RadarConsoleComponent component)
@@ -113,6 +159,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
             angle = Angle.Zero;
             onGrid = xform.ParentUid == xform.GridUid;
         }
+
         EntityCoordinates? coordinates = onGrid ? xform.Coordinates : null;
 
         // Use ourself I guess.
@@ -131,7 +178,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 
         var mobs = GetMobsAround(component);
         var projectiles = GetProjectilesAround(component);
-        var cannons = GetCannonsOnGrid(component);
+        var cannons = GetCannonInfosByMyGrid(component);
 
         var radarState = new RadarConsoleBoundInterfaceState(
             component.MaxRange,
@@ -141,9 +188,8 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
             mobs,
             projectiles,
             cannons
-            );
+        );
 
         _uiSystem.TrySetUiState(component.Owner, RadarConsoleUiKey.Key, radarState);
     }
-
 }

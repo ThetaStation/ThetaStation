@@ -9,5 +9,5 @@ namespace Content.Shared.Weapons.Ranged.Components;
 public sealed class ContainerAmmoProviderComponent : AmmoProviderComponent
 {
     [DataField("container", required: true)]
-    public string Container = default!;
+    public string Container = "storagebase";
 }

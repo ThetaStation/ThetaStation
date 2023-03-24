@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Client.Computer;
 using Content.Client.UserInterface.Controls;
 using Content.Shared.Shuttles.BUIStates;
@@ -106,8 +107,10 @@ public sealed partial class ShuttleConsoleWindow : FancyWindow,
 
     public void UpdateState(ShuttleConsoleBoundInterfaceState scc)
     {
-        UpdateDocks(scc.Docks);
-        UpdateFTL(scc.Destinations, scc.FTLState, scc.FTLTime);
+        if(scc.Docks.DistinctBy(i => i.Coordinates.EntityId).Count() != _docks.Count)
+            UpdateDocks(scc.Docks);
+        if(scc.Destinations. Count != _destinations.Count)
+            UpdateFTL(scc.Destinations, scc.FTLState, scc.FTLTime);
         RadarScreen.UpdateState(scc);
         MaxRadarRange.Text = $"{scc.MaxRange:0}";
         UpdateNameInputPlaceholder();

@@ -1,12 +1,6 @@
-﻿using System.Linq;
-using Content.Server.MachineLinking.Components;
-using Content.Server.MachineLinking.Events;
-using Content.Server.MachineLinking.System;
-using Content.Server.Shuttles.Systems;
-using Content.Shared.MachineLinking.Events;
+﻿using Content.Server.Shuttles.Systems;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
-using Content.Shared.Theta.ShipEvent;
 using Content.Shared.Theta.ShipEvent.Console;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
@@ -17,7 +11,6 @@ public sealed class CannonConsoleSystem : EntitySystem
 {
     [Dependency] private readonly RadarConsoleSystem _radarConsoleSystem = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
-    [Dependency] private readonly SignalLinkerSystem _signalSystem = default!;
 
     public override void Update(float frameTime)
     {
@@ -25,22 +18,10 @@ public sealed class CannonConsoleSystem : EntitySystem
 
         foreach (var (cannon, radar) in EntityManager.EntityQuery<CannonConsoleComponent, RadarConsoleComponent>())
         {
+            if (!_uiSystem.IsUiOpen(cannon.Owner, CannonConsoleUiKey.Key))
+                continue;
             UpdateState(cannon, radar);
         }
-    }
-
-    public List<EntityUid> GetLinkedCannons(EntityUid console)
-    {
-        List<EntityUid> cannons = new();
-        if(!TryComp<SignalTransmitterComponent>(console, out var signalTransmitter))
-            return cannons;
-
-        foreach (var (_, list) in signalTransmitter.Outputs)
-        {
-            cannons.AddRange(list.Select(i => i.Uid));
-        }
-
-        return cannons;
     }
 
     private void UpdateState(CannonConsoleComponent cannonConsole, RadarConsoleComponent radarConsole)
@@ -51,8 +32,7 @@ public sealed class CannonConsoleSystem : EntitySystem
 
         var mobs = _radarConsoleSystem.GetMobsAround(radarConsole);
         var projectiles = _radarConsoleSystem.GetProjectilesAround(radarConsole);
-        var cannonsOnGrid = _radarConsoleSystem.GetCannonsOnGrid(radarConsole);
-        var controlledCannons = GetLinkedCannons(cannonConsole.Owner);
+        var cannonsInformation = _radarConsoleSystem.GetCannonInfosByMyGrid(radarConsole);
 
         var radarState = new CannonConsoleBoundInterfaceState(
             radarConsole.MaxRange,
@@ -61,8 +41,7 @@ public sealed class CannonConsoleSystem : EntitySystem
             new List<DockingInterfaceState>(),
             mobs,
             projectiles,
-            cannonsOnGrid,
-             controlledCannons
+            cannonsInformation
         );
 
         _uiSystem.TrySetUiState(cannonConsole.Owner, CannonConsoleUiKey.Key, radarState);

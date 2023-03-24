@@ -339,18 +339,18 @@ public sealed class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         docks ??= GetAllDocks();
         List<MobInterfaceState> mobs;
         List<ProjectilesInterfaceState> projectiles;
-        List<CannonInterfaceState> cannons;
+        List<CannonInformationInterfaceState> cannons;
         if (radar != null)
         {
             mobs = _radarConsoleSystem.GetMobsAround(radar);
             projectiles = _radarConsoleSystem.GetProjectilesAround(radar);
-            cannons = _radarConsoleSystem.GetCannonsOnGrid(radar);
+            cannons = _radarConsoleSystem.GetCannonInfosByMyGrid(radar);
         }
         else
         {
             mobs = new List<MobInterfaceState>();
             projectiles = new List<ProjectilesInterfaceState>();
-            cannons = new List<CannonInterfaceState>();
+            cannons = new List<CannonInformationInterfaceState>();
         }
 
         _ui.GetUiOrNull(consoleUid, ShuttleConsoleUiKey.Key)
@@ -393,6 +393,8 @@ public sealed class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         var shuttleComponent = EntityQueryEnumerator<ShuttleConsoleComponent>();
         while (shuttleComponent.MoveNext(out var uid, out var _))
         {
+            if(!_ui.IsUiOpen(uid, ShuttleConsoleUiKey.Key))
+                continue;
             UpdateState(uid);
         }
     }
