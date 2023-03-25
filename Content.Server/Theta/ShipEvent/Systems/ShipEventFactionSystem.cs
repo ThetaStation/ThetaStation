@@ -38,6 +38,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _protMan = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSys = default!;
+    [Dependency] private readonly IPlayerManager _playerMan = default!;
 
     private readonly Dictionary<EntityUid, string> _shipNames = new();
     private readonly Dictionary<string, int> _projectileDamage = new(); //cached damage for projectile prototypes
@@ -116,7 +117,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                 ("name", team.Name),
                 ("color", team.Color),
                 ("shipname", _shipNames[team.Ship]),
-                ("capname", GetName(team.Captain))
+                ("capname", team.Captain)
             ));
             args.AddLine(Loc.GetString("shipevent-roundend-teamstats",
                 ("points", team.Points),
@@ -212,7 +213,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             _blacklist.Select(ckey => ckey.Trim());
         }
 
-        if (_blacklist.Contains(args.Session.Name))
+        if (_blacklist.Contains(args.Session.ConnectedClient.UserName))
         {
             if (_uiSys.TryGetUi(entity, args.UiKey, out var bui))
             {
@@ -230,7 +231,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         var spawners = GetShipComponents<GhostRoleMobSpawnerComponent>(newShip);
         if (!spawners.Any()) return;
 
-        var team = CreateTeam(newShip, (EntityUid) args.Session.AttachedEntity, args.Name, _color, _blacklist);
+        var team = CreateTeam(newShip, args.Session.ConnectedClient.UserName, args.Name, _color, _blacklist);
         SetMarkers(newShip, team);
 
         _entMan.DeleteEntity((EntityUid) args.Session.AttachedEntity);
@@ -254,7 +255,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
             if (team.Blacklist != null)
             {
-                if (team.Blacklist.Contains(session.Name))
+                if (team.Blacklist.Contains(session.ConnectedClient.UserName))
                 {
                     _chatSys.SendSimpleMessage(Loc.GetString("shipevent-blacklist"), session);
                     _entMan.DeleteEntity(entity);
@@ -317,7 +318,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         }
     }
 
-    public ShipEventFaction CreateTeam(EntityUid shipEntity, EntityUid captain, string name = "", string color = "",
+    public ShipEventFaction CreateTeam(EntityUid shipEntity, string captain, string name = "", string color = "",
         List<string>? blacklist = null, bool silent = false)
     {
         var shipName = GetName(shipEntity);
@@ -533,6 +534,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                 RespawnTeam(
                     team,
                     Loc.GetString("shipevent-respawn-dead"));
+                team.TimeSinceRemoval = 0;
                 break;
             }
 
@@ -541,6 +543,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                 RespawnTeam(
                     team,
                     Loc.GetString("shipevent-respawn-tech"));
+                team.TimeSinceRemoval = 0;
                 break;
             }
 
@@ -558,15 +561,24 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                     _shipNames[team.Ship] = shipName;
                 }
             }
-
-            if (!IsActive(team.Captain))
+            
+            if (!_playerMan.TryGetSessionByUsername(team.Captain, out _))
             {
                 if (team.Members.Any())
                 {
-                    var newCap = team.GetMemberEntity(_random.Pick(team.Members));
+                    string newCap = "";
+                    for(int c = 0; c < 100; c++)
+                    {
+                        var newCapRole = _random.Pick(team.Members);
+                        if (newCapRole.Mind.Session != null)
+                        {
+                            newCap = newCapRole.Mind.Session.ConnectedClient.UserName;
+                            break;
+                        }
+                    }
                     TeamMessage(team,
-                        Loc.GetString("shipevent-team-captainchange", ("oldcap", GetName(team.Captain)),
-                            ("newcap", GetName(newCap))), color: Color.FromHex(team.Color));
+                        Loc.GetString("shipevent-team-captainchange", ("oldcap", team.Captain),
+                            ("newcap", newCap)), color: Color.FromHex(team.Color));
                     team.Captain = newCap;
                 }
             }
