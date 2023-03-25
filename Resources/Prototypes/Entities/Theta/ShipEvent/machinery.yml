@@ -83,7 +83,7 @@
     name: Ship Team
     description: Уничтожь своих врагов!
     rules: You are an antagonist, scavenge, attack, and grow your hoard!
-    availableTakeovers: 5
+    infiniteTakeovers: true
     deleteOnSpawn: false
   - type: Physics
     bodyType: Static

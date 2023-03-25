@@ -15,6 +15,9 @@ namespace Content.Server.Ghost.Roles.Components
     public sealed class GhostRoleMobSpawnerComponent : GhostRoleComponent
     {
         [Dependency] private readonly IEntityManager _entMan = default!;
+        
+        [ViewVariables(VVAccess.ReadWrite)] [DataField("infiniteTakeovers")]
+        private bool _infiniteTakeovers = true;
 
         [ViewVariables(VVAccess.ReadWrite)] [DataField("deleteOnSpawn")]
         private bool _deleteOnSpawn = true;
@@ -32,6 +35,12 @@ namespace Content.Server.Ghost.Roles.Components
 
         public override bool Take(IPlayerSession session)
         {
+            if (_infiniteTakeovers)
+            {
+                Spawn(session);
+                return true;
+            }
+            
             if (Taken)
             {
                 if (_currentTakeovers < _availableTakeovers)
@@ -39,7 +48,22 @@ namespace Content.Server.Ghost.Roles.Components
                 else
                     return false;
             }
+            
+            Spawn(session);
 
+            if (!(++_currentTakeovers < _availableTakeovers))
+            {
+                Taken = true;
+
+                if (_deleteOnSpawn)
+                    _entMan.QueueDeleteEntity(Owner);
+            }
+
+            return true;
+        }
+
+        private void Spawn(IPlayerSession session)
+        {
             if (string.IsNullOrEmpty(Prototype))
                 throw new NullReferenceException("Prototype string cannot be null or empty!");
 
@@ -57,16 +81,6 @@ namespace Content.Server.Ghost.Roles.Components
 
             var spawnedEvent = new GhostRoleSpawnerUsedEvent(Owner, mob);
             _entMan.EventBus.RaiseLocalEvent(mob, spawnedEvent, false);
-
-            if (++_currentTakeovers < _availableTakeovers)
-                return true;
-
-            Taken = true;
-
-            if (_deleteOnSpawn)
-                _entMan.QueueDeleteEntity(Owner);
-
-            return true;
         }
 
         public void SetCurrentTakeovers(int takeovers) { _currentTakeovers = takeovers; }
