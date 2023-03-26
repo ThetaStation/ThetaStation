@@ -17,7 +17,7 @@ namespace Content.Server.Ghost.Roles.Components
         [Dependency] private readonly IEntityManager _entMan = default!;
         
         [ViewVariables(VVAccess.ReadWrite)] [DataField("infiniteTakeovers")]
-        private bool _infiniteTakeovers = true;
+        private bool _infiniteTakeovers = false;
 
         [ViewVariables(VVAccess.ReadWrite)] [DataField("deleteOnSpawn")]
         private bool _deleteOnSpawn = true;
