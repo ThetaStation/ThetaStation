@@ -1,6 +1,5 @@
 using System.Linq;
 using Content.Client.Theta.ShipEvent;
-using Content.Shared.Coordinates;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using JetBrains.Annotations;
@@ -527,39 +526,23 @@ public sealed class RadarControl : Control
     private void DrawVelocityArrow(DrawingHandleScreen handle, Vector2 gridVelocity)
     {
         const float arrowSize = 3f;
-        const float offset = 10f;
-        const float maxSpeed = 15f;
-        const float correctionalCoeff = 0.01f; //really, this is just a magic number for gradient. maybe there is a way to avoid using it, but I suck at math, so enjoy
 
         var (x, y) = (gridVelocity.X, gridVelocity.Y);
         if (x == 0f && y == 0f)
             return;
 
         var angle = Angle.FromWorldVec(gridVelocity);
-
-        var gradientLevel = Math.Clamp(gridVelocity.Length / maxSpeed, 0, 1);
-        var color = new Color(
-            255 * (1 - gradientLevel) * correctionalCoeff, 
-            255 * gradientLevel * correctionalCoeff, 
-            0);
-
         var verts = new[]
         {
-            new Vector2(-arrowSize / 2, arrowSize / 4),
-            new Vector2(0, -arrowSize / 2 - arrowSize / 4),
-            new Vector2(arrowSize / 2, arrowSize / 4),
-            new Vector2(arrowSize / 4, arrowSize / 4),
-            new Vector2(arrowSize / 4, arrowSize),
-            new Vector2(-arrowSize / 4, arrowSize),
-            new Vector2(-arrowSize / 4, arrowSize / 4),
-            new Vector2(-arrowSize / 2, arrowSize / 4)
+            gridVelocity + angle.RotateVec(new Vector2(-arrowSize / 2, arrowSize / 4)),
+            gridVelocity + angle.RotateVec(new Vector2(0, -arrowSize / 2 - arrowSize / 4)),
+            gridVelocity + angle.RotateVec(new Vector2(arrowSize / 2, arrowSize / 4)),
+            gridVelocity + angle.RotateVec(new Vector2(arrowSize / 4, arrowSize / 4)),
+            gridVelocity + angle.RotateVec(new Vector2(arrowSize / 4, arrowSize)),
+            gridVelocity + angle.RotateVec(new Vector2(-arrowSize / 4, arrowSize)),
+            gridVelocity + angle.RotateVec(new Vector2(-arrowSize / 4, arrowSize / 4)),
+            gridVelocity + angle.RotateVec(new Vector2(-arrowSize / 2, arrowSize / 4)),
         };
-        
-        for (var i = 0; i < verts.Length; i++)
-        {
-            verts[i] = angle.RotateVec(verts[i]) + gridVelocity.Normalized * offset;
-        }
-        
         for (var i = 0; i < verts.Length; i++)
         {
             var vert = verts[i];
@@ -567,7 +550,7 @@ public sealed class RadarControl : Control
             verts[i] = ScalePosition(vert);
         }
 
-        handle.DrawPrimitives(DrawPrimitiveTopology.LineStrip, verts, color);
+        handle.DrawPrimitives(DrawPrimitiveTopology.LineStrip, verts, Color.White);
     }
 
     // transform components on the client should be enough to get the angle
