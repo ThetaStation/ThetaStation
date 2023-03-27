@@ -194,7 +194,7 @@ public sealed class RadarControl : Control
 
     private void StartFiring(GUIBoundKeyEventArgs args)
     {
-        if(args.Function != EngineKeyFunctions.Use)
+        if (args.Function != EngineKeyFunctions.Use)
             return;
 
         if (_controlledCannons.Count == 0)
@@ -203,7 +203,7 @@ public sealed class RadarControl : Control
         var coordinates = RotateCannons(args.RelativePosition);
 
         var player = _player.LocalPlayer?.ControlledEntity;
-        if(player == null)
+        if (player == null)
             return;
 
         var ev = new StartCannonFiringEvent(coordinates, player.Value);
@@ -217,7 +217,7 @@ public sealed class RadarControl : Control
 
     private void StopFiring(GUIBoundKeyEventArgs args)
     {
-        if(args.Function != EngineKeyFunctions.Use)
+        if (args.Function != EngineKeyFunctions.Use)
             return;
 
         if (_controlledCannons.Count == 0)
@@ -235,13 +235,14 @@ public sealed class RadarControl : Control
         var offsetMatrix = GetOffsetMatrix();
         var relativePositionToCoordinates = RelativePositionToCoordinates(mouseRelativePosition, offsetMatrix);
         var player = _player.LocalPlayer?.ControlledEntity;
-        if(player == null)
+        if (player == null)
             return relativePositionToCoordinates;
         foreach (var entityUid in _controlledCannons)
         {
             var ev = new RotateCannonEvent(relativePositionToCoordinates, player.Value);
             _entManager.EventBus.RaiseLocalEvent(entityUid, ref ev);
         }
+
         return relativePositionToCoordinates;
     }
 
@@ -562,6 +563,16 @@ public sealed class RadarControl : Control
             var position = cannon.Coordinates.ToMapPos(_entManager);
             var angle = cannon.Angle;
             var color = cannon.Color;
+
+            var hsvColor = Color.ToHsv(color);
+
+            const float additionalDegreeCoeff = 20f / 360f;
+
+            // X is hue
+            var hueOffset = hsvColor.X - (hsvColor.X * cannon.Ammo / cannon.Capacity);
+            hsvColor.X = Math.Max(hsvColor.X-hueOffset+additionalDegreeCoeff, additionalDegreeCoeff);
+
+            color = Color.FromHsv(hsvColor);
 
             var verts = new[]
             {
