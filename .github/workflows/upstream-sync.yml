@@ -77,7 +77,7 @@ jobs:
         uses: repo-sync/pull-request@v2
         if: steps.main.outputs.abort == 0
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GH_PAT }}
           source_branch: ${{ env.UPDATE_BRANCH }}
           destination_branch: ${{ steps.main.outputs.current_branch }}
           pr_title: "Pull SS14 RU upstream to Theta"
