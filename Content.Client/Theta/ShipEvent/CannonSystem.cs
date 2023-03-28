@@ -45,6 +45,13 @@ public sealed class CannonSystem : SharedCannonSystem
         }
     }
 
+    protected override void OnAnchorChanged(EntityUid uid, CannonComponent component, ref AnchorStateChangedEvent args)
+    {
+        base.OnAnchorChanged(uid, component, ref args);
+        if (!args.Anchored)
+            _firingCannons.Remove(uid);
+    }
+
     private void RotateCannons(EntityUid uid, CannonComponent component, ref RotateCannonEvent args)
     {
         _toUpdateRotation[uid] = args.Coordinates;
@@ -90,13 +97,7 @@ public sealed class CannonSystem : SharedCannonSystem
     {
         foreach (var (uid, (pilot, vector2)) in _firingCannons)
         {
-            var gun = GetCannonGun(uid);
-            if (gun == null)
-            {
-                _firingCannons.Remove(uid);
-                return;
-            }
-            if (!_gunSystem.CanShoot(gun))
+            if (!CanFire(uid))
                 return;
 
             RaisePredictiveEvent(new RequestCannonShootEvent
@@ -106,6 +107,23 @@ public sealed class CannonSystem : SharedCannonSystem
                 Pilot = pilot
             });
         }
+    }
+
+    private bool CanFire(EntityUid cannonUid)
+    {
+        var gun = GetCannonGun(cannonUid);
+        if (gun == null)
+        {
+            _firingCannons.Remove(cannonUid);
+            return false;
+        }
+
+        if (!_gunSystem.CanShoot(gun))
+        {
+            return false;
+        }
+
+        return true;
     }
 }
 
