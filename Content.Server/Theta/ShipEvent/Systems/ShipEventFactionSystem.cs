@@ -8,11 +8,13 @@ using Content.Server.IdentityManagement;
 using Content.Server.Mind.Components;
 using Content.Server.Roles;
 using Content.Server.Shuttles.Components;
+using Content.Server.Shuttles.Systems;
 using Content.Server.Theta.MobHUD;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Shared.Actions;
 using Content.Shared.GameTicking;
 using Content.Shared.Projectiles;
+using Content.Shared.Shuttles.Components;
 using Content.Shared.Theta.MobHUD;
 using Content.Shared.Theta.ShipEvent;
 using Content.Shared.Theta.ShipEvent.UI;
@@ -38,6 +40,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _protMan = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSys = default!;
+    [Dependency] private readonly ShuttleSystem _shuttleSystem = default!;
 
     private readonly Dictionary<EntityUid, string> _shipNames = new();
     private readonly Dictionary<string, int> _projectileDamage = new(); //cached damage for projectile prototypes
@@ -46,13 +49,13 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     public float TeamCheckInterval; //in seconds
     public float RespawnDelay; //in seconds
-    
+
     public int MaxSpawnOffset; //both for ships & obstacles
     public int CollisionCheckRange;
-    
+
     public int BonusInterval; //in seconds
     public int PointsPerInterval; //points for surviving longer than BonusInterval without respawn
-    
+
     public float PointsPerHitMultiplier;
     public int PointsPerAssist;
     public int PointsPerKill;
@@ -134,7 +137,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     {
         if (!RuleSelected)
             return;
-        
+
         var result = $"\n{Loc.GetString("shipevent-teamview-heading")}";
         result += $"\n{Loc.GetString("shipevent-teamview-heading2")}";
         foreach (var team in Teams)
@@ -171,7 +174,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     {
         if (!RuleSelected)
             return;
-        
+
         List<string> _blacklist = new();
 
         if (!IsValidName(args.Name))
@@ -523,7 +526,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             }
         }
     }
-    
+
     private void CheckTeams(float deltaTime)
     {
         foreach (var team in Teams)
@@ -598,7 +601,10 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         List<EntityUid> spawnedObstacles = new();
         for (int i = 0; i < amount; i++)
         {
-            spawnedObstacles.Add(RandomPosSpawn(_random.Pick(ObstacleTypes)));
+            var obstacleUid = RandomPosSpawn(_random.Pick(ObstacleTypes));
+            _shuttleSystem.AddIFFFlag(obstacleUid, IFFFlags.HideLabel);
+            _shuttleSystem.SetIFFColor(obstacleUid, Color.Gold);
+            spawnedObstacles.Add(obstacleUid);
         }
 
         return spawnedObstacles;
