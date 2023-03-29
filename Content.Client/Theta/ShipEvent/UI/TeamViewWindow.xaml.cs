@@ -21,7 +21,6 @@ public sealed partial class TeamViewWindow : DefaultWindow
 
     public void UpdateText(TeamViewBoundUserInterfaceState state)
     {
-        // TODO затестить эту поеботу хуй
         GridContent.RemoveAllChildren();
         AddHeaders();
 
