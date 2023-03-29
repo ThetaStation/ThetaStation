@@ -138,28 +138,30 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         if (!RuleSelected)
             return;
 
-        var result = $"\n{Loc.GetString("shipevent-teamview-heading")}";
-        result += $"\n{Loc.GetString("shipevent-teamview-heading2")}";
+        var session = GetSession(entity);
+        if (session == null)
+            return;
+
+        List<TeamState> teamsInfo = new();
         foreach (var team in Teams)
         {
-            if (team.ShouldRespawn)
-                result += $"\n'[color={team.Color}]{team.Name}[/color]' - N/A - N/A - {team.Points}";
-            else
-                result +=
-                    $"\n'[color={team.Color}]{team.Name}[/color]' - '{_shipNames[team.Ship]}' - {team.GetLivingMembersMinds().Count} - {team.Points}";
+            teamsInfo.Add(new TeamState
+            {
+                Name = team.Name,
+                Color = team.Color,
+                ShipName = team.ShouldRespawn ? null : _shipNames[team.Ship],
+                AliveCrewCount = team.ShouldRespawn ? null : team.GetLivingMembersMinds().Count.ToString(),
+                Points = team.Points,
+            });
         }
 
         Enum uiKey = TeamViewUiKey.Key;
-        var session = GetSession(entity);
-        if (session == null) return;
-
-        if (!_uiSys.IsUiOpen(entity, uiKey))
+        if (_uiSys.IsUiOpen(entity, uiKey))
+            return;
+        if (_uiSys.TryGetUi(entity, uiKey, out var bui))
         {
-            if (_uiSys.TryGetUi(entity, uiKey, out var bui))
-            {
-                _uiSys.OpenUi(bui, session);
-                _uiSys.SetUiState(bui, new TeamViewBoundUserInterfaceState(result));
-            }
+            _uiSys.OpenUi(bui, session);
+            _uiSys.SetUiState(bui, new TeamViewBoundUserInterfaceState(teamsInfo));
         }
     }
 
@@ -227,11 +229,13 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             return;
         }
 
-        if (args.Session.AttachedEntity == null) return;
+        if (args.Session.AttachedEntity == null)
+            return;
 
         var newShip = RandomPosSpawn(_random.Pick(ShipTypes));
         var spawners = GetShipComponents<GhostRoleMobSpawnerComponent>(newShip);
-        if (!spawners.Any()) return;
+        if (!spawners.Any())
+            return;
 
         var team = CreateTeam(newShip, (EntityUid) args.Session.AttachedEntity, args.Name, _color, _blacklist);
         SetMarkers(newShip, team);
@@ -275,13 +279,14 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         {
             var hudProt = _protMan.Index<MobHUDPrototype>(HUDPrototypeId);
             hudProt.Color = team.Color;
-            _hudSys.SetActiveHUDs(hud, new List<MobHUDPrototype> {hudProt});
+            _hudSys.SetActiveHUDs(hud, new List<MobHUDPrototype> { hudProt });
         }
     }
 
     private void OnCollision(EntityUid entity, ShipEventFactionMarkerComponent component, ref StartCollideEvent args)
     {
-        if (component.Team == null) return;
+        if (component.Team == null)
+            return;
 
         if (_entMan.TryGetComponent(entity, out ProjectileComponent? projComp))
         {
@@ -592,7 +597,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             }
 
             team.TimeSinceRemoval += deltaTime;
-            if (!team.ShouldRespawn) team.BonusIntervalTimer += deltaTime;
+            if (!team.ShouldRespawn)
+                team.BonusIntervalTimer += deltaTime;
         }
     }
 
