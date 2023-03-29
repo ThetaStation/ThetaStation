@@ -569,8 +569,8 @@ public sealed class RadarControl : Control
             const float additionalDegreeCoeff = 20f / 360f;
 
             // X is hue
-            var hueOffset = hsvColor.X - (hsvColor.X * cannon.Ammo / cannon.Capacity);
-            hsvColor.X = Math.Max(hsvColor.X-hueOffset+additionalDegreeCoeff, additionalDegreeCoeff);
+            var hueOffset = hsvColor.X * cannon.Ammo / cannon.Capacity;
+            hsvColor.X = Math.Max(hueOffset + additionalDegreeCoeff, additionalDegreeCoeff);
 
             color = Color.FromHsv(hsvColor);
 
