@@ -17,7 +17,7 @@ public sealed class ShipEventFaction : PlayerFaction
     public int Assists;
     public List<string>? Blacklist; //blacklist for ckeys
     public float BonusIntervalTimer; //used to add bonus points for surviving long enough
-    public EntityUid Captain;
+    public string Captain; //ckey
 
     public string Color; //for recolouring HUDs, specify in hex
 
@@ -27,9 +27,9 @@ public sealed class ShipEventFaction : PlayerFaction
     public int Respawns;
     public EntityUid Ship;
     public bool ShouldRespawn; //whether this team is currently waiting for respawn
-    public float TimeSinceRemoval; //time since last removal (respawn)
+    public float TimeSinceRemoval; //time since last removal
 
-    public ShipEventFaction(string name, string iconPath, string color, EntityUid ship, EntityUid captain,
+    public ShipEventFaction(string name, string iconPath, string color, EntityUid ship, string captain,
         int points = 0,
         List<string>? blacklist = null) : base(name, iconPath)
     {
@@ -161,10 +161,8 @@ public sealed partial class ShipEventFactionSystem
 
     public string GenerateTeamColor()
     {
-        var failsafe = 0;
-        while (failsafe < 100)
+        for(int c = 0; c < 100; c++)
         {
-            failsafe++;
             var newColor = new Color(_random.NextFloat(0, 1), _random.NextFloat(0, 1), _random.NextFloat(0, 1));
             if (IsValidColor(newColor)) 
                 return newColor.ToHex();
@@ -208,33 +206,16 @@ public sealed partial class ShipEventFactionSystem
         return Math.Sqrt(delta);
     }
 
-    public bool IsActive(EntityUid entity)
-    {
-        if (_entMan.TryGetComponent<MindComponent>(entity, out var mindComp))
-        {
-            if (mindComp.HasMind)
-            {
-                if (!mindComp.Mind!.CharacterDeadPhysically && mindComp.Mind.Session != null)
-                    return true;
-            }
-        }
-
-        return false;
-    }
-    
     public EntityUid RandomPosSpawn(string mapPath)
     {
-        var failsafe = 0;
         Vector2i mapPos = Vector2i.Zero;
-        while (failsafe < 100)
+        for(int c = 0; c < 100; c++)
         {
             mapPos = (Vector2i) _random.NextVector2(MaxSpawnOffset);
             if (!_mapMan.FindGridsIntersecting(TargetMap, new Box2(mapPos - CollisionCheckRange, mapPos + CollisionCheckRange)).Any())
             {
                 break;
             }
-
-            failsafe++;
         }
 
         var loadOptions = new MapLoadOptions
