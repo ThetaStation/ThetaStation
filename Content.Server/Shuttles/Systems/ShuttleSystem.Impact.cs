@@ -61,6 +61,8 @@ public sealed partial class ShuttleSystem
         _audio.Play(_shuttleImpactSound, Filter.Pvs(coordinates, rangeMultiplier: 4f, entityMan: EntityManager), coordinates, true, audioParams);
         
         var kineticEnergy = ourBody.Mass * Math.Pow(jungleDiff, 2) / 2;
-        _expSys.QueueExplosion(coordinates.ToMap(EntityManager), ExplosionSystem.DefaultExplosionPrototypeId, (float)(kineticEnergy*IntensityMultiplier), 5f, 50f);
+		var mapCoords = coordinates.ToMap(EntityManager)
+		var intensity = (float)(kineticEnergy*IntensityMultiplier)
+        _expSys.QueueExplosion(mapCoords, ExplosionSystem.DefaultExplosionPrototypeId, intensity , 5f, 50f);
     }
 }
