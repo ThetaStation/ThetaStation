@@ -17,7 +17,7 @@ public sealed partial class ShuttleSystem
     /// </summary>
     private const int MinimumImpactVelocity = 10;
     
-    private const double IntensityMultiplier = 0.005;
+    private const double IntensityMultiplier = 0.01;
 
     private readonly SoundCollectionSpecifier _shuttleImpactSound = new("ShuttleImpactSound");
 
