@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Client.Resources;
 using Content.Client.Theta.ShipEvent;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
@@ -6,6 +7,7 @@ using JetBrains.Annotations;
 using Content.Shared.Shuttles.Systems;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
+using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Collections;
@@ -29,6 +31,7 @@ public sealed class RadarControl : Control
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private readonly IResourceCache _resourceCache = default!;
 
     private const float ScrollSensitivity = 8f;
     private const float GridLinesDistance = 32f;
@@ -390,8 +393,13 @@ public sealed class RadarControl : Control
             shown.Add(grid.Owner);
             var name = metaQuery.GetComponent(grid.Owner).EntityName;
 
+            bool isUnknown = false;
+            
             if (name == string.Empty)
+            {
                 name = Loc.GetString("shuttle-console-unknown");
+                isUnknown = true;
+            }
 
             var gridXform = xformQuery.GetComponent(grid.Owner);
             var gridMatrix = gridXform.WorldMatrix;
@@ -401,6 +409,8 @@ public sealed class RadarControl : Control
             // Others default:
             // Color.FromHex("#FFC000FF")
             // Hostile default: Color.Firebrick
+
+            Color labelColor = color;
 
             if (ShowIFF &&
                 (iff == null && IFFComponent.ShowIFFDefault ||
@@ -424,7 +434,14 @@ public sealed class RadarControl : Control
                     label = (Label) control;
                 }
 
-                label.FontColorOverride = color;
+                if (isUnknown)
+                {
+                    labelColor = new Color(color.R * 0.5f, color.G * 0.5f, color.B * 0.5f);
+                    var fontSmall = _resourceCache.GetFont("/Fonts/Notosans/Notosans-Italic.ttf", 8);
+                    label.FontOverride = fontSmall;
+                }
+
+                label.FontColorOverride = labelColor;
                 var gridCentre = matty.Transform(gridBody.LocalCenter);
                 gridCentre.Y = -gridCentre.Y;
                 var distance = gridCentre.Length;
