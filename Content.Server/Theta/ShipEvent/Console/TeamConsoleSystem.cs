@@ -32,7 +32,7 @@ public sealed class TeamConsoleSystem : EntitySystem
             return;
         }
 
-        var color = string.Empty;
+        var color = Color.White.ToHex();
         if (!string.IsNullOrEmpty(args.Color))
         {
             if (!_shipEventFaction.IsValidColor(args.Color))
@@ -43,8 +43,6 @@ public sealed class TeamConsoleSystem : EntitySystem
 
             color = args.Color;
         }
-        else
-            color = Color.White.ToHex();
 
         List<string> blacklist = new();
         if (!string.IsNullOrEmpty(args.Blacklist))
