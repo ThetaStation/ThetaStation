@@ -1,18 +1,7 @@
 ﻿- type: entity
-  parent: ComputerShuttle
-  id: ComputerShuttleEvent
-  name: shuttle console
-  description: Used to pilot a shuttle.
-  suffix: SHIPEVENT
-  components:
-    - type: ApcPowerReceiver
-      needsPower: false
-
-- type: entity
-  parent: BaseComputer
-  id: CannonComputerShuttleEvent
+  id: CannonComputerShipEvent
   name: cannon console
-  suffix: SHIPEVENT
+  parent: BaseComputer
   components:
     - type: CannonConsole
     - type: SignalTransmitter
@@ -43,13 +32,10 @@
           state: syndie_key
 
 - type: entity
-  parent: BaseComputer
   id: TeamCreationConsoleShipEvent
   name: team console
-  suffix: SHIPEVENT
-  description: shipevent-teamconsole-desc
+  parent: BaseComputer
   components:
-    - type: ShipEventFactionMarker
     - type: ActivatableUI
       key: enum.TeamCreationUiKey.Key
     - type: UserInterface
@@ -67,10 +53,8 @@
   id: TeamSpawnerShipEvent
   name: team spawner
   parent: BaseStructure
-  suffix: SHIPEVENT
   placement:
     mode: SnapgridCenter
-  description: shipevent-spawner-desc
   components:
   - type: Transform
     anchored: true
@@ -120,3 +104,63 @@
       Brute:
         path:
           "/Audio/Effects/glass_hit.ogg"
+        
+- type: entity
+  id: TurretLoaderShipEvent
+  name: turret loader
+  parent: BaseStructure
+  placement:
+    mode: SnapgridCenter
+  components:
+    - type: Transform
+      anchored: true
+    - type: Sprite
+      drawdepth: Objects
+      sprite: Theta/ShipEvent/Structures/Machines/TurretLoader.rsi
+      state: loader
+    - type: Physics
+      bodyType: Static
+    - type: Fixtures
+      fixtures:
+        - shape:
+            !type:PhysShapeAabb {}
+          mask:
+            - FullTileMask
+          layer:
+            - WallLayer
+    - type: Damageable
+      damageContainer: Inorganic
+      damageModifierSet: Metallic
+    - type: Repairable
+    - type: Destructible
+      thresholds:
+        - trigger:
+            !type:DamageTrigger
+            damage: 300
+          behaviors:
+            - !type:PlaySoundBehavior
+              sound: !type:SoundPathSpecifier
+                path: "/Audio/Effects/metalbreak.ogg"
+            - !type:SpawnEntitiesBehavior
+              spawn:
+                SheetSteel:
+                  min: 2
+                  max: 4
+                Cable:
+                  min: 2
+                  max: 4
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+    - type: MeleeSound
+      soundGroups:
+        Brute:
+          path:
+            "/Audio/Effects/trayhit1.ogg"
+    - type: ApcPowerReceiver
+      needsPower: false
+    - type: ActivatableUI
+      key: enum.TeamCreationUiKey.Key
+    - type: UserInterface
+      interfaces:
+      - key: enum.TeamCreationUiKey.Key
+        type: TeamCreationBoundUserInterface

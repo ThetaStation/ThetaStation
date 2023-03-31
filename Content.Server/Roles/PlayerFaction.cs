@@ -12,17 +12,18 @@ public class PlayerFaction
     /// <summary>
     /// Icon of the faction
     /// </summary>
-    public SpriteSpecifier Icon { get; }
+    public SpriteSpecifier? Icon { get; }
 
     /// <summary>
     /// Members of the faction
     /// </summary>
     public List<Role> Members { get; }
 
-    public PlayerFaction(string name, string iconPath)
+    public PlayerFaction(string name, string iconPath = "")
     {
         Name = name;
-        Icon = new SpriteSpecifier.Texture(new ResourcePath(iconPath));
+        if(iconPath != "")
+            Icon = new SpriteSpecifier.Texture(new ResourcePath(iconPath));
         Members = new List<Role>();
     }
 

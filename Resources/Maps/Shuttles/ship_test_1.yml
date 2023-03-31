@@ -4776,7 +4776,7 @@ entities:
     parent: 73
     type: Transform
 - uid: 561
-  type: CannonComputerShuttleEvent
+  type: CannonComputerShipEvent
   components:
   - pos: -2.5,-2.5
     parent: 73
@@ -7038,7 +7038,7 @@ entities:
     parent: 73
     type: Transform
 - uid: 903
-  type: CannonComputerShuttleEvent
+  type: CannonComputerShipEvent
   components:
   - pos: -5.5,-8.5
     parent: 73
@@ -7055,7 +7055,7 @@ entities:
         uid: 914
     type: SignalTransmitter
 - uid: 904
-  type: CannonComputerShuttleEvent
+  type: CannonComputerShipEvent
   components:
   - pos: 4.5,-8.5
     parent: 73
