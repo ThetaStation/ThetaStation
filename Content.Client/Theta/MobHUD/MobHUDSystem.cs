@@ -12,7 +12,7 @@ public sealed class MobHUDSystem : SharedMobHUDSystem
     [Dependency] private readonly IPrototypeManager protMan = default!;
     [Dependency] private readonly IClientGameStateManager statMan = default!;
     [Dependency] private readonly IPlayerManager playerMan = default!;
-    
+
     public HashSet<EntityUid> DetachedEntities = new();
     public MobHUDComponent PlayerHUD = default!;
 
@@ -148,7 +148,7 @@ public sealed class MobHUDSystem : SharedMobHUDSystem
 
     public void UpdateAll()
     {
-        foreach (var (sprite, hud) in EntityQuery<SpriteComponent, MobHUDComponent>())
+        foreach (var (sprite, hud) in EntityManager.EntityQuery<SpriteComponent, MobHUDComponent>())
         {
             UpdateSprite(sprite, hud);
         }
