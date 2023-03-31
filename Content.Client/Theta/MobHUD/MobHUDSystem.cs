@@ -13,6 +13,7 @@ public sealed class MobHUDSystem : SharedMobHUDSystem
     [Dependency] private readonly IClientGameStateManager statMan = default!;
     [Dependency] private readonly IPlayerManager playerMan = default!;
 
+    private Dictionary<MobHUDComponent, List<string>> UsedLayers = new();
     public HashSet<EntityUid> DetachedEntities = new();
     public MobHUDComponent PlayerHUD = default!;
 
@@ -97,23 +98,22 @@ public sealed class MobHUDSystem : SharedMobHUDSystem
 
     public void ResetSprite(SpriteComponent sprite, MobHUDComponent hud)
     {
-        foreach (var mappedLayer in sprite.LayerMap)
+        foreach (var layerKey in UsedLayers[hud])
         {
-            if (mappedLayer.Key is string layerKey)
+            if (sprite.LayerMapTryGet(layerKey, out var index))
             {
-                if(layerKey.Length < 4)
-                    continue;
-                
-                if (layerKey.Substring(0, 4) == "HUD_")
-                {
-                    sprite.RemoveLayer(mappedLayer.Value);
-                }
+                sprite.RemoveLayer(index);
             }
         }
+        
+        UsedLayers[hud].Clear();
     }
 
     public void UpdateSprite(SpriteComponent sprite, MobHUDComponent hud)
     {
+        if(!UsedLayers.ContainsKey(hud))
+            UsedLayers[hud] = new List<string>();
+        
         ResetSprite(sprite, hud);
         if (PlayerHUD == null) return;
 
@@ -144,6 +144,7 @@ public sealed class MobHUDSystem : SharedMobHUDSystem
         }
 
         sprite.LayerMapSet(hudKey, index);
+        UsedLayers[hud].Add(hudKey);
     }
 
     public void UpdateAll()
