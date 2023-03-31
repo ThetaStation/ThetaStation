@@ -21,6 +21,7 @@ using Robust.Server.GameObjects;
 using Robust.Server.Player;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Events;
+using Robust.Shared.Players;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
@@ -47,13 +48,13 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     public float TeamCheckInterval; //in seconds
     public float RespawnDelay; //in seconds
-    
+
     public int MaxSpawnOffset; //both for ships & obstacles
     public int CollisionCheckRange;
-    
+
     public int BonusInterval; //in seconds
     public int PointsPerInterval; //points for surviving longer than BonusInterval without respawn
-    
+
     public float PointsPerHitMultiplier;
     public int PointsPerAssist;
     public int PointsPerKill;
@@ -77,7 +78,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         SubscribeLocalEvent<ShipEventFactionViewComponent, ComponentInit>(OnViewInit);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, GhostRoleSpawnerUsedEvent>(OnSpawn);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, StartCollideEvent>(OnCollision);
-        SubscribeLocalEvent<ShipEventFactionMarkerComponent, TeamCreationRequest>(OnTeamCreationRequest);
         SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEnd);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
     }
@@ -135,7 +135,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     {
         if (!RuleSelected)
             return;
-        
+
         var result = $"\n{Loc.GetString("shipevent-teamview-heading")}";
         result += $"\n{Loc.GetString("shipevent-teamview-heading2")}";
         foreach (var team in Teams)
@@ -167,75 +167,24 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             _actSys.AddAction(entity, view.ToggleAction, null, actComp);
     }
 
-    private void OnTeamCreationRequest(EntityUid entity, ShipEventFactionMarkerComponent component,
-        TeamCreationRequest args)
+    public void CreateShipEventTeam(ICommonSession captainSession, string name, string color, List<string>? blacklist = null)
     {
         if (!RuleSelected)
             return;
-        
-        List<string> _blacklist = new();
 
-        if (!IsValidName(args.Name))
-        {
-            if (_uiSys.TryGetUi(entity, args.UiKey, out var bui))
-            {
-                _uiSys.SetUiState(bui,
-                    new TeamCreationBoundUserInterfaceState(
-                        Loc.GetString("shipevent-teamcreation-response-invalidname")));
-            }
-
+        if(captainSession.AttachedEntity == null)
             return;
-        }
-
-        var _color = string.Empty;
-        if (args.Color.Any())
-        {
-            if (!IsValidColor(args.Color))
-            {
-                if (_uiSys.TryGetUi(entity, args.UiKey, out var bui))
-                {
-                    _uiSys.SetUiState(bui,
-                        new TeamCreationBoundUserInterfaceState(
-                            Loc.GetString("shipevent-teamcreation-response-invalidcolor")));
-                }
-
-                return;
-            }
-
-            _color = args.Color;
-        }
-        else
-            _color = Color.White.ToHex();
-
-        if (args.Blacklist.Any())
-        {
-            _blacklist = args.Blacklist.Split(",").ToList();
-            _blacklist.Select(ckey => ckey.Trim());
-        }
-
-        if (_blacklist.Contains(args.Session.ConnectedClient.UserName))
-        {
-            if (_uiSys.TryGetUi(entity, args.UiKey, out var bui))
-            {
-                _uiSys.SetUiState(bui,
-                    new TeamCreationBoundUserInterfaceState(
-                        Loc.GetString("shipevent-teamcreation-response-blacklistself")));
-            }
-
-            return;
-        }
-
-        if (args.Session.AttachedEntity == null) return;
 
         var newShip = RandomPosSpawn(_random.Pick(ShipTypes));
         var spawners = GetShipComponents<GhostRoleMobSpawnerComponent>(newShip);
-        if (!spawners.Any()) return;
+        if (!spawners.Any())
+            return;
 
-        var team = CreateTeam(newShip, args.Session.ConnectedClient.UserName, args.Name, _color, _blacklist);
+        var team = CreateTeam(newShip, captainSession.ConnectedClient.UserName, name, color, blacklist);
         SetMarkers(newShip, team);
 
-        _entMan.DeleteEntity((EntityUid) args.Session.AttachedEntity);
-        _entMan.GetComponent<GhostRoleMobSpawnerComponent>(spawners.First()).Take((IPlayerSession) args.Session);
+        _entMan.DeleteEntity(captainSession.AttachedEntity.Value);
+        _entMan.GetComponent<GhostRoleMobSpawnerComponent>(spawners.First()).Take((IPlayerSession) captainSession);
     }
 
     private void OnSpawn(EntityUid entity, ShipEventFactionMarkerComponent component, GhostRoleSpawnerUsedEvent args)
@@ -524,7 +473,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             }
         }
     }
-    
+
     private void CheckTeams(float deltaTime)
     {
         foreach (var team in Teams)
@@ -561,7 +510,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                     _shipNames[team.Ship] = shipName;
                 }
             }
-            
+
             if (!_playerMan.TryGetSessionByUsername(team.Captain, out _))
             {
                 if (team.Members.Any())

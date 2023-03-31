@@ -7,7 +7,10 @@ public sealed class TeamCreationBoundUserInterfaceState : BoundUserInterfaceStat
 {
     public readonly string UserMessage;
 
-    public TeamCreationBoundUserInterfaceState(string userMessage) { UserMessage = userMessage; }
+    public TeamCreationBoundUserInterfaceState(string userMessage)
+    {
+        UserMessage = userMessage;
+    }
 }
 
 [Serializable, NetSerializable]

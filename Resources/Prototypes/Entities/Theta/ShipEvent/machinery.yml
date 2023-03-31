@@ -50,6 +50,7 @@
   description: shipevent-teamconsole-desc
   components:
     - type: ShipEventFactionMarker
+    - type: TeamConsole
     - type: ActivatableUI
       key: enum.TeamCreationUiKey.Key
     - type: UserInterface

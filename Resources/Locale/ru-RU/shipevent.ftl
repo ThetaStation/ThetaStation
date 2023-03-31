@@ -54,6 +54,7 @@ shipevent-teamcreation-windowtitle = СОЗДАНИЕ КОМАНДЫ
 shipevent-teamcreation-response-invalidname = Данное имя уже занято/недоступно по другой причине.
 shipevent-teamcreation-response-invalidcolor = Данный цвет уже занят/недоступен по другой причине.
 shipevent-teamcreation-response-blacklistself = Зачем вы пытаетесь добавить себя же в блеклист?
+shipevent-teamcreation-response-eventnotstarted = Шип ивент не активирован.
 
 shipevent-teamcreation-name = Имя команды:
 shipevent-teamcreation-color = Цвет команды (hex):
@@ -73,4 +74,4 @@ shipevent-roundend-winner = ПОБЕДИТЕЛЬ - КОМАНДА '{ $name }'! �
 
 ## Misc.
 
-shipevent-blacklist = Вы в блеклисте сией команды. Наверное вы чем-то обидели капитана.
+shipevent-blacklist = Вы в блеклисте сией команды. Наверное, вы чем-то обидели капитана.
