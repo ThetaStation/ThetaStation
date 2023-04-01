@@ -13,9 +13,6 @@ public sealed class TeamViewBoundUserInterfaceState : BoundUserInterfaceState
     }
 }
 
-/// <summary>
-/// State of each individual docking port for interface purposes
-/// </summary>
 [Serializable, NetSerializable]
 public sealed class ShipTeamForTeamViewState
 {
