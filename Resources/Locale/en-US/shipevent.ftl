@@ -1,11 +1,11 @@
 ﻿## Gamemode stuff
 
 shipevent-title = Ship Battles
-shipevent-desc = NanoTrasen has started a contest to test out their light battle cruisers in fighting conditions
+shipevent-desc = NanoTrasen has started a contest to test out their light battle cruisers in combat situations
 
 ## Objects names & descriptions
 
-shipevent-spawner-desc = High tech bluespace machinery which is able to create cannon fodder from thin air! Will not spawn any more teammates, if the team is full.
+shipevent-spawner-desc = High tech bluespace machinery which is able to create cannon fodder from thin air!
 shipevent-teamconsole-desc = The console which allows you to participate in the ship battle contest.
 
 
@@ -61,7 +61,7 @@ shipevent-teamcreation-response-blacklistself = Why would you want to add yourse
 shipevent-teamcreation-name = Team name:
 shipevent-teamcreation-color = Team color (hex):
 shipevent-teamcreation-blacklist = Block list (ckeys seperated by a comma):
-shipevent-teamcreation-creationbutton = CREATE THE TEAM
+shipevent-teamcreation-creationbutton = CREATE A NEW TEAM
 
 ## Cannon console
 shipevent-cannonconsole-ammostatus = Ammo
@@ -70,10 +70,10 @@ shipevent-cannonconsole-ammostatus = Ammo
 
 shipevent-roundend-heading = The contest is over. Here's a list of participating teams:
 shipevent-roundend-team = Team '[color={ $color }]{ $name }[/color]' (ship name - '{ $shipname }') under the guidance of '{ $capname }':
-shipevent-roundend-teamstats = Has collected { $points } points, { $kills } kills and { $assists } assists, and they have respawned { $respawns } time(s).
+shipevent-roundend-teamstats = Has collected { $points } points, { $kills } kills, { $assists } assists, and they have respawned { $respawns } time(s).
 shipevent-roundend-winner = THE WINNER IS - TEAM '{ $name }'! Let's all congratulate them with their victory via OOC! (or badmouth them for their luck).
 
 
 ## Misc.
 
-shipevent-blacklist = You are in this team's block list. It seems that the captain is mighty dissapointed with you.
+shipevent-blacklist = You are in this team's block list. It seems that their captain is mighty dissapointed with you.
