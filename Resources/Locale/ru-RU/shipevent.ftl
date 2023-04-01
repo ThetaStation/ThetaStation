@@ -49,6 +49,13 @@ shipevent-teamview-toggle-desc = Просмотр списка активных 
 
 ## Team creation UI text
 
+shipevent-lobby-windowtitle = ЛОББИ
+
+shipevent-lobby-createteam = Создать команду
+shipevent-lobby-refresh = Обновить
+shipevent-lobby-empty = Пусто
+shipevent-lobby-join = Войти
+
 shipevent-teamcreation-windowtitle = СОЗДАНИЕ КОМАНДЫ
 
 shipevent-teamcreation-response-invalidname = Данное имя уже занято/недоступно по другой причине.

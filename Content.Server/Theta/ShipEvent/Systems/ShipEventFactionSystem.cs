@@ -172,9 +172,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         if (!RuleSelected)
             return;
 
-        if(captainSession.AttachedEntity == null)
-            return;
-
         var newShip = RandomPosSpawn(_random.Pick(ShipTypes));
         var spawners = GetShipComponents<GhostRoleMobSpawnerComponent>(newShip);
         if (!spawners.Any())
@@ -183,8 +180,34 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         var team = CreateTeam(newShip, captainSession.ConnectedClient.UserName, name, color, blacklist);
         SetMarkers(newShip, team);
 
-        _entMan.DeleteEntity(captainSession.AttachedEntity.Value);
-        _entMan.GetComponent<GhostRoleMobSpawnerComponent>(spawners.First()).Take((IPlayerSession) captainSession);
+        SpawnPlayerByGhostRole((IPlayerSession) captainSession, spawners.First());
+    }
+
+    public void ManuallyJoinToTeam(IPlayerSession player, string teamName)
+    {
+        EntityUid? shipUid = null;
+        foreach (var team in Teams)
+        {
+            if (team.Name == teamName)
+                shipUid = team.Ship;
+        }
+        if(shipUid == null)
+            return;
+
+        var spawners = GetShipComponents<GhostRoleMobSpawnerComponent>(shipUid.Value);
+        if (!spawners.Any())
+            return;
+
+        SpawnPlayerByGhostRole(player, spawners.First());
+    }
+
+    private void SpawnPlayerByGhostRole(IPlayerSession player, EntityUid spawnerUid)
+    {
+        if(player.AttachedEntity == null)
+            return;
+
+        _entMan.DeleteEntity(player.AttachedEntity.Value);
+        _entMan.GetComponent<GhostRoleMobSpawnerComponent>(spawnerUid).Take(player);
     }
 
     private void OnSpawn(EntityUid entity, ShipEventFactionMarkerComponent component, GhostRoleSpawnerUsedEvent args)

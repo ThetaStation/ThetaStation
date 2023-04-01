@@ -1,7 +1,9 @@
 ﻿using System.Linq;
 using Content.Server.Theta.ShipEvent.Systems;
+using Content.Server.UserInterface;
 using Content.Shared.Theta.ShipEvent.UI;
 using Robust.Server.GameObjects;
+using Robust.Server.Player;
 
 namespace Content.Server.Theta.ShipEvent.Console;
 
@@ -13,6 +15,42 @@ public sealed class TeamConsoleSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<TeamConsoleComponent, TeamCreationRequest>(OnTeamCreationRequest);
+        SubscribeLocalEvent<TeamConsoleComponent, RefreshShipTeamsEvent>(OnRefreshTeams);
+        SubscribeLocalEvent<TeamConsoleComponent, JoinToShipTeamsEvent>(TryJoinToShipTeam);
+        SubscribeLocalEvent<TeamConsoleComponent, BeforeActivatableUIOpenEvent>(UpdateLobbyState);
+    }
+
+    private void TryJoinToShipTeam(EntityUid uid, TeamConsoleComponent component, JoinToShipTeamsEvent args)
+    {
+        if (!_shipEventFaction.HasTeamName(args.Name))
+            return;
+        _shipEventFaction.ManuallyJoinToTeam((IPlayerSession) args.Session, args.Name);
+    }
+
+    private void OnRefreshTeams(EntityUid uid, TeamConsoleComponent component, RefreshShipTeamsEvent args)
+    {
+        UpdateState(uid);
+    }
+
+    private void UpdateLobbyState(EntityUid uid, TeamConsoleComponent component, BeforeActivatableUIOpenEvent args)
+    {
+        UpdateState(uid);
+    }
+
+    private void UpdateState(EntityUid uid)
+    {
+        _uiSystem.TrySetUiState(uid, TeamCreationUiKey.Key, new ShipEventLobbyBoundUserInterfaceState(GetTeams()));
+    }
+
+    private List<ShipTeamState> GetTeams()
+    {
+        List<ShipTeamState> teamStates = new();
+        foreach (var team in _shipEventFaction.Teams)
+        {
+            teamStates.Add(new ShipTeamState(team.Name, team.Members.Count, team.Captain));
+        }
+
+        return teamStates;
     }
 
     private void OnTeamCreationRequest(EntityUid uid, TeamConsoleComponent component, TeamCreationRequest args)
@@ -80,7 +118,7 @@ public sealed class TeamConsoleSystem : EntitySystem
         }
 
         _uiSystem.TrySetUiState(uid, uiKey,
-            new TeamCreationBoundUserInterfaceState(
+            new ShipEventCreateTeamBoundUserInterfaceState(
                 Loc.GetString(errorText)
             )
         );

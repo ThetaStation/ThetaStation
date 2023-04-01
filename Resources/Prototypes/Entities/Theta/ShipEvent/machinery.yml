@@ -56,7 +56,7 @@
     - type: UserInterface
       interfaces:
         - key: enum.TeamCreationUiKey.Key
-          type: TeamCreationBoundUserInterface
+          type: ShipEventLobbyBoundUserInterface
     - type: PointLight
       radius: 1.5
       energy: 1.6
