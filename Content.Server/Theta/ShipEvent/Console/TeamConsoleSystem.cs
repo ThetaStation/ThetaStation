@@ -42,12 +42,12 @@ public sealed class TeamConsoleSystem : EntitySystem
         _uiSystem.TrySetUiState(uid, TeamCreationUiKey.Key, new ShipEventLobbyBoundUserInterfaceState(GetTeams()));
     }
 
-    private List<ShipTeamState> GetTeams()
+    private List<ShipTeamForLobbyState> GetTeams()
     {
-        List<ShipTeamState> teamStates = new();
+        List<ShipTeamForLobbyState> teamStates = new();
         foreach (var team in _shipEventFaction.Teams)
         {
-            teamStates.Add(new ShipTeamState(team.Name, team.Members.Count, team.Captain));
+            teamStates.Add(new ShipTeamForLobbyState(team.Name, team.Members.Count, team.Captain));
         }
 
         return teamStates;

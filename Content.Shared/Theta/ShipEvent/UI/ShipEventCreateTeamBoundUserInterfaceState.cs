@@ -16,22 +16,22 @@ public sealed class ShipEventCreateTeamBoundUserInterfaceState : BoundUserInterf
 [Serializable, NetSerializable]
 public sealed class ShipEventLobbyBoundUserInterfaceState : BoundUserInterfaceState
 {
-    public readonly List<ShipTeamState> Teams;
+    public readonly List<ShipTeamForLobbyState> Teams;
 
-    public ShipEventLobbyBoundUserInterfaceState(List<ShipTeamState> teams)
+    public ShipEventLobbyBoundUserInterfaceState(List<ShipTeamForLobbyState> teams)
     {
         Teams = teams;
     }
 }
 
 [Serializable, NetSerializable]
-public sealed class ShipTeamState
+public sealed class ShipTeamForLobbyState
 {
     public readonly string Name;
     public readonly int Members;
     public readonly string Captain;
 
-    public ShipTeamState(string name, int members, string captain)
+    public ShipTeamForLobbyState(string name, int members, string captain)
     {
         Name = name;
         Members = members;

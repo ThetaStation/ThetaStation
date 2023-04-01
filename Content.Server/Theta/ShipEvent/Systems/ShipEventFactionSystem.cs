@@ -23,6 +23,7 @@ using Robust.Server.GameObjects;
 using Robust.Server.Player;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Events;
+using Robust.Shared.Players;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
@@ -141,10 +142,10 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         if (session == null)
             return;
 
-        List<TeamState> teamsInfo = new();
+        List<ShipTeamForTeamViewState> teamsInfo = new();
         foreach (var team in Teams)
         {
-            teamsInfo.Add(new TeamState
+            teamsInfo.Add(new ShipTeamForTeamViewState
             {
                 Name = team.Name,
                 Color = team.Color,
@@ -170,7 +171,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             _actSys.AddAction(entity, view.ToggleAction, null, actComp);
     }
 
-    public void CreateShipEventTeam(ICommonSession captainSession, string name, string color, List<string>? blacklist = null)
+    public void CreateShipEventTeam(ICommonSession captainSession, string name, string color,
+        List<string>? blacklist = null)
     {
         if (!RuleSelected)
             return;
@@ -194,7 +196,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             if (team.Name == teamName)
                 shipUid = team.Ship;
         }
-        if(shipUid == null)
+
+        if (shipUid == null)
             return;
 
         var spawners = GetShipComponents<GhostRoleMobSpawnerComponent>(shipUid.Value);
@@ -206,11 +209,11 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     private void SpawnPlayerByGhostRole(IPlayerSession player, EntityUid spawnerUid)
     {
-        if(player.AttachedEntity == null)
+        if (player.AttachedEntity == null)
             return;
 
-        _entMan.DeleteEntity(player.AttachedEntity.Value);
-        _entMan.GetComponent<GhostRoleMobSpawnerComponent>(spawnerUid).Take(player);
+        EntityManager.DeleteEntity(player.AttachedEntity.Value);
+        EntityManager.GetComponent<GhostRoleMobSpawnerComponent>(spawnerUid).Take(player);
     }
 
     private void OnSpawn(EntityUid entity, ShipEventFactionMarkerComponent component, GhostRoleSpawnerUsedEvent args)
@@ -543,7 +546,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                 if (team.Members.Any())
                 {
                     string newCap = "";
-                    for(int c = 0; c < 100; c++)
+                    for (int c = 0; c < 100; c++)
                     {
                         var newCapRole = _random.Pick(team.Members);
                         if (newCapRole.Mind.Session != null)
@@ -552,6 +555,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                             break;
                         }
                     }
+
                     TeamMessage(team,
                         Loc.GetString("shipevent-team-captainchange", ("oldcap", team.Captain),
                             ("newcap", newCap)), color: Color.FromHex(team.Color));
