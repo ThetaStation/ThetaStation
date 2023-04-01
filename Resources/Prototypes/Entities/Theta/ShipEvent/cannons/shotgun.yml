@@ -76,6 +76,7 @@
     proto: PelletShotgunSlugEvent
     count: 5
     spread: 30
+    deleteOnSpawn: true
 
 - type: entity
   id: PelletShotgunSlugEvent

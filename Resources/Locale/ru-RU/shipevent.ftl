@@ -41,7 +41,11 @@ shipevent-role-greet = Вы - член испытательной группы, 
 shipevent-teamview-windowtitle = СПИСОК КОМАНД
 
 shipevent-teamview-heading = Активные команды:
-shipevent-teamview-heading2 = Название команды - Название корабля - Кол-во живых членов - Очки
+
+shipevent-teamview-heading-name = Название команды
+shipevent-teamview-heading-shipname = Название корабля
+shipevent-teamview-heading-crew = Живой экипаж
+shipevent-teamview-heading-points = Очки
 
 shipevent-teamview-toggle-name = Активные команды
 shipevent-teamview-toggle-desc = Просмотр списка активных команд

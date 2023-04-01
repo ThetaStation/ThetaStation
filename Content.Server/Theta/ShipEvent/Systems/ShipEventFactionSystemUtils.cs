@@ -1,6 +1,7 @@
 ﻿//Because it's pain to work with 800+ line class
 
 using System.Linq;
+using Content.Server.Access.Systems;
 using Content.Server.Explosion.Components;
 using Content.Server.Mind.Components;
 using Content.Server.Roles;
@@ -43,6 +44,8 @@ public sealed class ShipEventFaction : PlayerFaction
 
 public sealed partial class ShipEventFactionSystem
 {
+    [Dependency] private readonly IdCardSystem _cardSystem = default!;
+
     private void Announce(string message)
     {
         _chatSys.DispatchGlobalAnnouncement(message, Loc.GetString("shipevent-announcement-title"));
@@ -66,7 +69,7 @@ public sealed partial class ShipEventFactionSystem
 
     private string GetName(EntityUid entity)
     {
-        if (_entMan.TryGetComponent(entity, out MetaDataComponent? metaComp))
+        if (EntityManager.TryGetComponent(entity, out MetaDataComponent? metaComp))
             return metaComp.EntityName;
 
         return string.Empty;
@@ -74,8 +77,13 @@ public sealed partial class ShipEventFactionSystem
 
     private void SetName(EntityUid entity, string name)
     {
-        if (_entMan.TryGetComponent(entity, out MetaDataComponent? metaComp))
+        if (EntityManager.TryGetComponent(entity, out MetaDataComponent? metaComp))
             metaComp.EntityName = name;
+
+        if (_cardSystem.TryFindIdCard(entity, out var idCard))
+        {
+            _cardSystem.TryChangeFullName(idCard.Owner, name, idCard);
+        }
 
         _idSys.QueueIdentityUpdate(entity);
     }
@@ -83,7 +91,7 @@ public sealed partial class ShipEventFactionSystem
     private List<EntityUid> GetShipComponents<T>(EntityUid shipEntity) where T : IComponent
     {
         List<EntityUid> entities = new();
-        foreach (var comp in _entMan.EntityQuery<T>())
+        foreach (var comp in EntityManager.EntityQuery<T>())
         {
             if (Transform(comp.Owner).GridUid == shipEntity)
                 entities.Add(comp.Owner);
@@ -94,7 +102,7 @@ public sealed partial class ShipEventFactionSystem
 
     public int GetProjectileDamage(EntityUid entity)
     {
-        if (_entMan.TryGetComponent<MetaDataComponent>(entity, out var meta))
+        if (EntityManager.TryGetComponent<MetaDataComponent>(entity, out var meta))
         {
             if (meta.EntityPrototype == null)
                 return 0;
@@ -104,12 +112,13 @@ public sealed partial class ShipEventFactionSystem
 
             var damage = 0;
 
-            if (_entMan.TryGetComponent<ProjectileComponent>(entity, out var proj))
+            if (EntityManager.TryGetComponent<ProjectileComponent>(entity, out var proj))
                 damage += (int) proj.Damage.Total;
 
-            if (_entMan.TryGetComponent<ExplosiveComponent>(entity, out var exp))
+            if (EntityManager.TryGetComponent<ExplosiveComponent>(entity, out var exp))
             {
-                var damagePerIntensity = (int) _protMan.Index<ExplosionPrototype>(exp.ExplosionType).DamagePerIntensity.Total;
+                var damagePerIntensity =
+                    (int) _protMan.Index<ExplosionPrototype>(exp.ExplosionType).DamagePerIntensity.Total;
                 damage += (int) (exp.TotalIntensity * damagePerIntensity);
             }
 
@@ -123,7 +132,7 @@ public sealed partial class ShipEventFactionSystem
 
     private IPlayerSession? GetSession(EntityUid entity)
     {
-        if (_entMan.TryGetComponent<MindComponent>(entity, out var mindComp))
+        if (EntityManager.TryGetComponent<MindComponent>(entity, out var mindComp))
         {
             if (mindComp.HasMind)
             {
@@ -164,7 +173,7 @@ public sealed partial class ShipEventFactionSystem
         foreach (var team in Teams)
         {
             if (team.Name == name)
-                    return false;
+                return false;
         }
 
         return true;
@@ -172,7 +181,7 @@ public sealed partial class ShipEventFactionSystem
 
     public string GenerateTeamColor()
     {
-        for(int c = 0; c < 100; c++)
+        for (int c = 0; c < 100; c++)
         {
             var newColor = new Color(_random.NextFloat(0, 1), _random.NextFloat(0, 1), _random.NextFloat(0, 1));
             if (IsValidColor(newColor))
@@ -220,10 +229,11 @@ public sealed partial class ShipEventFactionSystem
     public EntityUid RandomPosSpawn(string mapPath)
     {
         Vector2i mapPos = Vector2i.Zero;
-        for(int c = 0; c < 100; c++)
+        for (int c = 0; c < 100; c++)
         {
             mapPos = (Vector2i) _random.NextVector2(MaxSpawnOffset);
-            if (!_mapMan.FindGridsIntersecting(TargetMap, new Box2(mapPos - CollisionCheckRange, mapPos + CollisionCheckRange)).Any())
+            if (!_mapMan.FindGridsIntersecting(TargetMap,
+                    new Box2(mapPos - CollisionCheckRange, mapPos + CollisionCheckRange)).Any())
             {
                 break;
             }
@@ -242,3 +252,4 @@ public sealed partial class ShipEventFactionSystem
         return EntityUid.Invalid;
     }
 }
+
