@@ -69,7 +69,7 @@ public sealed partial class ShipEventFactionSystem
 
     private string GetName(EntityUid entity)
     {
-        if (_entMan.TryGetComponent(entity, out MetaDataComponent? metaComp))
+        if (EntityManager.TryGetComponent(entity, out MetaDataComponent? metaComp)) 
             return metaComp.EntityName;
 
         return string.Empty;
@@ -77,7 +77,7 @@ public sealed partial class ShipEventFactionSystem
 
     private void SetName(EntityUid entity, string name)
     {
-        if (_entMan.TryGetComponent(entity, out MetaDataComponent? metaComp))
+        if (EntityManager.TryGetComponent(entity, out MetaDataComponent? metaComp)) 
             metaComp.EntityName = name;
 
         if (_cardSystem.TryFindIdCard(entity, out var idCard))
@@ -91,7 +91,7 @@ public sealed partial class ShipEventFactionSystem
     private List<EntityUid> GetShipComponents<T>(EntityUid shipEntity) where T : IComponent
     {
         List<EntityUid> entities = new();
-        foreach (var comp in _entMan.EntityQuery<T>())
+        foreach (var comp in EntityManager.EntityQuery<T>())
         {
             if (Transform(comp.Owner).GridUid == shipEntity)
                 entities.Add(comp.Owner);
@@ -102,7 +102,7 @@ public sealed partial class ShipEventFactionSystem
 
     public int GetProjectileDamage(EntityUid entity)
     {
-        if (_entMan.TryGetComponent<MetaDataComponent>(entity, out var meta))
+        if (EntityManager.TryGetComponent<MetaDataComponent>(entity, out var meta))
         {
             if (meta.EntityPrototype == null)
                 return 0;
@@ -112,10 +112,10 @@ public sealed partial class ShipEventFactionSystem
 
             var damage = 0;
 
-            if (_entMan.TryGetComponent<ProjectileComponent>(entity, out var proj))
+            if (EntityManager.TryGetComponent<ProjectileComponent>(entity, out var proj)) 
                 damage += (int) proj.Damage.Total;
 
-            if (_entMan.TryGetComponent<ExplosiveComponent>(entity, out var exp))
+            if (EntityManager.TryGetComponent<ExplosiveComponent>(entity, out var exp))
             {
                 var damagePerIntensity =
                     (int) _protMan.Index<ExplosionPrototype>(exp.ExplosionType).DamagePerIntensity.Total;
@@ -132,7 +132,7 @@ public sealed partial class ShipEventFactionSystem
 
     private IPlayerSession? GetSession(EntityUid entity)
     {
-        if (_entMan.TryGetComponent<MindComponent>(entity, out var mindComp))
+        if (EntityManager.TryGetComponent<MindComponent>(entity, out var mindComp))
         {
             if (mindComp.HasMind)
             {

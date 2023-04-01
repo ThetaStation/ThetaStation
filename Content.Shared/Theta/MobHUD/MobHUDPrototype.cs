@@ -1,6 +1,4 @@
-﻿using Nett;
-using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations;
+﻿using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.List;
 using Robust.Shared.Utility;
 
@@ -32,5 +30,10 @@ public sealed class MobHUDPrototype : IPrototype, IEquatable<MobHUDPrototype>
     {
         if (other == null){return false;}
         return ID == other.ID;
+    }
+
+    public MobHUDPrototype ShallowCopy()
+    {
+        return (MobHUDPrototype)this.MemberwiseClone();
     }
 }

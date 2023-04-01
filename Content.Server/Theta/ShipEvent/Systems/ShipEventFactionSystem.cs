@@ -32,7 +32,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 {
     [Dependency] private readonly ActionsSystem _actSys = default!;
     [Dependency] private readonly ChatSystem _chatSys = default!;
-    [Dependency] private readonly IEntityManager _entMan = default!;
     [Dependency] private readonly MobHUDSystem _hudSys = default!;
     [Dependency] private readonly IdentitySystem _idSys = default!;
     [Dependency] private readonly MapLoaderSystem _mapSys = default!;
@@ -168,7 +167,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     private void OnViewInit(EntityUid entity, ShipEventFactionViewComponent view, ComponentInit args)
     {
-        if (_entMan.TryGetComponent<ActionsComponent>(entity, out var actComp))
+        if (EntityManager.TryGetComponent<ActionsComponent>(entity, out var actComp))
             _actSys.AddAction(entity, view.ToggleAction, null, actComp);
     }
 
@@ -241,8 +240,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         var team = CreateTeam(newShip, args.Session.ConnectedClient.UserName, args.Name, _color, _blacklist);
         SetMarkers(newShip, team);
 
-        _entMan.DeleteEntity((EntityUid) args.Session.AttachedEntity);
-        _entMan.GetComponent<GhostRoleMobSpawnerComponent>(spawners.First()).Take((IPlayerSession) args.Session);
+        EntityManager.DeleteEntity((EntityUid) args.Session.AttachedEntity);
+        EntityManager.GetComponent<GhostRoleMobSpawnerComponent>(spawners.First()).Take((IPlayerSession) args.Session);
     }
 
     private void OnSpawn(EntityUid entity, ShipEventFactionMarkerComponent component, GhostRoleSpawnerUsedEvent args)
@@ -253,7 +252,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         ShipEventFaction team = default!;
 
-        if (_entMan.TryGetComponent<ShipEventFactionMarkerComponent>(args.Spawner, out var teamMarker))
+        if (EntityManager.TryGetComponent<ShipEventFactionMarkerComponent>(args.Spawner, out var teamMarker))
         {
             if (teamMarker.Team == null)
                 return;
@@ -265,20 +264,20 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                 if (team.Blacklist.Contains(session.ConnectedClient.UserName))
                 {
                     _chatSys.SendSimpleMessage(Loc.GetString("shipevent-blacklist"), session);
-                    _entMan.DeleteEntity(entity);
+                    EntityManager.DeleteEntity(entity);
                     return;
                 }
             }
 
             AddToTeam(args.Spawned, team);
             component.Team = team;
-            _entMan.GetComponent<GhostRoleMobSpawnerComponent>(args.Spawner)
+            EntityManager.GetComponent<GhostRoleMobSpawnerComponent>(args.Spawner)
                 .SetCurrentTakeovers(team.Members.Count);
         }
 
-        if (_entMan.TryGetComponent<MobHUDComponent>(args.Spawned, out var hud))
+        if (EntityManager.TryGetComponent<MobHUDComponent>(args.Spawned, out var hud))
         {
-            var hudProt = _protMan.Index<MobHUDPrototype>(HUDPrototypeId);
+            var hudProt = _protMan.Index<MobHUDPrototype>(HUDPrototypeId).ShallowCopy();
             hudProt.Color = team.Color;
             _hudSys.SetActiveHUDs(hud, new List<MobHUDPrototype> { hudProt });
         }
@@ -289,9 +288,9 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         if (component.Team == null)
             return;
 
-        if (_entMan.TryGetComponent(entity, out ProjectileComponent? projComp))
+        if (EntityManager.TryGetComponent(entity, out ProjectileComponent? projComp))
         {
-            if (_entMan.TryGetComponent<ShipEventFactionMarkerComponent>(
+            if (EntityManager.TryGetComponent<ShipEventFactionMarkerComponent>(
                     Transform(args.OtherFixture.Body.Owner).GridUid, out var marker))
             {
                 if (marker.Team == null || marker.Team == component.Team)
@@ -308,7 +307,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     private void AddToTeam(EntityUid entity, ShipEventFaction team)
     {
-        if (_entMan.TryGetComponent<MindComponent>(entity, out var mindComp))
+        if (EntityManager.TryGetComponent<MindComponent>(entity, out var mindComp))
         {
             if (!mindComp.HasMind)
                 return;
@@ -367,18 +366,18 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         var spawners = GetShipComponents<GhostRoleMobSpawnerComponent>(shipEntity);
         foreach (var spawner in spawners)
         {
-            var marker = _entMan.EnsureComponent<ShipEventFactionMarkerComponent>(spawner);
+            var marker = EntityManager.EnsureComponent<ShipEventFactionMarkerComponent>(spawner);
             marker.Team = team;
         }
 
         var cannons = GetShipComponents<CannonComponent>(shipEntity);
         foreach (var cannon in cannons)
         {
-            var marker = _entMan.EnsureComponent<ShipEventFactionMarkerComponent>(cannon);
+            var marker = EntityManager.EnsureComponent<ShipEventFactionMarkerComponent>(cannon);
             marker.Team = team;
         }
 
-        var markerShip = _entMan.EnsureComponent<ShipEventFactionMarkerComponent>(shipEntity);
+        var markerShip = EntityManager.EnsureComponent<ShipEventFactionMarkerComponent>(shipEntity);
         markerShip.Team = team;
     }
 
@@ -413,11 +412,11 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         _shipNames.Remove(team.Ship);
         foreach (var member in team.Members)
         {
-            _entMan.DeleteEntity(team.GetMemberEntity(member));
+            EntityManager.DeleteEntity(team.GetMemberEntity(member));
         }
 
         if (team.Ship != EntityUid.Invalid)
-            _entMan.DeleteEntity(team.Ship);
+            EntityManager.DeleteEntity(team.Ship);
 
         team.Ship = EntityUid.Invalid;
 
@@ -462,7 +461,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         team.Members.Clear();
         foreach (var session in sessions)
         {
-            _entMan.GetComponent<GhostRoleMobSpawnerComponent>(spawners.First()).Take(session);
+            EntityManager.GetComponent<GhostRoleMobSpawnerComponent>(spawners.First()).Take(session);
         }
 
         team.Respawns++;
@@ -495,11 +494,11 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         _shipNames.Remove(team.Ship);
         foreach (var member in team.Members)
         {
-            _entMan.DeleteEntity(team.GetMemberEntity(member));
+            EntityManager.DeleteEntity(team.GetMemberEntity(member));
         }
 
         if (team.Ship != EntityUid.Invalid)
-            _entMan.DeleteEntity(team.Ship);
+            EntityManager.DeleteEntity(team.Ship);
 
         Teams.Remove(team);
     }
