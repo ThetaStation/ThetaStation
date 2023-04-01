@@ -34,29 +34,6 @@
     availableModes:
       - FullAuto
     soundGunshot: /Audio/Weapons/Guns/Gunshots/gun_sentry.ogg
-  - type: ChamberMagazineAmmoProvider
-  - type: ContainerContainer
-    containers:
-      gun_magazine: !type:ContainerSlot
-      gun_chamber: !type:ContainerSlot
-  - type: ItemSlots
-    slots:
-      gun_magazine:
-        name: Magazine
-        startingItem: MagazineLightRifleBoxEvent
-        insertSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
-        ejectSound: /Audio/Weapons/Guns/MagOut/batrifle_magout.ogg
-        priority: 2
-        whitelist:
-          tags:
-            - MagazineLightRifleBox
-      gun_chamber:
-        name: Chamber
-        startingItem: CartridgeLightRifleExplosive
-        priority: 1
-        whitelist:
-          tags:
-            - CartridgeLightRifle
 
 - type: entity
   id: MagazineLightRifleBoxEvent

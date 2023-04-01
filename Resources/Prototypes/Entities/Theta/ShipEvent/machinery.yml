@@ -159,8 +159,19 @@
     - type: ApcPowerReceiver
       needsPower: false
     - type: ActivatableUI
-      key: enum.TeamCreationUiKey.Key
+      key: enum.TurretLoaderUiKey.Key
     - type: UserInterface
       interfaces:
-      - key: enum.TeamCreationUiKey.Key
-        type: TeamCreationBoundUserInterface
+      - key: enum.TurretLoaderUiKey.Key
+        type: TurretLoaderBoundUserInterface
+    - type: ItemSlots
+      slots:
+        ammoContainer:
+          name: AmmoContainer
+          insertSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
+          ejectSound: /Audio/Weapons/Guns/MagOut/batrifle_magout.ogg
+          priority: 2
+          whitelist:
+            tags:
+            - TurretAmmoContainer
+    - type: TurretLoader

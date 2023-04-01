@@ -1,0 +1,7 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+               Title="{Loc 'shipevent-teamcreation-windowtitle'}"
+               MinSize="500 350"
+               SetSize="500 350">
+    <BoxContainer Orientation="Vertical" SeparationOverride="4">
+    </BoxContainer>
+</DefaultWindow>

@@ -1,8 +1,10 @@
 ﻿using System.Linq;
 using Content.Shared.Physics;
 using Content.Shared.Weapons.Ranged.Components;
+using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Map;
+using Robust.Shared.Network;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Serialization;
@@ -13,12 +15,57 @@ public abstract class SharedCannonSystem : EntitySystem
 {
     [Dependency] private readonly SharedGunSystem _gunSystem = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    [Dependency] private readonly INetManager _netMan = default!;
 
     public override void Initialize()
     {
         base.Initialize();
         SubscribeAllEvent<RequestCannonShootEvent>(OnShootRequest);
         SubscribeAllEvent<RequestStopCannonShootEvent>(OnStopShootRequest);
+        SubscribeLocalEvent<CannonComponent, TakeAmmoEvent>(OnAmmoRequest);
+        SubscribeLocalEvent<CannonComponent, GetAmmoCountEvent>(OnAmmoCount);
+    }
+
+    private void OnAmmoRequest(EntityUid uid, CannonComponent cannon, TakeAmmoEvent args)
+    {
+        var loader = cannon.BoundLoader;
+        
+        if (loader == null)
+            return;
+
+        if (loader.AmmoContainer != null)
+        {
+            for (int i = 0; i < args.Shots; i++)
+            {
+                if (!loader.AmmoContainer.ContainedEntities.Any())
+                    break;
+
+                var ent = loader.AmmoContainer.ContainedEntities[0];
+
+                if (_netMan.IsServer)
+                    loader.AmmoContainer.Remove(ent);
+
+                args.Ammo.Add((ent, EnsureComp<AmmoComponent>(ent)));
+            }
+        }
+    }
+    
+    private void OnAmmoCount(EntityUid uid, CannonComponent cannon, ref GetAmmoCountEvent args)
+    {
+        var loader = cannon.BoundLoader;
+        
+        if (loader == null)
+            return;
+        
+        if (loader.AmmoContainer == null)
+        {
+            args.Capacity = 0;
+            args.Count = 0;
+            return;
+        }
+
+        args.Capacity = Int32.MaxValue;
+        args.Count = loader.AmmoContainer.ContainedEntities.Count;
     }
 
     private void OnShootRequest(RequestCannonShootEvent ev, EntitySessionEventArgs args)

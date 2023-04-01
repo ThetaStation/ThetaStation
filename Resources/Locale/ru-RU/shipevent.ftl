@@ -76,8 +76,25 @@ shipevent-teamcreation-color = Цвет команды (hex):
 shipevent-teamcreation-blacklist = Блеклист (сикеи через запятую):
 shipevent-teamcreation-creationbutton = СОЗДАТЬ КОМАНДУ
 
+
+# Turret loader UI text
+
+shipevent-turretloader-windowtitle = ЗАРЯДНИК ОРУДИЙ
+
+shipevent-turretloader-status = Статус:
+shipevent-turretloader-status-normal = Работает
+shipevent-turretloader-status-unbound = Нет привязки
+shipevent-turretloader-status-nocontainer = Нет контейнера
+shipevent-turretloader-status-broken = Неисправность
+
+shipevent-turretloader-ammocount = Количество патронов:
+
+shipevent-turretloader-ejectcontainerbutton = ИЗВЛЕЧЬ КОНТЕЙНЕР
+
+
 ## Cannon console
 shipevent-cannonconsole-ammostatus = Боезапас
+
 
 ## Roundend messages
 
