@@ -8,11 +8,13 @@ using Content.Server.IdentityManagement;
 using Content.Server.Mind.Components;
 using Content.Server.Roles;
 using Content.Server.Shuttles.Components;
+using Content.Server.Shuttles.Systems;
 using Content.Server.Theta.MobHUD;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Shared.Actions;
 using Content.Shared.GameTicking;
 using Content.Shared.Projectiles;
+using Content.Shared.Shuttles.Components;
 using Content.Shared.Theta.MobHUD;
 using Content.Shared.Theta.ShipEvent;
 using Content.Shared.Theta.ShipEvent.UI;
@@ -37,6 +39,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _protMan = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSys = default!;
+    [Dependency] private readonly ShuttleSystem _shuttleSystem = default!;
     [Dependency] private readonly IPlayerManager _playerMan = default!;
 
     private readonly Dictionary<EntityUid, string> _shipNames = new();
@@ -46,13 +49,13 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     public float TeamCheckInterval; //in seconds
     public float RespawnDelay; //in seconds
-    
+
     public int MaxSpawnOffset; //both for ships & obstacles
     public int CollisionCheckRange;
-    
+
     public int BonusInterval; //in seconds
     public int PointsPerInterval; //points for surviving longer than BonusInterval without respawn
-    
+
     public float PointsPerHitMultiplier;
     public int PointsPerAssist;
     public int PointsPerKill;
@@ -134,29 +137,31 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     {
         if (!RuleSelected)
             return;
-        
-        var result = $"\n{Loc.GetString("shipevent-teamview-heading")}";
-        result += $"\n{Loc.GetString("shipevent-teamview-heading2")}";
+
+        var session = GetSession(entity);
+        if (session == null)
+            return;
+
+        List<TeamState> teamsInfo = new();
         foreach (var team in Teams)
         {
-            if (team.ShouldRespawn)
-                result += $"\n'[color={team.Color}]{team.Name}[/color]' - N/A - N/A - {team.Points}";
-            else
-                result +=
-                    $"\n'[color={team.Color}]{team.Name}[/color]' - '{_shipNames[team.Ship]}' - {team.GetLivingMembersMinds().Count} - {team.Points}";
+            teamsInfo.Add(new TeamState
+            {
+                Name = team.Name,
+                Color = team.Color,
+                ShipName = team.ShouldRespawn ? null : _shipNames[team.Ship],
+                AliveCrewCount = team.ShouldRespawn ? null : team.GetLivingMembersMinds().Count.ToString(),
+                Points = team.Points,
+            });
         }
 
         Enum uiKey = TeamViewUiKey.Key;
-        var session = GetSession(entity);
-        if (session == null) return;
-
-        if (!_uiSys.IsUiOpen(entity, uiKey))
+        if (_uiSys.IsUiOpen(entity, uiKey))
+            return;
+        if (_uiSys.TryGetUi(entity, uiKey, out var bui))
         {
-            if (_uiSys.TryGetUi(entity, uiKey, out var bui))
-            {
-                _uiSys.OpenUi(bui, session);
-                _uiSys.SetUiState(bui, new TeamViewBoundUserInterfaceState(result));
-            }
+            _uiSys.OpenUi(bui, session);
+            _uiSys.SetUiState(bui, new TeamViewBoundUserInterfaceState(teamsInfo));
         }
     }
 
@@ -171,7 +176,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     {
         if (!RuleSelected)
             return;
-        
+
         List<string> _blacklist = new();
 
         if (!IsValidName(args.Name))
@@ -224,11 +229,13 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             return;
         }
 
-        if (args.Session.AttachedEntity == null) return;
+        if (args.Session.AttachedEntity == null)
+            return;
 
         var newShip = RandomPosSpawn(_random.Pick(ShipTypes));
         var spawners = GetShipComponents<GhostRoleMobSpawnerComponent>(newShip);
-        if (!spawners.Any()) return;
+        if (!spawners.Any())
+            return;
 
         var team = CreateTeam(newShip, args.Session.ConnectedClient.UserName, args.Name, _color, _blacklist);
         SetMarkers(newShip, team);
@@ -272,13 +279,14 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         {
             var hudProt = _protMan.Index<MobHUDPrototype>(HUDPrototypeId).ShallowCopy();
             hudProt.Color = team.Color;
-            _hudSys.SetActiveHUDs(hud, new List<MobHUDPrototype> {hudProt});
+            _hudSys.SetActiveHUDs(hud, new List<MobHUDPrototype> { hudProt });
         }
     }
 
     private void OnCollision(EntityUid entity, ShipEventFactionMarkerComponent component, ref StartCollideEvent args)
     {
-        if (component.Team == null) return;
+        if (component.Team == null)
+            return;
 
         if (EntityManager.TryGetComponent(entity, out ProjectileComponent? projComp))
         {
@@ -523,7 +531,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             }
         }
     }
-    
+
     private void CheckTeams(float deltaTime)
     {
         foreach (var team in Teams)
@@ -600,7 +608,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             }
 
             team.TimeSinceRemoval += deltaTime;
-            if (!team.ShouldRespawn) team.BonusIntervalTimer += deltaTime;
+            if (!team.ShouldRespawn)
+                team.BonusIntervalTimer += deltaTime;
         }
     }
 
@@ -609,7 +618,10 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         List<EntityUid> spawnedObstacles = new();
         for (int i = 0; i < amount; i++)
         {
-            spawnedObstacles.Add(RandomPosSpawn(_random.Pick(ObstacleTypes)));
+            var obstacleUid = RandomPosSpawn(_random.Pick(ObstacleTypes));
+            _shuttleSystem.AddIFFFlag(obstacleUid, IFFFlags.HideLabel);
+            _shuttleSystem.SetIFFColor(obstacleUid, Color.Gold);
+            spawnedObstacles.Add(obstacleUid);
         }
 
         return spawnedObstacles;

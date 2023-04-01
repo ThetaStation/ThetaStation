@@ -104,6 +104,8 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
         {
             if (transform.GridUid != myGrid)
                 continue;
+            if (!transform.Anchored)
+                continue;
 
             var controlled = false;
             if (controlledCannons != null)
