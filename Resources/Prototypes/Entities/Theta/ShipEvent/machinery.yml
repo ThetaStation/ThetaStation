@@ -172,7 +172,7 @@
             tags:
             - TurretAmmoContainer
     - type: ContainerContainer
-        containers:
+      containers:
         storagebase: !type:Container
           ents: [ ]
     - type: TurretLoader
