@@ -171,6 +171,10 @@
           whitelist:
             tags:
             - TurretAmmoContainer
+    - type: ContainerContainer
+        containers:
+        storagebase: !type:Container
+          ents: [ ]
     - type: TurretLoader
     - type: SignalTransmitter
       outputs:

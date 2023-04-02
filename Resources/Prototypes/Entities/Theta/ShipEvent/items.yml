@@ -22,6 +22,10 @@
       whitelist:
         components:
         - Ammo
+    - type: ContainerContainer
+      containers:
+        storagebase: !type:Container
+          ents: [ ]
     - type: Dumpable
     - type: UserInterface
       interfaces:
