@@ -16,8 +16,6 @@ public sealed partial class CannonConsoleWindow : FancyWindow,
 {
     private List<CannonInformationInterfaceState> _controlledCannons = new();
 
-    private Dictionary<EntityUid, CannonAmmoStatus> _ammoStatuses = new();
-
     public CannonConsoleWindow()
     {
         RobustXamlLoader.Load(this);
@@ -39,12 +37,8 @@ public sealed partial class CannonConsoleWindow : FancyWindow,
     {
         foreach (var cannonInformation in _controlledCannons)
         {
-            if (!_ammoStatuses.TryGetValue(cannonInformation.Uid, out var status))
-            {
-                status = new CannonAmmoStatus();
-                _ammoStatuses[cannonInformation.Uid] = status;
-                AmmoStatusContents.AddChild(status);
-            }
+            var status = new CannonAmmoStatus();
+            AmmoStatusContents.AddChild(status);
 
             var hasMagazine = cannonInformation is { Ammo: 0, Capacity: 0 };
             status.Update(!hasMagazine, cannonInformation.Ammo, cannonInformation.Capacity);
