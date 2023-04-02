@@ -149,16 +149,8 @@
                 SheetSteel:
                   min: 2
                   max: 4
-                Cable:
-                  min: 2
-                  max: 4
             - !type:DoActsBehavior
               acts: [ "Destruction" ]
-    - type: MeleeSound
-      soundGroups:
-        Brute:
-          path:
-            "/Audio/Effects/trayhit1.ogg"
     - type: ApcPowerReceiver
       needsPower: false
     - type: ActivatableUI
