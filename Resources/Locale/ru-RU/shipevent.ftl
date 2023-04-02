@@ -57,7 +57,11 @@ shipevent-role-greet = Вы - член испытательной группы, 
 shipevent-teamview-windowtitle = СПИСОК КОМАНД
 
 shipevent-teamview-heading = Активные команды:
-shipevent-teamview-heading2 = Название команды - Название корабля - Кол-во живых членов - Очки
+
+shipevent-teamview-heading-name = Название команды
+shipevent-teamview-heading-shipname = Название корабля
+shipevent-teamview-heading-crew = Живой экипаж
+shipevent-teamview-heading-points = Очки
 
 shipevent-teamview-toggle-name = Активные команды
 shipevent-teamview-toggle-desc = Просмотр списка активных команд
@@ -65,11 +69,19 @@ shipevent-teamview-toggle-desc = Просмотр списка активных 
 
 ## Team creation UI text
 
+shipevent-lobby-windowtitle = ЛОББИ
+
+shipevent-lobby-createteam = Создать команду
+shipevent-lobby-refresh = Обновить
+shipevent-lobby-empty = Пусто
+shipevent-lobby-join = Войти
+
 shipevent-teamcreation-windowtitle = СОЗДАНИЕ КОМАНДЫ
 
 shipevent-teamcreation-response-invalidname = Данное имя уже занято/недоступно по другой причине.
 shipevent-teamcreation-response-invalidcolor = Данный цвет уже занят/недоступен по другой причине.
 shipevent-teamcreation-response-blacklistself = Зачем вы пытаетесь добавить себя же в блеклист?
+shipevent-teamcreation-response-eventnotstarted = Шип ивент не активирован.
 
 shipevent-teamcreation-name = Имя команды:
 shipevent-teamcreation-color = Цвет команды (hex):
@@ -108,4 +120,4 @@ shipevent-roundend-winner = ПОБЕДИТЕЛЬ - КОМАНДА '{ $name }'! �
 
 ## Misc.
 
-shipevent-blacklist = Вы в блеклисте сией команды. Наверное вы чем-то обидели капитана.
+shipevent-blacklist = Вы в блеклисте сией команды. Наверное, вы чем-то обидели капитана.

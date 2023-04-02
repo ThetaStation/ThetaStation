@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using Content.Shared.Theta.MobHUD;
+﻿using Content.Shared.Theta.MobHUD;
 using Robust.Client.GameObjects;
 using Robust.Client.GameStates;
+using Robust.Client.Player;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
@@ -11,17 +11,19 @@ public sealed class MobHUDSystem : SharedMobHUDSystem
 {
     [Dependency] private readonly IPrototypeManager protMan = default!;
     [Dependency] private readonly IClientGameStateManager statMan = default!;
+    [Dependency] private readonly IPlayerManager playerMan = default!;
+
+    private Dictionary<MobHUDComponent, List<string>> UsedLayers = new();
     public HashSet<EntityUid> DetachedEntities = new();
     public MobHUDComponent PlayerHUD = default!;
-    public Dictionary<MobHUDComponent, List<int>> UsedLayers = new();
 
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<MobHUDComponent, ComponentInit>(OnHUDInit);
         SubscribeLocalEvent<MobHUDComponent, ComponentShutdown>(OnHUDShutdown);
-        SubscribeLocalEvent<PlayerAttachedEvent>(OnPlayerAttach);
-        SubscribeLocalEvent<PlayerDetachedEvent>(OnPlayerDetach);
+        SubscribeLocalEvent<PlayerAttachedEvent>(OnPlayerEntityChange);
+        SubscribeLocalEvent<PlayerDetachedEvent>(OnPlayerEntityChange);
         statMan.GameStateApplied += OnGameStateApplied;
     }
 
@@ -44,23 +46,28 @@ public sealed class MobHUDSystem : SharedMobHUDSystem
         }
     }
 
-    public void OnPlayerAttach(PlayerAttachedEvent args)
+    public void OnPlayerEntityChange(PlayerAttachedEvent _)
     {
-        PlayerHUD = default!;
-        if (EntityManager.TryGetComponent<MobHUDComponent>(args.Entity, out var hud))
-            PlayerHUD = hud;
+        UpdatePlayerHUD();
         UpdateAll();
     }
-
-    public void OnPlayerDetach(PlayerDetachedEvent args)
+    
+    public void OnPlayerEntityChange(PlayerDetachedEvent _)
     {
-        PlayerHUD = default!;
+        UpdatePlayerHUD();
         UpdateAll();
     }
 
     public void OnHUDInit(EntityUid entity, MobHUDComponent hud, ComponentInit args)
     {
-        UsedLayers[hud] = new List<int>();
+        UpdatePlayerHUD(); //if it's roundstart spawn and player haven't changed their entity yet
+        
+        if (hud == PlayerHUD)
+        {
+            UpdateAll();
+            return;
+        }
+        
         UpdateSprite(EntityManager.GetComponent<SpriteComponent>(entity), hud);
     }
 
@@ -70,17 +77,15 @@ public sealed class MobHUDSystem : SharedMobHUDSystem
         {
             PlayerHUD = default!;
             UpdateAll();
+            return;
         }
 
         ResetSprite(EntityManager.GetComponent<SpriteComponent>(entity), hud);
-        UsedLayers.Remove(hud);
     }
 
     public override void SetHUDState(EntityUid entity, MobHUDComponent hud, ref ComponentHandleState args)
     {
         base.SetHUDState(entity, hud, ref args);
-
-        if (!UsedLayers.ContainsKey(hud)) UsedLayers[hud] = new List<int>();
 
         if (hud == PlayerHUD)
         {
@@ -93,16 +98,22 @@ public sealed class MobHUDSystem : SharedMobHUDSystem
 
     public void ResetSprite(SpriteComponent sprite, MobHUDComponent hud)
     {
-        foreach (var layer in UsedLayers[hud])
+        foreach (var layerKey in UsedLayers[hud])
         {
-            sprite.RemoveLayer(layer);
+            if (sprite.LayerMapTryGet(layerKey, out var index))
+            {
+                sprite.RemoveLayer(index);
+            }
         }
-
+        
         UsedLayers[hud].Clear();
     }
 
     public void UpdateSprite(SpriteComponent sprite, MobHUDComponent hud)
     {
+        if(!UsedLayers.ContainsKey(hud))
+            UsedLayers[hud] = new List<string>();
+        
         ResetSprite(sprite, hud);
         if (PlayerHUD == null) return;
 
@@ -118,24 +129,48 @@ public sealed class MobHUDSystem : SharedMobHUDSystem
                 }
             }
         }
-
-        //Since SpriteComponent stored layers as simple list and not as dict, removing layer will move all other layers above it to one position down.
-        //Sorting is to prevent this case.
-        UsedLayers[hud] = UsedLayers[hud].OrderDescending().ToList();
     }
 
     public void ApplyHUD(SpriteComponent sprite, MobHUDComponent hud, MobHUDPrototype hudPrototype)
     {
-        var layerIndex = sprite.AddLayer(hudPrototype.Sprite);
-        sprite.LayerSetColor(layerIndex, Color.FromHex(hudPrototype.Color));
-        UsedLayers[hud].Add(layerIndex);
+        var index = sprite.AddLayer(hudPrototype.Sprite);
+        sprite.LayerSetColor(index, Color.FromHex(hudPrototype.Color));
+        var hudKey = GetHUDKey(hudPrototype);
+
+        if (sprite.LayerMapTryGet(hudKey, out var oldIndex))
+        {
+            sprite.RemoveLayer(oldIndex);
+            index--;
+        }
+
+        sprite.LayerMapSet(hudKey, index);
+        UsedLayers[hud].Add(hudKey);
     }
 
     public void UpdateAll()
     {
-        foreach (var (sprite, hud) in EntityQuery<SpriteComponent, MobHUDComponent>())
+        foreach (var (sprite, hud) in EntityManager.EntityQuery<SpriteComponent, MobHUDComponent>())
         {
             UpdateSprite(sprite, hud);
         }
+    }
+
+    public void UpdatePlayerHUD()
+    {
+        PlayerHUD = default!;
+
+        var player = playerMan.LocalPlayer?.ControlledEntity;
+        if (player == null)
+            return;
+
+        if (EntityManager.TryGetComponent<MobHUDComponent>(player, out var hud))
+        {
+            PlayerHUD = hud;
+        }
+    }
+
+    public string GetHUDKey(MobHUDPrototype hud)
+    {
+        return "HUD_" + hud.ID;
     }
 }

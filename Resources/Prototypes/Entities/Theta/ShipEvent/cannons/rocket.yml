@@ -53,6 +53,7 @@
   components:
   - type: CartridgeAmmo
     proto: LightRifleBulletExplosive
+    deleteOnSpawn: true
 
 - type: entity
   id: LightRifleBulletExplosive

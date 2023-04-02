@@ -194,7 +194,7 @@ public sealed class RadarControl : Control
 
     private void StartFiring(GUIBoundKeyEventArgs args)
     {
-        if(args.Function != EngineKeyFunctions.Use)
+        if (args.Function != EngineKeyFunctions.Use)
             return;
 
         if (_controlledCannons.Count == 0)
@@ -203,7 +203,7 @@ public sealed class RadarControl : Control
         var coordinates = RotateCannons(args.RelativePosition);
 
         var player = _player.LocalPlayer?.ControlledEntity;
-        if(player == null)
+        if (player == null)
             return;
 
         var ev = new StartCannonFiringEvent(coordinates, player.Value);
@@ -217,7 +217,7 @@ public sealed class RadarControl : Control
 
     private void StopFiring(GUIBoundKeyEventArgs args)
     {
-        if(args.Function != EngineKeyFunctions.Use)
+        if (args.Function != EngineKeyFunctions.Use)
             return;
 
         if (_controlledCannons.Count == 0)
@@ -235,13 +235,14 @@ public sealed class RadarControl : Control
         var offsetMatrix = GetOffsetMatrix();
         var relativePositionToCoordinates = RelativePositionToCoordinates(mouseRelativePosition, offsetMatrix);
         var player = _player.LocalPlayer?.ControlledEntity;
-        if(player == null)
+        if (player == null)
             return relativePositionToCoordinates;
         foreach (var entityUid in _controlledCannons)
         {
             var ev = new RotateCannonEvent(relativePositionToCoordinates, player.Value);
             _entManager.EventBus.RaiseLocalEvent(entityUid, ref ev);
         }
+
         return relativePositionToCoordinates;
     }
 
@@ -345,7 +346,6 @@ public sealed class RadarControl : Control
         {
             var transformGridComp = xformQuery.GetComponent(ourGridId.Value);
             var ourGridMatrix = transformGridComp.WorldMatrix;
-            var ourGridFixtures = fixturesQuery.GetComponent(ourGridId.Value);
 
             Matrix3.Multiply(in ourGridMatrix, in offsetMatrix, out var matrix);
 
@@ -359,7 +359,7 @@ public sealed class RadarControl : Control
             var gridPhysic = bodyQuery.GetComponent(ourGridId.Value);
             var gridVelocity = displayRot.RotateVec(gridPhysic.LinearVelocity);
 
-            DrawVelocityArrow(handle, gridVelocity);
+            DrawVelocityArrow(handle, matrix, gridVelocity, gridPhysic.LocalCenter);
         }
 
         var shown = new HashSet<EntityUid>();
@@ -523,7 +523,7 @@ public sealed class RadarControl : Control
         }
     }
 
-    private void DrawVelocityArrow(DrawingHandleScreen handle, Vector2 gridVelocity)
+    private void DrawVelocityArrow(DrawingHandleScreen handle, Matrix3 matrix, Vector2 gridVelocity, Vector2 gridCenter)
     {
         const float arrowSize = 3f;
 
@@ -534,17 +534,20 @@ public sealed class RadarControl : Control
         var angle = Angle.FromWorldVec(gridVelocity);
         var verts = new[]
         {
-            gridVelocity + angle.RotateVec(new Vector2(-arrowSize / 2, arrowSize / 4)),
-            gridVelocity + angle.RotateVec(new Vector2(0, -arrowSize / 2 - arrowSize / 4)),
-            gridVelocity + angle.RotateVec(new Vector2(arrowSize / 2, arrowSize / 4)),
-            gridVelocity + angle.RotateVec(new Vector2(arrowSize / 4, arrowSize / 4)),
-            gridVelocity + angle.RotateVec(new Vector2(arrowSize / 4, arrowSize)),
-            gridVelocity + angle.RotateVec(new Vector2(-arrowSize / 4, arrowSize)),
-            gridVelocity + angle.RotateVec(new Vector2(-arrowSize / 4, arrowSize / 4)),
-            gridVelocity + angle.RotateVec(new Vector2(-arrowSize / 2, arrowSize / 4)),
+            new Vector2(-arrowSize / 2, arrowSize / 4),
+            new Vector2(0, -arrowSize / 2 - arrowSize / 4),
+            new Vector2(arrowSize / 2, arrowSize / 4),
+            new Vector2(arrowSize / 4, arrowSize / 4),
+            new Vector2(arrowSize / 4, arrowSize),
+            new Vector2(-arrowSize / 4, arrowSize),
+            new Vector2(-arrowSize / 4, arrowSize / 4),
+            new Vector2(-arrowSize / 2, arrowSize / 4),
         };
         for (var i = 0; i < verts.Length; i++)
         {
+            var offset = gridCenter + gridVelocity * 1.5f + angle.RotateVec(verts[i]);
+            verts[i] = matrix.Transform(offset);
+
             var vert = verts[i];
             vert.Y = -vert.Y;
             verts[i] = ScalePosition(vert);
@@ -562,6 +565,16 @@ public sealed class RadarControl : Control
             var position = cannon.Coordinates.ToMapPos(_entManager);
             var angle = cannon.Angle;
             var color = cannon.Color;
+
+            var hsvColor = Color.ToHsv(color);
+
+            const float additionalDegreeCoeff = 20f / 360f;
+
+            // X is hue
+            var hueOffset = hsvColor.X * cannon.Ammo / cannon.Capacity;
+            hsvColor.X = Math.Max(hueOffset + additionalDegreeCoeff, additionalDegreeCoeff);
+
+            color = Color.FromHsv(hsvColor);
 
             var verts = new[]
             {
