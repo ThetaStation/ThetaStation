@@ -1,0 +1,21 @@
+﻿<DefaultWindow xmlns="https://spacestation14.io"
+               Title="{Loc 'shipevent-lobby-windowtitle'}"
+               MinSize="500 350">
+    <BoxContainer Orientation="Vertical">
+        <ScrollContainer VerticalExpand="True">
+            <GridContainer Columns="4" Name="TeamsContainer">
+
+            </GridContainer>
+        </ScrollContainer>
+        <BoxContainer Orientation="Horizontal">
+            <Button Name="Refresh"
+                    Text="{Loc 'shipevent-lobby-refresh'}"
+                    HorizontalExpand="True"
+                    HorizontalAlignment="Left" />
+            <Button Name="CreateTeam"
+                    Text="{Loc 'shipevent-lobby-createteam'}"
+                    HorizontalExpand="True"
+                    HorizontalAlignment="Right" />
+        </BoxContainer>
+    </BoxContainer>
+</DefaultWindow>

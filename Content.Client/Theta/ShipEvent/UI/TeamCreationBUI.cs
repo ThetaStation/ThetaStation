@@ -1,29 +1,54 @@
 ﻿using Content.Shared.Theta.ShipEvent.UI;
+using JetBrains.Annotations;
 using Robust.Client.GameObjects;
 
 namespace Content.Client.Theta.ShipEvent.UI;
 
-public sealed class TeamCreationBoundUserInterface : BoundUserInterface
+[UsedImplicitly]
+public sealed class ShipEventLobbyBoundUserInterface : BoundUserInterface
 {
-    private TeamCreationWindow? _window;
+    private TeamCreationWindow? _teamCreation;
+    private TeamLobbyWindow? _lobby;
 
-    public TeamCreationBoundUserInterface(ClientUserInterfaceComponent owner, Enum uiKey) : base(owner, uiKey) { }
+    public ShipEventLobbyBoundUserInterface(ClientUserInterfaceComponent owner, Enum uiKey) : base(owner, uiKey) { }
 
     protected override void Open()
     {
-        base.Open();
+        _teamCreation = new TeamCreationWindow();
+        _lobby = new TeamLobbyWindow();
 
-        _window = new TeamCreationWindow();
-        _window.OpenCentered();
+        _lobby.OnClose += Close;
+        _teamCreation.CreationButtonPressed += _ =>
+        {
+            SendMessage(new TeamCreationRequest(_teamCreation.TeamName, _teamCreation.Blacklist, _teamCreation.Color));
+        };
+        _lobby.CreateTeamButtonPressed += _ =>
+        {
+            _teamCreation.OpenCentered();
+        };
+        _lobby.RefreshButtonPressed += _ =>
+        {
+            SendMessage(new RefreshShipTeamsEvent());
+        };
+        _lobby.JoinButtonPressed += name =>
+        {
+            SendMessage(new JoinToShipTeamsEvent(name));
+        };
 
-        _window.OnClose += Close;
-        _window.CreationButtonPressed += _ => { SendMessage(new TeamCreationRequest(_window._Name, _window._Blacklist, _window._Color)); };
+        _lobby.OpenCentered();
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)
     {
-        base.UpdateState(state);
-        _window?.UpdateState((TeamCreationBoundUserInterfaceState)state);
+        switch (state)
+        {
+            case ShipEventCreateTeamBoundUserInterfaceState msg:
+                _teamCreation?.UpdateState(msg);
+                break;
+            case ShipEventLobbyBoundUserInterfaceState msg:
+                _lobby?.UpdateState(msg);
+                break;
+        }
     }
 
     protected override void Dispose(bool disposing)
@@ -32,7 +57,8 @@ public sealed class TeamCreationBoundUserInterface : BoundUserInterface
 
         if (disposing)
         {
-            _window?.Dispose();
+            _teamCreation?.Dispose();
+            _lobby?.Dispose();
         }
     }
 }

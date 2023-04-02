@@ -13,18 +13,20 @@ namespace Content.Client.Theta.ShipEvent.UI;
 public sealed partial class TeamCreationWindow : DefaultWindow
 {
     public event Action<BaseButton.ButtonEventArgs>? CreationButtonPressed;
-    public string _Name => NameEdit.Text;
+    public string TeamName => NameEdit.Text;
 
-    public string _Color => ColorEdit.Text;
-    
-    public string _Blacklist => BlacklistEdit.Text;
+    public string Color => ColorEdit.Text;
+
+    public string Blacklist => BlacklistEdit.Text;
 
     public TeamCreationWindow()
     {
         RobustXamlLoader.Load(this);
-
         CreationButton.OnPressed += _ => CreationButtonPressed?.Invoke(_);
     }
 
-    public void UpdateState(TeamCreationBoundUserInterfaceState state) { UserMessage.Text = state.UserMessage; }
+    public void UpdateState(ShipEventCreateTeamBoundUserInterfaceState state)
+    {
+        UserMessage.Text = state.UserMessage;
+    }
 }

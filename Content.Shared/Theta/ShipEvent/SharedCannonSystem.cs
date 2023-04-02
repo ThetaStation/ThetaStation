@@ -16,12 +16,14 @@ public abstract class SharedCannonSystem : EntitySystem
     [Dependency] private readonly SharedGunSystem _gunSystem = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly INetManager _netMan = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {
         base.Initialize();
         SubscribeAllEvent<RequestCannonShootEvent>(OnShootRequest);
         SubscribeAllEvent<RequestStopCannonShootEvent>(OnStopShootRequest);
+        SubscribeLocalEvent<CannonComponent, AnchorStateChangedEvent>(OnAnchorChanged);
         SubscribeLocalEvent<CannonComponent, TakeAmmoEvent>(OnAmmoRequest);
         SubscribeLocalEvent<CannonComponent, GetAmmoCountEvent>(OnAmmoCount);
     }
@@ -73,10 +75,12 @@ public abstract class SharedCannonSystem : EntitySystem
         var gun = GetCannonGun(ev.Cannon);
         if (gun == null || !CanShoot(ev, gun))
         {
+            StopShoot(ev.Cannon);
             return;
         }
 
-        var coords = EntityCoordinates.FromMap(ev.Cannon, new MapCoordinates(ev.Coordinates, Transform(ev.Cannon).MapID));
+        var mapCoords = new MapCoordinates(ev.Coordinates, Transform(ev.Cannon).MapID);
+        var coords = EntityCoordinates.FromMap(ev.Cannon, mapCoords, _transform);
         _gunSystem.AttemptShoot(ev.Pilot, ev.Cannon, gun, coords);
     }
 
@@ -86,8 +90,13 @@ public abstract class SharedCannonSystem : EntitySystem
             return false;
 
         var cannonTransform = Transform(args.Cannon);
-        var dir = args.Coordinates - cannonTransform.WorldPosition;
-        var ray = new CollisionRay(cannonTransform.WorldPosition, dir.Normalized, (int) (CollisionGroup.Impassable));
+        var pilotTransform = Transform(args.Pilot);
+        if (!pilotTransform.GridUid.Equals(cannonTransform.GridUid))
+            return false;
+
+        var dir = args.Coordinates - _transform.GetWorldPosition(cannonTransform);
+        var ray = new CollisionRay(_transform.GetWorldPosition(cannonTransform), dir.Normalized,
+            (int) (CollisionGroup.Impassable));
 
         const int averageShipLength = 25;
 
@@ -102,6 +111,12 @@ public abstract class SharedCannonSystem : EntitySystem
         return true;
     }
 
+    protected virtual void OnAnchorChanged(EntityUid uid, CannonComponent component, ref AnchorStateChangedEvent args)
+    {
+        if (!args.Anchored)
+            StopShoot(uid);
+    }
+
     public GunComponent? GetCannonGun(EntityUid uid)
     {
         return !TryComp<GunComponent>(uid, out var gun) ? null : gun;
@@ -109,7 +124,12 @@ public abstract class SharedCannonSystem : EntitySystem
 
     private void OnStopShootRequest(RequestStopCannonShootEvent ev)
     {
-        var gun = GetCannonGun(ev.Cannon);
+        StopShoot(ev.Cannon);
+    }
+
+    private void StopShoot(EntityUid cannonUid)
+    {
+        var gun = GetCannonGun(cannonUid);
         if (gun == null || gun.ShotCounter == 0)
             return;
 
