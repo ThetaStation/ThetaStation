@@ -1,0 +1,78 @@
+﻿- type: entity
+  id: ShellShotgunSlugShipEvent
+  name: shotgun shell
+  parent: ShellShotgunSlug
+  components:
+    - type: Item
+      size: 2
+    - type: CartridgeAmmo
+      proto: PelletShotgunSlugEvent
+      count: 5
+      spread: 30
+      deleteOnSpawn: true
+
+- type: entity
+  id: PelletShotgunSlugShipEvent
+  name: pellet
+  noSpawn: true
+  parent: PelletShotgunSlug
+  suffix: SHIPEVENT
+  components:
+    - type: Projectile
+      damage:
+        types:
+          Piercing: 100
+
+- type: entity
+  id: ShipEventCloset
+  name: closet
+  parent: ClosetBase
+  suffix: SHIPEVENT
+  components:
+    - type: Appearance
+      visuals:
+        - type: StorageVisualizer
+          state: bomb
+          state_open: bomb_open
+          state_closed: bomb_door
+
+- type: entity
+  name: Rocket Ammo Closet
+  id: RocketAmmoClosetShipEvent
+  parent: ShipEventCloset
+  components:
+    - type: StorageFill
+      contents:
+        - id: TurretAmmoContainerRocketFilled
+          amount: 10
+
+- type: entity
+  name: Shotgun Ammo Closet
+  id: ShotgunAmmoClosetShipEvent
+  parent: ShipEventCloset
+  components:
+    - type: StorageFill
+      contents:
+        - id: TurretAmmoContainerShotgunFilled
+          amount: 10
+          
+- type: entity
+  id: TurretAmmoContainerRocketFilled
+  parent: TurretAmmoContainerRegular
+  name: rocket ammo container
+  components:
+    - type: StorageFill
+      contents:
+        - id: CartridgeRocket
+          amount: 20
+          
+- type: entity
+  id: TurretAmmoContainerShotgunFilled
+  parent: TurretAmmoContainerRegular
+  name: shotgun ammo container
+  components:
+    - type: StorageFill
+      contents:
+        - id: ShellShotgunSlugShipEvent
+          amount: 50
+

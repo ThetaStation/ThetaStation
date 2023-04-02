@@ -44,6 +44,14 @@ public abstract class SharedCannonSystem : EntitySystem
 
                 var ent = loader.AmmoContainer.ContainedEntities[0];
 
+                var prot = EntityManager.GetComponent<MetaDataComponent>(ent).EntityPrototype?.ID;
+
+                if (prot == null)
+                    continue;
+
+                if (!cannon.AmmoPrototypes.Contains(prot))
+                    continue;
+
                 if (_netMan.IsServer)
                     loader.AmmoContainer.Remove(ent);
 
