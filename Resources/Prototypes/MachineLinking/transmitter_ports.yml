@@ -58,6 +58,11 @@
 
 - type: transmitterPort
   id: CannonConsoleSender
-  name: signal-port-name-artifact-analyzer-sender
-  description: signal-port-description-artifact-analyzer-sender
+  name: shipevent-cannonconsole-signalport-name
+  description: shipevent-cannonconsole-signalport-desc
   defaultLinks: [ CannonConsoleReceiver ]
+  
+- type: transmitterPort
+  id: TurretLoaderSender
+  name: shipevent-turretloader-signalport-name
+  description: shipevent-turretloader-signalport-desc

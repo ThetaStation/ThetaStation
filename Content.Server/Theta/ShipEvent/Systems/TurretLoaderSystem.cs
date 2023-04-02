@@ -1,5 +1,8 @@
+using Content.Server.MachineLinking.Components;
+using Content.Server.MachineLinking.System;
 using Content.Server.Storage.Components;
 using Content.Shared.Containers.ItemSlots;
+using Content.Shared.MachineLinking.Events;
 using Content.Shared.Theta.ShipEvent;
 using Content.Shared.Theta.ShipEvent.Components;
 using Content.Shared.Theta.ShipEvent.UI;
@@ -12,6 +15,7 @@ public sealed class TurretLoaderSystem : EntitySystem
 {
     [Dependency] private readonly ItemSlotsSystem _slotSys = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearanceSys = default!;
+    [Dependency] private readonly SignalLinkerSystem _sigSys = default!;
     
     public override void Initialize()
     {
@@ -22,6 +26,7 @@ public sealed class TurretLoaderSystem : EntitySystem
         SubscribeLocalEvent<TurretLoaderComponent, EntRemovedFromContainerMessage>(OnContainerRemove);
         SubscribeLocalEvent<TurretLoaderComponent, TurretLoaderEjectRequest>(OnEject);
         SubscribeLocalEvent<TurretLoaderComponent, ComponentGetState>(GetLoaderState);
+        SubscribeLocalEvent<TurretLoaderComponent, NewLinkEvent>(OnLink);
     }
 
     private void GetLoaderState(EntityUid uid, TurretLoaderComponent loader, ref ComponentGetState args)
@@ -29,8 +34,25 @@ public sealed class TurretLoaderSystem : EntitySystem
         args.State = new TurretLoaderState(loader);
     }
 
+    private EntityUid GetLinkedTurret(EntityUid uid, TurretLoaderComponent loader)
+    {
+        if (EntityManager.TryGetComponent<SignalTransmitterComponent>(uid, out var sig))
+        {
+            if (sig.Outputs.ContainsKey("TurretLoaderSender"))
+            {
+                if (sig.Outputs["TurretLoaderSender"].Count > 0)
+                    return sig.Outputs["TurretLoaderSender"][0].Uid;
+            }
+        }
+        
+        return EntityUid.Invalid;
+    }
+
     public void SetupLoader(EntityUid uid, TurretLoaderComponent loader)
     {
+        if (!loader.BoundTurret.IsValid())
+            loader.BoundTurret = GetLinkedTurret(uid, loader);
+
         if (EntityManager.TryGetComponent<ItemSlotsComponent>(uid, out var slots))
         {
             loader.ContainerSlot = slots.Slots["ammoContainer"];
@@ -96,5 +118,10 @@ public sealed class TurretLoaderSystem : EntitySystem
             return;
 
         _slotSys.TryEject(uid, loader.ContainerSlot, uid, out var _);
+    }
+
+    private void OnLink(EntityUid uid, TurretLoaderComponent loader, NewLinkEvent args)
+    {
+        SetupLoader(uid, loader);
     }
 }

@@ -6,7 +6,7 @@
     - type: Item
       size: 2
     - type: CartridgeAmmo
-      proto: PelletShotgunSlugEvent
+      proto: PelletShotgunSlugShipEvent
       count: 5
       spread: 30
       deleteOnSpawn: true

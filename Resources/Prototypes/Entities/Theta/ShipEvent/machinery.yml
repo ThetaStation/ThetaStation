@@ -149,8 +149,8 @@
             - !type:SpawnEntitiesBehavior
               spawn:
                 SheetSteel:
-                  min: 2
-                  max: 4
+                  min: 3
+                  max: 5
             - !type:DoActsBehavior
               acts: [ "Destruction" ]
     - type: ApcPowerReceiver
@@ -172,3 +172,6 @@
             tags:
             - TurretAmmoContainer
     - type: TurretLoader
+    - type: SignalTransmitter
+      outputs:
+        TurretLoaderSender: [ ]
