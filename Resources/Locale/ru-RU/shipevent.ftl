@@ -88,8 +88,10 @@ shipevent-turretloader-status-nocontainer = Нет контейнера
 shipevent-turretloader-status-broken = Неисправность
 
 shipevent-turretloader-ammocount = Количество патронов:
+shipevent-turretloader-turret = Турель:
 
 shipevent-turretloader-ejectcontainerbutton = ИЗВЛЕЧЬ КОНТЕЙНЕР
+shipevent-turretloader-refreshbutton = ОБНОВИТЬ UI
 
 
 ## Cannon console

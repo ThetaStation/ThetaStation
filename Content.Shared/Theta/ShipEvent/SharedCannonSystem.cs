@@ -64,7 +64,7 @@ public abstract class SharedCannonSystem : EntitySystem
             return;
         }
 
-        args.Capacity = Int32.MaxValue;
+        args.Capacity = loader.MaxContainerCapacity;
         args.Count = loader.AmmoContainer.ContainedEntities.Count;
     }
 
