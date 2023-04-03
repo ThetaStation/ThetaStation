@@ -5,14 +5,12 @@ namespace Content.Shared.Theta.ShipEvent.UI;
 public sealed class TurretLoaderBoundUserInterfaceState : BoundUserInterfaceState
 {
     public int AmmoCurrent;
-    public int AmmoMax;
     public int TurretUid;
     public string Status;
 
-    public TurretLoaderBoundUserInterfaceState(int _ammoCurrent, int _ammoMax, int _turretUid, string _status)
+    public TurretLoaderBoundUserInterfaceState(int _ammoCurrent, int _turretUid, string _status)
     {
         AmmoCurrent = _ammoCurrent;
-        AmmoMax = _ammoMax;
         TurretUid = _turretUid;
         Status = _status;
     }

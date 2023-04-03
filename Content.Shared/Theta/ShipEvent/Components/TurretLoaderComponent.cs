@@ -25,6 +25,11 @@ public sealed class TurretLoaderComponent : Component
     /// Maximum capacity of currently loaded container
     /// </summary>
     public int MaxContainerCapacity;
+
+    /// <summary>
+    /// How much capacity of loaded container is currently used
+    /// </summary>
+    public int CurrentContainerCapacity;
 }
 
 [Serializable, NetSerializable]
@@ -33,6 +38,8 @@ public sealed class TurretLoaderState : ComponentState
     public EntityUid BoundTurret;
 
     public int MaxContainerCapacity;
+
+    public int CurrentContainerCapacity;
 
     public string? ContainerSlotID;
 
@@ -43,6 +50,7 @@ public sealed class TurretLoaderState : ComponentState
         BoundTurret = loader.BoundTurret;
         ContainerSlotID = loader.ContainerSlot?.ID;
         MaxContainerCapacity = loader.MaxContainerCapacity;
+        CurrentContainerCapacity = loader.CurrentContainerCapacity;
         ContainerID = loader.AmmoContainer?.ID;
     }
 }

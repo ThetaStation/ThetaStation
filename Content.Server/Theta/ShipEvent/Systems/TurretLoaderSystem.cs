@@ -30,6 +30,7 @@ public sealed class TurretLoaderSystem : EntitySystem
 
     private void GetLoaderState(EntityUid uid, TurretLoaderComponent loader, ref ComponentGetState args)
     {
+        UpdateAmmoContainer(loader);
         args.State = new TurretLoaderState(loader);
     }
 
@@ -68,6 +69,25 @@ public sealed class TurretLoaderSystem : EntitySystem
         
         Dirty(loader);
     }
+
+    private void UpdateAmmoContainer(TurretLoaderComponent loader)
+    {
+        loader.AmmoContainer = null;
+        loader.MaxContainerCapacity = 0;
+        loader.CurrentContainerCapacity = 0;
+        
+        var container = loader.ContainerSlot?.Item;
+
+        if (EntityManager.TryGetComponent<ServerStorageComponent>(container, out var storage))
+        {
+            if (storage.Storage != null)
+            {
+                loader.AmmoContainer = storage.Storage;
+                loader.MaxContainerCapacity = storage.StorageCapacityMax;
+                loader.CurrentContainerCapacity = storage.StorageUsed;
+            }
+        }
+    }
     
     private void OnInit(EntityUid uid, TurretLoaderComponent loader, ComponentInit args)
     {
@@ -85,29 +105,15 @@ public sealed class TurretLoaderSystem : EntitySystem
     
     private void OnContainerInsert(EntityUid uid, TurretLoaderComponent loader, EntInsertedIntoContainerMessage args)
     {
-        var container = loader.ContainerSlot?.Item;
-
-        if (EntityManager.TryGetComponent<ServerStorageComponent>(container, out var storage))
-        {
-            if (storage.Storage != null)
-            {
-                loader.AmmoContainer = storage.Storage;
-                loader.MaxContainerCapacity = storage.StorageCapacityMax;
-            }
-        }
-        
+        UpdateAmmoContainer(loader);
         _appearanceSys.SetData(uid, TurretLoaderVisuals.Loaded, true);
-
         Dirty(loader);
     }
 
     private void OnContainerRemove(EntityUid uid, TurretLoaderComponent loader, EntRemovedFromContainerMessage args)
     {
-        loader.AmmoContainer = null;
-        loader.MaxContainerCapacity = 0;
-        
+        UpdateAmmoContainer(loader);
         _appearanceSys.SetData(uid, TurretLoaderVisuals.Loaded, false);
-
         Dirty(loader);
     }
     

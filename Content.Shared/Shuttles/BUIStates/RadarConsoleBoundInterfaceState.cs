@@ -77,7 +77,8 @@ public sealed class CannonInformationInterfaceState
     public Angle Angle;
     public bool IsControlling;
     public int Ammo;
-    public int Capacity;
+    public int MaxCapacity;
+    public int UsedCapacity;
 }
 
 /// <summary>

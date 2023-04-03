@@ -58,6 +58,8 @@ public abstract class SharedCannonSystem : EntitySystem
                 args.Ammo.Add((ent, EnsureComp<AmmoComponent>(ent)));
             }
         }
+        
+        Dirty(loader);
     }
     
     private void OnAmmoCount(EntityUid uid, CannonComponent cannon, ref GetAmmoCountEvent args)
@@ -74,7 +76,9 @@ public abstract class SharedCannonSystem : EntitySystem
             return;
         }
 
-        args.Capacity = loader.MaxContainerCapacity;
+        //there is no sense in setting this, since ammo may have different size & types and it's impossible to count how much shots we can fit
+        args.Capacity = 0;
+        
         args.Count = loader.AmmoContainer.ContainedEntities.Count;
     }
 

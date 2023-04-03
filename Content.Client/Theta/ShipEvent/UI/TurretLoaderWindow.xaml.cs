@@ -22,7 +22,7 @@ public sealed partial class TurretLoaderWindow : DefaultWindow
     public void UpdateState(TurretLoaderBoundUserInterfaceState state)
     {
         StatusText.Text = state.Status;
-        AmmoCount.Text = $"{state.AmmoCurrent}/{state.AmmoMax}";
+        AmmoCount.Text = $"{state.AmmoCurrent}";
         TurretUid.Text = state.TurretUid.ToString();
     }
 }

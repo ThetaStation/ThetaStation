@@ -54,20 +54,22 @@ public sealed class CannonAmmoStatus : Control
         });
     }
 
-    public void Update(bool magazine, int count, int capacity)
+    //usedCapacity is how much of storage space of loader's container is occupied (for drawing ammo bar correctly)
+    public void Update(bool magazine, int count, int usedCapacity, int maxCapacity)
     {
         if (!magazine)
         {
             _noMagazineLabel.Visible = true;
             _ammoCount.Visible = false;
+            _ammoBar.Value = 0;
             return;
         }
 
         _noMagazineLabel.Visible = false;
 
-        _ammoCount.Text = $"{count}/{capacity}";
+        _ammoCount.Text = $"{count}";
 
-        _ammoBar.MaxValue = capacity;
-        _ammoBar.Value = count;
+        _ammoBar.MaxValue = maxCapacity;
+        _ammoBar.Value = usedCapacity;
     }
 }

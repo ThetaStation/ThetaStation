@@ -45,12 +45,11 @@ public sealed class TurretLoaderBoundUserInterface : BoundUserInterface
                     
             return new TurretLoaderBoundUserInterfaceState(
                 ammoCount,
-                loader.MaxContainerCapacity,
                 loader.BoundTurret.GetHashCode(),
                 GetLoaderStatus(loader));
         }
 
-        return new TurretLoaderBoundUserInterfaceState(0,0,0,"-");
+        return new TurretLoaderBoundUserInterfaceState(0,0,"-");
     }
 
     private string GetLoaderStatus(TurretLoaderComponent loader)
