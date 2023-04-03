@@ -89,6 +89,8 @@
     damage:
       types:
         Piercing: 100
+  - type: TimedDespawn
+    lifetime: 4
 
 - type: entity
   id: MagazineShotgunIncendiaryShipEvent

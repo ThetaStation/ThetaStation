@@ -37,6 +37,15 @@ public sealed partial class CannonConsoleWindow : FancyWindow,
 
     private void UpdateAmmo()
     {
+        foreach (var (cannonUid, cannonAmmoStatus) in _ammoStatuses)
+        {
+            if (_controlledCannons.Select(i => i.Uid).Contains(cannonUid))
+                continue;
+
+            _ammoStatuses.Remove(cannonUid);
+            AmmoStatusContents.RemoveChild(cannonAmmoStatus);
+            cannonAmmoStatus.Dispose();
+        }
         foreach (var cannonInformation in _controlledCannons)
         {
             if (!_ammoStatuses.TryGetValue(cannonInformation.Uid, out var status))
