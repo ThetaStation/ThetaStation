@@ -18,29 +18,28 @@ public sealed class ClientTurretLoaderSystem : EntitySystem
 
     private void SetLoaderState(EntityUid uid, TurretLoaderComponent loader, ref ComponentHandleState args)
     {
-        if (args.Current is not TurretLoaderState state) 
+        if (args.Current is not TurretLoaderState loaderState) 
             return;
-        var loaderState = (TurretLoaderState)args.Current;
-        
+
         loader.BoundTurret = loaderState.BoundTurret;
         loader.MaxContainerCapacity = loaderState.MaxContainerCapacity;
         loader.CurrentContainerCapacity = loaderState.CurrentContainerCapacity;
 
-        if (state.ContainerSlotID != null)
+        if (loaderState.ContainerSlotID != null)
         {
-            if (_slotSys.TryGetSlot(uid, state.ContainerSlotID, out var slot))
+            if (_slotSys.TryGetSlot(uid, loaderState.ContainerSlotID, out var slot))
                 loader.ContainerSlot = slot;
         }
 
         if (EntityManager.TryGetComponent<ContainerManagerComponent>(uid, out var contMan) &&
-            state.ContainerID != null)
+            loaderState.ContainerID != null)
         {
             var ammoContainer = loader.ContainerSlot?.Item;
 
             if (ammoContainer == null)
                 return;
             
-            if (_contSys.TryGetContainer((EntityUid)ammoContainer, state.ContainerID, out var cont))
+            if (_contSys.TryGetContainer((EntityUid)ammoContainer, loaderState.ContainerID, out var cont))
                 loader.AmmoContainer = (Container)cont;
         }
     }
