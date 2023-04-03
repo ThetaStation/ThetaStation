@@ -28,8 +28,11 @@ public sealed class TurretLoaderBoundUserInterface : BoundUserInterface
 
     protected override void UpdateState(BoundUserInterfaceState state)
     {
+        if (state is not TurretLoaderBoundUserInterfaceState loaderState)
+            return;
+        
         base.UpdateState(state);
-        _window?.UpdateState((TurretLoaderBoundUserInterfaceState)state);
+        _window?.UpdateState(loaderState);
     }
 
     private TurretLoaderBoundUserInterfaceState Refresh()
