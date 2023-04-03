@@ -15,8 +15,7 @@ public sealed class TurretLoaderSystem : EntitySystem
 {
     [Dependency] private readonly ItemSlotsSystem _slotSys = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearanceSys = default!;
-    [Dependency] private readonly SignalLinkerSystem _sigSys = default!;
-    
+
     public override void Initialize()
     {
         base.Initialize();

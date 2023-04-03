@@ -173,7 +173,7 @@
             - TurretAmmoContainer
     - type: ContainerContainer
       containers:
-        storagebase: !type:Container
+        ammoContainer: !type:ContainerSlot
           ents: [ ]
     - type: TurretLoader
     - type: SignalTransmitter
