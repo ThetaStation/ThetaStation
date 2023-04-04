@@ -15,7 +15,6 @@ public abstract class SharedCannonSystem : EntitySystem
 {
     [Dependency] private readonly SharedGunSystem _gunSystem = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly INetManager _netMan = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     public override void Initialize()
@@ -52,8 +51,7 @@ public abstract class SharedCannonSystem : EntitySystem
                 if (!cannon.AmmoPrototypes.Contains(prot))
                     continue;
 
-                if (_netMan.IsServer)
-                    loader.AmmoContainer.Remove(ent);
+                loader.AmmoContainer.Remove(ent);
 
                 args.Ammo.Add((ent, EnsureComp<AmmoComponent>(ent)));
             }
