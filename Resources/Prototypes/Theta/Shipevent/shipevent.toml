@@ -1,4 +1,6 @@
-﻿TeamCheckInterval = 5.0 #float, in seconds
+﻿#todo: move this to gamerule prototype (someday)
+
+TeamCheckInterval = 5.0 #float, in seconds
 RespawnDelay = 60.0 #float, in seconds
 
 InitialObstacleAmount = 50

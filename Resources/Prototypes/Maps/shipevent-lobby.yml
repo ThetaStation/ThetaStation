@@ -7,6 +7,6 @@
     LobbyShipevent:
       mapNameTemplate: 'Lobby'
       overflowJobs:
-        - Passenger
+        - PassengerGodmode
       availableJobs:
-        Passenger: [ -1, -1 ]
+        PassengerGodmode: [ -1, -1 ]
