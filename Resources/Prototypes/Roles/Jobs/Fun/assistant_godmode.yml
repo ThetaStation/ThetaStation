@@ -5,7 +5,7 @@
   startingGear: PassengerGear
   icon: "Passenger"
   supervisors: job-supervisors-everyone
-  playTimeTracker: Dummy
+  playTimeTracker: JobPassenger
   special:
   - !type:AddComponentSpecial
     components:
