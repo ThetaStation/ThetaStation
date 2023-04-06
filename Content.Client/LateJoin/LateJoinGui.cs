@@ -163,7 +163,7 @@ namespace Content.Client.LateJoin
                 List<string> unsortedJobs = new();
                 foreach (var job in _prototypeManager.EnumeratePrototypes<JobPrototype>())
                 {
-                    if (job.ShowIfNotInDepartment)
+                    if (job.AlwaysShowInLatejoin)
                         unsortedJobs.Add(job.ID);
                 }
 

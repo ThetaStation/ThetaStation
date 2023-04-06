@@ -10,4 +10,4 @@
   - !type:AddComponentSpecial
     components:
     - type: Godmode
-  showIfNotInDepartment: true
+  alwaysShowInLatejoin: true
