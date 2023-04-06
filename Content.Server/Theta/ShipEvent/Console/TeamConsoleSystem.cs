@@ -1,9 +1,12 @@
 ﻿using System.Linq;
+using Content.Server.GameTicking;
+using Content.Server.GameTicking.Rules;
 using Content.Server.Theta.ShipEvent.Systems;
 using Content.Server.UserInterface;
 using Content.Shared.Theta.ShipEvent.UI;
 using Robust.Server.GameObjects;
 using Robust.Server.Player;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.Theta.ShipEvent.Console;
 
@@ -11,6 +14,8 @@ public sealed class TeamConsoleSystem : EntitySystem
 {
     [Dependency] private readonly ShipEventFactionSystem _shipEventFaction = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
+    [Dependency] private readonly GameTicker _ticker = default!;
+    [Dependency] private readonly IPrototypeManager _protMan = default!;
 
     public override void Initialize()
     {
@@ -60,8 +65,7 @@ public sealed class TeamConsoleSystem : EntitySystem
 
         if (!_shipEventFaction.RuleSelected)
         {
-            ThrowError(uid, args.UiKey, ErrorTypes.ShipEventNotStarted);
-            return;
+            _ticker.AddGameRule(_protMan.Index<GameRulePrototype>("ShipEvent"));
         }
 
         if (!_shipEventFaction.IsValidName(args.Name))
