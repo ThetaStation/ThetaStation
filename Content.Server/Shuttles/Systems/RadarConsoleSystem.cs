@@ -118,6 +118,9 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
             var ammoCountEv = new GetAmmoCountEvent();
             RaiseLocalEvent(cannon.Owner, ref ammoCountEv);
 
+            var maxCapacity = cannon.BoundLoader?.MaxContainerCapacity != null ? cannon.BoundLoader.MaxContainerCapacity : 0;
+            var usedCapacity = cannon.BoundLoader?.CurrentContainerCapacity != null ? cannon.BoundLoader.CurrentContainerCapacity : 0;
+
             list.Add(new CannonInformationInterfaceState
             {
                 Uid = cannon.Owner,
@@ -126,7 +129,8 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
                 Angle = _transformSystem.GetWorldRotation(transform),
                 IsControlling = controlled,
                 Ammo = ammoCountEv.Count,
-                Capacity = ammoCountEv.Capacity,
+                UsedCapacity = usedCapacity,
+                MaxCapacity = maxCapacity
             });
         }
 

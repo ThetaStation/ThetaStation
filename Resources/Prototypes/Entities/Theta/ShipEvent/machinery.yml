@@ -1,18 +1,7 @@
 ﻿- type: entity
-  parent: ComputerShuttle
-  id: ComputerShuttleEvent
-  name: shuttle console
-  description: Used to pilot a shuttle.
-  suffix: SHIPEVENT
-  components:
-    - type: ApcPowerReceiver
-      needsPower: false
-
-- type: entity
-  parent: BaseComputer
-  id: CannonComputerShuttleEvent
+  id: CannonComputerShipEvent
   name: cannon console
-  suffix: SHIPEVENT
+  parent: BaseComputer
   components:
     - type: CannonConsole
     - type: SignalTransmitter
@@ -43,11 +32,9 @@
           state: syndie_key
 
 - type: entity
-  parent: BaseComputer
   id: TeamCreationConsoleShipEvent
   name: team console
-  suffix: SHIPEVENT
-  description: shipevent-teamconsole-desc
+  parent: BaseComputer
   components:
     - type: ShipEventFactionMarker
     - type: TeamConsole
@@ -68,10 +55,8 @@
   id: TeamSpawnerShipEvent
   name: team spawner
   parent: BaseStructure
-  suffix: SHIPEVENT
   placement:
     mode: SnapgridCenter
-  description: shipevent-spawner-desc
   components:
   - type: Transform
     anchored: true
@@ -121,3 +106,75 @@
       Brute:
         path:
           "/Audio/Effects/glass_hit.ogg"
+        
+- type: entity
+  id: TurretLoaderShipEvent
+  name: turret loader
+  parent: BaseStructure
+  placement:
+    mode: SnapgridCenter
+  components:
+    - type: Transform
+      anchored: true
+    - type: Sprite
+      drawdepth: Objects
+      sprite: Theta/ShipEvent/Structures/Machines/TurretLoader.rsi
+      state: loader
+    - type: Appearance
+      visuals:
+      - type: TurretLoaderVisualizer
+    - type: Physics
+      bodyType: Static
+    - type: Fixtures
+      fixtures:
+        - shape:
+            !type:PhysShapeAabb {}
+          mask:
+            - FullTileMask
+          layer:
+            - WallLayer
+    - type: Damageable
+      damageContainer: Inorganic
+      damageModifierSet: Metallic
+    - type: Repairable
+    - type: Destructible
+      thresholds:
+        - trigger:
+            !type:DamageTrigger
+            damage: 300
+          behaviors:
+            - !type:PlaySoundBehavior
+              sound: !type:SoundPathSpecifier
+                path: "/Audio/Effects/metalbreak.ogg"
+            - !type:SpawnEntitiesBehavior
+              spawn:
+                SheetSteel:
+                  min: 3
+                  max: 5
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+    - type: ApcPowerReceiver
+      needsPower: false
+    - type: ActivatableUI
+      key: enum.TurretLoaderUiKey.Key
+    - type: UserInterface
+      interfaces:
+      - key: enum.TurretLoaderUiKey.Key
+        type: TurretLoaderBoundUserInterface
+    - type: ItemSlots
+      slots:
+        ammoContainer:
+          name: AmmoContainer
+          insertSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
+          ejectSound: /Audio/Weapons/Guns/MagOut/batrifle_magout.ogg
+          priority: 2
+          whitelist:
+            tags:
+            - TurretAmmoContainer
+    - type: ContainerContainer
+      containers:
+        ammoContainer: !type:ContainerSlot { }
+    - type: TurretLoader
+    - type: SignalTransmitter
+      outputs:
+        TurretLoaderSender: [ ]

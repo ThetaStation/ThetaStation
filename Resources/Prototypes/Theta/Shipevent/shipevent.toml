@@ -16,7 +16,7 @@ PointsPerKill = 10000
 
 HUDPrototypeId = "ShipeventHUD"
 
-ShipTypes = ["/Maps/Shuttles/ship_test_1.yml"]
+ShipTypes = ["/Maps/Shuttles/shiptest-infiltrator.yml"]
 ObstacleTypes = ["/Maps/Salvage/asteroid-base.yml", 
     "/Maps/Salvage/medium-1.yml", 
     "/Maps/Salvage/small-1.yml", 

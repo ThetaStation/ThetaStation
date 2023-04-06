@@ -1,27 +1,48 @@
-﻿- type: entity
-  name: pocket radar
-  description: Helps to fight without voice chat
+﻿- type: Tag
+  id: TurretAmmoContainer
+
+- type: entity
+  id: TurretAmmoContainerRegular
+  name: ammo container
   parent: BaseItem
-  id: PocketRadar
-  suffix: SHIPEVENT
   components:
-    - type: Sprite
-      sprite: Objects/Devices/gps.rsi
-      netsync: false
-      layers:
-        - state: icon
-        - state: active
+    - type: Tag
+      tags:
+      - TurretAmmoContainer
     - type: Item
-      sprite: Objects/Devices/gps.rsi
-    - type: RadarConsole
-      maxRange: 150
-    - type: ActivatableUI
-      key: enum.RadarConsoleUiKey.Key
-      inHandsOnly: true
-      singleUser: true
-      requireHands: false
-      closeOnHandDeselect: false
+      size: 9999
+    - type: Sprite
+      drawdepth: Items
+      sprite: Theta/ShipEvent/Objects/AmmoContainer.rsi
+      state: container
+    - type: Storage
+      capacity: 100
+      quickInsert: true
+      areaInsert: true
+      whitelist:
+        components:
+        - Ammo
+    - type: ContainerContainer
+      containers:
+        storagebase: !type:Container
+          ents: [ ]
+    - type: Dumpable
     - type: UserInterface
       interfaces:
-        - key: enum.RadarConsoleUiKey.Key
-          type: RadarConsoleBoundUserInterface
+      - key: enum.StorageUiKey.Key
+        type: StorageBoundUserInterface
+
+- type: entity
+  id: TurretAmmoContainerBluespace
+  name: bluespace ammo container
+  parent: TurretAmmoContainerRegular
+  components:
+    - type: Sprite
+      drawdepth: Items
+      sprite: Theta/ShipEvent/Objects/AmmoContainer.rsi
+      state: container-bluespace
+    - type: Storage
+      capacity: 500
+      whitelist:
+        components:
+        - Ammo

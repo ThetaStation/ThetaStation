@@ -306,7 +306,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         var team = new ShipEventFaction(
             teamName,
-            "/Textures/Theta/ShipEvent/ShipFactionIcon.rsi",
+            "",
             teamColor,
             shipEntity,
             captain,
