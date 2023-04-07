@@ -12,7 +12,7 @@ namespace Content.Server.Theta.ShipEvent.Console;
 
 public sealed class TeamConsoleSystem : EntitySystem
 {
-    [Dependency] private readonly ShipEventFactionSystem _shipEventFaction = default!;
+    [Dependency] private readonly ShipEventFactionSystem _shipSys = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
     [Dependency] private readonly GameTicker _ticker = default!;
     [Dependency] private readonly IPrototypeManager _protMan = default!;
@@ -27,9 +27,7 @@ public sealed class TeamConsoleSystem : EntitySystem
 
     private void TryJoinToShipTeam(EntityUid uid, TeamConsoleComponent component, JoinToShipTeamsEvent args)
     {
-        if (!_shipEventFaction.HasTeamName(args.Name))
-            return;
-        _shipEventFaction.ManuallyJoinToTeam((IPlayerSession) args.Session, args.Name);
+        _shipSys.JoinTeam((IPlayerSession) args.Session, args.Name);
     }
 
     private void OnRefreshTeams(EntityUid uid, TeamConsoleComponent component, RefreshShipTeamsEvent args)
@@ -50,7 +48,7 @@ public sealed class TeamConsoleSystem : EntitySystem
     private List<ShipTeamForLobbyState> GetTeams()
     {
         List<ShipTeamForLobbyState> teamStates = new();
-        foreach (var team in _shipEventFaction.Teams)
+        foreach (var team in _shipSys.Teams)
         {
             teamStates.Add(new ShipTeamForLobbyState(team.Name, team.Members.Count, team.Captain));
         }
@@ -63,12 +61,12 @@ public sealed class TeamConsoleSystem : EntitySystem
         if (args.Session.AttachedEntity == null)
             return;
 
-        if (!_shipEventFaction.RuleSelected)
+        if (!_shipSys.RuleSelected)
         {
             _ticker.AddGameRule(_protMan.Index<GameRulePrototype>("ShipEvent"));
         }
 
-        if (!_shipEventFaction.IsValidName(args.Name))
+        if (!_shipSys.IsValidName(args.Name))
         {
             ThrowError(uid, args.UiKey, ErrorTypes.InvalidName);
             return;
@@ -77,7 +75,7 @@ public sealed class TeamConsoleSystem : EntitySystem
         var color = Color.White.ToHex();
         if (!string.IsNullOrEmpty(args.Color))
         {
-            if (!_shipEventFaction.IsValidColor(args.Color))
+            if (!_shipSys.IsValidColor(args.Color))
             {
                 ThrowError(uid, args.UiKey, ErrorTypes.InvalidColor);
                 return;
@@ -99,7 +97,7 @@ public sealed class TeamConsoleSystem : EntitySystem
             return;
         }
 
-        _shipEventFaction.CreateShipEventTeam(args.Session, args.Name, color, blacklist);
+        _shipSys.CreateTeam(args.Session, args.Name, color, blacklist);
     }
 
     private void ThrowError(EntityUid uid, Enum uiKey, ErrorTypes error)
