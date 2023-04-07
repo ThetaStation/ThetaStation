@@ -1,6 +1,6 @@
 ﻿#todo: move this to gamerule prototype (someday)
 
-RoundDuration = 300 #in seconds, set ot negative if you don't want a timed round end
+RoundDuration = 1800 #in seconds, set ot negative if you don't want a timed round end
 
 TeamCheckInterval = 5.0 #float, in seconds
 RespawnDelay = 60.0 #float, in seconds
