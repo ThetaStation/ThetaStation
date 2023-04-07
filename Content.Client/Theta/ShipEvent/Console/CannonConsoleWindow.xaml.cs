@@ -14,10 +14,6 @@ namespace Content.Client.Theta.ShipEvent.Console;
 public sealed partial class CannonConsoleWindow : FancyWindow,
     IComputerWindow<CannonConsoleBoundInterfaceState>
 {
-    private List<CannonInformationInterfaceState> _controlledCannons = new();
-
-    private Dictionary<EntityUid, CannonAmmoStatus> _ammoStatuses = new();
-
     public CannonConsoleWindow()
     {
         RobustXamlLoader.Load(this);
@@ -26,8 +22,9 @@ public sealed partial class CannonConsoleWindow : FancyWindow,
     public void UpdateState(CannonConsoleBoundInterfaceState scc)
     {
         RadarScreen.UpdateState(scc);
-        _controlledCannons = scc.Cannons.Where(i => i.IsControlling).ToList();
-        UpdateAmmo();
+
+        var cannons = scc.Cannons.Where(i => i.IsControlling).ToList();
+        UpdateAmmo(cannons);
     }
 
     public void SetMatrix(EntityCoordinates? coordinates, Angle? angle)
@@ -35,26 +32,13 @@ public sealed partial class CannonConsoleWindow : FancyWindow,
         RadarScreen.SetMatrix(coordinates, angle);
     }
 
-    private void UpdateAmmo()
+    private void UpdateAmmo(List<CannonInformationInterfaceState> controlledCannons)
     {
-        foreach (var (cannonUid, cannonAmmoStatus) in _ammoStatuses)
+        AmmoStatusContents.RemoveAllChildren();
+        foreach (var cannonInformation in controlledCannons)
         {
-            if (_controlledCannons.Select(i => i.Uid).Contains(cannonUid))
-                continue;
-
-            _ammoStatuses.Remove(cannonUid);
-            AmmoStatusContents.RemoveChild(cannonAmmoStatus);
-            cannonAmmoStatus.Dispose();
-        }
-        foreach (var cannonInformation in _controlledCannons)
-        {
-            if (!_ammoStatuses.TryGetValue(cannonInformation.Uid, out var status))
-            {
-                status = new CannonAmmoStatus();
-                _ammoStatuses[cannonInformation.Uid] = status;
-                AmmoStatusContents.AddChild(status);
-            }
-
+            var status = new CannonAmmoStatus();
+            AmmoStatusContents.AddChild(status);
             var noMagazine = cannonInformation is { Ammo: 0, MaxCapacity: 0 };
             status.Update(!noMagazine, cannonInformation.Ammo, cannonInformation.UsedCapacity, cannonInformation.MaxCapacity);
         }
