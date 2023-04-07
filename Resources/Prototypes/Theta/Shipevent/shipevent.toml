@@ -3,7 +3,7 @@
 TeamCheckInterval = 5.0 #float, in seconds
 RespawnDelay = 60.0 #float, in seconds
 
-InitialObstacleAmount = 50
+InitialObstacleAmount = 150
 MaxSpawnOffset = 500 #both for ships & obstacles
 CollisionCheckRange = 100
 
