@@ -41,11 +41,16 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     [Dependency] private readonly UserInterfaceSystem _uiSys = default!;
     [Dependency] private readonly ShuttleSystem _shuttleSystem = default!;
     [Dependency] private readonly IPlayerManager _playerMan = default!;
+    [Dependency] private readonly GameTicker _ticker = default!;
 
     private readonly Dictionary<EntityUid, string> _shipNames = new();
     private readonly Dictionary<string, int> _projectileDamage = new(); //cached damage for projectile prototypes
     private int _lastTeamNumber;
     private float _teamCheckTimer;
+    private float _roundendTimer;
+
+    public float RoundDuration; //in seconds
+    public bool TimedRoundEnd = false;
 
     public float TeamCheckInterval; //in seconds
     public float RespawnDelay; //in seconds
@@ -85,14 +90,38 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     public override void Update(float frametime)
     {
-        if (_teamCheckTimer < TeamCheckInterval)
+        _teamCheckTimer += frametime;
+        _roundendTimer += frametime;
+        
+        if (_teamCheckTimer > TeamCheckInterval)
         {
-            _teamCheckTimer += frametime;
-            return;
+            _teamCheckTimer -= TeamCheckInterval;
+            CheckTeams(TeamCheckInterval);
         }
 
-        _teamCheckTimer -= TeamCheckInterval;
-        CheckTeams(TeamCheckInterval);
+        CheckRoundendTimer();
+    }
+
+    public void CheckRoundendTimer()
+    {
+        if (!TimedRoundEnd)
+            return;
+        
+        switch (RoundDuration - _roundendTimer)
+        {
+            case 600:
+               Announce(Loc.GetString("shipevent-roundendtimer-tenmins"));
+               break;
+            case 300:
+                Announce(Loc.GetString("shipevent-roundendtimer-fivemins"));
+                break;
+            case 60:
+                Announce(Loc.GetString("shipevent-roundendtimer-onemin"));
+                break;
+            case <= 0:
+                _ticker.EndRound();
+                break;
+        }
     }
 
     public void OnRoundRestart(RoundRestartCleanupEvent ev)

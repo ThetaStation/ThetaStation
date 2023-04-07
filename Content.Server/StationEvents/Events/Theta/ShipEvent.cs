@@ -40,7 +40,11 @@ public sealed class ShipEvent : StationEventSystem
         var config = configReader.ReadToEnd().Replace(Environment.NewLine, "\n");
         var table = Toml.ReadString(config);
         
+        var roundDuration = (int)((TomlInt)table["RoundDuration"]).Value;
+
         //maybe it's worth to automate collection of system's public variables in future
+        _shipSys.RoundDuration = roundDuration;
+        _shipSys.TimedRoundEnd = roundDuration > 0;
         _shipSys.TeamCheckInterval = (float)((TomlFloat)table["TeamCheckInterval"]).Value;
         _shipSys.RespawnDelay = (float)((TomlFloat)table["RespawnDelay"]).Value;
         _shipSys.MaxSpawnOffset = (int)((TomlInt)table["MaxSpawnOffset"]).Value;
@@ -50,7 +54,7 @@ public sealed class ShipEvent : StationEventSystem
         _shipSys.PointsPerHitMultiplier = (float)((TomlFloat)table["PointsPerHitMultiplier"]).Value;
         _shipSys.PointsPerAssist = (int)((TomlInt)table["PointsPerAssist"]).Value;
         _shipSys.PointsPerKill = (int)((TomlInt)table["PointsPerKill"]).Value;
-        
+
         _shipSys.HUDPrototypeId = ((TomlString) table["HUDPrototypeId"]).Value;
         _shipSys.ShipTypes = ((TomlArray) table["ShipTypes"]).Value.Select(s => (string)((TomlString)s).Value).ToList();
         _shipSys.ObstacleTypes = ((TomlArray) table["ObstacleTypes"]).Value.Select(s => (string) ((TomlString) s).Value).ToList();
