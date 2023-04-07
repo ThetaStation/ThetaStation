@@ -29,7 +29,8 @@ public class PlayerFaction
 
     public void AddMember(Role member)
     {
-        if (Members.Contains(member)) { return; }
+        if (Members.Contains(member))
+            return;
 
         member.Faction = this;
         Members.Add(member);
@@ -37,7 +38,8 @@ public class PlayerFaction
 
     public void RemoveMember(Role member)
     {
-        if (!Members.Contains(member)) { return; }
+        if (!Members.Contains(member))
+            return;
 
         member.Faction = null;
         Members.Remove(member);
@@ -45,10 +47,12 @@ public class PlayerFaction
 
     public EntityUid GetMemberEntity(Role member)
     {
-        if (!Members.Contains(member)) { return EntityUid.Invalid; }
+        if (!Members.Contains(member))
+            return EntityUid.Invalid;
 
         EntityUid? entity = member.Mind.OwnedEntity;
-        if (entity != null) { return (EntityUid) entity; }
+        if (entity != null)
+            return (EntityUid) entity;
 
         return EntityUid.Invalid;
     }
@@ -58,7 +62,8 @@ public class PlayerFaction
         List<EntityUid> living = new();
         foreach (Role member in Members)
         {
-            if (!member.Mind.CharacterDeadPhysically) { living.Add((EntityUid)member.Mind.OwnedEntity!); }
+            if (!member.Mind.CharacterDeadPhysically)
+                living.Add((EntityUid)member.Mind.OwnedEntity!);
         }
 
         return living;
@@ -69,9 +74,22 @@ public class PlayerFaction
         List<Mind.Mind> living = new();
         foreach (Role member in Members)
         {
-            if (!member.Mind.CharacterDeadPhysically) { living.Add(member.Mind); }
+            if (!member.Mind.CharacterDeadPhysically)
+                living.Add(member.Mind);
         }
 
         return living;
+    }
+
+    public List<string> GetMemberUserNames()
+    {
+        List<string> names = new();
+        foreach (Role member in Members)
+        {
+            if (!member.Mind.TryGetSession(out var session))
+                names.Add(session!.ConnectedClient.UserName);
+        }
+
+        return names;
     }
 }

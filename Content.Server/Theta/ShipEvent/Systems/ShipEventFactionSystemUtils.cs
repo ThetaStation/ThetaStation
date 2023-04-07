@@ -153,18 +153,7 @@ public sealed partial class ShipEventFactionSystem
 
         return null;
     }
-
-    public bool HasTeamName(string name)
-    {
-        foreach (var team in Teams)
-        {
-            if (team.Name == name)
-                return true;
-        }
-
-        return false;
-    }
-
+    
     public bool IsValidName(string name)
     {
         if (name == "")

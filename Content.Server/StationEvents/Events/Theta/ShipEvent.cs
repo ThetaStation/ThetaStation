@@ -32,8 +32,12 @@ public sealed class ShipEvent : StationEventSystem
         using var configReader = new StreamReader(configStream, EncodingHelpers.UTF8);
         var config = configReader.ReadToEnd().Replace(Environment.NewLine, "\n");
         var table = Toml.ReadString(config);
+        
+        var roundDuration = (int)((TomlInt)table["RoundDuration"]).Value;
 
         //maybe it's worth to automate collection of system's public variables in future
+        _shipSys.RoundDuration = roundDuration;
+        _shipSys.TimedRoundEnd = roundDuration > 0;
         _shipSys.TeamCheckInterval = (float)((TomlFloat)table["TeamCheckInterval"]).Value;
         _shipSys.RespawnDelay = (float)((TomlFloat)table["RespawnDelay"]).Value;
         _shipSys.MaxSpawnOffset = (int)((TomlInt)table["MaxSpawnOffset"]).Value;
