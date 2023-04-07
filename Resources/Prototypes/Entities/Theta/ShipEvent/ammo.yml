@@ -55,7 +55,7 @@
       contents:
         - id: TurretAmmoContainerShotgunFilled
           amount: 10
-          
+
 - type: entity
   id: TurretAmmoContainerRocketFilled
   parent: TurretAmmoContainerRegular
@@ -64,8 +64,8 @@
     - type: StorageFill
       contents:
         - id: CartridgeRocket
-          amount: 20
-          
+          amount: 100
+
 - type: entity
   id: TurretAmmoContainerShotgunFilled
   parent: TurretAmmoContainerRegular
