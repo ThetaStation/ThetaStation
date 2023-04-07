@@ -55,7 +55,7 @@ public sealed partial class CannonConsoleWindow : FancyWindow,
                 AmmoStatusContents.AddChild(status);
             }
 
-            var noMagazine = cannonInformation is { Ammo: 0, UsedCapacity: 0 };
+            var noMagazine = cannonInformation is { Ammo: 0, MaxCapacity: 0 };
             status.Update(!noMagazine, cannonInformation.Ammo, cannonInformation.UsedCapacity, cannonInformation.MaxCapacity);
         }
     }
