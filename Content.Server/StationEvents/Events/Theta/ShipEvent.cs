@@ -21,15 +21,8 @@ public sealed class ShipEvent : StationEventSystem
     {
         base.Started();
 
-        int mid = 1;
-        for (int i = 0; i < 100; i++)
-        {
-            if (!_mapMan.MapExists(new MapId(mid))) { break; }
-            mid++;
-        }
-
-        _mapMan.CreateMap(new MapId(mid));
-        _shipSys.TargetMap = new MapId(mid);
+        var map = _mapMan.CreateMap();
+        _shipSys.TargetMap = map;
         _shipSys.RuleSelected = true;
 
         var eventConfigPath = new ResourcePath("/Prototypes/Theta/Shipevent/shipevent.toml");

@@ -19,7 +19,7 @@
                     <Label Name="NameShipLabel" Text="{Loc 'shuttle-console-name-label'}" HorizontalAlignment="Center"/>
                 </controls:StripeBack>
                 <LineEdit Name="ShipName" Access="Public" HorizontalExpand="True"/>
-                <Button Name="ChangeNameShip" Access="Public" Text="Изменить"/>
+                <Button Name="ChangeNameShip" Access="Public" Text="{Loc 'shuttle-console-name-change'}"/>
             </BoxContainer>
             <BoxContainer Orientation="Vertical">
                 <controls:StripeBack>
