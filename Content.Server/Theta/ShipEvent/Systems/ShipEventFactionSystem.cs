@@ -26,6 +26,7 @@ using Robust.Shared.Players;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
+
 namespace Content.Server.Theta.ShipEvent.Systems;
 
 public sealed partial class ShipEventFactionSystem : EntitySystem
@@ -106,21 +107,19 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     {
         if (!TimedRoundEnd)
             return;
-        
-        switch (RoundDuration - _roundendTimer)
+
+        var remaining = RoundDuration - _roundendTimer;
+        if (Math.Abs(remaining - 10*60) <= 1)
         {
-            case 600:
-               Announce(Loc.GetString("shipevent-roundendtimer-tenmins"));
-               break;
-            case 300:
-                Announce(Loc.GetString("shipevent-roundendtimer-fivemins"));
-                break;
-            case 60:
-                Announce(Loc.GetString("shipevent-roundendtimer-onemin"));
-                break;
-            case <= 0:
-                _ticker.EndRound();
-                break;
+            Announce(Loc.GetString("shipevent-roundendtimer-tenmins"));
+        }
+        if (Math.Abs(remaining - 5*60) <= 1)
+        {
+            Announce(Loc.GetString("shipevent-roundendtimer-fivemins"));
+        }
+        if (Math.Abs(remaining - 60) <= 1)
+        {
+            Announce(Loc.GetString("shipevent-roundendtimer-onemin"));
         }
     }
 
