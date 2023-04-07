@@ -78,8 +78,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<ShipEventFactionViewComponent, ToggleActionEvent>(OnView);
         SubscribeLocalEvent<ShipEventFactionViewComponent, ComponentInit>(OnViewInit);
-        SubscribeLocalEvent<ShipEventFactionMarkerComponent, GhostRoleSpawnerUsedEvent>(OnSpawn);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, StartCollideEvent>(OnCollision);
+        SubscribeLocalEvent<ShipEventFactionMarkerComponent, PlayerDetachedEvent>(OnPlayerDetach);
         SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEnd);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
     }
@@ -171,6 +171,29 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             _actSys.AddAction(entity, view.ToggleAction, null, actComp);
     }
 
+    private void OnPlayerDetach(EntityUid entity, ShipEventFactionMarkerComponent marker, PlayerDetachedEvent args)
+    {
+        var ship = marker.Team?.Ship;
+        if (ship == null)
+            return;
+
+        var session = GetSession(entity);
+        if (session == null)
+            return;
+        
+        var spawners = GetShipComponents<ShipEventSpawnerComponent>((EntityUid)ship);
+
+        if (!spawners.Any())
+        {
+            _chatSys.SendSimpleMessage(Loc.GetString("shipevent-respawnfailed"), session);
+            return;
+        }
+
+        var spawner = spawners.First();
+        var playerMob = SpawnPlayer(session, spawner);
+        AfterSpawn(playerMob, spawner);
+    }
+
     public void CreateShipEventTeam(ICommonSession captainSession, string name, string color,
         List<string>? blacklist = null)
     {
@@ -178,17 +201,19 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             return;
 
         var newShip = RandomPosSpawn(_random.Pick(ShipTypes));
-        var spawners = GetShipComponents<GhostRoleMobSpawnerComponent>(newShip);
+        var spawners = GetShipComponents<ShipEventSpawnerComponent>(newShip);
         if (!spawners.Any())
             return;
 
         var team = CreateTeam(newShip, captainSession.ConnectedClient.UserName, name, color, blacklist);
         SetMarkers(newShip, team);
 
-        SpawnPlayerByGhostRole((IPlayerSession) captainSession, spawners.First());
+        var spawner = spawners.First();
+        var playerMob = SpawnPlayer((IPlayerSession) captainSession, spawner);
+        AfterSpawn(playerMob, spawner);
     }
 
-    public void ManuallyJoinToTeam(IPlayerSession player, string teamName)
+    public void JoinTeam(IPlayerSession player, string teamName)
     {
         EntityUid? shipUid = null;
         foreach (var team in Teams)
@@ -200,31 +225,47 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         if (shipUid == null)
             return;
 
-        var spawners = GetShipComponents<GhostRoleMobSpawnerComponent>(shipUid.Value);
+        var spawners = GetShipComponents<ShipEventSpawnerComponent>(shipUid.Value);
         if (!spawners.Any())
             return;
 
-        SpawnPlayerByGhostRole(player, spawners.First());
+        var spawner = spawners.First();
+        var playerMob = SpawnPlayer(player, spawner);
+        AfterSpawn(playerMob, spawner);
     }
 
-    private void SpawnPlayerByGhostRole(IPlayerSession player, EntityUid spawnerUid)
+    private EntityUid SpawnPlayer(IPlayerSession player, EntityUid spawnerUid)
     {
         if (player.AttachedEntity == null)
-            return;
+            return EntityUid.Invalid;
 
         EntityManager.DeleteEntity(player.AttachedEntity.Value);
-        EntityManager.GetComponent<GhostRoleMobSpawnerComponent>(spawnerUid).Take(player);
+        
+        var spawner = EntityManager.GetComponent<ShipEventSpawnerComponent>(spawnerUid);
+        var playerMob = EntityManager.SpawnEntity(spawner.Prototype, Transform(spawnerUid).Coordinates);
+        var xform = EntityManager.GetComponent<TransformComponent>(playerMob);
+        xform.AttachToGridOrMap();
+        
+        playerMob.EnsureComponent<MindComponent>();
+        var newMind = new Mind.Mind(player.UserId)
+        {
+            CharacterName = EntityManager.GetComponent<MetaDataComponent>(playerMob).EntityName
+        };
+        newMind.ChangeOwningPlayer(player.UserId);
+        newMind.TransferTo(playerMob);
+
+        return playerMob;
     }
 
-    private void OnSpawn(EntityUid entity, ShipEventFactionMarkerComponent component, GhostRoleSpawnerUsedEvent args)
+    private void AfterSpawn(EntityUid spawnedEntity, EntityUid spawnerEntity)
     {
-        var session = GetSession(entity);
+        var session = GetSession(spawnedEntity);
         if (session == null)
             return;
 
         ShipEventFaction team = default!;
 
-        if (EntityManager.TryGetComponent<ShipEventFactionMarkerComponent>(args.Spawner, out var teamMarker))
+        if (EntityManager.TryGetComponent<ShipEventFactionMarkerComponent>(spawnerEntity, out var teamMarker))
         {
             if (teamMarker.Team == null)
                 return;
@@ -236,18 +277,18 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                 if (team.Blacklist.Contains(session.ConnectedClient.UserName))
                 {
                     _chatSys.SendSimpleMessage(Loc.GetString("shipevent-blacklist"), session);
-                    EntityManager.DeleteEntity(entity);
+                    EntityManager.DeleteEntity(spawnedEntity);
                     return;
                 }
             }
 
-            AddToTeam(args.Spawned, team);
-            component.Team = team;
-            EntityManager.GetComponent<GhostRoleMobSpawnerComponent>(args.Spawner)
-                .SetCurrentTakeovers(team.Members.Count);
+            AddToTeam(spawnedEntity, team);
+
+            var marker = EntityManager.GetComponent<ShipEventFactionMarkerComponent>(spawnedEntity);
+            marker.Team = team;
         }
 
-        if (EntityManager.TryGetComponent<MobHUDComponent>(args.Spawned, out var hud))
+        if (EntityManager.TryGetComponent<MobHUDComponent>(spawnedEntity, out var hud))
         {
             var hudProt = _protMan.Index<MobHUDPrototype>(HUDPrototypeId).ShallowCopy();
             hudProt.Color = team.Color;
@@ -335,7 +376,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// <param name="team">Team in question</param>
     public void SetMarkers(EntityUid shipEntity, ShipEventFaction team)
     {
-        var spawners = GetShipComponents<GhostRoleMobSpawnerComponent>(shipEntity);
+        var spawners = GetShipComponents<ShipEventSpawnerComponent>(shipEntity);
         foreach (var spawner in spawners)
         {
             var marker = EntityManager.EnsureComponent<ShipEventFactionMarkerComponent>(spawner);
@@ -410,7 +451,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     {
         var newShip = RandomPosSpawn(_random.Pick(ShipTypes));
 
-        var spawners = GetShipComponents<GhostRoleMobSpawnerComponent>(newShip);
+        var spawners = GetShipComponents<ShipEventSpawnerComponent>(newShip);
         if (!spawners.Any())
             return;
 
@@ -431,9 +472,11 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         }
 
         team.Members.Clear();
+        var spawner = spawners.First();
         foreach (var session in sessions)
         {
-            EntityManager.GetComponent<GhostRoleMobSpawnerComponent>(spawners.First()).Take(session);
+            var playerMob = SpawnPlayer(session, spawner);
+            AfterSpawn(playerMob, spawner);
         }
 
         team.Respawns++;

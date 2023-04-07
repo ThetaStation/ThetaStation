@@ -64,13 +64,8 @@
     drawdepth: Mobs
     sprite: /Textures/Structures/Machines/cloning.rsi
     state: pod_1
-  - type: GhostRoleMobSpawner
+  - type: ShipEventSpawner
     prototype: MobHumanShipEvent
-    name: Ship Team
-    description: Уничтожь своих врагов!
-    rules: You are an antagonist, scavenge, attack, and grow your hoard!
-    infiniteTakeovers: true
-    deleteOnSpawn: false
   - type: Physics
     bodyType: Static
   - type: Fixtures
