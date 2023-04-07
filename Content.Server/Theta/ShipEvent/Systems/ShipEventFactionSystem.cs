@@ -49,6 +49,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     private int _lastTeamNumber;
     private float _teamCheckTimer;
     private float _roundendTimer;
+    private int _lastAnnoucementMinute;
 
     public float RoundDuration; //in seconds
     public bool TimedRoundEnd = false;
@@ -71,9 +72,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     public bool RuleSelected = false;
 
     public List<string> ShipTypes = new();
-
     public List<string> ObstacleTypes = new();
-
     public MapId TargetMap;
 
     public List<ShipEventFaction> Teams { get; } = new();
@@ -109,17 +108,20 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             return;
 
         var remaining = RoundDuration - _roundendTimer;
-        if (Math.Abs(remaining - 10*60) <= 1)
+        if (remaining <= 60 * 10 && _lastAnnoucementMinute == 0)
         {
             Announce(Loc.GetString("shipevent-roundendtimer-tenmins"));
+            _lastAnnoucementMinute = 10;
         }
-        if (Math.Abs(remaining - 5*60) <= 1)
+        if (remaining <= 60 * 5 && _lastAnnoucementMinute == 10)
         {
             Announce(Loc.GetString("shipevent-roundendtimer-fivemins"));
+            _lastAnnoucementMinute = 5;
         }
-        if (Math.Abs(remaining - 60) <= 1)
+        if (remaining <= 60)
         {
             Announce(Loc.GetString("shipevent-roundendtimer-onemin"));
+            _lastAnnoucementMinute = 1;
         }
     }
 
