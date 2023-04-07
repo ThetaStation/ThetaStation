@@ -30,21 +30,6 @@ shipevent-role-name = Пилот
 shipevent-role-greet = Вы - член испытательной группы, созданной Нанотрейзен для тестирования кораблей лёгкого класса и развлечения её начальства. Уничтожьте своих врагов любой ценой!
 
 
-## Team view UI text
-
-shipevent-teamview-windowtitle = СПИСОК КОМАНД
-
-shipevent-teamview-heading = Активные команды:
-
-shipevent-teamview-heading-name = Название команды
-shipevent-teamview-heading-shipname = Название корабля
-shipevent-teamview-heading-crew = Живой экипаж
-shipevent-teamview-heading-points = Очки
-
-shipevent-teamview-toggle-name = Активные команды
-shipevent-teamview-toggle-desc = Просмотр списка активных команд
-
-
 ## Roundend messages
 
 shipevent-roundend-heading = Соревнование окончено. Команды принявшие участие:
