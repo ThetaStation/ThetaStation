@@ -12,6 +12,13 @@
       deleteOnSpawn: true
 
 - type: entity
+  id: CartridgeRocketShipEvent
+  parent: CartridgeRocket
+  components:
+    - type: Item
+      size: 1
+
+- type: entity
   id: PelletShotgunSlugShipEvent
   name: pellet
   noSpawn: true
@@ -63,7 +70,7 @@
   components:
     - type: StorageFill
       contents:
-        - id: CartridgeRocket
+        - id: CartridgeRocketShipEvent
           amount: 100
 
 - type: entity
@@ -75,4 +82,3 @@
       contents:
         - id: ShellShotgunSlugShipEvent
           amount: 50
-
