@@ -8,6 +8,7 @@ using Content.Shared.Theta.ShipEvent.Components;
 using Content.Shared.Theta.ShipEvent.UI;
 using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
+using Content.Shared.Throwing;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
@@ -21,8 +22,12 @@ public sealed class TurretLoaderSystem : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<TurretLoaderComponent, ComponentInit>(OnInit);
         SubscribeLocalEvent<TurretLoaderComponent, ComponentRemove>(OnRemoval);
+
         SubscribeLocalEvent<TurretLoaderComponent, EntInsertedIntoContainerMessage>(OnContainerInsert);
         SubscribeLocalEvent<TurretLoaderComponent, EntRemovedFromContainerMessage>(OnContainerRemove);
+
+        SubscribeLocalEvent<TurretLoaderComponent, ThrowHitByEvent>(HandleThrowCollide);
+
         SubscribeLocalEvent<TurretLoaderComponent, TurretLoaderEjectRequest>(OnEject);
         SubscribeLocalEvent<TurretLoaderComponent, ComponentGetState>(GetLoaderState);
         SubscribeLocalEvent<TurretLoaderComponent, NewLinkEvent>(OnLink);
@@ -128,5 +133,16 @@ public sealed class TurretLoaderSystem : EntitySystem
     private void OnLink(EntityUid uid, TurretLoaderComponent loader, NewLinkEvent args)
     {
         SetupLoader(uid, loader);
+    }
+
+    /// <summary>
+    /// Throwing ammo in loads it up.
+    /// </summary>
+    private void HandleThrowCollide(EntityUid uid, TurretLoaderComponent component, ThrowHitByEvent args)
+    {
+        if (component.ContainerSlot == null)
+            return;
+
+        _slotSys.TryInsert(uid, component.ContainerSlot, args.Thrown, args.User);
     }
 }
