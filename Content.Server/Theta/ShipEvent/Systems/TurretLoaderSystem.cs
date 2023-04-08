@@ -143,6 +143,9 @@ public sealed class TurretLoaderSystem : EntitySystem
         if (component.ContainerSlot == null)
             return;
 
+        if (component.ContainerSlot.HasItem && !_slotSys.TryEject(uid, component.ContainerSlot, null, out var item))
+            return;
+
         _slotSys.TryInsert(uid, component.ContainerSlot, args.Thrown, args.User);
     }
 }
