@@ -32,6 +32,13 @@
           state: syndie_key
 
 - type: entity
+  parent: ComputerShuttleSyndie
+  id: ComputerShuttleSyndieShipEvent
+  components:
+    - type: Anchorable
+      delay: 9999999
+
+- type: entity
   id: TeamCreationConsoleShipEvent
   name: team console
   parent: BaseComputer
@@ -101,7 +108,7 @@
       Brute:
         path:
           "/Audio/Effects/glass_hit.ogg"
-        
+
 - type: entity
   id: TurretLoaderShipEvent
   name: turret loader
