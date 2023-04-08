@@ -9,24 +9,21 @@ tilemap:
   58: FloorReinforced
   64: FloorShuttleRed
   65: FloorShuttleWhite
-  81: FloorWhite
   91: FloorWood
   93: Lattice
   94: Plating
 entities:
 - uid: 0
+  type: WallPlastitanium
   components:
-  - type: MetaData
-  - type: Transform
-  - type: Map
-  - type: PhysicsMap
-  - type: Broadphase
-  - type: OccluderTree
+  - pos: 4.5,-1.5
+    parent: 1
+    type: Transform
 - uid: 1
   components:
   - type: MetaData
   - pos: 0.64252126,4.1776605
-    parent: 0
+    parent: invalid
     type: Transform
   - chunks:
       -1,-1:
@@ -34,7 +31,7 @@ entities:
         tiles: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXgAAAF4AAABeAAAAXgAAAF4AAAAWAAAAFgAAABYAAAAWAAAAFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXQAAAF4AAABeAAAAXgAAAF4AAABeAAAAXgAAABYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABeAAAAXQAAAF0AAABeAAAAXgAAAF4AAABeAAAAQAAAABYAAABeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXgAAAF0AAABdAAAAXgAAAF4AAABeAAAAXgAAAEAAAABAAAAAXgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAF4AAABdAAAAXQAAAF4AAABeAAAAXgAAAF4AAABAAAAAFgAAAF4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAF0AAABeAAAAXgAAAF0AAABeAAAAXgAAAF4AAABeAAAAXgAAABYAAAAWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABdAAAAXQAAAF4AAABdAAAAXgAAAF4AAABeAAAAXgAAAF4AAAAWAAAAFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXQAAAF4AAABeAAAAXQAAAF4AAABeAAAAXgAAAF4AAABeAAAAFgAAABYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABeAAAAXQAAAF0AAABeAAAAXgAAAF4AAABeAAAAXgAAAF4AAAAWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXgAAAF0AAABdAAAAXgAAAF4AAABeAAAAXgAAABYAAAAWAAAAFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXQAAAF4AAABdAAAAXQAAAF4AAABBAAAAQQAAAEEAAAAWAAAAFgAAABYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAF0AAABeAAAAXQAAAF0AAABeAAAAQQAAAEEAAABBAAAAFgAAABYAAAAWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABdAAAAXgAAAF0AAABdAAAAXgAAAF4AAABBAAAAQQAAABYAAAAWAAAAFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAF4AAABdAAAAXQAAAF0AAABeAAAAXgAAAF4AAABAAAAAQAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABeAAAAXgAAAF0AAAAAAAAAXQAAAF0AAABeAAAAXgAAAF4AAABeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAF4AAABdAAAAXQAAAF0AAABdAAAAXQAAAA==
       0,-1:
         ind: 0,-1
-        tiles: FgAAABYAAAAWAAAAFgAAAF4AAABeAAAAXgAAAF4AAABeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAF4AAABeAAAAXgAAAF4AAABeAAAAXgAAAF0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAFgAAAF4AAABeAAAAXgAAAF4AAABdAAAAXQAAAF4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFgAAABYAAABeAAAAXgAAAF4AAABeAAAAXQAAAF0AAABeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYAAAAWAAAAXgAAAF4AAABeAAAAXgAAAF0AAABdAAAAXgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAXgAAAF4AAABeAAAAXgAAAF4AAABdAAAAXgAAAF4AAABdAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFgAAAF4AAABeAAAAXgAAAF4AAABeAAAAXQAAAF4AAABdAAAAXQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYAAABeAAAAXgAAAF4AAABeAAAAXgAAAF0AAABeAAAAXgAAAF0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABeAAAAXgAAAF4AAABeAAAAXgAAAF4AAABdAAAAXQAAAF4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFgAAABYAAABbAAAAXgAAAF4AAABeAAAAXQAAAF0AAABeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYAAAAWAAAAWwAAAFsAAABbAAAAXgAAAF0AAABdAAAAXgAAAF0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAFgAAAFsAAABbAAAAWwAAAF4AAABdAAAAXQAAAF4AAABdAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFgAAAEAAAABeAAAAUQAAAF4AAABeAAAAXQAAAF0AAABeAAAAXQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAXgAAAF4AAABeAAAAXQAAAF0AAABdAAAAXgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABeAAAAXgAAAF4AAABdAAAAXQAAAAAAAABdAAAAXgAAAF4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXQAAAF0AAABdAAAAXQAAAF4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+        tiles: FgAAABYAAAAWAAAAFgAAAF4AAABeAAAAXgAAAF4AAABeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAF4AAABeAAAAXgAAAF4AAABeAAAAXgAAAF0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAFgAAAF4AAABeAAAAXgAAAF4AAABdAAAAXQAAAF4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFgAAABYAAABeAAAAXgAAAF4AAABeAAAAXQAAAF0AAABeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYAAAAWAAAAXgAAAF4AAABeAAAAXgAAAF0AAABdAAAAXgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAXgAAAF4AAABeAAAAXgAAAF4AAABdAAAAXgAAAF4AAABdAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFgAAAF4AAABeAAAAXgAAAF4AAABeAAAAXQAAAF4AAABdAAAAXQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYAAABeAAAAXgAAAF4AAABeAAAAXgAAAF0AAABeAAAAXgAAAF0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABeAAAAXgAAAF4AAABeAAAAXgAAAF4AAABdAAAAXQAAAF4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFgAAABYAAABbAAAAXgAAAF4AAABeAAAAXQAAAF0AAABeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYAAAAWAAAAWwAAAF4AAABeAAAAXgAAAF0AAABdAAAAXgAAAF0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAFgAAAFsAAABeAAAAXgAAAF4AAABdAAAAXQAAAF4AAABdAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFgAAAEAAAABeAAAAXgAAAF4AAABeAAAAXQAAAF0AAABeAAAAXQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAXgAAAF4AAABeAAAAXQAAAF0AAABdAAAAXgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABeAAAAXgAAAF4AAABdAAAAXQAAAF0AAABdAAAAXgAAAF4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXQAAAF0AAABdAAAAXQAAAF0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
       -1,0:
         ind: -1,0
         tiles: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAF4AAABeAAAAXQAAAF4AAABeAAAAXgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAF0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
@@ -394,15 +391,20 @@ entities:
     parent: 1
     type: Transform
 - uid: 4
-  type: ReinforcedPlasmaWindow
+  type: TurretLoaderShipEvent
   components:
-  - pos: 3.5,-2.5
+  - pos: 4.5,-3.5
     parent: 1
     type: Transform
+  - outputs:
+      TurretLoaderSender:
+      - port: CannonConsoleReceiver
+        uid: 910
+    type: SignalTransmitter
 - uid: 5
   type: WallPlastitanium
   components:
-  - pos: 4.5,-3.5
+  - pos: 3.5,-1.5
     parent: 1
     type: Transform
 - uid: 6
@@ -574,9 +576,9 @@ entities:
     parent: 1
     type: Transform
 - uid: 33
-  type: WallPlastitanium
+  type: AirlockSecurity
   components:
-  - pos: 4.5,-6.5
+  - pos: 2.5,-5.5
     parent: 1
     type: Transform
 - uid: 34
@@ -1164,9 +1166,9 @@ entities:
     parent: 1
     type: Transform
 - uid: 123
-  type: Grille
+  type: WallPlastitanium
   components:
-  - pos: 3.5,-2.5
+  - pos: 5.5,-2.5
     parent: 1
     type: Transform
 - uid: 124
@@ -1256,9 +1258,9 @@ entities:
     parent: 1
     type: Transform
 - uid: 138
-  type: AirlockSecurityGlass
+  type: RocketAmmoClosetShipEvent
   components:
-  - pos: 2.5,-5.5
+  - pos: 3.5,-12.5
     parent: 1
     type: Transform
 - uid: 139
@@ -1271,9 +1273,9 @@ entities:
   - powerLoad: 0
     type: ApcPowerReceiver
 - uid: 140
-  type: PlasmaReinforcedWindowDirectional
+  type: RocketAmmoClosetShipEvent
   components:
-  - pos: 3.5,-1.5
+  - pos: 4.5,-12.5
     parent: 1
     type: Transform
 - uid: 141
@@ -1538,7 +1540,7 @@ entities:
 - uid: 183
   type: ShotgunAmmoClosetShipEvent
   components:
-  - pos: 0.5,-15.5
+  - pos: -5.5,-12.5
     parent: 1
     type: Transform
 - uid: 184
@@ -1553,7 +1555,7 @@ entities:
 - uid: 185
   type: RocketAmmoClosetShipEvent
   components:
-  - pos: -3.5,-15.5
+  - pos: 1.5,-15.5
     parent: 1
     type: Transform
 - uid: 186
@@ -1574,13 +1576,11 @@ entities:
   - bodyType: Static
     type: Physics
 - uid: 188
-  type: Thruster
+  type: RocketAmmoClosetShipEvent
   components:
-  - pos: 5.5,-2.5
+  - pos: 0.5,-15.5
     parent: 1
     type: Transform
-  - bodyType: Static
-    type: Physics
 - uid: 189
   type: SheetSteel
   components:
@@ -2391,12 +2391,16 @@ entities:
   - pos: 3.5,-5.5
     parent: 1
     type: Transform
+  - enabled: True
+    type: AmbientSound
 - uid: 306
   type: CableApcExtension
   components:
   - pos: 3.5,-4.5
     parent: 1
     type: Transform
+  - enabled: True
+    type: AmbientSound
 - uid: 307
   type: CableApcExtension
   components:
@@ -2497,6 +2501,8 @@ entities:
   - pos: 4.5,-4.5
     parent: 1
     type: Transform
+  - enabled: True
+    type: AmbientSound
 - uid: 323
   type: CableApcExtension
   components:
@@ -2850,7 +2856,7 @@ entities:
 - uid: 376
   type: ShotgunAmmoClosetShipEvent
   components:
-  - pos: -1.5,-6.5
+  - pos: -4.5,-12.5
     parent: 1
     type: Transform
 - uid: 377
@@ -4196,10 +4202,9 @@ entities:
   - powerLoad: 0
     type: ApcPowerReceiver
 - uid: 512
-  type: TableWood
+  type: RocketAmmoClosetShipEvent
   components:
-  - rot: 3.141592653589793 rad
-    pos: 4.5,-4.5
+  - pos: 3.5,-13.5
     parent: 1
     type: Transform
 - uid: 513
@@ -4211,9 +4216,9 @@ entities:
   - powerLoad: 0
     type: ApcPowerReceiver
 - uid: 514
-  type: WallPlastitanium
+  type: ShotgunAmmoClosetShipEvent
   components:
-  - pos: 3.5,-6.5
+  - pos: -4.5,-13.5
     parent: 1
     type: Transform
 - uid: 515
@@ -4344,8 +4349,6 @@ entities:
     pos: 0.5,-21.5
     parent: 1
     type: Transform
-  - bodyType: Static
-    type: Physics
 - uid: 534
   type: Chair
   components:
@@ -4353,8 +4356,6 @@ entities:
     pos: 2.5,-21.5
     parent: 1
     type: Transform
-  - bodyType: Static
-    type: Physics
 - uid: 535
   type: soda_dispenser
   components:
@@ -4482,15 +4483,15 @@ entities:
     parent: 1
     type: Transform
 - uid: 556
-  type: OxygenCanister
+  type: ShotgunAmmoClosetShipEvent
   components:
-  - pos: -5.5,-12.5
+  - pos: 3.5,-2.5
     parent: 1
     type: Transform
 - uid: 557
-  type: OxygenCanister
+  type: ComputerShuttleSyndieShipEvent
   components:
-  - pos: 4.5,-12.5
+  - pos: -0.5,-2.5
     parent: 1
     type: Transform
 - uid: 558
@@ -4572,11 +4573,16 @@ entities:
     parent: 1
     type: Transform
 - uid: 566
-  type: ShotgunAmmoClosetShipEvent
+  type: TurretLoaderShipEvent
   components:
-  - pos: 1.5,-15.5
+  - pos: 4.5,-5.5
     parent: 1
     type: Transform
+  - outputs:
+      TurretLoaderSender:
+      - port: CannonConsoleReceiver
+        uid: 718
+    type: SignalTransmitter
 - uid: 567
   type: RocketAmmoClosetShipEvent
   components:
@@ -4592,11 +4598,16 @@ entities:
   - enabled: True
     type: AmbientSound
 - uid: 569
-  type: ShotgunAmmoClosetShipEvent
+  type: TurretLoaderShipEvent
   components:
-  - pos: 2.5,-15.5
+  - pos: 4.5,-6.5
     parent: 1
     type: Transform
+  - outputs:
+      TurretLoaderSender:
+      - port: CannonConsoleReceiver
+        uid: 911
+    type: SignalTransmitter
 - uid: 570
   type: RocketAmmoClosetShipEvent
   components:
@@ -5021,7 +5032,7 @@ entities:
 - uid: 634
   type: Multitool
   components:
-  - pos: -6.5307503,-22.24257
+  - pos: -6.5581536,-22.241814
     parent: 1
     type: Transform
 - uid: 635
@@ -5339,20 +5350,24 @@ entities:
     parent: 1
     type: Transform
 - uid: 681
-  type: ToiletEmpty
+  type: TurretLoaderShipEvent
   components:
-  - pos: 3.5,-3.5
+  - pos: 4.5,-4.5
+    parent: 1
+    type: Transform
+  - outputs:
+      TurretLoaderSender:
+      - port: CannonConsoleReceiver
+        uid: 721
+    type: SignalTransmitter
+- uid: 682
+  type: Thruster
+  components:
+  - pos: 5.5,-1.5
     parent: 1
     type: Transform
   - bodyType: Static
     type: Physics
-- uid: 682
-  type: Windoor
-  components:
-  - rot: 3.141592653589793 rad
-    pos: 3.5,-4.5
-    parent: 1
-    type: Transform
 - uid: 683
   type: WindowReinforcedDirectional
   components:
@@ -5375,14 +5390,11 @@ entities:
     parent: 1
     type: Transform
 - uid: 686
-  type: ComfyChair
+  type: RocketAmmoClosetShipEvent
   components:
-  - rot: 3.141592653589793 rad
-    pos: 4.5,-5.5
+  - pos: 4.5,-11.5
     parent: 1
     type: Transform
-  - bodyType: Static
-    type: Physics
 - uid: 687
   type: WallPlastitanium
   components:
@@ -5413,7 +5425,7 @@ entities:
 - uid: 691
   type: Multitool
   components:
-  - pos: -6.841023,-22.443493
+  - pos: -6.3990774,-22.503475
     parent: 1
     type: Transform
 - uid: 692
@@ -5430,9 +5442,9 @@ entities:
     parent: 1
     type: Transform
 - uid: 694
-  type: ClothingNeckMantleHOS
+  type: RocketAmmoClosetShipEvent
   components:
-  - pos: 4.488545,-4.38966
+  - pos: 3.5,-11.5
     parent: 1
     type: Transform
 - uid: 695
@@ -5601,7 +5613,7 @@ entities:
       - port: CannonConsoleSender
         uid: 561
       - port: TurretLoaderSender
-        uid: 930
+        uid: 566
     type: SignalReceiver
 - uid: 719
   type: AMEShielding
@@ -5629,7 +5641,7 @@ entities:
       - port: CannonConsoleSender
         uid: 561
       - port: TurretLoaderSender
-        uid: 934
+        uid: 681
     type: SignalReceiver
 - uid: 722
   type: AMEController
@@ -5719,16 +5731,15 @@ entities:
     parent: 1
     type: Transform
 - uid: 736
-  type: WallPlastitanium
+  type: ShotgunAmmoClosetShipEvent
   components:
-  - rot: -1.5707963267948966 rad
-    pos: 4.5,-0.5
+  - pos: -5.5,-11.5
     parent: 1
     type: Transform
 - uid: 737
-  type: SoapSyndie
+  type: ShotgunAmmoClosetShipEvent
   components:
-  - pos: 3.4939585,-3.6311884
+  - pos: -4.5,-11.5
     parent: 1
     type: Transform
 - uid: 738
@@ -5891,12 +5902,6 @@ entities:
     pos: -8.5,-9.5
     parent: 1
     type: Transform
-- uid: 763
-  type: ComputerShuttleSyndie
-  components:
-  - pos: -0.5,-2.5
-    parent: 1
-    type: Transform
 - uid: 764
   type: ChairPilotSeat
   components:
@@ -5904,8 +5909,6 @@ entities:
     pos: -0.5,-3.5
     parent: 1
     type: Transform
-  - bodyType: Static
-    type: Physics
 - uid: 765
   type: ChairPilotSeat
   components:
@@ -5913,8 +5916,6 @@ entities:
     pos: 0.5,-3.5
     parent: 1
     type: Transform
-  - bodyType: Static
-    type: Physics
 - uid: 766
   type: CableHV
   components:
@@ -6076,15 +6077,6 @@ entities:
   - pos: -5.4968786,-5.2836776
     parent: 1
     type: Transform
-- uid: 792
-  type: PoweredSmallLight
-  components:
-  - rot: -1.5707963267948966 rad
-    pos: 3.5,-3.5
-    parent: 1
-    type: Transform
-  - powerLoad: 0
-    type: ApcPowerReceiver
 - uid: 793
   type: WallPlastitanium
   components:
@@ -6092,15 +6084,6 @@ entities:
     pos: 8.5,-10.5
     parent: 1
     type: Transform
-- uid: 794
-  type: PoweredSmallLight
-  components:
-  - rot: -1.5707963267948966 rad
-    pos: 4.5,-5.5
-    parent: 1
-    type: Transform
-  - powerLoad: 0
-    type: ApcPowerReceiver
 - uid: 795
   type: Poweredlight
   components:
@@ -6759,12 +6742,6 @@ entities:
     pos: 1.5,0.5
     parent: 1
     type: Transform
-- uid: 881
-  type: Mirror
-  components:
-  - pos: 4.5,-3.5
-    parent: 1
-    type: Transform
 - uid: 882
   type: Grille
   components:
@@ -6970,8 +6947,6 @@ entities:
     pos: 4.5,-9.5
     parent: 1
     type: Transform
-  - bodyType: Static
-    type: Physics
 - uid: 905
   type: ChairPilotSeat
   components:
@@ -6979,8 +6954,6 @@ entities:
     pos: -5.5,-9.5
     parent: 1
     type: Transform
-  - bodyType: Static
-    type: Physics
 - uid: 906
   type: ShipEventRocketCannon
   components:
@@ -7059,7 +7032,7 @@ entities:
       - port: CannonConsoleSender
         uid: 561
       - port: TurretLoaderSender
-        uid: 932
+        uid: 4
     type: SignalReceiver
 - uid: 911
   type: ShipEventShotgunCannon
@@ -7075,7 +7048,7 @@ entities:
       - port: CannonConsoleSender
         uid: 561
       - port: TurretLoaderSender
-        uid: 928
+        uid: 569
     type: SignalReceiver
 - uid: 912
   type: TurretLoaderShipEvent
@@ -7164,50 +7137,6 @@ entities:
       TurretLoaderSender:
       - port: CannonConsoleReceiver
         uid: 909
-    type: SignalTransmitter
-- uid: 928
-  type: TurretLoaderShipEvent
-  components:
-  - pos: 0.5,-6.5
-    parent: 1
-    type: Transform
-  - outputs:
-      TurretLoaderSender:
-      - port: CannonConsoleReceiver
-        uid: 911
-    type: SignalTransmitter
-- uid: 930
-  type: TurretLoaderShipEvent
-  components:
-  - pos: 1.5,-6.5
-    parent: 1
-    type: Transform
-  - outputs:
-      TurretLoaderSender:
-      - port: CannonConsoleReceiver
-        uid: 718
-    type: SignalTransmitter
-- uid: 932
-  type: TurretLoaderShipEvent
-  components:
-  - pos: 1.5,-3.5
-    parent: 1
-    type: Transform
-  - outputs:
-      TurretLoaderSender:
-      - port: CannonConsoleReceiver
-        uid: 910
-    type: SignalTransmitter
-- uid: 934
-  type: TurretLoaderShipEvent
-  components:
-  - pos: 1.5,-4.5
-    parent: 1
-    type: Transform
-  - outputs:
-      TurretLoaderSender:
-      - port: CannonConsoleReceiver
-        uid: 721
     type: SignalTransmitter
 - uid: 936
   type: SheetSteel
