@@ -29,6 +29,8 @@
       damage:
         types:
           Piercing: 100
+    - type: TimedDespawn
+      lifetime: 3
 
 - type: entity
   id: ShipEventCloset
