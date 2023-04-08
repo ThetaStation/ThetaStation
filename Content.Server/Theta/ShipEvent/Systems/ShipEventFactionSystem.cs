@@ -49,7 +49,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     private int _lastTeamNumber;
     private float _teamCheckTimer;
     private float _roundendTimer;
-    private int _lastAnnoucementMinute;
+    private int _lastAnnoucementMinute = 0;
 
     public float RoundDuration; //in seconds
     public bool TimedRoundEnd = false;
@@ -118,7 +118,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             Announce(Loc.GetString("shipevent-roundendtimer-fivemins"));
             _lastAnnoucementMinute = 5;
         }
-        if (remaining <= 60)
+        if (remaining <= 60 && _lastAnnoucementMinute == 5)
         {
             Announce(Loc.GetString("shipevent-roundendtimer-onemin"));
             _lastAnnoucementMinute = 1;
