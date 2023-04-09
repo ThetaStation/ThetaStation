@@ -49,7 +49,7 @@ public sealed class TurretLoaderSystem : EntitySystem
                     return sig.Outputs["TurretLoaderSender"][0].Uid;
             }
         }
-        
+
         return EntityUid.Invalid;
     }
 
@@ -67,11 +67,12 @@ public sealed class TurretLoaderSystem : EntitySystem
                 if (EntityManager.TryGetComponent<CannonComponent>(loader.BoundTurret, out var cannon))
                 {
                     cannon.BoundLoader = loader;
+                    cannon.BoundLoaderEntity = uid;
                     Dirty(cannon);
                 }
             }
         }
-        
+
         Dirty(loader);
     }
 
@@ -80,7 +81,7 @@ public sealed class TurretLoaderSystem : EntitySystem
         loader.AmmoContainer = null;
         loader.MaxContainerCapacity = 0;
         loader.CurrentContainerCapacity = 0;
-        
+
         var container = loader.ContainerSlot?.Item;
 
         if (EntityManager.TryGetComponent<ServerStorageComponent>(container, out var storage))
@@ -93,7 +94,7 @@ public sealed class TurretLoaderSystem : EntitySystem
             }
         }
     }
-    
+
     private void OnInit(EntityUid uid, TurretLoaderComponent loader, ComponentInit args)
     {
         SetupLoader(uid, loader);
@@ -107,7 +108,7 @@ public sealed class TurretLoaderSystem : EntitySystem
                 cannon.BoundLoader = null;
         }
     }
-    
+
     private void OnContainerInsert(EntityUid uid, TurretLoaderComponent loader, EntInsertedIntoContainerMessage args)
     {
         UpdateAmmoContainer(loader);
@@ -121,7 +122,7 @@ public sealed class TurretLoaderSystem : EntitySystem
         _appearanceSys.SetData(uid, TurretLoaderVisuals.Loaded, false);
         Dirty(loader);
     }
-    
+
     private void OnEject(EntityUid uid, TurretLoaderComponent loader, TurretLoaderEjectRequest args)
     {
         if (loader.ContainerSlot?.Item == null)

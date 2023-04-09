@@ -9,6 +9,9 @@ public sealed class CannonComponent : Component
     /// TurretLoader bound to this turret
     /// </summary>
     public TurretLoaderComponent? BoundLoader;
+    /// <summary>
+    /// The TurretLoader's entity.
+    public EntityUid? BoundLoaderEntity;
 
     /// <summary>
     /// Ammo prototypes which this turret can use

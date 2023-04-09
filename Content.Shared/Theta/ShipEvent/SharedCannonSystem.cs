@@ -4,6 +4,8 @@ using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Map;
+using Content.Shared.Containers.ItemSlots;
+using Robust.Shared.Containers;
 using Robust.Shared.Network;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
@@ -16,6 +18,7 @@ public abstract class SharedCannonSystem : EntitySystem
     [Dependency] private readonly SharedGunSystem _gunSystem = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly ItemSlotsSystem _slotSys = default!;
 
     public override void Initialize()
     {
@@ -30,7 +33,7 @@ public abstract class SharedCannonSystem : EntitySystem
     private void OnAmmoRequest(EntityUid uid, CannonComponent cannon, TakeAmmoEvent args)
     {
         var loader = cannon.BoundLoader;
-        
+
         if (loader == null)
             return;
 
@@ -55,18 +58,21 @@ public abstract class SharedCannonSystem : EntitySystem
 
                 args.Ammo.Add((ent, EnsureComp<AmmoComponent>(ent)));
             }
+
+            if (cannon.BoundLoaderEntity != null && loader.ContainerSlot != null && !loader.AmmoContainer.ContainedEntities.Any())
+                _slotSys.TryEject(cannon.BoundLoaderEntity.Value, loader.ContainerSlot, null, out var item);
         }
-        
+
         Dirty(loader);
     }
-    
+
     private void OnAmmoCount(EntityUid uid, CannonComponent cannon, ref GetAmmoCountEvent args)
     {
         var loader = cannon.BoundLoader;
-        
+
         if (loader == null)
             return;
-        
+
         if (loader.AmmoContainer == null)
         {
             args.Capacity = 0;
@@ -76,7 +82,7 @@ public abstract class SharedCannonSystem : EntitySystem
 
         //there is no sense in setting this, since ammo may have different size & types and it's impossible to count how much shots we can fit
         args.Capacity = 0;
-        
+
         args.Count = loader.AmmoContainer.ContainedEntities.Count;
     }
 
