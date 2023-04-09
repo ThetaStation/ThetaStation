@@ -126,7 +126,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             _lastAnnoucementMinute = 1;
             return;
         }
-        if (remaining <= 0 && _lastAnnoucementMinute = 1)
+        if (remaining <= 0 && _lastAnnoucementMinute == 1)
         {
             _ticker.EndRound();
             _lastAnnoucementMinute = -1;
