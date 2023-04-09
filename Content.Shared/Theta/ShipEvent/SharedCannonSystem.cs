@@ -42,7 +42,11 @@ public abstract class SharedCannonSystem : EntitySystem
             for (int i = 0; i < args.Shots; i++)
             {
                 if (!loader.AmmoContainer.ContainedEntities.Any())
+                {
+                     if (cannon.BoundLoaderEntity != null && loader.ContainerSlot != null)
+                         _slotSys.TryEject(cannon.BoundLoaderEntity.Value, loader.ContainerSlot, null, out var item);
                     break;
+                }
 
                 var ent = loader.AmmoContainer.ContainedEntities[0];
 
@@ -58,9 +62,6 @@ public abstract class SharedCannonSystem : EntitySystem
 
                 args.Ammo.Add((ent, EnsureComp<AmmoComponent>(ent)));
             }
-
-            if (cannon.BoundLoaderEntity != null && loader.ContainerSlot != null && !loader.AmmoContainer.ContainedEntities.Any())
-                _slotSys.TryEject(cannon.BoundLoaderEntity.Value, loader.ContainerSlot, null, out var item);
         }
 
         Dirty(loader);
