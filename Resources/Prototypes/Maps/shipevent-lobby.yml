@@ -1,0 +1,12 @@
+- type: gameMap
+  id: LobbyShipevent
+  mapName: 'Lobby-Shipevent'
+  mapPath: /Maps/Theta/Shipevent/lobby.yml
+  minPlayers: 1
+  stations:
+    LobbyShipevent:
+      mapNameTemplate: 'Lobby'
+      overflowJobs:
+        - PassengerGodmode
+      availableJobs:
+        PassengerGodmode: [ -1, -1 ]

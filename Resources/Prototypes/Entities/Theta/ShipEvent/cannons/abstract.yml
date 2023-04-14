@@ -1,0 +1,31 @@
+﻿- type: entity
+  id: ShipEventCannon
+  parent: BaseStructure
+  suffix: SHIPEVENT
+  abstract: true
+  components:
+  - type: CombatMode
+    combatToggleAction:
+      enabled: false
+      autoPopulate: false
+      name: action-name-combat
+  - type: Actions
+  - type: Cannon
+  - type: Sprite
+    netsync: false
+    sprite: Objects/Weapons/Guns/Turrets/turrets.rsi
+    drawdepth: WallMountedItems
+    layers:
+      - state: syndie_broken
+  - type: InteractionPopup
+    interactDelay: 0.2
+    successChance: 0.8
+    interactSuccessString: petting-success-generic
+    interactFailureString: petting-failure-generic
+    interactSuccessSound:
+      path: /Audio/Effects/double_beep.ogg
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: SignalReceiver
+    inputs:
+      CannonConsoleReceiver: [ ]

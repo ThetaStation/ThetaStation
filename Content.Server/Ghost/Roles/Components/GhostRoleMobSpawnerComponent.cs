@@ -15,6 +15,9 @@ namespace Content.Server.Ghost.Roles.Components
     public sealed class GhostRoleMobSpawnerComponent : GhostRoleComponent
     {
         [Dependency] private readonly IEntityManager _entMan = default!;
+        
+        [ViewVariables(VVAccess.ReadWrite)] [DataField("infiniteTakeovers")]
+        private bool _infiniteTakeovers = false;
 
         [ViewVariables(VVAccess.ReadWrite)] [DataField("deleteOnSpawn")]
         private bool _deleteOnSpawn = true;
@@ -32,18 +35,41 @@ namespace Content.Server.Ghost.Roles.Components
 
         public override bool Take(IPlayerSession session)
         {
+            if (_infiniteTakeovers)
+            {
+                Spawn(session);
+                return true;
+            }
+            
             if (Taken)
-                return false;
+            {
+                if (_currentTakeovers < _availableTakeovers)
+                    Taken = false;
+                else
+                    return false;
+            }
+            
+            Spawn(session);
 
+            if (!(++_currentTakeovers < _availableTakeovers))
+            {
+                Taken = true;
+
+                if (_deleteOnSpawn)
+                    _entMan.QueueDeleteEntity(Owner);
+            }
+
+            return true;
+        }
+
+        private void Spawn(IPlayerSession session)
+        {
             if (string.IsNullOrEmpty(Prototype))
                 throw new NullReferenceException("Prototype string cannot be null or empty!");
 
             var mob = _entMan.SpawnEntity(Prototype, _entMan.GetComponent<TransformComponent>(Owner).Coordinates);
             var xform = _entMan.GetComponent<TransformComponent>(mob);
             xform.AttachToGridOrMap();
-
-            var spawnedEvent = new GhostRoleSpawnerUsedEvent(Owner, mob);
-            _entMan.EventBus.RaiseLocalEvent(mob, spawnedEvent, false);
 
             if (MakeSentient)
                 MakeSentientCommand.MakeSentient(mob, _entMan, AllowMovement, AllowSpeech);
@@ -53,15 +79,10 @@ namespace Content.Server.Ghost.Roles.Components
             var ghostRoleSystem = EntitySystem.Get<GhostRoleSystem>();
             ghostRoleSystem.GhostRoleInternalCreateMindAndTransfer(session, Owner, mob, this);
 
-            if (++_currentTakeovers < _availableTakeovers)
-                return true;
-
-            Taken = true;
-
-            if (_deleteOnSpawn)
-                _entMan.QueueDeleteEntity(Owner);
-
-            return true;
+            var spawnedEvent = new GhostRoleSpawnerUsedEvent(Owner, mob);
+            _entMan.EventBus.RaiseLocalEvent(mob, spawnedEvent, false);
         }
+
+        public void SetCurrentTakeovers(int takeovers) { _currentTakeovers = takeovers; }
     }
 }
