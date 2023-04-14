@@ -112,16 +112,24 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         {
             Announce(Loc.GetString("shipevent-roundendtimer-tenmins"));
             _lastAnnoucementMinute = 10;
+            return;
         }
         if (remaining <= 60 * 5 && _lastAnnoucementMinute == 10)
         {
             Announce(Loc.GetString("shipevent-roundendtimer-fivemins"));
             _lastAnnoucementMinute = 5;
+            return;
         }
         if (remaining <= 60 && _lastAnnoucementMinute == 5)
         {
             Announce(Loc.GetString("shipevent-roundendtimer-onemin"));
             _lastAnnoucementMinute = 1;
+            return;
+        }
+        if (remaining <= 0 && _lastAnnoucementMinute == 1)
+        {
+            _ticker.EndRound();
+            _lastAnnoucementMinute = -1;
         }
     }
 

@@ -944,18 +944,6 @@ entities:
   - pos: 9.628136,4.5650406
     parent: 0
     type: Transform
-- uid: 130
-  type: PuddleBlood
-  components:
-  - pos: 10.5,3.5
-    parent: 0
-    type: Transform
-- uid: 131
-  type: PuddleBlood
-  components:
-  - pos: 11.5,0.5
-    parent: 0
-    type: Transform
 - uid: 132
   type: MiningDrill
   components:
