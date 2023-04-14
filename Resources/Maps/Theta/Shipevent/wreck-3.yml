@@ -552,16 +552,4 @@ entities:
   - pos: 6.5,1.5
     parent: 0
     type: Transform
-- uid: 58
-  type: PuddleBlood
-  components:
-  - pos: 1.5,2.5
-    parent: 0
-    type: Transform
-- uid: 59
-  type: PuddleBlood
-  components:
-  - pos: 2.5,0.5
-    parent: 0
-    type: Transform
 ...
