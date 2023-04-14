@@ -697,7 +697,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         for (int i = 0; i < amount; i++)
         {
             var obstacleUid = RandomPosSpawn(_random.Pick(ObstacleTypes));
-            AddComp<InheritanceIFFComponent>(obstacleUid);
+            EnsureComp<InheritanceIFFComponent>(obstacleUid);
             _shuttleSystem.AddIFFFlag(obstacleUid, IFFFlags.HideLabel);
             _shuttleSystem.SetIFFColor(obstacleUid, Color.Gold);
             spawnedObstacles.Add(obstacleUid);

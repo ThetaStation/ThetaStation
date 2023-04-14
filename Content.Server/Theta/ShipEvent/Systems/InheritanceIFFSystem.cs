@@ -4,9 +4,6 @@ using Content.Shared.Shuttles.Components;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
-/// <summary>
-/// This handles...
-/// </summary>
 public sealed class InheritanceIFFSystem : EntitySystem
 {
     [Dependency] private readonly ShuttleSystem _shuttleSystem = default!;
