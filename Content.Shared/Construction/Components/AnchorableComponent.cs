@@ -22,7 +22,7 @@ namespace Content.Shared.Construction.Components
         public float Delay = 1f;
 
         /// <summary>
-        /// If true, then entity cannot be anchor or unanchor.
+        /// If true, then entity cannot be anchored or unanchored.
         /// </summary>
         [ViewVariables(VVAccess.ReadWrite)]
         [DataField("disabled")]
