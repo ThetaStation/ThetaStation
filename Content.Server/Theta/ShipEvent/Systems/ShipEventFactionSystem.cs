@@ -128,6 +128,12 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     public void OnRoundRestart(RoundRestartCleanupEvent ev)
     {
         Teams.Clear();
+        _shipNames.Clear();
+        TargetMap = MapId.Nullspace;
+        RuleSelected = false;
+        _teamCheckTimer = 0;
+        _roundendTimer = 0;
+        _lastAnnoucementMinute = 0;
         _lastTeamNumber = 0;
     }
 
