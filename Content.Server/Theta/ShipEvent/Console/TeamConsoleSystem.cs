@@ -68,7 +68,7 @@ public sealed class TeamConsoleSystem : EntitySystem
 
         if (!_shipSys.IsValidName(args.Name))
         {
-            ThrowError(uid, args.UiKey, ErrorTypes.InvalidName);
+            SendResponse(uid, args.UiKey, ResponseTypes.InvalidName);
             return;
         }
 
@@ -77,7 +77,7 @@ public sealed class TeamConsoleSystem : EntitySystem
         {
             if (!_shipSys.IsValidColor(args.Color))
             {
-                ThrowError(uid, args.UiKey, ErrorTypes.InvalidColor);
+                SendResponse(uid, args.UiKey, ResponseTypes.InvalidColor);
                 return;
             }
 
@@ -93,45 +93,42 @@ public sealed class TeamConsoleSystem : EntitySystem
 
         if (blacklist.Contains(args.Session.ConnectedClient.UserName))
         {
-            ThrowError(uid, args.UiKey, ErrorTypes.BlacklistedSelf);
+            SendResponse(uid, args.UiKey, ResponseTypes.BlacklistedSelf);
             return;
         }
 
+        SendResponse(uid, args.UiKey, ResponseTypes.SettingUp);
         _shipSys.CreateTeam(args.Session, args.Name, color, blacklist);
     }
 
-    private void ThrowError(EntityUid uid, Enum uiKey, ErrorTypes error)
+    private void SendResponse(EntityUid uid, Enum uiKey, ResponseTypes response)
     {
-        var errorText = "";
-        switch (error)
+        var text = "";
+        switch (response)
         {
-            case ErrorTypes.InvalidName:
-                errorText = "shipevent-teamcreation-response-invalidname";
+            case ResponseTypes.InvalidName:
+                text = "shipevent-teamcreation-response-invalidname";
                 break;
-            case ErrorTypes.InvalidColor:
-                errorText = "shipevent-teamcreation-response-invalidcolor";
+            case ResponseTypes.InvalidColor:
+                text = "shipevent-teamcreation-response-invalidcolor";
                 break;
-            case ErrorTypes.BlacklistedSelf:
-                errorText = "shipevent-teamcreation-response-blacklistself";
+            case ResponseTypes.BlacklistedSelf:
+                text = "shipevent-teamcreation-response-blacklistself";
                 break;
-            case ErrorTypes.ShipEventNotStarted:
-                errorText = "shipevent-teamcreation-response-eventnotstarted";
+            case ResponseTypes.SettingUp:
+                text = "shipevent-teamcreation-response-plswait";
                 break;
         }
 
-        _uiSystem.TrySetUiState(uid, uiKey,
-            new ShipEventCreateTeamBoundUserInterfaceState(
-                Loc.GetString(errorText)
-            )
-        );
+        _uiSystem.TrySetUiState(uid, uiKey, new ShipEventCreateTeamBoundUserInterfaceState(Loc.GetString(text)));
     }
 
 
-    private enum ErrorTypes
+    private enum ResponseTypes
     {
         InvalidName,
         InvalidColor,
         BlacklistedSelf,
-        ShipEventNotStarted,
+        SettingUp
     }
 }
