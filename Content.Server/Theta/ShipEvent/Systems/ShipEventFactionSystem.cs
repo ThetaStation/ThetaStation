@@ -42,6 +42,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     [Dependency] private readonly UserInterfaceSystem _uiSys = default!;
     [Dependency] private readonly ShuttleSystem _shuttleSystem = default!;
     [Dependency] private readonly IPlayerManager _playerMan = default!;
+    [Dependency] private readonly TransformSystem _formSys = default!;
     [Dependency] private readonly GameTicker _ticker = default!;
 
     private readonly Dictionary<EntityUid, string> _shipNames = new();
@@ -219,7 +220,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         if (session == null)
             return;
         
-        var spawners = GetShipComponents<ShipEventSpawnerComponent>((EntityUid)ship);
+        var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>((EntityUid)ship);
 
         if (!spawners.Any())
         {
@@ -246,7 +247,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             return;
 
         var newShip = RandomPosSpawn(_random.Pick(ShipTypes));
-        var spawners = GetShipComponents<ShipEventSpawnerComponent>(newShip);
+        var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>(newShip);
         if (!spawners.Any())
             return;
 
@@ -279,7 +280,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         if (shipUid == null)
             return;
 
-        var spawners = GetShipComponents<ShipEventSpawnerComponent>(shipUid.Value);
+        var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>(shipUid.Value);
         if (!spawners.Any())
             return;
 
@@ -444,14 +445,14 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// <param name="team">Team in question</param>
     public void SetMarkers(EntityUid shipEntity, ShipEventFaction team)
     {
-        var spawners = GetShipComponents<ShipEventSpawnerComponent>(shipEntity);
+        var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>(shipEntity);
         foreach (var spawner in spawners)
         {
             var marker = EntityManager.EnsureComponent<ShipEventFactionMarkerComponent>(spawner);
             marker.Team = team;
         }
 
-        var cannons = GetShipComponents<CannonComponent>(shipEntity);
+        var cannons = GetShipComponentHolders<CannonComponent>(shipEntity);
         foreach (var cannon in cannons)
         {
             var marker = EntityManager.EnsureComponent<ShipEventFactionMarkerComponent>(cannon);
@@ -491,9 +492,21 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         var oldShipName = GetName(team.Ship);
         _shipNames.Remove(team.Ship);
+
         foreach (var member in team.Members)
         {
             EntityManager.DeleteEntity(team.GetMemberEntity(member));
+        }
+
+        foreach (var marker in GetShipComponents<ShipEventFactionMarkerComponent>(team.Ship))
+        {
+            if (marker.Team != team)
+            {
+                var transform = Transform(marker.Owner);
+                _formSys.SetParent(transform.Owner, _mapMan.GetMapEntityId(transform.MapID));
+                _formSys.SetGridId(transform, null);
+                Dirty(transform);
+            }
         }
 
         if (team.Ship != EntityUid.Invalid)
@@ -519,7 +532,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     {
         var newShip = RandomPosSpawn(_random.Pick(ShipTypes));
 
-        var spawners = GetShipComponents<ShipEventSpawnerComponent>(newShip);
+        var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>(newShip);
         if (!spawners.Any())
             return;
 
@@ -628,7 +641,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                 break;
             }
 
-            if (!GetShipComponents<ShuttleConsoleComponent>(team.Ship).Any() && !team.ShouldRespawn)
+            if (!GetShipComponentHolders<ShuttleConsoleComponent>(team.Ship).Any() && !team.ShouldRespawn)
             {
                 RespawnTeam(
                     team,

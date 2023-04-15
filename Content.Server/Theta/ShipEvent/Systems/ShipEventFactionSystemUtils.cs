@@ -88,7 +88,7 @@ public sealed partial class ShipEventFactionSystem
         _idSys.QueueIdentityUpdate(entity);
     }
 
-    private List<EntityUid> GetShipComponents<T>(EntityUid shipEntity) where T : IComponent
+    private List<EntityUid> GetShipComponentHolders<T>(EntityUid shipEntity) where T : IComponent
     {
         List<EntityUid> entities = new();
         foreach (var comp in EntityManager.EntityQuery<T>())
@@ -98,6 +98,18 @@ public sealed partial class ShipEventFactionSystem
         }
 
         return entities;
+    }
+    
+    private List<T> GetShipComponents<T>(EntityUid shipEntity) where T : IComponent
+    {
+        List<T> comps = new();
+        foreach (var comp in EntityManager.EntityQuery<T>())
+        {
+            if (Transform(comp.Owner).GridUid == shipEntity)
+                comps.Add(comp);
+        }
+
+        return comps;
     }
 
     public int GetProjectileDamage(EntityUid entity)
