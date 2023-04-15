@@ -93,7 +93,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     {
         _teamCheckTimer += frametime;
         _roundendTimer += frametime;
-        
+
         if (_teamCheckTimer > TeamCheckInterval)
         {
             _teamCheckTimer -= TeamCheckInterval;
@@ -113,16 +113,24 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         {
             Announce(Loc.GetString("shipevent-roundendtimer-tenmins"));
             _lastAnnoucementMinute = 10;
+            return;
         }
         if (remaining <= 60 * 5 && _lastAnnoucementMinute == 10)
         {
             Announce(Loc.GetString("shipevent-roundendtimer-fivemins"));
             _lastAnnoucementMinute = 5;
+            return;
         }
         if (remaining <= 60 && _lastAnnoucementMinute == 5)
         {
             Announce(Loc.GetString("shipevent-roundendtimer-onemin"));
             _lastAnnoucementMinute = 1;
+            return;
+        }
+        if (remaining <= 0 && _lastAnnoucementMinute == 1)
+        {
+            _ticker.EndRound();
+            _lastAnnoucementMinute = -1;
         }
     }
 
@@ -211,7 +219,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     {
         if (args.NewMobState != MobState.Dead)
             return;
-        
+
         var ship = marker.Team?.Ship;
         if (ship == null)
             return;
@@ -287,7 +295,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         var spawner = spawners.First();
         var playerMob = SpawnPlayer(player, spawner);
         AfterSpawn(playerMob, spawner);
-        
+
         TeamMessage(teamFaction, Loc.GetString("shipevent-team-newmember", ("name", GetName(playerMob))),
             color: Color.FromHex(teamFaction.Color));
     }
@@ -305,7 +313,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         var playerMob = EntityManager.SpawnEntity(spawner.Prototype, Transform(spawnerUid).Coordinates);
         var xform = EntityManager.GetComponent<TransformComponent>(playerMob);
         xform.AttachToGridOrMap();
-        
+
         playerMob.EnsureComponent<MindComponent>();
         var newMind = new Mind.Mind(player.UserId)
         {
@@ -716,6 +724,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         for (int i = 0; i < amount; i++)
         {
             var obstacleUid = RandomPosSpawn(_random.Pick(ObstacleTypes));
+            EnsureComp<InheritanceIFFComponent>(obstacleUid);
             _shuttleSystem.AddIFFFlag(obstacleUid, IFFFlags.HideLabel);
             _shuttleSystem.SetIFFColor(obstacleUid, Color.Gold);
             spawnedObstacles.Add(obstacleUid);

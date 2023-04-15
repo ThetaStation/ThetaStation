@@ -35,3 +35,23 @@
     availableModes:
       - FullAuto
     soundGunshot: /Audio/Weapons/Guns/Gunshots/gun_sentry.ogg
+
+- type: entity
+  id: CartridgeRocketShipEvent
+  parent: CartridgeRocket
+  components:
+    - type: Item
+      size: 1
+    - type: CartridgeAmmo
+      proto: LightBulletRocket
+      deleteOnSpawn: true
+
+- type: entity
+  id: LightBulletRocket
+  parent: BulletRocket
+  components:
+    - type: Explosive
+      explosionType: Default
+      totalIntensity: 25
+      maxIntensity: 5
+      maxTileBreak: 1

@@ -335,3 +335,9 @@
   name: holiday-name-friday-thirteenth
   shouldCelebrate:
     !type:FridayThirteenth { }
+
+- type: holiday
+  id: ThetaDay
+  name: holiday-name-theta-day
+  beginDay: 6
+  beginMonth: June

@@ -8,6 +8,7 @@ using Content.Shared.Theta.ShipEvent.Components;
 using Content.Shared.Theta.ShipEvent.UI;
 using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
+using Content.Shared.Throwing;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
@@ -21,8 +22,12 @@ public sealed class TurretLoaderSystem : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<TurretLoaderComponent, ComponentInit>(OnInit);
         SubscribeLocalEvent<TurretLoaderComponent, ComponentRemove>(OnRemoval);
+
         SubscribeLocalEvent<TurretLoaderComponent, EntInsertedIntoContainerMessage>(OnContainerInsert);
         SubscribeLocalEvent<TurretLoaderComponent, EntRemovedFromContainerMessage>(OnContainerRemove);
+
+        SubscribeLocalEvent<TurretLoaderComponent, ThrowHitByEvent>(HandleThrowCollide);
+
         SubscribeLocalEvent<TurretLoaderComponent, TurretLoaderEjectRequest>(OnEject);
         SubscribeLocalEvent<TurretLoaderComponent, ComponentGetState>(GetLoaderState);
         SubscribeLocalEvent<TurretLoaderComponent, NewLinkEvent>(OnLink);
@@ -44,7 +49,7 @@ public sealed class TurretLoaderSystem : EntitySystem
                     return sig.Outputs["TurretLoaderSender"][0].Uid;
             }
         }
-        
+
         return EntityUid.Invalid;
     }
 
@@ -62,11 +67,12 @@ public sealed class TurretLoaderSystem : EntitySystem
                 if (EntityManager.TryGetComponent<CannonComponent>(loader.BoundTurret, out var cannon))
                 {
                     cannon.BoundLoader = loader;
+                    cannon.BoundLoaderEntity = uid;
                     Dirty(cannon);
                 }
             }
         }
-        
+
         Dirty(loader);
     }
 
@@ -75,7 +81,7 @@ public sealed class TurretLoaderSystem : EntitySystem
         loader.AmmoContainer = null;
         loader.MaxContainerCapacity = 0;
         loader.CurrentContainerCapacity = 0;
-        
+
         var container = loader.ContainerSlot?.Item;
 
         if (EntityManager.TryGetComponent<ServerStorageComponent>(container, out var storage))
@@ -88,7 +94,7 @@ public sealed class TurretLoaderSystem : EntitySystem
             }
         }
     }
-    
+
     private void OnInit(EntityUid uid, TurretLoaderComponent loader, ComponentInit args)
     {
         SetupLoader(uid, loader);
@@ -102,7 +108,7 @@ public sealed class TurretLoaderSystem : EntitySystem
                 cannon.BoundLoader = null;
         }
     }
-    
+
     private void OnContainerInsert(EntityUid uid, TurretLoaderComponent loader, EntInsertedIntoContainerMessage args)
     {
         UpdateAmmoContainer(loader);
@@ -116,7 +122,7 @@ public sealed class TurretLoaderSystem : EntitySystem
         _appearanceSys.SetData(uid, TurretLoaderVisuals.Loaded, false);
         Dirty(loader);
     }
-    
+
     private void OnEject(EntityUid uid, TurretLoaderComponent loader, TurretLoaderEjectRequest args)
     {
         if (loader.ContainerSlot?.Item == null)
@@ -128,5 +134,19 @@ public sealed class TurretLoaderSystem : EntitySystem
     private void OnLink(EntityUid uid, TurretLoaderComponent loader, NewLinkEvent args)
     {
         SetupLoader(uid, loader);
+    }
+
+    /// <summary>
+    /// Throwing ammo in loads it up.
+    /// </summary>
+    private void HandleThrowCollide(EntityUid uid, TurretLoaderComponent component, ThrowHitByEvent args)
+    {
+        if (component.ContainerSlot == null)
+            return;
+
+        if (component.ContainerSlot.HasItem && !_slotSys.TryEject(uid, component.ContainerSlot, null, out var item))
+            return;
+
+        _slotSys.TryInsert(uid, component.ContainerSlot, args.Thrown, args.User);
     }
 }

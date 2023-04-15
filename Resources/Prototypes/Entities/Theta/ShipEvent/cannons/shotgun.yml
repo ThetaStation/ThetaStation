@@ -35,3 +35,30 @@
       availableModes:
         - FullAuto
       soundGunshot: /Audio/Weapons/Guns/Gunshots/gun_sentry.ogg
+
+- type: entity
+  id: ShellShotgunSlugShipEvent
+  name: shotgun shell
+  parent: ShellShotgunSlug
+  components:
+    - type: Item
+      size: 2
+    - type: CartridgeAmmo
+      proto: PelletShotgunSlugShipEvent
+      count: 5
+      spread: 30
+      deleteOnSpawn: true
+
+- type: entity
+  id: PelletShotgunSlugShipEvent
+  name: pellet
+  noSpawn: true
+  parent: PelletShotgunSlug
+  suffix: SHIPEVENT
+  components:
+    - type: Projectile
+      damage:
+        types:
+          Piercing: 100
+    - type: TimedDespawn
+      lifetime: 3
