@@ -62,9 +62,7 @@ public sealed class TeamConsoleSystem : EntitySystem
             return;
 
         if (!_shipSys.RuleSelected)
-        {
             _ticker.AddGameRule(_protMan.Index<GameRulePrototype>("ShipEvent"));
-        }
 
         if (!_shipSys.IsValidName(args.Name))
         {
@@ -116,7 +114,7 @@ public sealed class TeamConsoleSystem : EntitySystem
                 text = "shipevent-teamcreation-response-blacklistself";
                 break;
             case ResponseTypes.SettingUp:
-                text = "shipevent-teamcreation-response-plswait";
+                text = "shipevent-teamcreation-response-waitpls";
                 break;
         }
 

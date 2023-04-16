@@ -8,6 +8,8 @@ shipevent-desc = Нанотрейзен устроила испытания св
 
 shipevent-announcement-title = Управления флотом Нанотрейзен
 
+shipevent-eventannouncement = На станции начался полный хаос, после того как НТ устроили поблизости испытания боевой мощи своих кораблей лёгкого класса.
+
 shipevent-team-add = Новая команда '{ $teamname }' (корабль - '{ $shipname }') вступила в соревнования!
 shipevent-team-remove = Команда '{ $teamname }' (корабль - '{ $shipname }') покинула соревнования по причине { $removereason }
 shipevent-team-respawn = Команда '{ $teamname }' (корабль - '{ $shipname }') временно покинула соревнования по причине { $respawnreason }. Ожидаемое время до восстановления: { $respawntime } минут(а).

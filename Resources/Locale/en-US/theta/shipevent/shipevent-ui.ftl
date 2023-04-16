@@ -27,7 +27,7 @@ shipevent-teamcreation-windowtitle = TEAM CREATION
 shipevent-teamcreation-response-invalidname = This name is already taken/unavailable for some other reason.
 shipevent-teamcreation-response-invalidcolor = This color is already taken/unavailable for some other reason.
 shipevent-teamcreation-response-blacklistself = Why are you trying to blacklist yourself?
-shipevent-teamcreation-response-waitpls = Team creation request was received and will be processed within 7 working days. Please wait.
+shipevent-teamcreation-response-waitpls = Team creation request was received, PLEASE WAIT.
 
 shipevent-teamcreation-name = Team name:
 shipevent-teamcreation-color = Team color (hex):

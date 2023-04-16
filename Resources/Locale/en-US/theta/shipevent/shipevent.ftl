@@ -1,18 +1,14 @@
 ﻿## Gamemode stuff
 
-shipevent-title = Ship Battles
+shipevent-title = Ship Battle
 shipevent-desc = NanoTrasen has started a contest to test out their light battle cruisers in combat situations
-
-
-## Objects names & descriptions
-
-shipevent-spawner-desc = High tech bluespace machinery which is able to create cannon fodder from thin air!
-shipevent-teamconsole-desc = The console which allows you to participate in the ship battle contest.
 
 
 ## Global annoucements & team messages
 
 shipevent-announcement-title = NanoTrasen Fleet Command
+
+shipevent-eventannouncement = Station has plunged into chaos after NT began testing their light battle ships nearby
 
 shipevent-team-add = A new team '{ $teamname }' (ship name - '{ $shipname }') has entered the competition!
 shipevent-team-remove = The team '{ $teamname }' (ship name- '{ $shipname }') has withdrawn from the competition because of { $removereason }
