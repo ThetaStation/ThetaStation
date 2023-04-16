@@ -36,7 +36,7 @@
   id: ComputerShuttleSyndieShipEvent
   components:
     - type: Anchorable
-      delay: 9999999
+      disabled: true
 
 - type: entity
   id: TeamCreationConsoleShipEvent
