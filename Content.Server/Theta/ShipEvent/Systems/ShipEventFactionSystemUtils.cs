@@ -233,11 +233,9 @@ public sealed partial class ShipEventFactionSystem
         for (int c = 0; c < 100; c++)
         {
             mapPos = (Vector2i) _random.NextVector2(MaxSpawnOffset);
-            if (!_mapMan.FindGridsIntersecting(TargetMap,
+            if (!_mapMan.FindGridsIntersecting(TargetMap, 
                     new Box2(mapPos - CollisionCheckRange, mapPos + CollisionCheckRange)).Any())
-            {
                 break;
-            }
         }
 
         var loadOptions = new MapLoadOptions
