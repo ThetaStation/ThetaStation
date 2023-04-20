@@ -124,6 +124,10 @@
   components:
   - type: SpawnPoint
     job_id: SecurityCadet
+  - type: Sprite
+    layers:
+      - state: green
+      - state: security_cadet
 
 - type: entity
   id: SpawnPointResearchAssistant
@@ -260,6 +264,18 @@
       layers:
         - state: green
         - state: musician
+
+- type: entity
+  id: SpawnPointBoxer
+  parent: SpawnPointJobBase
+  name: boxer
+  components:
+    - type: SpawnPoint
+      job_id: Boxer
+    - type: Sprite
+      layers:
+        - state: green
+        - state: boxer
 
 # Command
 
@@ -438,6 +454,18 @@
     layers:
       - state: green
       - state: detective
+
+- type: entity
+  id: SpawnPointBrigmedic
+  parent: SpawnPointJobBase
+  name: brigmedic
+  components:
+  - type: SpawnPoint
+    job_id: Brigmedic
+  - type: Sprite
+    layers:
+      - state: green
+      - state: brigmed
 
 # SPECIAL
 # ERT

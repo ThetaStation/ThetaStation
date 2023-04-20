@@ -53,8 +53,8 @@ public sealed partial class ShuttleConsoleWindow : FancyWindow,
         _entManager = IoCManager.Resolve<IEntityManager>();
         _timing = IoCManager.Resolve<IGameTiming>();
 
-        OnRadarRangeChange(RadarScreen.RadarRange);
-        RadarScreen.OnRadarRangeChanged += OnRadarRangeChange;
+        WorldRangeChange(RadarScreen.WorldRange);
+        RadarScreen.WorldRangeChanged += WorldRangeChange;
 
         IFFToggle.OnToggled += OnIFFTogglePressed;
         IFFToggle.Pressed = RadarScreen.ShowIFF;
@@ -67,7 +67,7 @@ public sealed partial class ShuttleConsoleWindow : FancyWindow,
         ChangeNameShip.OnPressed += OnChangeNamePressed;
     }
 
-    private void OnRadarRangeChange(float value)
+    private void WorldRangeChange(float value)
     {
         RadarRange.Text = $"{value:0}";
     }
