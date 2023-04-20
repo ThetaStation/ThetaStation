@@ -199,7 +199,6 @@ public sealed class RadarControl : MapGridControl
         return matrix.Transform(removeScale);
     }
 
-    protected override void MouseWheel(GUIMouseWheelEventArgs args)
     public void UpdateState(RadarConsoleBoundInterfaceState ls)
     {
         WorldMaxRange = ls.MaxRange;
@@ -222,7 +221,7 @@ public sealed class RadarControl : MapGridControl
             var grid = _docks.GetOrNew(coordinates.EntityId);
             grid.Add(state);
         }
-        
+
         _mobs = ls.MobsAround;
         _projectiles = ls.Projectiles;
 
@@ -584,7 +583,7 @@ public sealed class RadarControl : MapGridControl
                 var position = state.Coordinates.Position;
                 var uiPosition = matrix.Transform(position);
 
-                if (uiPosition.Length > RadarRange - DockScale)
+                if (uiPosition.Length > WorldRange - DockScale)
                     continue;
 
                 var color = HighlightedDock == ent ? state.HighlightedColor : state.Color;
