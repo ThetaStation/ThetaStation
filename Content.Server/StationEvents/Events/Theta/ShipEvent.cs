@@ -1,19 +1,49 @@
-using System.IO;
-using System.Linq;
-using System.Resources;
+using Content.Server.GameTicking.Rules.Configurations;
 using Content.Server.Theta.ShipEvent.Systems;
-using Nett;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Map;
-using Robust.Shared.Utility;
 
 namespace Content.Server.StationEvents.Events.Theta;
+
+public sealed class ShipEventRuleConfiguration : StationEventRuleConfiguration
+{
+    //all time related fields are in seconds
+    
+    [DataField("roundDuration")] public int RoundDuration; //set to negative if you don't need a timed round end
+
+    [DataField("teamCheckInterval")] public float TeamCheckInterval;
+
+    [DataField("respawnDelay")] public int RespawnDelay;
+
+    [DataField("initialObstacleAmount")] public int InitialObstacleAmount;
+
+    [DataField("maxSpawnOffset")] public int MaxSpawnOffset;
+    
+    [DataField("collisionCheckRange")] public int CollisionCheckRange;
+    
+    [DataField("bonusInterval")] public int BonusInterval;
+    
+    [DataField("pointsPerInterval")] public int PointsPerInterval;
+    
+    [DataField("pointsPerHitMultiplier")] public float PointsPerHitMultiplier;
+    
+    [DataField("pointsPerAssist")] public int PointsPerAssist;
+    
+    [DataField("pointsPerKill")] public int PointsPerKill;
+    
+    [DataField("hudPrototypeId")] public string HUDPrototypeId = "";
+    
+    [DataField("shipTypes")] public List<string> ShipTypes = new();
+    
+    [DataField("obstacleTypes")] public List<string> ObstacleTypes = new();
+}
 
 public sealed class ShipEvent : StationEventSystem
 {
     [Dependency] private ShipEventFactionSystem _shipSys = default!;
     [Dependency] private readonly IMapManager _mapMan = default!;
     [Dependency] private readonly IResourceManager _resMan = default!;
+    private ShipEventRuleConfiguration eventConfig = default!;
 
     public override string Prototype => "ShipEvent";
 
@@ -21,37 +51,31 @@ public sealed class ShipEvent : StationEventSystem
     {
         base.Started();
 
+        if (Configuration is not ShipEventRuleConfiguration ev)
+            return;
+
+        eventConfig = ev;
+
         var map = _mapMan.CreateMap();
         _shipSys.TargetMap = map;
         _shipSys.RuleSelected = true;
-
-        var eventConfigPath = new ResourcePath("/Prototypes/Theta/Shipevent/shipevent.toml");
-        if (!_resMan.TryContentFileRead(eventConfigPath, out var configStream))
-            return;
-
-        using var configReader = new StreamReader(configStream, EncodingHelpers.UTF8);
-        var config = configReader.ReadToEnd().Replace(Environment.NewLine, "\n");
-        var table = Toml.ReadString(config);
         
-        var roundDuration = (int)((TomlInt)table["RoundDuration"]).Value;
+        _shipSys.RoundDuration = eventConfig.RoundDuration;
+        _shipSys.TimedRoundEnd = eventConfig.RoundDuration > 0;
+        _shipSys.TeamCheckInterval = eventConfig.TeamCheckInterval;
+        _shipSys.RespawnDelay = eventConfig.RespawnDelay;
+        _shipSys.MaxSpawnOffset = eventConfig.MaxSpawnOffset;
+        _shipSys.CollisionCheckRange = eventConfig.CollisionCheckRange;
+        _shipSys.BonusInterval = eventConfig.BonusInterval;
+        _shipSys.PointsPerInterval = eventConfig.PointsPerInterval;
+        _shipSys.PointsPerHitMultiplier = eventConfig.PointsPerHitMultiplier;
+        _shipSys.PointsPerAssist = eventConfig.PointsPerAssist;
+        _shipSys.PointsPerKill = eventConfig.PointsPerKill;
+                
+        _shipSys.HUDPrototypeId = eventConfig.HUDPrototypeId;
+        _shipSys.ShipTypes = eventConfig.ShipTypes;
+        _shipSys.ObstacleTypes = eventConfig.ObstacleTypes;
 
-        //maybe it's worth to automate collection of system's public variables in future
-        _shipSys.RoundDuration = roundDuration;
-        _shipSys.TimedRoundEnd = roundDuration > 0;
-        _shipSys.TeamCheckInterval = (float)((TomlFloat)table["TeamCheckInterval"]).Value;
-        _shipSys.RespawnDelay = (float)((TomlFloat)table["RespawnDelay"]).Value;
-        _shipSys.MaxSpawnOffset = (int)((TomlInt)table["MaxSpawnOffset"]).Value;
-        _shipSys.CollisionCheckRange = (int)((TomlInt)table["CollisionCheckRange"]).Value;
-        _shipSys.BonusInterval = (int)((TomlInt)table["BonusInterval"]).Value;
-        _shipSys.PointsPerInterval = (int)((TomlInt)table["PointsPerInterval"]).Value;
-        _shipSys.PointsPerHitMultiplier = (float)((TomlFloat)table["PointsPerHitMultiplier"]).Value;
-        _shipSys.PointsPerAssist = (int)((TomlInt)table["PointsPerAssist"]).Value;
-        _shipSys.PointsPerKill = (int)((TomlInt)table["PointsPerKill"]).Value;
-
-        _shipSys.HUDPrototypeId = ((TomlString) table["HUDPrototypeId"]).Value;
-        _shipSys.ShipTypes = ((TomlArray) table["ShipTypes"]).Value.Select(s => (string)((TomlString)s).Value).ToList();
-        _shipSys.ObstacleTypes = ((TomlArray) table["ObstacleTypes"]).Value.Select(s => (string) ((TomlString) s).Value).ToList();
-
-        _shipSys.CreateObstacles((int)((TomlInt)table["InitialObstacleAmount"]).Value);
+        _shipSys.CreateObstacles(eventConfig.InitialObstacleAmount);
     }
 }

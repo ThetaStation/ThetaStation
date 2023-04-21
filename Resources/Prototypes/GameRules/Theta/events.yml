@@ -1,8 +1,36 @@
 ﻿- type: gameRule
   id: ShipEvent
   config:
-    !type:StationEventRuleConfiguration
+    !type:ShipEventRuleConfiguration
     id: ShipEvent
-    startAnnouncement: station-event-ship-event-event-announcement
+    startAnnouncement: shipevent-eventannouncement
     maxOccurrences: 0 # only shitspawn
     endAfter: 1
+    
+    roundDuration: 1800
+    teamCheckInterval: 5.0
+    respawnDelay: 60
+    initialObstacleAmount: 150
+    maxSpawnOffset: 500
+    collisionCheckRange: 20
+    bonusInterval: 600
+    pointsPerInterval: 5000
+    pointsPerHitMultiplier: 0.01
+    pointsPerAssist: 5000
+    pointsPerKill : 10000
+    hudPrototypeId: "ShipeventHUD"
+  
+    shipTypes:
+      - "/Maps/Shuttles/shiptest-infiltrator.yml"
+    
+    obstacleTypes:
+      - "/Maps/Theta/Shipevent/asteroid-1.yml"
+      - "/Maps/Theta/Shipevent/asteroid-2.yml"
+      - "/Maps/Theta/Shipevent/asteroid-3.yml"
+      - "/Maps/Theta/Shipevent/wreck-1.yml"
+      - "/Maps/Theta/Shipevent/wreck-2.yml"
+      - "/Maps/Theta/Shipevent/wreck-3.yml"
+      - "/Maps/Theta/Shipevent/wreck-4.yml"
+      - "/Maps/Theta/Shipevent/wreck-5.yml"
+      - "/Maps/Theta/Shipevent/wreck-6.yml"
+      - "/Maps/Theta/Shipevent/wreck-7.yml"

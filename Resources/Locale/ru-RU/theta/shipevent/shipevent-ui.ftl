@@ -10,7 +10,7 @@ shipevent-teamview-heading-crew = Живой экипаж
 shipevent-teamview-heading-points = Очки
 
 shipevent-teamview-toggle-name = Активные команды
-shipevent-teamview-toggle-desc = Просмотр списка активных команд
+shipevent-teamview-toggle-desc = Просмотр списка команд
 
 
 ## Team console
@@ -27,7 +27,7 @@ shipevent-teamcreation-windowtitle = СОЗДАНИЕ КОМАНДЫ
 shipevent-teamcreation-response-invalidname = Данное имя уже занято/недоступно по другой причине.
 shipevent-teamcreation-response-invalidcolor = Данный цвет уже занят/недоступен по другой причине.
 shipevent-teamcreation-response-blacklistself = Зачем вы пытаетесь добавить себя же в блеклист?
-shipevent-teamcreation-response-eventnotstarted = Шип ивент не активирован.
+shipevent-teamcreation-response-waitpls = Запрос на создание команды получен, ПОЖАЛУЙСТА ОЖИДАЙТЕ.
 
 shipevent-teamcreation-name = Имя команды:
 shipevent-teamcreation-color = Цвет команды (hex):

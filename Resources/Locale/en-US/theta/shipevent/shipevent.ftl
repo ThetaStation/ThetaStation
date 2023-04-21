@@ -1,17 +1,14 @@
 ﻿## Gamemode stuff
 
-shipevent-title = Ship Battles
+shipevent-title = Ship Battle
 shipevent-desc = NanoTrasen has started a contest to test out their light battle cruisers in combat situations
-
-## Objects names & descriptions
-
-shipevent-spawner-desc = High tech bluespace machinery which is able to create cannon fodder from thin air!
-shipevent-teamconsole-desc = The console which allows you to participate in the ship battle contest.
 
 
 ## Global annoucements & team messages
 
 shipevent-announcement-title = NanoTrasen Fleet Command
+
+shipevent-eventannouncement = Station has plunged into chaos after NT began testing their light battle ships nearby
 
 shipevent-team-add = A new team '{ $teamname }' (ship name - '{ $shipname }') has entered the competition!
 shipevent-team-remove = The team '{ $teamname }' (ship name- '{ $shipname }') has withdrawn from the competition because of { $removereason }
@@ -35,37 +32,6 @@ shipevent-role-name = Pilot
 shipevent-role-greet = You are a member of the light battle cruiser testing group, created by NanoTrasen to entertain the public. Destroy your enemies at any cost!
 
 
-## Team view UI text
-
-shipevent-teamview-windowtitle = TEAM LIST
-
-shipevent-teamview-heading = Active teams:
-
-shipevent-teamview-heading-name = Team name
-shipevent-teamview-heading-shipname = Ship name
-shipevent-teamview-heading-crew = Active team members
-shipevent-teamview-heading-points = Points
-
-shipevent-teamview-toggle-name = Active teams
-shipevent-teamview-toggle-desc = View the team list
-
-
-## Team creation UI text
-
-shipevent-teamcreation-windowtitle = TEAM CREATION
-
-shipevent-teamcreation-response-invalidname = This name is already taken/unavailable due to some other reason.
-shipevent-teamcreation-response-invalidcolor = This color is already taken/unavailable due to some other reason.
-shipevent-teamcreation-response-blacklistself = Why would you want to add yourself to the block list?
-
-shipevent-teamcreation-name = Team name:
-shipevent-teamcreation-color = Team color (hex):
-shipevent-teamcreation-blacklist = Block list (ckeys seperated by a comma):
-shipevent-teamcreation-creationbutton = CREATE A NEW TEAM
-
-## Cannon console
-shipevent-cannonconsole-ammostatus = Ammo
-
 ## Roundend messages
 
 shipevent-roundend-heading = The contest is over. Here's a list of participating teams:
@@ -76,4 +42,8 @@ shipevent-roundend-winner = THE WINNER IS - TEAM '{ $name }'! Let's all congratu
 
 ## Misc.
 
-shipevent-blacklist = You are in this team's block list. It seems that their captain is mighty dissapointed with you.
+shipevent-blacklist = You're in this team's blacklist. Their captain is probably quite dissapointed in you.
+shipevent-respawnfailed = Couldn't respawn you, quite possibly your ship's spawner is destroyed. Wait until someone builds new spawner/ship respawns.
+shipevent-roundendtimer-tenmins = Ten minutes left until round end, raise those scores!
+shipevent-roundendtimer-fivemins = Five mins left until round end, destroy some ships asap.
+shipevent-roundendtimer-onemin = Round will end very soon...
