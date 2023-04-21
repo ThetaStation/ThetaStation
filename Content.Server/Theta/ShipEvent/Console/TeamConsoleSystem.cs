@@ -62,7 +62,7 @@ public sealed class TeamConsoleSystem : EntitySystem
             return;
 
         if (!_shipSys.RuleSelected)
-            _ticker.AddGameRule(_protMan.Index<GameRulePrototype>("ShipEvent"));
+            _ticker.StartGameRule(_protMan.Index<GameRulePrototype>("ShipEvent"));
 
         if (!_shipSys.IsValidName(args.Name))
         {
