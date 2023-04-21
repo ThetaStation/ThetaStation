@@ -60,7 +60,9 @@ public sealed class TeamConsoleSystem : EntitySystem
     {
         if (args.Session.AttachedEntity == null)
             return;
-
+        
+        SendResponse(uid, args.UiKey, ResponseTypes.SettingUp);
+        
         if (!_shipSys.RuleSelected)
             _ticker.StartGameRule(_protMan.Index<GameRulePrototype>("ShipEvent"));
 
@@ -94,8 +96,7 @@ public sealed class TeamConsoleSystem : EntitySystem
             SendResponse(uid, args.UiKey, ResponseTypes.BlacklistedSelf);
             return;
         }
-
-        SendResponse(uid, args.UiKey, ResponseTypes.SettingUp);
+        
         _shipSys.CreateTeam(args.Session, args.Name, color, blacklist);
     }
 

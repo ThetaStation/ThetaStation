@@ -1,0 +1,26 @@
+﻿- type: gameRule
+  id: ShipEvent
+  config:
+    !type:ShipEventRuleConfiguration
+    id: ShipEvent
+    startAnnouncement: shipevent-eventannouncement
+    maxOccurrences: 0 # only shitspawn
+    endAfter: 1
+    
+    roundDuration: 1800
+    teamCheckInterval: 5.0
+    respawnDelay: 60
+    initialObstacleAmount: 150
+    maxSpawnOffset: 500
+    bonusInterval: 600
+    pointsPerInterval: 5000
+    pointsPerHitMultiplier: 0.01
+    pointsPerAssist: 5000
+    pointsPerKill : 10000
+    hudPrototypeId: "ShipeventHUD"
+  
+    shipTypes:
+      - "/Maps/Shuttles/shiptest-infiltrator.yml"
+    
+    obstacleTypes:
+      - "wreck_one_ml"

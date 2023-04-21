@@ -1,0 +1,6 @@
+#- type: structure
+#  id: wreck_mapload
+#  generator: !type:MapLoaderGenerator
+#    mapPath: "/Maps/Theta/Shipevent/wreck-1.yml"
+#  spawnWeight: 0.75
+#  minDistance: 15
