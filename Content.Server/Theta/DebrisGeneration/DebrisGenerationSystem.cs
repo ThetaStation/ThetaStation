@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Server.Theta.DebrisGeneration.Prototypes;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
 namespace Content.Server.Theta.DebrisGeneration;
@@ -9,9 +10,12 @@ namespace Content.Server.Theta.DebrisGeneration;
 
 public sealed class DebrisGenerationSystem : EntitySystem
 {
-    //public to allow generators & processors to use those field and not call IoC every time
+    //public fields are for the systems most commonly used by generators & processors,
+    //to prevent wasting a bit of time calling IoC every time & for convenience
     [Dependency] public readonly IMapManager MapMan = default!;
     [Dependency] public readonly MapLoaderSystem MapLoader = default!;
+    [Dependency] public readonly ITileDefinitionManager TileDefMan = default!;
+    [Dependency] public readonly IPrototypeManager ProtMan = default!;
     [Dependency] public readonly IRobustRandom Rand = default!;
     public IEntityManager EntMan => EntityManager;
     
