@@ -2,7 +2,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
-using YamlDotNet.RepresentationModel;
+
 
 namespace Content.Server.Theta.DebrisGeneration.Generators;
 
@@ -38,8 +38,8 @@ public sealed class AsteroidGenerator : Generator
     public override EntityUid Generate(DebrisGenerationSystem sys, Vector2 position)
     {
         var tileDefMan = sys.TileDefMan;
-        
-        byte[,] tileArray = GenerateTileArray(sys.Rand);
+            
+        var tileSet = GenerateTileSet(sys.Rand);
 
         var gridComp = sys.MapMan.CreateGrid(sys.TargetMap);
         var gridUid = gridComp.Owner;
@@ -48,22 +48,14 @@ public sealed class AsteroidGenerator : Generator
         
         List<(Vector2i, Tile)> tiles = new();
         List<(EntityCoordinates, string)> ents = new();
-        
-        Vector2i posRounded = (Vector2i)position.Rounded();
-        
-        for (int y = 0; y < Size; y++)
+
+        foreach (var pos in tileSet)
         {
-            for (int x = 0; x < Size; x++)
-            {
-                if (tileArray[x, y] == 1)
-                {
-                    Vector2i spawnPos = new Vector2i(posRounded.X + x, posRounded.Y + y);
-                    tiles.Add((spawnPos, new Tile(tileDefMan[FloorId].TileId)));
-                    if (sys.Rand.Prob(Erosion))
-                        continue;
-                    ents.Add((new EntityCoordinates(gridUid, spawnPos), WallPrototypeId));
-                }
-            }
+            var spawnPos = (Vector2i)(pos + position).Rounded();
+            tiles.Add((spawnPos, new Tile(tileDefMan[FloorId].TileId)));
+            if (sys.Rand.Prob(Erosion))
+                continue;
+            ents.Add((new EntityCoordinates(gridUid, spawnPos), WallPrototypeId));
         }
         
         gridComp.SetTiles(tiles);
@@ -74,14 +66,10 @@ public sealed class AsteroidGenerator : Generator
 
         return gridUid;
     }
-
-    /// <summary>
-    /// Generates array representing asteroid's shape
-    /// </summary>
-    /// <returns></returns>
-    private byte[,] GenerateTileArray(IRobustRandom random)
+    
+    private HashSet<Vector2i> GenerateTileSet(IRobustRandom random)
     {
-        byte[,] tileArray = new byte[Size + 1,Size + 1];
+        HashSet<Vector2i> tileSet = new();
         Vector2 lastCirclePos = Vector2.Zero;
         int lastCircleRadius = 0;
         
@@ -104,24 +92,24 @@ public sealed class AsteroidGenerator : Generator
 
                 if ((pos - lastCirclePos).Length < lastCircleRadius + maxRadius || lastCirclePos == Vector2.Zero)
                 {
-                    PlaceCircle(ref tileArray, pos, maxRadius);
+                    PlaceCircle(ref tileSet, pos, maxRadius);
                     lastCirclePos = pos;
                     break;
                 }
             }
         }
 
-        return tileArray;
+        return tileSet;
     }
     
-    private void PlaceCircle(ref byte[,] tileArray, Vector2i pos, int radius)
+    private void PlaceCircle(ref HashSet<Vector2i> tileSet, Vector2i pos, int radius)
     {
         for (int y = -radius; y <= radius; y++)
         {
             for (int x = -radius; x <= radius; x++)
             {
                 if (x * x + y * y <= radius * radius)
-                    tileArray[pos.X + x, pos.Y + y] = 1;
+                    tileSet.Add(new Vector2i(x + pos.X, y + pos.Y));
             }
         }
     }
