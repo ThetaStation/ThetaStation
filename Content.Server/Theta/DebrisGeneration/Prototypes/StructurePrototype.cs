@@ -3,9 +3,10 @@ using Robust.Shared.Prototypes;
 namespace Content.Server.Theta.DebrisGeneration.Prototypes;
 
 [Prototype("structure")]
+
 public sealed class StructurePrototype : IPrototype
 {
-    [IdDataField] 
+    [IdDataField]
     public string ID { get; } = "";
 
     /// <summary>
