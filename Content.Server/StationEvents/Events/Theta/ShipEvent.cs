@@ -1,5 +1,6 @@
 using Content.Server.GameTicking.Rules.Configurations;
 using Content.Server.Theta.DebrisGeneration;
+using Content.Server.Theta.DebrisGeneration.Generators;
 using Content.Server.Theta.DebrisGeneration.Processors;
 using Content.Server.Theta.DebrisGeneration.Prototypes;
 using Content.Server.Theta.ShipEvent.Components;
@@ -7,6 +8,7 @@ using Content.Server.Theta.ShipEvent.Systems;
 using Content.Shared.Shuttles.Components;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
 using Robust.Shared.Serialization.Markdown.Mapping;
 
 namespace Content.Server.StationEvents.Events.Theta;
@@ -40,6 +42,12 @@ public sealed class ShipEventRuleConfiguration : StationEventRuleConfiguration
     [DataField("shipTypes")] public List<string> ShipTypes = new();
     
     [DataField("obstacleTypes")] public List<string> ObstacleTypes = new();
+
+    [DataField("obstacleAmountAmplitude")] public int ObstacleAmountAmplitude;
+
+    [DataField("obstacleSizeAmplitude")] public int ObstacleSizeAmplitude;
+    
+    [DataField("obstacleMinDistanceAmplitude")] public int ObstacleMinDistanceAmplitude;
 }
 
 public sealed class ShipEvent : StationEventSystem
@@ -48,6 +56,7 @@ public sealed class ShipEvent : StationEventSystem
     [Dependency] private DebrisGenerationSystem _debrisSys = default!;
     [Dependency] private readonly IMapManager _mapMan = default!;
     [Dependency] private readonly IPrototypeManager _protMan = default!;
+    [Dependency] private IRobustRandom _rand = default!;
     
     private ShipEventRuleConfiguration eventConfig = default!;
 
@@ -82,7 +91,14 @@ public sealed class ShipEvent : StationEventSystem
         List<StructurePrototype> obstacleStructProts = new();
         foreach (var structProtId in eventConfig.ObstacleTypes)
         {
-            obstacleStructProts.Add(_protMan.Index<StructurePrototype>(structProtId));
+            var structProt = _protMan.Index<StructurePrototype>(structProtId);
+            
+            //todo: remove this horror after proper map gen adjustment system is made
+            if (structProt.Generator is AsteroidGenerator gen)
+                gen.Size += _rand.Next(-eventConfig.ObstacleSizeAmplitude, eventConfig.ObstacleSizeAmplitude);
+
+            structProt.MinDistance += _rand.Next(-eventConfig.ObstacleMinDistanceAmplitude, eventConfig.ObstacleMinDistanceAmplitude);
+            obstacleStructProts.Add(structProt);
         }
         
         AddComponentsProcessor iffInheritanceProc = new();
@@ -106,7 +122,7 @@ public sealed class ShipEvent : StationEventSystem
             Vector2.Zero,
             obstacleStructProts,
             globalProcessors,
-            eventConfig.InitialObstacleAmount,
+            eventConfig.InitialObstacleAmount + _rand.Next(-eventConfig.ObstacleAmountAmplitude, eventConfig.ObstacleAmountAmplitude),
             eventConfig.MaxSpawnOffset);
     }
 }

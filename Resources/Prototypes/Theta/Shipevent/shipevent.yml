@@ -7,21 +7,30 @@
     maxOccurrences: 0 # only shitspawn
     endAfter: 1
     
+    hudPrototypeId: "ShipeventHUD"
+    
+    #time
     roundDuration: 1800
     teamCheckInterval: 5.0
     respawnDelay: 60
-    initialObstacleAmount: 150
-    maxSpawnOffset: 1000
     bonusInterval: 600
+    
+    #points
     pointsPerInterval: 5000
     pointsPerHitMultiplier: 0.01
     pointsPerAssist: 5000
     pointsPerKill : 10000
-    hudPrototypeId: "ShipeventHUD"
-  
+    
+    #map gen
+    initialObstacleAmount: 300
+    maxSpawnOffset: 2000
     shipTypes:
       - "/Maps/Shuttles/shiptest-infiltrator.yml"
-    
     obstacleTypes:
       - "asteroid_small"
       - "asteroid_large"
+    
+    #randomisation
+    obstacleAmountAmplitude: 100
+    obstacleSizeAmplitude: 10
+    obstacleMinDistanceAmplitude: 20
