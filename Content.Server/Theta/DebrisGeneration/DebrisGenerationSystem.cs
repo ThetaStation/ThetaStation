@@ -33,8 +33,9 @@ public sealed class DebrisGenerationSystem : EntitySystem
         if (targetMap == MapId.Nullspace || !MapMan.MapExists(targetMap))
             return;
         TargetMap = targetMap;
-
-
+        
+        MapMan.SetMapPaused(TargetMap, true);
+        
         for (int n = 0; n < debrisAmount; n++)
         {
             var structProt = PickStructure(structures);
@@ -67,7 +68,11 @@ public sealed class DebrisGenerationSystem : EntitySystem
             proc.Process(this, MapMan.GetMapEntityId(TargetMap), true);
         }
         
+        MapMan.SetMapPaused(TargetMap, false);
+        
         TargetMap = MapId.Nullspace;
+        Logger.Info($"Debris generation: Spawned {SpawnedGrids.Count} grids.");
+        SpawnedGrids.Clear();
     }
     
     // Randomly picks structure from structure list, accounting for their weight

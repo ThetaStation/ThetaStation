@@ -2,6 +2,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
+using YamlDotNet.RepresentationModel;
 
 namespace Content.Server.Theta.DebrisGeneration.Generators;
 
@@ -44,8 +45,12 @@ public sealed class AsteroidGenerator : Generator
         var gridUid = gridComp.Owner;
         var transform = sys.EntMan.GetComponent<TransformComponent>(gridUid);
         transform.Coordinates = new EntityCoordinates(transform.Coordinates.EntityId, position);
-
+        
+        List<(Vector2i, Tile)> tiles = new();
+        List<(EntityCoordinates, string)> ents = new();
+        
         Vector2i posRounded = (Vector2i)position.Rounded();
+        
         for (int y = 0; y < Size; y++)
         {
             for (int x = 0; x < Size; x++)
@@ -53,12 +58,18 @@ public sealed class AsteroidGenerator : Generator
                 if (tileArray[x, y] == 1)
                 {
                     Vector2i spawnPos = new Vector2i(posRounded.X + x, posRounded.Y + y);
-                    gridComp.SetTile(spawnPos, new Tile(tileDefMan[FloorId].TileId));
+                    tiles.Add((spawnPos, new Tile(tileDefMan[FloorId].TileId)));
                     if (sys.Rand.Prob(Erosion))
                         continue;
-                    sys.EntMan.SpawnEntity(WallPrototypeId, new EntityCoordinates(gridUid, spawnPos));
+                    ents.Add((new EntityCoordinates(gridUid, spawnPos), WallPrototypeId));
                 }
             }
+        }
+        
+        gridComp.SetTiles(tiles);
+        foreach ((EntityCoordinates coords, string protId) in ents)
+        {
+            sys.EntMan.SpawnEntity(protId, coords);
         }
 
         return gridUid;
