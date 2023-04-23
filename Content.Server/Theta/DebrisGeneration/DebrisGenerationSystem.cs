@@ -63,10 +63,11 @@ public sealed class DebrisGenerationSystem : EntitySystem
             if (spawnPos == null)
             {
                 Logger.Error("Debris generation: Failed to generate spawn position, skipping grid");
+                EntityManager.DeleteEntity(grid);
                 continue;
             }
+            
             gridForm.Coordinates = new EntityCoordinates(gridForm.Coordinates.EntityId, spawnPos.Value);
-
             SpawnedGrids.Add(grid);
             foreach (var proc in structProt.Processors)
             {
