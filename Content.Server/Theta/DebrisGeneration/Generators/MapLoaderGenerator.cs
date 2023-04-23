@@ -11,12 +11,12 @@ public sealed class MapLoaderGenerator : Generator
     [DataField("mapPath", required: true)] 
     public string MapPath = "";
     
-    public override EntityUid Generate(DebrisGenerationSystem sys, MapId targetMap, Vector2 position)
+    public override EntityUid Generate(DebrisGenerationSystem sys, MapId targetMap)
     {
         var loadOptions = new MapLoadOptions
         {
             Rotation = sys.Rand.NextAngle(),
-            Offset = position,
+            Offset = Vector2.Zero,
             LoadMap = false
         };
 

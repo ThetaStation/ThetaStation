@@ -46,8 +46,6 @@ public sealed class ShipEventRuleConfiguration : StationEventRuleConfiguration
     [DataField("obstacleAmountAmplitude")] public int ObstacleAmountAmplitude;
 
     [DataField("obstacleSizeAmplitude")] public int ObstacleSizeAmplitude;
-    
-    [DataField("obstacleMinDistanceAmplitude")] public int ObstacleMinDistanceAmplitude;
 }
 
 public sealed class ShipEvent : StationEventSystem
@@ -94,10 +92,16 @@ public sealed class ShipEvent : StationEventSystem
             var structProt = _protMan.Index<StructurePrototype>(structProtId);
             
             //todo: remove this horror after proper map gen adjustment system is made
+            var randomSize = _rand.Next(-eventConfig.ObstacleSizeAmplitude, eventConfig.ObstacleSizeAmplitude);
             if (structProt.Generator is AsteroidGenerator gen)
-                gen.Size += _rand.Next(-eventConfig.ObstacleSizeAmplitude, eventConfig.ObstacleSizeAmplitude);
+            {
+                var ratio = (gen.Size + randomSize) / gen.Size;
+                gen.MaxCircleRadius *= ratio;
+                gen.MaxCircleRadius *= ratio;
+                structProt.MinDistance += randomSize;
+                gen.Size += randomSize;
+            }
 
-            structProt.MinDistance += _rand.Next(-eventConfig.ObstacleMinDistanceAmplitude, eventConfig.ObstacleMinDistanceAmplitude);
             obstacleStructProts.Add(structProt);
         }
         

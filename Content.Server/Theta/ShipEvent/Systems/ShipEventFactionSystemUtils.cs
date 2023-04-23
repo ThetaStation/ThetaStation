@@ -234,7 +234,7 @@ public sealed partial class ShipEventFactionSystem
         Vector2i mapPos = Vector2i.Zero;
         for (int c = 0; c < 100; c++)
         {
-            mapPos = (Vector2i) _random.NextVector2Box(0, 0, MaxSpawnOffset, MaxSpawnOffset);
+            mapPos = (Vector2i) _random.NextVector2Box(0, 0, MaxSpawnOffset, MaxSpawnOffset).Rounded();
             if (!_mapMan.FindGridsIntersecting(TargetMap, 
                     new Box2(mapPos - shipCollisionCheckRange, mapPos + shipCollisionCheckRange)).Any())
                 break;

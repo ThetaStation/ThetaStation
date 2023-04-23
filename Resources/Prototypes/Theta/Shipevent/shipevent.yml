@@ -22,8 +22,8 @@
     pointsPerKill : 10000
     
     #map gen
-    initialObstacleAmount: 300
-    maxSpawnOffset: 2000
+    initialObstacleAmount: 150
+    maxSpawnOffset: 1000
     shipTypes:
       - "/Maps/Shuttles/shiptest-infiltrator.yml"
     obstacleTypes:
@@ -31,6 +31,5 @@
       - "asteroid_large"
     
     #randomisation
-    obstacleAmountAmplitude: 100
-    obstacleSizeAmplitude: 10
-    obstacleMinDistanceAmplitude: 20
+    obstacleAmountAmplitude: 50
+    obstacleSizeAmplitude: 7

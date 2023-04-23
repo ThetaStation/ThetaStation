@@ -3,13 +3,13 @@
   generator: !type:AsteroidGenerator
     size: 10
     circleAmount: 3
-    maxCircleRadius: 3
+    maxCircleRadius: 5
     minCircleRadius: 1
     erosion: 0.1
     floorId: FloorAsteroidSand
     wallPrototypeId: AsteroidRock
   spawnWeight: 0.5
-  minDistance: 35
+  minDistance: 5
   
 - type: structure
   id: asteroid_large
@@ -22,4 +22,4 @@
     floorId: FloorAsteroidSand
     wallPrototypeId: AsteroidRock
   spawnWeight: 0.5
-  minDistance: 35
+  minDistance: 15

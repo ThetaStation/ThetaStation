@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Server.Theta.DebrisGeneration.Prototypes;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
@@ -15,6 +16,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
     [Dependency] public readonly IMapManager MapMan = default!;
     [Dependency] public readonly MapLoaderSystem MapLoader = default!;
     [Dependency] public readonly ITileDefinitionManager TileDefMan = default!;
+    [Dependency] public readonly TransformSystem FormSys = default!;
     [Dependency] public readonly IPrototypeManager ProtMan = default!;
     [Dependency] public readonly IRobustRandom Rand = default!;
     public IEntityManager EntMan => EntityManager;
@@ -26,7 +28,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
     private const int spawnSectorSize = 100;
     private const int spawnTries = 5;
     private Dictionary<Vector2, List<(Vector2, int)>> spawnSectors = new(); //starting pos => spawn positions in this sector
-    private Dictionary<Vector2, float> spawnSectorVolumes = new(); //starting pos => occupied volume in this sector
+    private Dictionary<Vector2, double> spawnSectorVolumes = new(); //starting pos => occupied volume in this sector
 
     public void GenerateDebris(
         MapId targetMap,
@@ -48,13 +50,23 @@ public sealed class DebrisGenerationSystem : EntitySystem
             var structProt = PickStructure(structures);
             if (structProt == null)
             {
-                Logger.Warning("Could not pick structure prototype (debris generation system)");
+                Logger.Warning("Debris generation: Could not pick structure prototype, skipping grid");
                 continue;
             }
 
-            var spawnPos = GenerateSpawnPosition(structProt.MinDistance);
+            var grid = structProt.Generator.Generate(this, TargetMap);
+            var gridComp = EntMan.GetComponent<MapGridComponent>(grid);
+            var gridForm = EntMan.GetComponent<TransformComponent>(grid);
 
-            var grid = structProt.Generator.Generate(this, TargetMap, spawnPos);
+            var finalDistance = (int)Math.Ceiling(structProt.MinDistance + Math.Max(gridComp.LocalAABB.Height, gridComp.LocalAABB.Width));
+            var spawnPos = GenerateSpawnPosition(finalDistance);
+            if (spawnPos == null)
+            {
+                Logger.Error("Debris generation: Failed to generate spawn position, skipping grid");
+                continue;
+            }
+            gridForm.Coordinates = new EntityCoordinates(gridForm.Coordinates.EntityId, spawnPos.Value);
+
             SpawnedGrids.Add(grid);
             foreach (var proc in structProt.Processors)
             {
@@ -69,7 +81,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
         
         MapMan.SetMapPaused(TargetMap, false);
         TargetMap = MapId.Nullspace;
-        Logger.Info($"Debris generation: Spawned {SpawnedGrids.Count} grids.");
+        Logger.Info($"Debris generation: Spawned {SpawnedGrids.Count} grids");
         SpawnedGrids.Clear();
 
         spawnSectors.Clear();
@@ -111,9 +123,9 @@ public sealed class DebrisGenerationSystem : EntitySystem
         }
     }
 
-    private Vector2 GenerateSpawnPosition(int minDistance)
+    private Vector2? GenerateSpawnPosition(int distance)
     {
-        var volume = Math.Pow(minDistance, 2) * 2 * Math.PI;
+        var volume = distance * distance * Math.PI;
         var shuffledSectors = spawnSectors.Keys.ToList();
         Rand.Shuffle(shuffledSectors);
         
@@ -121,12 +133,12 @@ public sealed class DebrisGenerationSystem : EntitySystem
         {
             if (spawnSectorSize * spawnSectorSize - spawnSectorVolumes[randomSector] < volume)
                 continue;
-            var result = TryPlaceInSector(randomSector, minDistance, spawnTries, out var spawnPos);
+            var result = TryPlaceInSector(randomSector, distance, spawnTries, out var spawnPos);
             if (result)
                 return spawnPos;
         }
-
-        return Vector2.Zero;
+        
+        return null;
     }
 
     private bool TryPlaceInSector(Vector2 sectorPos, int radius, int tries, out Vector2 pos)
@@ -158,7 +170,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
         if (result)
         {
             spawnSectors[sectorPos].Add((pos, radius));
-            spawnSectorVolumes[sectorPos] += (float)(Math.Pow(radius, 2) * 2 * Math.PI);
+            spawnSectorVolumes[sectorPos] += radius * radius * Math.PI;
         }
         return result;
     }
@@ -170,7 +182,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
 [ImplicitDataDefinitionForInheritors]
 public abstract class Generator
 {
-    public abstract EntityUid Generate(DebrisGenerationSystem sys, MapId targetMap, Vector2 position);
+    public abstract EntityUid Generate(DebrisGenerationSystem sys, MapId targetMap);
 }
 
 /// <summary>

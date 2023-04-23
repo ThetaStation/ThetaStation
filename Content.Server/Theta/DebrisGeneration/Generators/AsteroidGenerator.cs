@@ -35,7 +35,7 @@ public sealed class AsteroidGenerator : Generator
     [DataField("wallPrototypeId", required: true, customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
     public string WallPrototypeId = "";
     
-    public override EntityUid Generate(DebrisGenerationSystem sys, MapId targetMap, Vector2 position)
+    public override EntityUid Generate(DebrisGenerationSystem sys, MapId targetMap)
     {
         var tileDefMan = sys.TileDefMan;
             
@@ -43,25 +43,23 @@ public sealed class AsteroidGenerator : Generator
 
         var gridComp = sys.MapMan.CreateGrid(targetMap);
         var gridUid = gridComp.Owner;
-        var transform = sys.EntMan.GetComponent<TransformComponent>(gridUid);
-        transform.Coordinates = new EntityCoordinates(transform.Coordinates.EntityId, position);
-        
+
         List<(Vector2i, Tile)> tiles = new();
         List<(EntityCoordinates, string)> ents = new();
 
         foreach (var pos in tileSet)
         {
-            var spawnPos = (Vector2i)(pos + position).Rounded();
-            tiles.Add((spawnPos, new Tile(tileDefMan[FloorId].TileId)));
+            tiles.Add((pos, new Tile(tileDefMan[FloorId].TileId)));
             if (sys.Rand.Prob(Erosion))
                 continue;
-            ents.Add((new EntityCoordinates(gridUid, spawnPos), WallPrototypeId));
+            ents.Add((new EntityCoordinates(gridUid, pos), WallPrototypeId));
         }
         
         gridComp.SetTiles(tiles);
         foreach ((EntityCoordinates coords, string protId) in ents)
         {
-            sys.EntMan.SpawnEntity(protId, coords);
+            var ent = sys.EntMan.SpawnEntity(protId, coords);
+            sys.FormSys.AttachToGridOrMap(ent);
         }
 
         return gridUid;
