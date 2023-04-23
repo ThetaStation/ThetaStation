@@ -1,4 +1,5 @@
 using Robust.Server.Maps;
+using Robust.Shared.Map;
 
 namespace Content.Server.Theta.DebrisGeneration.Generators;
 
@@ -10,7 +11,7 @@ public sealed class MapLoaderGenerator : Generator
     [DataField("mapPath", required: true)] 
     public string MapPath = "";
     
-    public override EntityUid Generate(DebrisGenerationSystem sys, Vector2 position)
+    public override EntityUid Generate(DebrisGenerationSystem sys, MapId targetMap, Vector2 position)
     {
         var loadOptions = new MapLoadOptions
         {
@@ -19,7 +20,7 @@ public sealed class MapLoaderGenerator : Generator
             LoadMap = false
         };
 
-        if (sys.MapLoader.TryLoad(sys.TargetMap, MapPath, out var rootUids, loadOptions))
+        if (sys.MapLoader.TryLoad(targetMap, MapPath, out var rootUids, loadOptions))
             return rootUids[0];
         
         return EntityUid.Invalid;

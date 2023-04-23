@@ -22,8 +22,14 @@ public sealed class DebrisGenerationSystem : EntitySystem
     public MapId TargetMap = MapId.Nullspace;
     public List<EntityUid> SpawnedGrids = new();
 
+    //primitive quad tree (aka plain grid) for optimising collision checks
+    private const int spawnSectorSize = 100;
+    private const int spawnTries = 5;
+    private Dictionary<Vector2, List<(Vector2, int)>> spawnSectors = new(); //starting pos => spawn positions in this sector
+    private Dictionary<Vector2, float> spawnSectorVolumes = new(); //starting pos => occupied volume in this sector
+
     public void GenerateDebris(
-        MapId targetMap, 
+        MapId targetMap,
         Vector2 startPos,
         List<StructurePrototype> structures, 
         List<Processor> globalProcessors,
@@ -33,8 +39,9 @@ public sealed class DebrisGenerationSystem : EntitySystem
         if (targetMap == MapId.Nullspace || !MapMan.MapExists(targetMap))
             return;
         TargetMap = targetMap;
-        
         MapMan.SetMapPaused(TargetMap, true);
+        
+        SetupGrid(startPos, maxDebrisOffset);
         
         for (int n = 0; n < debrisAmount; n++)
         {
@@ -45,34 +52,28 @@ public sealed class DebrisGenerationSystem : EntitySystem
                 continue;
             }
 
-            Vector2 pos = startPos;
-            for (int m = 0; m < 100; m++)
-            {
-                pos += Rand.NextVector2(maxDebrisOffset);
+            var spawnPos = GenerateSpawnPosition(structProt.MinDistance);
 
-                if (!MapMan.FindGridsIntersecting(TargetMap, 
-                        new Box2(pos - structProt.MinDistance, pos + structProt.MinDistance)).Any())
-                    break;
-            }
-
-            var grid = structProt.Generator.Generate(this, pos);
+            var grid = structProt.Generator.Generate(this, TargetMap, spawnPos);
             SpawnedGrids.Add(grid);
             foreach (var proc in structProt.Processors)
             {
-                proc.Process(this, grid, false);
+                proc.Process(this, TargetMap, grid, false);
             }
         }
 
         foreach (var proc in globalProcessors)
         {
-            proc.Process(this, MapMan.GetMapEntityId(TargetMap), true);
+            proc.Process(this, TargetMap, MapMan.GetMapEntityId(TargetMap), true);
         }
         
         MapMan.SetMapPaused(TargetMap, false);
-        
         TargetMap = MapId.Nullspace;
         Logger.Info($"Debris generation: Spawned {SpawnedGrids.Count} grids.");
         SpawnedGrids.Clear();
+
+        spawnSectors.Clear();
+        spawnSectorVolumes.Clear();
     }
     
     // Randomly picks structure from structure list, accounting for their weight
@@ -96,6 +97,71 @@ public sealed class DebrisGenerationSystem : EntitySystem
 
         return picked;
     }
+
+    private void SetupGrid(Vector2 startPos, int maxDebrisOffset)
+    {
+        for (int y = 0; y < maxDebrisOffset; y += spawnSectorSize)
+        {
+            for (int x = 0; x < maxDebrisOffset; x += spawnSectorSize)
+            {
+                Vector2 sectorPos = new Vector2(startPos.X + x, startPos.Y + y);
+                spawnSectors[sectorPos] = new List<(Vector2, int)>();
+                spawnSectorVolumes[sectorPos] = 0;
+            }
+        }
+    }
+
+    private Vector2 GenerateSpawnPosition(int minDistance)
+    {
+        var volume = Math.Pow(minDistance, 2) * 2 * Math.PI;
+        var shuffledSectors = spawnSectors.Keys.ToList();
+        Rand.Shuffle(shuffledSectors);
+        
+        foreach(var randomSector in shuffledSectors)
+        {
+            if (spawnSectorSize * spawnSectorSize - spawnSectorVolumes[randomSector] < volume)
+                continue;
+            var result = TryPlaceInSector(randomSector, minDistance, spawnTries, out var spawnPos);
+            if (result)
+                return spawnPos;
+        }
+
+        return Vector2.Zero;
+    }
+
+    private bool TryPlaceInSector(Vector2 sectorPos, int radius, int tries, out Vector2 pos)
+    {
+        pos = Vector2.Zero;
+        bool result = true;
+        Vector2 sectorEnd = sectorPos + spawnSectorSize;
+        
+        for (int t = 0; t < tries; t++)
+        {
+            pos = Rand.NextVector2Box(sectorPos.X, sectorPos.Y, sectorEnd.X, sectorEnd.Y);
+            foreach ((Vector2 otherPos, int otherRadius) in spawnSectors[sectorPos])
+            {
+                if ((pos - otherPos).Length < radius + otherRadius)
+                {
+                    result = false;
+                    break;
+                }
+            }
+
+            if (!result)
+            {
+                result = true;
+                continue;
+            }
+            break;
+        }
+
+        if (result)
+        {
+            spawnSectors[sectorPos].Add((pos, radius));
+            spawnSectorVolumes[sectorPos] += (float)(Math.Pow(radius, 2) * 2 * Math.PI);
+        }
+        return result;
+    }
 }
 
 /// <summary>
@@ -104,7 +170,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
 [ImplicitDataDefinitionForInheritors]
 public abstract class Generator
 {
-    public abstract EntityUid Generate(DebrisGenerationSystem sys, Vector2 position);
+    public abstract EntityUid Generate(DebrisGenerationSystem sys, MapId targetMap, Vector2 position);
 }
 
 /// <summary>
@@ -113,5 +179,5 @@ public abstract class Generator
 [ImplicitDataDefinitionForInheritors]
 public abstract class Processor
 {
-    public abstract void Process(DebrisGenerationSystem sys, EntityUid gridUid, bool isGlobal);
+    public abstract void Process(DebrisGenerationSystem sys, MapId targetMap, EntityUid gridUid, bool isGlobal);
 }

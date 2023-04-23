@@ -35,13 +35,13 @@ public sealed class AsteroidGenerator : Generator
     [DataField("wallPrototypeId", required: true, customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
     public string WallPrototypeId = "";
     
-    public override EntityUid Generate(DebrisGenerationSystem sys, Vector2 position)
+    public override EntityUid Generate(DebrisGenerationSystem sys, MapId targetMap, Vector2 position)
     {
         var tileDefMan = sys.TileDefMan;
             
         var tileSet = GenerateTileSet(sys.Rand);
 
-        var gridComp = sys.MapMan.CreateGrid(sys.TargetMap);
+        var gridComp = sys.MapMan.CreateGrid(targetMap);
         var gridUid = gridComp.Owner;
         var transform = sys.EntMan.GetComponent<TransformComponent>(gridUid);
         transform.Coordinates = new EntityCoordinates(transform.Coordinates.EntityId, position);

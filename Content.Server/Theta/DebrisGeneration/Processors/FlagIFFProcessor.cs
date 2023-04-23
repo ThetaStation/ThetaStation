@@ -1,5 +1,6 @@
 using Content.Server.Shuttles.Systems;
 using Content.Shared.Shuttles.Components;
+using Robust.Shared.Map;
 
 namespace Content.Server.Theta.DebrisGeneration.Processors;
 
@@ -20,7 +21,7 @@ public sealed class FlagIFFProcessor : Processor
     [DataField("colorOverride")]
     public Color? ColorOverride;
     
-    public override void Process(DebrisGenerationSystem sys, EntityUid gridUid, bool isGlobal)
+    public override void Process(DebrisGenerationSystem sys, MapId targetMap, EntityUid gridUid, bool isGlobal)
     {
         var shuttleSys = sys.EntMan.System<ShuttleSystem>();
         if (isGlobal)

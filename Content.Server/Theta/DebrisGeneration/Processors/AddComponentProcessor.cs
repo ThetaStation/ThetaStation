@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.Manager;
@@ -15,7 +16,7 @@ public sealed class AddComponentsProcessor : Processor
     [AlwaysPushInheritance]
     public EntityPrototype.ComponentRegistry Components = new();
     
-    public override void Process(DebrisGenerationSystem sys, EntityUid gridUid, bool isGlobal)
+    public override void Process(DebrisGenerationSystem sys, MapId targetMap, EntityUid gridUid, bool isGlobal)
     {
         if (isGlobal)
         {
