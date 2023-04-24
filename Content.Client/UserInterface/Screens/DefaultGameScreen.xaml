@@ -8,6 +8,7 @@
     xmlns:widgets="clr-namespace:Content.Client.UserInterface.Systems.Ghost.Widgets"
     xmlns:hotbar="clr-namespace:Content.Client.UserInterface.Systems.Hotbar.Widgets"
     xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+    xmlns:radar="clr-namespace:Content.Client.UserInterface.Systems.Radar.Widgets"
     Name="DefaultHud"
     VerticalExpand="False"
     VerticalAlignment="Bottom"
@@ -27,5 +28,6 @@
     <hotbar:HotbarGui Name="Hotbar" Access="Protected" />
     <actions:ActionsBar Name="Actions" Access="Protected" />
     <chat:ResizableChatBox Name="Chat" Access="Protected" />
+    <radar:RadarGui Name="Radar" Access="Protected"/>
     <alerts:AlertsUI Name="Alerts" Access="Protected" />
 </screens:DefaultGameScreen>
