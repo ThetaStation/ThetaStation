@@ -84,7 +84,13 @@ public sealed class ShipEvent : StationEventSystem
         _shipSys.PointsPerKill = eventConfig.PointsPerKill;
                 
         _shipSys.HUDPrototypeId = eventConfig.HUDPrototypeId;
-        _shipSys.ShipTypes = eventConfig.ShipTypes;
+
+        _shipSys.MaxSpawnOffset = eventConfig.MaxSpawnOffset;
+
+        foreach (var shipType in eventConfig.ShipTypes)
+        {
+            _shipSys.ShipTypes.Add(_protMan.Index<StructurePrototype>(shipType));
+        }
 
         List<StructurePrototype> obstacleStructProts = new();
         foreach (var structProtId in eventConfig.ObstacleTypes)
@@ -124,9 +130,9 @@ public sealed class ShipEvent : StationEventSystem
 
         _debrisSys.GenerateDebris(map,
             Vector2.Zero,
-            obstacleStructProts,
-            globalProcessors,
             eventConfig.InitialObstacleAmount + _rand.Next(-eventConfig.ObstacleAmountAmplitude, eventConfig.ObstacleAmountAmplitude),
-            eventConfig.MaxSpawnOffset);
+            eventConfig.MaxSpawnOffset,
+            obstacleStructProts,
+            globalProcessors);
     }
 }

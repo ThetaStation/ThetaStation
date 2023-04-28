@@ -6,6 +6,8 @@ using Content.Server.IdentityManagement;
 using Content.Server.Mind.Components;
 using Content.Server.Roles;
 using Content.Server.Shuttles.Components;
+using Content.Server.Theta.DebrisGeneration;
+using Content.Server.Theta.DebrisGeneration.Prototypes;
 using Content.Server.Theta.MobHUD;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Shared.Actions;
@@ -32,6 +34,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     [Dependency] private readonly ActionsSystem _actSys = default!;
     [Dependency] private readonly ChatSystem _chatSys = default!;
     [Dependency] private readonly MobHUDSystem _hudSys = default!;
+    [Dependency] private readonly DebrisGenerationSystem _debrisSys = default!;
     [Dependency] private readonly IdentitySystem _idSys = default!;
     [Dependency] private readonly MapLoaderSystem _mapSys = default!;
     [Dependency] private readonly IMapManager _mapMan = default!;
@@ -49,15 +52,16 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     private float _roundendTimer;
     private int _lastAnnoucementMinute;
 
-    public float RoundDuration; //in seconds
+    //all time-related fields are specified in seconds
+    public float RoundDuration;
     public bool TimedRoundEnd = false;
 
-    public float TeamCheckInterval; //in seconds
-    public float RespawnDelay; //in seconds
+    public float TeamCheckInterval;
+    public float RespawnDelay;
 
-    public int MaxSpawnOffset; //both for ships & obstacles
+    public int MaxSpawnOffset; //for ships
 
-    public int BonusInterval; //in seconds
+    public int BonusInterval;
     public int PointsPerInterval; //points for surviving longer than BonusInterval without respawn
 
     public float PointsPerHitMultiplier;
@@ -68,7 +72,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     public bool RuleSelected;
 
-    public List<string> ShipTypes = new();
+    public List<StructurePrototype> ShipTypes = new();
     public MapId TargetMap;
 
     public List<ShipEventFaction> Teams { get; } = new();
@@ -250,7 +254,14 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         if (!RuleSelected)
             return;
 
-        var newShip = RandomPosSpawn(_random.Pick(ShipTypes));
+        var newShip = _debrisSys.RandomPosSpawn(
+            TargetMap, 
+            Vector2.Zero, 
+            MaxSpawnOffset, 
+            100,
+            _random.Pick(ShipTypes), 
+            new List<Processor>());
+        
         var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>(newShip);
         if (!spawners.Any())
             return;
@@ -534,7 +545,13 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// </param>
     private void ImmediateRespawn(ShipEventFaction team, string oldShipName = "")
     {
-        var newShip = RandomPosSpawn(_random.Pick(ShipTypes));
+        var newShip = _debrisSys.RandomPosSpawn(
+            TargetMap, 
+            Vector2.Zero, 
+            MaxSpawnOffset, 
+            100,
+            _random.Pick(ShipTypes), 
+            new List<Processor>());
 
         var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>(newShip);
         if (!spawners.Any())

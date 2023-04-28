@@ -25,7 +25,7 @@
     initialObstacleAmount: 150
     maxSpawnOffset: 1000
     shipTypes:
-      - "/Maps/Shuttles/shiptest-infiltrator.yml"
+      - "shiptest_infiltrator"
     obstacleTypes:
       - "asteroid_small"
       - "asteroid_large"

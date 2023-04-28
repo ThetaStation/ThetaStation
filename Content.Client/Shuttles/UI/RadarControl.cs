@@ -330,11 +330,6 @@ public sealed class RadarControl : MapGridControl
                 continue;
 
             var gridBody = bodyQuery.GetComponent(grid.Owner);
-            //if (gridBody.Mass < 10f)
-            //{
-            //    ClearLabel(grid.Owner);
-            //    continue;
-            //}
 
             _entManager.TryGetComponent<IFFComponent>(grid.Owner, out var iff);
 

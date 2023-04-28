@@ -30,13 +30,22 @@ public sealed class DebrisGenerationSystem : EntitySystem
     private Dictionary<Vector2, List<(Vector2, int)>> spawnSectors = new(); //starting pos => spawn positions in this sector
     private Dictionary<Vector2, double> spawnSectorVolumes = new(); //starting pos => occupied volume in this sector
 
+    /// <summary>
+    /// Randomly places specified structures onto map
+    /// </summary>
+    /// <param name="targetMap">selected map</param>
+    /// <param name="startPos">starting position from which to spawn structures</param>
+    /// <param name="structures">list of structure prototypes to spawn</param>
+    /// <param name="globalProcessors">list of processors which should run after all structures were spawned</param>
+    /// <param name="debrisAmount">amount of structures to spawn</param>
+    /// <param name="maxDebrisOffset">max offset from startPos. startPos is being the left-lower corner of the square in which spawning positions are chosen</param>
     public void GenerateDebris(
         MapId targetMap,
         Vector2 startPos,
-        List<StructurePrototype> structures, 
-        List<Processor> globalProcessors,
         int debrisAmount,
-        int maxDebrisOffset)
+        int maxDebrisOffset,
+        List<StructurePrototype> structures, 
+        List<Processor> globalProcessors)
     {
         if (targetMap == MapId.Nullspace || !MapMan.MapExists(targetMap))
             return;
@@ -50,7 +59,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
             var structProt = PickStructure(structures);
             if (structProt == null)
             {
-                Logger.Warning("Debris generation: Could not pick structure prototype, skipping grid");
+                Logger.Warning("Debris generation, GenerateDebris: Could not pick structure prototype, skipping");
                 continue;
             }
 
@@ -62,7 +71,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
             var spawnPos = GenerateSpawnPosition(finalDistance);
             if (spawnPos == null)
             {
-                Logger.Error("Debris generation: Failed to generate spawn position, skipping grid");
+                Logger.Error("Debris generation, GenerateDebris: Failed to find spawn position, deleting grid");
                 EntityManager.DeleteEntity(grid);
                 continue;
             }
@@ -82,7 +91,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
         
         MapMan.SetMapPaused(TargetMap, false);
         TargetMap = MapId.Nullspace;
-        Logger.Info($"Debris generation: Spawned {SpawnedGrids.Count} grids");
+        Logger.Info($"Debris generation, GenerateDebris: Spawned {SpawnedGrids.Count} grids");
         SpawnedGrids.Clear();
 
         spawnSectors.Clear();
@@ -111,6 +120,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
         return picked;
     }
 
+    //Set's up collision grid
     private void SetupGrid(Vector2 startPos, int maxDebrisOffset)
     {
         for (int y = 0; y < maxDebrisOffset; y += spawnSectorSize)
@@ -124,6 +134,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
         }
     }
 
+    //Generates spawn position in random sector of the grid
     private Vector2? GenerateSpawnPosition(int distance)
     {
         var volume = distance * distance * Math.PI;
@@ -142,6 +153,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
         return null;
     }
 
+    //Tries to find good position in specified sector & if it's successful, updates sector contents
     private bool TryPlaceInSector(Vector2 sectorPos, int radius, int tries, out Vector2 pos)
     {
         pos = Vector2.Zero;
@@ -174,6 +186,50 @@ public sealed class DebrisGenerationSystem : EntitySystem
             spawnSectorVolumes[sectorPos] += radius * radius * Math.PI;
         }
         return result;
+    }
+
+    /// <summary>
+    /// Randomly places specified structure onto map. Does not optimise collision checking in any way
+    /// </summary>
+    public EntityUid RandomPosSpawn(MapId targetMap, Vector2 startPos, int maxOffset, int tries, StructurePrototype structure, List<Processor> extraProcessors)
+    {
+        TargetMap = targetMap;
+        
+        var grid = structure.Generator.Generate(this, TargetMap);
+        var gridComp = EntMan.GetComponent<MapGridComponent>(grid);
+        var gridForm = EntMan.GetComponent<TransformComponent>(grid);
+
+        var finalDistance = (int)Math.Ceiling(structure.MinDistance + Math.Max(gridComp.LocalAABB.Height, gridComp.LocalAABB.Width));
+
+        Vector2i mapPos = Vector2i.Zero;
+        var result = false;
+        for (int n = 0; n < tries; n++)
+        {
+            mapPos = (Vector2i) Rand.NextVector2Box(
+                startPos.X, 
+                startPos.Y, 
+                startPos.X + maxOffset, 
+                startPos.Y + maxOffset).Rounded();
+            if (!MapMan.FindGridsIntersecting(targetMap,
+                    new Box2(mapPos - finalDistance, mapPos + finalDistance)).Any())
+            {
+                result = true;
+                break;
+            }
+        }
+        
+        TargetMap = MapId.Nullspace;
+        
+        if (result)
+        {
+            Logger.Info($"Debris generation, RandomPosSpawn: Spawned grid {grid.ToString()} successfully");
+            gridForm.Coordinates = new EntityCoordinates(gridForm.Coordinates.EntityId, mapPos);
+            return grid;
+        }
+        
+        Logger.Error($"Debris generation, RandomPosSpawn: Failed to find spawn position, deleting grid {grid.ToString()}");
+        EntityManager.DeleteEntity(grid);
+        return EntityUid.Invalid;
     }
 }
 
