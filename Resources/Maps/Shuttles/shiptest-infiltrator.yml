@@ -23,7 +23,7 @@ entities:
   components:
   - type: MetaData
   - pos: 0.64252126,4.1776605
-    parent: invalid
+    parent: 763
     type: Transform
   - chunks:
       -1,-1:
@@ -87,7 +87,7 @@ entities:
           1: 34954
         1,-1:
           0: 55
-          1: 7624
+          1: 8136
         0,-5:
           0: 61951
           2: 3584
@@ -378,6 +378,7 @@ entities:
     shakeTimes: 10
     type: GravityShake
   - type: GasTileOverlay
+  - type: SpreaderGrid
 - uid: 2
   type: WallPlastitanium
   components:
@@ -5902,6 +5903,14 @@ entities:
     pos: -8.5,-9.5
     parent: 1
     type: Transform
+- uid: 763
+  components:
+  - type: MetaData
+  - type: Transform
+  - type: Map
+  - type: PhysicsMap
+  - type: Broadphase
+  - type: OccluderTree
 - uid: 764
   type: ChairPilotSeat
   components:
@@ -6077,11 +6086,25 @@ entities:
   - pos: -5.4968786,-5.2836776
     parent: 1
     type: Transform
+- uid: 792
+  type: BluespaceCatapultShipEvent
+  components:
+  - pos: -0.5,-5.5
+    parent: 1
+    type: Transform
+  - bodyType: Static
+    type: Physics
 - uid: 793
   type: WallPlastitanium
   components:
   - rot: -1.5707963267948966 rad
     pos: 8.5,-10.5
+    parent: 1
+    type: Transform
+- uid: 794
+  type: CableMV
+  components:
+  - pos: -0.5,-5.5
     parent: 1
     type: Transform
 - uid: 795

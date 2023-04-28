@@ -8,7 +8,7 @@ namespace Content.Server.Theta.ShipEvent.Components;
 public sealed class BluespaceCatapultComponent : Component
 {
     [DataField("launchSound")] 
-    public SoundSpecifier LaunchSound = new SoundPathSpecifier("/Audio/Theta/hl-teleport.mp3");
+    public SoundSpecifier LaunchSound = new SoundPathSpecifier("/Audio/Theta/hl-teleport.ogg");
     
     /// <summary>
     /// Maximum amount of energy that catapult can discharge during single launch. Every joule of energy is converted into a single newton of
