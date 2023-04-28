@@ -201,7 +201,7 @@
       fixtures:
       - shape:
           !type:PhysShapeCircle
-        radius: 0.2
+          radius: 0.2
         density: 100
         mask:
         - TableMask
@@ -240,5 +240,9 @@
     - type: PowerConsumer
       voltage: Medium
     - type: Battery
-      maxCharge: 15000
+      maxCharge: 300000
     - type: BluespaceCatapult
+      maxPower: 300000
+      maxError: 5
+      efficiency: 0.01
+      chargeRate: 3000

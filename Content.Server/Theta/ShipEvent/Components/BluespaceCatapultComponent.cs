@@ -14,22 +14,26 @@ public sealed class BluespaceCatapultComponent : Component
     /// Maximum amount of energy that catapult can discharge during single launch. Every joule of energy is converted into a single newton of
     /// force applied to payload (for 1 second), so initial velocity is equal to 'used power * catapult's efficiency / load mass'
     /// </summary>
-    [DataField("maxPowerPerLaunch")]
-    public int MaxPower = 15000;
+    [DataField("maxPower")]
+    public int MaxPower;
 
     /// <summary>
     /// Maximum error (in angles) for bearing & elevation
     /// </summary>
     [DataField("maxError")]
-    public int MaxError = 5;
+    public int MaxError;
 
     /// <summary>
     /// How much of input energy is translated into force applied to payload
     /// </summary>
     [DataField("efficiency")]
-    public float Efficiency = 0.1f;
+    public float Efficiency;
 
-    public int ChargeRate = 1000;
+    /// <summary>
+    /// How fast catapult's battery is charging
+    /// </summary>
+    [DataField("chargeRate")]
+    public int ChargeRate;
 
     public PowerConsumerComponent? Consumer;
     
@@ -42,5 +46,5 @@ public sealed class BluespaceCatapultComponent : Component
     public bool IsFullyCharged => Battery?.IsFullyCharged ?? false;
 
     [Access(typeof(BluespaceCatapultSystem))]
-    public float animationTimer = 0;
+    public float animationTimer;
 }
