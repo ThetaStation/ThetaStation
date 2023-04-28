@@ -19,7 +19,7 @@ public sealed class SimpleRadarControl : MapGridControl
 
     private const float GridLinesDistance = 32f;
 
-    // new because pendoses has hardcoded all size-related parameters
+    // new because western collegues have hardcoded all size-related parameters
     private new int UIDisplayRadius = 400;
     private new int MidPoint => (int) (SizeFull / 2);
     private new int SizeFull => (int) (UIDisplayRadius * UIScale);
