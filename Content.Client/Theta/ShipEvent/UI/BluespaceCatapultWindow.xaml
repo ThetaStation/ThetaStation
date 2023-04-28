@@ -1,0 +1,33 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+               Title="{Loc 'shipevent-bluespacecatapult-windowtitle'}"
+               MinSize="600 350"
+               MaxSize="600 350"
+               SetSize="600 350">
+    <BoxContainer Orientation="Vertical" SeparationOverride="4">
+        <Label Name="UserMessage"
+               Text="" />
+        <Control MinSize="0 10" />
+        
+        <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+            <Label Name="ChargeLabel" Text="{Loc 'shipevent-bluespacecatapult-chargelabel'}" />
+            <Label Name="Charge" Text="" />
+            <Control MinSize="0 10" />
+        </BoxContainer>
+        
+        <Label Name="ElevationLabel" Text="{Loc 'shipevent-bluespacecatapult-elevationlabel'}"></Label>
+        <LineEdit Name="ElevationField"></LineEdit>
+        
+        <Label Name="BearingLabel" Text="{Loc 'shipevent-bluespacecatapult-bearinglabel'}"></Label>
+        <LineEdit Name="BearingField"></LineEdit>
+        
+        <Label Name="PowerLabel" Text="{Loc 'shipevent-bluespacecatapult-powerlabel'}"></Label>
+        <LineEdit Name="PowerField"></LineEdit>
+        
+        <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+            <Button Name="LaunchButton"
+                    Text="{Loc 'shipevent-bluespacecatapult-launchbutton'}"/>
+            <Button Name="RefreshButton"
+                    Text="{Loc 'shipevent-bluespacecatapult-refreshbutton'}"/>
+        </BoxContainer>
+    </BoxContainer>
+</DefaultWindow>

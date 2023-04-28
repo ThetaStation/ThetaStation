@@ -80,9 +80,9 @@
     - shape:
         !type:PhysShapeAabb {}
       mask:
-      - FullTileMask
+        - MachineMask
       layer:
-      - WallLayer
+        - MachineLayer
   - type: Damageable
     damageContainer: Inorganic
     damageModifierSet: Glass
@@ -132,9 +132,9 @@
         - shape:
             !type:PhysShapeAabb {}
           mask:
-            - FullTileMask
+            - MachineMask
           layer:
-            - WallLayer
+            - MachineLayer
     - type: Damageable
       damageContainer: Inorganic
       damageModifierSet: Metallic
@@ -180,3 +180,67 @@
     - type: SignalTransmitter
       outputs:
         TurretLoaderSender: [ ]
+        
+- type: entity
+  id: BluespaceCatapultShipEvent
+  name: bluespace catapult
+  parent: BaseStructure
+  placement:
+    mode: SnapgridCenter
+  components:
+    - type: Transform
+      anchored: true
+    - type: Anchorable
+    - type: Sprite
+      drawdepth: Objects
+      sprite: Theta/ShipEvent/Structures/Machines/BluespaceCatapult.rsi
+      state: catapult
+    - type: Physics
+      bodyType: Dynamic
+    - type: Fixtures
+      fixtures:
+      - shape:
+          !type:PhysShapeCircle
+          radius: 0.5
+        density: 0
+        mask:
+          - MachineMask
+        layer:
+          - MachineLayer
+    - type: Damageable
+      damageContainer: Inorganic
+      damageModifierSet: Metallic
+    - type: Repairable
+    - type: Destructible
+      thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: 300
+        behaviors:
+          - !type:PlaySoundBehavior
+            sound: !type:SoundPathSpecifier
+              path: "/Audio/Effects/metalbreak.ogg"
+          - !type:SpawnEntitiesBehavior
+            spawn:
+              SheetSteel:
+                min: 3
+                max: 5
+          - !type:DoActsBehavior
+            acts: [ "Destruction" ]
+    - type: ActivatableUI
+      key: enum.BluespaceCatapultUiKey.Key
+    - type: UserInterface
+      interfaces:
+      - key: enum.BluespaceCatapultUiKey.Key
+        type: BluespaceCatapultBoundUserInterface
+    - type: NodeContainer
+      examinable: true
+      nodes:
+        input:
+          !type:CableDeviceNode
+          nodeGroupID: MVPower
+    - type: PowerConsumer
+      voltage: Medium
+    - type: Battery
+      maxCharge: 15000
+    - type: BluespaceCatapult

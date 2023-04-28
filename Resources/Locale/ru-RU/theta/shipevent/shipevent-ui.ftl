@@ -60,3 +60,21 @@ shipevent-turretloader-signalport-desc = Используется для свя�
 shipevent-cannonconsole-ammostatus = Боезапас
 shipevent-cannonconsole-signalport-name = Консоль управления орудиями
 shipevent-cannonconsole-signalport-desc = Используется для отправки управляющих сигналов к турелям.
+
+
+## Bluespace catapult
+
+shipevent-bluespacecatapult-windowtitle = БЛЮСПЕЙС КАТАПУЛЬТА
+
+shipevent-bluespacecatapult-response-lowpower = Недостаточно энергии
+shipevent-bluespacecatapult-response-lowmass = Недостаточная масса
+shipevent-bluespacecatapult-response-invaliddata = Неправильные данные
+shipevent-bluespacecatapult-response-broken = Неисправность
+
+shipevent-bluespacecatapult-chargelabel = Заряд:
+shipevent-bluespacecatapult-elevationlabel = Подъём:
+shipevent-bluespacecatapult-bearinglabel = Поворот:
+shipevent-bluespacecatapult-powerlabel = Мощность:
+
+shipevent-bluespacecatapult-launchbutton = ПУСК
+shipevent-bluespacecatapult-refreshbutton = ОБНОВИТЬ UI

@@ -60,3 +60,21 @@ shipevent-turretloader-signalport-desc = Used for binding weapon loader & turret
 shipevent-cannonconsole-ammostatus = Ammo
 shipevent-cannonconsole-signalport-name = Weapon control console
 shipevent-cannonconsole-signalport-desc = Used for communication with turrets.
+
+
+## Bluespace catapult
+
+shipevent-bluespacecatapult-windowtitle = BLUESPACE CATAPULT
+
+shipevent-bluespacecatapult-response-lowpower = Insufficient power
+shipevent-bluespacecatapult-response-lowmass = Insufficient mass
+shipevent-bluespacecatapult-response-invaliddata = Invalid target data
+shipevent-bluespacecatapult-response-broken = Malfunction
+
+shipevent-bluespacecatapult-chargelabel = Charge:
+shipevent-bluespacecatapult-elevationlabel = Elevation:
+shipevent-bluespacecatapult-bearinglabel = Bearing:
+shipevent-bluespacecatapult-powerlabel = Power:
+
+shipevent-bluespacecatapult-launchbutton = LAUNCH
+shipevent-bluespacecatapult-refreshbutton = REFRESH UI

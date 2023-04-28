@@ -18,6 +18,9 @@ ent-TurretAmmoContainerRegular = ammo container
 ent-TurretAmmoContainerBluespace = ammo container (bluespace)
     .desc = { "Extended version of standard ammo container." }
     .suffix = { "ShipEvent" }
+ent-BluespaceCatapultShipEvent = bluespace catapult
+    .desc = { "Combination of ancient weapon and modern science. Used to teleport payload in limited radius around the ship." }
+    .suffix = { "ShipEvent" }
     
     
 ## Guns
