@@ -18,6 +18,7 @@
         description: shipevent-teamview-toggle-desc
         itemIconStyle: NoItem
         event: !type:ToggleActionEvent
+    - type: RadarHUD
     - type: UserInterface
       interfaces:
       - key: enum.TeamViewUiKey.Key
