@@ -128,7 +128,7 @@ public sealed class ShipEvent : StationEventSystem
         
         List<Processor> globalProcessors = new() { iffInheritanceProc, iffFlagProc };
 
-        _debrisSys.GenerateDebris(map,
+        _debrisSys.SpawnStructures(map,
             Vector2.Zero,
             eventConfig.InitialObstacleAmount + _rand.Next(-eventConfig.ObstacleAmountAmplitude, eventConfig.ObstacleAmountAmplitude),
             eventConfig.MaxSpawnOffset,

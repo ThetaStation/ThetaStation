@@ -8,7 +8,9 @@ using Robust.Shared.Random;
 
 namespace Content.Server.Theta.DebrisGeneration;
 
-
+/// <summary>
+/// System providing modular, procedural generation of various stru
+/// </summary>
 public sealed class DebrisGenerationSystem : EntitySystem
 {
     //public fields are for the systems most commonly used by generators & processors,
@@ -39,11 +41,11 @@ public sealed class DebrisGenerationSystem : EntitySystem
     /// <param name="globalProcessors">list of processors which should run after all structures were spawned</param>
     /// <param name="debrisAmount">amount of structures to spawn</param>
     /// <param name="maxDebrisOffset">max offset from startPos. startPos is being the left-lower corner of the square in which spawning positions are chosen</param>
-    public void GenerateDebris(
+    public void SpawnStructures(
         MapId targetMap,
         Vector2 startPos,
-        int debrisAmount,
-        int maxDebrisOffset,
+        int structureAmount,
+        int maxOffset,
         List<StructurePrototype> structures, 
         List<Processor> globalProcessors)
     {
@@ -52,9 +54,9 @@ public sealed class DebrisGenerationSystem : EntitySystem
         TargetMap = targetMap;
         MapMan.SetMapPaused(TargetMap, true);
         
-        SetupGrid(startPos, maxDebrisOffset);
+        SetupGrid(startPos, maxOffset);
         
-        for (int n = 0; n < debrisAmount; n++)
+        for (int n = 0; n < structureAmount; n++)
         {
             var structProt = PickStructure(structures);
             if (structProt == null)
