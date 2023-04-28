@@ -26,9 +26,6 @@ public sealed class SimpleRadarControl : MapGridControl
     private new int ScaledMinimapRadius => (int) (SizeFull / 2);
     private new float MinimapScale => WorldRange != 0 ? ScaledMinimapRadius / WorldRange : 0f;
 
-    private EntityUid? lastGridUid;
-    private Angle? lastGridWorldRotation;
-
     public SimpleRadarControl() : base(192f, 192f, 192f)
     {
         SetSize = (SizeFull, SizeFull);
