@@ -3,6 +3,7 @@
 using System.Linq;
 using Content.Server.Access.Systems;
 using Content.Server.Explosion.Components;
+using Content.Server.Mind;
 using Content.Server.Mind.Components;
 using Content.Server.Roles;
 using Content.Shared.Chat;
@@ -45,6 +46,7 @@ public sealed class ShipEventFaction : PlayerFaction
 public sealed partial class ShipEventFactionSystem
 {
     [Dependency] private readonly IdCardSystem _cardSystem = default!;
+    [Dependency] private readonly MindTrackerSystem _mindTrack = default!;
 
     private void Announce(string message)
     {
@@ -112,7 +114,7 @@ public sealed partial class ShipEventFactionSystem
         return comps;
     }
 
-    public int GetProjectileDamage(EntityUid entity)
+    private int GetProjectileDamage(EntityUid entity)
     {
         if (EntityManager.TryGetComponent<MetaDataComponent>(entity, out var meta))
         {
@@ -180,7 +182,7 @@ public sealed partial class ShipEventFactionSystem
         return true;
     }
 
-    public string GenerateTeamColor()
+    private string GenerateTeamColor()
     {
         for (int c = 0; c < 100; c++)
         {
@@ -217,7 +219,7 @@ public sealed partial class ShipEventFactionSystem
     }
 
     //todo: actually PR it to RT instead of putting it here
-    public double RedmeanColorDelta(Color a, Color b)
+    private double RedmeanColorDelta(Color a, Color b)
     {
         var deltaR = a.RByte - b.RByte;
         var deltaG = a.GByte - b.GByte;
@@ -227,7 +229,7 @@ public sealed partial class ShipEventFactionSystem
         return Math.Sqrt(delta);
     }
 
-    public EntityUid RandomPosSpawn(string mapPath)
+    private EntityUid RandomPosSpawn(string mapPath)
     {
         Vector2i mapPos = Vector2i.Zero;
         for (int c = 0; c < 100; c++)
@@ -249,6 +251,17 @@ public sealed partial class ShipEventFactionSystem
             return rootUids[0];
 
         return EntityUid.Invalid;
+    }
+
+    //to avoid cluttering roundend statistics
+    public void CleanMindTracker()
+    {
+        _mindTrack.ClearMindSet();
+        foreach (var mind in EntityManager.EntityQuery<MindComponent>())
+        {
+            if(mind.HasMind)
+                _mindTrack.AddMind(mind.Mind!);
+        }
     }
 }
 

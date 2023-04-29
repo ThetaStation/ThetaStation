@@ -5,6 +5,7 @@ using Content.Server.GameTicking;
 using Content.Server.IdentityManagement;
 using Content.Server.Mind.Components;
 using Content.Server.Roles;
+using Content.Server.RoundEnd;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Systems;
 using Content.Server.Theta.MobHUD;
@@ -43,7 +44,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     [Dependency] private readonly ShuttleSystem _shuttleSystem = default!;
     [Dependency] private readonly IPlayerManager _playerMan = default!;
     [Dependency] private readonly TransformSystem _formSys = default!;
-    [Dependency] private readonly GameTicker _ticker = default!;
+    [Dependency] private readonly RoundEndSystem _endSys = default!;
 
     private readonly Dictionary<EntityUid, string> _shipNames = new();
     private readonly Dictionary<string, int> _projectileDamage = new(); //cached damage for projectile prototypes
@@ -129,7 +130,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         }
         if (remaining <= 0 && _lastAnnoucementMinute == 1)
         {
-            _ticker.EndRound();
+            _endSys.EndRound();
             _lastAnnoucementMinute = -1;
         }
     }
@@ -151,6 +152,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         if (!RuleSelected || !Teams.Any())
             return;
 
+        CleanMindTracker();
 
         var winner = Teams.First();
         args.AddLine(Loc.GetString("shipevent-roundend-heading"));
