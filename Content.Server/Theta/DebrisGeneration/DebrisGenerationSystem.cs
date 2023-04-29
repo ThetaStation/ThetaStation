@@ -177,7 +177,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
         
         for (int t = 0; t < tries; t++)
         {
-            resultPos = Rand.NextVector2Box(sectorPos.X, sectorPos.Y, sectorEnd.X, sectorEnd.Y);
+            resultPos = Rand.NextVector2Box(sectorPos.X + radius, sectorPos.Y + radius, sectorEnd.X - radius, sectorEnd.Y - radius);
 
             if (CanPlace(resultPos))
             {
