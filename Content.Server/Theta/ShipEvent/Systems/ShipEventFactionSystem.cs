@@ -6,14 +6,14 @@ using Content.Server.IdentityManagement;
 using Content.Server.Mind.Components;
 using Content.Server.Roles;
 using Content.Server.Shuttles.Components;
-using Content.Server.Shuttles.Systems;
+using Content.Server.Theta.DebrisGeneration;
+using Content.Server.Theta.DebrisGeneration.Prototypes;
 using Content.Server.Theta.MobHUD;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Shared.Actions;
 using Content.Shared.GameTicking;
 using Content.Shared.Mobs;
 using Content.Shared.Projectiles;
-using Content.Shared.Shuttles.Components;
 using Content.Shared.Theta.MobHUD;
 using Content.Shared.Theta.ShipEvent;
 using Content.Shared.Theta.ShipEvent.UI;
@@ -34,13 +34,13 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     [Dependency] private readonly ActionsSystem _actSys = default!;
     [Dependency] private readonly ChatSystem _chatSys = default!;
     [Dependency] private readonly MobHUDSystem _hudSys = default!;
+    [Dependency] private readonly DebrisGenerationSystem _debrisSys = default!;
     [Dependency] private readonly IdentitySystem _idSys = default!;
     [Dependency] private readonly MapLoaderSystem _mapSys = default!;
     [Dependency] private readonly IMapManager _mapMan = default!;
     [Dependency] private readonly IPrototypeManager _protMan = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSys = default!;
-    [Dependency] private readonly ShuttleSystem _shuttleSystem = default!;
     [Dependency] private readonly IPlayerManager _playerMan = default!;
     [Dependency] private readonly TransformSystem _formSys = default!;
     [Dependency] private readonly GameTicker _ticker = default!;
@@ -50,18 +50,18 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     private int _lastTeamNumber;
     private float _teamCheckTimer;
     private float _roundendTimer;
-    private int _lastAnnoucementMinute = 0;
+    private int _lastAnnoucementMinute;
 
-    public float RoundDuration; //in seconds
+    //all time-related fields are specified in seconds
+    public float RoundDuration;
     public bool TimedRoundEnd = false;
 
-    public float TeamCheckInterval; //in seconds
-    public float RespawnDelay; //in seconds
+    public float TeamCheckInterval;
+    public float RespawnDelay;
 
-    public int MaxSpawnOffset; //both for ships & obstacles
-    public int CollisionCheckRange;
+    public int MaxSpawnOffset; //for ships
 
-    public int BonusInterval; //in seconds
+    public int BonusInterval;
     public int PointsPerInterval; //points for surviving longer than BonusInterval without respawn
 
     public float PointsPerHitMultiplier;
@@ -70,10 +70,9 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     public string HUDPrototypeId = "ShipeventHUD";
 
-    public bool RuleSelected = false;
+    public bool RuleSelected;
 
-    public List<string> ShipTypes = new();
-    public List<string> ObstacleTypes = new();
+    public List<StructurePrototype> ShipTypes = new();
     public MapId TargetMap;
 
     public List<ShipEventFaction> Teams { get; } = new();
@@ -81,6 +80,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
+
         SubscribeLocalEvent<ShipEventFactionViewComponent, ToggleActionEvent>(OnView);
         SubscribeLocalEvent<ShipEventFactionViewComponent, ComponentInit>(OnViewInit);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, StartCollideEvent>(OnCollision);
@@ -254,7 +254,14 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         if (!RuleSelected)
             return;
 
-        var newShip = RandomPosSpawn(_random.Pick(ShipTypes));
+        var newShip = _debrisSys.RandomPosSpawn(
+            TargetMap, 
+            Vector2.Zero, 
+            MaxSpawnOffset, 
+            100,
+            _random.Pick(ShipTypes), 
+            new List<Processor>());
+        
         var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>(newShip);
         if (!spawners.Any())
             return;
@@ -538,7 +545,13 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// </param>
     private void ImmediateRespawn(ShipEventFaction team, string oldShipName = "")
     {
-        var newShip = RandomPosSpawn(_random.Pick(ShipTypes));
+        var newShip = _debrisSys.RandomPosSpawn(
+            TargetMap, 
+            Vector2.Zero, 
+            MaxSpawnOffset, 
+            100,
+            _random.Pick(ShipTypes), 
+            new List<Processor>());
 
         var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>(newShip);
         if (!spawners.Any())
@@ -716,20 +729,5 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             if (!team.ShouldRespawn)
                 team.BonusIntervalTimer += deltaTime;
         }
-    }
-
-    public List<EntityUid> CreateObstacles(int amount)
-    {
-        List<EntityUid> spawnedObstacles = new();
-        for (int i = 0; i < amount; i++)
-        {
-            var obstacleUid = RandomPosSpawn(_random.Pick(ObstacleTypes));
-            EnsureComp<InheritanceIFFComponent>(obstacleUid);
-            _shuttleSystem.AddIFFFlag(obstacleUid, IFFFlags.HideLabel);
-            _shuttleSystem.SetIFFColor(obstacleUid, Color.Gold);
-            spawnedObstacles.Add(obstacleUid);
-        }
-
-        return spawnedObstacles;
     }
 }

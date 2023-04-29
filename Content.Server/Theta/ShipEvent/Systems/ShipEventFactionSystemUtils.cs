@@ -229,12 +229,14 @@ public sealed partial class ShipEventFactionSystem
 
     public EntityUid RandomPosSpawn(string mapPath)
     {
+        const int shipCollisionCheckRange = 30;
+        
         Vector2i mapPos = Vector2i.Zero;
         for (int c = 0; c < 100; c++)
         {
-            mapPos = (Vector2i) _random.NextVector2(MaxSpawnOffset);
+            mapPos = (Vector2i) _random.NextVector2Box(0, 0, MaxSpawnOffset, MaxSpawnOffset).Rounded();
             if (!_mapMan.FindGridsIntersecting(TargetMap, 
-                    new Box2(mapPos - CollisionCheckRange, mapPos + CollisionCheckRange)).Any())
+                    new Box2(mapPos - shipCollisionCheckRange, mapPos + shipCollisionCheckRange)).Any())
                 break;
         }
 
