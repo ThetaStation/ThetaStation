@@ -1,0 +1,6 @@
+- type: structure
+  id: shiptest_infiltrator
+  generator: !type:MapLoaderGenerator
+    mapPath: "/Maps/Shuttles/shiptest-infiltrator.yml"
+  spawnWeight: 0
+  minDistance: 10

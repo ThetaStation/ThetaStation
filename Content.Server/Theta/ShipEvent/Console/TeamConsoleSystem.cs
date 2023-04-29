@@ -94,7 +94,6 @@ public sealed class TeamConsoleSystem : EntitySystem
             SendResponse(uid, args.UiKey, ResponseTypes.BlacklistedSelf);
             return;
         }
-
         SendResponse(uid, args.UiKey, ResponseTypes.SettingUp);
         _shipSys.CreateTeam(args.Session, args.Name, color, blacklist);
     }

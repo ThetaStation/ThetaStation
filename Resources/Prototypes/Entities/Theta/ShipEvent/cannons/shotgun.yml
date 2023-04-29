@@ -42,7 +42,7 @@
   parent: ShellShotgunSlug
   components:
     - type: Item
-      size: 2
+      size: 1
     - type: CartridgeAmmo
       proto: PelletShotgunSlugShipEvent
       count: 5
