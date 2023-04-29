@@ -304,9 +304,10 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     {
         if (player.AttachedEntity != null)
         {
-            var uid = player.AttachedEntity;
-            player.DetachFromEntity();
-            EntityManager.DeleteEntity((EntityUid)uid);
+            if (EntityManager.TryGetComponent<MindComponent>(player.AttachedEntity, out var mind))
+                mind.GhostOnShutdown = false; //to prevent ghost duplication
+
+            EntityManager.DeleteEntity((EntityUid)player.AttachedEntity);
         }
 
         var spawner = EntityManager.GetComponent<ShipEventSpawnerComponent>(spawnerUid);
