@@ -4,7 +4,6 @@ using Content.Client.UserInterface.Controls;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using JetBrains.Annotations;
-using Content.Shared.Shuttles.Systems;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Client.UserInterface;
@@ -14,7 +13,6 @@ using Robust.Shared.Input;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
-using Robust.Shared.Physics.Collision.Shapes;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Utility;
 
@@ -332,11 +330,6 @@ public sealed class RadarControl : MapGridControl
                 continue;
 
             var gridBody = bodyQuery.GetComponent(grid.Owner);
-            if (gridBody.Mass < 10f)
-            {
-                ClearLabel(grid.Owner);
-                continue;
-            }
 
             _entManager.TryGetComponent<IFFComponent>(grid.Owner, out var iff);
 

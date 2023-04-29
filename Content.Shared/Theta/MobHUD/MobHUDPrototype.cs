@@ -34,6 +34,6 @@ public sealed class MobHUDPrototype : IPrototype, IEquatable<MobHUDPrototype>
 
     public MobHUDPrototype ShallowCopy()
     {
-        return (MobHUDPrototype)this.MemberwiseClone();
+        return (MobHUDPrototype)MemberwiseClone();
     }
 }
