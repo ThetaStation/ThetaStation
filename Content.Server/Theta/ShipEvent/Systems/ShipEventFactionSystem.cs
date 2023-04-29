@@ -69,6 +69,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     public int PointsPerAssist;
     public int PointsPerKill;
 
+    public int PlayersPerTeamPlace;
+
     public string HUDPrototypeId = "ShipeventHUD";
 
     public bool RuleSelected;
@@ -300,6 +302,21 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>(shipUid.Value);
         if (!spawners.Any())
             return;
+        
+        if (teamFaction.Members.Count >= GetMemberLimit())
+        {
+            _chatSys.SendSimpleMessage(Loc.GetString("shipevent-memberlimit"), player);
+            return;
+        }
+        
+        if (teamFaction.Blacklist != null)
+        {
+            if (teamFaction.Blacklist.Contains(player.ConnectedClient.UserName))
+            {
+                _chatSys.SendSimpleMessage(Loc.GetString("shipevent-blacklist"), player);
+                return;
+            }
+        }
 
         var spawner = spawners.First();
         var playerMob = SpawnPlayer(player, spawner);
@@ -350,18 +367,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         {
             if (teamMarker.Team == null)
                 return;
-
             team = teamMarker.Team;
-
-            if (team.Blacklist != null)
-            {
-                if (team.Blacklist.Contains(session.ConnectedClient.UserName))
-                {
-                    _chatSys.SendSimpleMessage(Loc.GetString("shipevent-blacklist"), session);
-                    EntityManager.DeleteEntity(spawnedEntity);
-                    return;
-                }
-            }
 
             AddToTeam(spawnedEntity, team);
 
@@ -650,6 +656,20 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                     break;
             }
         }
+    }
+
+    private int GetMemberLimit()
+    {
+        int totalMembers = 0;
+        int minMembers = 0;
+        foreach (var team in Teams)
+        {
+            totalMembers += team.Members.Count;
+            if (team.Members.Count < minMembers || minMembers == 0)
+                minMembers = team.Members.Count;
+        }
+        
+        return minMembers + totalMembers / PlayersPerTeamPlace;
     }
 
     private void CheckTeams(float deltaTime)
