@@ -156,35 +156,39 @@ public sealed class DebrisGenerationSystem : EntitySystem
     }
 
     //Tries to find good position in specified sector & if it's successful, updates sector contents
-    private bool TryPlaceInSector(Vector2 sectorPos, int radius, int tries, out Vector2 pos)
+    private bool TryPlaceInSector(Vector2 sectorPos, int radius, int tries, out Vector2 resultPos)
     {
-        pos = Vector2.Zero;
+        bool CanPlace(Vector2 pos)
+        {
+            foreach ((Vector2 otherPos, int otherRadius) in spawnSectors[sectorPos])
+            {
+                if ((pos - otherPos).Length < radius + otherRadius)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        
+        resultPos = Vector2.Zero;
         bool result = true;
         Vector2 sectorEnd = sectorPos + spawnSectorSize;
         
         for (int t = 0; t < tries; t++)
         {
-            pos = Rand.NextVector2Box(sectorPos.X, sectorPos.Y, sectorEnd.X, sectorEnd.Y);
-            foreach ((Vector2 otherPos, int otherRadius) in spawnSectors[sectorPos])
-            {
-                if ((pos - otherPos).Length < radius + otherRadius)
-                {
-                    result = false;
-                    break;
-                }
-            }
+            resultPos = Rand.NextVector2Box(sectorPos.X, sectorPos.Y, sectorEnd.X, sectorEnd.Y);
 
-            if (!result)
+            if (CanPlace(resultPos))
             {
                 result = true;
-                continue;
+                break;
             }
-            break;
         }
 
         if (result)
         {
-            spawnSectors[sectorPos].Add((pos, radius));
+            spawnSectors[sectorPos].Add((resultPos, radius));
             spawnSectorVolumes[sectorPos] += radius * radius * Math.PI;
         }
         return result;
