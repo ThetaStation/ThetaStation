@@ -35,11 +35,11 @@ public sealed class ShipEventFaction : PlayerFaction
     
     public bool ShouldRespawn; //whether this team is currently waiting for respawn
     public float TimeSinceRemoval; //time since last removal
+    
     public int LastBonusInterval; //how much times this team has acquired bonus points for surviving bonus interval
     
     public ShipEventFaction(string name, string iconPath, Color color, string captain,
-        int points = 0,
-        List<string>? blacklist = null) : base(name, iconPath)
+        int points = 0, List<string>? blacklist = null) : base(name, iconPath)
     {
         Color = color;
         Captain = captain;
@@ -270,7 +270,7 @@ public sealed partial class ShipEventFactionSystem
                 _mindTrack.AddMind(mind.Mind!);
         }
     }
-
+    
     public bool CanPickShip(ShipEventFaction team, ShipType ship)
     {
         if (team.Members.Count >= ship.MinCrewAmount)

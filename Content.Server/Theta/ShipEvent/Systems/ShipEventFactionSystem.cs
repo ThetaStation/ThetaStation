@@ -71,7 +71,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     public int PointsPerKill;
 
     public int PlayersPerTeamPlace;
-    
+
     public string HUDPrototypeId = "ShipeventHUD";
     public string CaptainHUDPrototypeId = "";
 
