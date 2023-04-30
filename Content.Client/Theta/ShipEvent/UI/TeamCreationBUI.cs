@@ -18,10 +18,6 @@ public sealed class ShipEventLobbyBoundUserInterface : BoundUserInterface
         _lobby = new TeamLobbyWindow();
 
         _lobby.OnClose += Close;
-        _teamCreation.CreationButtonPressed += _ =>
-        {
-            SendMessage(new TeamCreationRequest(_teamCreation.TeamName, _teamCreation.Blacklist, _teamCreation.TeamColor));
-        };
         _lobby.CreateTeamButtonPressed += _ =>
         {
             _teamCreation.OpenCentered();
@@ -34,6 +30,16 @@ public sealed class ShipEventLobbyBoundUserInterface : BoundUserInterface
         {
             SendMessage(new JoinToShipTeamsEvent(name));
         };
+        
+        _teamCreation.CreationButtonPressed += _ =>
+        {
+            SendMessage(new TeamCreationRequest(_teamCreation.TeamName, _teamCreation.TeamColor, _teamCreation.Blacklist, _teamCreation.ShipType));
+        };
+        _teamCreation.ShipPickerButtonPressed += _ =>
+        {
+            _teamCreation.ShipPicker.OpenCentered();
+            SendMessage(new GetShipPickerInfoMessage());
+        };
 
         _lobby.OpenCentered();
     }
@@ -44,6 +50,9 @@ public sealed class ShipEventLobbyBoundUserInterface : BoundUserInterface
         {
             case ShipEventCreateTeamBoundUserInterfaceState msg:
                 _teamCreation?.UpdateState(msg);
+                break;
+            case ShipPickerBoundUserInterfaceState msg:
+                _teamCreation?.ShipPicker.UpdateState(msg);
                 break;
             case ShipEventLobbyBoundUserInterfaceState msg:
                 _lobby?.UpdateState(msg);

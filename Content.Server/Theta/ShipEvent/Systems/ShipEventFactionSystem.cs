@@ -77,7 +77,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     public bool RuleSelected;
 
-    public List<StructurePrototype> ShipTypes = new();
+    public List<ShipType> ShipTypes = new();
     public MapId TargetMap;
 
     public List<ShipEventFaction> Teams { get; } = new();
@@ -90,9 +90,27 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         SubscribeLocalEvent<ShipEventFactionViewComponent, ComponentInit>(OnViewInit);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, StartCollideEvent>(OnCollision);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, MobStateChangedEvent>(OnPlayerStateChange);
-        SubscribeAllEvent<ShuttleConsoleChangeShipNameMessage>(OnShipNameChange);
+        SubscribeAllEvent<ShuttleConsoleChangeShipNameMessage>(OnShipNameChange); //un-directed event since we will have duplicate subscriptions otherwise
+        SubscribeAllEvent<GetShipPickerInfoMessage>(OnShipPickerInfoRequest);
         SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEnd);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
+    }
+
+    private void OnShipPickerInfoRequest(GetShipPickerInfoMessage msg)
+    {
+        var memberCount = 0;
+        foreach (var team in Teams)
+        {
+            foreach (var role in team.Members)
+            {
+                if (role.Mind.Session == msg.Session)
+                    memberCount = team.Members.Count;
+            }
+        }
+        
+        _uiSys.TrySetUiState(msg.Entity, 
+            TeamCreationUiKey.Key,
+            new ShipPickerBoundUserInterfaceState(ShipTypes, memberCount));
     }
 
     private void OnShipNameChange(ShuttleConsoleChangeShipNameMessage args)
@@ -273,23 +291,29 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// <summary>
     /// Does everything needed to create a new team, from faction creation to ship spawning.
     /// </summary>
-    /// <param name="captainSession"></param>
-    /// <param name="name"></param>
-    /// <param name="color"></param>
-    /// <param name="blacklist"></param>
-    public void CreateTeam(ICommonSession captainSession, string name, Color color,
+    public void CreateTeam(ICommonSession captainSession, string name, Color color, ShipType? initialShipType = null,
         List<string>? blacklist = null)
     {
         if (!RuleSelected)
             return;
+
+        ShipType shipType;
+        if (initialShipType == null || initialShipType.MinCrewAmount > 1)
+        {
+            shipType = _random.Pick(ShipTypes);
+        }
+        else
+        {
+            shipType = initialShipType;
+        }
 
         var newShip = _debrisSys.RandomPosSpawn(
             TargetMap, 
             Vector2.Zero, 
             MaxSpawnOffset, 
             100,
-            _random.Pick(ShipTypes), 
-            new List<Processor>());
+            _protMan.Index<StructurePrototype>(shipType.StructurePrototype),
+        new List<Processor>());
         
         var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>(newShip);
         if (!spawners.Any())
@@ -458,7 +482,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// <summary>
     /// Creates new faction with all the specified data. Does not spawn ship, if you want to put new team in game right away use CreateTeam
     /// </summary>
-    private ShipEventFaction RegisterTeam(EntityUid shipEntity, string captain, string name, Color color,
+    private ShipEventFaction RegisterTeam(string captain, string name, Color color,
         List<string>? blacklist = null, bool silent = false)
     {
         var teamName = IsValidName(name) ? name : GenerateTeamName();
@@ -578,7 +602,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             Vector2.Zero,
             MaxSpawnOffset,
             100,
-            team.ChosenShipType ?? _random.Pick(ShipTypes), 
+            team.ChosenShipType ?? _protMan.Index<StructurePrototype>(_random.Pick(ShipTypes).StructurePrototype), 
             new List<Processor>());
 
         var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>(newShip);

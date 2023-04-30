@@ -19,6 +19,13 @@
         <Control MinSize="0 10" />
         <ColorSelectorSliders Name="ColorEdit"/>
         
+        <Label Name="ShipLabel"
+               Text="{Loc 'shipevent-teamcreation-ship'}" />
+        <Control MinSize="0 10" />
+        <Button Name="ShipPickerButton"
+                Text="{Loc 'shipevent-teamcreation-shippickerbutton'}"
+        />
+        
         <Label Name="BlacklistLabel"
                Text="{Loc 'shipevent-teamcreation-blacklist'}" />
         <Control MinSize="0 10" />

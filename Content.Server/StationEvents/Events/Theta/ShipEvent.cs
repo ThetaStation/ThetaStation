@@ -3,6 +3,8 @@ using Content.Server.Theta.DebrisGeneration;
 using Content.Server.Theta.DebrisGeneration.Generators;
 using Content.Server.Theta.DebrisGeneration.Processors;
 using Content.Server.Theta.DebrisGeneration.Prototypes;
+using Content.Server.Theta.ShipEvent;
+using Content.Shared.Theta.ShipEvent;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Server.Theta.ShipEvent.Systems;
 using Content.Shared.Shuttles.Components;
@@ -43,7 +45,7 @@ public sealed class ShipEventRuleConfiguration : StationEventRuleConfiguration
     
     [DataField("captainHudPrototypeId")] public string CaptainHUDPrototypeId = "";
     
-    [DataField("shipTypes")] public List<string> ShipTypes = new();
+    [DataField("shipTypes")] public List<ShipType> ShipTypes = new();
     
     [DataField("obstacleTypes")] public List<string> ObstacleTypes = new();
 
@@ -93,10 +95,7 @@ public sealed class ShipEvent : StationEventSystem
 
         _shipSys.MaxSpawnOffset = eventConfig.MaxSpawnOffset;
 
-        foreach (var shipType in eventConfig.ShipTypes)
-        {
-            _shipSys.ShipTypes.Add(_protMan.Index<StructurePrototype>(shipType));
-        }
+        _shipSys.ShipTypes = eventConfig.ShipTypes;
 
         List<StructurePrototype> obstacleStructProts = new();
         foreach (var structProtId in eventConfig.ObstacleTypes)

@@ -95,7 +95,7 @@ public sealed class TeamConsoleSystem : EntitySystem
             return;
         }
         
-        _shipSys.CreateTeam(args.Session, args.Name, color, blacklist);
+        _shipSys.CreateTeam(args.Session, args.Name, color, args.ShipType, blacklist);
     }
 
     private void SendResponse(EntityUid uid, Enum uiKey, ResponseTypes response)

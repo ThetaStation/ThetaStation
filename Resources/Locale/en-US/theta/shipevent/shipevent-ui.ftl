@@ -13,7 +13,7 @@ shipevent-teamview-toggle-name = Active teams
 shipevent-teamview-toggle-desc = View team list
 
 
-## Team console
+## Team console - lobby
 
 shipevent-lobby-windowtitle = LOBBY
 
@@ -21,6 +21,13 @@ shipevent-lobby-createteam = Create team
 shipevent-lobby-refresh = Refresh
 shipevent-lobby-empty = Empty
 shipevent-lobby-join = Join
+
+shipevent-lobby-team = Team
+shipevent-lobby-captain = Captain
+shipevent-lobby-crew = Crew
+
+
+## Team console - team creation
 
 shipevent-teamcreation-windowtitle = TEAM CREATION
 
@@ -31,9 +38,21 @@ shipevent-teamcreation-response-waitpls = Team creation request was received, PL
 
 shipevent-teamcreation-name = Team name:
 shipevent-teamcreation-color = Team color (hex):
+shipevent-teamcreation-ship = Initial ship:
 shipevent-teamcreation-blacklist = Blacklist (ckeys separated with commas):
 shipevent-teamcreation-creationbutton = CREATE TEAM
+shipevent-teamcreation-shippickerbutton = PICK SHIP
 
+
+## Team console - ship picker
+
+shipevent-shippicker-windowtitle = SHIP SELECTION
+
+shipevent-shippicker-lightclass = [color=green]Light[/color]
+shipevent-shippicker-mediumclass = [color=yellow]Medium[/color]
+shipevent-shippicker-heavyclass = [color=red]Heavy[/color]
+shipevent-shippicker-specialclass = [color=pink]Special[/color]
+shipevent-teamcreation-selectionbutton = Select
 
 ## Turret loader
 

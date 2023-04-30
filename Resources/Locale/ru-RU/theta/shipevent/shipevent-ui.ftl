@@ -22,6 +22,12 @@ shipevent-lobby-refresh = Обновить
 shipevent-lobby-empty = Пусто
 shipevent-lobby-join = Войти
 
+shipevent-lobby-team = Команда
+shipevent-lobby-captain = Капитан
+shipevent-lobby-crew = Экипаж
+
+## Team console - team creation
+
 shipevent-teamcreation-windowtitle = СОЗДАНИЕ КОМАНДЫ
 
 shipevent-teamcreation-response-invalidname = Данное имя уже занято/недоступно по другой причине.
@@ -31,8 +37,21 @@ shipevent-teamcreation-response-waitpls = Запрос на создание к�
 
 shipevent-teamcreation-name = Имя команды:
 shipevent-teamcreation-color = Цвет команды (hex):
+shipevent-teamcreation-ship = Начальный корабль:
 shipevent-teamcreation-blacklist = Блеклист (сикеи через запятую):
 shipevent-teamcreation-creationbutton = СОЗДАТЬ КОМАНДУ
+shipevent-teamcreation-shippickerbutton = ВЫБРАТЬ КОРАБЛЬ
+
+
+## Team console - ship picker
+
+shipevent-shippicker-windowtitle = ВЫБОР КОРАБЛЯ
+
+shipevent-shippicker-lightclass = [color=green]Лёгкий[/color]
+shipevent-shippicker-mediumclass = [color=yellow]Жёлтый[/color]
+shipevent-shippicker-heavyclass = [color=red]Тяжёлый[/color]
+shipevent-shippicker-specialclass = [color=pink]Особый[/color]
+shipevent-teamcreation-selectionbutton = Выбрать
 
 
 ## Turret loader

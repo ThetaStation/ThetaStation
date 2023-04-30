@@ -35,17 +35,17 @@ public sealed partial class TeamLobbyWindow : DefaultWindow
 
         TeamsContainer.AddChild(new Label
         {
-            Text = "Команда",
+            Text = Loc.GetString("shipevent-lobby-team"),
         });
 
         TeamsContainer.AddChild(new Label
         {
-            Text = "Капитан",
+            Text = Loc.GetString("shipevent-lobby-captain"),
         });
 
         TeamsContainer.AddChild(new Label
         {
-            Text = "Экипаж",
+            Text = Loc.GetString("shipevent-lobby-crew"),
             HorizontalAlignment = HAlignment.Right,
         });
 

@@ -10,6 +10,7 @@ using Content.Server.Theta.DebrisGeneration.Prototypes;
 using Content.Shared.Chat;
 using Content.Shared.Explosion;
 using Content.Shared.Projectiles;
+using Content.Shared.Theta.ShipEvent;
 using Robust.Server.Maps;
 using Robust.Server.Player;
 
@@ -268,6 +269,13 @@ public sealed partial class ShipEventFactionSystem
             if(mind.HasMind)
                 _mindTrack.AddMind(mind.Mind!);
         }
+    }
+
+    public bool CanPickShip(ShipEventFaction team, ShipType ship)
+    {
+        if (team.Members.Count >= ship.MinCrewAmount)
+            return true;
+        return false;
     }
 }
 
