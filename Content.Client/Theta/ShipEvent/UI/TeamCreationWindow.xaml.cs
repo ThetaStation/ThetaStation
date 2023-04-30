@@ -15,15 +15,18 @@ public sealed partial class TeamCreationWindow : DefaultWindow
     public event Action<BaseButton.ButtonEventArgs>? CreationButtonPressed;
     public string TeamName => NameEdit.Text;
 
-    public string Color => ColorEdit.Text;
+    public Color TeamColor => ColorEdit.Color;
 
     public string Blacklist => BlacklistEdit.Text;
 
     public TeamCreationWindow()
     {
         RobustXamlLoader.Load(this);
+        ColorEdit.OnColorChanged += _ => OnColorChanged(); //will runtime if no callback for this event is set
         CreationButton.OnPressed += _ => CreationButtonPressed?.Invoke(_);
     }
+
+    public void OnColorChanged() { }
 
     public void UpdateState(ShipEventCreateTeamBoundUserInterfaceState state)
     {

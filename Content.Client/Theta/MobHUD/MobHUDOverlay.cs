@@ -33,7 +33,7 @@ public sealed class MobHUDOverlay : Overlay
         if (_hudSys.PlayerHUD == null)
             return;
 
-        foreach ((var hud, var form, var sprite) in _entMan.EntityQuery<MobHUDComponent, TransformComponent, SpriteComponent>())
+        foreach ((var hud, var form) in _entMan.EntityQuery<MobHUDComponent, TransformComponent>())
         {
             foreach (var activeHud in hud.ActiveHUDs)
             {
@@ -43,7 +43,7 @@ public sealed class MobHUDOverlay : Overlay
 
                     if (_hudSys.PlayerHUD.ActiveHUDs.Contains(allowedHudPrototype))
                     {
-                        DrawHUD(form, sprite, activeHud, handle);
+                        DrawHUD(form, activeHud, handle);
                         break;
                     }
                 }
@@ -53,7 +53,7 @@ public sealed class MobHUDOverlay : Overlay
         handle.SetTransform(Matrix3.Identity);
     }
 
-    public void DrawHUD(TransformComponent form, SpriteComponent sprite, MobHUDPrototype hudProt, DrawingHandleWorld handle)
+    public void DrawHUD(TransformComponent form, MobHUDPrototype hudProt, DrawingHandleWorld handle)
     {
         Texture texture = Texture.Transparent;
 
@@ -85,6 +85,6 @@ public sealed class MobHUDOverlay : Overlay
         
         var textureSize = texture.Size / (float)EyeManager.PixelsPerMeter;
         var rect = Box2.FromDimensions(textureSize/-2, textureSize);
-        handle.DrawTextureRectRegion(texture, rect, Color.FromHex(hudProt.Color));
+        handle.DrawTextureRectRegion(texture, rect, hudProt.Color);
     }
 }

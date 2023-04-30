@@ -3,6 +3,7 @@
 using System.Linq;
 using Content.Server.Access.Systems;
 using Content.Server.Explosion.Components;
+using Content.Server.Mind;
 using Content.Server.Mind.Components;
 using Content.Server.Roles;
 using Content.Shared.Chat;
@@ -20,7 +21,7 @@ public sealed class ShipEventFaction : PlayerFaction
     public float BonusIntervalTimer; //used to add bonus points for surviving long enough
     public string Captain; //ckey
 
-    public string Color; //for recolouring HUDs, specify in hex
+    public Color Color;
 
     public Dictionary<ShipEventFaction, int> Hits = new(); //hits from other teams, not vice-versa
     public int Kills;
@@ -30,7 +31,7 @@ public sealed class ShipEventFaction : PlayerFaction
     public bool ShouldRespawn; //whether this team is currently waiting for respawn
     public float TimeSinceRemoval; //time since last removal
 
-    public ShipEventFaction(string name, string iconPath, string color, EntityUid ship, string captain,
+    public ShipEventFaction(string name, string iconPath, Color color, EntityUid ship, string captain,
         int points = 0,
         List<string>? blacklist = null) : base(name, iconPath)
     {
@@ -45,6 +46,7 @@ public sealed class ShipEventFaction : PlayerFaction
 public sealed partial class ShipEventFactionSystem
 {
     [Dependency] private readonly IdCardSystem _cardSystem = default!;
+    [Dependency] private readonly MindTrackerSystem _mindTrack = default!;
 
     private void Announce(string message)
     {
@@ -112,7 +114,7 @@ public sealed partial class ShipEventFactionSystem
         return comps;
     }
 
-    public int GetProjectileDamage(EntityUid entity)
+    private int GetProjectileDamage(EntityUid entity)
     {
         if (EntityManager.TryGetComponent<MetaDataComponent>(entity, out var meta))
         {
@@ -180,16 +182,16 @@ public sealed partial class ShipEventFactionSystem
         return true;
     }
 
-    public string GenerateTeamColor()
+    private Color GenerateTeamColor()
     {
         for (int c = 0; c < 100; c++)
         {
             var newColor = new Color(_random.NextFloat(0, 1), _random.NextFloat(0, 1), _random.NextFloat(0, 1));
             if (IsValidColor(newColor))
-                return newColor.ToHex();
+                return newColor;
         }
 
-        return string.Empty;
+        return Color.White;
     }
 
     public bool IsValidColor(Color color)
@@ -198,7 +200,7 @@ public sealed partial class ShipEventFactionSystem
 
         foreach (var team in Teams)
         {
-            var otherColor = Color.FromHex(team.Color);
+            var otherColor = team.Color;
             var delta = RedmeanColorDelta(color, otherColor);
             if (delta < minimalColorDelta)
                 return false;
@@ -217,7 +219,7 @@ public sealed partial class ShipEventFactionSystem
     }
 
     //todo: actually PR it to RT instead of putting it here
-    public double RedmeanColorDelta(Color a, Color b)
+    private double RedmeanColorDelta(Color a, Color b)
     {
         var deltaR = a.RByte - b.RByte;
         var deltaG = a.GByte - b.GByte;
@@ -227,7 +229,7 @@ public sealed partial class ShipEventFactionSystem
         return Math.Sqrt(delta);
     }
 
-    public EntityUid RandomPosSpawn(string mapPath)
+    private EntityUid RandomPosSpawn(string mapPath)
     {
         const int shipCollisionCheckRange = 30;
         
@@ -251,6 +253,17 @@ public sealed partial class ShipEventFactionSystem
             return rootUids[0];
 
         return EntityUid.Invalid;
+    }
+
+    //to avoid cluttering roundend statistics
+    public void CleanMindTracker()
+    {
+        _mindTrack.ClearMindSet();
+        foreach (var mind in EntityManager.EntityQuery<MindComponent>())
+        {
+            if(mind.HasMind)
+                _mindTrack.AddMind(mind.Mind!);
+        }
     }
 }
 
