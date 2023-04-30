@@ -44,9 +44,9 @@ public sealed class TeamCreationRequest : BoundUserInterfaceMessage
 {
     public readonly string Name;
     public readonly string Blacklist;
-    public readonly string Color;
+    public readonly Color Color;
 
-    public TeamCreationRequest(string name, string blacklist, string color)
+    public TeamCreationRequest(string name, string blacklist, Color color)
     {
         Name = name;
         Blacklist = blacklist;

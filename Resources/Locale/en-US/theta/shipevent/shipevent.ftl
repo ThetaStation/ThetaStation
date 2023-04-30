@@ -42,6 +42,7 @@ shipevent-roundend-winner = THE WINNER IS - TEAM '{ $name }'! Let's all congratu
 
 ## Misc.
 
+shipevent-memberlimit = There's no free places in this team! Wait until someone leaves it/member limit will rise
 shipevent-blacklist = You're in this team's blacklist. Their captain is probably quite dissapointed in you.
 shipevent-respawnfailed = Couldn't respawn you, quite possibly your ship's spawner is destroyed. Wait until someone builds new spawner/ship respawns.
 shipevent-roundendtimer-tenmins = Ten minutes left until round end, raise those scores!

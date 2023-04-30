@@ -17,7 +17,7 @@ public sealed class TeamViewBoundUserInterfaceState : BoundUserInterfaceState
 public sealed class ShipTeamForTeamViewState
 {
     public string? Name;
-    public string? Color;
+    public Color Color;
     public string? ShipName;
     public string? AliveCrewCount;
     public int Points;

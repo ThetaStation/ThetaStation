@@ -28,6 +28,8 @@ public sealed class ShipEventRuleConfiguration : StationEventRuleConfiguration
     [DataField("maxSpawnOffset")] public int MaxSpawnOffset;
 
     [DataField("bonusInterval")] public int BonusInterval;
+
+    [DataField("playerPerTeamPlace")] public int PlayersPerTeamPlace;
     
     [DataField("pointsPerInterval")] public int PointsPerInterval;
     
@@ -80,6 +82,7 @@ public sealed class ShipEvent : StationEventSystem
         _shipSys.TeamCheckInterval = eventConfig.TeamCheckInterval;
         _shipSys.RespawnDelay = eventConfig.RespawnDelay;
         _shipSys.BonusInterval = eventConfig.BonusInterval;
+        _shipSys.PlayersPerTeamPlace = eventConfig.PlayersPerTeamPlace;
         _shipSys.PointsPerInterval = eventConfig.PointsPerInterval;
         _shipSys.PointsPerHitMultiplier = eventConfig.PointsPerHitMultiplier;
         _shipSys.PointsPerAssist = eventConfig.PointsPerAssist;

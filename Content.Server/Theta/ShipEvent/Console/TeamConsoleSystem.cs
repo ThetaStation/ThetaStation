@@ -62,7 +62,10 @@ public sealed class TeamConsoleSystem : EntitySystem
             return;
 
         if (!_shipSys.RuleSelected)
+        {
+            SendResponse(uid, args.UiKey, ResponseTypes.SettingUp);
             _ticker.StartGameRule(_protMan.Index<GameRulePrototype>("ShipEvent"));
+        }
 
         if (!_shipSys.IsValidName(args.Name))
         {
@@ -70,17 +73,14 @@ public sealed class TeamConsoleSystem : EntitySystem
             return;
         }
 
-        var color = Color.White.ToHex();
-        if (!string.IsNullOrEmpty(args.Color))
+        var color = Color.White;
+        if (!_shipSys.IsValidColor(args.Color))
         {
-            if (!_shipSys.IsValidColor(args.Color))
-            {
-                SendResponse(uid, args.UiKey, ResponseTypes.InvalidColor);
-                return;
-            }
-
-            color = args.Color;
+            SendResponse(uid, args.UiKey, ResponseTypes.InvalidColor);
+            return;
         }
+
+        color = args.Color;
 
         List<string> blacklist = new();
         if (!string.IsNullOrEmpty(args.Blacklist))
@@ -94,7 +94,7 @@ public sealed class TeamConsoleSystem : EntitySystem
             SendResponse(uid, args.UiKey, ResponseTypes.BlacklistedSelf);
             return;
         }
-        SendResponse(uid, args.UiKey, ResponseTypes.SettingUp);
+        
         _shipSys.CreateTeam(args.Session, args.Name, color, blacklist);
     }
 
