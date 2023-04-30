@@ -252,7 +252,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// <param name="name"></param>
     /// <param name="color"></param>
     /// <param name="blacklist"></param>
-    public void CreateTeam(ICommonSession captainSession, string name, string color,
+    public void CreateTeam(ICommonSession captainSession, string name, Color color,
         List<string>? blacklist = null)
     {
         if (!RuleSelected)
@@ -323,7 +323,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         AfterSpawn(playerMob, spawner);
 
         TeamMessage(teamFaction, Loc.GetString("shipevent-team-newmember", ("name", GetName(playerMob))),
-            color: Color.FromHex(teamFaction.Color));
+            color: teamFaction.Color);
     }
 
     private EntityUid SpawnPlayer(IPlayerSession player, EntityUid spawnerUid)
@@ -431,7 +431,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// <summary>
     /// Creates new faction with all the specified data. Does not spawn ship, if you want to put new team in game right away use CreateTeam
     /// </summary>
-    private ShipEventFaction RegisterTeam(EntityUid shipEntity, string captain, string name = "", string color = "",
+    private ShipEventFaction RegisterTeam(EntityUid shipEntity, string captain, string name, Color color,
         List<string>? blacklist = null, bool silent = false)
     {
         var shipName = GetName(shipEntity);
@@ -726,14 +726,14 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
                     TeamMessage(team,
                         Loc.GetString("shipevent-team-captainchange", ("oldcap", team.Captain),
-                            ("newcap", newCap)), color: Color.FromHex(team.Color));
+                            ("newcap", newCap)), color: team.Color);
                     team.Captain = newCap;
                 }
             }
 
             if (team.ShouldRespawn && team.TimeSinceRemoval > RespawnDelay)
             {
-                TeamMessage(team, Loc.GetString("shipevent-team-respawnnow"), color: Color.FromHex(team.Color));
+                TeamMessage(team, Loc.GetString("shipevent-team-respawnnow"), color: team.Color);
                 ImmediateRespawn(team);
             }
 
@@ -743,7 +743,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                     Loc.GetString("shipevent-team-bonusinterval",
                         ("time", BonusInterval / 60),
                         ("points", PointsPerInterval)),
-                    color: Color.FromHex(team.Color));
+                    color: team.Color);
                 team.Points += PointsPerInterval;
                 team.BonusIntervalTimer -= BonusInterval;
             }

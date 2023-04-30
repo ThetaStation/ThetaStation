@@ -21,7 +21,7 @@ public sealed class ShipEventFaction : PlayerFaction
     public float BonusIntervalTimer; //used to add bonus points for surviving long enough
     public string Captain; //ckey
 
-    public string Color; //for recolouring HUDs, specify in hex
+    public Color Color;
 
     public Dictionary<ShipEventFaction, int> Hits = new(); //hits from other teams, not vice-versa
     public int Kills;
@@ -31,7 +31,7 @@ public sealed class ShipEventFaction : PlayerFaction
     public bool ShouldRespawn; //whether this team is currently waiting for respawn
     public float TimeSinceRemoval; //time since last removal
 
-    public ShipEventFaction(string name, string iconPath, string color, EntityUid ship, string captain,
+    public ShipEventFaction(string name, string iconPath, Color color, EntityUid ship, string captain,
         int points = 0,
         List<string>? blacklist = null) : base(name, iconPath)
     {
@@ -182,16 +182,16 @@ public sealed partial class ShipEventFactionSystem
         return true;
     }
 
-    private string GenerateTeamColor()
+    private Color GenerateTeamColor()
     {
         for (int c = 0; c < 100; c++)
         {
             var newColor = new Color(_random.NextFloat(0, 1), _random.NextFloat(0, 1), _random.NextFloat(0, 1));
             if (IsValidColor(newColor))
-                return newColor.ToHex();
+                return newColor;
         }
 
-        return string.Empty;
+        return Color.White;
     }
 
     public bool IsValidColor(Color color)
@@ -200,7 +200,7 @@ public sealed partial class ShipEventFactionSystem
 
         foreach (var team in Teams)
         {
-            var otherColor = Color.FromHex(team.Color);
+            var otherColor = team.Color;
             var delta = RedmeanColorDelta(color, otherColor);
             if (delta < minimalColorDelta)
                 return false;
