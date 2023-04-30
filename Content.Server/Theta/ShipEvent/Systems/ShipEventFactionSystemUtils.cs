@@ -5,6 +5,7 @@ using Content.Server.Access.Systems;
 using Content.Server.Explosion.Components;
 using Content.Server.Mind.Components;
 using Content.Server.Roles;
+using Content.Server.Theta.DebrisGeneration.Prototypes;
 using Content.Shared.Chat;
 using Content.Shared.Explosion;
 using Content.Shared.Projectiles;
@@ -17,7 +18,6 @@ public sealed class ShipEventFaction : PlayerFaction
 {
     public int Assists;
     public List<string>? Blacklist; //blacklist for ckeys
-    public float BonusIntervalTimer; //used to add bonus points for surviving long enough
     public string Captain; //ckey
 
     public string Color; //for recolouring HUDs, specify in hex
@@ -26,16 +26,20 @@ public sealed class ShipEventFaction : PlayerFaction
     public int Kills;
     public int Points;
     public int Respawns;
+    
+    public StructurePrototype? ChosenShipType;
     public EntityUid Ship;
+    public string ShipName = "";
+    
     public bool ShouldRespawn; //whether this team is currently waiting for respawn
     public float TimeSinceRemoval; //time since last removal
+    public int LastBonusInterval; //how much times this team has acquired bonus points for surviving bonus interval
 
-    public ShipEventFaction(string name, string iconPath, string color, EntityUid ship, string captain,
+    public ShipEventFaction(string name, string iconPath, string color, string captain,
         int points = 0,
         List<string>? blacklist = null) : base(name, iconPath)
     {
         Color = color;
-        Ship = ship;
         Captain = captain;
         Points = points;
         Blacklist = blacklist;
