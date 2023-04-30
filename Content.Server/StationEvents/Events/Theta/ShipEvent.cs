@@ -39,6 +39,8 @@ public sealed class ShipEventRuleConfiguration : StationEventRuleConfiguration
     
     [DataField("hudPrototypeId")] public string HUDPrototypeId = "";
     
+    [DataField("captainHudPrototypeId")] public string CaptainHUDPrototypeId = "";
+    
     [DataField("shipTypes")] public List<string> ShipTypes = new();
     
     [DataField("obstacleTypes")] public List<string> ObstacleTypes = new();
@@ -82,8 +84,9 @@ public sealed class ShipEvent : StationEventSystem
         _shipSys.PointsPerHitMultiplier = eventConfig.PointsPerHitMultiplier;
         _shipSys.PointsPerAssist = eventConfig.PointsPerAssist;
         _shipSys.PointsPerKill = eventConfig.PointsPerKill;
-                
+        
         _shipSys.HUDPrototypeId = eventConfig.HUDPrototypeId;
+        _shipSys.CaptainHUDPrototypeId = eventConfig.CaptainHUDPrototypeId;
 
         _shipSys.MaxSpawnOffset = eventConfig.MaxSpawnOffset;
 

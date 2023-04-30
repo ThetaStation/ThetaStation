@@ -67,8 +67,9 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     public float PointsPerHitMultiplier;
     public int PointsPerAssist;
     public int PointsPerKill;
-
-    public string HUDPrototypeId = "ShipeventHUD";
+    
+    public string HUDPrototypeId = "";
+    public string CaptainHUDPrototypeId = "";
 
     public bool RuleSelected;
 
@@ -368,7 +369,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         if (EntityManager.TryGetComponent<MobHUDComponent>(spawnedEntity, out var hud))
         {
-            var hudProt = _protMan.Index<MobHUDPrototype>(HUDPrototypeId).ShallowCopy();
+            var hudProt = _protMan.Index<MobHUDPrototype>(
+                team.Captain == session.ConnectedClient.UserName ? HUDPrototypeId : CaptainHUDPrototypeId).ShallowCopy();
             hudProt.Color = team.Color;
             _hudSys.SetActiveHUDs(hud, new List<MobHUDPrototype> { hudProt });
         }
