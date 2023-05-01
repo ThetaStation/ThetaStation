@@ -98,3 +98,13 @@
   rules:
     - Pirates
     - BasicStationEventScheduler
+
+- type: gamePreset
+  id: ShipBattle
+  alias:
+    - shipevent
+    - shiptest
+  name: shipevent-title
+  description: shipevent-desc
+  rules:
+    - ShipEvent

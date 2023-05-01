@@ -28,6 +28,9 @@ shuttle-console-dock-label = Docking ports
 shuttle-console-docked = {$index} (Docked)
 shuttle-console-dock-button = Dock {$suffix}
 
+shuttle-console-name-label = Ship Name
+shuttle-console-name-change = Change
+
 shuttle-console-hyperspace-label = FTL destinations
 shuttle-console-hyperspace-none = No destinations found
 

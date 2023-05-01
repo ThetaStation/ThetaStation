@@ -43,6 +43,7 @@ namespace Content.IntegrationTests.Tests
             "/Maps/centcomm.yml",
             "/Maps/Shuttles/cargo.yml",
             "/Maps/Shuttles/emergency.yml",
+            "/Maps/Shuttles/shiptest-infiltrator.yml",
             "/Maps/infiltrator.yml",
         };
 
