@@ -38,6 +38,7 @@ public sealed partial class ShipPickerWindow : DefaultWindow
             shipTypePreviewImage.TexturePath = shipType.PreviewImage;
             shipTypePreviewImage.MinWidth = Width / 2;
             shipTypePreviewImage.SetWidth = Width / 2;
+            shipTypePreviewImage.Stretch = TextureRect.StretchMode.Scale;
             
             shipTypeEntryInfoHolder.AddChild(shipTypeLabel);
             shipTypeEntryInfoHolder.AddChild(shipTypePreviewImage);
