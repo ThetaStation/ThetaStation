@@ -3,7 +3,6 @@ using Content.Server.Theta.DebrisGeneration;
 using Content.Server.Theta.DebrisGeneration.Generators;
 using Content.Server.Theta.DebrisGeneration.Processors;
 using Content.Server.Theta.DebrisGeneration.Prototypes;
-using Content.Server.Theta.ShipEvent;
 using Content.Shared.Theta.ShipEvent;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Server.Theta.ShipEvent.Systems;
@@ -31,6 +30,8 @@ public sealed class ShipEventRuleComponent : Component
     [DataField("maxSpawnOffset")] public int MaxSpawnOffset;
 
     [DataField("bonusInterval")] public int BonusInterval;
+    
+    [DataField("playersPerTeamPlace")] public int PlayersPerTeamPlace;
 
     [DataField("pointsPerInterval")] public int PointsPerInterval;
 
@@ -68,24 +69,24 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         var map = _mapMan.CreateMap();
         _shipSys.TargetMap = map;
         _shipSys.RuleSelected = true;
-        
-        _shipSys.RoundDuration = eventConfig.RoundDuration;
-        _shipSys.TimedRoundEnd = eventConfig.RoundDuration > 0;
-        _shipSys.TeamCheckInterval = eventConfig.TeamCheckInterval;
-        _shipSys.RespawnDelay = eventConfig.RespawnDelay;
-        _shipSys.BonusInterval = eventConfig.BonusInterval;
-        _shipSys.PlayersPerTeamPlace = eventConfig.PlayersPerTeamPlace;
-        _shipSys.PointsPerInterval = eventConfig.PointsPerInterval;
-        _shipSys.PointsPerHitMultiplier = eventConfig.PointsPerHitMultiplier;
-        _shipSys.PointsPerAssist = eventConfig.PointsPerAssist;
-        _shipSys.PointsPerKill = eventConfig.PointsPerKill;
-        
-        _shipSys.HUDPrototypeId = eventConfig.HUDPrototypeId;
-        _shipSys.CaptainHUDPrototypeId = eventConfig.CaptainHUDPrototypeId;
 
-        _shipSys.MaxSpawnOffset = eventConfig.MaxSpawnOffset;
+        _shipSys.RoundDuration = component.RoundDuration;
+        _shipSys.TimedRoundEnd = component.RoundDuration > 0;
+        _shipSys.TeamCheckInterval = component.TeamCheckInterval;
+        _shipSys.RespawnDelay = component.RespawnDelay;
+        _shipSys.BonusInterval = component.BonusInterval;
+        _shipSys.PlayersPerTeamPlace = component.PlayersPerTeamPlace;
+        _shipSys.PointsPerInterval = component.PointsPerInterval;
+        _shipSys.PointsPerHitMultiplier = component.PointsPerHitMultiplier;
+        _shipSys.PointsPerAssist = component.PointsPerAssist;
+        _shipSys.PointsPerKill = component.PointsPerKill;
+        
+        _shipSys.HUDPrototypeId = component.HUDPrototypeId;
+        _shipSys.CaptainHUDPrototypeId = component.CaptainHUDPrototypeId;
 
-        _shipSys.ShipTypes = eventConfig.ShipTypes;
+        _shipSys.MaxSpawnOffset = component.MaxSpawnOffset;
+
+        _shipSys.ShipTypes = component.ShipTypes;
 
         List<StructurePrototype> obstacleStructProts = new();
         foreach (var structProtId in component.ObstacleTypes)
