@@ -1,4 +1,4 @@
-﻿- type: gameRule
+﻿- type: entity
   id: ShipEvent
   config:
     !type:ShipEventRuleConfiguration
