@@ -98,7 +98,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     private void OnShipPickerInfoRequest(GetShipPickerInfoMessage msg)
     {
-        var memberCount = 0;
+        var memberCount = 1;
         foreach (var team in Teams)
         {
             foreach (var role in team.Members)
@@ -300,7 +300,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         ShipType shipType;
         if (initialShipType == null || initialShipType.MinCrewAmount > 1)
         {
-            shipType = _random.Pick(ShipTypes);
+            shipType = _random.Pick(ShipTypes.Where(t => t.MinCrewAmount == 1).ToList());
         }
         else
         {

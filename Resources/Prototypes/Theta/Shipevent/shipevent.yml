@@ -1,44 +1,46 @@
 ﻿- type: entity
+  noSpawn: true
   id: ShipEvent
-  config:
-    !type:ShipEventRuleConfiguration
-    id: ShipEvent
-    startAnnouncement: shipevent-eventannouncement
-    maxOccurrences: 0 # only shitspawn
-    endAfter: 1
+  parent: BaseGameRule
+  components:
+    - type: ShipEventRule
+      id: ShipEvent
+      startAnnouncement: shipevent-eventannouncement
+      maxOccurrences: 0 # only shitspawn
+      endAfter: 1
     
-    hudPrototypeId: "ShipeventHUD"
-    captainHudPrototypeId: "ShipeventHUDCaptain"
+      hudPrototypeId: "ShipeventHUD"
+      captainHudPrototypeId: "ShipeventHUDCaptain"
     
-    #time
-    roundDuration: 1800
-    teamCheckInterval: 5.0
-    respawnDelay: 60
-    bonusInterval: 600
+      #time
+      roundDuration: 1800
+      teamCheckInterval: 5.0
+      respawnDelay: 60
+      bonusInterval: 600
     
-    #teams
-    playersPerTeamPlace: 2
+      #teams
+      playersPerTeamPlace: 2
     
-    #points
-    pointsPerInterval: 5000
-    pointsPerHitMultiplier: 0.01
-    pointsPerAssist: 5000
-    pointsPerKill : 10000
+      #points
+      pointsPerInterval: 5000
+      pointsPerHitMultiplier: 0.01
+      pointsPerAssist: 5000
+      pointsPerKill : 10000
     
-    #map gen
-    initialObstacleAmount: 150
-    maxSpawnOffset: 1000
-    shipTypes:
-      - !type:ShipType
-        name: "Infiltator"
-        description: "infiltator.yml but with cannons"
-        previewImage: "Resources/Textures/Theta/ShipEvent/ShipPreviews/placeholder.png"
-        structurePrototype: "shiptest-infiltrator"
+      #map gen
+      initialObstacleAmount: 150
+      maxSpawnOffset: 1000
+      shipTypes:
+        - !type:ShipType
+          name: "Infiltator"
+          description: "infiltator.yml but with cannons"
+          previewImage: /Textures/Theta/ShipEvent/ShipPreviews/placeholder.png
+          structurePrototype: "shiptest_infiltrator"
         
-    obstacleTypes:
-      - "asteroid_small"
-      - "asteroid_large"
+      obstacleTypes:
+        - "asteroid_small"
+        - "asteroid_large"
     
-    #randomisation
-    obstacleAmountAmplitude: 50
-    obstacleSizeAmplitude: 7
+      #randomisation
+      obstacleAmountAmplitude: 50
+      obstacleSizeAmplitude: 7

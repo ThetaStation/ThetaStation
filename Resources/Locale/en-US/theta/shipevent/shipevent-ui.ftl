@@ -52,7 +52,7 @@ shipevent-shippicker-lightclass = [color=green]Light[/color]
 shipevent-shippicker-mediumclass = [color=yellow]Medium[/color]
 shipevent-shippicker-heavyclass = [color=red]Heavy[/color]
 shipevent-shippicker-specialclass = [color=pink]Special[/color]
-shipevent-teamcreation-selectionbutton = Select
+shipevent-shippicker-selectionbutton = Select
 
 ## Turret loader
 

@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using Content.Server.GameTicking;
-using Content.Server.GameTicking.Rules;
 using Content.Server.Theta.ShipEvent.Systems;
 using Content.Server.UserInterface;
 using Content.Shared.Theta.ShipEvent.UI;
@@ -19,10 +18,19 @@ public sealed class TeamConsoleSystem : EntitySystem
 
     public override void Initialize()
     {
+        SubscribeLocalEvent<TeamConsoleComponent, ComponentInit>(OnInit);
         SubscribeLocalEvent<TeamConsoleComponent, TeamCreationRequest>(OnTeamCreationRequest);
         SubscribeLocalEvent<TeamConsoleComponent, RefreshShipTeamsEvent>(OnRefreshTeams);
         SubscribeLocalEvent<TeamConsoleComponent, JoinToShipTeamsEvent>(TryJoinToShipTeam);
         SubscribeLocalEvent<TeamConsoleComponent, BeforeActivatableUIOpenEvent>(UpdateLobbyState);
+    }
+
+    private void OnInit(EntityUid uid, TeamConsoleComponent component, ComponentInit args)
+    {
+        if (!_ticker.IsGameRuleAdded("ShipEvent"))
+        {
+            _ticker.StartGameRule("ShipEvent");
+        }
     }
 
     private void TryJoinToShipTeam(EntityUid uid, TeamConsoleComponent component, JoinToShipTeamsEvent args)
@@ -60,12 +68,6 @@ public sealed class TeamConsoleSystem : EntitySystem
     {
         if (args.Session.AttachedEntity == null)
             return;
-
-        if (!_shipSys.RuleSelected)
-        {
-            SendResponse(uid, args.UiKey, ResponseTypes.SettingUp);
-            _ticker.StartGameRule("ShipEvent");
-        }
 
         if (!_shipSys.IsValidName(args.Name))
         {
@@ -117,6 +119,7 @@ public sealed class TeamConsoleSystem : EntitySystem
                 break;
         }
 
+        SendResponse(uid, uiKey, ResponseTypes.SettingUp);
         _uiSystem.TrySetUiState(uid, uiKey, new ShipEventCreateTeamBoundUserInterfaceState(Loc.GetString(text)));
     }
 

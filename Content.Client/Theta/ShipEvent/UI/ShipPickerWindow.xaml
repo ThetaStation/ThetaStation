@@ -1,6 +1,7 @@
 <DefaultWindow xmlns="https://spacestation14.io"
                Title="{Loc 'shipevent-shippicker-windowtitle'}"
-               MinSize="100 100">
+               MinSize="600 300"
+               SetSize="300 300">
     <ScrollContainer Name="ShipOptionsContainer">
     </ScrollContainer>
 </DefaultWindow>
