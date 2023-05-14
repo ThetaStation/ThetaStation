@@ -29,7 +29,7 @@ public sealed class ShipEventFaction : PlayerFaction
     public int Points;
     public int Respawns;
     
-    public StructurePrototype? ChosenShipType;
+    public ShipTypePrototype? ChosenShipType;
     public EntityUid Ship;
     public string ShipName = "";
     

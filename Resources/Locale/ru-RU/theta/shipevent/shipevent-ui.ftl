@@ -26,6 +26,7 @@ shipevent-lobby-team = Команда
 shipevent-lobby-captain = Капитан
 shipevent-lobby-crew = Экипаж
 
+
 ## Team console - team creation
 
 shipevent-teamcreation-windowtitle = СОЗДАНИЕ КОМАНДЫ
@@ -52,6 +53,19 @@ shipevent-shippicker-mediumclass = [color=yellow]Жёлтый[/color]
 shipevent-shippicker-heavyclass = [color=red]Тяжёлый[/color]
 shipevent-shippicker-specialclass = [color=pink]Особый[/color]
 shipevent-shippicker-selectionbutton = Выбрать
+
+
+# Captain's menu
+
+shipevent-capmenu-windowtitle = УПРАВЛЕНИЕ КОМАНДОЙ
+
+shipevent-capmenu-shipmanagement = Управление кораблём:
+shipevent-capmenu-currentship = Текущий корабль:
+shipevent-capmenu-shippickerbutton = ВЫБРАТЬ КОРАБЛЬ
+shipevent-capmenu-changeshipbutton = СМЕНИТЬ КОРАБЛЬ
+
+shipevent-capmenu-toggle-name = Управление командой
+shipevent-capmenu-toggle-desc = Меняйте корабль, кикайте участников, делайте объявления и т.д.
 
 
 ## Turret loader

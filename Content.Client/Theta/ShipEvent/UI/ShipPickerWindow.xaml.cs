@@ -13,10 +13,13 @@ public sealed partial class ShipPickerWindow : DefaultWindow
 {
     public event Action<EventArgs>? InfoRequest;
 
+    private string? TeamName = null;
+
     public ShipTypePrototype? Selection;
     
-    public ShipPickerWindow()
+    public ShipPickerWindow(string? teamName = null)
     {
+        TeamName = teamName;
         RobustXamlLoader.Load(this);
     }
 

@@ -29,7 +29,11 @@ public sealed partial class TeamCreationWindow : DefaultWindow
         ShipPicker = new ShipPickerWindow();
         ColorEdit.OnColorChanged += _ => OnColorChanged(); //will runtime if no callback for this event is set
         CreationButton.OnPressed += _ => CreationButtonPressed?.Invoke(_);
-        ShipPickerButton.OnPressed += _ => ShipPickerButtonPressed?.Invoke(_);
+        ShipPickerButton.OnPressed += _ =>
+        {
+            ShipPicker.OpenCentered();
+            ShipPickerButtonPressed?.Invoke(_);
+        };
     }
 
     public void OnColorChanged() { }

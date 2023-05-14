@@ -37,7 +37,6 @@ public sealed class ShipEventLobbyBoundUserInterface : BoundUserInterface
         };
         _teamCreation.ShipPickerButtonPressed += _ =>
         {
-            _teamCreation.ShipPicker.OpenCentered();
             SendMessage(new GetShipPickerInfoMessage());
         };
 

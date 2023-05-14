@@ -54,6 +54,20 @@ shipevent-shippicker-heavyclass = [color=red]Heavy[/color]
 shipevent-shippicker-specialclass = [color=pink]Special[/color]
 shipevent-shippicker-selectionbutton = Select
 
+
+# Captain's menu
+
+shipevent-capmenu-windowtitle = TEAM MANAGEMENT
+
+shipevent-capmenu-shipmanagement = Ship management:
+shipevent-capmenu-currentship = Current ship:
+shipevent-capmenu-shippickerbutton = PICK SHIP
+shipevent-capmenu-changeshipbutton = CHANGE SHIP
+
+shipevent-capmenu-toggle-name = Team management
+shipevent-capmenu-toggle-desc = Change your ship, kick team members, make announcements, etc.
+
+
 ## Turret loader
 
 shipevent-turretloader-windowtitle = WEAPON LOADER
