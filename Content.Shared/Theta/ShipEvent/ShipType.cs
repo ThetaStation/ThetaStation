@@ -1,12 +1,15 @@
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
-using Robust.Shared.Serialization.TypeSerializers.Implementations;
 
 namespace Content.Shared.Theta.ShipEvent;
 
 [Serializable, NetSerializable]
-[ImplicitDataDefinitionForInheritors]
-public sealed class ShipType
+[Prototype("shiptype")]
+public sealed class ShipTypePrototype : IPrototype
 {
+    [IdDataField] 
+    public string ID { get; } = default!;
+    
     [DataField("name", required: true)]
     public string Name = "";
 
@@ -14,7 +17,7 @@ public sealed class ShipType
     public string Description = "";
 
     [DataField("previewImage")]
-    public string PreviewImage = "";
+    public string PreviewImagePath = "";
 
     [DataField("class")]
     public ShipClass Class = ShipClass.Light;

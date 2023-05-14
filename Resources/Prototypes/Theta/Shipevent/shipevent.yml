@@ -31,11 +31,7 @@
       initialObstacleAmount: 150
       maxSpawnOffset: 1000
       shipTypes:
-        - !type:ShipType
-          name: "Infiltator"
-          description: "infiltator.yml but with cannons"
-          previewImage: /Textures/Theta/ShipEvent/ShipPreviews/placeholder.png
-          structurePrototype: "shiptest_infiltrator"
+        - "shiptype_infiltator"
         
       obstacleTypes:
         - "asteroid_small"

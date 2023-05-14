@@ -21,7 +21,7 @@ public sealed partial class TeamCreationWindow : DefaultWindow
 
     public string Blacklist => BlacklistEdit.Text;
 
-    public ShipType? ShipType => ShipPicker.Selection;
+    public ShipTypePrototype? ShipType => ShipPicker.Selection;
 
     public TeamCreationWindow()
     {

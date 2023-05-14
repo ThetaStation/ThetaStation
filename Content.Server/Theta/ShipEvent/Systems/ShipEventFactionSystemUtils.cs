@@ -271,7 +271,7 @@ public sealed partial class ShipEventFactionSystem
         }
     }
     
-    public bool CanPickShip(ShipEventFaction team, ShipType ship)
+    public bool CanPickShip(ShipEventFaction team, ShipTypePrototype ship)
     {
         if (team.Members.Count >= ship.MinCrewAmount)
             return true;

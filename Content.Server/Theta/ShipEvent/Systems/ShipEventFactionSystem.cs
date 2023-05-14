@@ -77,7 +77,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     public bool RuleSelected;
 
-    public List<ShipType> ShipTypes = new();
+    public List<ShipTypePrototype> ShipTypes = new();
     public MapId TargetMap;
 
     public List<ShipEventFaction> Teams { get; } = new();
@@ -291,13 +291,13 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// <summary>
     /// Does everything needed to create a new team, from faction creation to ship spawning.
     /// </summary>
-    public void CreateTeam(ICommonSession captainSession, string name, Color color, ShipType? initialShipType = null,
+    public void CreateTeam(ICommonSession captainSession, string name, Color color, ShipTypePrototype? initialShipType = null,
         List<string>? blacklist = null)
     {
         if (!RuleSelected)
             return;
 
-        ShipType shipType;
+        ShipTypePrototype shipType;
         if (initialShipType == null || initialShipType.MinCrewAmount > 1)
         {
             shipType = _random.Pick(ShipTypes.Where(t => t.MinCrewAmount == 1).ToList());

@@ -13,7 +13,7 @@ public sealed partial class ShipPickerWindow : DefaultWindow
 {
     public event Action<EventArgs>? InfoRequest;
 
-    public ShipType? Selection;
+    public ShipTypePrototype? Selection;
     
     public ShipPickerWindow()
     {
@@ -35,9 +35,9 @@ public sealed partial class ShipPickerWindow : DefaultWindow
             shipTypeLabel.SetWidth = Width / 2;
 
             var shipTypePreviewImage = new TextureRect();
-            shipTypePreviewImage.TexturePath = shipType.PreviewImage;
-            shipTypePreviewImage.MinWidth = Width / 2;
+            shipTypePreviewImage.TexturePath = shipType.PreviewImagePath;
             shipTypePreviewImage.SetWidth = Width / 2;
+            shipTypePreviewImage.MaxHeight = Height * 1.2f;
             shipTypePreviewImage.Stretch = TextureRect.StretchMode.Scale;
             
             shipTypeEntryInfoHolder.AddChild(shipTypeLabel);

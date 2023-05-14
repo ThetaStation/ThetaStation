@@ -45,7 +45,7 @@ public sealed class ShipEventRuleComponent : Component
     
     [DataField("captainHudPrototypeId")] public string CaptainHUDPrototypeId = "";
     
-    [DataField("shipTypes")] public List<ShipType> ShipTypes = new();
+    [DataField("shipTypes")] public List<string> ShipTypes = new();
     
     [DataField("obstacleTypes")] public List<string> ObstacleTypes = new();
 
@@ -85,8 +85,11 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         _shipSys.CaptainHUDPrototypeId = component.CaptainHUDPrototypeId;
 
         _shipSys.MaxSpawnOffset = component.MaxSpawnOffset;
-
-        _shipSys.ShipTypes = component.ShipTypes;
+        
+        foreach (var shipTypeProtId in component.ShipTypes)
+        {
+            _shipSys.ShipTypes.Add(_protMan.Index<ShipTypePrototype>(shipTypeProtId));
+        }
 
         List<StructurePrototype> obstacleStructProts = new();
         foreach (var structProtId in component.ObstacleTypes)

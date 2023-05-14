@@ -17,10 +17,10 @@ public sealed class ShipEventCreateTeamBoundUserInterfaceState : BoundUserInterf
 [Serializable, NetSerializable]
 public sealed class ShipPickerBoundUserInterfaceState : BoundUserInterfaceState
 {
-    public readonly List<ShipType> ShipTypes;
+    public readonly List<ShipTypePrototype> ShipTypes;
     public int MemberCount;
 
-    public ShipPickerBoundUserInterfaceState(List<ShipType> shipTypes, int memberCount)
+    public ShipPickerBoundUserInterfaceState(List<ShipTypePrototype> shipTypes, int memberCount)
     {
         ShipTypes = shipTypes;
         MemberCount = memberCount;
@@ -59,9 +59,9 @@ public sealed class TeamCreationRequest : BoundUserInterfaceMessage
     public readonly string Name;
     public readonly string Blacklist;
     public readonly Color Color;
-    public readonly ShipType? ShipType;
+    public readonly ShipTypePrototype? ShipType;
 
-    public TeamCreationRequest(string name, Color color, string blacklist, ShipType? shipType)
+    public TeamCreationRequest(string name, Color color, string blacklist, ShipTypePrototype? shipType)
     {
         Name = name;
         Blacklist = blacklist;
