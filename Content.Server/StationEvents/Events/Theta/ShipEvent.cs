@@ -30,6 +30,8 @@ public sealed class ShipEventRuleComponent : Component
 
     [DataField("bonusInterval")] public int BonusInterval;
 
+    [DataField("playerPerTeamPlace")] public int PlayersPerTeamPlace;
+
     [DataField("pointsPerInterval")] public int PointsPerInterval;
 
     [DataField("pointsPerHitMultiplier")] public float PointsPerHitMultiplier;
@@ -70,6 +72,7 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         _shipSys.TeamCheckInterval = component.TeamCheckInterval;
         _shipSys.RespawnDelay = component.RespawnDelay;
         _shipSys.BonusInterval = component.BonusInterval;
+        _shipSys.PlayersPerTeamPlace = component.PlayersPerTeamPlace;
         _shipSys.PointsPerInterval = component.PointsPerInterval;
         _shipSys.PointsPerHitMultiplier = component.PointsPerHitMultiplier;
         _shipSys.PointsPerAssist = component.PointsPerAssist;

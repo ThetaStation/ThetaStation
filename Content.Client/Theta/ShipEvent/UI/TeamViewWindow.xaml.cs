@@ -28,7 +28,7 @@ public sealed partial class TeamViewWindow : DefaultWindow
         {
             var richText = new RichTextLabel();
             richText.MaxWidth = this.MinWidth / 4;
-            richText.SetMarkup($"[color={teamState.Color}]{teamState.Name ?? "N/A"}[/color]");
+            richText.SetMarkup($"[color={teamState.Color.ToHex()}]{teamState.Name ?? "N/A"}[/color]");
             GridContent.AddChild(richText);
 
             richText = new RichTextLabel();
