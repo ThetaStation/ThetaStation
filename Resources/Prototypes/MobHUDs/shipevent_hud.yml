@@ -1,0 +1,5 @@
+﻿- type: mobhud
+  id: ShipeventHUD
+  sprite: {sprite: /Textures/Theta/ShipEvent/ShipHUDIcon.rsi, state: icon}
+  allowedHUDs:
+    - ShipeventHUD

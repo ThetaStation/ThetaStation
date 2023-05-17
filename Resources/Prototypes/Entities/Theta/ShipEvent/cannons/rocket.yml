@@ -1,0 +1,57 @@
+﻿- type: entity
+  id: ShipEventRocketCannon
+  parent: ShipEventCannon
+  components:
+  - type: Cannon
+    ammoPrototypes:
+      - "CartridgeRocketShipEvent"
+  - type: Sprite
+    layers:
+      - state: syndie_lethal
+  - type: Destructible
+    thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: 300
+        behaviors:
+          - !type:DoActsBehavior
+            acts: [ "Destruction" ]
+          - !type:PlaySoundBehavior
+            sound:
+              path: /Audio/Effects/metalbreak.ogg
+          - !type:SpawnEntitiesBehavior
+            spawn:
+              SheetSteel1:
+                min: 3
+                max: 5
+  - type: Gun
+    minAngle: 4
+    maxAngle: 20
+    angleIncrease: 4
+    angleDecay: 16
+    fireRate: 4
+    projectileSpeed: 50
+    selectedMode: FullAuto
+    availableModes:
+      - FullAuto
+    soundGunshot: /Audio/Weapons/Guns/Gunshots/gun_sentry.ogg
+
+- type: entity
+  id: CartridgeRocketShipEvent
+  parent: CartridgeRocket
+  components:
+    - type: Item
+      size: 1
+    - type: CartridgeAmmo
+      proto: LightBulletRocket
+      deleteOnSpawn: true
+
+- type: entity
+  id: LightBulletRocket
+  parent: BulletRocket
+  components:
+    - type: Explosive
+      explosionType: Default
+      totalIntensity: 25
+      maxIntensity: 5
+      maxTileBreak: 1

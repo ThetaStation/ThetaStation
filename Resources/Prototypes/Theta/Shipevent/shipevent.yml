@@ -1,0 +1,40 @@
+﻿- type: entity
+  id: ShipEvent
+  parent: BaseGameRule
+  noSpawn: true
+  components:
+    - type: StationEvent
+      startAnnouncement: shipevent-eventannouncement
+      endTime: 1
+      duration: 1
+      maxOccurrences: 0 # only shitspawn
+    - type: ShipEventRule
+      hudPrototypeId: "ShipeventHUD"
+
+      #time
+      roundDuration: 1800
+      teamCheckInterval: 5.0
+      respawnDelay: 60
+      bonusInterval: 600
+
+      #teams
+      playerPerTeamPlace: 2
+
+      #points
+      pointsPerInterval: 5000
+      pointsPerHitMultiplier: 0.01
+      pointsPerAssist: 5000
+      pointsPerKill: 10000
+
+      #map gen
+      initialObstacleAmount: 150
+      maxSpawnOffset: 1000
+      shipTypes:
+        - "shiptest_infiltrator"
+      obstacleTypes:
+        - "asteroid_small"
+        - "asteroid_large"
+
+      #randomisation
+      obstacleAmountAmplitude: 50
+      obstacleSizeAmplitude: 7

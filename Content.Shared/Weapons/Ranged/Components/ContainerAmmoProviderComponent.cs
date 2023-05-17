@@ -10,7 +10,7 @@ public sealed class ContainerAmmoProviderComponent : AmmoProviderComponent
 {
     [DataField("container", required: true)]
     [ViewVariables]
-    public string Container = default!;
+    public string Container = "storagebase";
 
     [DataField("provider")]
     [ViewVariables]
