@@ -13,6 +13,7 @@ public sealed class ShipEventCaptainMenuBoundUserInterfaceState : BoundUserInter
     }
 }
 
+[Serializable, NetSerializable]
 public sealed class ShipEventCaptainMenuRequestInfoMessage : BoundUserInterfaceMessage{}
 
 [Serializable, NetSerializable]

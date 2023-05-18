@@ -7,7 +7,6 @@ using Content.Server.Mind.Components;
 using Content.Server.Roles;
 using Content.Server.RoundEnd;
 using Content.Server.Shuttles.Components;
-using Content.Server.Shuttles.Systems;
 using Content.Server.Theta.DebrisGeneration;
 using Content.Server.Theta.DebrisGeneration.Prototypes;
 using Content.Server.Theta.MobHUD;
@@ -87,13 +86,11 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<ShipEventFactionViewComponent, ToggleActionEvent>(OnViewToggle);
-        SubscribeLocalEvent<ShipEventCaptainMenuComponent, ToggleActionEvent>(OnCapMenuToggle);
+        SubscribeLocalEvent<ShipEventFactionViewComponent, ShipEventTeamViewToggleEvent>(OnViewToggle);
+        SubscribeLocalEvent<ShipEventCaptainMenuComponent, ShipEventCaptainMenuToggleEvent>(OnCapMenuToggle);
 
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, StartCollideEvent>(OnCollision);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, MobStateChangedEvent>(OnPlayerStateChange);
-        
-        SubscribeLocalEvent<ShipEventFactionMarkerComponent, PlayerAttachedEvent>(OnPlayerAttach);
 
         SubscribeAllEvent<ShuttleConsoleChangeShipNameMessage>(OnShipNameChange); //un-directed event since we will have duplicate subscriptions otherwise
         SubscribeAllEvent<ShipEventCaptainMenuRequestInfoMessage>(OnCapMenuInfoRequest);
@@ -104,29 +101,18 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
     }
 
-    private void OnPlayerAttach(EntityUid uid, ShipEventFactionMarkerComponent marker, PlayerAttachedEvent args)
-    {
-        SetupActions(uid, marker.Team!, args.Player);
-    }
-
-    //todo: add cap UI & team view UI if they are not yet present
     private void SetupActions(EntityUid uid, ShipEventFaction team, IPlayerSession session)
     {
         if (EntityManager.TryGetComponent<ActionsComponent>(uid, out var actComp))
         {
             var teamView = EntityManager.EnsureComponent<ShipEventFactionViewComponent>(uid);
-            teamView.ToggleAction = _protMan.Index<InstantActionPrototype>("ShipEventTeamViewToggle");
+            teamView.ToggleAction = (InstantAction)_protMan.Index<InstantActionPrototype>("ShipEventTeamViewToggle").Clone();
             _actSys.AddAction(uid, teamView.ToggleAction, null, actComp);
         
             if (team.Captain == session.ConnectedClient.UserName)
             {
-                if (EntityManager.TryGetComponent<ServerUserInterfaceComponent>(uid, out var ui))
-                {
-                    
-                }
-                
                 var capMenu = EntityManager.EnsureComponent<ShipEventCaptainMenuComponent>(uid);
-                teamView.ToggleAction = _protMan.Index<InstantActionPrototype>("ShipEventCaptainMenuToggle");
+                capMenu.ToggleAction = (InstantAction)_protMan.Index<InstantActionPrototype>("ShipEventCaptainMenuToggle").Clone();
                 _actSys.AddAction(uid, capMenu.ToggleAction, null, actComp);
             }
         }
@@ -277,14 +263,16 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         args.AddLine(Loc.GetString("shipevent-roundend-winner", ("name", winner.Name)));
     }
 
-    private void OnViewToggle(EntityUid entity, ShipEventFactionViewComponent component, ToggleActionEvent args)
+    private void OnViewToggle(EntityUid entity, ShipEventFactionViewComponent component, ShipEventTeamViewToggleEvent args)
     {
-        if (!RuleSelected)
+        if (!RuleSelected || args.Handled)
             return;
 
         var session = GetSession(entity);
         if (session == null)
             return;
+
+        args.Handled = true;
 
         List<ShipTeamForTeamViewState> teamsInfo = new();
         foreach (var team in Teams)
@@ -309,14 +297,16 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         }
     }
     
-    private void OnCapMenuToggle(EntityUid uid, ShipEventCaptainMenuComponent component, ToggleActionEvent args)
+    private void OnCapMenuToggle(EntityUid uid, ShipEventCaptainMenuComponent component, ShipEventCaptainMenuToggleEvent args)
     {
-        if (!RuleSelected)
+        if (!RuleSelected || args.Handled)
             return;
 
         var session = GetSession(uid);
         if (session == null)
             return;
+
+        args.Handled = true;
 
         Enum uiKey = CaptainMenuUiKey.Key;
         if (_uiSys.IsUiOpen(uid, uiKey))
@@ -487,6 +477,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             var marker = EntityManager.EnsureComponent<ShipEventFactionMarkerComponent>(spawnedEntity);
             marker.Team = team;
         }
+        
+        SetupActions(spawnedEntity, team, session);
 
         if (EntityManager.TryGetComponent<MobHUDComponent>(spawnedEntity, out var hud))
         {

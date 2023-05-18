@@ -5,7 +5,7 @@
   name: shipevent-teamview-toggle-name
   description: shipevent-teamview-toggle-desc
   itemIconStyle: NoItem
-  event: !type:ToggleActionEvent
+  event: !type:ShipEventTeamViewToggleEvent
     
 - type: instantAction
   id: ShipEventCaptainMenuToggle
@@ -14,4 +14,4 @@
   name: shipevent-capmenu-toggle-name
   description: shipevent-capmenu-toggle-desc
   itemIconStyle: NoItem
-  event: !type:ToggleActionEvent
+  event: !type:ShipEventCaptainMenuToggleEvent

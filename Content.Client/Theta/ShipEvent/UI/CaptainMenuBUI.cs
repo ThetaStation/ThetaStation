@@ -1,6 +1,5 @@
 using Content.Shared.Theta.ShipEvent.UI;
 using Robust.Client.GameObjects;
-using Robust.Shared.Serialization;
 
 namespace Content.Client.Theta.ShipEvent.UI;
 
@@ -16,6 +15,7 @@ public sealed class CaptainMenuBoundUserInterface : BoundUserInterface
 
         _window = new CaptainMenuWindow();
         _window.OpenCentered();
+        SendMessage(new ShipEventCaptainMenuRequestInfoMessage());
         _window.OnClose += Close;
         _window.ShipPickerButtonPressed += _ =>
         {
