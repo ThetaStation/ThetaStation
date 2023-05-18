@@ -36,7 +36,7 @@ public sealed class CaptainMenuBoundUserInterface : BoundUserInterface
         {
             case ShipEventCaptainMenuBoundUserInterfaceState msg:
                 base.UpdateState(state);
-                _window?.UpdateState((ShipEventCaptainMenuBoundUserInterfaceState)state);
+                _window?.UpdateState(msg);
                 break;
             case ShipPickerBoundUserInterfaceState pickerMsg:
                 _window?.shipPicker.UpdateState(pickerMsg);
