@@ -75,8 +75,7 @@ public sealed class AsteroidGenerator : Generator
         {
             for (int m = 0; m < 100; m++)
             {
-                Vector2i pos = new Vector2i(random.Next(0 + MinCircleRadius, Size - MinCircleRadius), 
-                    random.Next(0 + MinCircleRadius, Size - MinCircleRadius));
+                Vector2i pos = new Vector2i(random.Next(MinCircleRadius, Size - MinCircleRadius), random.Next(MinCircleRadius, Size - MinCircleRadius));
 
                 int maxRadius = MaxCircleRadius;
                 if (pos.X + maxRadius > Size)
