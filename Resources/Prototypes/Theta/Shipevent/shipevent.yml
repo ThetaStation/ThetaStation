@@ -20,7 +20,7 @@
     
       #teams
       playersPerTeamPlace: 2
-    
+      
       #points
       pointsPerInterval: 5000
       pointsPerHitMultiplier: 0.01

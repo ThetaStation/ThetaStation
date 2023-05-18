@@ -337,7 +337,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         var session = GetSession(entity);
         if (session == null)
             return;
-        
+
         var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>((EntityUid)ship);
 
         if (!spawners.Any())
@@ -371,9 +371,9 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         }
 
         var newShip = _debrisSys.RandomPosSpawn(
-            TargetMap, 
-            Vector2.Zero, 
-            MaxSpawnOffset, 
+            TargetMap,
+            Vector2.Zero,
+            MaxSpawnOffset,
             100,
             _protMan.Index<StructurePrototype>(shipType.StructurePrototype),
         new List<Processor>());
@@ -415,13 +415,13 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>(shipUid.Value);
         if (!spawners.Any())
             return;
-        
+
         if (teamFaction.Members.Count >= GetMemberLimit())
         {
             _chatSys.SendSimpleMessage(Loc.GetString("shipevent-memberlimit"), player);
             return;
         }
-        
+
         if (teamFaction.Blacklist != null)
         {
             if (teamFaction.Blacklist.Contains(player.ConnectedClient.UserName))
@@ -505,7 +505,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         if (EntityManager.TryGetComponent(entity, out ProjectileComponent? projComp))
         {
             if (EntityManager.TryGetComponent<ShipEventFactionMarkerComponent>(
-                    Transform(args.OtherFixture.Body.Owner).GridUid, out var marker))
+                    Transform(args.OtherEntity).GridUid, out var marker))
             {
                 if (marker.Team == null || marker.Team == component.Team)
                     return;
@@ -781,7 +781,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             if (team.Members.Count < minMembers || minMembers == 0)
                 minMembers = team.Members.Count;
         }
-        
+
         return minMembers + totalMembers / PlayersPerTeamPlace;
     }
 

@@ -1,8 +1,7 @@
 using Content.Server.MachineLinking.Components;
-using Content.Server.MachineLinking.System;
 using Content.Server.Storage.Components;
 using Content.Shared.Containers.ItemSlots;
-using Content.Shared.MachineLinking.Events;
+using Content.Shared.DeviceLinking.Events;
 using Content.Shared.Theta.ShipEvent;
 using Content.Shared.Theta.ShipEvent.Components;
 using Content.Shared.Theta.ShipEvent.UI;
