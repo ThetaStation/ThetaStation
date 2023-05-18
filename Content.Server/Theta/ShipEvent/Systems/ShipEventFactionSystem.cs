@@ -373,6 +373,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             return;
         
         var team = RegisterTeam(captainSession.ConnectedClient.UserName, name, color, blacklist);
+        team.ChosenShipType = shipType;
         team.Ship = newShip;
         SetMarkers(newShip, team);
 
