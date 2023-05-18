@@ -33,8 +33,6 @@ public sealed class ShipEventRuleComponent : Component
     
     [DataField("playersPerTeamPlace")] public int PlayersPerTeamPlace;
 
-    [DataField("playerPerTeamPlace")] public int PlayersPerTeamPlace;
-
     [DataField("pointsPerInterval")] public int PointsPerInterval;
 
     [DataField("pointsPerHitMultiplier")] public float PointsPerHitMultiplier;
