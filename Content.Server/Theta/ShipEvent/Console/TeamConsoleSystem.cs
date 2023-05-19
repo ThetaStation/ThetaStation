@@ -118,8 +118,7 @@ public sealed class TeamConsoleSystem : EntitySystem
                 text = "shipevent-teamcreation-response-waitpls";
                 break;
         }
-
-        SendResponse(uid, uiKey, ResponseTypes.SettingUp);
+        
         _uiSystem.TrySetUiState(uid, uiKey, new ShipEventCreateTeamBoundUserInterfaceState(Loc.GetString(text)));
     }
 
