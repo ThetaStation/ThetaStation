@@ -24,9 +24,9 @@ public sealed class ShipTypePrototype : IPrototype
     
     [DataField("structurePrototype", required: true)]
     public string StructurePrototype = "";
-
+    
     [DataField("minCrewAmount")]
-    public int MinCrewAmount = 1;
+    public int MinCrewAmount = 1; //This should be a recommendation, not a restraint
 }
 
 public enum ShipClass

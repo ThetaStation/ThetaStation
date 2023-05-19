@@ -48,6 +48,7 @@ shipevent-teamcreation-shippickerbutton = PICK SHIP
 
 shipevent-shippicker-windowtitle = SHIP SELECTION
 
+shipevent-shippicker-mincrewamount = Recommended minimal crew amount: 
 shipevent-shippicker-lightclass = [color=green]Light[/color]
 shipevent-shippicker-mediumclass = [color=yellow]Medium[/color]
 shipevent-shippicker-heavyclass = [color=red]Heavy[/color]

@@ -48,6 +48,7 @@ shipevent-teamcreation-shippickerbutton = ВЫБРАТЬ КОРАБЛЬ
 
 shipevent-shippicker-windowtitle = ВЫБОР КОРАБЛЯ
 
+shipevent-shippicker-mincrewamount = Рекомендуемое минимальное кол-во экипажа: 
 shipevent-shippicker-lightclass = [color=green]Лёгкий[/color]
 shipevent-shippicker-mediumclass = [color=yellow]Жёлтый[/color]
 shipevent-shippicker-heavyclass = [color=red]Тяжёлый[/color]

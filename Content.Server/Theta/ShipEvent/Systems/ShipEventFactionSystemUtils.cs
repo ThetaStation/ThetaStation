@@ -270,12 +270,5 @@ public sealed partial class ShipEventFactionSystem
                 _mindTrack.AddMind(mind.Mind!);
         }
     }
-    
-    public bool CanPickShip(ShipEventFaction team, ShipTypePrototype ship)
-    {
-        if (team.Members.Count >= ship.MinCrewAmount)
-            return true;
-        return false;
-    }
 }
 

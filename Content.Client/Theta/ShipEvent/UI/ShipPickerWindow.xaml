@@ -2,6 +2,8 @@
                Title="{Loc 'shipevent-shippicker-windowtitle'}"
                MinSize="600 300"
                SetSize="300 300">
-    <ScrollContainer Name="ShipOptionsContainer">
+    <ScrollContainer VerticalExpand="True" MinHeight="300">
+        <BoxContainer Name="ShipOptionsContainer" VerticalExpand="True" Orientation="Vertical">
+        </BoxContainer>
     </ScrollContainer>
 </DefaultWindow>

@@ -20,7 +20,6 @@ using Content.Shared.Shuttles.Events;
 using Content.Shared.Theta.MobHUD;
 using Content.Shared.Theta.ShipEvent;
 using Content.Shared.Theta.ShipEvent.UI;
-using Content.Shared.Toggleable;
 using Robust.Server.GameObjects;
 using Robust.Server.Player;
 using Robust.Shared.Map;
@@ -359,16 +358,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     {
         if (!RuleSelected)
             return;
-
-        ShipTypePrototype shipType;
-        if (initialShipType == null || initialShipType.MinCrewAmount > 1)
-        {
-            shipType = _random.Pick(ShipTypes.Where(t => t.MinCrewAmount == 1).ToList());
-        }
-        else
-        {
-            shipType = initialShipType;
-        }
+        
+        ShipTypePrototype shipType = initialShipType ?? _random.Pick(ShipTypes.Where(t => t.MinCrewAmount == 1).ToList());
 
         var newShip = _debrisSys.RandomPosSpawn(
             TargetMap,

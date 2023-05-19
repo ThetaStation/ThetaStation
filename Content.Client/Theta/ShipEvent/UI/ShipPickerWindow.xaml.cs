@@ -13,13 +13,12 @@ public sealed partial class ShipPickerWindow : DefaultWindow
 {
     public event Action<EventArgs>? InfoRequest;
 
-    private string? TeamName = null;
+    private List<BoxContainer> shipTypeEntries = new();
 
     public ShipTypePrototype? Selection;
     
-    public ShipPickerWindow(string? teamName = null)
+    public ShipPickerWindow()
     {
-        TeamName = teamName;
         RobustXamlLoader.Load(this);
     }
 
@@ -33,7 +32,10 @@ public sealed partial class ShipPickerWindow : DefaultWindow
             shipTypeEntryInfoHolder.Orientation = BoxContainer.LayoutOrientation.Horizontal;
             
             var shipTypeLabel = new RichTextLabel();
-            shipTypeLabel.SetMarkup($"{shipType.Name}\n \n{GetShipClassName(shipType.Class)}\n \n{shipType.Description}");
+            string crewAmountStr = Loc.GetString("shipevent-shippicker-mincrewamount") + shipType.MinCrewAmount;
+            if (state.MemberCount < shipType.MinCrewAmount)
+                crewAmountStr = "[color=yellow]" + crewAmountStr + "[/color]";
+            shipTypeLabel.SetMarkup($"{shipType.Name}\n \n{GetShipClassName(shipType.Class)}\n \n{crewAmountStr}\n \n{shipType.Description}");
             shipTypeLabel.MinWidth = Width / 2;
             shipTypeLabel.SetWidth = Width / 2;
 
@@ -59,6 +61,7 @@ public sealed partial class ShipPickerWindow : DefaultWindow
             shipTypeEntry.AddChild(shipTypeEntryInfoHolder);
             shipTypeEntry.AddChild(selectionButton);
             
+            shipTypeEntries.Add(shipTypeEntry);
             ShipOptionsContainer.AddChild(shipTypeEntry);
         }
     }
