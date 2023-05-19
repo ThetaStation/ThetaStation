@@ -123,9 +123,12 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         foreach (var team in Teams)
         {
             if (team.Captain == msg.Session.ConnectedClient.UserName)
+            {
                 _uiSys.TrySetUiState(msg.Entity, 
                     msg.UiKey,
                     new ShipEventCaptainMenuBoundUserInterfaceState(team.ChosenShipType));
+                return;
+            }
         }
     }
 
@@ -135,7 +138,10 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         foreach (var team in Teams)
         {
             if (team.Captain == msg.Session.ConnectedClient.UserName)
+            {
                 memberCount = team.Members.Count;
+                break;
+            }
         }
         
         _uiSys.TrySetUiState(msg.Entity, 
@@ -148,7 +154,10 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         foreach (var team in Teams)
         {
             if (team.Captain == msg.Session.ConnectedClient.UserName)
+            {
                 team.ChosenShipType = msg.NewShip;
+                break;
+            }
         }
     }
 
@@ -171,6 +180,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                     ("newname", newName));
                 Announce(message);
                 team.ShipName = newName;
+                break;
             }
         }
     }
@@ -397,6 +407,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             {
                 teamFaction = team;
                 shipUid = team.Ship;
+                break;
             }
         }
 
