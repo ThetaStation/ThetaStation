@@ -23,7 +23,7 @@ public class PlayerFaction
     {
         Name = name;
         if(iconPath != "")
-            Icon = new SpriteSpecifier.Texture(new ResourcePath(iconPath));
+            Icon = new SpriteSpecifier.Texture(new ResPath(iconPath));
         Members = new List<Role>();
     }
 

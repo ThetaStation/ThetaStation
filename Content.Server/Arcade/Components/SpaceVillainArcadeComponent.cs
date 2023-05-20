@@ -44,7 +44,7 @@ namespace Content.Server.Arcade.Components
         private List<string> _possibleFirstEnemyNames = new List<string>(){
         /// Corvax-Localization-Start
             "Автоматический", "Фермер", "Лорд", "Профессор", "Кубинец", "Злой", "Грозный Король",
-            "Космический", "Лорд", "Могучий", "Герцог", "Обычный"
+            "Космический", "Лорд", "Могучий", "Герцог", "Генерал"
         /// Corvax-Localization-End
         };
         [ViewVariables(VVAccess.ReadWrite)]
@@ -66,7 +66,7 @@ namespace Content.Server.Arcade.Components
             "FoamCrossbow", "RevolverCapGun", "PlushieLizard", "PlushieAtmosian", "PlushieSpaceLizard",
             "PlushieNuke", "PlushieCarp", "PlushieRatvar", "PlushieNar", "PlushieSnake", "Basketball", "Football",
             "PlushieRouny", "PlushieBee", "PlushieSlime", "BalloonCorgi", "ToySword", "CrayonBox", "BoxDonkSoftBox", "BoxCartridgeCap",
-            "HarmonicaInstrument", "OcarinaInstrument", "RecorderInstrument", "GunpetInstrument", "BirdToyInstrument"
+            "HarmonicaInstrument", "OcarinaInstrument", "RecorderInstrument", "GunpetInstrument", "BirdToyInstrument", "PlushieXeno"
         };
 
         [DataField("rewardMinAmount")]

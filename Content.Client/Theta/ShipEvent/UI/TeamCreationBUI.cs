@@ -20,7 +20,7 @@ public sealed class ShipEventLobbyBoundUserInterface : BoundUserInterface
         _lobby.OnClose += Close;
         _teamCreation.CreationButtonPressed += _ =>
         {
-            SendMessage(new TeamCreationRequest(_teamCreation.TeamName, _teamCreation.Blacklist, _teamCreation.Color));
+            SendMessage(new TeamCreationRequest(_teamCreation.TeamName, _teamCreation.Blacklist, _teamCreation.TeamColor));
         };
         _lobby.CreateTeamButtonPressed += _ =>
         {

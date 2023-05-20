@@ -24,7 +24,7 @@ public sealed class MobHUDPrototype : IPrototype, IEquatable<MobHUDPrototype>
     /// Color of this HUD, in hex. Leave empty if you don't want to recolor your sprite.
     /// </summary>
     [DataField("color")]
-    public string Color = Robust.Shared.Maths.Color.White.ToHex();
+    public Color Color = Color.White;
 
     public bool Equals(MobHUDPrototype? other)
     {

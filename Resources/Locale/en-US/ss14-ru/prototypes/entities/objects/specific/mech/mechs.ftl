@@ -1,7 +1,12 @@
 ent-BaseMech = { "" }
     .desc = { "" }
-ent-MechRipley = ripley
-    .desc = Cargo's favorite robotic box hauling friend.
+ent-MechRipley = Ripley APLU
+    .desc = Versatile and lightly armored, the Ripley is useful for almost any heavy work scenario. The "APLU" stands for Autonomous Power Loading Unit.
 ent-MechRipleyBattery = { ent-MechRipley }
     .suffix = Battery
     .desc = { ent-MechRipley.desc }
+ent-MechHonker = H.O.N.K.
+    .desc = Produced by "Tyranny of Honk, INC", this exosuit is designed as heavy clown-support. Used to spread the fun and joy of life. HONK!
+ent-MechHonkerBattery = { ent-MechHonker }
+    .suffix = Battery
+    .desc = { ent-MechHonker.desc }

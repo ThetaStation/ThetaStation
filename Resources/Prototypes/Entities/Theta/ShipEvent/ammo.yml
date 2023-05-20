@@ -49,4 +49,4 @@
     - type: StorageFill
       contents:
         - id: ShellShotgunSlugShipEvent
-          amount: 50
+          amount: 100

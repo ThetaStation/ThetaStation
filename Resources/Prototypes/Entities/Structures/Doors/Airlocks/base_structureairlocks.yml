@@ -28,19 +28,21 @@
     - state: emergency_unlit
       map: ["enum.DoorVisualLayers.BaseEmergencyAccess"]
       shader: unshaded
-    - state: panel_closed # Corvax-Resprite-Airlocks
+    - state: panel_open
       map: ["enum.WiresVisualLayers.MaintenancePanel"]
+  - type: AnimationPlayer
   - type: Physics
   - type: Fixtures
     fixtures:
-    - shape:
-        !type:PhysShapeAabb
-        bounds: "-0.49,-0.49,0.49,0.49" # don't want this colliding with walls or they won't close
-      density: 100
-      mask:
-      - FullTileMask
-      layer:
-      - AirlockLayer
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,0.49,0.49" # don't want this colliding with walls or they won't close
+        density: 100
+        mask:
+        - FullTileMask
+        layer:
+        - AirlockLayer
   - type: LayerChangeOnWeld
     unWeldedLayer: AirlockLayer
     weldedLayer: WallLayer
@@ -64,10 +66,8 @@
     fuel: 3
     time: 3
   - type: Airlock
+    openUnlitVisible: true # Corvax-Resprite-Airlocks
   - type: Appearance
-    visuals:
-    - type: AirlockVisualizer
-      openUnlitVisible: true # Corvax-Resprite-Airlocks
   - type: WiresVisuals
   - type: ApcPowerReceiver
     powerLoad: 20
@@ -79,11 +79,21 @@
     BoardName: "Airlock Control"
     LayoutId: Airlock
   - type: DoorSignalControl
-  - type: SignalReceiver
-    inputs:
-      Open: []
-      Close: []
-      Toggle: []
+  - type: DeviceNetwork
+    deviceNetId: Wireless
+    receiveFrequencyId: BasicDevice
+  - type: WirelessNetworkConnection
+    range: 200
+  - type: DeviceLinkSink
+    ports:
+      - Open
+      - Close
+      - Toggle
+      - AutoClose
+      - DoorBolt
+  - type: DeviceLinkSource
+    ports:
+      - DoorStatus
   - type: UserInterface
     interfaces:
     - key: enum.WiresUiKey.Key
@@ -110,6 +120,8 @@
     node: airlock
     containers:
     - board
+  - type: PlacementReplacement
+    key: walls
   - type: IconSmooth
     key: walls
     mode: NoSprite
