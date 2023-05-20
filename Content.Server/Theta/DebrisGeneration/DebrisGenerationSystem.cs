@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Server.Theta.DebrisGeneration.Prototypes;
+using Content.Shared.Follower;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -28,9 +29,8 @@ public sealed class DebrisGenerationSystem : EntitySystem
 
     //primitive quad tree (aka plain grid) for optimising collision checks
     private const int spawnSectorSize = 100;
-    private const int spawnTries = 5;
-    private Dictionary<Vector2, List<(Vector2, int)>> spawnSectors = new(); //starting pos => spawn positions in this sector
-    private Dictionary<Vector2, double> spawnSectorVolumes = new(); //starting pos => occupied volume in this sector
+    private Dictionary<Vector2, HashSet<SectorRange>> spawnSectors = new(); //sector pos => free ranges in this sector
+    private Dictionary<Vector2, double> spawnSectorVolumes = new(); //sector pos => occupied volume in this sector
 
     /// <summary>
     /// Randomly places specified structures onto map
@@ -68,9 +68,8 @@ public sealed class DebrisGenerationSystem : EntitySystem
             var grid = structProt.Generator.Generate(this, TargetMap);
             var gridComp = EntMan.GetComponent<MapGridComponent>(grid);
             var gridForm = EntMan.GetComponent<TransformComponent>(grid);
-
-            var finalDistance = (int)Math.Ceiling(structProt.MinDistance + Math.Max(gridComp.LocalAABB.Height, gridComp.LocalAABB.Width));
-            var spawnPos = GenerateSpawnPosition(finalDistance);
+            
+            var spawnPos = GenerateSpawnPosition(gridComp.LocalAABB.Enlarged(structProt.MinDistance));
             if (spawnPos == null)
             {
                 Logger.Error("Debris generation, GenerateDebris: Failed to find spawn position, deleting grid");
@@ -100,100 +99,6 @@ public sealed class DebrisGenerationSystem : EntitySystem
         spawnSectorVolumes.Clear();
     }
     
-    // Randomly picks structure from structure list, accounting for their weight
-    // todo: maybe it's worth to PR this to RT (weighted random selection)
-    private StructurePrototype? PickStructure(List<StructurePrototype> structures)
-    {
-        float totalWeight = structures.Select(s => s.SpawnWeight).Sum();
-        float randFloat = Rand.NextFloat(0, totalWeight);
-
-        StructurePrototype? picked = null;
-        foreach(var structProt in structures)
-        {
-            if (structProt.SpawnWeight > randFloat)
-            {
-                picked = structProt;
-                break;
-            }
-
-            randFloat -= structProt.SpawnWeight;
-        }
-
-        return picked;
-    }
-
-    //Set's up collision grid
-    private void SetupGrid(Vector2 startPos, int maxDebrisOffset)
-    {
-        for (int y = 0; y < maxDebrisOffset; y += spawnSectorSize)
-        {
-            for (int x = 0; x < maxDebrisOffset; x += spawnSectorSize)
-            {
-                Vector2 sectorPos = new Vector2(startPos.X + x, startPos.Y + y);
-                spawnSectors[sectorPos] = new List<(Vector2, int)>();
-                spawnSectorVolumes[sectorPos] = 0;
-            }
-        }
-    }
-
-    //Generates spawn position in random sector of the grid
-    private Vector2? GenerateSpawnPosition(int distance)
-    {
-        var volume = distance * distance * Math.PI;
-        var shuffledSectors = spawnSectors.Keys.ToList();
-        Rand.Shuffle(shuffledSectors);
-        
-        foreach(var randomSector in shuffledSectors)
-        {
-            if (spawnSectorSize * spawnSectorSize - spawnSectorVolumes[randomSector] < volume)
-                continue;
-            var result = TryPlaceInSector(randomSector, distance, spawnTries, out var spawnPos);
-            if (result)
-                return spawnPos;
-        }
-        
-        return null;
-    }
-
-    //Tries to find good position in specified sector & if it's successful, updates sector contents
-    private bool TryPlaceInSector(Vector2 sectorPos, int radius, int tries, out Vector2 resultPos)
-    {
-        bool CanPlace(Vector2 pos)
-        {
-            foreach ((Vector2 otherPos, int otherRadius) in spawnSectors[sectorPos])
-            {
-                if ((pos - otherPos).Length < radius + otherRadius)
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-        
-        resultPos = Vector2.Zero;
-        bool result = true;
-        Vector2 sectorEnd = sectorPos + spawnSectorSize;
-        
-        for (int t = 0; t < tries; t++)
-        {
-            resultPos = Rand.NextVector2Box(sectorPos.X + radius, sectorPos.Y + radius, sectorEnd.X - radius, sectorEnd.Y - radius);
-
-            if (CanPlace(resultPos))
-            {
-                result = true;
-                break;
-            }
-        }
-
-        if (result)
-        {
-            spawnSectors[sectorPos].Add((resultPos, radius));
-            spawnSectorVolumes[sectorPos] += radius * radius * Math.PI;
-        }
-        return result;
-    }
-
     /// <summary>
     /// Randomly places specified structure onto map. Does not optimise collision checking in any way
     /// </summary>
@@ -236,6 +141,249 @@ public sealed class DebrisGenerationSystem : EntitySystem
         Logger.Error($"Debris generation, RandomPosSpawn: Failed to find spawn position, deleting grid {grid.ToString()}");
         EntityManager.DeleteEntity(grid);
         return EntityUid.Invalid;
+    }
+
+    //Set's up collision grid
+    private void SetupGrid(Vector2 startPos, int maxDebrisOffset)
+    {
+        for (int y = 0; y < maxDebrisOffset; y += spawnSectorSize)
+        {
+            for (int x = 0; x < maxDebrisOffset; x += spawnSectorSize)
+            {
+                Vector2 sectorPos = new Vector2(startPos.X + x, startPos.Y + y);
+                spawnSectors[sectorPos] = new HashSet<SectorRange>
+                {
+                    new SectorRange(sectorPos.Y, sectorPos.Y + spawnSectorSize, 
+                        new List<(float, float)>{(sectorPos.X, sectorPos.X + spawnSectorSize)})
+                };
+                spawnSectorVolumes[sectorPos] = 0;
+            }
+        }
+    }
+
+    // Randomly picks structure from structure list, accounting for their weight
+    // todo: maybe it's worth to PR this to RT (weighted random selection)
+    private StructurePrototype? PickStructure(List<StructurePrototype> structures)
+    {
+        float totalWeight = structures.Select(s => s.SpawnWeight).Sum();
+        float randFloat = Rand.NextFloat(0, totalWeight);
+
+        StructurePrototype? picked = null;
+        foreach(var structProt in structures)
+        {
+            if (structProt.SpawnWeight > randFloat)
+            {
+                picked = structProt;
+                break;
+            }
+
+            randFloat -= structProt.SpawnWeight;
+        }
+
+        return picked;
+    }
+    
+    //Generates spawn position in random sector of the grid
+    private Vector2? GenerateSpawnPosition(Box2 bounds)
+    {
+        var volume = bounds.Height * bounds.Width;
+        var shuffledSectors = spawnSectors.Keys.ToList();
+        Rand.Shuffle(shuffledSectors);
+        
+        foreach(var randomSector in shuffledSectors)
+        {
+            if (spawnSectorSize * spawnSectorSize - spawnSectorVolumes[randomSector] < volume)
+                continue;
+            var result = TryPlaceInSector(randomSector, bounds, out var spawnPos);
+            if (result)
+                return spawnPos;
+        }
+        
+        return null;
+    }
+    
+    /// <summary>
+    /// Tries to find spot with enough space to fit given bounding box
+    /// </summary>
+    /// <param name="sectorPos">position of sector for search</param>
+    /// <param name="bounds">bounding box</param>
+    /// <param name="resultPos">resulting position</param>
+    /// <returns></returns>
+    private bool TryPlaceInSector(Vector2 sectorPos, Box2 bounds, out Vector2 resultPos)
+    {
+        bool result = false;
+        resultPos = Vector2.NaN;
+
+        HashSet<SectorRange> ranges = CutRanges(spawnSectors[sectorPos], sectorPos.X + spawnSectorSize - bounds.Width, sectorPos.Y + spawnSectorSize - bounds.Height);
+        foreach (SectorRange range in ranges)
+        {
+            foreach ((float start, float end) in range.XRanges)
+            {
+                if (end - start >= bounds.Width)
+                {
+                    if (range.Top - range.Bottom >= bounds.Height)
+                    {
+                        result = true;
+                        resultPos = new Vector2(Rand.NextFloat(start, end), Rand.NextFloat(range.Bottom, range.Top));
+                        break;
+                    }
+                    SectorRange combinedRange = CombineRangesVertically(ranges, start, end, range.Bottom, bounds.Width);
+                    if (combinedRange.Top - combinedRange.Bottom >= bounds.Height) 
+                    {
+                        result = true;
+                        (float startc, float endc) = combinedRange.XRanges.First();
+                        resultPos = new Vector2(Rand.NextFloat(startc, endc), Rand.NextFloat(range.Bottom, range.Top));
+                        break;
+                    }
+                }
+            }
+
+            if (result)
+                break;
+        }
+
+        if (result)
+        {
+            spawnSectors[sectorPos] = AddRange(spawnSectors[sectorPos], 
+                CreateRange(Box2.FromDimensions(sectorPos, new Vector2(spawnSectorSize, spawnSectorSize)), 
+                    Box2.FromDimensions(resultPos, new Vector2(bounds.Width, bounds.Height))));
+            spawnSectorVolumes[sectorPos] += bounds.Height * bounds.Width;
+        }
+        return result;
+    }
+    
+    private SectorRange CreateRange(Box2 parent, Box2 child)
+    {
+        List<(float, float)> xr = new() {(parent.Left, child.Left), (child.Right, parent.Right)};
+        return new SectorRange(child.Bottom, child.Top, xr);
+    }
+
+    private HashSet<SectorRange> CutRanges(HashSet<SectorRange> ranges, float maxX, float maxY)
+    {
+        HashSet<SectorRange> rangesNew = new();
+        foreach (SectorRange range in ranges)
+        {
+            SectorRange rangeN = range;
+            rangeN.XRanges.Clear();
+            
+            if (range.Bottom > maxY)
+                continue;
+            if (range.Top > maxY)
+                rangeN.Top = maxY;
+
+            foreach ((float start, float end) in range.XRanges)
+            {
+                if (start > maxX)
+                    continue;
+                rangeN.XRanges.Add((start, end > maxX ? maxX : end));
+            }
+
+            rangesNew.Add(rangeN);
+        }
+
+        return rangesNew;
+    }
+
+    //Adds range to the set of ranges, combining it with existing ranges if needed
+    private HashSet<SectorRange> AddRange(HashSet<SectorRange> ranges, SectorRange range)
+    {
+        HashSet<SectorRange> rangesNew = new();
+        foreach (SectorRange rangeOther in ranges)
+        {
+            if (rangeOther.Bottom < range.Top && rangeOther.Top > range.Bottom) //height overlap
+            {
+                if (XRangesOverlap(range.XRanges, rangeOther.XRanges))
+                    Logger.Error("Debris generation system, AddRange: Got both height & x-range overlap (COLLISION). Fix it pls.");
+
+                if (Math.Abs(rangeOther.Bottom - range.Bottom) <= 0.1 && Math.Abs(rangeOther.Top - range.Top) <= 0.1)
+                {
+                    range.XRanges.Concat(rangeOther.XRanges);
+                    rangesNew.Add(new SectorRange(range.Bottom, range.Top, range.XRanges));
+                }
+                
+                (SectorRange rangeHigh, SectorRange rangeLow) = range.Top > rangeOther.Top ? (range, rangeOther) : (rangeOther, range);
+
+                rangesNew.Add(new SectorRange(rangeLow.Top, rangeHigh.Top, rangeHigh.XRanges));
+                rangesNew.Add(new SectorRange(rangeHigh.Bottom, rangeLow.Top, rangeHigh.XRanges.Concat(rangeLow.XRanges).ToList()));
+                rangesNew.Add(new SectorRange(rangeLow.Bottom, rangeHigh.Bottom, rangeLow.XRanges));
+            }
+        }
+
+        return rangesNew;
+    }
+
+    //Combines all ranges lying between endX & start X, and above/below height into a single range (with single X range)
+    //with width above minWidth and combined height of included ranges
+    private SectorRange CombineRangesVertically(HashSet<SectorRange> ranges, float start, float end, float height, float minWidth)
+    {
+        (float, float) GetFreeRange(SectorRange range)
+        {
+            foreach ((float startn, float endn) in range.XRanges)
+            {
+                if (startn < end && endn > start)
+                {
+                    return (startn, endn);
+                }
+            }
+
+            return (0, 0);
+        }
+
+        float bottom, top, startn, endn;
+        bottom = top = startn = endn = 0;
+
+        List<SectorRange> sorted = ranges.Where(r => r.Top < height).OrderBy(r => r.Top).ToList();
+        foreach (SectorRange range in sorted)
+        {
+            (float startf, float endf) = GetFreeRange(range);
+            if (endf - startf < minWidth)
+                break;
+            bottom = range.Bottom;
+            startn = startf > startn ? startf : startn;
+            endn = endf < endn ? endf : endn;
+        }
+        
+        sorted = ranges.Where(r => r.Bottom > height).OrderByDescending(r => r.Top).ToList();
+        foreach (SectorRange range in sorted)
+        {
+            (float startf, float endf) = GetFreeRange(range);
+            if (endf - startf < minWidth)
+                break;
+            top = range.Top;
+            start = startf > start ? startf : start;
+            endn = endf < endn ? endf : endn;
+        }
+
+        return new SectorRange(bottom, top, new List<(float, float)>{(startn, endn)});
+    }
+
+    //Returns true if at least one x-range overlaps another
+    private bool XRangesOverlap(List<(float, float)> ranges1, List<(float, float)> ranges2)
+    {
+        foreach ((float start1, float end1) in ranges1)
+        {
+            foreach ((float start2, float end2) in ranges2)
+            {
+                if (start1 < end2 && end1 > start2)
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    //SectorRange represents single 'line' of sector space. It contains info about it's height (Bottom, Top) & free spaces on that height level (XRanges)
+    private struct SectorRange
+    {
+        public float Bottom, Top = 0;
+        public List<(float, float)> XRanges;
+
+        public SectorRange(float bottom, float top, List<(float, float)> xRanges)
+        {
+            Bottom = bottom;
+            Top = top;
+            XRanges = xRanges;
+        }
     }
 }
 
