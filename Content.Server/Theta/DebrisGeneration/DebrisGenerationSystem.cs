@@ -114,9 +114,9 @@ public sealed class DebrisGenerationSystem : EntitySystem
         var grid = structure.Generator.Generate(this, TargetMap);
         var gridComp = EntMan.GetComponent<MapGridComponent>(grid);
         var gridForm = EntMan.GetComponent<TransformComponent>(grid);
-
+        
         var finalDistance = (int)Math.Ceiling(structure.MinDistance + Math.Max(gridComp.LocalAABB.Height, gridComp.LocalAABB.Width));
-
+        
         Vector2i mapPos = Vector2i.Zero;
         var result = false;
         for (int n = 0; n < tries; n++)
@@ -253,8 +253,8 @@ public sealed class DebrisGenerationSystem : EntitySystem
 
         if (result)
         {
-            spawnSectors[sectorPos] = AddRange(spawnSectors[sectorPos], 
-                CreateRange(Box2i.FromDimensions(sectorPos, new Vector2i(spawnSectorSize, spawnSectorSize)), 
+            spawnSectors[sectorPos] = SubtractRange(spawnSectors[sectorPos], 
+                CreateRangeFromCollider(Box2i.FromDimensions(sectorPos, new Vector2i(spawnSectorSize, spawnSectorSize)), 
                     Box2i.FromDimensions(resultPos, new Vector2i(bounds.Width, bounds.Height))));
             spawnSectorVolumes[sectorPos] += bounds.Height * bounds.Width;
         }
@@ -262,40 +262,15 @@ public sealed class DebrisGenerationSystem : EntitySystem
         return result;
     }
     
-    private SectorRange CreateRange(Box2i parent, Box2i child)
+    //Creates free space ranges from given bounding box, relatively to parent box
+    private SectorRange CreateRangeFromCollider(Box2i parent, Box2i child)
     {
-        List<(int, int)> xr = new() {(parent.Left, child.Left), (child.Right, (int)parent.Right)};
+        List<(int, int)> xr = new() {(parent.Left, child.Left), (child.Right, parent.Right)};
         return new SectorRange(child.Bottom, child.Top, xr);
     }
 
-    private HashSet<SectorRange> CutRanges(HashSet<SectorRange> ranges, int maxX, int maxY)
-    {
-        HashSet<SectorRange> rangesNew = new();
-        foreach (SectorRange range in ranges)
-        {
-            SectorRange rangeN = range;
-            rangeN.XRanges = new List<(int, int)>();
-
-            if (range.Bottom > maxY)
-                continue;
-            if (range.Top > maxY)
-                rangeN.Top = maxY;
-
-            foreach ((int start, int end) in range.XRanges)
-            {
-                if (start > maxX)
-                    continue;
-                rangeN.XRanges.Add((start, end > maxX ? maxX : end));
-            }
-
-            rangesNew.Add(rangeN);
-        }
-
-        return rangesNew;
-    }
-
-    //Adds range to the set of ranges, combining it with existing ranges if needed
-    private HashSet<SectorRange> AddRange(HashSet<SectorRange> ranges, SectorRange range)
+    //Subtracts range from existing ranges
+    private HashSet<SectorRange> SubtractRange(HashSet<SectorRange> ranges, SectorRange range)
     {
         HashSet<SectorRange> rangesNew = new();
         foreach (SectorRange rangeOther in ranges)
@@ -304,15 +279,16 @@ public sealed class DebrisGenerationSystem : EntitySystem
             {
                 if (Math.Abs(rangeOther.Bottom - range.Bottom) <= 0.1 && Math.Abs(rangeOther.Top - range.Top) <= 0.1)
                 {
-                    range.XRanges.Concat(rangeOther.XRanges);
-                    rangesNew.Add(new SectorRange(range.Bottom, range.Top, range.XRanges));
+                    rangesNew.Add(new SectorRange(range.Bottom, range.Top, SubtractXRanges(rangeOther.XRanges, range.XRanges)));
                 }
-                
-                (SectorRange rangeHigh, SectorRange rangeLow) = range.Top > rangeOther.Top ? (range, rangeOther) : (rangeOther, range);
+                else
+                {
+                    (SectorRange rangeHigh, SectorRange rangeLow) = range.Top > rangeOther.Top ? (range, rangeOther) : (rangeOther, range);
 
-                rangesNew.Add(new SectorRange(rangeLow.Top, rangeHigh.Top, rangeHigh.XRanges));
-                rangesNew.Add(new SectorRange(rangeHigh.Bottom, rangeLow.Top, rangeHigh.XRanges.Concat(rangeLow.XRanges).ToList()));
-                rangesNew.Add(new SectorRange(rangeLow.Bottom, rangeHigh.Bottom, rangeLow.XRanges));
+                    rangesNew.Add(new SectorRange(rangeLow.Top, rangeHigh.Top, rangeHigh.XRanges));
+                    rangesNew.Add(new SectorRange(rangeHigh.Bottom, rangeLow.Top, SubtractXRanges(rangeOther.XRanges, range.XRanges)));
+                    rangesNew.Add(new SectorRange(rangeLow.Bottom, rangeHigh.Bottom, rangeLow.XRanges));
+                }
             }
         }
 
@@ -321,7 +297,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
 
     //Combines all ranges lying between endX & start X, and above/below height into a single range (with single X range)
     //with width above minWidth and combined height of included ranges
-    private SectorRange CombineRangesVertically(HashSet<SectorRange> ranges, int start, int end, int height, int heightTop, int minWidth)
+    private SectorRange CombineRangesVertically(HashSet<SectorRange> ranges, int start, int end, int heightBottom, int heightTop, int minWidth)
     {
         (int, int) GetFreeRange(SectorRange range)
         {
@@ -335,11 +311,11 @@ public sealed class DebrisGenerationSystem : EntitySystem
         }
 
         int top = heightTop;
-        int bottom = height;
+        int bottom = heightBottom;
         int startn = start;
         int endn = end;
 
-        List<SectorRange> sorted = ranges.Where(r => r.Top < height).OrderBy(r => r.Top).ToList();
+        List<SectorRange> sorted = ranges.Where(r => r.Top < heightBottom).OrderByDescending(r => r.Top).ToList();
         foreach (SectorRange range in sorted)
         {
             (int startf, int endf) = GetFreeRange(range);
@@ -350,7 +326,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
             endn = endf < endn ? endf : endn;
         }
         
-        sorted = ranges.Where(r => r.Bottom > height).OrderByDescending(r => r.Top).ToList();
+        sorted = ranges.Where(r => r.Bottom > heightTop).OrderBy(r => r.Top).ToList();
         foreach (SectorRange range in sorted)
         {
             (int startf, int endf) = GetFreeRange(range);
@@ -394,6 +370,31 @@ public sealed class DebrisGenerationSystem : EntitySystem
         }
 
         return results;
+    }
+
+    //Subtracts ranges2 from ranges1
+    private List<(int, int)> SubtractXRanges(List<(int, int)> ranges1, List<(int, int)> ranges2)
+    {
+        List<(int, int)> newXRanges = new();
+        foreach ((int start1, int end1) in ranges1)
+        {
+            foreach ((int start2, int end2) in ranges2)
+            {
+                if (start1 < end2 && end1 > start2)
+                {
+                    if (start2 > start1)
+                        newXRanges.Add((start1, start2));
+                    if (end2 < end1)
+                        newXRanges.Add((end2, end1));
+                }
+                else
+                {
+                    newXRanges.Add((start1, end1));
+                }
+            }
+        }
+
+        return newXRanges;
     }
 
     //SectorRange represents single 'line' of sector space. It contains info about it's height (Bottom, Top) & free spaces on that height level (XRanges)
