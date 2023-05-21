@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Server.Theta.DebrisGeneration.Prototypes;
 using Content.Shared.Follower;
+using Content.Shared.Theta;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -94,6 +95,10 @@ public sealed class DebrisGenerationSystem : EntitySystem
         TargetMap = MapId.Nullspace;
         Logger.Info($"Debris generation, GenerateDebris: Spawned {SpawnedGrids.Count} grids");
         SpawnedGrids.Clear();
+
+        //REMOVE LATER
+        SendDebugOverlayInfo();
+        //REMOVE LATER
 
         spawnSectors.Clear();
         spawnSectorVolumes.Clear();
@@ -213,9 +218,11 @@ public sealed class DebrisGenerationSystem : EntitySystem
     {
         bool result = false;
         resultPos = Vector2i.Zero;
+        
+        int maxX = sectorPos.X + spawnSectorSize - bounds.Width;
+        int maxY = sectorPos.Y + spawnSectorSize - bounds.Height;
 
-        HashSet<SectorRange> ranges = CutRanges(spawnSectors[sectorPos], sectorPos.X + spawnSectorSize - bounds.Width, sectorPos.Y + spawnSectorSize - bounds.Height);
-        foreach (SectorRange range in ranges)
+        foreach (SectorRange range in spawnSectors[sectorPos])
         {
             foreach ((int start, int end) in range.XRanges)
             {
@@ -224,15 +231,17 @@ public sealed class DebrisGenerationSystem : EntitySystem
                     if (range.Top - range.Bottom >= bounds.Height)
                     {
                         result = true;
-                        resultPos = new Vector2i(Rand.Next(start, end), Rand.Next(range.Bottom, range.Top));
+                        resultPos = new Vector2i(Rand.Next(start, Math.Clamp(end, 0, maxX)), Rand.Next(range.Bottom, Math.Clamp(range.Top, 0, maxY)));
                         break;
                     }
-                    SectorRange combinedRange = CombineRangesVertically(ranges, start, end, range.Bottom, range.Top, bounds.Width);
+                    SectorRange combinedRange = CombineRangesVertically(spawnSectors[sectorPos], start, end, range.Bottom, range.Top, bounds.Width);
                     if (combinedRange.Top - combinedRange.Bottom >= bounds.Height) 
                     {
                         result = true;
                         (int startc, int endc) = combinedRange.XRanges.First();
-                        resultPos = new Vector2i(Rand.Next(startc, endc), Rand.Next(range.Bottom, range.Top));
+
+                        resultPos = new Vector2i(Rand.Next(startc, Math.Clamp(endc, 0, maxX)), 
+                            Rand.Next(combinedRange.Bottom, Math.Clamp(combinedRange.Top, 0, maxY)));
                         break;
                     }
                 }
@@ -249,6 +258,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
                     Box2i.FromDimensions(resultPos, new Vector2i(bounds.Width, bounds.Height))));
             spawnSectorVolumes[sectorPos] += bounds.Height * bounds.Width;
         }
+
         return result;
     }
     
@@ -371,6 +381,21 @@ public sealed class DebrisGenerationSystem : EntitySystem
         return false;
     }
 
+    //Returns list of inverted (occupied) ranges
+    private List<(int, int)> InvertedXRanges(List<(int, int)> ranges)
+    {
+        List<(int, int)> results = new();
+        foreach ((int start, int end) in ranges)
+        {
+            (int, int) nextRange = ranges.Where(r => r.Item1 > end).OrderByDescending(r => r.Item1).FirstOrDefault();
+            if (nextRange == default)
+                continue;
+            results.Add((end, nextRange.Item1));
+        }
+
+        return results;
+    }
+
     //SectorRange represents single 'line' of sector space. It contains info about it's height (Bottom, Top) & free spaces on that height level (XRanges)
     private struct SectorRange
     {
@@ -383,6 +408,28 @@ public sealed class DebrisGenerationSystem : EntitySystem
             Top = top;
             XRanges = xRanges;
         }
+    }
+    
+    //REMOVE LATER
+    private void SendDebugOverlayInfo()
+    {
+        List<Box2i> freeRects = new();
+        List<Box2i> occupiedRects = new();
+        foreach (HashSet<SectorRange> rangeSet in spawnSectors.Values)
+        {
+            foreach (SectorRange range in rangeSet)
+            {
+                foreach ((int start, int end) in range.XRanges)
+                {
+                    freeRects.Add(new Box2i(new Vector2i(start, range.Bottom), new Vector2i(end, range.Top)));
+                }
+                foreach ((int start, int end) in InvertedXRanges(range.XRanges))
+                {
+                    occupiedRects.Add(new Box2i(new Vector2i(start, range.Bottom), new Vector2i(end, range.Top)));
+                }
+            }
+        }
+        RaiseNetworkEvent(new FinalGridStateEvent(freeRects, occupiedRects));
     }
 }
 
