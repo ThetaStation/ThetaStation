@@ -29,8 +29,8 @@ public sealed class DebrisGenerationSystem : EntitySystem
 
     //primitive quad tree (aka plain grid) for optimising collision checks
     private const int spawnSectorSize = 100;
-    private Dictionary<Vector2, HashSet<SectorRange>> spawnSectors = new(); //sector pos => free ranges in this sector
-    private Dictionary<Vector2, double> spawnSectorVolumes = new(); //sector pos => occupied volume in this sector
+    private Dictionary<Vector2i, HashSet<SectorRange>> spawnSectors = new(); //sector pos => free ranges in this sector
+    private Dictionary<Vector2i, double> spawnSectorVolumes = new(); //sector pos => occupied volume in this sector
 
     /// <summary>
     /// Randomly places specified structures onto map
@@ -43,7 +43,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
     /// <param name="maxDebrisOffset">max offset from startPos. startPos is being the left-lower corner of the square in which spawning positions are chosen</param>
     public void SpawnStructures(
         MapId targetMap,
-        Vector2 startPos,
+        Vector2i startPos,
         int structureAmount,
         int maxOffset,
         List<StructurePrototype> structures, 
@@ -69,7 +69,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
             var gridComp = EntMan.GetComponent<MapGridComponent>(grid);
             var gridForm = EntMan.GetComponent<TransformComponent>(grid);
             
-            var spawnPos = GenerateSpawnPosition(gridComp.LocalAABB.Enlarged(structProt.MinDistance));
+            var spawnPos = GenerateSpawnPosition((Box2i)gridComp.LocalAABB.Enlarged(structProt.MinDistance));
             if (spawnPos == null)
             {
                 Logger.Error("Debris generation, GenerateDebris: Failed to find spawn position, deleting grid");
@@ -144,17 +144,17 @@ public sealed class DebrisGenerationSystem : EntitySystem
     }
 
     //Set's up collision grid
-    private void SetupGrid(Vector2 startPos, int maxDebrisOffset)
+    private void SetupGrid(Vector2i startPos, int maxDebrisOffset)
     {
         for (int y = 0; y < maxDebrisOffset; y += spawnSectorSize)
         {
             for (int x = 0; x < maxDebrisOffset; x += spawnSectorSize)
             {
-                Vector2 sectorPos = new Vector2(startPos.X + x, startPos.Y + y);
+                Vector2i sectorPos = new Vector2i(startPos.X + x, startPos.Y + y);
                 spawnSectors[sectorPos] = new HashSet<SectorRange>
                 {
                     new SectorRange(sectorPos.Y, sectorPos.Y + spawnSectorSize, 
-                        new List<(float, float)>{(sectorPos.X, sectorPos.X + spawnSectorSize)})
+                        new List<(int, int)>{(sectorPos.X, sectorPos.X + spawnSectorSize)})
                 };
                 spawnSectorVolumes[sectorPos] = 0;
             }
@@ -184,7 +184,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
     }
     
     //Generates spawn position in random sector of the grid
-    private Vector2? GenerateSpawnPosition(Box2 bounds)
+    private Vector2? GenerateSpawnPosition(Box2i bounds)
     {
         var volume = bounds.Height * bounds.Width;
         var shuffledSectors = spawnSectors.Keys.ToList();
@@ -209,30 +209,30 @@ public sealed class DebrisGenerationSystem : EntitySystem
     /// <param name="bounds">bounding box</param>
     /// <param name="resultPos">resulting position</param>
     /// <returns></returns>
-    private bool TryPlaceInSector(Vector2 sectorPos, Box2 bounds, out Vector2 resultPos)
+    private bool TryPlaceInSector(Vector2i sectorPos, Box2i bounds, out Vector2i resultPos)
     {
         bool result = false;
-        resultPos = Vector2.NaN;
+        resultPos = Vector2i.Zero;
 
         HashSet<SectorRange> ranges = CutRanges(spawnSectors[sectorPos], sectorPos.X + spawnSectorSize - bounds.Width, sectorPos.Y + spawnSectorSize - bounds.Height);
         foreach (SectorRange range in ranges)
         {
-            foreach ((float start, float end) in range.XRanges)
+            foreach ((int start, int end) in range.XRanges)
             {
                 if (end - start >= bounds.Width)
                 {
                     if (range.Top - range.Bottom >= bounds.Height)
                     {
                         result = true;
-                        resultPos = new Vector2(Rand.NextFloat(start, end), Rand.NextFloat(range.Bottom, range.Top));
+                        resultPos = new Vector2i(Rand.Next(start, end), Rand.Next(range.Bottom, range.Top));
                         break;
                     }
-                    SectorRange combinedRange = CombineRangesVertically(ranges, start, end, range.Bottom, bounds.Width);
+                    SectorRange combinedRange = CombineRangesVertically(ranges, start, end, range.Bottom, range.Top, bounds.Width);
                     if (combinedRange.Top - combinedRange.Bottom >= bounds.Height) 
                     {
                         result = true;
-                        (float startc, float endc) = combinedRange.XRanges.First();
-                        resultPos = new Vector2(Rand.NextFloat(startc, endc), Rand.NextFloat(range.Bottom, range.Top));
+                        (int startc, int endc) = combinedRange.XRanges.First();
+                        resultPos = new Vector2i(Rand.Next(startc, endc), Rand.Next(range.Bottom, range.Top));
                         break;
                     }
                 }
@@ -245,33 +245,33 @@ public sealed class DebrisGenerationSystem : EntitySystem
         if (result)
         {
             spawnSectors[sectorPos] = AddRange(spawnSectors[sectorPos], 
-                CreateRange(Box2.FromDimensions(sectorPos, new Vector2(spawnSectorSize, spawnSectorSize)), 
-                    Box2.FromDimensions(resultPos, new Vector2(bounds.Width, bounds.Height))));
+                CreateRange(Box2i.FromDimensions(sectorPos, new Vector2i(spawnSectorSize, spawnSectorSize)), 
+                    Box2i.FromDimensions(resultPos, new Vector2i(bounds.Width, bounds.Height))));
             spawnSectorVolumes[sectorPos] += bounds.Height * bounds.Width;
         }
         return result;
     }
     
-    private SectorRange CreateRange(Box2 parent, Box2 child)
+    private SectorRange CreateRange(Box2i parent, Box2i child)
     {
-        List<(float, float)> xr = new() {(parent.Left, child.Left), (child.Right, parent.Right)};
+        List<(int, int)> xr = new() {(parent.Left, child.Left), (child.Right, (int)parent.Right)};
         return new SectorRange(child.Bottom, child.Top, xr);
     }
 
-    private HashSet<SectorRange> CutRanges(HashSet<SectorRange> ranges, float maxX, float maxY)
+    private HashSet<SectorRange> CutRanges(HashSet<SectorRange> ranges, int maxX, int maxY)
     {
         HashSet<SectorRange> rangesNew = new();
         foreach (SectorRange range in ranges)
         {
             SectorRange rangeN = range;
-            rangeN.XRanges.Clear();
-            
+            rangeN.XRanges = new List<(int, int)>();
+
             if (range.Bottom > maxY)
                 continue;
             if (range.Top > maxY)
                 rangeN.Top = maxY;
 
-            foreach ((float start, float end) in range.XRanges)
+            foreach ((int start, int end) in range.XRanges)
             {
                 if (start > maxX)
                     continue;
@@ -292,9 +292,6 @@ public sealed class DebrisGenerationSystem : EntitySystem
         {
             if (rangeOther.Bottom < range.Top && rangeOther.Top > range.Bottom) //height overlap
             {
-                if (XRangesOverlap(range.XRanges, rangeOther.XRanges))
-                    Logger.Error("Debris generation system, AddRange: Got both height & x-range overlap (COLLISION). Fix it pls.");
-
                 if (Math.Abs(rangeOther.Bottom - range.Bottom) <= 0.1 && Math.Abs(rangeOther.Top - range.Top) <= 0.1)
                 {
                     range.XRanges.Concat(rangeOther.XRanges);
@@ -314,28 +311,28 @@ public sealed class DebrisGenerationSystem : EntitySystem
 
     //Combines all ranges lying between endX & start X, and above/below height into a single range (with single X range)
     //with width above minWidth and combined height of included ranges
-    private SectorRange CombineRangesVertically(HashSet<SectorRange> ranges, float start, float end, float height, float minWidth)
+    private SectorRange CombineRangesVertically(HashSet<SectorRange> ranges, int start, int end, int height, int heightTop, int minWidth)
     {
-        (float, float) GetFreeRange(SectorRange range)
+        (int, int) GetFreeRange(SectorRange range)
         {
-            foreach ((float startn, float endn) in range.XRanges)
+            foreach ((int startn, int endn) in range.XRanges)
             {
                 if (startn < end && endn > start)
-                {
                     return (startn, endn);
-                }
             }
 
             return (0, 0);
         }
 
-        float bottom, top, startn, endn;
-        bottom = top = startn = endn = 0;
+        int top = heightTop;
+        int bottom = height;
+        int startn = start;
+        int endn = end;
 
         List<SectorRange> sorted = ranges.Where(r => r.Top < height).OrderBy(r => r.Top).ToList();
         foreach (SectorRange range in sorted)
         {
-            (float startf, float endf) = GetFreeRange(range);
+            (int startf, int endf) = GetFreeRange(range);
             if (endf - startf < minWidth)
                 break;
             bottom = range.Bottom;
@@ -346,23 +343,25 @@ public sealed class DebrisGenerationSystem : EntitySystem
         sorted = ranges.Where(r => r.Bottom > height).OrderByDescending(r => r.Top).ToList();
         foreach (SectorRange range in sorted)
         {
-            (float startf, float endf) = GetFreeRange(range);
+            (int startf, int endf) = GetFreeRange(range);
             if (endf - startf < minWidth)
                 break;
             top = range.Top;
-            start = startf > start ? startf : start;
+            startn = startf > startn ? startf : startn;
             endn = endf < endn ? endf : endn;
         }
 
-        return new SectorRange(bottom, top, new List<(float, float)>{(startn, endn)});
+        if (startn > endn)
+            Logger.Error("Debris generation, CombineRangesVertically: Combined range start is higher than end. Fix it pls.");
+        return new SectorRange(bottom, top, new List<(int, int)>{(startn, endn)});
     }
 
     //Returns true if at least one x-range overlaps another
-    private bool XRangesOverlap(List<(float, float)> ranges1, List<(float, float)> ranges2)
+    private bool XRangesOverlap(List<(int, int)> ranges1, List<(int, int)> ranges2)
     {
-        foreach ((float start1, float end1) in ranges1)
+        foreach ((int start1, int end1) in ranges1)
         {
-            foreach ((float start2, float end2) in ranges2)
+            foreach ((int start2, int end2) in ranges2)
             {
                 if (start1 < end2 && end1 > start2)
                     return true;
@@ -375,10 +374,10 @@ public sealed class DebrisGenerationSystem : EntitySystem
     //SectorRange represents single 'line' of sector space. It contains info about it's height (Bottom, Top) & free spaces on that height level (XRanges)
     private struct SectorRange
     {
-        public float Bottom, Top = 0;
-        public List<(float, float)> XRanges;
+        public int Bottom, Top;
+        public List<(int, int)> XRanges;
 
-        public SectorRange(float bottom, float top, List<(float, float)> xRanges)
+        public SectorRange(int bottom, int top, List<(int, int)> xRanges)
         {
             Bottom = bottom;
             Top = top;
