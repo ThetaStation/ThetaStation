@@ -387,7 +387,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
         List<(int, int)> results = new();
         foreach ((int start, int end) in ranges)
         {
-            (int, int) nextRange = ranges.Where(r => r.Item1 > end).OrderByDescending(r => r.Item1).FirstOrDefault();
+            (int, int) nextRange = ranges.Where(r => r.Item1 > end).OrderBy(r => r.Item1).FirstOrDefault();
             if (nextRange == default)
                 continue;
             results.Add((end, nextRange.Item1));
