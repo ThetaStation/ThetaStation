@@ -10,19 +10,13 @@
       prototypes: [ShipTestEventStandard]
     - type: UsePlayerNameForEntityName
     - type: ShipEventFactionMarker
-    - type: ShipEventFactionView
-      toggle:
-        icon: { sprite: "/Textures/Theta/ShipEvent/ShipTeamView.rsi", state: icon }
-        iconOn: "/Textures/Theta/ShipEvent/ShipTeamView.rsi"
-        name: shipevent-teamview-toggle-name
-        description: shipevent-teamview-toggle-desc
-        itemIconStyle: NoItem
-        event: !type:ToggleActionEvent
     - type: RadarHUD
     - type: UserInterface
       interfaces:
       - key: enum.TeamViewUiKey.Key
         type: TeamViewBoundUserInterface
+      - key: enum.CaptainMenuUiKey.Key
+        type: CaptainMenuBoundUserInterface
     - type: MobHUD
 
 - type: entity

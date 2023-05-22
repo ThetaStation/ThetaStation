@@ -73,7 +73,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
             var spawnPos = GenerateSpawnPosition(finalDistance);
             if (spawnPos == null)
             {
-                Logger.Error("Debris generation, GenerateDebris: Failed to find spawn position, deleting grid");
+                Logger.Warning("Debris generation, GenerateDebris: Failed to find spawn position, deleting grid");
                 EntityManager.DeleteEntity(grid);
                 continue;
             }

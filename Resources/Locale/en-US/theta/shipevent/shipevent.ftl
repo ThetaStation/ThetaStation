@@ -10,7 +10,7 @@ shipevent-announcement-title = NanoTrasen Fleet Command
 
 shipevent-eventannouncement = Station has plunged into chaos after NT began testing their light battle ships nearby
 
-shipevent-team-add = A new team '{ $teamname }' (ship name - '{ $shipname }') has entered the competition!
+shipevent-team-add = A new team '{ $teamname }' has entered the competition!
 shipevent-team-remove = The team '{ $teamname }' (ship name- '{ $shipname }') has withdrawn from the competition because of { $removereason }
 shipevent-team-respawn = The team '{ $teamname }' (ship name - '{ $shipname }') was temporarily withdrawn from the competition due to { $respawnreason }. Expected time before they return: { $respawntime } minute(s).
 shipevent-team-shiprename = The team '{ $teamname }' has changed their ship name from '{ $oldname }' to '{ $newname }'
