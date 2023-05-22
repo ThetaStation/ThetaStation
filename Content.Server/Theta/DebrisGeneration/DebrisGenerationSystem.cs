@@ -73,7 +73,9 @@ public sealed class DebrisGenerationSystem : EntitySystem
             var gridComp = EntMan.GetComponent<MapGridComponent>(grid);
             var gridForm = EntMan.GetComponent<TransformComponent>(grid);
             
-            var spawnPos = GenerateSpawnPosition((Box2i)gridComp.LocalAABB.Enlarged(structProt.MinDistance));
+            //multiplying by two since Enlarged() expands bounds only in one direction
+            var spawnPos = GenerateSpawnPosition((Box2i)gridComp.LocalAABB.Enlarged(structProt.MinDistance*2));
+            
             if (spawnPos == null)
             {
                 Logger.Error("Debris generation, GenerateDebris: Failed to find spawn position, deleting grid");
@@ -82,9 +84,9 @@ public sealed class DebrisGenerationSystem : EntitySystem
             }
 
             Vector2 pos = spawnPos.Value;
-            pos.X -= gridComp.LocalAABB.Left;
-            pos.Y -= gridComp.LocalAABB.Bottom;
-            
+            pos.X += structProt.MinDistance - gridComp.LocalAABB.Left;
+            pos.Y += structProt.MinDistance - gridComp.LocalAABB.Bottom;
+
             gridForm.Coordinates = new EntityCoordinates(gridForm.Coordinates.EntityId, pos);
             SpawnedGrids.Add(grid);
             foreach (var proc in structProt.Processors)
