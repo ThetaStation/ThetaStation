@@ -1,5 +1,7 @@
 using Content.Shared.Theta;
 using Robust.Client.Graphics;
+using Robust.Shared.GameObjects;
+using Robust.Shared.IoC;
 
 namespace Content.Client.Theta;
 
@@ -19,6 +21,6 @@ public sealed class DebugOverlaySystem : EntitySystem
     public void OnFinalGridStateMessage(FinalGridStateEvent ev)
     {
         overlay.FreeRects = ev.FreeRangeRects;
-        overlay.OccupiedRects = ev.OccupiedRangeRects;
+        overlay.SpawnPositions = ev.SpawnPositions;
     }
 }

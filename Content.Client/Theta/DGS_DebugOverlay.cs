@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using Robust.Client.Graphics;
 using Robust.Shared.Enums;
+using Robust.Shared.Maths;
 
 namespace Content.Client.Theta;
 
@@ -9,17 +11,19 @@ public sealed class DebugOverlay : Overlay
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
 
     public List<Box2i> FreeRects = new();
-    public List<Box2i> OccupiedRects = new();
+    public List<Vector2i> SpawnPositions = new();
 
     protected override void Draw(in OverlayDrawArgs args)
     {
         foreach(Box2i freeRect in FreeRects)
         {
-            DrawHatchedRect(freeRect, Color.Green, args.WorldHandle);
+            DrawCrossedRect(freeRect, Color.Green, args.WorldHandle);
         }
-        foreach(Box2i occupiedRect in OccupiedRects)
+        foreach (Vector2i spawnPos in SpawnPositions)
         {
-            DrawHatchedRect(occupiedRect, Color.Yellow, args.WorldHandle);
+            args.WorldHandle.DrawRect(new Box2(
+                new Vector2(spawnPos.X - 0.5f, spawnPos.Y - 0.5f), new Vector2(spawnPos.X + 0.5f, spawnPos.Y + 0.5f)), 
+                Color.Red);
         }
         for (int y = 0; y < 1000; y += 100)
         {
@@ -30,12 +34,10 @@ public sealed class DebugOverlay : Overlay
         }
     }
 
-    private void DrawHatchedRect(Box2i rect, Color color, DrawingHandleWorld handle)
+    private void DrawCrossedRect(Box2i rect, Color color, DrawingHandleWorld handle)
     {
         handle.DrawRect(rect, color, false);
-        for (int i = 0; i < rect.Width; i += 2)
-        {
-            handle.DrawLine(new Vector2i(rect.Left + i, rect.Bottom), new Vector2i(rect.Left + i, rect.Top), color);
-        }
+        handle.DrawLine(rect.BottomLeft, rect.TopRight, color);
+        handle.DrawLine(rect.TopLeft, rect.BottomRight, color);
     }
 }
