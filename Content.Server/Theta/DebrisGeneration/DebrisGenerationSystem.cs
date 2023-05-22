@@ -422,7 +422,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
 
             return r;
         }
-
+        
         List<(int, int)> newRanges = new(ranges1);
         foreach ((int, int) range2 in ranges2)
         {
@@ -446,7 +446,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
         }
     }
     
-    //REMOVE LATER
+    //REMOVE LATER 
     private void SendDebugOverlayInfo()
     {
         List<Box2i> freeRects = new();
