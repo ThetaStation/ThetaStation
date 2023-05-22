@@ -282,11 +282,6 @@ public sealed class DebrisGenerationSystem : EntitySystem
     //Subtracts range from existing ranges
     private HashSet<SectorRange> SubtractRange(HashSet<SectorRange> ranges, SectorRange range)
     {
-        if (range.Top - range.Bottom > 60)
-        {
-            Logger.Warning("Some sussy shit here");
-        }
-
         HashSet<SectorRange> rangesNew = new();
         foreach (SectorRange rangeOther in ranges)
         {
