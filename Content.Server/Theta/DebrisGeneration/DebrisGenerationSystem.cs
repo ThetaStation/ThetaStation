@@ -80,8 +80,12 @@ public sealed class DebrisGenerationSystem : EntitySystem
                 EntityManager.DeleteEntity(grid);
                 continue;
             }
+
+            Vector2 pos = spawnPos.Value;
+            pos.X -= gridComp.LocalAABB.Left;
+            pos.Y -= gridComp.LocalAABB.Bottom;
             
-            gridForm.Coordinates = new EntityCoordinates(gridForm.Coordinates.EntityId, spawnPos.Value);
+            gridForm.Coordinates = new EntityCoordinates(gridForm.Coordinates.EntityId, pos);
             SpawnedGrids.Add(grid);
             foreach (var proc in structProt.Processors)
             {
@@ -278,6 +282,11 @@ public sealed class DebrisGenerationSystem : EntitySystem
     //Subtracts range from existing ranges
     private HashSet<SectorRange> SubtractRange(HashSet<SectorRange> ranges, SectorRange range)
     {
+        if (range.Top - range.Bottom > 60)
+        {
+            Logger.Warning("Some sussy shit here");
+        }
+
         HashSet<SectorRange> rangesNew = new();
         foreach (SectorRange rangeOther in ranges)
         {
@@ -298,6 +307,10 @@ public sealed class DebrisGenerationSystem : EntitySystem
                 }
                 
                 rangesNew.Add(new SectorRange(overlapBottom, overlapTop, SubtractXRanges(rangeOther.XRanges, range.XRanges)));
+            }
+            else
+            {
+                rangesNew.Add(rangeOther);
             }
         }
 
