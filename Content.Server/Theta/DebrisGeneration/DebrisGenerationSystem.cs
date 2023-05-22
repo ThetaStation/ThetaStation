@@ -225,9 +225,6 @@ public sealed class DebrisGenerationSystem : EntitySystem
     {
         bool result = false;
         resultPos = Vector2i.Zero;
-        
-        int maxX = sectorPos.X + spawnSectorSize - bounds.Width;
-        int maxY = sectorPos.Y + spawnSectorSize - bounds.Height;
 
         foreach (SectorRange range in spawnSectors[sectorPos])
         {
@@ -235,10 +232,13 @@ public sealed class DebrisGenerationSystem : EntitySystem
             {
                 if (end - start >= bounds.Width)
                 {
+                    int maxX, maxY;
                     if (range.Top - range.Bottom >= bounds.Height)
                     {
                         result = true;
-                        resultPos = new Vector2i(Rand.Next(start, Math.Clamp(end, 0, maxX)), Rand.Next(range.Bottom, Math.Clamp(range.Top, 0, maxY)));
+                        maxX = end - bounds.Width;
+                        maxY = range.Top - bounds.Height;
+                        resultPos = new Vector2i(Rand.Next(start, maxX), Rand.Next(range.Bottom, maxY));
                         break;
                     }
                     SectorRange combinedRange = CombineRangesVertically(spawnSectors[sectorPos], start, end, range.Bottom, range.Top, bounds.Width);
@@ -246,9 +246,9 @@ public sealed class DebrisGenerationSystem : EntitySystem
                     {
                         result = true;
                         (int startc, int endc) = combinedRange.XRanges.First();
-
-                        resultPos = new Vector2i(Rand.Next(startc, Math.Clamp(endc, 0, maxX)), 
-                            Rand.Next(combinedRange.Bottom, Math.Clamp(combinedRange.Top, 0, maxY)));
+                        maxX = endc - bounds.Width;
+                        maxY = combinedRange.Top - bounds.Height;
+                        resultPos = new Vector2i(Rand.Next(startc, maxX), Rand.Next(combinedRange.Bottom, maxY));
                         break;
                     }
                 }
@@ -341,22 +341,26 @@ public sealed class DebrisGenerationSystem : EntitySystem
         foreach (SectorRange range in sorted)
         {
             (int startf, int endf) = GetFreeRange(range);
-            if (endf - startf < minWidth)
+            int startnn = startf > startn ? startf : startn;
+            int endnn = endf < endn ? endf : endn;
+            if (endnn - startnn < minWidth)
                 break;
             bottom = range.Bottom;
-            startn = startf > startn ? startf : startn;
-            endn = endf < endn ? endf : endn;
+            endn = endnn;
+            startn = startnn;
         }
         
         sorted = ranges.Where(r => r.Bottom > heightTop).OrderBy(r => r.Top).ToList();
         foreach (SectorRange range in sorted)
         {
             (int startf, int endf) = GetFreeRange(range);
-            if (endf - startf < minWidth)
+            int startnn = startf > startn ? startf : startn;
+            int endnn = endf < endn ? endf : endn;
+            if (endnn - startnn < minWidth)
                 break;
             top = range.Top;
-            startn = startf > startn ? startf : startn;
-            endn = endf < endn ? endf : endn;
+            endn = endnn;
+            startn = startnn;
         }
 
         if (startn > endn)
