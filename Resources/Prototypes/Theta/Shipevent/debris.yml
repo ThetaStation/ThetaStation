@@ -9,7 +9,7 @@
     floorId: FloorAsteroidSand
     wallPrototypeId: AsteroidRock
   spawnWeight: 0.5
-  minDistance: 5
+  minDistance: 1
   
 - type: structure
   id: asteroid_large
@@ -22,4 +22,4 @@
     floorId: FloorAsteroidSand
     wallPrototypeId: AsteroidRock
   spawnWeight: 0.5
-  minDistance: 15
+  minDistance: 1
