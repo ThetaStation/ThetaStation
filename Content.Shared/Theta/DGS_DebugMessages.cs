@@ -7,11 +7,11 @@ namespace Content.Shared.Theta;
 public sealed class FinalGridStateEvent : EntityEventArgs
 {
     public List<Box2i> FreeRangeRects;
-    public List<Box2i> OccupiedRangeRects;
+    public List<Vector2i> SpawnPositions;
 
-    public FinalGridStateEvent(List<Box2i> freeRangeRects, List<Box2i> occupiedRangeRects)
+    public FinalGridStateEvent(List<Box2i> freeRangeRects, List<Vector2i> spawnPositions)
     {
         FreeRangeRects = freeRangeRects;
-        OccupiedRangeRects = occupiedRangeRects;
+        SpawnPositions = spawnPositions;
     }
 }
