@@ -5,6 +5,7 @@
   minPlayers: 1
   stations:
     LobbyShipevent:
+      stationProto: NanotrasenCentralCommand
       mapNameTemplate: 'Lobby'
       overflowJobs:
         - PassengerGodmode
