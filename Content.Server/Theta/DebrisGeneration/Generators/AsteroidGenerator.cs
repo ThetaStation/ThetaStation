@@ -68,8 +68,13 @@ public sealed class AsteroidGenerator : Generator
         {
             for (int m = 0; m < 100; m++)
             {
-                Vector2i pos = new Vector2i(random.Next(0 + MinCircleRadius, Size - MinCircleRadius), 
-                    random.Next(0 + MinCircleRadius, Size - MinCircleRadius));
+                if (Size - MinCircleRadius <= MinCircleRadius)
+                {
+                    Logger.Warning("AsteroidGenerator: size of asteroid is too small, can't place minimum radius circle properly. Please check your prototypes.");
+                    return new HashSet<Vector2i>();
+                }
+                
+                Vector2i pos = new Vector2i(random.Next(MaxCircleRadius, Size - MaxCircleRadius), random.Next(MaxCircleRadius, Size - MaxCircleRadius));
 
                 int maxRadius = MaxCircleRadius;
                 if (pos.X + maxRadius > Size)

@@ -49,6 +49,7 @@
 - type: entity
   id: LightBulletRocket
   parent: BulletRocket
+  noSpawn: true
   components:
     - type: Explosive
       explosionType: Default

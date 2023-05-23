@@ -3,6 +3,7 @@ using Content.Server.Theta.DebrisGeneration;
 using Content.Server.Theta.DebrisGeneration.Generators;
 using Content.Server.Theta.DebrisGeneration.Processors;
 using Content.Server.Theta.DebrisGeneration.Prototypes;
+using Content.Shared.Theta.ShipEvent;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Server.Theta.ShipEvent.Systems;
 using Content.Shared.Shuttles.Components;
@@ -30,7 +31,7 @@ public sealed class ShipEventRuleComponent : Component
 
     [DataField("bonusInterval")] public int BonusInterval;
 
-    [DataField("playerPerTeamPlace")] public int PlayersPerTeamPlace;
+    [DataField("playersPerTeamPlace")] public int PlayersPerTeamPlace;
 
     [DataField("pointsPerInterval")] public int PointsPerInterval;
 
@@ -41,6 +42,8 @@ public sealed class ShipEventRuleComponent : Component
     [DataField("pointsPerKill")] public int PointsPerKill;
 
     [DataField("hudPrototypeId")] public string HUDPrototypeId = "";
+
+    [DataField("captainHudPrototypeId")] public string CaptainHUDPrototypeId = "";
 
     [DataField("shipTypes")] public List<string> ShipTypes = new();
 
@@ -79,12 +82,13 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         _shipSys.PointsPerKill = component.PointsPerKill;
 
         _shipSys.HUDPrototypeId = component.HUDPrototypeId;
+        _shipSys.CaptainHUDPrototypeId = component.CaptainHUDPrototypeId;
 
         _shipSys.MaxSpawnOffset = component.MaxSpawnOffset;
 
-        foreach (var shipType in component.ShipTypes)
+        foreach (var shipTypeProtId in component.ShipTypes)
         {
-            _shipSys.ShipTypes.Add(_protMan.Index<StructurePrototype>(shipType));
+            _shipSys.ShipTypes.Add(_protMan.Index<ShipTypePrototype>(shipTypeProtId));
         }
 
         List<StructurePrototype> obstacleStructProts = new();
@@ -107,7 +111,7 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         }
 
         AddComponentsProcessor iffInheritanceProc = new();
-        iffInheritanceProc.Components = new EntityPrototype.ComponentRegistry(
+        iffInheritanceProc.Components = new ComponentRegistry(
             new()
             {
                 {

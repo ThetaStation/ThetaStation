@@ -111,14 +111,12 @@ public sealed class TurretLoaderSystem : EntitySystem
     private void OnContainerInsert(EntityUid uid, TurretLoaderComponent loader, EntInsertedIntoContainerMessage args)
     {
         UpdateAmmoContainer(loader);
-        _appearanceSys.SetData(uid, TurretLoaderVisuals.Loaded, true);
         Dirty(loader);
     }
 
     private void OnContainerRemove(EntityUid uid, TurretLoaderComponent loader, EntRemovedFromContainerMessage args)
     {
         UpdateAmmoContainer(loader);
-        _appearanceSys.SetData(uid, TurretLoaderVisuals.Loaded, false);
         Dirty(loader);
     }
 

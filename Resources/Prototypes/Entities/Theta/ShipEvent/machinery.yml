@@ -123,9 +123,6 @@
       drawdepth: Objects
       sprite: Theta/ShipEvent/Structures/Machines/TurretLoader.rsi
       state: loader
-    - type: Appearance
-      visuals:
-      - type: TurretLoaderVisualizer
     - type: Physics
       bodyType: Static
     - type: Fixtures
