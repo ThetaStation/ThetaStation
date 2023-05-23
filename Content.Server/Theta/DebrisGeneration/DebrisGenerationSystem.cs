@@ -11,7 +11,7 @@ using Robust.Shared.Random;
 namespace Content.Server.Theta.DebrisGeneration;
 
 /// <summary>
-/// System providing modular, procedural generation of various stru
+/// System providing modular, procedural generation of various structures
 /// </summary>
 public sealed class DebrisGenerationSystem : EntitySystem
 {
@@ -73,8 +73,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
             var gridComp = EntMan.GetComponent<MapGridComponent>(grid);
             var gridForm = EntMan.GetComponent<TransformComponent>(grid);
             
-            //multiplying by two since Enlarged() expands bounds only in one direction
-            var spawnPos = GenerateSpawnPosition((Box2i)gridComp.LocalAABB.Enlarged(structProt.MinDistance*2));
+            var spawnPos = GenerateSpawnPosition((Box2i)gridComp.LocalAABB.Enlarged(structProt.MinDistance));
             
             if (spawnPos == null)
             {
@@ -170,7 +169,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
                     new SectorRange(sectorPos.Y, sectorPos.Y + spawnSectorSize, 
                         new List<(int, int)>{(sectorPos.X, sectorPos.X + spawnSectorSize)})
                 };
-                spawnSectorVolumes[sectorPos] = 0;
+                spawnSectorVolumes[sectorPos] = spawnSectorSize * spawnSectorSize;
             }
         }
     }
@@ -206,7 +205,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
         
         foreach(var randomSector in shuffledSectors)
         {
-            if (spawnSectorSize * spawnSectorSize - spawnSectorVolumes[randomSector] < volume)
+            if (spawnSectorVolumes[randomSector] < volume)
                 continue;
             var result = TryPlaceInSector(randomSector, bounds, out var spawnPos);
             if (result)
@@ -227,6 +226,8 @@ public sealed class DebrisGenerationSystem : EntitySystem
     {
         bool result = false;
         resultPos = Vector2i.Zero;
+        int lx, ly, hx, hy;
+        lx = ly = hx = hy = 0;
 
         foreach (SectorRange range in spawnSectors[sectorPos])
         {
@@ -234,43 +235,49 @@ public sealed class DebrisGenerationSystem : EntitySystem
             {
                 if (end - start >= bounds.Width)
                 {
-                    int maxX, maxY;
                     if (range.Top - range.Bottom >= bounds.Height)
                     {
                         result = true;
-                        maxX = end - bounds.Width;
-                        maxY = range.Top - bounds.Height;
-                        resultPos = new Vector2i(Rand.Next(start, maxX), Rand.Next(range.Bottom, maxY));
+                        lx = start;
+                        hx = end - bounds.Width;
+                        ly = range.Bottom;
+                        hy = range.Top - bounds.Height;
                         break;
                     }
                     SectorRange combinedRange = CombineRangesVertically(spawnSectors[sectorPos], start, end, range.Bottom, range.Top, bounds.Width);
+
                     if (combinedRange.Top - combinedRange.Bottom >= bounds.Height) 
                     {
                         result = true;
                         (int startc, int endc) = combinedRange.XRanges.First();
-                        maxX = endc - bounds.Width;
-                        maxY = combinedRange.Top - bounds.Height;
-                        resultPos = new Vector2i(Rand.Next(startc, maxX), Rand.Next(combinedRange.Bottom, maxY));
+
+                        lx = startc;
+                        hx = endc - bounds.Width;
+                        ly = combinedRange.Bottom;
+                        hy = combinedRange.Top - bounds.Height;
                         break;
                     }
                 }
             }
 
             if (result)
+            {
+                resultPos = new Vector2i(Rand.Next(lx, hx), Rand.Next(ly, hy));
                 break;
+            }
         }
 
         if (result)
         {
+            //REMOVE LATER
             chosenPositions.Add(resultPos);
+
             spawnSectors[sectorPos] = SubtractRange(spawnSectors[sectorPos],
                     RangeFromBox(
-                        Box2i.FromDimensions(resultPos, 
-                            new Vector2i(bounds.Width, bounds.Height)
-                            )
+                        Box2i.FromDimensions(resultPos, new Vector2i(bounds.Width, bounds.Height))
                         )
                     );
-            spawnSectorVolumes[sectorPos] += bounds.Height * bounds.Width;
+            spawnSectorVolumes[sectorPos] -= bounds.Height * bounds.Width;
         }
 
         return result;
@@ -287,7 +294,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
         HashSet<SectorRange> rangesNew = new();
         foreach (SectorRange rangeOther in ranges)
         {
-            if (rangeOther.Bottom < range.Top && rangeOther.Top > range.Bottom) //height overlap
+            if (!(rangeOther.Top < range.Bottom || rangeOther.Bottom > range.Top)) //height overlap
             {
                 int overlapBottom = rangeOther.Bottom;
                 int overlapTop = rangeOther.Top;
@@ -311,6 +318,12 @@ public sealed class DebrisGenerationSystem : EntitySystem
             }
         }
 
+        foreach (SectorRange nrange in rangesNew)
+        {
+            if (nrange.Top - nrange.Bottom == 0 || nrange.XRanges.Count == 0)
+                rangesNew.Remove(nrange);
+        }
+
         return rangesNew;
     }
 
@@ -318,51 +331,55 @@ public sealed class DebrisGenerationSystem : EntitySystem
     //with width above minWidth and combined height of included ranges
     private SectorRange CombineRangesVertically(HashSet<SectorRange> ranges, int start, int end, int heightBottom, int heightTop, int minWidth)
     {
-        (int, int) GetFreeRange(SectorRange range)
+        int startn, endn, bottomn, topn;
+        (startn, endn, bottomn, topn) = (start, end, heightBottom, heightTop);
+
+        SectorRange? GetNextFreeRange(bool above, int height)
         {
-            foreach ((int startn, int endn) in range.XRanges)
+            List<SectorRange> sranges = ranges.Where(x => above ? x.Bottom >= height : x.Top <= height).
+                OrderBy(x => above ? x.Top : x.Bottom).ToList();
+            if (!above)
+                sranges.Reverse();
+            
+            if (sranges.Count == 0)
+                return null;
+            SectorRange srange = sranges[0];
+            
+            if (Math.Abs((above ? srange.Bottom : srange.Top) - (above ? topn : bottomn)) > 1)
+                return null;
+
+            foreach ((int startf, int endf) in srange.XRanges)
             {
-                if (startn < end && endn > start)
-                    return (startn, endn);
+                int startnn = startf > startn ? startf : startn;
+                int endnn = endf < endn ? endf : endn;
+                if (endnn - startnn < minWidth)
+                    continue;
+                return new SectorRange(srange.Bottom, srange.Top, new List<(int, int)>{(startnn, endnn)});
             }
 
-            return (0, 0);
+            return null;
         }
 
-        int top = heightTop;
-        int bottom = heightBottom;
-        int startn = start;
-        int endn = end;
-
-        List<SectorRange> sorted = ranges.Where(r => r.Top < heightBottom).OrderByDescending(r => r.Top).ToList();
-        foreach (SectorRange range in sorted)
+        while (true)
         {
-            (int startf, int endf) = GetFreeRange(range);
-            int startnn = startf > startn ? startf : startn;
-            int endnn = endf < endn ? endf : endn;
-            if (endnn - startnn < minWidth)
+            SectorRange? r = GetNextFreeRange(false, bottomn);
+            if (r == null)
                 break;
-            bottom = range.Bottom;
-            endn = endnn;
-            startn = startnn;
-        }
-        
-        sorted = ranges.Where(r => r.Bottom > heightTop).OrderBy(r => r.Top).ToList();
-        foreach (SectorRange range in sorted)
-        {
-            (int startf, int endf) = GetFreeRange(range);
-            int startnn = startf > startn ? startf : startn;
-            int endnn = endf < endn ? endf : endn;
-            if (endnn - startnn < minWidth)
-                break;
-            top = range.Top;
-            endn = endnn;
-            startn = startnn;
+            bottomn = r.Value.Bottom;
+            (startn, endn) = r.Value.XRanges[0];
+            
         }
 
-        if (startn > endn)
-            Logger.Error("Debris generation, CombineRangesVertically: Combined range start is higher than end. Fix it pls.");
-        return new SectorRange(bottom, top, new List<(int, int)>{(startn, endn)});
+        while (true)
+        {
+            SectorRange? r = GetNextFreeRange(true, topn);
+            if (r == null)
+                break;
+            topn = r.Value.Top;
+            (startn, endn) = r.Value.XRanges[0];
+        }
+
+        return new SectorRange(bottomn, topn, new List<(int, int)> {(startn, endn)});
     }
 
     //Returns true if at least one x-range overlaps another
@@ -403,21 +420,17 @@ public sealed class DebrisGenerationSystem : EntitySystem
             List<(int, int)> r = new();
             foreach ((int start, int end) in ranges)
             {
-                bool stInBounds = false;
-                bool endInBounds = false;
-                if (start < range.Item1 && range.Item1 < end)
+                if(!(start > range.Item2 || end < range.Item1))
                 {
-                    stInBounds = true;
-                    r.Add((start, range.Item1));
+                    if (end > range.Item1 && range.Item1 > start)
+                        r.Add((start, range.Item1));
+                    if (end > range.Item2 && range.Item2 > start)
+                        r.Add((range.Item2, end));
                 }
-                if (start < range.Item2 && range.Item2 < end)
+                else
                 {
-                    endInBounds = true;
-                    r.Add((range.Item2, end));
-                }
-
-                if (!(stInBounds || endInBounds))
                     r.Add((start, end));
+                }
             }
 
             return r;
