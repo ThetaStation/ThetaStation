@@ -48,7 +48,7 @@ public sealed class ClientTurretLoaderSystem : EntitySystem
         if (!EntityManager.TryGetComponent(uid, out SpriteComponent? sprite)) 
             return;
 
-        bool loaded = loader.AmmoContainer != null && loader.ContainerSlot?.Item != null; //this may seem redundant, but ammo container is always updated correctly
+        bool loaded = loader.AmmoContainer != null && loader.ContainerSlot?.Item != null; //this may seem redundant, but ammo container isn't always updated correctly
         sprite.LayerSetState(0, loaded ? "loader-loaded" : "loader");
     }
 }
