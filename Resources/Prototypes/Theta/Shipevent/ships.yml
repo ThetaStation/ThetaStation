@@ -1,0 +1,13 @@
+- type: structure
+  id: shiptest_infiltrator
+  generator: !type:MapLoaderGenerator
+    mapPath: "/Maps/Shuttles/shiptest-infiltrator.yml"
+  spawnWeight: 0
+  minDistance: 10
+  
+- type: shiptype
+  id: shiptype_infiltator
+  name: "Infiltator"
+  description: "infiltator.yml but with cannons"
+  previewImage: /Textures/Theta/ShipEvent/ShipPreviews/infiltrator-preview.png
+  structurePrototype: "shiptest_infiltrator"

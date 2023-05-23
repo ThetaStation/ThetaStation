@@ -24,4 +24,14 @@ public sealed class DepartmentPrototype : IPrototype
     [ViewVariables(VVAccess.ReadWrite),
      DataField("roles", customTypeSerializer: typeof(PrototypeIdListSerializer<JobPrototype>))]
     public List<string> Roles = new();
+
+    public DepartmentPrototype(string id, string desc, Color color, List<string> roles)
+    {
+        ID = id;
+        Description = desc;
+        Color = color;
+        Roles = roles;
+    }
+    
+    public DepartmentPrototype(){}
 }

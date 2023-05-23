@@ -30,6 +30,7 @@ public sealed class ShuttleConsoleSystem : SharedShuttleConsoleSystem
     [Dependency] private readonly ShuttleSystem _shuttle = default!;
     [Dependency] private readonly TagSystem _tags = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private readonly RadarConsoleSystem _radarConsoleSystem = default!;
 
     public override void Initialize()
     {
@@ -40,6 +41,7 @@ public sealed class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         SubscribeLocalEvent<ShuttleConsoleComponent, AnchorStateChangedEvent>(OnConsoleAnchorChange);
         SubscribeLocalEvent<ShuttleConsoleComponent, ActivatableUIOpenAttemptEvent>(OnConsoleUIOpenAttempt);
         SubscribeLocalEvent<ShuttleConsoleComponent, ShuttleConsoleFTLRequestMessage>(OnDestinationMessage);
+        SubscribeLocalEvent<ShuttleConsoleComponent, ShuttleConsoleChangeShipNameMessage>(OnChangeShipName);
         SubscribeLocalEvent<ShuttleConsoleComponent, BoundUIClosedEvent>(OnConsoleUIClose);
 
         SubscribeLocalEvent<DockEvent>(OnDock);
@@ -60,6 +62,23 @@ public sealed class ShuttleConsoleSystem : SharedShuttleConsoleSystem
     private void OnFtlDestShutdown(EntityUid uid, FTLDestinationComponent component, ComponentShutdown args)
     {
         RefreshShuttleConsoles();
+    }
+
+    private void OnChangeShipName(EntityUid uid, ShuttleConsoleComponent component,
+        ShuttleConsoleChangeShipNameMessage args)
+    {
+        if (args.NewShipName == null)
+            return;
+        if (!TryComp<TransformComponent>(uid, out var xform))
+            return;
+        if (!TryComp<MetaDataComponent>(xform.GridUid, out var meta))
+            return;
+        meta.EntityName = args.NewShipName;
+        var shuttleComponent = EntityQueryEnumerator<ShuttleConsoleComponent>();
+        while (shuttleComponent.MoveNext(out var uidS, out var _))
+        {
+            UpdateState(uidS);
+        }
     }
 
     private void OnDestinationMessage(EntityUid uid, ShuttleConsoleComponent component, ShuttleConsoleFTLRequestMessage args)
@@ -165,13 +184,15 @@ public sealed class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         RemovePilot(user);
     }
 
-    private void OnConsoleUIOpenAttempt(EntityUid uid, ShuttleConsoleComponent component, ActivatableUIOpenAttemptEvent args)
+    private void OnConsoleUIOpenAttempt(EntityUid uid, ShuttleConsoleComponent component,
+        ActivatableUIOpenAttemptEvent args)
     {
         if (!TryPilot(args.User, uid))
             args.Cancel();
     }
 
-    private void OnConsoleAnchorChange(EntityUid uid, ShuttleConsoleComponent component, ref AnchorStateChangedEvent args)
+    private void OnConsoleAnchorChange(EntityUid uid, ShuttleConsoleComponent component,
+        ref AnchorStateChangedEvent args)
     {
         UpdateState(uid);
     }
@@ -315,6 +336,21 @@ public sealed class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         }
 
         docks ??= GetAllDocks();
+        List<MobInterfaceState> mobs;
+        List<ProjectilesInterfaceState> projectiles;
+        List<CannonInformationInterfaceState> cannons;
+        if (radar != null)
+        {
+            mobs = _radarConsoleSystem.GetMobsAround(radar);
+            projectiles = _radarConsoleSystem.GetProjectilesAround(radar);
+            cannons = _radarConsoleSystem.GetCannonInfosByMyGrid(radar);
+        }
+        else
+        {
+            mobs = new List<MobInterfaceState>();
+            projectiles = new List<ProjectilesInterfaceState>();
+            cannons = new List<CannonInformationInterfaceState>();
+        }
 
         _ui.GetUiOrNull(consoleUid, ShuttleConsoleUiKey.Key)
             ?.SetState(new ShuttleConsoleBoundInterfaceState(
@@ -324,7 +360,10 @@ public sealed class ShuttleConsoleSystem : SharedShuttleConsoleSystem
                 range,
                 consoleXform?.Coordinates,
                 consoleXform?.LocalRotation,
-                docks));
+                docks,
+                mobs,
+                projectiles,
+                cannons));
     }
 
     public override void Update(float frameTime)
@@ -349,7 +388,16 @@ public sealed class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         {
             RemovePilot(uid, comp);
         }
+
+        var shuttleComponent = EntityQueryEnumerator<ShuttleConsoleComponent>();
+        while (shuttleComponent.MoveNext(out var uid, out var _))
+        {
+            if(!_ui.IsUiOpen(uid, ShuttleConsoleUiKey.Key))
+                continue;
+            UpdateState(uid);
+        }
     }
+
 
     /// <summary>
     /// If pilot is moved then we'll stop them from piloting.
