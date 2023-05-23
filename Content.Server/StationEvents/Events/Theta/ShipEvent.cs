@@ -30,7 +30,7 @@ public sealed class ShipEventRuleComponent : Component
     [DataField("maxSpawnOffset")] public int MaxSpawnOffset;
 
     [DataField("bonusInterval")] public int BonusInterval;
-    
+
     [DataField("playersPerTeamPlace")] public int PlayersPerTeamPlace;
 
     [DataField("pointsPerInterval")] public int PointsPerInterval;
@@ -42,11 +42,11 @@ public sealed class ShipEventRuleComponent : Component
     [DataField("pointsPerKill")] public int PointsPerKill;
 
     [DataField("hudPrototypeId")] public string HUDPrototypeId = "";
-    
+
     [DataField("captainHudPrototypeId")] public string CaptainHUDPrototypeId = "";
-    
+
     [DataField("shipTypes")] public List<string> ShipTypes = new();
-    
+
     [DataField("obstacleTypes")] public List<string> ObstacleTypes = new();
 
     [DataField("obstacleAmountAmplitude")] public int ObstacleAmountAmplitude;
@@ -80,12 +80,12 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         _shipSys.PointsPerHitMultiplier = component.PointsPerHitMultiplier;
         _shipSys.PointsPerAssist = component.PointsPerAssist;
         _shipSys.PointsPerKill = component.PointsPerKill;
-        
+
         _shipSys.HUDPrototypeId = component.HUDPrototypeId;
         _shipSys.CaptainHUDPrototypeId = component.CaptainHUDPrototypeId;
 
         _shipSys.MaxSpawnOffset = component.MaxSpawnOffset;
-        
+
         foreach (var shipTypeProtId in component.ShipTypes)
         {
             _shipSys.ShipTypes.Add(_protMan.Index<ShipTypePrototype>(shipTypeProtId));
@@ -111,7 +111,7 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         }
 
         AddComponentsProcessor iffInheritanceProc = new();
-        iffInheritanceProc.Components = new EntityPrototype.ComponentRegistry(
+        iffInheritanceProc.Components = new ComponentRegistry(
             new()
             {
                 {

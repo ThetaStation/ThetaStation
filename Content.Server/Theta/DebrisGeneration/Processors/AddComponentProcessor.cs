@@ -14,8 +14,8 @@ public sealed class AddComponentsProcessor : Processor
 {
     [DataField("components", required: true)]
     [AlwaysPushInheritance]
-    public EntityPrototype.ComponentRegistry Components = new();
-    
+    public ComponentRegistry Components = new();
+
     public override void Process(DebrisGenerationSystem sys, MapId targetMap, EntityUid gridUid, bool isGlobal)
     {
         if (isGlobal)
@@ -30,7 +30,7 @@ public sealed class AddComponentsProcessor : Processor
             AddComponents(sys, gridUid);
         }
     }
-    
+
     public void AddComponents(DebrisGenerationSystem sys, EntityUid gridUid)
     {
         //todo: this is a copypaste from AddComponentSpecial, all concerns from here apply there too
