@@ -54,9 +54,3 @@ public sealed class TurretLoaderState : ComponentState
         ContainerID = loader.AmmoContainer?.ID;
     }
 }
-
-[Serializable, NetSerializable]
-public enum TurretLoaderVisuals
-{
-    Loaded
-}

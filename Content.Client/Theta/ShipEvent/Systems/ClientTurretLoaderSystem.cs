@@ -1,5 +1,6 @@
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Theta.ShipEvent.Components;
+using Robust.Client.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
 
@@ -14,6 +15,7 @@ public sealed class ClientTurretLoaderSystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<TurretLoaderComponent, ComponentHandleState>(SetLoaderState);
+        
     }
 
     private void SetLoaderState(EntityUid uid, TurretLoaderComponent loader, ref ComponentHandleState args)
@@ -42,5 +44,11 @@ public sealed class ClientTurretLoaderSystem : EntitySystem
             if (_contSys.TryGetContainer((EntityUid)ammoContainer, loaderState.ContainerID, out var cont))
                 loader.AmmoContainer = (Container)cont;
         }
+        
+        if (!EntityManager.TryGetComponent(uid, out SpriteComponent? sprite)) 
+            return;
+
+        bool loaded = loader.AmmoContainer != null && loader.ContainerSlot?.Item != null; //this may seem redundant, but ammo container is always updated correctly
+        sprite.LayerSetState(0, loaded ? "loader-loaded" : "loader");
     }
 }
