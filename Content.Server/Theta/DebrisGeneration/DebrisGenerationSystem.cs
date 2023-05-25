@@ -1,7 +1,5 @@
 using System.Linq;
 using Content.Server.Theta.DebrisGeneration.Prototypes;
-using Content.Shared.Follower;
-using Content.Shared.Theta;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -32,9 +30,6 @@ public sealed class DebrisGenerationSystem : EntitySystem
     private const int spawnSectorSize = 100;
     private Dictionary<Vector2i, HashSet<SectorRange>> spawnSectors = new(); //sector pos => free ranges in this sector
     private Dictionary<Vector2i, double> spawnSectorVolumes = new(); //sector pos => occupied volume in this sector
-    
-    //REMOVE LATER
-    private List<Vector2i> chosenPositions = new();
 
     /// <summary>
     /// Randomly places specified structures onto map
@@ -103,10 +98,6 @@ public sealed class DebrisGenerationSystem : EntitySystem
         TargetMap = MapId.Nullspace;
         Logger.Info($"Debris generation, GenerateDebris: Spawned {SpawnedGrids.Count} grids");
         SpawnedGrids.Clear();
-
-        //REMOVE LATER
-        SendDebugOverlayInfo();
-        //REMOVE LATER
 
         spawnSectors.Clear();
         spawnSectorVolumes.Clear();
@@ -269,9 +260,6 @@ public sealed class DebrisGenerationSystem : EntitySystem
 
         if (result)
         {
-            //REMOVE LATER
-            chosenPositions.Add(resultPos);
-
             spawnSectors[sectorPos] = SubtractRange(spawnSectors[sectorPos],
                     RangeFromBox(
                         Box2i.FromDimensions(resultPos, new Vector2i(bounds.Width, bounds.Height))
@@ -457,23 +445,6 @@ public sealed class DebrisGenerationSystem : EntitySystem
             Top = top;
             XRanges = xRanges;
         }
-    }
-    
-    //REMOVE LATER 
-    private void SendDebugOverlayInfo()
-    {
-        List<Box2i> freeRects = new();
-        foreach (HashSet<SectorRange> rangeSet in spawnSectors.Values)
-        {
-            foreach (SectorRange range in rangeSet)
-            {
-                foreach ((int start, int end) in range.XRanges)
-                {
-                    freeRects.Add(new Box2i(new Vector2i(start, range.Bottom), new Vector2i(end, range.Top)));
-                }
-            }
-        }
-        RaiseNetworkEvent(new FinalGridStateEvent(freeRects, chosenPositions));
     }
 }
 
