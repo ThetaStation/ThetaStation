@@ -100,5 +100,5 @@
   
 - type: sinkPort
   id: CannonConsoleReceiver
-  name: "-"
-  description: "-"
+  name: "Cannon console receiver"
+  description: "Cannon console receiver"

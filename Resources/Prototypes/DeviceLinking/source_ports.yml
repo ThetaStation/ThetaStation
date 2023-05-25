@@ -85,10 +85,10 @@
   
 - type: sourcePort
   id: CannonConsoleSender
-  name: shipevent-cannonconsole-signalport-name
-  description: shipevent-cannonconsole-signalport-desc
+  name: "Cannon console"
+  description: "Cannon console"
 
 - type: sourcePort
   id: TurretLoaderSender
-  name: shipevent-turretloader-signalport-name
-  description: shipevent-turretloader-signalport-desc
+  name: "Turret loader"
+  description: "Turret loader"

@@ -1,8 +1,8 @@
 using System.Linq;
-using Content.Server.MachineLinking.Components;
 using Content.Server.Mind.Components;
 using Content.Server.Theta.ShipEvent.Console;
 using Content.Server.UserInterface;
+using Content.Shared.DeviceLinking;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Projectiles;
@@ -16,11 +16,15 @@ using Robust.Shared.Map;
 
 namespace Content.Server.Shuttles.Systems;
 
+//everything related to cannons should be moved out of here, but this will require rewriting big parts of cannon code, which I don't want to do currently
+//todo: do something about this
 public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 {
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
     [Dependency] private readonly TransformSystem _transformSystem = default!;
     [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
+
+    private const string OutputPortName = "CannonConsoleSender";
 
     public override void Initialize()
     {
@@ -97,7 +101,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 
         var myGrid = Transform(component.Owner).GridUid;
         var isCannonConsole = HasComp<CannonConsoleComponent>(component.Owner);
-
+        
         var controlledCannons = GetControlledCannons(component.Owner);
 
         foreach (var (cannon, transform) in EntityQuery<CannonComponent, TransformComponent>())
@@ -136,21 +140,17 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 
         return list;
     }
-
+    
     private List<EntityUid>? GetControlledCannons(EntityUid uid)
     {
-        List<EntityUid>? controlledCannons = null;
-        var hasSignalTransmitter = TryComp<SignalTransmitterComponent>(uid, out var signalTransmitter);
-        if (!hasSignalTransmitter || signalTransmitter == null)
-            return controlledCannons;
-
-        controlledCannons = new List<EntityUid>();
-        foreach (var (_, cannons) in signalTransmitter.Outputs)
+        if (TryComp<DeviceLinkSourceComponent>(uid, out var linkSource))
         {
-            controlledCannons.AddRange(cannons.Select(i => i.Uid));
+            //we should store info about controlled cannons in the console component itself, not use this
+            if(linkSource.Outputs.Keys.Contains(OutputPortName)) //using Keys.Contains() instead of ContainsKeys() because of retarded access restrictions
+                return linkSource.Outputs[OutputPortName].ToList();
         }
 
-        return controlledCannons;
+        return null;
     }
 
     protected override void UpdateState(RadarConsoleComponent component)
