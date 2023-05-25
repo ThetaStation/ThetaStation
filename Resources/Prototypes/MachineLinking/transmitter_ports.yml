@@ -69,17 +69,6 @@
   defaultLinks: [ ArtifactAnalyzerReceiver ]
 
 - type: transmitterPort
-  id: CannonConsoleSender
-  name: shipevent-cannonconsole-signalport-name
-  description: shipevent-cannonconsole-signalport-desc
-  defaultLinks: [ CannonConsoleReceiver ]
-  
-- type: transmitterPort
-  id: TurretLoaderSender
-  name: shipevent-turretloader-signalport-name
-  description: shipevent-turretloader-signalport-desc
-
-- type: transmitterPort
   id: DoorStatus
   name: "Door Status"
   description: "HIGH when door is open, LOW when door is closed."

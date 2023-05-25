@@ -4,9 +4,6 @@
   parent: BaseComputer
   components:
     - type: CannonConsole
-    - type: SignalTransmitter
-      outputs:
-        CannonConsoleSender: []
     - type: ActivatableUI
       key: enum.CannonConsoleUiKey.Key
     - type: UserInterface
@@ -30,6 +27,13 @@
           state: comm_syndie
         - map: ["computerLayerKeys"]
           state: syndie_key
+    - type: DeviceNetwork
+      deviceNetId: Wireless
+    - type: WirelessNetworkConnection
+      range: 200
+    - type: DeviceLinkSource
+      ports:
+      - CannonConsoleSender
 
 - type: entity
   parent: ComputerShuttleSyndie
@@ -123,6 +127,7 @@
       drawdepth: Objects
       sprite: Theta/ShipEvent/Structures/Machines/TurretLoader.rsi
       state: loader
+    - type: InteractionOutline
     - type: Physics
       bodyType: Static
     - type: Fixtures
@@ -176,6 +181,10 @@
       containers:
         ammoContainer: !type:ContainerSlot { }
     - type: TurretLoader
-    - type: SignalTransmitter
-      outputs:
-        TurretLoaderSender: [ ]
+    - type: DeviceNetwork
+      deviceNetId: Wireless
+    - type: WirelessNetworkConnection
+      range: 200
+    - type: DeviceLinkSource
+      ports:
+      - TurretLoaderSender
