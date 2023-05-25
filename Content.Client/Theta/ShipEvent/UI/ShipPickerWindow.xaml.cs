@@ -24,6 +24,8 @@ public sealed partial class ShipPickerWindow : DefaultWindow
 
     public void UpdateState(ShipPickerBoundUserInterfaceState state)
     {
+        ShipOptionsContainer.Children.Clear();
+        
         foreach (var shipType in state.ShipTypes)
         {
             var shipTypeEntry = new BoxContainer();
