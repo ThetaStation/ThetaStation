@@ -128,7 +128,7 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         List<Processor> globalProcessors = new() { iffInheritanceProc, iffFlagProc };
 
         _debrisSys.SpawnStructures(map,
-            Vector2.Zero,
+            Vector2i.Zero,
             component.InitialObstacleAmount + _rand.Next(-component.ObstacleAmountAmplitude, component.ObstacleAmountAmplitude),
             component.MaxSpawnOffset,
             obstacleStructProts,

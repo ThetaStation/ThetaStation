@@ -15,7 +15,7 @@ public sealed class StructurePrototype : IPrototype
     public float SpawnWeight;
 
     /// <summary>
-    /// Minimal distance between this structure and other spawned ones. Set this to 0 if you only want to take minimum collision distance into account
+    /// Minimal distance between this structure and other spawned ones. Set this to 0 if you only want to take collision distance into account
     /// </summary>
     [DataField("minDistance", required: true)]
     public int MinDistance;

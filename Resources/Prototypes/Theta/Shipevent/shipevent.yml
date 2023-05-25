@@ -38,5 +38,5 @@
         - "asteroid_large"
     
       #randomisation
-      obstacleAmountAmplitude: 50
-      obstacleSizeAmplitude: 7
+      obstacleAmountAmplitude: 0
+      obstacleSizeAmplitude: 0
