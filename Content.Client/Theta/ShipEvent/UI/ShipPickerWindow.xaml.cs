@@ -11,10 +11,6 @@ namespace Content.Client.Theta.ShipEvent.UI;
 [GenerateTypedNameReferences]
 public sealed partial class ShipPickerWindow : DefaultWindow
 {
-    public event Action<EventArgs>? InfoRequest;
-
-    private List<BoxContainer> shipTypeEntries = new();
-
     public ShipTypePrototype? Selection;
     
     public ShipPickerWindow()
@@ -24,6 +20,8 @@ public sealed partial class ShipPickerWindow : DefaultWindow
 
     public void UpdateState(ShipPickerBoundUserInterfaceState state)
     {
+        ShipOptionsContainer.Children.Clear();
+
         foreach (var shipType in state.ShipTypes)
         {
             var shipTypeEntry = new BoxContainer();
@@ -61,7 +59,6 @@ public sealed partial class ShipPickerWindow : DefaultWindow
             shipTypeEntry.AddChild(shipTypeEntryInfoHolder);
             shipTypeEntry.AddChild(selectionButton);
             
-            shipTypeEntries.Add(shipTypeEntry);
             ShipOptionsContainer.AddChild(shipTypeEntry);
         }
     }
