@@ -38,24 +38,10 @@ public sealed class TurretLoaderSystem : EntitySystem
         args.State = new TurretLoaderState(loader);
     }
 
-    private EntityUid GetLinkedTurret(EntityUid uid, TurretLoaderComponent loader)
+    public void SetupLoader(EntityUid uid, TurretLoaderComponent loader, EntityUid? turretUid = null)
     {
-        if (EntityManager.TryGetComponent<SignalTransmitterComponent>(uid, out var sig))
-        {
-            if (sig.Outputs.ContainsKey("TurretLoaderSender"))
-            {
-                if (sig.Outputs["TurretLoaderSender"].Count > 0)
-                    return sig.Outputs["TurretLoaderSender"][0].Uid;
-            }
-        }
-
-        return EntityUid.Invalid;
-    }
-
-    public void SetupLoader(EntityUid uid, TurretLoaderComponent loader)
-    {
-        if (!loader.BoundTurret.IsValid())
-            loader.BoundTurret = GetLinkedTurret(uid, loader);
+        if (!loader.BoundTurret.IsValid() && turretUid != null)
+            loader.BoundTurret = turretUid.Value;
 
         if (EntityManager.TryGetComponent<ItemSlotsComponent>(uid, out var slots))
         {
@@ -130,7 +116,7 @@ public sealed class TurretLoaderSystem : EntitySystem
 
     private void OnLink(EntityUid uid, TurretLoaderComponent loader, NewLinkEvent args)
     {
-        SetupLoader(uid, loader);
+        SetupLoader(uid, loader, args.Sink);
     }
 
     /// <summary>

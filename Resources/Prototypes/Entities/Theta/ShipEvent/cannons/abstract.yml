@@ -17,6 +17,7 @@
     drawdepth: WallMountedItems
     layers:
       - state: syndie_broken
+  - type: InteractionOutline
   - type: InteractionPopup
     interactDelay: 0.2
     successChance: 0.8
@@ -26,6 +27,10 @@
       path: /Audio/Effects/double_beep.ogg
   - type: Damageable
     damageContainer: Inorganic
-  - type: SignalReceiver
-    inputs:
-      CannonConsoleReceiver: [ ]
+  - type: DeviceNetwork
+    deviceNetId: Wireless
+  - type: WirelessNetworkConnection
+    range: 200
+  - type: DeviceLinkSink
+    ports:
+    - CannonConsoleReceiver

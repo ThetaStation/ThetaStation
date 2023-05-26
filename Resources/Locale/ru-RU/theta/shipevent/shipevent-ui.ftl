@@ -85,12 +85,7 @@ shipevent-turretloader-turret = Турель:
 shipevent-turretloader-ejectcontainerbutton = ИЗВЛЕЧЬ КОНТЕЙНЕР
 shipevent-turretloader-refreshbutton = ОБНОВИТЬ UI
 
-shipevent-turretloader-signalport-name = Зарядник орудий
-shipevent-turretloader-signalport-desc = Используется для связки зарядника с турелями. Не несёт данных.
-
 
 ## Cannon console
 
 shipevent-cannonconsole-ammostatus = Боезапас
-shipevent-cannonconsole-signalport-name = Консоль управления орудиями
-shipevent-cannonconsole-signalport-desc = Используется для отправки управляющих сигналов к турелям.

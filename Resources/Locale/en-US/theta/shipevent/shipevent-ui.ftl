@@ -85,12 +85,7 @@ shipevent-turretloader-turret = Turret:
 shipevent-turretloader-ejectcontainerbutton = EJECT CONTAINER
 shipevent-turretloader-refreshbutton = REFRESH UI
 
-shipevent-turretloader-signalport-name = Weapon loader
-shipevent-turretloader-signalport-desc = Used for binding weapon loader & turrets, does not carry any data.
-
 
 ## Cannon console
 
 shipevent-cannonconsole-ammostatus = Ammo
-shipevent-cannonconsole-signalport-name = Weapon control console
-shipevent-cannonconsole-signalport-desc = Used for communication with turrets.

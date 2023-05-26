@@ -97,3 +97,8 @@
   id: B2
   name: "Input B2"
   description: "Input B2"
+  
+- type: sinkPort
+  id: CannonConsoleReceiver
+  name: "Cannon console receiver"
+  description: "Cannon console receiver"
