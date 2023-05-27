@@ -8,6 +8,7 @@ using Content.Shared.Theta.ShipEvent.UI;
 using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
 using Content.Shared.Throwing;
+using Content.Shared.Weapons.Ranged.Components;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
@@ -63,12 +64,19 @@ public sealed class TurretLoaderSystem : EntitySystem
 
     private void UpdateAmmoContainer(TurretLoaderComponent loader)
     {
+        ContainerAmmoProviderComponent? turretContainer = null;
+        if (loader.BoundTurret.IsValid())
+        {
+            turretContainer = EntityManager.EnsureComponent<ContainerAmmoProviderComponent>(loader.BoundTurret);
+            turretContainer.ProviderUid = null;
+            turretContainer.Container = "";
+        }
+
         loader.AmmoContainer = null;
         loader.MaxContainerCapacity = 0;
         loader.CurrentContainerCapacity = 0;
 
         var container = loader.ContainerSlot?.Item;
-
         if (EntityManager.TryGetComponent<ServerStorageComponent>(container, out var storage))
         {
             if (storage.Storage != null)
@@ -76,8 +84,18 @@ public sealed class TurretLoaderSystem : EntitySystem
                 loader.AmmoContainer = storage.Storage;
                 loader.MaxContainerCapacity = storage.StorageCapacityMax;
                 loader.CurrentContainerCapacity = storage.StorageUsed;
+
+                if (turretContainer != null)
+                {
+                    turretContainer.ProviderUid = container;
+                    turretContainer.Container = storage.Storage.ID;
+                }
             }
         }
+        
+        Dirty(loader);
+        if(turretContainer != null)
+            Dirty(turretContainer);
     }
 
     private void OnInit(EntityUid uid, TurretLoaderComponent loader, ComponentInit args)
@@ -97,13 +115,11 @@ public sealed class TurretLoaderSystem : EntitySystem
     private void OnContainerInsert(EntityUid uid, TurretLoaderComponent loader, EntInsertedIntoContainerMessage args)
     {
         UpdateAmmoContainer(loader);
-        Dirty(loader);
     }
 
     private void OnContainerRemove(EntityUid uid, TurretLoaderComponent loader, EntRemovedFromContainerMessage args)
     {
         UpdateAmmoContainer(loader);
-        Dirty(loader);
     }
 
     private void OnEject(EntityUid uid, TurretLoaderComponent loader, TurretLoaderEjectRequest args)

@@ -1,0 +1,148 @@
+#37mm round
+- type: entity
+  id: BulletArtilleryLight
+  name: bullet (37mm)
+  parent: BaseBullet
+  noSpawn: true
+  components:
+  - type: Item
+    size: 1
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 200
+  - type: Sprite
+    sprite: /Textures/Theta/ShipEvent/Objects/AmmoArtillery.rsi
+    layers:
+    - state: bullet
+
+- type: entity
+  id: CartridgeArtilleryLight
+  name: 37mm cartridge
+  parent: BaseCartridge
+  components:
+  - type: Item
+    size: 2
+  - type: Tag
+    tags:
+    - Cartridge
+  - type: CartridgeAmmo
+    proto: BulletArtilleryLight
+    deleteOnSpawn: true
+  - type: Sprite
+    netsync: false
+    sprite: /Textures/Theta/ShipEvent/Objects/AmmoArtillery.rsi
+    layers:
+    - state: cartridge
+  - type: StaticPrice
+    price: 20
+
+#100mm round
+- type: entity
+  id: BulletArtilleryHeavy
+  name: bullet (100mm)
+  parent: BaseBulletTrigger
+  noSpawn: true
+  components:
+  - type: Item
+    size: 5
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 200
+  - type: Sprite
+    sprite: /Textures/Theta/ShipEvent/Objects/AmmoArtillery.rsi
+    layers:
+    - state: bullet
+  - type: ExplodeOnTrigger
+  - type: Explosive
+    explosionType: Default
+    maxIntensity: 20
+    intensitySlope: 5
+    totalIntensity: 100
+
+- type: entity
+  id: CartridgeArtilleryHeavy
+  name: 100mm cartridge
+  parent: CartridgeArtilleryLight
+  components:
+  - type: CartridgeAmmo
+    proto: BulletArtilleryHeavy
+    deleteOnSpawn: true
+  - type: StaticPrice
+    price: 70
+    
+#ammo containers
+- type: entity
+  id: TurretAmmoContainerMachineGunFilled
+  name: .30 ammo container
+  parent: TurretAmmoContainerRegular
+  components:
+    - type: StorageFill
+      contents:
+        - id: CartridgeLightRifle
+          amount: 100
+          
+- type: entity
+  id: TurretAmmoContainerLightArtilleryFilled
+  name: 37mm ammo container
+  parent: TurretAmmoContainerRegular
+  components:
+    - type: StorageFill
+      contents:
+        - id: CartridgeArtilleryLight
+          amount: 50
+          
+- type: entity
+  id: TurretAmmoContainerHeavyArtilleryFilled
+  name: 100mm ammo container
+  parent: TurretAmmoContainerRegular
+  components:
+    - type: StorageFill
+      contents:
+        - id: CartridgeArtilleryHeavy
+          amount: 20
+    
+#closets
+- type: entity
+  id: ShipEventCloset
+  name: closet
+  parent: ClosetBase
+  suffix: SHIPEVENT
+  components:
+    - type: Appearance
+      visuals:
+        - type: StorageVisualizer
+          state: bomb
+          state_open: bomb_open
+          state_closed: bomb_door
+          
+- type: entity
+  id: MachineGunAmmoClosetShipEvent
+  name: .30 Ammo Closet
+  parent: ShipEventCloset
+  components:
+    - type: StorageFill
+      contents:
+        - id: TurretAmmoContainerMachineGunFilled
+          amount: 10
+          
+- type: entity
+  id: LightArtilleryAmmoClosetShipEvent
+  name: 37mm Ammo Closet
+  parent: ShipEventCloset
+  components:
+    - type: StorageFill
+      contents:
+        - id: TurretAmmoContainerLightArtilleryFilled
+          amount: 10
+          
+- type: entity
+  id: HeavyArtilleryAmmoClosetShipEvent
+  name: 100mm Ammo Closet
+  parent: ShipEventCloset
+  components:
+    - type: StorageFill
+      contents:
+        - id: TurretAmmoContainerHeavyArtilleryFilled
+          amount: 10
