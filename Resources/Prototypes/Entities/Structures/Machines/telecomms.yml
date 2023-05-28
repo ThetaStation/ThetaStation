@@ -48,7 +48,6 @@
         acts: ["Destruction"]
   - type: Machine
     board: TelecomServerCircuitboard
-  - type: WiresPanel
   - type: Wires
     BoardName: "TelecomServer"
     LayoutId: TelecomServer

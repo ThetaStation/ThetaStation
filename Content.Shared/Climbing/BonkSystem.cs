@@ -7,7 +7,6 @@ using Content.Shared.DragDrop;
 using Robust.Shared.Configuration;
 using Content.Shared.Popups;
 using Content.Shared.IdentityManagement;
-using Content.Shared.Interaction.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Serialization;
 
@@ -73,7 +72,7 @@ public sealed class BonkSystem : EntitySystem
 
     private void OnDragDrop(EntityUid uid, BonkableComponent component, ref DragDropTargetEvent args)
     {
-        if (args.Handled || !HasComp<ClumsyComponent>(args.Dragged))
+        if (args.Handled)
             return;
 
         var doAfterArgs = new DoAfterArgs(args.Dragged, component.BonkDelay, new BonkDoAfterEvent(), uid, target: uid)

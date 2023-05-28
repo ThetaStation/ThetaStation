@@ -90,7 +90,6 @@
     supplyRampTolerance: 1000
     supplyRampRate: 500
   - type: WallMount
-  - type: WiresPanel
   - type: Wires
     BoardName: "APC"
     LayoutId: APC

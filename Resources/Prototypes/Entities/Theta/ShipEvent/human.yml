@@ -25,9 +25,9 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitOperative
     back: ClothingBackpackDuffelSyndicateOperative
-    shoes: ClothingShoesBootsMagAdvOn
+    shoes: ClothingShoesBootsMagAdv
     mask: ClothingMaskGasSyndicate
-    head: ClothingHeadHelmetHardsuitSyndie
+    # eyes: Night Vision Goggles whenever they're made
     eyes: ClothingEyesGlassesMeson
     ears: ClothingHeadsetAltSyndicate
     gloves: ClothingHandsGlovesCombat

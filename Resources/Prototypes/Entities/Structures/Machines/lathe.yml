@@ -51,7 +51,6 @@
         - Sheet
         - RawMaterial
         - Ingot
-  - type: WiresPanel
   - type: Wires
     BoardName: "Autolathe"
     LayoutId: Autolathe
@@ -159,7 +158,6 @@
         acts: ["Destruction"]
   - type: Machine
     board: ProtolatheMachineCircuitboard
-  - type: WiresPanel
   - type: Wires
     BoardName: "Protolathe"
     LayoutId: Protolathe
@@ -310,7 +308,6 @@
       - StasisBedMachineCircuitboard
       - MaterialReclaimerMachineCircuitboard
       - OreProcessorMachineCircuitboard
-      - CargoTelepadMachineCircuitboard
       - RipleyCentralElectronics
       - RipleyPeripheralsElectronics
       - HonkerCentralElectronics

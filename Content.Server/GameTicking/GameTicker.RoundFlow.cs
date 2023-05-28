@@ -526,18 +526,19 @@ namespace Content.Server.GameTicking
         {
             if (Preset == null) return;
 
-            var options = _prototypeManager.EnumeratePrototypes<RoundAnnouncementPrototype>().ToList();
+            foreach (var proto in _prototypeManager.EnumeratePrototypes<RoundAnnouncementPrototype>())
+            {
+                if (!proto.GamePresets.Contains(Preset.ID)) continue;
 
-            if (options.Count == 0)
-                return;
+                if (proto.Message != null)
+                    _chatSystem.DispatchGlobalAnnouncement(Loc.GetString(proto.Message), playSound: true);
 
-            var proto = _robustRandom.Pick(options);
+                if (proto.Sound != null)
+                    SoundSystem.Play(proto.Sound.GetSound(), Filter.Broadcast());
 
-            if (proto.Message != null)
-                _chatSystem.DispatchGlobalAnnouncement(Loc.GetString(proto.Message), playSound: true);
-
-            if (proto.Sound != null)
-                SoundSystem.Play(proto.Sound.GetSound(), Filter.Broadcast());
+                // Only play one because A
+                break;
+            }
         }
     }
 

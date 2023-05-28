@@ -60,7 +60,6 @@
           True: { visible: true }
           False: { visible: false }
   # Machine / Construction stuff
-  - type: WiresPanel
   - type: Wires
     BoardName: "chem_master"
     LayoutId: chem_master

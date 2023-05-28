@@ -237,7 +237,10 @@ public sealed class WiresSystem : SharedWiresSystem
 
     private void OnWiresStartup(EntityUid uid, WiresComponent component, ComponentStartup args)
     {
-        EnsureComp<WiresPanelComponent>(uid);
+        if (!String.IsNullOrEmpty(component.LayoutId))
+            SetOrCreateWireLayout(uid, component);
+
+        UpdateUserInterface(uid);
     }
     #endregion
 
@@ -495,16 +498,17 @@ public sealed class WiresSystem : SharedWiresSystem
 
     private void OnMapInit(EntityUid uid, WiresComponent component, MapInitEvent args)
     {
-        if (!string.IsNullOrEmpty(component.LayoutId))
-            SetOrCreateWireLayout(uid, component);
-
+        EnsureComp<WiresPanelComponent>(uid);
         if (component.SerialNumber == null)
+        {
             GenerateSerialNumber(uid, component);
+        }
 
         if (component.WireSeed == 0)
+        {
             component.WireSeed = _random.Next(1, int.MaxValue);
-
-        UpdateUserInterface(uid);
+            UpdateUserInterface(uid);
+        }
     }
     #endregion
 

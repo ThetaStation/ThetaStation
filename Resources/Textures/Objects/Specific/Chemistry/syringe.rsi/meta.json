@@ -35,6 +35,12 @@
 			"name": "syringe2"
 		},
 		{
+			"name": "syringe3"
+		},
+		{
+			"name": "syringe4"
+		},
+		{
       "name": "0-inhand-left",
       "directions": 4
     },

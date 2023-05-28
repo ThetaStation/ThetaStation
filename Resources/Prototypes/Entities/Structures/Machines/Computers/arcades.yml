@@ -35,7 +35,6 @@
   components:
   - type: SpaceVillainArcade
     rewardAmount: 0
-  - type: WiresPanel
   - type: Wires
     LayoutId: Arcade
     BoardName: "Arcade"
@@ -77,7 +76,6 @@
   - type: ActivatableUI
     key: enum.BlockGameUiKey.Key
   - type: ActivatableUIRequiresPower
-  - type: WiresPanel
   - type: Wires
     LayoutId: Arcade
     BoardName: "Arcade"

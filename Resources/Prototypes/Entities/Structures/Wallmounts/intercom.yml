@@ -30,7 +30,6 @@
   - type: Transform
     noRot: false
     anchored: true
-  - type: WiresPanel
   - type: Wires
     BoardName: "Intercom"
     LayoutId: Intercom

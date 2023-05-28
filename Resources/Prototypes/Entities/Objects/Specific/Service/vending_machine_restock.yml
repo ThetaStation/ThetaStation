@@ -103,7 +103,6 @@
     - SciDrobeInventory
     - SecDrobeInventory
     - ViroDrobeInventory
-    - WinterDrobeInventory
   - type: Sprite
     layers:
     - state: base

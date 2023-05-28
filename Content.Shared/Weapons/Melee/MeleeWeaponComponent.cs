@@ -53,7 +53,6 @@ public sealed class MeleeWeaponComponent : Component
     /// </summary>
     [ViewVariables(VVAccess.ReadWrite)]
     public bool Attacking = false;
-	
 
     /// <summary>
     /// When did we start a heavy attack.

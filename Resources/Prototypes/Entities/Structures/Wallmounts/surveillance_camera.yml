@@ -20,7 +20,6 @@
   - type: DeviceNetworkRequiresPower
   - type: Transform
     anchored: true
-  - type: WiresPanel
   - type: Wires
     alwaysRandomize: true
     LayoutId: SurveillanceCamera

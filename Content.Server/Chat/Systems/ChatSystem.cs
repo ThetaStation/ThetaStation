@@ -102,14 +102,14 @@ public sealed partial class ChatSystem : SharedChatSystem
 
     private void OnGameChange(GameRunLevelChangedEvent ev)
     {
-        switch (ev.New)
+        switch(ev.New)
         {
             case GameRunLevel.InRound:
-                if (!_configurationManager.GetCVar(CCVars.OocEnableDuringRound))
+                if(!_configurationManager.GetCVar(CCVars.OocEnableDuringRound))
                     _configurationManager.SetCVar(CCVars.OocEnabled, false);
                 break;
             case GameRunLevel.PostRound:
-                if (!_configurationManager.GetCVar(CCVars.OocEnableDuringRound))
+                if(!_configurationManager.GetCVar(CCVars.OocEnableDuringRound))
                     _configurationManager.SetCVar(CCVars.OocEnabled, true);
                 break;
         }
@@ -122,14 +122,13 @@ public sealed partial class ChatSystem : SharedChatSystem
     /// <param name="message">The message being spoken or emoted</param>
     /// <param name="desiredType">The chat type</param>
     /// <param name="hideChat">Whether or not this message should appear in the chat window</param>
-    /// <param name="hideLog">Whether or not this message should appear in the adminlog window</param>
     /// <param name="shell"></param>
     /// <param name="player">The player doing the speaking</param>
     /// <param name="nameOverride">The name to use for the speaking entity. Usually this should just be modified via <see cref="TransformSpeakerNameEvent"/>. If this is set, the event will not get raised.</param>
-    public void TrySendInGameICMessage(EntityUid source, string message, InGameICChatType desiredType, bool hideChat, bool hideLog = false,
+    public void TrySendInGameICMessage(EntityUid source, string message, InGameICChatType desiredType, bool hideChat,
         IConsoleShell? shell = null, IPlayerSession? player = null, string? nameOverride = null, bool checkRadioPrefix = true)
     {
-        TrySendInGameICMessage(source, message, desiredType, hideChat ? ChatTransmitRange.HideChat : ChatTransmitRange.Normal, hideLog, shell, player, nameOverride, checkRadioPrefix);
+        TrySendInGameICMessage(source, message, desiredType, hideChat ? ChatTransmitRange.HideChat : ChatTransmitRange.Normal, shell, player, nameOverride, checkRadioPrefix);
     }
 
     /// <summary>
@@ -142,7 +141,7 @@ public sealed partial class ChatSystem : SharedChatSystem
     /// <param name="shell"></param>
     /// <param name="player">The player doing the speaking</param>
     /// <param name="nameOverride">The name to use for the speaking entity. Usually this should just be modified via <see cref="TransformSpeakerNameEvent"/>. If this is set, the event will not get raised.</param>
-    public void TrySendInGameICMessage(EntityUid source, string message, InGameICChatType desiredType, ChatTransmitRange range, bool hideLog = false,
+    public void TrySendInGameICMessage(EntityUid source, string message, InGameICChatType desiredType, ChatTransmitRange range,
         IConsoleShell? shell = null, IPlayerSession? player = null, string? nameOverride = null, bool checkRadioPrefix = true)
     {
         if (HasComp<GhostComponent>(source))
@@ -197,13 +196,13 @@ public sealed partial class ChatSystem : SharedChatSystem
         switch (desiredType)
         {
             case InGameICChatType.Speak:
-                SendEntitySpeak(source, message, range, nameOverride, hideLog);
+                SendEntitySpeak(source, message, range, nameOverride);
                 break;
             case InGameICChatType.Whisper:
-                SendEntityWhisper(source, message, range, null, nameOverride, hideLog);
+                SendEntityWhisper(source, message, range, null, nameOverride);
                 break;
             case InGameICChatType.Emote:
-                SendEntityEmote(source, message, range, nameOverride, hideLog);
+                SendEntityEmote(source, message, range, nameOverride);
                 break;
         }
     }
@@ -303,7 +302,7 @@ public sealed partial class ChatSystem : SharedChatSystem
 
     #region Private API
 
-    private void SendEntitySpeak(EntityUid source, string originalMessage, ChatTransmitRange range, string? nameOverride, bool hideLog = false)
+    private void SendEntitySpeak(EntityUid source, string originalMessage, ChatTransmitRange range, string? nameOverride)
     {
         if (!_actionBlocker.CanSpeak(source))
             return;
@@ -339,8 +338,7 @@ public sealed partial class ChatSystem : SharedChatSystem
         RaiseLocalEvent(source, ev, true);
 
         // To avoid logging any messages sent by entities that are not players, like vendors, cloning, etc.
-		// Also doesn't log if hideLog is true.
-        if (!HasComp<ActorComponent>(source) || hideLog == true)
+        if (!HasComp<ActorComponent>(source))
             return;
 
         if (originalMessage == message)
@@ -361,7 +359,7 @@ public sealed partial class ChatSystem : SharedChatSystem
         }
     }
 
-    private void SendEntityWhisper(EntityUid source, string originalMessage, ChatTransmitRange range, RadioChannelPrototype? channel, string? nameOverride, bool hideLog = false)
+    private void SendEntityWhisper(EntityUid source, string originalMessage, ChatTransmitRange range, RadioChannelPrototype? channel, string? nameOverride)
     {
         if (!_actionBlocker.CanSpeak(source))
             return;
@@ -416,26 +414,26 @@ public sealed partial class ChatSystem : SharedChatSystem
 
         var ev = new EntitySpokeEvent(source, message, originalMessage, channel, obfuscatedMessage);
         RaiseLocalEvent(source, ev, true);
-        if (!hideLog)
-            if (originalMessage == message)
-            {
-                if (name != Name(source))
-                    _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Whisper from {ToPrettyString(source):user} as {name}: {originalMessage}.");
-                else
-                    _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Whisper from {ToPrettyString(source):user}: {originalMessage}.");
-            }
+
+        if (originalMessage == message)
+        {
+            if (name != Name(source))
+                _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Whisper from {ToPrettyString(source):user} as {name}: {originalMessage}.");
             else
-            {
-                if (name != Name(source))
-                    _adminLogger.Add(LogType.Chat, LogImpact.Low,
+                _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Whisper from {ToPrettyString(source):user}: {originalMessage}.");
+        }
+        else
+        {
+            if (name != Name(source))
+                _adminLogger.Add(LogType.Chat, LogImpact.Low,
                     $"Whisper from {ToPrettyString(source):user} as {name}, original: {originalMessage}, transformed: {message}.");
-                else
-                    _adminLogger.Add(LogType.Chat, LogImpact.Low,
+            else
+                _adminLogger.Add(LogType.Chat, LogImpact.Low,
                     $"Whisper from {ToPrettyString(source):user}, original: {originalMessage}, transformed: {message}.");
-            }
+        }
     }
 
-    private void SendEntityEmote(EntityUid source, string action, ChatTransmitRange range, string? nameOverride, bool hideLog = false, bool checkEmote = true)
+    private void SendEntityEmote(EntityUid source, string action, ChatTransmitRange range, string? nameOverride, bool checkEmote = true)
     {
         if (!_actionBlocker.CanEmote(source)) return;
 
@@ -450,11 +448,11 @@ public sealed partial class ChatSystem : SharedChatSystem
         if (checkEmote)
             TryEmoteChatInput(source, action);
         SendInVoiceRange(ChatChannel.Emotes, action, wrappedMessage, source, range);
-        if (!hideLog)
-            if (name != Name(source))
-                _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Emote from {ToPrettyString(source):user} as {name}: {action}");
-            else
-                _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Emote from {ToPrettyString(source):user}: {action}");
+
+        if (name != Name(source))
+            _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Emote from {ToPrettyString(source):user} as {name}: {action}");
+        else
+            _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Emote from {ToPrettyString(source):user}: {action}");
     }
 
     // ReSharper disable once InconsistentNaming
@@ -732,7 +730,7 @@ public sealed class TransformSpeakerNameEvent : EntityEventArgs
 }
 
 /// <summary>
-///     Raised broadcast in order to transform speech.transmit
+///     Raised broadcast in order to transform speech.
 /// </summary>
 public sealed class TransformSpeechEvent : EntityEventArgs
 {

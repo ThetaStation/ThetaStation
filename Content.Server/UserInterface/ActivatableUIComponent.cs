@@ -43,13 +43,6 @@ namespace Content.Server.UserInterface
         public bool RequireHands = true;
 
         /// <summary>
-        ///     Whether you can activate this ui with activateinhand or not
-        /// </summary>
-        [ViewVariables(VVAccess.ReadWrite)]
-        [DataField("rightClickOnly")]
-        public bool rightClickOnly = false;
-
-        /// <summary>
         ///     Whether spectators (non-admin ghosts) should be allowed to view this UI.
         /// </summary>
         [ViewVariables(VVAccess.ReadWrite)]

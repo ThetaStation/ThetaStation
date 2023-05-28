@@ -13,7 +13,6 @@ using JetBrains.Annotations;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Network;
-using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -26,6 +25,7 @@ namespace Content.Shared.Lock;
 public sealed class LockSystem : EntitySystem
 {
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly AccessReaderSystem _accessReader = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearanceSystem = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
@@ -87,9 +87,8 @@ public sealed class LockSystem : EntitySystem
     {
         if (!component.Locked)
             return;
-
-        if (!args.Silent)
-            _sharedPopupSystem.PopupClient(Loc.GetString("entity-storage-component-locked-message"), uid, args.User);
+        if (!args.Silent && _net.IsServer)
+            _sharedPopupSystem.PopupEntity(Loc.GetString("entity-storage-component-locked-message"), uid);
 
         args.Cancelled = true;
     }
@@ -120,8 +119,11 @@ public sealed class LockSystem : EntitySystem
         if (!HasUserAccess(uid, user, quiet: false))
             return false;
 
-        _sharedPopupSystem.PopupClient(Loc.GetString("lock-comp-do-lock-success",
+        if (_net.IsServer)
+        {
+            _sharedPopupSystem.PopupEntity(Loc.GetString("lock-comp-do-lock-success",
                 ("entityName", Identity.Name(uid, EntityManager))), uid, user);
+        }
         _audio.PlayPredicted(lockComp.LockSound, uid, user, AudioParams.Default.WithVolume(-5));
 
         lockComp.Locked = true;
@@ -144,12 +146,14 @@ public sealed class LockSystem : EntitySystem
         if (!Resolve(uid, ref lockComp))
             return;
 
-        if (user is { Valid: true })
+        if (_net.IsServer)
         {
-            _sharedPopupSystem.PopupClient(Loc.GetString("lock-comp-do-unlock-success",
-                ("entityName", Identity.Name(uid, EntityManager))), uid, user.Value);
+            if (user is { Valid: true })
+            {
+                _sharedPopupSystem.PopupEntity(Loc.GetString("lock-comp-do-unlock-success",
+                    ("entityName", Identity.Name(uid, EntityManager))), uid, user.Value);
+            }
         }
-
         _audio.PlayPredicted(lockComp.UnlockSound, uid, user, AudioParams.Default.WithVolume(-5));
 
         lockComp.Locked = false;
@@ -206,8 +210,8 @@ public sealed class LockSystem : EntitySystem
         if (_accessReader.IsAllowed(user, reader))
             return true;
 
-        if (!quiet && _timing.IsFirstTimePredicted)
-            _sharedPopupSystem.PopupEntity(Loc.GetString("lock-comp-has-user-access-fail"), uid, Filter.Local(), true);
+        if (!quiet && _net.IsClient && _timing.IsFirstTimePredicted)
+            _sharedPopupSystem.PopupEntity(Loc.GetString("lock-comp-has-user-access-fail"), uid, user);
         return false;
     }
 

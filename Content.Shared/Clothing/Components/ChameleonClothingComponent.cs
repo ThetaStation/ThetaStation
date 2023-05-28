@@ -1,4 +1,4 @@
-using Content.Shared.Clothing.EntitySystems;
+﻿using Content.Shared.Clothing.EntitySystems;
 using Content.Shared.Inventory;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -55,7 +55,7 @@ public sealed class ChameleonBoundUserInterfaceState : BoundUserInterfaceState
 }
 
 [Serializable, NetSerializable]
-public sealed class ChameleonPrototypeSelectedMessage : BoundUserInterfaceMessage
+public sealed class ChameleonPrototypeSelectedMessage: BoundUserInterfaceMessage
 {
     public readonly string SelectedId;
 

@@ -79,7 +79,6 @@
     board: HydroponicsTrayMachineCircuitboard
   - type: TTS # Corvax-TTS
     voice: TrainingRobot
-  - type: WiresPanel
   - type: Wires
     BoardName: "HydroponicsTray"
     LayoutId: HydroponicsTray

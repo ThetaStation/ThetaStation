@@ -257,7 +257,7 @@
     solution: injector
   - type: Appearance
   - type: SolutionContainerVisuals
-    maxFillLevels: 2
+    maxFillLevels: 4
     fillBaseName: syringe
   - type: Tag
     tags:

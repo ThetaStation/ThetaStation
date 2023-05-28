@@ -36,7 +36,6 @@
   - type: Physics
     bodyType: KinematicController
   - type: Clickable
-  - type: WiresPanel
   - type: Wires #we just want the panel
     BoardName: Mech
     LayoutId: Mech

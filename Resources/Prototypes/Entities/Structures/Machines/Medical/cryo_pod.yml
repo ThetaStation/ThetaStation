@@ -50,7 +50,6 @@
   - type: Machine
     board: CryoPodMachineCircuitboard
   - type: WiresVisuals
-  - type: WiresPanel
   - type: Wires
     BoardName: "Cryo pod"
     LayoutId: CryoPod

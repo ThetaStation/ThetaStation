@@ -162,7 +162,6 @@
       map: ["enum.WiresVisualLayers.MaintenancePanel"]
   - type: Appearance
   - type: WiresVisuals
-  - type: WiresPanel
   - type: Wires
     BoardName: "DawInstrument"
     LayoutId: DawInstrument

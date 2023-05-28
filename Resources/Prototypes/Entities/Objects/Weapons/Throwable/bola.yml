@@ -46,4 +46,5 @@
     walkSpeed: 0.7 #makeshift bola shouldn't slow too much
     sprintSpeed: 0.7
     canThrowTrigger: true
+    canMoveBreakout: true
 

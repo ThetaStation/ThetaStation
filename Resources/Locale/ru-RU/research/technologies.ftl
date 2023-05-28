@@ -46,4 +46,3 @@ research-technology-advanced-cleaning = Продвинутая уборка
 research-technology-meat-manipulation = Манипулирование мясом
 research-technology-honk-mech = Мех Х.О.Н.К.
 research-technology-advanced-spray = Продвинутые спреи
-research-technology-bluespace-cargo-transport = Bluespace Cargo Transport

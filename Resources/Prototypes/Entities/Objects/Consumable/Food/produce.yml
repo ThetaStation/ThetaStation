@@ -842,12 +842,12 @@
   - type: SolutionContainerManager
     solutions:
       food:
-        maxVol: 22
+        maxVol: 12
         reagents:
         - ReagentId: Nutriment
           Quantity: 2
         - ReagentId: Bicaridine
-          Quantity: 20
+          Quantity: 10
   - type: Sprite
     sprite: Objects/Specific/Hydroponics/poppy.rsi
   - type: Produce
@@ -897,16 +897,16 @@
   - type: SolutionContainerManager
     solutions:
       food:
-        maxVol: 24
+        maxVol: 26
         reagents:
         - ReagentId: Bicaridine
-          Quantity: 5
+          Quantity: 10
         - ReagentId: Kelotane
-          Quantity: 5
+          Quantity: 10
         - ReagentId: Nutriment
           Quantity: 2
         - ReagentId: Desoxyephedrine
-          Quantity: 10
+          Quantity: 2
         - ReagentId: Vitamin
           Quantity: 2
   - type: Sprite

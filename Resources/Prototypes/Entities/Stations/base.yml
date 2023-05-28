@@ -32,12 +32,6 @@
     - type: StationArrivals
 
 - type: entity
-  id: BaseStationCentcomm
-  abstract: true
-  components:
-    - type: StationCentcomm
-
-- type: entity
   id: BaseStationEvacuation
   abstract: true
   components:
