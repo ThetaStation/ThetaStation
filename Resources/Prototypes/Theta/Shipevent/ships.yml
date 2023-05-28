@@ -10,6 +10,7 @@
   name: shipevent-mule-name
   description: shipevent-mule-desc
   class: shipevent-shipclass-medium
+  minCrewAmount: 3
   previewImage: /Textures/Theta/ShipEvent/ShipPreviews/mule-preview.png
   structurePrototype: "shipevent_mule"
   

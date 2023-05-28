@@ -6,7 +6,7 @@ namespace Content.Shared.Weapons.Ranged.Components;
 ///     Handles pulling entities from the given container to use as ammunition.
 /// </summary>
 [RegisterComponent, NetworkedComponent]
-[AutoGenerateComponentState]
+[AutoGenerateComponentState] //networking is needed for cannons (prediction issues)
 public sealed partial class ContainerAmmoProviderComponent : AmmoProviderComponent
 {
     [DataField("container", required: true)]

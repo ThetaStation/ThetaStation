@@ -1,3 +1,12 @@
+#7.62mm caseless
+- type: entity
+  id: CartridgeLightRifleCaseless
+  parent: CartridgeLightRifle
+  components:
+  - type: CartridgeAmmo
+    proto: BulleLightRifle
+    deleteOnSpawn: true
+
 #37mm round
 - type: entity
   id: BulletArtilleryLight
@@ -10,7 +19,8 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 200
+        Piercing: 100
+        Blunt: 100
   - type: Sprite
     sprite: /Textures/Theta/ShipEvent/Objects/AmmoArtillery.rsi
     layers:
@@ -49,7 +59,8 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 200
+        Piercing: 100
+        Blunt: 100
   - type: Sprite
     sprite: /Textures/Theta/ShipEvent/Objects/AmmoArtillery.rsi
     layers:
@@ -75,12 +86,12 @@
 #ammo containers
 - type: entity
   id: TurretAmmoContainerMachineGunFilled
-  name: .30 ammo container
+  name: 7.62mm caseless ammo container
   parent: TurretAmmoContainerRegular
   components:
     - type: StorageFill
       contents:
-        - id: CartridgeLightRifle
+        - id: CartridgeLightRifleCaseless
           amount: 100
           
 - type: entity
@@ -119,7 +130,7 @@
           
 - type: entity
   id: MachineGunAmmoClosetShipEvent
-  name: .30 Ammo Closet
+  name: 7.62mm caseless Ammo Closet
   parent: ShipEventCloset
   components:
     - type: StorageFill

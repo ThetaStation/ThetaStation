@@ -1,6 +1,7 @@
-using Content.Server.MachineLinking.Components;
+using System.Linq;
 using Content.Server.Storage.Components;
 using Content.Shared.Containers.ItemSlots;
+using Content.Shared.DeviceLinking;
 using Content.Shared.DeviceLinking.Events;
 using Content.Shared.Theta.ShipEvent;
 using Content.Shared.Theta.ShipEvent.Components;
@@ -29,6 +30,7 @@ public sealed class TurretLoaderSystem : EntitySystem
         SubscribeLocalEvent<TurretLoaderComponent, ThrowHitByEvent>(HandleThrowCollide);
 
         SubscribeLocalEvent<TurretLoaderComponent, TurretLoaderEjectRequest>(OnEject);
+        SubscribeLocalEvent<TurretLoaderComponent, TurretLoaderAfterShotMessage>(AfterShot);
         SubscribeLocalEvent<TurretLoaderComponent, ComponentGetState>(GetLoaderState);
         SubscribeLocalEvent<TurretLoaderComponent, NewLinkEvent>(OnLink);
     }
@@ -42,13 +44,20 @@ public sealed class TurretLoaderSystem : EntitySystem
     public void SetupLoader(EntityUid uid, TurretLoaderComponent loader, EntityUid? turretUid = null)
     {
         if (!loader.BoundTurret.IsValid() && turretUid != null)
+        {
             loader.BoundTurret = turretUid.Value;
+        }
+        else
+        {
+            if (CheckNetwork(uid, out EntityUid turret))
+                loader.BoundTurret = turret;
+        }
 
         if (EntityManager.TryGetComponent<ItemSlotsComponent>(uid, out var slots))
         {
             loader.ContainerSlot = slots.Slots["ammoContainer"];
 
-            if (loader.BoundTurret != EntityUid.Invalid)
+            if (loader.BoundTurret.IsValid())
             {
                 if (EntityManager.TryGetComponent<CannonComponent>(loader.BoundTurret, out var cannon))
                 {
@@ -98,6 +107,21 @@ public sealed class TurretLoaderSystem : EntitySystem
             Dirty(turretContainer);
     }
 
+    private bool CheckNetwork(EntityUid uid, out EntityUid turret)
+    {
+        if (EntityManager.TryGetComponent<DeviceLinkSourceComponent>(uid, out var source))
+        {
+            if (source.Outputs.Count > 0)
+            {
+                turret = source.Outputs.Values.First().First();
+                return true;
+            }
+        }
+
+        turret = EntityUid.Invalid;
+        return false;
+    }
+
     private void OnInit(EntityUid uid, TurretLoaderComponent loader, ComponentInit args)
     {
         SetupLoader(uid, loader);
@@ -109,6 +133,11 @@ public sealed class TurretLoaderSystem : EntitySystem
         {
             if (EntityManager.TryGetComponent<CannonComponent>(loader.BoundTurret, out var cannon))
                 cannon.BoundLoader = null;
+            if (EntityManager.TryGetComponent<ContainerAmmoProviderComponent>(loader.BoundTurret, out var container))
+            {
+                container.ProviderUid = null;
+                container.Container = "";
+            }
         }
     }
 
@@ -127,12 +156,21 @@ public sealed class TurretLoaderSystem : EntitySystem
         if (loader.ContainerSlot?.Item == null)
             return;
 
-        _slotSys.TryEject(uid, loader.ContainerSlot, uid, out var _);
+        _slotSys.TryEject(uid, loader.ContainerSlot, uid, out _);
     }
 
     private void OnLink(EntityUid uid, TurretLoaderComponent loader, NewLinkEvent args)
     {
         SetupLoader(uid, loader, args.Sink);
+    }
+    
+    private void AfterShot(EntityUid uid, TurretLoaderComponent loader, TurretLoaderAfterShotMessage args)
+    {
+        if (loader.AmmoContainer != null && loader.ContainerSlot != null)
+        {
+            if(loader.AmmoContainer.ContainedEntities.Count == 0)
+                _slotSys.TryEject(uid, loader.ContainerSlot, uid, out _);
+        }
     }
 
     /// <summary>

@@ -1,12 +1,9 @@
 ﻿using System.Linq;
 using Content.Shared.Physics;
 using Content.Shared.Weapons.Ranged.Components;
-using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Map;
 using Content.Shared.Containers.ItemSlots;
-using Robust.Shared.Containers;
-using Robust.Shared.Network;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Serialization;
@@ -20,37 +17,20 @@ public abstract class SharedCannonSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly ItemSlotsSystem _slotSys = default!;
 
+    private const int CollisionRayDistance = 25;
+
     public override void Initialize()
     {
         base.Initialize();
         SubscribeAllEvent<RequestCannonShootEvent>(OnShootRequest);
         SubscribeAllEvent<RequestStopCannonShootEvent>(OnStopShootRequest);
         SubscribeLocalEvent<CannonComponent, AnchorStateChangedEvent>(OnAnchorChanged);
-        SubscribeLocalEvent<CannonComponent, GetAmmoCountEvent>(OnAmmoCount);
-    }
-
-    private void OnAmmoCount(EntityUid uid, CannonComponent cannon, ref GetAmmoCountEvent args)
-    {
-        var loader = cannon.BoundLoader;
-        if (loader == null)
-            return;
-
-        if (loader.AmmoContainer == null)
-        {
-            args.Capacity = 0;
-            args.Count = 0;
-            return;
-        }
-
-        //there is no sense in setting this, since ammo may have different size & types and it's impossible to count how much shots we can fit
-        args.Capacity = 0;
-        args.Count = loader.AmmoContainer.ContainedEntities.Count;
     }
 
     private void OnShootRequest(RequestCannonShootEvent ev, EntitySessionEventArgs args)
     {
         var gun = GetCannonGun(ev.Cannon);
-        if (gun == null || !CanShoot(ev, gun))
+        if (gun == null || !CanShoot(ev))
         {
             StopShoot(ev.Cannon);
             return;
@@ -61,24 +41,17 @@ public abstract class SharedCannonSystem : EntitySystem
         _gunSystem.AttemptShoot(ev.Pilot, ev.Cannon, gun, coords);
     }
 
-    public bool CanShoot(RequestCannonShootEvent args, GunComponent gun)
+    private bool CanShoot(RequestCannonShootEvent args)
     {
-        if (!_gunSystem.CanShoot(gun))
-            return false;
-
         var cannonTransform = Transform(args.Cannon);
         var pilotTransform = Transform(args.Pilot);
         if (!pilotTransform.GridUid.Equals(cannonTransform.GridUid))
             return false;
 
         var dir = args.Coordinates - _transform.GetWorldPosition(cannonTransform);
-        var ray = new CollisionRay(_transform.GetWorldPosition(cannonTransform), dir.Normalized,
-            (int) (CollisionGroup.Impassable));
+        var ray = new CollisionRay(_transform.GetWorldPosition(cannonTransform), dir.Normalized, (int)CollisionGroup.BulletImpassable);
 
-        const int averageShipLength = 25;
-
-        var rayCastResult = _physics.IntersectRay(cannonTransform.MapID, ray, averageShipLength).ToList();
-
+        var rayCastResult = _physics.IntersectRay(cannonTransform.MapID, ray, CollisionRayDistance).ToList();
         foreach (var result in rayCastResult)
         {
             if (Transform(result.HitEntity).GridUid == cannonTransform.GridUid)
