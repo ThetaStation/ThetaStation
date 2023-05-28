@@ -80,7 +80,8 @@
         - FullAuto
       soundGunshot:
         path: /Audio/Weapons/Guns/Gunshots/gun_sentry.ogg
-        volume: 10
+        params:
+          volume: 10
 
 #37mm
 - type: entity
@@ -121,7 +122,8 @@
         - FullAuto
       soundGunshot: 
         path: /Audio/Theta/Shipevent/artillery.ogg
-        volume: 10
+        params:
+          volume: 10
       
 #100mm
 - type: entity
