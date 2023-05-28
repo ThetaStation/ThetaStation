@@ -45,14 +45,21 @@ public sealed class AsteroidGenerator : Generator
         var gridUid = gridComp.Owner;
 
         List<(Vector2i, Tile)> tiles = new();
+        List<(EntityCoordinates, string)> ents = new();
 
         foreach (var pos in tileSet)
         {
-            var coords = new EntityCoordinates(gridUid, pos);
-            gridComp.SetTile(coords, new Tile(tileDefMan[FloorId].TileId));
+            tiles.Add((pos, new Tile(tileDefMan[FloorId].TileId)));
             if (sys.Rand.Prob(Erosion))
                 continue;
-            sys.EntMan.SpawnEntity(WallPrototypeId, coords);
+            ents.Add((new EntityCoordinates(gridUid, pos), WallPrototypeId));
+        }
+        
+        gridComp.SetTiles(tiles);
+        foreach ((EntityCoordinates coords, string protId) in ents)
+        {
+            var ent = sys.EntMan.SpawnEntity(protId, coords);
+            sys.FormSys.AttachToGridOrMap(ent);
         }
 
         return gridUid;
