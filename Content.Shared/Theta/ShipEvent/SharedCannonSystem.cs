@@ -30,7 +30,7 @@ public abstract class SharedCannonSystem : EntitySystem
     private void OnShootRequest(RequestCannonShootEvent ev, EntitySessionEventArgs args)
     {
         var gun = GetCannonGun(ev.Cannon);
-        if (gun == null || !CanShoot(ev))
+        if (gun == null || !CanShoot(ev, gun))
         {
             StopShoot(ev.Cannon);
             return;
@@ -41,8 +41,11 @@ public abstract class SharedCannonSystem : EntitySystem
         _gunSystem.AttemptShoot(ev.Pilot, ev.Cannon, gun, coords);
     }
 
-    private bool CanShoot(RequestCannonShootEvent args)
+    private bool CanShoot(RequestCannonShootEvent args, GunComponent gun)
     {
+        if (!_gunSystem.CanShoot(gun))
+            return false;
+        
         var cannonTransform = Transform(args.Cannon);
         var pilotTransform = Transform(args.Pilot);
         if (!pilotTransform.GridUid.Equals(cannonTransform.GridUid))
