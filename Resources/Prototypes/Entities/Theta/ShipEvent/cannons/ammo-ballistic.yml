@@ -54,8 +54,6 @@
   parent: BaseBulletTrigger
   noSpawn: true
   components:
-  - type: Item
-    size: 5
   - type: Projectile
     damage:
       types:
@@ -77,6 +75,8 @@
   name: 100mm cartridge
   parent: CartridgeArtilleryLight
   components:
+  - type: Item
+    size: 5
   - type: CartridgeAmmo
     proto: BulletArtilleryHeavy
     deleteOnSpawn: true
