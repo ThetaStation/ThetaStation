@@ -61,7 +61,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     public float TeamCheckInterval;
     public float RespawnDelay;
     
-    public int MaxSpawnOffset; //for ships
+    public int MaxSpawnOffset;
 
     public int BonusInterval;
     public int PointsPerInterval; //points for surviving longer than BonusInterval without respawn
@@ -79,7 +79,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     public bool BoundsCompression = false;
     public float BoundsCompressionInterval;
     public int BoundsCompressionDistance; //how much play area bounds are compressed every BoundCompressionInterval
-    public int CurrentBoundsSize;
+    public int CurrentBoundsOffset; //inward offset of bounds
 
     public bool RuleSelected;
 
@@ -106,6 +106,22 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEnd);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
+    }
+    
+    public override void Update(float frametime)
+    {
+        _teamCheckTimer += frametime;
+        _roundendTimer += frametime;
+        _boundsCompressionTimer += frametime;
+
+        if (_teamCheckTimer > TeamCheckInterval)
+        {
+            _teamCheckTimer -= TeamCheckInterval;
+            CheckTeams(TeamCheckInterval);
+        }
+
+        CheckBoundsCompressionTimer();
+        CheckRoundendTimer();
     }
 
     private void SetupActions(EntityUid uid, ShipEventFaction team, IPlayerSession session)
@@ -190,22 +206,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                 break;
             }
         }
-    }
-
-    public override void Update(float frametime)
-    {
-        _teamCheckTimer += frametime;
-        _roundendTimer += frametime;
-        _boundsCompressionTimer += frametime;
-
-        if (_teamCheckTimer > TeamCheckInterval)
-        {
-            _teamCheckTimer -= TeamCheckInterval;
-            CheckTeams(TeamCheckInterval);
-        }
-
-        CheckBoundsCompressionTimer();
-        CheckRoundendTimer();
     }
 
     public void CheckRoundendTimer()
@@ -373,8 +373,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         var newShip = _debrisSys.RandomPosSpawn(
             TargetMap,
-            Vector2.Zero,
-            MaxSpawnOffset,
+            new Vector2(CurrentBoundsOffset, CurrentBoundsOffset),
+            MaxSpawnOffset - CurrentBoundsOffset,
             100,
             _protMan.Index<StructurePrototype>(shipType.StructurePrototype),
         new List<Processor>());
@@ -679,8 +679,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         var newShip = _debrisSys.RandomPosSpawn(
             TargetMap,
-            Vector2.Zero,
-            MaxSpawnOffset,
+            new Vector2(CurrentBoundsOffset, CurrentBoundsOffset),
+            MaxSpawnOffset - CurrentBoundsOffset,
             100,
             shipStructProt,
             new List<Processor>());

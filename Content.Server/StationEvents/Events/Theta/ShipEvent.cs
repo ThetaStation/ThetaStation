@@ -90,8 +90,8 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
 
         _shipSys.HUDPrototypeId = component.HUDPrototypeId;
         _shipSys.CaptainHUDPrototypeId = component.CaptainHUDPrototypeId;
-
-        _shipSys.MaxSpawnOffset = _shipSys.CurrentBoundsSize = component.MaxSpawnOffset;
+        
+        _shipSys.MaxSpawnOffset = component.MaxSpawnOffset;
 
         _shipSys.BoundsCompressionInterval = component.BoundsCompressionInterval;
         _shipSys.BoundsCompression = component.BoundsCompressionInterval > 0;

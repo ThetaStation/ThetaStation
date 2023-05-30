@@ -10,6 +10,15 @@ public sealed partial class ShipEventFactionSystem
 {
     [Dependency] private readonly ExplosionSystem _expSys = default!;
 
+    Box2 GetPlayAreaBounds()
+    {
+        return new Box2i(
+            CurrentBoundsOffset, 
+            CurrentBoundsOffset, 
+            MaxSpawnOffset - CurrentBoundsOffset, 
+            MaxSpawnOffset - CurrentBoundsOffset);
+    }
+    
     private void CheckBoundsCompressionTimer()
     {
         if (!BoundsCompression)
@@ -29,13 +38,8 @@ public sealed partial class ShipEventFactionSystem
             if (EntityManager.TryGetComponent<TransformComponent>(team.Ship, out var form) && 
                 EntityManager.TryGetComponent<PhysicsComponent>(team.Ship, out var grid))
             {
-                Box2 bounds = new Box2(
-                    MaxSpawnOffset - CurrentBoundsSize, 
-                    MaxSpawnOffset - CurrentBoundsSize, 
-                    CurrentBoundsSize, 
-                    CurrentBoundsSize);
                 Matrix3 wmat = _formSys.GetWorldMatrix(form);
-                return !bounds.Contains(wmat.Transform(grid.LocalCenter));
+                return !GetPlayAreaBounds().Contains(wmat.Transform(grid.LocalCenter));
             }
         }
 
@@ -56,18 +60,14 @@ public sealed partial class ShipEventFactionSystem
     private void CompressBounds()
     {
         Announce(Loc.GetString("shipevent-boundscompressed", ("distance", BoundsCompressionDistance)));
-        CurrentBoundsSize -= BoundsCompressionDistance;
-        CurrentBoundsSize = CurrentBoundsSize < 0 ? 0 : CurrentBoundsSize;
+        CurrentBoundsOffset += BoundsCompressionDistance;
+        CurrentBoundsOffset = CurrentBoundsOffset < 0 ? 0 : CurrentBoundsOffset;
         UpdateBoundsOverlay();
     }
 
     private void UpdateBoundsOverlay(ICommonSession? recipient = null)
     {
-        Box2i bounds = new Box2i(
-            MaxSpawnOffset - CurrentBoundsSize, 
-            MaxSpawnOffset - CurrentBoundsSize, 
-            CurrentBoundsSize, 
-            CurrentBoundsSize);
+        Box2 bounds = GetPlayAreaBounds();
         
         if (recipient == null)
         {

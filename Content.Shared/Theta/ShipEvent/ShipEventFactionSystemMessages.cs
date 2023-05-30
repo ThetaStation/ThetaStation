@@ -10,9 +10,9 @@ public sealed class BoundsOverlayInfoRequest : EntityEventArgs { }
 public sealed class BoundsOverlayInfo : EntityEventArgs
 {
     public MapId TargetMap;
-    public Box2i Bounds;
+    public Box2 Bounds;
 
-    public BoundsOverlayInfo(MapId targetMap, Box2i bounds)
+    public BoundsOverlayInfo(MapId targetMap, Box2 bounds)
     {
         TargetMap = targetMap;
         Bounds = bounds;

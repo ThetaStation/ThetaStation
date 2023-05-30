@@ -35,8 +35,8 @@
         - "shiptype_infiltator"
       
       #bounds
-      boundCompressionInterval: 200
-      boundCompressionDistance: 100
+      boundsCompressionInterval: 200
+      boundsCompressionDistance: 100
         
       obstacleTypes:
         - "asteroid_small"
