@@ -45,7 +45,6 @@ public abstract class SharedCannonSystem : EntitySystem
     {
         if (!_gunSystem.CanShoot(gun))
             return false;
-        
         var cannonTransform = Transform(args.Cannon);
         var pilotTransform = Transform(args.Pilot);
         if (!pilotTransform.GridUid.Equals(cannonTransform.GridUid))
