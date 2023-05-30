@@ -20,19 +20,11 @@ public sealed class ShipTypePrototype : IPrototype
     public string PreviewImagePath = "";
 
     [DataField("class")]
-    public ShipClass Class = ShipClass.Light;
+    public string Class = "Light";
     
     [DataField("structurePrototype", required: true)]
     public string StructurePrototype = "";
     
     [DataField("minCrewAmount")]
     public int MinCrewAmount = 1; //This should be a recommendation, not a restraint
-}
-
-public enum ShipClass
-{
-    Light, //fast, maneuverable ships with little protection
-    Medium, //something in between
-    Heavy, //slow, sturdy and powerful ships
-    Special
 }

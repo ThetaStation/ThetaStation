@@ -1,13 +1,13 @@
 ﻿- type: entity
-  name: ShipTest Agent
+  name: ShipEvent Agent
   id: MobHumanShipEvent
   parent: MobHuman
   suffix: SHIPEVENT
   components:
     - type: RandomHumanoidAppearance
     - type: Loadout
-      prototype: ShipTestEventStandard
-      prototypes: [ShipTestEventStandard]
+      prototype: ShipEventStandard
+      prototypes: [ShipEventStandard]
     - type: UsePlayerNameForEntityName
     - type: ShipEventFactionMarker
     - type: RadarHUD
@@ -19,28 +19,9 @@
         type: CaptainMenuBoundUserInterface
     - type: MobHUD
 
-- type: entity
-  id: SpawnPointShipEvent
-  name: ship event spawner
-  suffix: SHIPEVENT
-  parent: MarkerBase
-  components:
-    - type: GhostRoleMobSpawner
-      prototype: MobHumanShipEvent
-      availableTakeovers: 5
-      name: Ship Team
-      description: Уничтожь своих врагов!
-      rules: You are an antagonist, scavenge, attack, and grow your hoard!
-    - type: Sprite
-      sprite: Markers/jobs.rsi
-      layers:
-        - state: green
-        - sprite: Markers/jobs.rsi
-          state: ertjanitoreva
-
 # Space Ship - Poverty
 - type: startingGear
-  id: ShipTestEventStandard
+  id: ShipEventStandard
   equipment:
     jumpsuit: ClothingUniformJumpsuitOperative
     back: ClothingBackpackDuffelSyndicateOperative

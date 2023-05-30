@@ -31,7 +31,9 @@
       initialObstacleAmount: 150
       maxSpawnOffset: 1000
       shipTypes:
-        - "shiptype_infiltator"
+        - "shiptype_arrowhead"
+        - "shiptype_mule"
+        - "shiptype_boxship"
         
       obstacleTypes:
         - "asteroid_small"
