@@ -26,12 +26,17 @@
       pointsPerHitMultiplier: 0.01
       pointsPerAssist: 5000
       pointsPerKill : 10000
+      outOfBoundsPenalty: 2000
     
       #map gen
       initialObstacleAmount: 150
       maxSpawnOffset: 1000
       shipTypes:
         - "shiptype_infiltator"
+      
+      #bounds
+      boundCompressionInterval: 200
+      boundCompressionDistance: 100
         
       obstacleTypes:
         - "asteroid_small"

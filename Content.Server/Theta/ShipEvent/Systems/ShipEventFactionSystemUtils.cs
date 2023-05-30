@@ -6,7 +6,6 @@ using Content.Server.Explosion.Components;
 using Content.Server.Mind;
 using Content.Server.Mind.Components;
 using Content.Server.Roles;
-using Content.Server.Theta.DebrisGeneration.Prototypes;
 using Content.Shared.Chat;
 using Content.Shared.Explosion;
 using Content.Shared.Projectiles;
@@ -35,6 +34,8 @@ public sealed class ShipEventFaction : PlayerFaction
     
     public bool ShouldRespawn; //whether this team is currently waiting for respawn
     public float TimeSinceRemoval; //time since last removal
+
+    public bool OutOfBoundsWarningReceived; //whether this team has already received warning about going out of play area
     
     public int LastBonusInterval; //how much times this team has acquired bonus points for surviving bonus interval
     
@@ -58,9 +59,19 @@ public sealed partial class ShipEventFactionSystem
         _chatSys.DispatchGlobalAnnouncement(message, Loc.GetString("shipevent-announcement-title"));
     }
 
+    /// <summary>
+    /// Sends chat message to all team members
+    /// </summary>
+    /// <param name="team">team to which message should be send</param>
+    /// <param name="message">message text</param>
+    /// <param name="chatChannel">chat channel (local by default)</param>
+    /// <param name="color">color of message (team's color by default)</param>
     private void TeamMessage(ShipEventFaction team, string message, ChatChannel chatChannel = ChatChannel.Local,
         Color? color = null)
     {
+        if (color == null)
+            color = team.Color;
+
         foreach (var mind in team.GetLivingMembersMinds())
         {
             if (mind.Session != null)
@@ -261,7 +272,7 @@ public sealed partial class ShipEventFactionSystem
     }
 
     //to avoid cluttering roundend statistics
-    public void CleanMindTracker()
+    public void ClearMindTracker()
     {
         _mindTrack.ClearMindSet();
         foreach (var mind in EntityManager.EntityQuery<MindComponent>())

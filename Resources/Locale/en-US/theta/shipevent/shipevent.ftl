@@ -25,6 +25,8 @@ shipevent-respawn-tech = the destruction of critically important ship components
 
 shipevent-remove-default = the admiral's dissapointment
 
+shipevent-outofbounds = WARNING! Your team has left test polygon's area. Return immediately, otherwise disciplinary measures will be applied.
+shipevent-boundscompressed = Test area bounds were compressed by { $distance } meters.
 
 ## Role stuff
 

@@ -51,6 +51,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     private int _lastTeamNumber;
     private float _teamCheckTimer;
     private float _roundendTimer;
+    private float _boundsCompressionTimer;
     private int _lastAnnoucementMinute;
 
     //all time-related fields are specified in seconds
@@ -59,7 +60,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     public float TeamCheckInterval;
     public float RespawnDelay;
-
+    
     public int MaxSpawnOffset; //for ships
 
     public int BonusInterval;
@@ -68,11 +69,17 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     public float PointsPerHitMultiplier;
     public int PointsPerAssist;
     public int PointsPerKill;
+    public int OutOfBoundsPenalty; //deducted every update cycle for teams which left play area
 
     public int PlayersPerTeamPlace;
 
     public string HUDPrototypeId = "ShipeventHUD";
     public string CaptainHUDPrototypeId = "";
+
+    public bool BoundsCompression = false;
+    public float BoundsCompressionInterval;
+    public int BoundsCompressionDistance; //how much play area bounds are compressed every BoundCompressionInterval
+    public int CurrentBoundsSize;
 
     public bool RuleSelected;
 
@@ -95,6 +102,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         SubscribeAllEvent<ShipEventCaptainMenuRequestInfoMessage>(OnCapMenuInfoRequest);
         SubscribeAllEvent<GetShipPickerInfoMessage>(OnShipPickerInfoRequest);
         SubscribeAllEvent<ShipEventCaptainMenuChangeShipMessage>(OnShipChangeRequest);
+        SubscribeAllEvent<BoundsOverlayInfoRequest>(OnBoundsOverlayInfoRequest);
 
         SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEnd);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
@@ -188,6 +196,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     {
         _teamCheckTimer += frametime;
         _roundendTimer += frametime;
+        _boundsCompressionTimer += frametime;
 
         if (_teamCheckTimer > TeamCheckInterval)
         {
@@ -195,6 +204,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             CheckTeams(TeamCheckInterval);
         }
 
+        CheckBoundsCompressionTimer();
         CheckRoundendTimer();
     }
 
@@ -245,7 +255,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         if (!RuleSelected || !Teams.Any())
             return;
 
-        CleanMindTracker();
+        ClearMindTracker();
 
         var winner = Teams.First();
         args.AddLine(Loc.GetString("shipevent-roundend-heading"));
@@ -802,6 +812,20 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                 break;
             }
 
+            if (IsTeamOutOfBounds(team))
+            {
+                if (!team.OutOfBoundsWarningReceived)
+                {
+                    TeamMessage(team, Loc.GetString("shipevent-outofbounds"), color: Color.DarkRed);
+                    team.OutOfBoundsWarningReceived = true;
+                }
+                PunishOutOfBoundsTeam(team);
+            }
+            else
+            {
+                team.OutOfBoundsWarningReceived = false;
+            }
+
             if (!_playerMan.TryGetSessionByUsername(team.Captain, out _))
             {
                 if (team.Members.Any())
@@ -817,16 +841,14 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                         }
                     }
 
-                    TeamMessage(team,
-                        Loc.GetString("shipevent-team-captainchange", ("oldcap", team.Captain),
-                            ("newcap", newCap)), color: team.Color);
+                    TeamMessage(team, Loc.GetString("shipevent-team-captainchange", ("oldcap", team.Captain), ("newcap", newCap)));
                     team.Captain = newCap;
                 }
             }
 
             if (team.ShouldRespawn && team.TimeSinceRemoval > RespawnDelay)
             {
-                TeamMessage(team, Loc.GetString("shipevent-team-respawnnow"), color: team.Color);
+                TeamMessage(team, Loc.GetString("shipevent-team-respawnnow"));
                 ImmediateRespawn(team);
                 team.LastBonusInterval = 0;
             }
