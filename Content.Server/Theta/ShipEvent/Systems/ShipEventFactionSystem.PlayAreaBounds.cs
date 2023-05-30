@@ -49,8 +49,7 @@ public sealed partial class ShipEventFactionSystem
     //idk how to name it otherwise
     private void PunishOutOfBoundsTeam(ShipEventFaction team)
     {
-        team.Points -= OutOfBoundsPenalty;
-        team.Points = team.Points < 0 ? 0 : team.Points;
+        team.Points = Math.Max(0, team.Points - OutOfBoundsPenalty);
 
         Vector2 teamShipPos = _formSys.GetWorldPosition(Transform(team.Ship));
         MapCoordinates mapCoords = new MapCoordinates(teamShipPos + _random.NextVector2(5), TargetMap);
@@ -60,8 +59,7 @@ public sealed partial class ShipEventFactionSystem
     private void CompressBounds()
     {
         Announce(Loc.GetString("shipevent-boundscompressed", ("distance", BoundsCompressionDistance)));
-        CurrentBoundsOffset += BoundsCompressionDistance;
-        CurrentBoundsOffset = CurrentBoundsOffset < 0 ? 0 : CurrentBoundsOffset;
+        CurrentBoundsOffset = Math.Max(MaxSpawnOffset, CurrentBoundsOffset + BoundsCompressionDistance);
         UpdateBoundsOverlay();
     }
 
