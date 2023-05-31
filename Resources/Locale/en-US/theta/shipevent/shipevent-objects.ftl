@@ -22,16 +22,14 @@ ent-TurretAmmoContainerBluespace = ammo container (bluespace)
     
 ## Guns
 
-ent-ShipEventRocketCannon = rocket turret
-    .desc = { "Turret shooting, you won't believe it, rockets." }
+ent-ShipEventMachineGunCannon = machine gun turret
+    .desc = { ".30 machine gun turret, for dealing with enemy's living force" }
     .suffix = { "ShipEvent" }
-ent-ShipEventShotgunCannon = shotgun turret
-    .desc = { "Huuuge shotgun, capable of turning a person into red mist." }
-    .suffix = { "ShipEvent" }
-
     
-## Ammo
-
-ent-ShellShotgunSlugShipEvent = shotgun shell
-    .desc = { "Shell for shotgun of ridiclious caliber, with very massive pellets." }
+ent-ShipEventLightArtilleryCannon = light cannon
+    .desc = { "61-K anti-aircraft 37mm cannon. Albeit designed 6 centuries ago, it's still capable of penetrating spacecraft armour." }
+    .suffix = { "ShipEvent" }
+    
+ent-ShipEventHeavyArtilleryCannon = heavy cannon
+    .desc = { "BS-3 anti-tank 100mm cannon. Slow firing, but extremely powerful, it has proven itself on fields of Second World War." }
     .suffix = { "ShipEvent" }
