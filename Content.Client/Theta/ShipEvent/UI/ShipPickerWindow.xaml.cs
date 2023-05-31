@@ -33,7 +33,7 @@ public sealed partial class ShipPickerWindow : DefaultWindow
             string crewAmountStr = Loc.GetString("shipevent-shippicker-mincrewamount") + shipType.MinCrewAmount;
             if (state.MemberCount < shipType.MinCrewAmount)
                 crewAmountStr = "[color=yellow]" + crewAmountStr + "[/color]";
-            shipTypeLabel.SetMarkup($"{shipType.Name}\n \n{GetShipClassName(shipType.Class)}\n \n{crewAmountStr}\n \n{shipType.Description}");
+            shipTypeLabel.SetMarkup($"{Loc.GetString(shipType.Name)}\n \n{Loc.GetString(shipType.Class)}\n \n{crewAmountStr}\n \n{Loc.GetString(shipType.Description)}");
             shipTypeLabel.MinWidth = Width / 2;
             shipTypeLabel.SetWidth = Width / 2;
 
@@ -61,26 +61,5 @@ public sealed partial class ShipPickerWindow : DefaultWindow
             
             ShipOptionsContainer.AddChild(shipTypeEntry);
         }
-    }
-
-    private string GetShipClassName(ShipClass shipClass)
-    {
-        string className = "";
-        switch (shipClass)
-        {
-            case ShipClass.Light:
-                className = "light";
-                break;
-            case ShipClass.Medium:
-                className = "medium";
-                break;
-            case ShipClass.Heavy:
-                className = "heavy";
-                break;
-            case ShipClass.Special:
-                className = "special";
-                break;
-        }
-        return Loc.GetString("shipevent-shippicker-"+className+"class");
     }
 }

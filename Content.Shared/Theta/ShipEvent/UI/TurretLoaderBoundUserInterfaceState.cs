@@ -20,6 +20,9 @@ public sealed class TurretLoaderBoundUserInterfaceState : BoundUserInterfaceStat
 public sealed class TurretLoaderEjectRequest : BoundUserInterfaceMessage { }
 
 [Serializable, NetSerializable]
+public sealed class TurretLoaderAfterShotMessage : EntityEventArgs { }
+
+[Serializable, NetSerializable]
 public enum TurretLoaderUiKey
 {
     Key
