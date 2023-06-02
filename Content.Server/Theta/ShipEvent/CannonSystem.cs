@@ -15,6 +15,13 @@ public sealed class CannonSystem : SharedCannonSystem
         base.Initialize();
         SubscribeNetworkEvent<RotateCannonsEvent>(OnRotateCannons);
         SubscribeLocalEvent<CannonComponent, AmmoShotEvent>(AfterShot);
+        SubscribeLocalEvent<CannonComponent, ComponentRemove>(OnRemoval);
+    }
+
+    private void OnRemoval(EntityUid uid, CannonComponent cannon, ComponentRemove args)
+    {
+        if(cannon.BoundLoader != null)
+            cannon.BoundLoader.BoundTurret = null;
     }
 
     private void OnRotateCannons(RotateCannonsEvent ev)
@@ -25,7 +32,7 @@ public sealed class CannonSystem : SharedCannonSystem
         }
     }
 
-    private void AfterShot(EntityUid entity, CannonComponent comp, AmmoShotEvent args)
+    private void AfterShot(EntityUid entity, CannonComponent cannon, AmmoShotEvent args)
     {
         foreach(EntityUid projectile in args.FiredProjectiles)
         {
@@ -33,7 +40,7 @@ public sealed class CannonSystem : SharedCannonSystem
             marker.Team = EntityManager.EnsureComponent<ShipEventFactionMarkerComponent>(entity).Team;
         }
 
-        if (comp.BoundLoaderEntity != null)
-            RaiseLocalEvent(comp.BoundLoaderEntity.Value, new TurretLoaderAfterShotMessage());
+        if (cannon.BoundLoaderEntity != null)
+            RaiseLocalEvent(cannon.BoundLoaderEntity.Value, new TurretLoaderAfterShotMessage());
     }
 }
