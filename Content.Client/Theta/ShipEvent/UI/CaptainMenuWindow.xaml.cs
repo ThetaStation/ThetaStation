@@ -33,6 +33,6 @@ public sealed partial class CaptainMenuWindow : DefaultWindow
 
     public void UpdateState(ShipEventCaptainMenuBoundUserInterfaceState state)
     {
-        ShipName.Text = state.CurrentShipType?.Name ?? "N/A";
+        ShipName.Text = Loc.GetString(state.CurrentShipType?.Name ?? "N/A");
     }
 }

@@ -12,6 +12,8 @@ namespace Content.Client.Theta.ShipEvent.UI;
 public sealed partial class ShipPickerWindow : DefaultWindow
 {
     public ShipTypePrototype? Selection;
+
+    public Action<ShipTypePrototype?>? OnSelectionMade;
     
     public ShipPickerWindow()
     {
@@ -51,6 +53,7 @@ public sealed partial class ShipPickerWindow : DefaultWindow
             selectionButton.OnPressed += _ =>
             {
                 Selection = shipType;
+                OnSelectionMade?.Invoke(Selection);
                 Close();
             };
             selectionButton.MinWidth = Width;

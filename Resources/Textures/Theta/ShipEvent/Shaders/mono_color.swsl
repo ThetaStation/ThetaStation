@@ -1,0 +1,7 @@
+uniform sampler2D SCREEN_TEXTURE;
+uniform highp vec3 UCOLOR;
+uniform highp float MIX;
+
+void fragment() {
+    COLOR.xyz = mix(texture(SCREEN_TEXTURE, UV).xyz, UCOLOR, MIX);
+}
