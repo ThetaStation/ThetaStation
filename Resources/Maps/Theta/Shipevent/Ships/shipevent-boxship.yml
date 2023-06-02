@@ -10,7 +10,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-    - pos: 29.15628,30.625061
+    - pos: 36.15628,37.62506
       parent: invalid
       type: Transform
     - chunks:
@@ -450,11 +450,11 @@ entities:
     - enabled: True
       type: PointLight
     - linkedPorts:
-        52:
+        53:
         - CannonConsoleSender: CannonConsoleReceiver
       registeredSinks:
         CannonConsoleSender:
-        - 52
+        - 53
       type: DeviceLinkSource
 - proto: ChairPilotSeat
   entities:
@@ -516,9 +516,11 @@ entities:
     - pos: 0.5,0.5
       parent: 1
       type: Transform
+    - supplyRate: 20000
+      type: PowerSupplier
 - proto: Gyroscope
   entities:
-  - uid: 66
+  - uid: 49
     components:
     - pos: -0.5,2.5
       parent: 1
@@ -527,14 +529,14 @@ entities:
       type: Thruster
 - proto: HeavyArtilleryAmmoClosetShipEvent
   entities:
-  - uid: 49
+  - uid: 50
     components:
     - pos: 2.5,1.5
       parent: 1
       type: Transform
 - proto: NetworkConfigurator
   entities:
-  - uid: 50
+  - uid: 51
     components:
     - pos: 0.5,1.5
       parent: 1
@@ -545,7 +547,7 @@ entities:
       type: EmitSoundOnCollide
 - proto: PoweredlightLED
   entities:
-  - uid: 51
+  - uid: 52
     components:
     - rot: -1.5707963267948966 rad
       pos: 2.5,1.5
@@ -555,7 +557,7 @@ entities:
       type: AmbientSound
 - proto: ShipEventHeavyArtilleryCannon
   entities:
-  - uid: 52
+  - uid: 53
     components:
     - flags: SessionSpecific
       type: MetaData
@@ -567,74 +569,74 @@ entities:
       type: Gun
     - links:
       - 41
-      - 65
+      - 66
       type: DeviceLinkSink
     - container: ""
       type: ContainerAmmoProvider
 - proto: SubstationBasic
   entities:
-  - uid: 53
+  - uid: 54
     components:
     - pos: -0.5,0.5
       parent: 1
       type: Transform
 - proto: Table
   entities:
-  - uid: 54
+  - uid: 55
     components:
     - pos: 0.5,1.5
       parent: 1
       type: Transform
 - proto: TeamSpawnerShipEvent
   entities:
-  - uid: 55
+  - uid: 56
     components:
     - pos: 1.5,2.5
       parent: 1
       type: Transform
 - proto: Thruster
   entities:
-  - uid: 56
+  - uid: 57
     components:
     - rot: 1.5707963267948966 rad
       pos: -1.5,3.5
       parent: 1
       type: Transform
-  - uid: 57
+  - uid: 58
     components:
     - rot: 1.5707963267948966 rad
       pos: -1.5,-0.5
       parent: 1
       type: Transform
-  - uid: 58
+  - uid: 59
     components:
     - rot: 3.141592653589793 rad
       pos: -0.5,-1.5
       parent: 1
       type: Transform
-  - uid: 59
+  - uid: 60
     components:
     - pos: -0.5,4.5
       parent: 1
       type: Transform
-  - uid: 60
-    components:
-    - pos: 3.5,4.5
-      parent: 1
-      type: Transform
   - uid: 61
     components:
-    - rot: -1.5707963267948966 rad
-      pos: 4.5,3.5
+    - pos: 3.5,4.5
       parent: 1
       type: Transform
   - uid: 62
     components:
     - rot: -1.5707963267948966 rad
-      pos: 4.5,-0.5
+      pos: 4.5,3.5
       parent: 1
       type: Transform
   - uid: 63
+    components:
+    - rot: -1.5707963267948966 rad
+      pos: 4.5,-0.5
+      parent: 1
+      type: Transform
+  - uid: 64
     components:
     - rot: 3.141592653589793 rad
       pos: 3.5,-1.5
@@ -642,7 +644,7 @@ entities:
       type: Transform
 - proto: ToolboxSyndicateFilled
   entities:
-  - uid: 64
+  - uid: 65
     components:
     - pos: 0.5,1.5
       parent: 1
@@ -653,17 +655,17 @@ entities:
       type: EmitSoundOnCollide
 - proto: TurretLoaderShipEvent
   entities:
-  - uid: 65
+  - uid: 66
     components:
     - pos: 2.5,0.5
       parent: 1
       type: Transform
     - linkedPorts:
-        52:
+        53:
         - TurretLoaderSender: CannonConsoleReceiver
       registeredSinks:
         TurretLoaderSender:
-        - 52
+        - 53
       type: DeviceLinkSource
 - proto: WallReinforced
   entities:
