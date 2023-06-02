@@ -9,7 +9,7 @@ namespace Content.Shared.Theta.ShipEvent.Components;
 public sealed class TurretLoaderComponent : Component
 {
     [ViewVariables(VVAccess.ReadWrite)] 
-    public EntityUid? BoundTurret = EntityUid.Invalid;
+    public EntityUid? BoundTurret;
     
     /// <summary>
     /// Slot containing ammo container
