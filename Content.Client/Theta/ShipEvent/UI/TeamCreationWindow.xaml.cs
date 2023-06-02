@@ -34,10 +34,15 @@ public sealed partial class TeamCreationWindow : DefaultWindow
             ShipPicker.OpenCentered();
             ShipPickerButtonPressed?.Invoke(_);
         };
-        ShipPicker.OnSelectionMade += _ =>
-        {
-            ShipLabel.Text = Loc.GetString(ShipPicker.Selection?.Name ?? "N/A");
-        };
+        ShipPicker.OnSelectionMade += SetChosenShipLabel;
+        SetChosenShipLabel();
+    }
+
+    private void SetChosenShipLabel(ShipTypePrototype? _ = null)
+    {
+        var desc = Loc.GetString("shipevent-teamcreation-ship");
+        var ship = Loc.GetString(ShipPicker.Selection?.Name ?? "N/A");
+        ShipLabel.Text = $"{desc} {ship}";
     }
 
     public void OnColorChanged() { }
