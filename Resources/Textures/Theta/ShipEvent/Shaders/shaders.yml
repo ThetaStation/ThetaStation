@@ -1,4 +1,0 @@
-#- type: shader
-#  id: MonoColor
-#  kind: source
-#  path: "/Textures/Theta/ShipEvent/Shaders/mono_color.swsl"
