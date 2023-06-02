@@ -18,6 +18,7 @@ shipevent-team-captainchange = Captain { $oldcap } has been replaced by { $newca
 shipevent-team-respawnnow = Team respawn is in progress...
 shipevent-team-bonusinterval = The team has survived without respawning for { $time } minutes, thus they receive { $points } points!
 shipevent-team-newmember = { $name } has joined the team! You should greet them.
+shipevent-team-ship-changed = New ship is "{ $name }". It will be replaced after the current one is destroyed.
 
 shipevent-respawn-default = an unfortunate set of circumstances
 shipevent-respawn-dead = the death of all team members
