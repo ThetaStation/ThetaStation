@@ -18,6 +18,7 @@ shipevent-team-captainchange = Капитан { $oldcap } был заменён 
 shipevent-team-respawnnow = Идёт респавн команды...
 shipevent-team-bonusinterval = Команда прожила без респавна очередные { $time } минут, и получает за это { $points } очков!
 shipevent-team-newmember = К команде присоединился { $name }! Поздоровайтесь.
+shipevent-team-ship-changed = Выбран новый корабль - "{ $name }". Он будет выдан после уничтожения текущего.
 
 shipevent-respawn-default = неудачного стечения обстоятельств
 shipevent-respawn-dead = смерти всего её состава

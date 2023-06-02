@@ -60,7 +60,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     public float TeamCheckInterval;
     public float RespawnDelay;
-    
+
     public int MaxSpawnOffset;
 
     public int BonusInterval;
@@ -107,7 +107,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEnd);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
     }
-    
+
     public override void Update(float frametime)
     {
         _teamCheckTimer += frametime;
@@ -179,6 +179,9 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             if (team.Captain == msg.Session.ConnectedClient.UserName)
             {
                 team.ChosenShipType = msg.NewShip;
+                var shipName = team.ChosenShipType.Name;
+                TeamMessage(team, Loc.GetString("shipevent-team-ship-changed", ("name", Loc.GetString(shipName))),
+                    color:  team.Color);
                 break;
             }
         }
