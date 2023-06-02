@@ -57,7 +57,7 @@ public sealed class TurretLoaderBoundUserInterface : BoundUserInterface
 
     private string GetLoaderStatus(TurretLoaderComponent loader)
     {
-        if (!loader.BoundTurret.IsValid())
+        if (!_entMan.EntityExists(loader.BoundTurret))
             return Loc.GetString("shipevent-turretloader-status-unbound");
 
         if (loader.ContainerSlot?.Item == null)
