@@ -106,7 +106,8 @@ public sealed class DebrisGenerationSystem : EntitySystem
     /// <summary>
     /// Randomly places specified structure onto map. Does not optimise collision checking in any way
     /// </summary>
-    public EntityUid RandomPosSpawn(MapId targetMap, Vector2 startPos, int maxOffset, int tries, StructurePrototype structure, List<Processor> extraProcessors)
+    public EntityUid RandomPosSpawn(MapId targetMap, Vector2 startPos, int maxOffset, int tries, 
+        StructurePrototype structure, List<Processor>? extraProcessors = null, bool forceIfFailed = false)
     {
         TargetMap = targetMap;
         
@@ -129,6 +130,13 @@ public sealed class DebrisGenerationSystem : EntitySystem
                     new Box2(mapPos - finalDistance, mapPos + finalDistance)).Any())
             {
                 result = true;
+                if (extraProcessors != null)
+                {
+                    foreach (Processor extraProc in extraProcessors)
+                    {
+                        extraProc.Process(this, targetMap, grid, false);
+                    }
+                }
                 break;
             }
         }
@@ -141,10 +149,57 @@ public sealed class DebrisGenerationSystem : EntitySystem
             gridForm.Coordinates = new EntityCoordinates(gridForm.Coordinates.EntityId, mapPos);
             return grid;
         }
-        
+
+        if (forceIfFailed)
+        {
+            Logger.Info($"Debris generation, RandomPosSpawn: Failed to find spawn position, but forceIfFailed is set to true; proceeding to force spawn");
+            return RandomPosForceSpawn(targetMap, startPos, maxOffset, structure, extraProcessors);
+        }
         Logger.Error($"Debris generation, RandomPosSpawn: Failed to find spawn position, deleting grid {grid.ToString()}");
         EntityManager.DeleteEntity(grid);
         return EntityUid.Invalid;
+    }
+
+    /// <summary>
+    /// Randomly places specified structure onto map, destroys any overlapping grids.
+    /// </summary>
+    public EntityUid RandomPosForceSpawn(MapId targetMap, Vector2 startPos, int maxOffset, 
+        StructurePrototype structure, List<Processor>? extraProcessors = null)
+    {
+        TargetMap = targetMap;
+        
+        var grid = structure.Generator.Generate(this, TargetMap);
+        var gridComp = EntMan.GetComponent<MapGridComponent>(grid);
+        var gridForm = EntMan.GetComponent<TransformComponent>(grid);
+        
+        var finalDistance = (int)Math.Ceiling(structure.MinDistance + Math.Max(gridComp.LocalAABB.Height, gridComp.LocalAABB.Width));
+        
+        Vector2i mapPos = Vector2i.Zero;
+        mapPos = (Vector2i) Rand.NextVector2Box(
+                startPos.X, 
+                startPos.Y, 
+                startPos.X + maxOffset, 
+                startPos.Y + maxOffset).Rounded();
+        
+        foreach(MapGridComponent ogrid in MapMan.FindGridsIntersecting(targetMap, 
+                    new Box2(mapPos - finalDistance, mapPos + finalDistance)))
+        {
+            EntityManager.DeleteEntity(ogrid.Owner);
+        }
+        
+        if (extraProcessors != null)
+        {
+            foreach (Processor extraProc in extraProcessors)
+            {
+                extraProc.Process(this, targetMap, grid, false);
+            }
+        }
+        
+        Logger.Info($"Debris generation, RandomPosForceSpawn: Spawned grid {grid.ToString()} successfully");
+        gridForm.Coordinates = new EntityCoordinates(gridForm.Coordinates.EntityId, mapPos);
+        TargetMap = MapId.Nullspace;
+        
+        return grid;
     }
 
     //Set's up collision grid

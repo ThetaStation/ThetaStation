@@ -1093,6 +1093,8 @@ entities:
     - pos: 5.5,5.5
       parent: 1
       type: Transform
+    - supplyRate: 30000
+      type: PowerSupplier
 - proto: GravityGeneratorMini
   entities:
   - uid: 160
@@ -1146,8 +1148,6 @@ entities:
       pos: 5.5,2.5
       parent: 1
       type: Transform
-    - nextFire: 0
-      type: Thruster
 - proto: KitchenMicrowave
   entities:
   - uid: 166
@@ -1314,8 +1314,6 @@ entities:
     - pos: 12.5,-0.5
       parent: 1
       type: Transform
-    - nextFire: 0
-      type: Gun
     - links:
       - 250
       - 251
@@ -1329,8 +1327,6 @@ entities:
     - pos: -2.5,-0.5
       parent: 1
       type: Transform
-    - nextFire: 0
-      type: Gun
     - links:
       - 247
       - 251
@@ -1345,8 +1341,6 @@ entities:
       pos: 11.5,8.5
       parent: 1
       type: Transform
-    - nextFire: 0
-      type: Gun
     - links:
       - 249
       - 251
@@ -1361,8 +1355,6 @@ entities:
       pos: -1.5,8.5
       parent: 1
       type: Transform
-    - nextFire: 0
-      type: Gun
     - links:
       - 246
       - 251
@@ -1377,8 +1369,6 @@ entities:
       pos: 2.5,12.5
       parent: 1
       type: Transform
-    - nextFire: 0
-      type: Gun
     - links:
       - 245
       - 251
@@ -1393,8 +1383,6 @@ entities:
       pos: 7.5,12.5
       parent: 1
       type: Transform
-    - nextFire: 0
-      type: Gun
     - links:
       - 248
       - 251
@@ -1495,94 +1483,70 @@ entities:
       pos: 2.5,-0.5
       parent: 1
       type: Transform
-    - nextFire: 0
-      type: Thruster
   - uid: 37
     components:
     - rot: 3.141592653589793 rad
       pos: 0.5,-0.5
       parent: 1
       type: Transform
-    - nextFire: 0
-      type: Thruster
   - uid: 38
     components:
     - rot: 3.141592653589793 rad
       pos: 7.5,-0.5
       parent: 1
       type: Transform
-    - nextFire: 0
-      type: Thruster
   - uid: 39
     components:
     - rot: 3.141592653589793 rad
       pos: 1.5,-0.5
       parent: 1
       type: Transform
-    - nextFire: 0
-      type: Thruster
   - uid: 57
     components:
     - rot: 3.141592653589793 rad
       pos: 8.5,-0.5
       parent: 1
       type: Transform
-    - nextFire: 0
-      type: Thruster
   - uid: 58
     components:
     - rot: 3.141592653589793 rad
       pos: 9.5,-0.5
       parent: 1
       type: Transform
-    - nextFire: 0
-      type: Thruster
   - uid: 144
     components:
     - rot: -1.5707963267948966 rad
       pos: 12.5,5.5
       parent: 1
       type: Transform
-    - nextFire: 0
-      type: Thruster
   - uid: 161
     components:
     - rot: 1.5707963267948966 rad
       pos: -2.5,5.5
       parent: 1
       type: Transform
-    - nextFire: 0
-      type: Thruster
   - uid: 197
     components:
     - pos: 8.5,10.5
       parent: 1
       type: Transform
-    - nextFire: 0
-      type: Thruster
   - uid: 200
     components:
     - rot: -1.5707963267948966 rad
       pos: 12.5,2.5
       parent: 1
       type: Transform
-    - nextFire: 0
-      type: Thruster
   - uid: 201
     components:
     - pos: 1.5,10.5
       parent: 1
       type: Transform
-    - nextFire: 0
-      type: Thruster
   - uid: 206
     components:
     - rot: 1.5707963267948966 rad
       pos: -2.5,2.5
       parent: 1
       type: Transform
-    - nextFire: 0
-      type: Thruster
 - proto: ToolboxSyndicateFilled
   entities:
   - uid: 128
@@ -1590,8 +1554,6 @@ entities:
     - pos: 5.5,6.5
       parent: 1
       type: Transform
-    - nextAttack: 0
-      type: MeleeWeapon
     - nextSound: 0
       type: EmitSoundOnCollide
 - proto: TurretLoaderShipEvent

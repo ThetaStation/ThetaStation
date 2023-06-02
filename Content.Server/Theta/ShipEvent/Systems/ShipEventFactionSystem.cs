@@ -378,9 +378,10 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             TargetMap,
             new Vector2(CurrentBoundsOffset, CurrentBoundsOffset),
             MaxSpawnOffset - CurrentBoundsOffset,
-            100,
+            50,
             _protMan.Index<StructurePrototype>(shipType.StructurePrototype),
-        new List<Processor>());
+        new List<Processor>(),
+            true);
 
         var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>(newShip);
         if (!spawners.Any())
@@ -684,9 +685,10 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             TargetMap,
             new Vector2(CurrentBoundsOffset, CurrentBoundsOffset),
             MaxSpawnOffset - CurrentBoundsOffset,
-            100,
+            50,
             shipStructProt,
-            new List<Processor>());
+            new List<Processor>(),
+            true);
 
         var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>(newShip);
         if (!spawners.Any())
