@@ -41,6 +41,8 @@ public sealed class ShipEventRuleComponent : Component
 
     [DataField("pointsPerKill")] public int PointsPerKill;
 
+    [DataField("outOfBoundsPenalty")] public int OutOfBoundsPenalty;
+
     [DataField("hudPrototypeId")] public string HUDPrototypeId = "";
 
     [DataField("captainHudPrototypeId")] public string CaptainHUDPrototypeId = "";
@@ -52,6 +54,10 @@ public sealed class ShipEventRuleComponent : Component
     [DataField("obstacleAmountAmplitude")] public int ObstacleAmountAmplitude;
 
     [DataField("obstacleSizeAmplitude")] public int ObstacleSizeAmplitude;
+
+    [DataField("boundsCompressionInterval")] public float BoundsCompressionInterval;
+    
+    [DataField("boundsCompressionDistance")] public int BoundsCompressionDistance;
 }
 
 public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
@@ -80,11 +86,16 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         _shipSys.PointsPerHitMultiplier = component.PointsPerHitMultiplier;
         _shipSys.PointsPerAssist = component.PointsPerAssist;
         _shipSys.PointsPerKill = component.PointsPerKill;
+        _shipSys.OutOfBoundsPenalty = component.OutOfBoundsPenalty;
 
         _shipSys.HUDPrototypeId = component.HUDPrototypeId;
         _shipSys.CaptainHUDPrototypeId = component.CaptainHUDPrototypeId;
-
+        
         _shipSys.MaxSpawnOffset = component.MaxSpawnOffset;
+
+        _shipSys.BoundsCompressionInterval = component.BoundsCompressionInterval;
+        _shipSys.BoundsCompression = component.BoundsCompressionInterval > 0;
+        _shipSys.BoundsCompressionDistance = component.BoundsCompressionDistance;
 
         foreach (var shipTypeProtId in component.ShipTypes)
         {

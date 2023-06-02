@@ -32,7 +32,7 @@
 - type: structure
   id: shipevent_boxship
   generator: !type:MapLoaderGenerator
-    mapPath: "/Maps/Theta/Shipevent/Ships/shipevent-arrowhead.yml"
+    mapPath: "/Maps/Theta/Shipevent/Ships/shipevent-boxship.yml"
   spawnWeight: 0
   minDistance: 10
 

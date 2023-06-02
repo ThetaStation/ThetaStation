@@ -25,6 +25,9 @@ shipevent-respawn-tech = уничтожения жизненно важных к
 
 shipevent-remove-default = недовольства адмирала
 
+shipevent-outofbounds = ВНИМАНИЕ! Ваша команда покинула пределы испытательного полигона. Немедленно вернитесь, в противном случае будут применены дисциплинарные меры.
+shipevent-boundscompressed = Границы полигона были сжаты на { $distance } метров.
+
 
 ## Role stuff
 

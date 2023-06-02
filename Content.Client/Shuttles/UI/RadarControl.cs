@@ -314,10 +314,10 @@ public sealed class RadarControl : MapGridControl
             // Get the positive reduced angle.
             var displayRot = -worldRot.Reduced();
 
-            var gridPhysic = bodyQuery.GetComponent(ourGridId.Value);
-            var gridVelocity = displayRot.RotateVec(gridPhysic.LinearVelocity);
+            var gridPhysics = bodyQuery.GetComponent(ourGridId.Value);
+            var gridVelocity = displayRot.RotateVec(gridPhysics.LinearVelocity);
 
-            DrawVelocityArrow(handle, matrix, gridVelocity, gridPhysic.LocalCenter);
+            DrawVelocityArrow(handle, matrix, gridVelocity, gridPhysics.LocalCenter);
         }
 
         var shown = new HashSet<EntityUid>();

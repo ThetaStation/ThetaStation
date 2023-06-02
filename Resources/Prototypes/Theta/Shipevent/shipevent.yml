@@ -26,6 +26,7 @@
       pointsPerHitMultiplier: 0.01
       pointsPerAssist: 5000
       pointsPerKill : 10000
+      outOfBoundsPenalty: 2000
     
       #map gen
       initialObstacleAmount: 150
@@ -34,6 +35,10 @@
         - "shiptype_arrowhead"
         - "shiptype_mule"
         - "shiptype_boxship"
+      
+      #bounds
+      boundsCompressionInterval: 200
+      boundsCompressionDistance: 100
         
       obstacleTypes:
         - "asteroid_small"
