@@ -43,7 +43,7 @@ public sealed class TurretLoaderSystem : EntitySystem
 
     public void SetupLoader(EntityUid uid, TurretLoaderComponent loader, EntityUid? turretUid = null)
     {
-        if (!loader.BoundTurret.IsValid() && turretUid != null)
+        if (!EntityManager.EntityExists(loader.BoundTurret) && turretUid != null)
         {
             loader.BoundTurret = turretUid.Value;
         }
@@ -57,7 +57,7 @@ public sealed class TurretLoaderSystem : EntitySystem
         {
             loader.ContainerSlot = slots.Slots["ammoContainer"];
 
-            if (loader.BoundTurret.IsValid())
+            if (loader.BoundTurret != null)
             {
                 if (EntityManager.TryGetComponent<CannonComponent>(loader.BoundTurret, out var cannon))
                 {
@@ -74,9 +74,9 @@ public sealed class TurretLoaderSystem : EntitySystem
     private void UpdateAmmoContainer(TurretLoaderComponent loader)
     {
         ContainerAmmoProviderComponent? turretContainer = null;
-        if (loader.BoundTurret.IsValid())
+        if (EntityManager.EntityExists(loader.BoundTurret))
         {
-            turretContainer = EntityManager.EnsureComponent<ContainerAmmoProviderComponent>(loader.BoundTurret);
+            turretContainer = EntityManager.EnsureComponent<ContainerAmmoProviderComponent>(loader.BoundTurret!.Value);
             turretContainer.ProviderUid = null;
             turretContainer.Container = "";
         }
@@ -129,7 +129,7 @@ public sealed class TurretLoaderSystem : EntitySystem
 
     private void OnRemoval(EntityUid uid, TurretLoaderComponent loader, ComponentRemove args)
     {
-        if (loader.BoundTurret != EntityUid.Invalid)
+        if (EntityManager.EntityExists(loader.BoundTurret))
         {
             if (EntityManager.TryGetComponent<CannonComponent>(loader.BoundTurret, out var cannon))
                 cannon.BoundLoader = null;
