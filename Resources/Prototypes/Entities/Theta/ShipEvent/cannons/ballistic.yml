@@ -40,7 +40,7 @@
       ports:
         - CannonConsoleReceiver
 
-#7.62
+# Machine Gun
 - type: entity
   id: ShipEventMachineGunCannon
   parent: ShipEventCannonBallisticBase
@@ -83,7 +83,7 @@
         params:
           volume: 10
 
-#37mm
+# Light Cannon
 - type: entity
   id: ShipEventLightArtilleryCannon
   parent: ShipEventCannonBallisticBase
@@ -120,12 +120,12 @@
       selectedMode: FullAuto
       availableModes:
         - FullAuto
-      soundGunshot: 
+      soundGunshot:
         path: /Audio/Theta/Shipevent/artillery.ogg
         params:
           volume: 10
-      
-#100mm
+
+# Artillery
 - type: entity
   id: ShipEventHeavyArtilleryCannon
   parent: ShipEventCannonBallisticBase

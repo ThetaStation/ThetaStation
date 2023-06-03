@@ -18,18 +18,18 @@ ent-TurretAmmoContainerRegular = ammo container
 ent-TurretAmmoContainerBluespace = ammo container (bluespace)
     .desc = { "Extended version of standard ammo container." }
     .suffix = { "ShipEvent" }
-    
-    
+
+
 ## Guns
 
 ent-ShipEventMachineGunCannon = machine gun turret
-    .desc = { ".30 machine gun turret, for dealing with enemy's living force" }
+    .desc = { "Machine gun turret, for dealing with enemy's living force." }
     .suffix = { "ShipEvent" }
-    
+
 ent-ShipEventLightArtilleryCannon = light cannon
-    .desc = { "61-K anti-aircraft 37mm cannon. Albeit designed 6 centuries ago, it's still capable of penetrating spacecraft armour." }
+    .desc = { "61-K anti-aircraft cannon. Despite outdated model, it's still capable of penetrating spacecraft armour." }
     .suffix = { "ShipEvent" }
-    
-ent-ShipEventHeavyArtilleryCannon = heavy cannon
-    .desc = { "BS-3 anti-tank 100mm cannon. Slow firing, but extremely powerful, it has proven itself on fields of Second World War." }
+
+ent-ShipEventHeavyArtilleryCannon = artillery cannon
+    .desc = { "BS-3 anti-ship cannon. Slow firing, but extremely powerful, it has proven itself on fields of The Second Corporate War." }
     .suffix = { "ShipEvent" }
