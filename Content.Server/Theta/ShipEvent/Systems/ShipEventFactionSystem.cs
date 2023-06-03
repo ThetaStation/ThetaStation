@@ -87,6 +87,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     public MapId TargetMap;
 
     public List<ShipEventFaction> Teams { get; } = new();
+    
+    public List<Processor> ShipProcessors = new(); //applied to all ships on spawn
 
     public override void Initialize()
     {
@@ -380,7 +382,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             MaxSpawnOffset - CurrentBoundsOffset,
             50,
             _protMan.Index<StructurePrototype>(shipType.StructurePrototype),
-        new List<Processor>(),
+            ShipProcessors,
             true);
 
         var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>(newShip);
@@ -687,7 +689,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             MaxSpawnOffset - CurrentBoundsOffset,
             50,
             shipStructProt,
-            new List<Processor>(),
+            ShipProcessors,
             true);
 
         var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>(newShip);

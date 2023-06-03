@@ -10,7 +10,10 @@ using Content.Shared.Shuttles.Components;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using Robust.Shared.Serialization.Markdown;
 using Robust.Shared.Serialization.Markdown.Mapping;
+using Robust.Shared.Serialization.Markdown.Value;
+using YamlDotNet.Core.Events;
 
 namespace Content.Server.StationEvents.Events.Theta;
 
@@ -68,6 +71,23 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
     [Dependency] private readonly IPrototypeManager _protMan = default!;
     [Dependency] private IRobustRandom _rand = default!;
 
+    //Creates ComponentRegistryEntry for ChangeIFFOnSplit comp. Used by AddComponentProcessor to prevent splitted grids from getting labels.
+    //todo: this is ugly hardcode, better to move it into prototype or somethin, when I will understand how
+    private EntityPrototype.ComponentRegistryEntry CreateIFFCompEntry()
+    {
+        var iffSplitComp = new ChangeIFFOnSplitComponent();
+        iffSplitComp.NewFlags = IFFFlags.HideLabel;
+        iffSplitComp.Replicate = true;
+
+        MappingDataNode mapping = new MappingDataNode(new Dictionary<DataNode, DataNode>
+        {
+            {new ValueDataNode("flags"), new ValueDataNode(IFFFlags.HideLabel.ToString())},
+            {new ValueDataNode("replicate"), new ValueDataNode("true")}
+        });
+
+        return new EntityPrototype.ComponentRegistryEntry(iffSplitComp, mapping);
+    }
+
     protected override void Started(EntityUid uid, ShipEventRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
         base.Started(uid, component, gameRule, args);
@@ -121,14 +141,11 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
             obstacleStructProts.Add(structProt);
         }
 
-        AddComponentsProcessor iffInheritanceProc = new();
-        iffInheritanceProc.Components = new ComponentRegistry(
+        AddComponentsProcessor iffSplitProc = new();
+        iffSplitProc.Components = new ComponentRegistry(
             new()
             {
-                {
-                    "InheritanceIFF",
-                    new EntityPrototype.ComponentRegistryEntry(new InheritanceIFFComponent(), new MappingDataNode())
-                }
+                {"ChangeIFFOnSplit", CreateIFFCompEntry()}
             }
         );
 
@@ -136,7 +153,7 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         iffFlagProc.Flags = new() { IFFFlags.HideLabel };
         iffFlagProc.ColorOverride = Color.Gold;
 
-        List<Processor> globalProcessors = new() { iffInheritanceProc, iffFlagProc };
+        List<Processor> globalProcessors = new() { iffSplitProc, iffFlagProc };
 
         _debrisSys.SpawnStructures(map,
             Vector2i.Zero,
@@ -144,5 +161,7 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
             component.MaxSpawnOffset,
             obstacleStructProts,
             globalProcessors);
+        
+        _shipSys.ShipProcessors.Add(iffSplitProc);
     }
 }

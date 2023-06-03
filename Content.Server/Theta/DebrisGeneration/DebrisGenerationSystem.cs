@@ -140,7 +140,6 @@ public sealed class DebrisGenerationSystem : EntitySystem
         {
             Logger.Info($"Debris generation, RandomPosSpawn: Spawned grid {grid.ToString()} successfully");
             gridForm.Coordinates = new EntityCoordinates(gridForm.Coordinates.EntityId, mapPos);
-            return grid;
         }
         else if (forceIfFailed)
         {
@@ -149,15 +148,19 @@ public sealed class DebrisGenerationSystem : EntitySystem
             mapPos = (Vector2i) Rand.NextVector2Box(bounds.Left, bounds.Bottom, bounds.Right, bounds.Top).Rounded();
             
             gridForm.Coordinates = new EntityCoordinates(gridForm.Coordinates.EntityId, mapPos);
-            return grid;
         }
         
-        if ((result || forceIfFailed) && extraProcessors != null)
+        if (result || forceIfFailed)
         {
-            foreach (Processor extraProc in extraProcessors)
+            if (extraProcessors != null)
             {
-                extraProc.Process(this, targetMap, grid, false);
+                foreach (Processor extraProc in extraProcessors)
+                {
+                    extraProc.Process(this, targetMap, grid, false);
+                }
             }
+
+            return grid;
         }
         
         Logger.Error($"Debris generation, RandomPosSpawn: Failed to find spawn position, deleting grid {grid.ToString()}");

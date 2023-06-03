@@ -33,7 +33,7 @@ public sealed class AddComponentsProcessor : Processor
 
     public void AddComponents(DebrisGenerationSystem sys, EntityUid gridUid)
     {
-        //todo: this is a copypaste from AddComponentSpecial, all concerns from here apply there too
+        //todo: this is a copypaste from AddComponentSpecial, all concerns from there apply here too
         var factory = IoCManager.Resolve<IComponentFactory>();
         var serializationManager = IoCManager.Resolve<ISerializationManager>();
 
