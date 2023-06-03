@@ -114,6 +114,10 @@ public sealed class DebrisGenerationSystem : EntitySystem
         var grid = structure.Generator.Generate(this, TargetMap);
         var gridComp = EntMan.GetComponent<MapGridComponent>(grid);
         var gridForm = EntMan.GetComponent<TransformComponent>(grid);
+        var bounds = new Box2(startPos.X, 
+            startPos.Y, 
+            startPos.X + maxOffset - gridComp.LocalAABB.Width, 
+            startPos.Y + maxOffset - gridComp.LocalAABB.Height);
         
         var finalDistance = (int)Math.Ceiling(structure.MinDistance + Math.Max(gridComp.LocalAABB.Height, gridComp.LocalAABB.Width));
         
@@ -121,22 +125,11 @@ public sealed class DebrisGenerationSystem : EntitySystem
         var result = false;
         for (int n = 0; n < tries; n++)
         {
-            mapPos = (Vector2i) Rand.NextVector2Box(
-                startPos.X, 
-                startPos.Y, 
-                startPos.X + maxOffset, 
-                startPos.Y + maxOffset).Rounded();
+            mapPos = (Vector2i) Rand.NextVector2Box(bounds.Left, bounds.Bottom, bounds.Right, bounds.Top).Rounded();
             if (!MapMan.FindGridsIntersecting(targetMap,
                     new Box2(mapPos - finalDistance, mapPos + finalDistance)).Any())
             {
                 result = true;
-                if (extraProcessors != null)
-                {
-                    foreach (Processor extraProc in extraProcessors)
-                    {
-                        extraProc.Process(this, targetMap, grid, false);
-                    }
-                }
                 break;
             }
         }
@@ -149,45 +142,17 @@ public sealed class DebrisGenerationSystem : EntitySystem
             gridForm.Coordinates = new EntityCoordinates(gridForm.Coordinates.EntityId, mapPos);
             return grid;
         }
-
-        if (forceIfFailed)
+        else if (forceIfFailed)
         {
-            Logger.Info($"Debris generation, RandomPosSpawn: Failed to find spawn position, but forceIfFailed is set to true; proceeding to force spawn");
-            return RandomPosForceSpawn(targetMap, startPos, maxOffset, structure, extraProcessors);
-        }
-        Logger.Error($"Debris generation, RandomPosSpawn: Failed to find spawn position, deleting grid {grid.ToString()}");
-        EntityManager.DeleteEntity(grid);
-        return EntityUid.Invalid;
-    }
-
-    /// <summary>
-    /// Randomly places specified structure onto map, destroys any overlapping grids.
-    /// </summary>
-    public EntityUid RandomPosForceSpawn(MapId targetMap, Vector2 startPos, int maxOffset, 
-        StructurePrototype structure, List<Processor>? extraProcessors = null)
-    {
-        TargetMap = targetMap;
-        
-        var grid = structure.Generator.Generate(this, TargetMap);
-        var gridComp = EntMan.GetComponent<MapGridComponent>(grid);
-        var gridForm = EntMan.GetComponent<TransformComponent>(grid);
-        
-        var finalDistance = (int)Math.Ceiling(structure.MinDistance + Math.Max(gridComp.LocalAABB.Height, gridComp.LocalAABB.Width));
-        
-        Vector2i mapPos = Vector2i.Zero;
-        mapPos = (Vector2i) Rand.NextVector2Box(
-                startPos.X, 
-                startPos.Y, 
-                startPos.X + maxOffset, 
-                startPos.Y + maxOffset).Rounded();
-        
-        foreach(MapGridComponent ogrid in MapMan.FindGridsIntersecting(targetMap, 
-                    new Box2(mapPos - finalDistance, mapPos + finalDistance)))
-        {
-            EntityManager.DeleteEntity(ogrid.Owner);
+            Logger.Info($"Debris generation, RandomPosSpawn: Failed to find spawn position for grid {grid.ToString()}," +
+                        "but forceIfFailed is set to true; proceeding to force-spawn");
+            mapPos = (Vector2i) Rand.NextVector2Box(bounds.Left, bounds.Bottom, bounds.Right, bounds.Top).Rounded();
+            
+            gridForm.Coordinates = new EntityCoordinates(gridForm.Coordinates.EntityId, mapPos);
+            return grid;
         }
         
-        if (extraProcessors != null)
+        if ((result || forceIfFailed) && extraProcessors != null)
         {
             foreach (Processor extraProc in extraProcessors)
             {
@@ -195,11 +160,9 @@ public sealed class DebrisGenerationSystem : EntitySystem
             }
         }
         
-        Logger.Info($"Debris generation, RandomPosForceSpawn: Spawned grid {grid.ToString()} successfully");
-        gridForm.Coordinates = new EntityCoordinates(gridForm.Coordinates.EntityId, mapPos);
-        TargetMap = MapId.Nullspace;
-        
-        return grid;
+        Logger.Error($"Debris generation, RandomPosSpawn: Failed to find spawn position, deleting grid {grid.ToString()}");
+        EntityManager.DeleteEntity(grid);
+        return EntityUid.Invalid;
     }
 
     //Set's up collision grid
