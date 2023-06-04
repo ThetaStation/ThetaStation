@@ -52,14 +52,14 @@ public sealed partial class ShipEventFactionSystem
         team.Points = Math.Max(0, team.Points - OutOfBoundsPenalty);
 
         Vector2 teamShipPos = _formSys.GetWorldPosition(Transform(team.Ship));
-        MapCoordinates mapCoords = new MapCoordinates(teamShipPos + _random.NextVector2(5), TargetMap);
-        _expSys.QueueExplosion(mapCoords, ExplosionSystem.DefaultExplosionPrototypeId, 100, 5, 50);
+        MapCoordinates mapCoords = new MapCoordinates(teamShipPos + 5 + _random.NextVector2(5), TargetMap);
+        _expSys.QueueExplosion(mapCoords, ExplosionSystem.DefaultExplosionPrototypeId, 300, 5, 100);
     }
 
     private void CompressBounds()
     {
         Announce(Loc.GetString("shipevent-boundscompressed", ("distance", BoundsCompressionDistance)));
-        CurrentBoundsOffset = Math.Max(MaxSpawnOffset, CurrentBoundsOffset + BoundsCompressionDistance);
+        CurrentBoundsOffset = Math.Min(MaxSpawnOffset / 2, CurrentBoundsOffset + BoundsCompressionDistance);
         UpdateBoundsOverlay();
     }
 

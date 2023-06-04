@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Client.Theta.ShipEvent;
+using Content.Client.Theta.ShipEvent.Systems;
 using Content.Client.UserInterface.Controls;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
@@ -26,6 +27,8 @@ public sealed class RadarControl : MapGridControl
     [Dependency] private readonly IEntityManager _entManager = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
+
+    private BoundsOverlaySystem _boundsOverSys;
 
     private const float GridLinesDistance = 32f;
 
@@ -74,6 +77,7 @@ public sealed class RadarControl : MapGridControl
     {
         OnKeyBindDown += StartFiring;
         OnKeyBindUp += StopFiring;
+        _boundsOverSys = _entManager.System<BoundsOverlaySystem>();
     }
 
     public void SetMatrix(EntityCoordinates? coordinates, Angle? angle)
@@ -415,6 +419,8 @@ public sealed class RadarControl : MapGridControl
 
         DrawCannons(handle, offsetMatrix);
 
+        DrawPlayAreaBounds(handle, offsetMatrix);
+
         var offset = _coordinates.Value.Position;
         var invertedPosition = _coordinates.Value.Position - offset;
         invertedPosition.Y = -invertedPosition.Y;
@@ -559,6 +565,29 @@ public sealed class RadarControl : MapGridControl
 
             handle.DrawCircle(ScalePosition(uiPosition), 3f, color);
         }
+    }
+
+    private void DrawPlayAreaBounds(DrawingHandleScreen handle, Matrix3 matrix)
+    {
+        Vector2 lb = matrix.Transform(_boundsOverSys.CurrentBounds.BottomLeft);
+        Vector2 lt = matrix.Transform(_boundsOverSys.CurrentBounds.TopLeft);
+        Vector2 rb = matrix.Transform(_boundsOverSys.CurrentBounds.BottomRight);
+        Vector2 rt = matrix.Transform(_boundsOverSys.CurrentBounds.TopRight);
+
+        lb.Y = -lb.Y;
+        lt.Y = -lt.Y;
+        rb.Y = -rb.Y;
+        rt.Y = -rt.Y;
+        
+        lb = ScalePosition(lb);
+        lt = ScalePosition(lt);
+        rb = ScalePosition(rb);
+        rt = ScalePosition(rt);
+
+        handle.DrawLine(lb, lt, Color.Red);
+        handle.DrawLine(rb, rt, Color.Red);
+        handle.DrawLine(lb, rb, Color.Red);
+        handle.DrawLine(lt, rt, Color.Red);
     }
 
     private void DrawDocks(DrawingHandleScreen handle, EntityUid uid, Matrix3 matrix)

@@ -37,8 +37,8 @@
         - "shiptype_boxship"
       
       #bounds
-      boundsCompressionInterval: 200
-      boundsCompressionDistance: 100
+      boundsCompressionInterval: 0
+      boundsCompressionDistance: 0
         
       obstacleTypes:
         - "asteroid_small"
