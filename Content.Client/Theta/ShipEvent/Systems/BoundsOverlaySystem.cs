@@ -7,6 +7,7 @@ namespace Content.Client.Theta.ShipEvent.Systems;
 public sealed class BoundsOverlaySystem : EntitySystem
 {
     [Dependency] private readonly IOverlayManager _overMan = default!;
+    public Box2 CurrentBounds;
     private BoundsOverlay overlay = default!;
     
     public override void Initialize()
@@ -25,7 +26,8 @@ public sealed class BoundsOverlaySystem : EntitySystem
 
     private void OnInfoReceived(BoundsOverlayInfo ev)
     {
-        overlay.TargetMap = ev.TargetMap;
+        CurrentBounds = ev.Bounds;
         overlay.Bounds = ev.Bounds;
+        overlay.TargetMap = ev.TargetMap;
     }
 }
