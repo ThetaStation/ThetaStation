@@ -32,11 +32,7 @@ public sealed partial class ShipPickerWindow : DefaultWindow
             shipTypeEntryInfoHolder.Orientation = BoxContainer.LayoutOrientation.Horizontal;
 
             var shipTypeLabel = new RichTextLabel();
-            string crewAmountStr = Loc.GetString("shipevent-shippicker-mincrewamount") + " ";
-            if (state.MemberCount < shipType.MinCrewAmount)
-                crewAmountStr += "[color=yellow]" + shipType.MinCrewAmount + "[/color]";
-            else
-                crewAmountStr += shipType.MinCrewAmount;
+            var crewAmountStr = Loc.GetString("shipevent-shippicker-mincrewamount") + " " + shipType.MinCrewAmount;
             shipTypeLabel.SetMarkup($"{Loc.GetString(shipType.Name)}\n \n{Loc.GetString(shipType.Class)}\n \n{crewAmountStr}\n \n{Loc.GetString(shipType.Description)}");
             shipTypeLabel.MinWidth = Width / 2;
             shipTypeLabel.SetWidth = Width / 2;

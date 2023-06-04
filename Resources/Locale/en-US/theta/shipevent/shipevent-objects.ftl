@@ -23,11 +23,11 @@ ent-TurretAmmoContainerBluespace = ammo container (bluespace)
 ## Guns
 
 ent-ShipEventMachineGunCannon = machine gun turret
-    .desc = { "Machine gun turret, for dealing with enemy's living force." }
+    .desc = { "Machine gun turret, for dealing with enemy's manpower." }
     .suffix = { "ShipEvent" }
 
 ent-ShipEventLightArtilleryCannon = light cannon
-    .desc = { "61-K anti-aircraft cannon. Despite outdated model, it's still capable of penetrating spacecraft armour." }
+    .desc = { "61-K anti-aircraft cannon. Despite being an outdated model, it's still capable of penetrating spacecraft armour." }
     .suffix = { "ShipEvent" }
 
 ent-ShipEventHeavyArtilleryCannon = artillery cannon
