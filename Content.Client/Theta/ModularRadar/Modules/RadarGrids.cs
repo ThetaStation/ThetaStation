@@ -18,6 +18,10 @@ public sealed class RadarGrids : RadarModule
 
     public bool ShowIFF { get; set; } = true;
 
+    public RadarGrids(ModularRadarControl parentRadar) : base(parentRadar)
+    {
+    }
+
     public override void Draw(DrawingHandleScreen handle, Parameters parameters)
     {
         var fixturesQuery = EntManager.GetEntityQuery<FixturesComponent>();
@@ -32,7 +36,7 @@ public sealed class RadarGrids : RadarModule
         {
             var ourGridMatrix = xformQuery.GetComponent(ourGridId.Value).WorldMatrix;
 
-            Matrix3.Multiply(in ourGridMatrix, in parameters.Matrix, out var matrix);
+            Matrix3.Multiply(in ourGridMatrix, in parameters.DrawMatrix, out var matrix);
 
             DrawGrid(handle, parameters, matrix, ourGrid, Color.MediumSpringGreen);
         }
@@ -42,7 +46,7 @@ public sealed class RadarGrids : RadarModule
         var shown = new HashSet<EntityUid>();
         // Draw other grids... differently
         foreach (var grid in MapManager.FindGridsIntersecting(mapPosition.MapId,
-                     new Box2(mapPosition.Position - parameters.MaxRadarRange, mapPosition.Position + parameters.MaxRadarRange)))
+                     new Box2(mapPosition.Position - MaxRadarRange, mapPosition.Position + MaxRadarRange)))
         {
             if (grid.Owner == ourGridId || !fixturesQuery.HasComponent(grid.Owner))
                 continue;
@@ -71,7 +75,7 @@ public sealed class RadarGrids : RadarModule
 
             var gridXform = xformQuery.GetComponent(grid.Owner);
             var gridMatrix = gridXform.WorldMatrix;
-            Matrix3.Multiply(in gridMatrix, in parameters.Matrix, out var matty);
+            Matrix3.Multiply(in gridMatrix, in parameters.DrawMatrix, out var matty);
             var color = iff?.Color ?? Color.Gold;
 
             // Others default:
@@ -93,7 +97,7 @@ public sealed class RadarGrids : RadarModule
                     };
 
                     _iffControls[grid.Owner] = label;
-                    parameters.RadarControl.AddChild(label);
+                    Radar.AddChild(label);
                 }
                 else
                 {
@@ -106,15 +110,15 @@ public sealed class RadarGrids : RadarModule
                 var distance = gridCentre.Length;
 
                 // y-offset the control to always render below the grid (vertically)
-                var yOffset = Math.Max(gridBounds.Height, gridBounds.Width) * parameters.MinimapScale / 1.8f / parameters.RadarControl.UIScale;
+                var yOffset = Math.Max(gridBounds.Height, gridBounds.Width) * MinimapScale / 1.8f / Radar.UIScale;
 
                 // The actual position in the UI. We offset the matrix position to render it off by half its width
                 // plus by the offset.
-                var uiPosition = ScalePosition(gridCentre, parameters) / parameters.RadarControl.UIScale - new Vector2(label.Width / 2f, -yOffset);
+                var uiPosition = ScalePosition(gridCentre) / Radar.UIScale - new Vector2(label.Width / 2f, -yOffset);
 
                 // Look this is uggo so feel free to cleanup. We just need to clamp the UI position to within the viewport.
-                uiPosition = new Vector2(Math.Clamp(uiPosition.X, 0f, parameters.RadarControl.Width - label.Width),
-                    Math.Clamp(uiPosition.Y, 10f, parameters.RadarControl.Height - label.Height));
+                uiPosition = new Vector2(Math.Clamp(uiPosition.X, 0f, Radar.Width - label.Width),
+                    Math.Clamp(uiPosition.Y, 10f, Radar.Height - label.Height));
 
                 label.Visible = true;
                 label.Text = Loc.GetString("shuttle-console-iff-label", ("name", name), ("distance", $"{distance:0.0}"));
@@ -206,11 +210,11 @@ public sealed class RadarGrids : RadarModule
                 var adjustedStart = matrix.Transform(start);
                 var adjustedEnd = matrix.Transform(end);
 
-                if (adjustedStart.Length > parameters.ActualRadarRange || adjustedEnd.Length > parameters.ActualRadarRange)
+                if (adjustedStart.Length > ActualRadarRange || adjustedEnd.Length > ActualRadarRange)
                     continue;
 
-                start = ScalePosition(new Vector2(adjustedStart.X, -adjustedStart.Y), parameters);
-                end = ScalePosition(new Vector2(adjustedEnd.X, -adjustedEnd.Y), parameters);
+                start = ScalePosition(new Vector2(adjustedStart.X, -adjustedStart.Y));
+                end = ScalePosition(new Vector2(adjustedEnd.X, -adjustedEnd.Y));
 
                 edges.Add(start);
                 edges.Add(end);

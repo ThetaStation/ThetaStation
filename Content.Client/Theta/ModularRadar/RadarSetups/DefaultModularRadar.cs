@@ -6,8 +6,8 @@ public sealed class DefaultModularRadar : ModularRadarControl
 {
     public DefaultModularRadar()
     {
-        Modules.Add(new RadarPosition());
-        Modules.Add(new RadarGrids());
-        Modules.Add(new RadarDocks());
+        Modules.Add(new RadarPosition(this));
+        Modules.Add(new RadarGrids(this));
+        Modules.Add(new RadarDocks(this));
     }
 }

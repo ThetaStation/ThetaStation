@@ -12,7 +12,6 @@ namespace Content.Client.Theta.ModularRadar;
 public abstract class ModularRadarControl : MapGridControl
 {
     [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
 
     private const float GridLinesDistance = 32f;
 
@@ -126,13 +125,7 @@ public abstract class ModularRadarControl : MapGridControl
             xform.WorldRotation + _rotation.Value);
 
         var parameters = new RadarModule.Parameters(
-            midPoint: MidPoint,
-            minimapScale: MinimapScale,
-            matrix: offsetMatrix,
-            actualRadarRange: ActualRadarRange,
-            maxRadarRange: MaxRadarRange,
-            radarControl: this,
-            worldRange: WorldRange
+            drawMatrix: offsetMatrix
         );
 
         foreach (var module in Modules)
@@ -147,5 +140,20 @@ public abstract class ModularRadarControl : MapGridControl
         {
             module.OnClear();
         }
+    }
+
+    public int GetMinimapMargin()
+    {
+        return MinimapMargin;
+    }
+
+    public int GetUIDisplayRadius()
+    {
+        return UIDisplayRadius;
+    }
+
+    public float GetActualRadarRange()
+    {
+        return ActualRadarRange;
     }
 }

@@ -13,15 +13,23 @@ public abstract class RadarModule
 
     protected Angle? ParentRotation;
 
-    protected RadarModule()
+    protected ModularRadarControl Radar;
+
+    protected int MidPoint => SizeFull / 2;
+    protected int SizeFull => (int) ((Radar.GetUIDisplayRadius() + Radar.GetMinimapMargin()) * 2 * Radar.UIScale);
+    protected int ScaledMinimapRadius => (int) (Radar.GetUIDisplayRadius() * Radar.UIScale);
+    protected float MinimapScale => Radar.WorldRange != 0 ? ScaledMinimapRadius / Radar.WorldRange : 0f;
+
+    protected float MaxRadarRange => Radar.MaxRadarRange;
+
+    protected float WorldRange => Radar.WorldRange;
+
+    protected float ActualRadarRange => Radar.GetActualRadarRange();
+
+    protected RadarModule(ModularRadarControl parentRadar)
     {
         IoCManager.InjectDependencies(this);
-    }
-
-    public void SetMatrix(EntityCoordinates? coordinates, Angle? angle)
-    {
-        ParentCoordinates = coordinates;
-        ParentRotation = angle;
+        Radar = parentRadar;
     }
 
     public virtual void MouseMove(GUIMouseMoveEventArgs args) { }
@@ -31,41 +39,57 @@ public abstract class RadarModule
     public virtual void Draw(DrawingHandleScreen handle, Parameters parameters) { }
     public virtual void OnClear() { }
 
-    protected static Vector2 ScalePosition(Vector2 value, Parameters parameters)
+    public void SetMatrix(EntityCoordinates? coordinates, Angle? angle)
     {
-        return value * parameters.MinimapScale + parameters.MidPoint;
+        ParentCoordinates = coordinates;
+        ParentRotation = angle;
     }
 
-    protected static Vector2 InverseScalePosition(Vector2 value, Parameters parameters)
+    protected Matrix3 GetOffsetMatrix()
     {
-        return (value - parameters.MidPoint) / parameters.MinimapScale;
+        if (ParentCoordinates == null || ParentRotation == null)
+            return Matrix3.Zero;
+
+        var mapPosition = ParentCoordinates.Value.ToMap(EntManager);
+        if (mapPosition.MapId == MapId.Nullspace)
+            return Matrix3.Zero;
+
+        var xformQuery = EntManager.GetEntityQuery<TransformComponent>();
+
+        if (!xformQuery.TryGetComponent(ParentCoordinates.Value.EntityId, out var xform))
+            return Matrix3.Zero;
+
+        var offsetMatrix = Matrix3.CreateTransform(
+            mapPosition.Position,
+            xform.WorldRotation - ParentRotation.Value);
+        return offsetMatrix;
+    }
+
+    protected Vector2 RelativePositionToCoordinates(Vector2 pos, Matrix3 matrix)
+    {
+        var removeScale = InverseScalePosition(pos);
+        removeScale.Y = -removeScale.Y;
+        return matrix.Transform(removeScale);
+    }
+
+    protected Vector2 ScalePosition(Vector2 value)
+    {
+        return value * MinimapScale + MidPoint;
+    }
+
+    protected Vector2 InverseScalePosition(Vector2 value)
+    {
+        return (value - MidPoint) / MinimapScale;
     }
 
     public sealed class Parameters
     {
-        public int MidPoint;
-        public float MinimapScale;
-        public Matrix3 Matrix;
-        public float MaxRadarRange;
-        public float ActualRadarRange;
-        public ModularRadarControl RadarControl;
-        public float WorldRange;
+        public Matrix3 DrawMatrix;
 
-        public Parameters(int midPoint,
-            float minimapScale,
-            Matrix3 matrix,
-            float maxRadarRange,
-            float actualRadarRange,
-            ModularRadarControl radarControl,
-            float worldRange)
+        public Parameters(
+            Matrix3 drawMatrix)
         {
-            MidPoint = midPoint;
-            MinimapScale = minimapScale;
-            Matrix = matrix;
-            MaxRadarRange = maxRadarRange;
-            ActualRadarRange = actualRadarRange;
-            RadarControl = radarControl;
-            WorldRange = worldRange;
+            DrawMatrix = drawMatrix;
         }
     }
 }

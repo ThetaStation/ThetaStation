@@ -19,6 +19,10 @@ public sealed class RadarDocks : RadarModule
     /// </summary>
     public EntityUid? HighlightedDock;
 
+    public RadarDocks(ModularRadarControl parentRadar) : base(parentRadar)
+    {
+    }
+
     public override void UpdateState(BoundUserInterfaceState state)
     {
         if(state is not RadarConsoleBoundInterfaceState radarState)
@@ -53,7 +57,7 @@ public sealed class RadarDocks : RadarModule
         var mapPosition = ParentCoordinates.Value.ToMap(EntManager);
 
         foreach (var grid in MapManager.FindGridsIntersecting(mapPosition.MapId,
-                     new Box2(mapPosition.Position - parameters.MaxRadarRange, mapPosition.Position + parameters.MaxRadarRange)))
+                     new Box2(mapPosition.Position - MaxRadarRange, mapPosition.Position + MaxRadarRange)))
         {
             if (grid.Owner == ourGridId || !fixturesQuery.HasComponent(grid.Owner))
                 continue;
@@ -85,9 +89,9 @@ public sealed class RadarDocks : RadarModule
             {
                 var ent = state.Entity;
                 var position = state.Coordinates.Position;
-                var uiPosition = parameters.Matrix.Transform(position);
+                var uiPosition = parameters.DrawMatrix.Transform(position);
 
-                if (uiPosition.Length > parameters.WorldRange - DockScale) continue;
+                if (uiPosition.Length > WorldRange - DockScale) continue;
 
                 var color = HighlightedDock == ent ? state.HighlightedColor : state.Color;
 
@@ -95,17 +99,17 @@ public sealed class RadarDocks : RadarModule
 
                 var verts = new[]
                 {
-                    parameters.Matrix.Transform(position + new Vector2(-DockScale, -DockScale)),
-                    parameters.Matrix.Transform(position + new Vector2(DockScale, -DockScale)),
-                    parameters.Matrix.Transform(position + new Vector2(DockScale, DockScale)),
-                    parameters.Matrix.Transform(position + new Vector2(-DockScale, DockScale)),
+                    parameters.DrawMatrix.Transform(position + new Vector2(-DockScale, -DockScale)),
+                    parameters.DrawMatrix.Transform(position + new Vector2(DockScale, -DockScale)),
+                    parameters.DrawMatrix.Transform(position + new Vector2(DockScale, DockScale)),
+                    parameters.DrawMatrix.Transform(position + new Vector2(-DockScale, DockScale)),
                 };
 
                 for (var i = 0; i < verts.Length; i++)
                 {
                     var vert = verts[i];
                     vert.Y = -vert.Y;
-                    verts[i] = ScalePosition(vert, parameters);
+                    verts[i] = ScalePosition(vert);
                 }
 
                 handle.DrawPrimitives(DrawPrimitiveTopology.TriangleFan, verts, color.WithAlpha(0.8f));
