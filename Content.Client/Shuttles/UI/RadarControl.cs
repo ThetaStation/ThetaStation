@@ -1,5 +1,3 @@
-using System.Linq;
-using Content.Client.Theta.ShipEvent;
 using Content.Client.Theta.ShipEvent.Systems;
 using Content.Client.UserInterface.Controls;
 using Content.Shared.Shuttles.BUIStates;
@@ -50,8 +48,6 @@ public sealed class RadarControl : MapGridControl
 
     private List<ProjectilesInterfaceState> _projectiles = new();
 
-    private List<CannonInformationInterfaceState> _cannons = new();
-
     public bool ShowIFF { get; set; } = true;
     public bool ShowDocks { get; set; } = true;
 
@@ -62,12 +58,6 @@ public sealed class RadarControl : MapGridControl
 
     public Action<float>? OnRadarRangeChanged;
 
-    private List<EntityUid> _controlledCannons = new();
-
-    private int _nextMouseHandle;
-
-    private const int _mouseCD = 20;
-
     /// <summary>
     /// Raised if the user left-clicks on the radar control with the relevant entitycoordinates.
     /// </summary>
@@ -75,8 +65,6 @@ public sealed class RadarControl : MapGridControl
 
     public RadarControl() : base(64f, 256f, 256f)
     {
-        OnKeyBindDown += StartFiring;
-        OnKeyBindUp += StopFiring;
         _boundsOverSys = _entManager.System<BoundsOverlaySystem>();
     }
 
@@ -123,77 +111,6 @@ public sealed class RadarControl : MapGridControl
         return coords;
     }
 
-    protected override void MouseMove(GUIMouseMoveEventArgs args)
-    {
-        base.MouseMove(args);
-        if (_nextMouseHandle < _mouseCD)
-        {
-            _nextMouseHandle++;
-            return;
-        }
-
-        if (_controlledCannons.Count == 0)
-            return;
-
-        _nextMouseHandle = 0;
-        RotateCannons(args.RelativePosition);
-        args.Handle();
-    }
-
-    private void StartFiring(GUIBoundKeyEventArgs args)
-    {
-        if (args.Function != EngineKeyFunctions.Use)
-            return;
-
-        if (_controlledCannons.Count == 0)
-            return;
-
-        var coordinates = RotateCannons(args.RelativePosition);
-
-        var player = _player.LocalPlayer?.ControlledEntity;
-        if (player == null)
-            return;
-
-        var ev = new StartCannonFiringEvent(coordinates, player.Value);
-        foreach (var entityUid in _controlledCannons)
-        {
-            _entManager.EventBus.RaiseLocalEvent(entityUid, ref ev);
-        }
-
-        args.Handle();
-    }
-
-    private void StopFiring(GUIBoundKeyEventArgs args)
-    {
-        if (args.Function != EngineKeyFunctions.Use)
-            return;
-
-        if (_controlledCannons.Count == 0)
-            return;
-
-        var ev = new StopCannonFiringEventEvent();
-        foreach (var entityUid in _controlledCannons)
-        {
-            _entManager.EventBus.RaiseLocalEvent(entityUid, ref ev);
-        }
-    }
-
-    private Vector2 RotateCannons(Vector2 mouseRelativePosition)
-    {
-        var offsetMatrix = GetOffsetMatrix();
-        var relativePositionToCoordinates = RelativePositionToCoordinates(mouseRelativePosition, offsetMatrix);
-        var player = _player.LocalPlayer?.ControlledEntity;
-        if (player == null)
-            return relativePositionToCoordinates;
-        foreach (var entityUid in _controlledCannons)
-        {
-            var ev = new RotateCannonEvent(relativePositionToCoordinates, player.Value);
-            _entManager.EventBus.RaiseLocalEvent(entityUid, ref ev);
-        }
-
-        return relativePositionToCoordinates;
-    }
-
     private Vector2 RelativePositionToCoordinates(Vector2 pos, Matrix3 matrix)
     {
         var removeScale = InverseScalePosition(pos);
@@ -226,12 +143,6 @@ public sealed class RadarControl : MapGridControl
 
         _mobs = ls.MobsAround;
         _projectiles = ls.Projectiles;
-
-        _cannons = ls.Cannons;
-        _controlledCannons = _cannons
-            .Where(i => i.IsControlling)
-            .Select(i => i.Uid)
-            .ToList();
     }
 
     private Matrix3 GetOffsetMatrix()
@@ -417,8 +328,6 @@ public sealed class RadarControl : MapGridControl
 
         DrawMobs(handle, offsetMatrix);
 
-        DrawCannons(handle, offsetMatrix);
-
         DrawPlayAreaBounds(handle, offsetMatrix);
 
         var offset = _coordinates.Value.Position;
@@ -515,44 +424,6 @@ public sealed class RadarControl : MapGridControl
         handle.DrawPrimitives(DrawPrimitiveTopology.LineStrip, verts, Color.White);
     }
 
-    // transform components on the client should be enough to get the angle
-    private void DrawCannons(DrawingHandleScreen handle, Matrix3 matrix)
-    {
-        const float cannonSize = 3f;
-        foreach (var cannon in _cannons)
-        {
-            var position = cannon.Coordinates.ToMapPos(_entManager);
-            var angle = cannon.Angle;
-            var color = cannon.Color;
-
-            var hsvColor = Color.ToHsv(color);
-
-            const float additionalDegreeCoeff = 20f / 360f;
-
-            // X is hue
-            var hueOffset = hsvColor.X * cannon.UsedCapacity / Math.Max(1, cannon.MaxCapacity);
-            hsvColor.X = Math.Max(hueOffset + additionalDegreeCoeff, additionalDegreeCoeff);
-
-            color = Color.FromHsv(hsvColor);
-
-            var verts = new[]
-            {
-                matrix.Transform(position + angle.RotateVec(new Vector2(-cannonSize / 2, cannonSize / 4))),
-                matrix.Transform(position + angle.RotateVec(new Vector2(0, -cannonSize / 2 - cannonSize / 4))),
-                matrix.Transform(position + angle.RotateVec(new Vector2(cannonSize / 2, cannonSize / 4))),
-                matrix.Transform(position + angle.RotateVec(new Vector2(-cannonSize / 2, cannonSize / 4))),
-            };
-            for (var i = 0; i < verts.Length; i++)
-            {
-                var vert = verts[i];
-                vert.Y = -vert.Y;
-                verts[i] = ScalePosition(vert);
-            }
-
-            handle.DrawPrimitives(DrawPrimitiveTopology.LineStrip, verts, color);
-        }
-    }
-
     private void DrawMobs(DrawingHandleScreen handle, Matrix3 matrix)
     {
         foreach (var state in _mobs)
@@ -578,7 +449,7 @@ public sealed class RadarControl : MapGridControl
         lt.Y = -lt.Y;
         rb.Y = -rb.Y;
         rt.Y = -rt.Y;
-        
+
         lb = ScalePosition(lb);
         lt = ScalePosition(lt);
         rb = ScalePosition(rb);

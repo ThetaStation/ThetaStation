@@ -2,6 +2,7 @@
 using Content.Client.UserInterface.Controls;
 using Content.Shared.Shuttles.BUIStates;
 using Robust.Client.Graphics;
+using Robust.Client.UserInterface;
 using Robust.Shared.Map;
 
 namespace Content.Client.Theta.ModularRadar;
@@ -26,6 +27,35 @@ public abstract class ModularRadarControl : MapGridControl
 
     public ModularRadarControl() : base(64f, 256f, 256f)
     {
+    }
+
+    protected override void MouseMove(GUIMouseMoveEventArgs args)
+    {
+        base.MouseMove(args);
+
+        foreach (var module in Modules)
+        {
+            module.MouseMove(args);
+        }
+    }
+
+    protected override void KeyBindUp(GUIBoundKeyEventArgs args)
+    {
+        base.KeyBindUp(args);
+        foreach (var module in Modules)
+        {
+            module.OnKeyBindUp(args);
+        }
+    }
+
+    protected override void KeyBindDown(GUIBoundKeyEventArgs args)
+    {
+        base.KeyBindDown(args);
+
+        foreach (var module in Modules)
+        {
+            module.OnKeyBindDown(args);
+        }
     }
 
     public bool TryGetModule<T>([NotNullWhen(true)] out T? module) where T : RadarModule
