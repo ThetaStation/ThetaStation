@@ -77,11 +77,6 @@ public abstract class ModularRadarControl : MapGridControl
     {
         _coordinates = coordinates;
         _rotation = angle;
-
-        foreach (var module in Modules)
-        {
-            module.SetMatrix(coordinates, angle);
-        }
     }
 
     public void UpdateState(BoundUserInterfaceState ls)
@@ -185,5 +180,15 @@ public abstract class ModularRadarControl : MapGridControl
     public float GetActualRadarRange()
     {
         return ActualRadarRange;
+    }
+
+    public EntityCoordinates? GetConsoleCoordinates()
+    {
+        return _coordinates;
+    }
+
+    public Angle? GetConsoleRotation()
+    {
+        return _rotation;
     }
 }

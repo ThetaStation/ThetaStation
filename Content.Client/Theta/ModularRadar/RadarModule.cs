@@ -9,21 +9,17 @@ public abstract class RadarModule
     [Dependency] protected readonly IEntityManager EntManager = default!;
     [Dependency] protected readonly IMapManager MapManager = default!;
 
-    protected EntityCoordinates? ParentCoordinates;
-
-    protected Angle? ParentRotation;
-
     protected ModularRadarControl Radar;
+
+    protected EntityCoordinates? ParentCoordinates => Radar.GetConsoleCoordinates();
+    protected Angle? ParentRotation => Radar.GetConsoleRotation();
 
     protected int MidPoint => SizeFull / 2;
     protected int SizeFull => (int) ((Radar.GetUIDisplayRadius() + Radar.GetMinimapMargin()) * 2 * Radar.UIScale);
     protected int ScaledMinimapRadius => (int) (Radar.GetUIDisplayRadius() * Radar.UIScale);
     protected float MinimapScale => Radar.WorldRange != 0 ? ScaledMinimapRadius / Radar.WorldRange : 0f;
-
     protected float MaxRadarRange => Radar.MaxRadarRange;
-
     protected float WorldRange => Radar.WorldRange;
-
     protected float ActualRadarRange => Radar.GetActualRadarRange();
 
     protected RadarModule(ModularRadarControl parentRadar)
@@ -38,12 +34,6 @@ public abstract class RadarModule
     public virtual void UpdateState(BoundUserInterfaceState state) { }
     public virtual void Draw(DrawingHandleScreen handle, Parameters parameters) { }
     public virtual void OnClear() { }
-
-    public void SetMatrix(EntityCoordinates? coordinates, Angle? angle)
-    {
-        ParentCoordinates = coordinates;
-        ParentRotation = angle;
-    }
 
     protected Matrix3 GetOffsetMatrix()
     {
