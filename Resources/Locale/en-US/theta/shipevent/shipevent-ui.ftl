@@ -51,6 +51,11 @@ shipevent-shippicker-windowtitle = SHIP SELECTION
 shipevent-shippicker-mincrewamount = Recommended minimal crew amount: 
 shipevent-shippicker-selectionbutton = Select
 
+shipevent-shippicker-lightclass = [color=green]Light[/color]
+shipevent-shippicker-mediumclass = [color=yellow]Medium[/color]
+shipevent-shippicker-heavyclass = [color=red]Heavy[/color]
+shipevent-shippicker-specialclass = [color=pink]Special[/color]
+
 
 # Captain's menu
 
@@ -59,7 +64,11 @@ shipevent-capmenu-windowtitle = TEAM MANAGEMENT
 shipevent-capmenu-shipmanagement = Ship management:
 shipevent-capmenu-currentship = Current ship:
 shipevent-capmenu-shippickerbutton = PICK SHIP
-shipevent-capmenu-changeshipbutton = CHANGE SHIP
+
+shipevent-capmenu-membermanagement = Member management:
+shipevent-capmenu-memberlist = Members:
+shipevent-capmenu-blacklistbutton = CHANGE BLACKLIST
+shipevent-capmenu-kickbutton = KICK MEMBER
 
 shipevent-capmenu-toggle-name = Team management
 shipevent-capmenu-toggle-desc = Change your ship, kick team members, make announcements, etc.

@@ -10,7 +10,21 @@
                 <Label Name="ShipName" Text="N/A"/>
             </BoxContainer>
             <Button Name="ShipPickerButton" Text="{Loc 'shipevent-capmenu-shippickerbutton'}" />
-            <Button Name="ChangeShipButton" Text="{Loc 'shipevent-capmenu-changeshipbutton'}" />
+        </BoxContainer>
+        <BoxContainer Orientation="Vertical">
+            <Label Text="{Loc 'shipevent-capmenu-membermanagement'}" />
+            <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+                <Label Text="{Loc 'shipevent-capmenu-memberlist'}" />
+                <Label Name="MemberList" Text="N/A"/>
+            </BoxContainer>
+            <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+                <LineEdit Name="BlackListEdit" MinWidth="200"/>
+                <Button Name="BlackListButton" Text="{Loc 'shipevent-capmenu-blacklistbutton'}"/>
+            </BoxContainer>
+            <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+                <LineEdit Name="KickCKeyEdit" MinWidth="200"/>
+                <Button Name="KickButton" Text="{Loc 'shipevent-capmenu-kickbutton'}"/>
+            </BoxContainer>
         </BoxContainer>
     </BoxContainer>
 </DefaultWindow>
