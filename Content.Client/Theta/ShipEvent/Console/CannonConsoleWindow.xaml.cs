@@ -21,7 +21,7 @@ public sealed partial class CannonConsoleWindow : FancyWindow,
 
     public void UpdateState(CannonConsoleBoundInterfaceState scc)
     {
-        RadarScreen.UpdateState(scc);
+        RadarAllScreen.UpdateState(scc);
 
         var cannons = scc.Cannons.Where(i => i.IsControlling).ToList();
         UpdateAmmo(cannons);
@@ -29,7 +29,7 @@ public sealed partial class CannonConsoleWindow : FancyWindow,
 
     public void SetMatrix(EntityCoordinates? coordinates, Angle? angle)
     {
-        RadarScreen.SetMatrix(coordinates, angle);
+        RadarAllScreen.SetMatrix(coordinates, angle);
     }
 
     private void UpdateAmmo(List<CannonInformationInterfaceState> controlledCannons)

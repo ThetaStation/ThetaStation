@@ -41,11 +41,11 @@
                         HorizontalAlignment = "Stretch"
                         HorizontalExpand = "True"
                         VerticalExpand = "True">
-            <radarSetups:DefaultModularRadar Name="RadarScreen"
-                                    MouseFilter="Stop"
-                                    Margin="4"
-                                    HorizontalExpand = "True"
-                                    VerticalExpand = "True"/>
+            <radarSetups:ShuttleModularRadar Name="RadarAllScreen"
+                                             MouseFilter="Stop"
+                                             Margin="4"
+                                             HorizontalExpand = "True"
+                                             VerticalExpand = "True"/>
             <ui:DockingControl Name="DockingScreen"
                                Visible="False"
                                MouseFilter="Stop"
