@@ -19,7 +19,7 @@
             </BoxContainer>
         </BoxContainer>
         <radarSetups:CannonModularRadar
-            Name="RadarAllScreen"
+            Name="RadarScreen"
             MouseFilter="Stop"
             Margin="4"
             HorizontalExpand="True"

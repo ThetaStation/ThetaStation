@@ -42,6 +42,7 @@ public abstract class ModularRadarControl : MapGridControl
     protected override void KeyBindUp(GUIBoundKeyEventArgs args)
     {
         base.KeyBindUp(args);
+
         foreach (var module in Modules)
         {
             module.OnKeyBindUp(args);
@@ -166,6 +167,8 @@ public abstract class ModularRadarControl : MapGridControl
             module.OnClear();
         }
     }
+
+    // Api to bypass encapsulation without changing MapGridControl
 
     public int GetMinimapMargin()
     {

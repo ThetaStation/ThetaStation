@@ -54,16 +54,16 @@ public sealed partial class ModularRadarShuttleConsoleWindow : FancyWindow,
         _entManager = IoCManager.Resolve<IEntityManager>();
         _timing = IoCManager.Resolve<IGameTiming>();
 
-        WorldRangeChange(RadarAllScreen.WorldRange);
-        RadarAllScreen.WorldRangeChanged += WorldRangeChange;
+        WorldRangeChange(RadarScreen.WorldRange);
+        RadarScreen.WorldRangeChanged += WorldRangeChange;
 
-        if (RadarAllScreen.TryGetModule<RadarGrids>(out var gridModule))
+        if (RadarScreen.TryGetModule<RadarGrids>(out var gridModule))
         {
             IFFToggle.OnToggled += OnIFFTogglePressed;
             IFFToggle.Pressed = gridModule.ShowIFF;
         }
 
-        if (RadarAllScreen.TryGetModule<RadarDocks>(out var dockModule))
+        if (RadarScreen.TryGetModule<RadarDocks>(out var dockModule))
         {
             DockToggle.OnToggled += OnDockTogglePressed;
             DockToggle.Pressed = dockModule.ShowDocks;
@@ -81,7 +81,7 @@ public sealed partial class ModularRadarShuttleConsoleWindow : FancyWindow,
 
     private void OnIFFTogglePressed(BaseButton.ButtonEventArgs args)
     {
-        if (RadarAllScreen.TryGetModule<RadarGrids>(out var gridModule))
+        if (RadarScreen.TryGetModule<RadarGrids>(out var gridModule))
         {
             gridModule.ShowIFF ^= true;
             args.Button.Pressed = gridModule.ShowIFF;
@@ -90,7 +90,7 @@ public sealed partial class ModularRadarShuttleConsoleWindow : FancyWindow,
 
     private void OnDockTogglePressed(BaseButton.ButtonEventArgs args)
     {
-        if (RadarAllScreen.TryGetModule<RadarDocks>(out var dockModule))
+        if (RadarScreen.TryGetModule<RadarDocks>(out var dockModule))
         {
             dockModule.ShowDocks ^= true;
             args.Button.Pressed = dockModule.ShowDocks;
@@ -115,7 +115,7 @@ public sealed partial class ModularRadarShuttleConsoleWindow : FancyWindow,
     public void SetMatrix(EntityCoordinates? coordinates, Angle? angle)
     {
         _shuttleUid = coordinates?.EntityId;
-        RadarAllScreen.SetMatrix(coordinates, angle);
+        RadarScreen.SetMatrix(coordinates, angle);
     }
 
     public void UpdateState(BoundUserInterfaceState scc)
@@ -130,7 +130,7 @@ public sealed partial class ModularRadarShuttleConsoleWindow : FancyWindow,
         }
 
         UpdateNameInputPlaceholder();
-        RadarAllScreen.UpdateState(scc);
+        RadarScreen.UpdateState(scc);
         }
 
     public void UpdateNameInputPlaceholder()
@@ -277,7 +277,7 @@ public sealed partial class ModularRadarShuttleConsoleWindow : FancyWindow,
 
     private void OnDockMouseEntered(GUIMouseHoverEventArgs obj, DockingInterfaceState state)
     {
-        if (RadarAllScreen.TryGetModule<RadarDocks>(out var dockModule))
+        if (RadarScreen.TryGetModule<RadarDocks>(out var dockModule))
         {
             dockModule.HighlightedDock = state.Entity;
         }
@@ -285,7 +285,7 @@ public sealed partial class ModularRadarShuttleConsoleWindow : FancyWindow,
 
     private void OnDockMouseExited(GUIMouseHoverEventArgs obj, DockingInterfaceState state)
     {
-        if (RadarAllScreen.TryGetModule<RadarDocks>(out var dockModule))
+        if (RadarScreen.TryGetModule<RadarDocks>(out var dockModule))
         {
             dockModule.HighlightedDock = null;
         }
@@ -320,7 +320,7 @@ public sealed partial class ModularRadarShuttleConsoleWindow : FancyWindow,
 
             UndockButton.Disabled = true;
             DockingScreen.Visible = false;
-            RadarAllScreen.Visible = true;
+            RadarScreen.Visible = true;
         }
         else
         {
@@ -336,7 +336,7 @@ public sealed partial class ModularRadarShuttleConsoleWindow : FancyWindow,
             }
 
             UndockButton.Disabled = false;
-            RadarAllScreen.Visible = false;
+            RadarScreen.Visible = false;
             DockingScreen.Visible = true;
             DockingScreen.ViewedDock = ent;
             StartAutodockPressed?.Invoke(ent);

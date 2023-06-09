@@ -41,7 +41,7 @@
                         HorizontalAlignment = "Stretch"
                         HorizontalExpand = "True"
                         VerticalExpand = "True">
-            <radarSetups:ShuttleModularRadar Name="RadarAllScreen"
+            <radarSetups:ShuttleModularRadar Name="RadarScreen"
                                              MouseFilter="Stop"
                                              Margin="4"
                                              HorizontalExpand = "True"
