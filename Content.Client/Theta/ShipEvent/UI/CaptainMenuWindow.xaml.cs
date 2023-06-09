@@ -11,11 +11,14 @@ namespace Content.Client.Theta.ShipEvent.UI;
 public sealed partial class CaptainMenuWindow : DefaultWindow
 {
     public ShipPickerWindow shipPicker = default!;
-    
-    public event Action<BaseButton.ButtonEventArgs>? ChangeShipButtonPressed;
 
     public event Action<BaseButton.ButtonEventArgs>? ShipPickerButtonPressed;
-    
+    public event Action<BaseButton.ButtonEventArgs>? BlackListButtonPressed;
+    public event Action<BaseButton.ButtonEventArgs>? KickButtonPressed;
+
+    public string BlacklistText => BlackListEdit.Text;
+    public string KickCKey => KickCKeyEdit.Text;
+
     public CaptainMenuWindow()
     {
         shipPicker = new ShipPickerWindow();
@@ -25,14 +28,19 @@ public sealed partial class CaptainMenuWindow : DefaultWindow
             shipPicker.OpenCentered();
             ShipPickerButtonPressed?.Invoke(_);
         };
-        ChangeShipButton.OnPressed += _ =>
+        BlackListButton.OnPressed += _ =>
         {
-            ChangeShipButtonPressed?.Invoke(_);
+            BlackListButtonPressed?.Invoke(_);
+        };
+        KickButton.OnPressed += _ =>
+        {
+            KickButtonPressed?.Invoke(_);
         };
     }
 
     public void UpdateState(ShipEventCaptainMenuBoundUserInterfaceState state)
     {
+        MemberList.Text = string.Join(';', state.Members);
         ShipName.Text = Loc.GetString(state.CurrentShipType?.Name ?? "N/A");
     }
 }

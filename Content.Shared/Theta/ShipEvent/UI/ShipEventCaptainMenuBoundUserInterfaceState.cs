@@ -6,9 +6,11 @@ namespace Content.Shared.Theta.ShipEvent.UI;
 public sealed class ShipEventCaptainMenuBoundUserInterfaceState : BoundUserInterfaceState
 {
     public ShipTypePrototype? CurrentShipType;
+    public List<string> Members;
 
-    public ShipEventCaptainMenuBoundUserInterfaceState(ShipTypePrototype? currentShipType)
+    public ShipEventCaptainMenuBoundUserInterfaceState(List<string> members, ShipTypePrototype? currentShipType)
     {
+        Members = members;
         CurrentShipType = currentShipType;
     }
 }
@@ -24,6 +26,28 @@ public sealed class ShipEventCaptainMenuChangeShipMessage : BoundUserInterfaceMe
     public ShipEventCaptainMenuChangeShipMessage(ShipTypePrototype newShip)
     {
         NewShip = newShip;
+    }
+}
+
+[Serializable, NetSerializable]
+public sealed class ShipEventCaptainMenuChangeBlacklistMessage : BoundUserInterfaceMessage
+{
+    public List<string> NewBlacklist;
+
+    public ShipEventCaptainMenuChangeBlacklistMessage(List<string> newBlacklist)
+    {
+        NewBlacklist = newBlacklist;
+    }
+}
+
+[Serializable, NetSerializable]
+public sealed class ShipEventCaptainMenuKickMemberMessage : BoundUserInterfaceMessage
+{
+    public string CKey;
+
+    public ShipEventCaptainMenuKickMemberMessage(string ckey)
+    {
+        CKey = ckey;
     }
 }
 

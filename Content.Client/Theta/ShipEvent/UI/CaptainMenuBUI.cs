@@ -1,8 +1,11 @@
+using System.Linq;
 using Content.Shared.Theta.ShipEvent.UI;
+using JetBrains.Annotations;
 using Robust.Client.GameObjects;
 
 namespace Content.Client.Theta.ShipEvent.UI;
 
+[UsedImplicitly]
 public sealed class CaptainMenuBoundUserInterface : BoundUserInterface
 {
     private CaptainMenuWindow? _window;
@@ -21,7 +24,16 @@ public sealed class CaptainMenuBoundUserInterface : BoundUserInterface
         {
             SendMessage(new GetShipPickerInfoMessage());
         };
-        _window.ChangeShipButtonPressed += _ =>
+        _window.BlackListButtonPressed += _ =>
+        {
+            List<string> blacklist = _window.BlacklistText.Split(",").ToList();
+            SendMessage(new ShipEventCaptainMenuChangeBlacklistMessage(blacklist));
+        };
+        _window.KickButtonPressed += _ =>
+        {
+            SendMessage(new ShipEventCaptainMenuKickMemberMessage(_window.KickCKey));
+        };
+        _window.shipPicker.OnSelectionMade += _ =>
         {
             if (_window.shipPicker.Selection == null)
                 return;

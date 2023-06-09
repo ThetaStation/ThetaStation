@@ -18,7 +18,7 @@ namespace Content.Server.Theta.ShipEvent.Systems;
 public sealed class ShipEventFaction : PlayerFaction
 {
     public int Assists;
-    public List<string>? Blacklist; //blacklist for ckeys
+    public List<string>? Blacklist; //black list for ckeys
     public string Captain; //ckey
 
     public Color Color;
