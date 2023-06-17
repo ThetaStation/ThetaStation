@@ -14,7 +14,7 @@ public sealed partial class ShipPickerWindow : DefaultWindow
     public ShipTypePrototype? Selection;
 
     public Action<ShipTypePrototype?>? OnSelectionMade;
-    
+
     public ShipPickerWindow()
     {
         RobustXamlLoader.Load(this);
@@ -30,11 +30,9 @@ public sealed partial class ShipPickerWindow : DefaultWindow
             var shipTypeEntryInfoHolder = new BoxContainer();
             shipTypeEntry.Orientation = BoxContainer.LayoutOrientation.Vertical;
             shipTypeEntryInfoHolder.Orientation = BoxContainer.LayoutOrientation.Horizontal;
-            
+
             var shipTypeLabel = new RichTextLabel();
-            string crewAmountStr = Loc.GetString("shipevent-shippicker-mincrewamount") + " " + shipType.MinCrewAmount;
-            if (state.MemberCount < shipType.MinCrewAmount)
-                crewAmountStr = "[color=yellow]" + crewAmountStr + "[/color]";
+            var crewAmountStr = Loc.GetString("shipevent-shippicker-mincrewamount") + " " + shipType.MinCrewAmount;
             shipTypeLabel.SetMarkup($"{Loc.GetString(shipType.Name)}\n \n{Loc.GetString(shipType.Class)}\n \n{crewAmountStr}\n \n{Loc.GetString(shipType.Description)}");
             shipTypeLabel.MinWidth = Width / 2;
             shipTypeLabel.SetWidth = Width / 2;
@@ -44,7 +42,7 @@ public sealed partial class ShipPickerWindow : DefaultWindow
             shipTypePreviewImage.SetWidth = Width / 2;
             shipTypePreviewImage.MaxHeight = Height * 1.2f;
             shipTypePreviewImage.Stretch = TextureRect.StretchMode.Scale;
-            
+
             shipTypeEntryInfoHolder.AddChild(shipTypeLabel);
             shipTypeEntryInfoHolder.AddChild(shipTypePreviewImage);
 
@@ -61,7 +59,7 @@ public sealed partial class ShipPickerWindow : DefaultWindow
 
             shipTypeEntry.AddChild(shipTypeEntryInfoHolder);
             shipTypeEntry.AddChild(selectionButton);
-            
+
             ShipOptionsContainer.AddChild(shipTypeEntry);
         }
     }

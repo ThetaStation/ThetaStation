@@ -1,4 +1,4 @@
-#7.62mm caseless
+# Machine Gun caseless
 - type: entity
   id: CartridgeLightRifleCaseless
   parent: CartridgeLightRifle
@@ -7,10 +7,10 @@
     proto: BulletLightRifle
     deleteOnSpawn: true
 
-#37mm round
+# Light Cannon round
 - type: entity
   id: BulletArtilleryLight
-  name: bullet (37mm)
+  name: bullet (light cannon)
   parent: BaseBullet
   noSpawn: true
   components:
@@ -28,7 +28,7 @@
 
 - type: entity
   id: CartridgeArtilleryLight
-  name: 37mm cartridge
+  name: light cannon cartridge
   parent: BaseCartridge
   components:
   - type: Item
@@ -47,10 +47,10 @@
   - type: StaticPrice
     price: 20
 
-#100mm round
+# Artillery round
 - type: entity
   id: BulletArtilleryHeavy
-  name: bullet (100mm)
+  name: bullet (artillery)
   parent: BaseBulletTrigger
   noSpawn: true
   components:
@@ -72,7 +72,7 @@
 
 - type: entity
   id: CartridgeArtilleryHeavy
-  name: 100mm cartridge
+  name: artillery cartridge
   parent: CartridgeArtilleryLight
   components:
   - type: Item
@@ -82,38 +82,38 @@
     deleteOnSpawn: true
   - type: StaticPrice
     price: 70
-    
-#ammo containers
+
+# Ammo containers
 - type: entity
   id: TurretAmmoContainerMachineGunFilled
-  name: 7.62mm caseless ammo container
+  name: Machine gun ammo container
   parent: TurretAmmoContainerRegular
   components:
     - type: StorageFill
       contents:
         - id: CartridgeLightRifleCaseless
           amount: 100
-          
+
 - type: entity
   id: TurretAmmoContainerLightArtilleryFilled
-  name: 37mm ammo container
+  name: Light cannon ammo container
   parent: TurretAmmoContainerRegular
   components:
     - type: StorageFill
       contents:
         - id: CartridgeArtilleryLight
           amount: 50
-          
+
 - type: entity
   id: TurretAmmoContainerHeavyArtilleryFilled
-  name: 100mm ammo container
+  name: Artillery ammo container
   parent: TurretAmmoContainerRegular
   components:
     - type: StorageFill
       contents:
         - id: CartridgeArtilleryHeavy
           amount: 20
-    
+
 #closets
 - type: entity
   id: ShipEventCloset
@@ -127,30 +127,30 @@
           state: bomb
           state_open: bomb_open
           state_closed: bomb_door
-          
+
 - type: entity
   id: MachineGunAmmoClosetShipEvent
-  name: 7.62mm caseless Ammo Closet
+  name: Machine gun Ammo Closet
   parent: ShipEventCloset
   components:
     - type: StorageFill
       contents:
         - id: TurretAmmoContainerMachineGunFilled
           amount: 10
-          
+
 - type: entity
   id: LightArtilleryAmmoClosetShipEvent
-  name: 37mm Ammo Closet
+  name: Light cannon Ammo Closet
   parent: ShipEventCloset
   components:
     - type: StorageFill
       contents:
         - id: TurretAmmoContainerLightArtilleryFilled
           amount: 10
-          
+
 - type: entity
   id: HeavyArtilleryAmmoClosetShipEvent
-  name: 100mm Ammo Closet
+  name: Artillery Ammo Closet
   parent: ShipEventCloset
   components:
     - type: StorageFill
