@@ -41,7 +41,7 @@ public sealed class AddComponentsProcessor : Processor
 
         foreach (var (name, data) in Components)
         {
-            if (sys.EntMan.HasComponent(gridUid, reflMan.LooseGetType(name)))
+            if (sys.EntMan.HasComponent(gridUid, reflMan.LooseGetType(name + "Component")))
             {
                 Logger.Warning($"Add components processor, AddComponents: Tried to add {name} to {gridUid.ToString()}, which already possesses it.");
                 continue;
