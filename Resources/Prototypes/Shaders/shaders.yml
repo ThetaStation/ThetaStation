@@ -75,4 +75,4 @@
 - type: shader
   id: BoundsOverlay
   kind: source
-  path: "/Textures/Theta/ShipEvent/Shaders/bounds.swsl"
+  path: "/Textures/Theta/ShipEvent/Shaders/bounds_overlay.swsl"
