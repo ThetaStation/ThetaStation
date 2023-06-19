@@ -18,8 +18,7 @@ public sealed class BoundsOverlay : Overlay
     private readonly TransformSystem _formSys;
     
     private ShaderInstance _boundsShader;
-    private Texture _borderTexture;
-    
+
     public override bool RequestScreenTexture => true;
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
 
@@ -36,8 +35,6 @@ public sealed class BoundsOverlay : Overlay
         IoCManager.InjectDependencies(this);
         _formSys = _entMan.System<TransformSystem>();
         _boundsShader = _protMan.Index<ShaderPrototype>("BoundsOverlay").InstanceUnique();
-        _borderTexture = _resCache.GetResource<TextureResource>(new 
-            ResPath("/Textures/Theta/ShipEvent/Textures/border.png").ToRootedPath());
     }
 
     protected override void Draw(in OverlayDrawArgs args)
