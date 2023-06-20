@@ -76,8 +76,7 @@ public abstract class RadarModule
     {
         public Matrix3 DrawMatrix;
 
-        public Parameters(
-            Matrix3 drawMatrix)
+        public Parameters(Matrix3 drawMatrix)
         {
             DrawMatrix = drawMatrix;
         }

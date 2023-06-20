@@ -25,7 +25,8 @@ public abstract class ModularRadarControl : MapGridControl
 
     protected readonly List<RadarModule> Modules = new();
 
-    public ModularRadarControl() : base(64f, 256f, 256f)
+    public ModularRadarControl(float minRange = 64f, float maxRange = 256f, float range = 256f)
+        : base(minRange, maxRange, range)
     {
     }
 
@@ -107,10 +108,8 @@ public abstract class ModularRadarControl : MapGridControl
     {
         base.Draw(handle);
 
-        var fakeAA = new Color(0.08f, 0.08f, 0.08f);
-
-        handle.DrawCircle((MidPoint, MidPoint), ScaledMinimapRadius + 1, fakeAA);
-        handle.DrawCircle((MidPoint, MidPoint), ScaledMinimapRadius, Color.Black);
+        var background = GetBackground();
+        handle.DrawCircle((MidPoint, MidPoint), ScaledMinimapRadius, background);
 
         // No data
         if (_coordinates == null || _rotation == null)
@@ -135,20 +134,12 @@ public abstract class ModularRadarControl : MapGridControl
             handle.DrawLine((MidPoint, MidPoint) - aExtent, (MidPoint, MidPoint) + aExtent, gridLines);
         }
 
-        var xformQuery = _entManager.GetEntityQuery<TransformComponent>();
-
-        var mapPosition = _coordinates.Value.ToMap(_entManager);
-
-        if (mapPosition.MapId == MapId.Nullspace ||
-            !xformQuery.TryGetComponent(_coordinates.Value.EntityId, out var xform))
+        var offsetMatrix = GetOffsetMatrix();
+        if (offsetMatrix.Equals(Matrix3.Zero))
         {
             Clear();
             return;
         }
-
-        var offsetMatrix = Matrix3.CreateInverseTransform(
-            mapPosition.Position,
-            xform.WorldRotation + _rotation.Value);
 
         var parameters = new RadarModule.Parameters(
             drawMatrix: offsetMatrix
@@ -168,17 +159,36 @@ public abstract class ModularRadarControl : MapGridControl
         }
     }
 
+    private Matrix3 GetOffsetMatrix()
+    {
+        if (_coordinates == null || _rotation == null)
+            return Matrix3.Zero;
+
+        var mapPosition = _coordinates.Value.ToMap(_entManager);
+        if (mapPosition.MapId == MapId.Nullspace)
+            return Matrix3.Zero;
+
+        return Matrix3.CreateInverseTransform(
+            mapPosition.Position,
+            GetMatrixRotation()
+        );
+    }
+
+    protected virtual Angle GetMatrixRotation()
+    {
+        var xformQuery = _entManager.GetEntityQuery<TransformComponent>();
+        if (!xformQuery.TryGetComponent(_coordinates!.Value.EntityId, out var xform))
+            return Angle.Zero;
+
+        return xform.WorldRotation + _rotation!.Value;
+    }
+
+    protected virtual Color GetBackground()
+    {
+        return new Color(0.08f, 0.08f, 0.08f);
+    }
+
     // Api to bypass encapsulation without changing MapGridControl
-
-    public int GetMinimapMargin()
-    {
-        return MinimapMargin;
-    }
-
-    public int GetUIDisplayRadius()
-    {
-        return UIDisplayRadius;
-    }
 
     public float GetActualRadarRange()
     {
