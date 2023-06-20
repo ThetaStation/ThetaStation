@@ -71,8 +71,7 @@
   id: Stealth
   kind: source
   path: "/Textures/Shaders/stealth.swsl"
-
 - type: shader
-  id: MonoColor
+  id: BoundsOverlay
   kind: source
-  path: "/Textures/Theta/ShipEvent/Shaders/mono_color.swsl"
+  path: "/Textures/Theta/ShipEvent/Shaders/bounds_overlay.swsl"
