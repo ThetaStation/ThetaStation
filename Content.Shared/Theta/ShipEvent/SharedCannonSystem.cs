@@ -27,7 +27,7 @@ public abstract class SharedCannonSystem : EntitySystem
 
     private void OnInit(EntityUid uid, CannonComponent cannon, ComponentInit args)
     {
-        cannon.FreeFiringRanges = CalculateFiringRanges(uid, GetCannonGun(uid)!, cannon);
+        cannon.FreeFiringRanges = CalculateFiringRanges(uid, GetCannonGun(uid)!);
     }
 
     private void OnShootRequest(RequestCannonShootEvent ev, EntitySessionEventArgs args)
@@ -61,8 +61,7 @@ public abstract class SharedCannonSystem : EntitySystem
             if (a.Theta > firingAngle && firingAngle > b)
                 return true;
         }
-
-        Logger.Warning($"canshoot: Out of range! {cannon.FreeFiringRanges.Count} ranges available.");
+        
         return false;
     }
 
@@ -74,10 +73,10 @@ public abstract class SharedCannonSystem : EntitySystem
             return;
         }
 
-        cannon.FreeFiringRanges = CalculateFiringRanges(uid, GetCannonGun(uid)!, cannon);
+        cannon.FreeFiringRanges = CalculateFiringRanges(uid, GetCannonGun(uid)!);
     }
     
-    private List<(Angle, Angle)> CalculateFiringRanges(EntityUid uid, GunComponent gun, CannonComponent cannon)
+    private List<(Angle, Angle)> CalculateFiringRanges(EntityUid uid, GunComponent gun)
     {
         List<(Angle, Angle)> ranges = new();
         TransformComponent gridForm = EntityManager.GetComponent<TransformComponent>(Transform(uid).ParentUid);
@@ -98,8 +97,9 @@ public abstract class SharedCannonSystem : EntitySystem
             //or (sqrt(2)/2)^2 for diagonal
             w = 2*Math.Asin(d / Math.Sqrt(c % Math.PI*0.5 == 0 ? 0.25 : 0.5 + d*d));
             
-            s0 = (c - w).Reduced();
-            e0 = (c + w).Reduced();
+            //0.08 is 5 degrees offset, just to be safe
+            s0 = (c - w + gun.MaxAngle + 0.08).Reduced();
+            e0 = (c + w - gun.MaxAngle - 0.08).Reduced();
 
             bool ov = false;
             List<(Angle, Angle)> uranges = new();
