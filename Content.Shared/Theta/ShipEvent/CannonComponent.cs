@@ -17,5 +17,12 @@ public sealed class CannonComponent : Component
     /// <summary>
     /// Ammo prototypes which this turret can use
     /// </summary>
-    [DataField("ammoPrototypes")] public List<string> AmmoPrototypes = new();
+    [DataField("ammoPrototypes"), ViewVariables(VVAccess.ReadWrite)] 
+    public List<string> AmmoPrototypes = new();
+
+    /// <summary>
+    /// Unobstructed circle sectors around cannon, to avoid collisions with ship
+    /// </summary>
+    [ViewVariables(VVAccess.ReadWrite)]
+    public List<(Angle, Angle)> FreeFiringRanges = new();
 }
