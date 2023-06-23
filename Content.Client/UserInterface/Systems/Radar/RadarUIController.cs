@@ -7,7 +7,6 @@ using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Client.UserInterface.Controllers;
 using Robust.Client.UserInterface.Controls;
-using Robust.Shared.Timing;
 
 namespace Content.Client.UserInterface.Systems.Radar;
 
@@ -54,7 +53,7 @@ public sealed class RadarUIController : UIController
         ClearRadarGui();
     }
 
-    public override void FrameUpdate(FrameEventArgs args)
+    public void UpdateRadarMatrix()
     {
         if (RadarGui == null)
             return;
@@ -82,11 +81,7 @@ public sealed class RadarUIController : UIController
         if (RadarGui != null)
             return;
 
-        var transform =
-            EntityManager.GetComponent<TransformComponent>(_playerManager.LocalPlayer!.ControlledEntity.Value);
-
         RadarGui = new();
-        RadarGui.SetMatrix(transform.Coordinates, -_eyeManager.CurrentEye.Rotation);
         switch (UIManager.ActiveScreen)
         {
             case DefaultGameScreen game:
