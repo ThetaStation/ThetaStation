@@ -1,4 +1,5 @@
-﻿using Robust.Server.Player;
+﻿using Content.Server.Mind;
+using Robust.Server.Player;
 using Robust.Shared.Utility;
 
 namespace Content.Server.Roles;
@@ -27,7 +28,7 @@ public class PlayerFaction
             Icon = new SpriteSpecifier.Texture(new ResPath(iconPath));
         Members = new List<Role>();
     }
-    
+
     public void AddMember(Role member)
     {
         if (Members.Contains(member))
@@ -36,7 +37,7 @@ public class PlayerFaction
         member.Faction = this;
         Members.Add(member);
     }
-    
+
     public void RemoveMember(Role member)
     {
         if (!Members.Contains(member))
@@ -45,7 +46,7 @@ public class PlayerFaction
         member.Faction = null;
         Members.Remove(member);
     }
-    
+
     public EntityUid GetMemberEntity(Role member)
     {
         if (!Members.Contains(member))
@@ -62,25 +63,27 @@ public class PlayerFaction
     {
         return member.Mind.Session;
     }
-    
+
     public List<EntityUid> GetLivingMembersEntities()
     {
         List<EntityUid> living = new();
+        var mindSystem = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<MindSystem>();
         foreach (Role member in Members)
         {
-            if (!member.Mind.CharacterDeadPhysically)
+            if (!mindSystem.IsCharacterDeadPhysically(member.Mind))
                 living.Add((EntityUid)member.Mind.OwnedEntity!);
         }
 
         return living;
     }
-    
+
     public List<Mind.Mind> GetLivingMembersMinds()
     {
         List<Mind.Mind> living = new();
+        var mindSystem = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<MindSystem>();
         foreach (Role member in Members)
         {
-            if (!member.Mind.CharacterDeadPhysically)
+            if (!mindSystem.IsCharacterDeadPhysically(member.Mind))
                 living.Add(member.Mind);
         }
 
@@ -93,9 +96,10 @@ public class PlayerFaction
     public List<string> GetMemberUserNames()
     {
         List<string> names = new();
+        var mindSystem = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<MindSystem>();
         foreach (Role member in Members)
         {
-            if (member.Mind.TryGetSession(out var session))
+            if (mindSystem.TryGetSession(member.Mind, out var session))
                 names.Add(session.ConnectedClient.UserName);
         }
 
@@ -108,9 +112,10 @@ public class PlayerFaction
     public Dictionary<string, Role> GetMembersByUserNames()
     {
         Dictionary<string, Role> pairs = new();
+        var mindSystem = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<MindSystem>();
         foreach (Role member in Members)
         {
-            if (member.Mind.TryGetSession(out var session))
+            if (mindSystem.TryGetSession(member.Mind,out var session))
                 pairs[session.ConnectedClient.UserName] = member;
         }
 

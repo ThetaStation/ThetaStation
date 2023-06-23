@@ -57,7 +57,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
             return list;
 
         foreach (var (_, mobState, transform) in EntityManager
-                     .EntityQuery<MindComponent, MobStateComponent, TransformComponent>())
+                     .EntityQuery<MindContainerComponent, MobStateComponent, TransformComponent>())
         {
             if (_mobStateSystem.IsIncapacitated(mobState.Owner, mobState))
                 continue;
@@ -101,7 +101,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 
         var myGrid = Transform(component.Owner).GridUid;
         var isCannonConsole = HasComp<CannonConsoleComponent>(component.Owner);
-        
+
         var controlledCannons = GetControlledCannons(component.Owner);
 
         foreach (var (cannon, transform) in EntityQuery<CannonComponent, TransformComponent>())
@@ -140,7 +140,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 
         return list;
     }
-    
+
     private List<EntityUid>? GetControlledCannons(EntityUid uid)
     {
         if (TryComp<DeviceLinkSourceComponent>(uid, out var linkSource))

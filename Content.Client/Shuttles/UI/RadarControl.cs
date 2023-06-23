@@ -26,6 +26,7 @@ public sealed class RadarControl : MapGridControl
 {
     [Dependency] private readonly IEntityManager _entManager = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
+    private SharedTransformSystem _transform = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
 
     private BoundsOverlaySystem _boundsOverSys;
@@ -75,6 +76,7 @@ public sealed class RadarControl : MapGridControl
 
     public RadarControl() : base(64f, 256f, 256f)
     {
+        _transform = _entManager.System<SharedTransformSystem>();
         OnKeyBindDown += StartFiring;
         OnKeyBindUp += StopFiring;
         _boundsOverSys = _entManager.System<BoundsOverlaySystem>();
@@ -311,7 +313,7 @@ public sealed class RadarControl : MapGridControl
 
             Matrix3.Multiply(in ourGridMatrix, in offsetMatrix, out var matrix);
 
-            DrawGrid(handle, matrix, ourFixturesComp, ourGrid, Color.MediumSpringGreen, true);
+            DrawGrid(handle, matrix, ourGrid, Color.MediumSpringGreen, true);
             DrawDocks(handle, ourGridId.Value, matrix);
 
             var worldRot = transformGridComp.WorldRotation;
@@ -408,7 +410,7 @@ public sealed class RadarControl : MapGridControl
             }
 
             // Detailed view
-            DrawGrid(handle, matty, fixturesComp, grid, color, true);
+            DrawGrid(handle, matty, grid, color, true);
 
             DrawDocks(handle, grid.Owner, matty);
         }
@@ -633,8 +635,7 @@ public sealed class RadarControl : MapGridControl
         }
     }
 
-    private void DrawGrid(DrawingHandleScreen handle, Matrix3 matrix, FixturesComponent fixturesComp,
-        MapGridComponent grid, Color color, bool drawInterior)
+    private void DrawGrid(DrawingHandleScreen handle, Matrix3 matrix, MapGridComponent grid, Color color, bool drawInterior)
     {
         var rator = grid.GetAllTilesEnumerator();
         var edges = new ValueList<Vector2>();

@@ -20,7 +20,7 @@ namespace Content.Server.Mind
             base.Initialize();
 
             SubscribeLocalEvent<RoundRestartCleanupEvent>(Reset);
-            SubscribeLocalEvent<MindComponent, MindAddedMessage>(OnMindAdded);
+            SubscribeLocalEvent<MindContainerComponent, MindAddedMessage>(OnMindAdded);
         }
 
         void Reset(RoundRestartCleanupEvent ev)
@@ -39,7 +39,7 @@ namespace Content.Server.Mind
             AllMinds.Add(mind);
         }
         
-        void OnMindAdded(EntityUid uid, MindComponent mc, MindAddedMessage args)
+        void OnMindAdded(EntityUid uid, MindContainerComponent mc, MindAddedMessage args)
         {
             var mind = mc.Mind;
             if (mind != null)
