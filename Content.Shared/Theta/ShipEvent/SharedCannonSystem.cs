@@ -14,8 +14,6 @@ public abstract class SharedCannonSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly ItemSlotsSystem _slotSys = default!;
 
-    public List<Vector2> dirs = new(); //debug, remove later
-
     private const int CollisionCheckDistance = 20;
 
     public override void Initialize()
@@ -27,7 +25,7 @@ public abstract class SharedCannonSystem : EntitySystem
         SubscribeLocalEvent<CannonComponent, ComponentInit>(OnInit);
     }
 
-    protected virtual void OnInit(EntityUid uid, CannonComponent cannon, ComponentInit args)
+    protected void OnInit(EntityUid uid, CannonComponent cannon, ComponentInit args)
     {
         cannon.ObstructedRanges = CalculateFiringRanges(uid, GetCannonGun(uid)!);
         Dirty(cannon);
@@ -56,6 +54,11 @@ public abstract class SharedCannonSystem : EntitySystem
         return a;
     }
 
+    private bool IsInsideSector(Angle x, Angle s, Angle e)
+    {
+        return s < e ? x >= s && x <= e : !(x < s) || x < e;
+    }
+
     private bool CanShoot(RequestCannonShootEvent args, GunComponent gun, CannonComponent cannon)
     {
         if (!_gunSystem.CanShoot(gun))
@@ -66,10 +69,11 @@ public abstract class SharedCannonSystem : EntitySystem
         if (!pilotTransform.GridUid.Equals(cannonTransform.GridUid))
             return false;
 
-        Angle firingAngle = ReducedAndPositive(Angle.FromWorldVec(args.Coordinates - _transform.GetWorldPosition(cannonTransform)));
+        Angle firingAngle = ReducedAndPositive(new Angle(args.Coordinates - _transform.GetWorldPosition(cannonTransform)) - 
+                                               _transform.GetWorldRotation(Transform(cannonTransform.GridUid ?? args.CannonUid)));
         foreach ((Angle s, Angle e) in cannon.ObstructedRanges)
         {
-            if (firingAngle > s && firingAngle < e)
+            if (IsInsideSector(firingAngle, s, e))
                 return false;
         }
         
@@ -98,7 +102,6 @@ public abstract class SharedCannonSystem : EntitySystem
         {
             TransformComponent form = Transform(childUid);
             Vector2 dir = form.LocalPosition - Transform(uid).LocalPosition;
-            dirs.Add(dir); //debug, remove later
             float dist = dir.Length;
             if (dist > CollisionCheckDistance || dist < 1)
                 continue;
@@ -112,31 +115,35 @@ public abstract class SharedCannonSystem : EntitySystem
             if (width == double.NaN)
                 continue;
 
-            //0.08 is 5 degrees offset, just to be safe
+            //0.08 is a 5 degree offset, just to be safe
             s0 = ReducedAndPositive(dirAngle - width + gun.MaxAngle + 0.08);
             e0 = ReducedAndPositive(dirAngle + width - gun.MaxAngle - 0.08);
 
-            bool overlap = false;
-            List<(Angle, Angle)> uranges = new();
+            List<(Angle, Angle)> overlaps = new();
+            (Angle s2, Angle e2) = (s0, e0);
             foreach ((Angle s1, Angle e1) in ranges)
             {
-                if (s0 >= s1 && s0 <= e1 || e0 >= s1 && e0 <= e1)
+                if (IsInsideSector(s0, s1, e1) || IsInsideSector(e0, s1, e1))
                 {
-                    uranges.Add((new Angle(Math.Min(s0, s1)), new Angle(Math.Max(e0, e1))));
-                    overlap = true;
-                }
-                else
-                {
-                    uranges.Add((s1, e1));
+                    if (s1 < s2)
+                        s2 = s1;
+                    if (e1 > e2)
+                        e2 = e1;
+                    
+                    overlaps.Add((s1, e1));
                 }
             }
 
-            if (!overlap)
-                uranges.Add((s0, e0));
-
-            ranges = uranges;
+            if (overlaps.Count > 1)
+            {
+                foreach ((Angle s, Angle e) in overlaps)
+                {
+                    ranges.Remove((s, e));
+                }
+            }
+            ranges.Add((s2, e2));
         }
-        
+
         return ranges;
     }
 

@@ -24,14 +24,6 @@ public sealed class CannonSystem : SharedCannonSystem
         SubscribeLocalEvent<CannonComponent, ComponentRemove>(OnComponentRemove);
     }
 
-    //debug, remove later
-    protected override void OnInit(EntityUid uid, CannonComponent cannon, ComponentInit args)
-    {
-        base.OnInit(uid, cannon, args);
-        RaiseLocalEvent(new DebugOverlayReceiveDirsEvent(Transform(uid).WorldPosition, dirs));
-        dirs.Clear();
-    }
-    
     private void RequestCannonShoot(EntityUid uid, CannonComponent cannon, ref StartCannonFiringEvent args)
     {
         _firingCannons[uid] = (args.Pilot, args.Coordinates);
