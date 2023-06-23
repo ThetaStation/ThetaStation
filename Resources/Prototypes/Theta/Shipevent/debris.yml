@@ -1,0 +1,25 @@
+- type: structure
+  id: asteroid_small
+  generator: !type:AsteroidGenerator
+    size: 10
+    circleAmount: 3
+    maxCircleRadius: 5
+    minCircleRadius: 1
+    erosion: 0.1
+    floorId: FloorAsteroidSand
+    wallPrototypeId: AsteroidRock
+  spawnWeight: 0.5
+  minDistance: 1
+  
+- type: structure
+  id: asteroid_large
+  generator: !type:AsteroidGenerator
+    size: 30
+    circleAmount: 6
+    maxCircleRadius: 7
+    minCircleRadius: 3
+    erosion: 0.1
+    floorId: FloorAsteroidSand
+    wallPrototypeId: AsteroidRock
+  spawnWeight: 0.5
+  minDistance: 1

@@ -27,7 +27,18 @@ namespace Content.Server.Mind
         {
             AllMinds.Clear();
         }
+        
+        //this kills whole point of this system, do not use it unless you have no other options
+        public void ClearMindSet()
+        {
+            AllMinds.Clear();
+        }
 
+        public void AddMind(Mind mind)
+        {
+            AllMinds.Add(mind);
+        }
+        
         void OnMindAdded(EntityUid uid, MindContainerComponent mc, MindAddedMessage args)
         {
             var mind = mc.Mind;

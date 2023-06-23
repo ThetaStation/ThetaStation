@@ -1,0 +1,41 @@
+﻿- type: entity
+  name: ShipEvent Agent
+  id: MobHumanShipEvent
+  parent: MobHuman
+  suffix: SHIPEVENT
+  components:
+    - type: RandomHumanoidAppearance
+    - type: Loadout
+      prototype: ShipEventStandard
+      prototypes: [ShipEventStandard]
+    - type: UsePlayerNameForEntityName
+    - type: ShipEventFactionMarker
+    - type: RadarHUD
+    - type: UserInterface
+      interfaces:
+      - key: enum.TeamViewUiKey.Key
+        type: TeamViewBoundUserInterface
+      - key: enum.CaptainMenuUiKey.Key
+        type: CaptainMenuBoundUserInterface
+    - type: MobHUD
+
+# Space Ship - Poverty
+- type: startingGear
+  id: ShipEventStandard
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitOperative
+    back: ClothingBackpackDuffelSyndicateOperative
+    shoes: ClothingShoesBootsMagAdvOn
+    mask: ClothingMaskGasSyndicate
+    head: ClothingHeadHelmetHardsuitSyndie
+    eyes: ClothingEyesGlassesMeson
+    ears: ClothingHeadsetAltSyndicate
+    gloves: ClothingHandsGlovesCombat
+    outerClothing: ClothingOuterHardsuitSyndie
+    id: AgentIDCard
+    pocket1: ExtendedEmergencyOxygenTankFilled
+    pocket2: BaseUplinkRadio40TC
+    belt: ClothingBeltMilitaryWebbing
+  innerclothingskirt: ClothingUniformJumpskirtOperative
+  satchel: ClothingBackpackDuffelSyndicateOperative
+  duffelbag: ClothingBackpackDuffelSyndicateOperative

@@ -1,3 +1,4 @@
+using Content.Server.Explosion.EntitySystems;
 using Content.Server.Shuttles.Components;
 using Robust.Shared.Audio;
 using Robust.Shared.Map;
@@ -9,10 +10,14 @@ namespace Content.Server.Shuttles.Systems;
 
 public sealed partial class ShuttleSystem
 {
+    [Dependency] private readonly ExplosionSystem _expSys = default!;
+    
     /// <summary>
     /// Minimum velocity difference between 2 bodies for a shuttle "impact" to occur.
     /// </summary>
     private const int MinimumImpactVelocity = 10;
+    
+    private const double IntensityMultiplier = 0.01;
 
     private readonly SoundCollectionSpecifier _shuttleImpactSound = new("ShuttleImpactSound");
 
@@ -54,5 +59,10 @@ public sealed partial class ShuttleSystem
         var audioParams = AudioParams.Default.WithVariation(0.05f).WithVolume(volume);
 
         _audio.Play(_shuttleImpactSound, Filter.Pvs(coordinates, rangeMultiplier: 4f, entityMan: EntityManager), coordinates, true, audioParams);
+        
+        var kineticEnergy = ourBody.Mass * Math.Pow(jungleDiff, 2) / 2;
+		var mapCoords = coordinates.ToMap(EntityManager);
+		var intensity = (float)(kineticEnergy*IntensityMultiplier);
+        _expSys.QueueExplosion(mapCoords, ExplosionSystem.DefaultExplosionPrototypeId, intensity , 5f, 50f);
     }
 }
