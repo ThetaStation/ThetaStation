@@ -21,8 +21,8 @@ public sealed class CannonComponent : Component
     public List<string> AmmoPrototypes = new();
 
     /// <summary>
-    /// Unobstructed circle sectors around cannon, to avoid collisions with ship
+    /// Obstructed sectors around cannon, to prevent projectiles from colliding with the ship
     /// </summary>
     [ViewVariables(VVAccess.ReadWrite)]
-    public List<(Angle, Angle)> FreeFiringRanges = new();
+    public List<(Angle, Angle)> ObstructedRanges = new();
 }

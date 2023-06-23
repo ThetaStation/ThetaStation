@@ -14,6 +14,8 @@ public abstract class SharedCannonSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly ItemSlotsSystem _slotSys = default!;
 
+    public List<Vector2> dirs = new(); //debug, remove later
+
     private const int CollisionCheckDistance = 20;
 
     public override void Initialize()
@@ -25,9 +27,10 @@ public abstract class SharedCannonSystem : EntitySystem
         SubscribeLocalEvent<CannonComponent, ComponentInit>(OnInit);
     }
 
-    private void OnInit(EntityUid uid, CannonComponent cannon, ComponentInit args)
+    protected virtual void OnInit(EntityUid uid, CannonComponent cannon, ComponentInit args)
     {
-        cannon.FreeFiringRanges = CalculateFiringRanges(uid, GetCannonGun(uid)!);
+        cannon.ObstructedRanges = CalculateFiringRanges(uid, GetCannonGun(uid)!);
+        Dirty(cannon);
     }
 
     private void OnShootRequest(RequestCannonShootEvent ev, EntitySessionEventArgs args)
@@ -45,6 +48,14 @@ public abstract class SharedCannonSystem : EntitySystem
         _gunSystem.AttemptShoot(ev.PilotUid, ev.CannonUid, gun, coords);
     }
 
+    private Angle ReducedAndPositive(Angle a)
+    {
+        a = a.Reduced();
+        if (a < 0)
+            a += 2 * Math.PI;
+        return a;
+    }
+
     private bool CanShoot(RequestCannonShootEvent args, GunComponent gun, CannonComponent cannon)
     {
         if (!_gunSystem.CanShoot(gun))
@@ -55,14 +66,14 @@ public abstract class SharedCannonSystem : EntitySystem
         if (!pilotTransform.GridUid.Equals(cannonTransform.GridUid))
             return false;
 
-        Angle firingAngle = Angle.FromWorldVec(args.Coordinates - _transform.GetWorldPosition(cannonTransform)).Reduced();
-        foreach ((Angle a, Angle b) in cannon.FreeFiringRanges)
+        Angle firingAngle = ReducedAndPositive(Angle.FromWorldVec(args.Coordinates - _transform.GetWorldPosition(cannonTransform)));
+        foreach ((Angle s, Angle e) in cannon.ObstructedRanges)
         {
-            if (a.Theta > firingAngle && firingAngle > b)
-                return true;
+            if (firingAngle > s && firingAngle < e)
+                return false;
         }
         
-        return false;
+        return true;
     }
 
     protected virtual void OnAnchorChanged(EntityUid uid, CannonComponent cannon, ref AnchorStateChangedEvent args)
@@ -73,7 +84,8 @@ public abstract class SharedCannonSystem : EntitySystem
             return;
         }
 
-        cannon.FreeFiringRanges = CalculateFiringRanges(uid, GetCannonGun(uid)!);
+        cannon.ObstructedRanges = CalculateFiringRanges(uid, GetCannonGun(uid)!);
+        Dirty(cannon);
     }
     
     private List<(Angle, Angle)> CalculateFiringRanges(EntityUid uid, GunComponent gun)
@@ -85,43 +97,46 @@ public abstract class SharedCannonSystem : EntitySystem
         foreach (EntityUid childUid in gridForm.ChildEntities)
         {
             TransformComponent form = Transform(childUid);
-            Vector2 v = _transform.GetWorldPosition(form)+0.5f - _transform.GetWorldPosition(uid)+0.5f;
-            float d = v.Length;
-            if (d > CollisionCheckDistance)
+            Vector2 dir = form.LocalPosition - Transform(uid).LocalPosition;
+            dirs.Add(dir); //debug, remove later
+            float dist = dir.Length;
+            if (dist > CollisionCheckDistance || dist < 1)
                 continue;
 
-            Angle w, c, s0, e0;
+            Angle width, dirAngle, s0, e0;
             
-            c = Angle.FromWorldVec(v);
+            dirAngle = Angle.FromWorldVec(dir);
             //0.5/0.25 is triangle's base divided by two, squared. so in case if it's straight angle it's 0.5^2
-            //or (sqrt(2)/2)^2 for diagonal
-            w = 2*Math.Asin(d / Math.Sqrt(c % Math.PI*0.5 == 0 ? 0.25 : 0.5 + d*d));
-            
-            //0.08 is 5 degrees offset, just to be safe
-            s0 = (c - w + gun.MaxAngle + 0.08).Reduced();
-            e0 = (c + w - gun.MaxAngle - 0.08).Reduced();
+            //or (sqrt(2)/2)^2 for diagonal.
+            width = 2*Math.Asin(dist / Math.Sqrt(dirAngle % Math.PI*0.5 == 0 ? 0.25 : 0.5 + dist*dist));
+            if (width == double.NaN)
+                continue;
 
-            bool ov = false;
+            //0.08 is 5 degrees offset, just to be safe
+            s0 = ReducedAndPositive(dirAngle - width + gun.MaxAngle + 0.08);
+            e0 = ReducedAndPositive(dirAngle + width - gun.MaxAngle - 0.08);
+
+            bool overlap = false;
             List<(Angle, Angle)> uranges = new();
             foreach ((Angle s1, Angle e1) in ranges)
             {
-                if (s0 > s1 && s0 < e1 || e0 > s1 && e0 < e1)
+                if (s0 >= s1 && s0 <= e1 || e0 >= s1 && e0 <= e1)
                 {
-                    uranges.Add((Math.Min(s0, s1), Math.Max(e0, e1)));
-                    ov = true;
+                    uranges.Add((new Angle(Math.Min(s0, s1)), new Angle(Math.Max(e0, e1))));
+                    overlap = true;
                 }
                 else
                 {
                     uranges.Add((s1, e1));
                 }
             }
-            
-            if(!ov)
+
+            if (!overlap)
                 uranges.Add((s0, e0));
 
             ranges = uranges;
         }
-
+        
         return ranges;
     }
 

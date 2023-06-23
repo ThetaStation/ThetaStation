@@ -24,6 +24,14 @@ public sealed class CannonSystem : SharedCannonSystem
         SubscribeLocalEvent<CannonComponent, ComponentRemove>(OnComponentRemove);
     }
 
+    //debug, remove later
+    protected override void OnInit(EntityUid uid, CannonComponent cannon, ComponentInit args)
+    {
+        base.OnInit(uid, cannon, args);
+        RaiseLocalEvent(new DebugOverlayReceiveDirsEvent(Transform(uid).WorldPosition, dirs));
+        dirs.Clear();
+    }
+    
     private void RequestCannonShoot(EntityUid uid, CannonComponent cannon, ref StartCannonFiringEvent args)
     {
         _firingCannons[uid] = (args.Pilot, args.Coordinates);
@@ -48,6 +56,7 @@ public sealed class CannonSystem : SharedCannonSystem
     protected override void OnAnchorChanged(EntityUid uid, CannonComponent cannon, ref AnchorStateChangedEvent args)
     {
         base.OnAnchorChanged(uid, cannon, ref args);
+        
         if (!args.Anchored)
             _firingCannons.Remove(uid);
     }
