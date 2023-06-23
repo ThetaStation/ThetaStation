@@ -125,6 +125,7 @@ public sealed class TurretLoaderSystem : EntitySystem
     private void OnInit(EntityUid uid, TurretLoaderComponent loader, ComponentInit args)
     {
         SetupLoader(uid, loader);
+        UpdateAmmoContainer(loader);
     }
 
     private void OnRemoval(EntityUid uid, TurretLoaderComponent loader, ComponentRemove args)

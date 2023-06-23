@@ -1,0 +1,37 @@
+uniform sampler2D SCREEN_TEXTURE;
+uniform highp float BRIGHTNESS;
+uniform lowp int DET_LEVELS = 2;
+uniform highp mat2 SCALE_MATRIX = mat2(2.0, 1.2, -1.2, 2.0);
+uniform highp vec3 BASE_COLOR = vec3(1.0,0.0,0.0);
+
+highp float rand(highp vec2 n) { 
+    return fract(sin(dot(n, vec2(12.9898, 4.1414))) * 43758.5453);
+}
+
+highp float noise(highp vec2 p){
+    highp vec2 ip = floor(p);
+    highp vec2 u = fract(p);
+    u = u*u*(3.0-2.0*u);
+
+    highp float res = mix(
+        mix(rand(ip),rand(ip+vec2(1.0,0.0)),u.x),
+        mix(rand(ip+vec2(0.0,1.0)),rand(ip+vec2(1.0,1.0)),u.x),u.y);
+    return res*res;
+}
+
+highp float fbm(highp vec2 uv, highp mat2 m){
+    highp float n = 0.0;
+    
+    n += 0.5*noise(uv + TIME); uv *= 2.05*m;
+    n += 0.25*noise(uv); uv *= 2.04*m;
+    n += 0.125*noise(uv); uv *= 2.03*m;
+    n += 0.0625*noise(uv + sin(TIME));
+    
+    return n;
+}
+
+void fragment() {
+    highp float f = fbm(UV, SCALE_MATRIX); //Fractional brownian motion warp overlay, based on https://www.shadertoy.com/view/tdG3Rd
+    for(int c = 0; c < DET_LEVELS; c++){f = fbm(UV + f, SCALE_MATRIX);}
+    COLOR.xyz = mix(texture(SCREEN_TEXTURE, UV).xyz, BASE_COLOR, f*BRIGHTNESS);
+}

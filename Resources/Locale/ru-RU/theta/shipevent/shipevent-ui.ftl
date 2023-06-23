@@ -49,11 +49,12 @@ shipevent-teamcreation-shippickerbutton = ВЫБРАТЬ КОРАБЛЬ
 shipevent-shippicker-windowtitle = ВЫБОР КОРАБЛЯ
 
 shipevent-shippicker-mincrewamount = Рекомендуемое минимальное кол-во экипажа: 
+shipevent-shippicker-selectionbutton = Выбрать
+
 shipevent-shippicker-lightclass = [color=green]Лёгкий[/color]
-shipevent-shippicker-mediumclass = [color=yellow]Жёлтый[/color]
+shipevent-shippicker-mediumclass = [color=yellow]Средний[/color]
 shipevent-shippicker-heavyclass = [color=red]Тяжёлый[/color]
 shipevent-shippicker-specialclass = [color=pink]Особый[/color]
-shipevent-shippicker-selectionbutton = Выбрать
 
 
 # Captain's menu
@@ -63,7 +64,11 @@ shipevent-capmenu-windowtitle = УПРАВЛЕНИЕ КОМАНДОЙ
 shipevent-capmenu-shipmanagement = Управление кораблём:
 shipevent-capmenu-currentship = Текущий корабль:
 shipevent-capmenu-shippickerbutton = ВЫБРАТЬ КОРАБЛЬ
-shipevent-capmenu-changeshipbutton = СМЕНИТЬ КОРАБЛЬ
+
+shipevent-capmenu-membermanagement = Управление членами команды:
+shipevent-capmenu-memberlist = Члены команды:
+shipevent-capmenu-blacklistbutton = ИЗМЕНИТЬ ЧС
+shipevent-capmenu-kickbutton = ВЫГНАТЬ ЧЛЕНА
 
 shipevent-capmenu-toggle-name = Управление командой
 shipevent-capmenu-toggle-desc = Меняйте корабль, кикайте участников, делайте объявления и т.д.
