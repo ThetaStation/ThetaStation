@@ -46,7 +46,8 @@ namespace Content.IntegrationTests.Tests
             "/Maps/infiltrator.yml",
             "/Maps/Theta/Shipevent/Ships/shipevent-arrowhead.yml",
             "/Maps/Theta/Shipevent/Ships/shipevent-mule.yml",
-            "/Maps/Theta/Shipevent/Ships/shipevent-boxship.yml"
+            "/Maps/Theta/Shipevent/Ships/shipevent-boxship.yml",
+            "/Maps/Theta/Shipevent/Ships/shipevent-skipjack.yml"
         };
 
         /// <summary>

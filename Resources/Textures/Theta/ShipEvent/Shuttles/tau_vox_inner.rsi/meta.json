@@ -164,7 +164,7 @@
             "name": "vox_shuttle_inner_1_8"
         },
         {
-            "name": "window"
+            "name": "vox_shuttle_inner_window"
         },
         {
             "name": "vox_shuttle_inner_12_8"
@@ -311,10 +311,10 @@
             "name": "vox_shuttle_inner_13_8"
         },
         {
-            "name": "window_bot"
+            "name": "vox_shuttle_inner_window_bot"
         },
         {
-            "name": "window_top"
+            "name": "vox_shuttle_inner_window_top"
         },
         {
             "name": "vox_shuttle_inner_7_13"

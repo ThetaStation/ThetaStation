@@ -35,11 +35,10 @@
 - type: entity
   id: VoxShuttleWindow
   name: skipjack window
-  parent: Window
+  parent: WindowNoSmooth
   abstract: true
   components:
     - type: Sprite
-      drawdepth: WallTops
       sprite: Theta/ShipEvent/Shuttles/tau_vox_inner.rsi
     - type: Icon
       sprite: Theta/ShipEvent/Shuttles/tau_vox_inner.rsi
@@ -73,11 +72,7 @@
               acts: [ "Destruction" ]
     - type: Appearance
     - type: DamageVisuals
-      thresholds: [4, 8, 12]
       damageDivisor: 36
-      trackAllDamage: true
-      damageOverlay:
-        sprite: Structures/Windows/cracks.rsi
 
 - type: entity
   parent: VoxShuttleWindow
@@ -85,9 +80,9 @@
   suffix: default
   components:
     - type: Sprite
-      state: window
+      state: vox_shuttle_inner_window
     - type: Icon
-      state: window
+      state: vox_shuttle_inner_window
 
 - type: entity
   parent: VoxShuttleWindow
@@ -95,9 +90,9 @@
   suffix: top
   components:
     - type: Sprite
-      state: window_top
+      state: vox_shuttle_inner_window_top
     - type: Icon
-      state: window_top
+      state: vox_shuttle_inner_window_top
 
 - type: entity
   parent: VoxShuttleWindow
@@ -105,9 +100,9 @@
   suffix: bop
   components:
     - type: Sprite
-      state: window_bot
+      state: vox_shuttle_inner_window_bot
     - type: Icon
-      state: window_bot
+      state: vox_shuttle_inner_window_bot
 
 - type: entity
   parent: VoxShuttleInnerWall

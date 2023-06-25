@@ -4,7 +4,7 @@
     mapPath: "/Maps/Theta/Shipevent/Ships/shipevent-mule.yml"
   spawnWeight: 0
   minDistance: 10
-  
+
 - type: shiptype
   id: shiptype_mule
   name: shipevent-mule-name
@@ -13,7 +13,7 @@
   minCrewAmount: 3
   previewImage: /Textures/Theta/ShipEvent/ShipPreviews/mule-preview.png
   structurePrototype: "shipevent_mule"
-  
+
 - type: structure
   id: shipevent_arrowhead
   generator: !type:MapLoaderGenerator
@@ -28,7 +28,7 @@
   class: shipevent-shipclass-light
   previewImage: /Textures/Theta/ShipEvent/ShipPreviews/arrowhead-preview.png
   structurePrototype: "shipevent_arrowhead"
-  
+
 - type: structure
   id: shipevent_boxship
   generator: !type:MapLoaderGenerator
@@ -43,3 +43,18 @@
   class: shipevent-shipclass-special
   previewImage: /Textures/Theta/ShipEvent/ShipPreviews/boxship-preview.png
   structurePrototype: "shipevent_boxship"
+
+- type: structure
+  id: shipevent_skipjack
+  generator: !type:MapLoaderGenerator
+    mapPath: "/Maps/Theta/Shipevent/Ships/shipevent-skipjack.yml"
+  spawnWeight: 0
+  minDistance: 20
+
+- type: shiptype
+  id: shiptype_skipjack
+  name: shipevent-skipjack-name
+  description: shipevent-skipjack-desc
+  class: shipevent-shipclass-heavyclass
+  previewImage: /Textures/Theta/ShipEvent/ShipPreviews/skipjack-preview.png
+  structurePrototype: "shipevent_skipjack"
