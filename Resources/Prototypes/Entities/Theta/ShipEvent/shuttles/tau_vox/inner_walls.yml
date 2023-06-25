@@ -1,0 +1,1170 @@
+﻿- type: entity
+  parent: BaseWall
+  id: VoxShuttleInnerWall
+  name: skipjack wall
+  abstract: true
+  components:
+    - type: Tag
+      tags:
+        - Wall
+        - RCDDeconstructWhitelist
+    - type: Sprite
+      sprite: Theta/ShipEvent/Shuttles/tau_vox_inner.rsi
+    - type: Icon
+      sprite: Theta/ShipEvent/Shuttles/tau_vox_inner.rsi
+    - type: Destructible
+      thresholds:
+        - trigger:
+            !type:DamageTrigger
+            damage: 1000
+          behaviors:
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+        - trigger:
+            !type:DamageTrigger
+            damage: 500
+          behaviors:
+            - !type:PlaySoundBehavior
+              sound:
+                path: /Audio/Effects/metalbreak.ogg
+            - !type:DoActsBehavior
+              acts: ["Destruction"]
+      destroySound:
+        path: /Audio/Effects/metalbreak.ogg
+
+- type: entity
+  id: VoxShuttleWindow
+  name: skipjack window
+  parent: Window
+  abstract: true
+  components:
+    - type: Sprite
+      drawdepth: WallTops
+      sprite: Theta/ShipEvent/Shuttles/tau_vox_inner.rsi
+    - type: Icon
+      sprite: Theta/ShipEvent/Shuttles/tau_vox_inner.rsi
+    - type: Damageable
+      damageContainer: Inorganic
+      damageModifierSet: RGlass
+    - type: Destructible
+      thresholds:
+        - trigger:
+            !type:DamageTrigger
+            damage: 1000
+          behaviors:
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+        - trigger:
+            !type:DamageTrigger
+            damage: 500
+          behaviors:
+            - !type:PlaySoundBehavior
+              sound:
+                collection: GlassBreak
+            - !type:SpawnEntitiesBehavior
+              spawn:
+                ShardGlassReinforced:
+                  min: 1
+                  max: 2
+                PartRodMetal:
+                  min: 1
+                  max: 2
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+    - type: Appearance
+    - type: DamageVisuals
+      thresholds: [4, 8, 12]
+      damageDivisor: 36
+      trackAllDamage: true
+      damageOverlay:
+        sprite: Structures/Windows/cracks.rsi
+
+- type: entity
+  parent: VoxShuttleWindow
+  id: VoxShuttleWindowDefault
+  suffix: default
+  components:
+    - type: Sprite
+      state: window
+    - type: Icon
+      state: window
+
+- type: entity
+  parent: VoxShuttleWindow
+  id: VoxShuttleWindowTop
+  suffix: top
+  components:
+    - type: Sprite
+      state: window_top
+    - type: Icon
+      state: window_top
+
+- type: entity
+  parent: VoxShuttleWindow
+  id: VoxShuttleWindowBot
+  suffix: bop
+  components:
+    - type: Sprite
+      state: window_bot
+    - type: Icon
+      state: window_bot
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall3_0
+  suffix: 3_0
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_3_0
+    - type: Icon
+      state: vox_shuttle_inner_3_0
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall4_0
+  suffix: 4_0
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_4_0
+    - type: Icon
+      state: vox_shuttle_inner_4_0
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall5_0
+  suffix: 5_0
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_5_0
+    - type: Icon
+      state: vox_shuttle_inner_5_0
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall6_0
+  suffix: 6_0
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_6_0
+    - type: Icon
+      state: vox_shuttle_inner_6_0
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall7_0
+  suffix: 7_0
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_7_0
+    - type: Icon
+      state: vox_shuttle_inner_7_0
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall8_0
+  suffix: 8_0
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_8_0
+    - type: Icon
+      state: vox_shuttle_inner_8_0
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall9_0
+  suffix: 9_0
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_9_0
+    - type: Icon
+      state: vox_shuttle_inner_9_0
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall10_0
+  suffix: 10_0
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_10_0
+    - type: Icon
+      state: vox_shuttle_inner_10_0
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall3_1
+  suffix: 3_1
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_3_1
+    - type: Icon
+      state: vox_shuttle_inner_3_1
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall10_1
+  suffix: 10_1
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_10_1
+    - type: Icon
+      state: vox_shuttle_inner_10_1
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall0_2
+  suffix: 0_2
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_0_2
+    - type: Icon
+      state: vox_shuttle_inner_0_2
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall1_2
+  suffix: 1_2
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_1_2
+    - type: Icon
+      state: vox_shuttle_inner_1_2
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall2_2
+  suffix: 2_2
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_2_2
+    - type: Icon
+      state: vox_shuttle_inner_2_2
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall3_2
+  suffix: 3_2
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_3_2
+    - type: Icon
+      state: vox_shuttle_inner_3_2
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall10_2
+  suffix: 10_2
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_10_2
+    - type: Icon
+      state: vox_shuttle_inner_10_2
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall11_2
+  suffix: 11_2
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_11_2
+    - type: Icon
+      state: vox_shuttle_inner_11_2
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall12_2
+  suffix: 12_2
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_12_2
+    - type: Icon
+      state: vox_shuttle_inner_12_2
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall13_2
+  suffix: 13_2
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_13_2
+    - type: Icon
+      state: vox_shuttle_inner_13_2
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall0_3
+  suffix: 0_3
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_0_3
+    - type: Icon
+      state: vox_shuttle_inner_0_3
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall3_3
+  suffix: 3_3
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_3_3
+    - type: Icon
+      state: vox_shuttle_inner_3_3
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall4_3
+  suffix: 4_3
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_4_3
+    - type: Icon
+      state: vox_shuttle_inner_4_3
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall5_3
+  suffix: 5_3
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_5_3
+    - type: Icon
+      state: vox_shuttle_inner_5_3
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall6_3
+  suffix: 6_3
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_6_3
+    - type: Icon
+      state: vox_shuttle_inner_6_3
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall7_3
+  suffix: 7_3
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_7_3
+    - type: Icon
+      state: vox_shuttle_inner_7_3
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall8_3
+  suffix: 8_3
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_8_3
+    - type: Icon
+      state: vox_shuttle_inner_8_3
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall9_3
+  suffix: 9_3
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_9_3
+    - type: Icon
+      state: vox_shuttle_inner_9_3
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall10_3
+  suffix: 10_3
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_10_3
+    - type: Icon
+      state: vox_shuttle_inner_10_3
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall13_3
+  suffix: 13_3
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_13_3
+    - type: Icon
+      state: vox_shuttle_inner_13_3
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall0_4
+  suffix: 0_4
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_0_4
+    - type: Icon
+      state: vox_shuttle_inner_0_4
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall3_4
+  suffix: 3_4
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_3_4
+    - type: Icon
+      state: vox_shuttle_inner_3_4
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall10_4
+  suffix: 10_4
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_10_4
+    - type: Icon
+      state: vox_shuttle_inner_10_4
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall13_4
+  suffix: 13_4
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_13_4
+    - type: Icon
+      state: vox_shuttle_inner_13_4
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall3_5
+  suffix: 3_5
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_3_5
+    - type: Icon
+      state: vox_shuttle_inner_3_5
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall10_5
+  suffix: 10_5
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_10_5
+    - type: Icon
+      state: vox_shuttle_inner_10_5
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall13_5
+  suffix: 13_5
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_13_5
+    - type: Icon
+      state: vox_shuttle_inner_13_5
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall0_6
+  suffix: 0_6
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_0_6
+    - type: Icon
+      state: vox_shuttle_inner_0_6
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall1_6
+  suffix: 1_6
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_1_6
+    - type: Icon
+      state: vox_shuttle_inner_1_6
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall2_6
+  suffix: 2_6
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_2_6
+    - type: Icon
+      state: vox_shuttle_inner_2_6
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall3_6
+  suffix: 3_6
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_3_6
+    - type: Icon
+      state: vox_shuttle_inner_3_6
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall4_6
+  suffix: 4_6
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_4_6
+    - type: Icon
+      state: vox_shuttle_inner_4_6
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall5_6
+  suffix: 5_6
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_5_6
+    - type: Icon
+      state: vox_shuttle_inner_5_6
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall8_6
+  suffix: 8_6
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_8_6
+    - type: Icon
+      state: vox_shuttle_inner_8_6
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall9_6
+  suffix: 9_6
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_9_6
+    - type: Icon
+      state: vox_shuttle_inner_9_6
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall10_6
+  suffix: 10_6
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_10_6
+    - type: Icon
+      state: vox_shuttle_inner_10_6
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall11_6
+  suffix: 11_6
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_11_6
+    - type: Icon
+      state: vox_shuttle_inner_11_6
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall12_6
+  suffix: 12_6
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_12_6
+    - type: Icon
+      state: vox_shuttle_inner_12_6
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall13_6
+  suffix: 13_6
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_13_6
+    - type: Icon
+      state: vox_shuttle_inner_13_6
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall1_7
+  suffix: 1_7
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_1_7
+    - type: Icon
+      state: vox_shuttle_inner_1_7
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall5_7
+  suffix: 5_7
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_5_7
+    - type: Icon
+      state: vox_shuttle_inner_5_7
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall8_7
+  suffix: 8_7
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_8_7
+    - type: Icon
+      state: vox_shuttle_inner_8_7
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall12_7
+  suffix: 12_7
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_12_7
+    - type: Icon
+      state: vox_shuttle_inner_12_7
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall1_8
+  suffix: 1_8
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_1_8
+    - type: Icon
+      state: vox_shuttle_inner_1_8
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall12_8
+  suffix: 12_8
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_12_8
+    - type: Icon
+      state: vox_shuttle_inner_12_8
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall1_9
+  suffix: 1_9
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_1_9
+    - type: Icon
+      state: vox_shuttle_inner_1_9
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall12_9
+  suffix: 12_9
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_12_9
+    - type: Icon
+      state: vox_shuttle_inner_12_9
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall1_10
+  suffix: 1_10
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_1_10
+    - type: Icon
+      state: vox_shuttle_inner_1_10
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall12_10
+  suffix: 12_10
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_12_10
+    - type: Icon
+      state: vox_shuttle_inner_12_10
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall1_11
+  suffix: 1_11
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_1_11
+    - type: Icon
+      state: vox_shuttle_inner_1_11
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall5_11
+  suffix: 5_11
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_5_11
+    - type: Icon
+      state: vox_shuttle_inner_5_11
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall8_11
+  suffix: 8_11
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_8_11
+    - type: Icon
+      state: vox_shuttle_inner_8_11
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall12_11
+  suffix: 12_11
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_12_11
+    - type: Icon
+      state: vox_shuttle_inner_12_11
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall1_12
+  suffix: 1_12
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_1_12
+    - type: Icon
+      state: vox_shuttle_inner_1_12
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall2_12
+  suffix: 2_12
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_2_12
+    - type: Icon
+      state: vox_shuttle_inner_2_12
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall3_12
+  suffix: 3_12
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_3_12
+    - type: Icon
+      state: vox_shuttle_inner_3_12
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall4_12
+  suffix: 4_12
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_4_12
+    - type: Icon
+      state: vox_shuttle_inner_4_12
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall5_12
+  suffix: 5_12
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_5_12
+    - type: Icon
+      state: vox_shuttle_inner_5_12
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall6_12
+  suffix: 6_12
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_6_12
+    - type: Icon
+      state: vox_shuttle_inner_6_12
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall7_12
+  suffix: 7_12
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_7_12
+    - type: Icon
+      state: vox_shuttle_inner_7_12
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall8_12
+  suffix: 8_12
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_8_12
+    - type: Icon
+      state: vox_shuttle_inner_8_12
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall9_12
+  suffix: 9_12
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_9_12
+    - type: Icon
+      state: vox_shuttle_inner_9_12
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall10_12
+  suffix: 10_12
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_10_12
+    - type: Icon
+      state: vox_shuttle_inner_10_12
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall11_12
+  suffix: 11_12
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_11_12
+    - type: Icon
+      state: vox_shuttle_inner_11_12
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall12_12
+  suffix: 12_12
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_12_12
+    - type: Icon
+      state: vox_shuttle_inner_12_12
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall3_13
+  suffix: 3_13
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_3_13
+    - type: Icon
+      state: vox_shuttle_inner_3_13
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall10_13
+  suffix: 10_13
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_10_13
+    - type: Icon
+      state: vox_shuttle_inner_10_13
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall3_14
+  suffix: 3_14
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_3_14
+    - type: Icon
+      state: vox_shuttle_inner_3_14
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall10_14
+  suffix: 10_14
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_10_14
+    - type: Icon
+      state: vox_shuttle_inner_10_14
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall3_15
+  suffix: 3_15
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_3_15
+    - type: Icon
+      state: vox_shuttle_inner_3_15
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall4_15
+  suffix: 4_15
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_4_15
+    - type: Icon
+      state: vox_shuttle_inner_4_15
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall5_15
+  suffix: 5_15
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_5_15
+    - type: Icon
+      state: vox_shuttle_inner_5_15
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall6_15
+  suffix: 6_15
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_6_15
+    - type: Icon
+      state: vox_shuttle_inner_6_15
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall7_15
+  suffix: 7_15
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_7_15
+    - type: Icon
+      state: vox_shuttle_inner_7_15
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall8_15
+  suffix: 8_15
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_8_15
+    - type: Icon
+      state: vox_shuttle_inner_8_15
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall9_15
+  suffix: 9_15
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_9_15
+    - type: Icon
+      state: vox_shuttle_inner_9_15
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall10_15
+  suffix: 10_15
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_10_15
+    - type: Icon
+      state: vox_shuttle_inner_10_15
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall5_4
+  suffix: 5_4
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_5_4
+    - type: Icon
+      state: vox_shuttle_inner_5_4
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall12_4
+  suffix: 12_4
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_12_4
+    - type: Icon
+      state: vox_shuttle_inner_12_4
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall5_5
+  suffix: 5_5
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_5_5
+    - type: Icon
+      state: vox_shuttle_inner_5_5
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall6_5
+  suffix: 6_5
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_6_5
+    - type: Icon
+      state: vox_shuttle_inner_6_5
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall7_5
+  suffix: 7_5
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_7_5
+    - type: Icon
+      state: vox_shuttle_inner_7_5
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall11_5
+  suffix: 11_5
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_11_5
+    - type: Icon
+      state: vox_shuttle_inner_11_5
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall12_5
+  suffix: 12_5
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_12_5
+    - type: Icon
+      state: vox_shuttle_inner_12_5
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall5_7t
+  suffix: 5_7t
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_5_7t
+    - type: Icon
+      state: vox_shuttle_inner_5_7t
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall12_7t
+  suffix: 12_7t
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_12_7t
+    - type: Icon
+      state: vox_shuttle_inner_12_7t
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall4_8
+  suffix: 4_8
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_4_8
+    - type: Icon
+      state: vox_shuttle_inner_4_8
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall6_8
+  suffix: 6_8
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_6_8
+    - type: Icon
+      state: vox_shuttle_inner_6_8
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall7_8
+  suffix: 7_8
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_7_8
+    - type: Icon
+      state: vox_shuttle_inner_7_8
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall10_8
+  suffix: 10_8
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_10_8
+    - type: Icon
+      state: vox_shuttle_inner_10_8
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall11_8
+  suffix: 11_8
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_11_8
+    - type: Icon
+      state: vox_shuttle_inner_11_8
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall13_8
+  suffix: 13_8
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_13_8
+    - type: Icon
+      state: vox_shuttle_inner_13_8
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall7_13
+  suffix: 7_13
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_7_13
+    - type: Icon
+      state: vox_shuttle_inner_7_13
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall10_13t
+  suffix: 10_13t
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_10_13t
+    - type: Icon
+      state: vox_shuttle_inner_10_13t
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall6_14
+  suffix: 6_14
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_6_14
+    - type: Icon
+      state: vox_shuttle_inner_6_14
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall7_14
+  suffix: 7_14
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_7_14
+    - type: Icon
+      state: vox_shuttle_inner_7_14
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall10_14t
+  suffix: 10_14t
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_10_14t
+    - type: Icon
+      state: vox_shuttle_inner_10_14t
+
+- type: entity
+  parent: VoxShuttleInnerWall
+  id: VoxShuttleInnerWall11_14
+  suffix: 11_14
+  components:
+    - type: Sprite
+      state: vox_shuttle_inner_11_14
+    - type: Icon
+      state: vox_shuttle_inner_11_14

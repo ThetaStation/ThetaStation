@@ -1,0 +1,338 @@
+﻿{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "https://github.com/TauCetiStation/TauCetiClassic/commit/386a4ec288741d2e2ef8f65409dde9d78a359d17",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "vox_shuttle_inner_3_0"
+        },
+        {
+            "name": "vox_shuttle_inner_4_0"
+        },
+        {
+            "name": "vox_shuttle_inner_5_0"
+        },
+        {
+            "name": "vox_shuttle_inner_6_0"
+        },
+        {
+            "name": "vox_shuttle_inner_7_0"
+        },
+        {
+            "name": "vox_shuttle_inner_8_0"
+        },
+        {
+            "name": "vox_shuttle_inner_9_0"
+        },
+        {
+            "name": "vox_shuttle_inner_10_0"
+        },
+        {
+            "name": "vox_shuttle_inner_3_1"
+        },
+        {
+            "name": "vox_shuttle_inner_10_1"
+        },
+        {
+            "name": "vox_shuttle_inner_0_2"
+        },
+        {
+            "name": "vox_shuttle_inner_1_2"
+        },
+        {
+            "name": "vox_shuttle_inner_2_2"
+        },
+        {
+            "name": "vox_shuttle_inner_3_2"
+        },
+        {
+            "name": "vox_shuttle_inner_10_2"
+        },
+        {
+            "name": "vox_shuttle_inner_11_2"
+        },
+        {
+            "name": "vox_shuttle_inner_12_2"
+        },
+        {
+            "name": "vox_shuttle_inner_13_2"
+        },
+        {
+            "name": "vox_shuttle_inner_0_3"
+        },
+        {
+            "name": "vox_shuttle_inner_3_3"
+        },
+        {
+            "name": "vox_shuttle_inner_4_3"
+        },
+        {
+            "name": "vox_shuttle_inner_5_3"
+        },
+        {
+            "name": "vox_shuttle_inner_6_3"
+        },
+        {
+            "name": "vox_shuttle_inner_7_3"
+        },
+        {
+            "name": "vox_shuttle_inner_8_3"
+        },
+        {
+            "name": "vox_shuttle_inner_9_3"
+        },
+        {
+            "name": "vox_shuttle_inner_10_3"
+        },
+        {
+            "name": "vox_shuttle_inner_13_3"
+        },
+        {
+            "name": "vox_shuttle_inner_0_4"
+        },
+        {
+            "name": "vox_shuttle_inner_3_4"
+        },
+        {
+            "name": "vox_shuttle_inner_10_4"
+        },
+        {
+            "name": "vox_shuttle_inner_13_4"
+        },
+        {
+            "name": "vox_shuttle_inner_3_5"
+        },
+        {
+            "name": "vox_shuttle_inner_10_5"
+        },
+        {
+            "name": "vox_shuttle_inner_13_5"
+        },
+        {
+            "name": "vox_shuttle_inner_0_6"
+        },
+        {
+            "name": "vox_shuttle_inner_1_6"
+        },
+        {
+            "name": "vox_shuttle_inner_2_6"
+        },
+        {
+            "name": "vox_shuttle_inner_3_6"
+        },
+        {
+            "name": "vox_shuttle_inner_4_6"
+        },
+        {
+            "name": "vox_shuttle_inner_5_6"
+        },
+        {
+            "name": "vox_shuttle_inner_8_6"
+        },
+        {
+            "name": "vox_shuttle_inner_9_6"
+        },
+        {
+            "name": "vox_shuttle_inner_10_6"
+        },
+        {
+            "name": "vox_shuttle_inner_11_6"
+        },
+        {
+            "name": "vox_shuttle_inner_12_6"
+        },
+        {
+            "name": "vox_shuttle_inner_13_6"
+        },
+        {
+            "name": "vox_shuttle_inner_1_7"
+        },
+        {
+            "name": "vox_shuttle_inner_5_7"
+        },
+        {
+            "name": "vox_shuttle_inner_8_7"
+        },
+        {
+            "name": "vox_shuttle_inner_12_7"
+        },
+        {
+            "name": "vox_shuttle_inner_1_8"
+        },
+        {
+            "name": "window"
+        },
+        {
+            "name": "vox_shuttle_inner_12_8"
+        },
+        {
+            "name": "vox_shuttle_inner_1_9"
+        },
+        {
+            "name": "vox_shuttle_inner_12_9"
+        },
+        {
+            "name": "vox_shuttle_inner_1_10"
+        },
+        {
+            "name": "vox_shuttle_inner_12_10"
+        },
+        {
+            "name": "vox_shuttle_inner_1_11"
+        },
+        {
+            "name": "vox_shuttle_inner_5_11"
+        },
+        {
+            "name": "vox_shuttle_inner_8_11"
+        },
+        {
+            "name": "vox_shuttle_inner_12_11"
+        },
+        {
+            "name": "vox_shuttle_inner_1_12"
+        },
+        {
+            "name": "vox_shuttle_inner_2_12"
+        },
+        {
+            "name": "vox_shuttle_inner_3_12"
+        },
+        {
+            "name": "vox_shuttle_inner_4_12"
+        },
+        {
+            "name": "vox_shuttle_inner_5_12"
+        },
+        {
+            "name": "vox_shuttle_inner_6_12"
+        },
+        {
+            "name": "vox_shuttle_inner_7_12"
+        },
+        {
+            "name": "vox_shuttle_inner_8_12"
+        },
+        {
+            "name": "vox_shuttle_inner_9_12"
+        },
+        {
+            "name": "vox_shuttle_inner_10_12"
+        },
+        {
+            "name": "vox_shuttle_inner_11_12"
+        },
+        {
+            "name": "vox_shuttle_inner_12_12"
+        },
+        {
+            "name": "vox_shuttle_inner_3_13"
+        },
+        {
+            "name": "vox_shuttle_inner_10_13"
+        },
+        {
+            "name": "vox_shuttle_inner_3_14"
+        },
+        {
+            "name": "vox_shuttle_inner_10_14"
+        },
+        {
+            "name": "vox_shuttle_inner_3_15"
+        },
+        {
+            "name": "vox_shuttle_inner_4_15"
+        },
+        {
+            "name": "vox_shuttle_inner_5_15"
+        },
+        {
+            "name": "vox_shuttle_inner_6_15"
+        },
+        {
+            "name": "vox_shuttle_inner_7_15"
+        },
+        {
+            "name": "vox_shuttle_inner_8_15"
+        },
+        {
+            "name": "vox_shuttle_inner_9_15"
+        },
+        {
+            "name": "vox_shuttle_inner_10_15"
+        },
+        {
+            "name": "vox_shuttle_inner_5_4"
+        },
+        {
+            "name": "vox_shuttle_inner_12_4"
+        },
+        {
+            "name": "vox_shuttle_inner_5_5"
+        },
+        {
+            "name": "vox_shuttle_inner_6_5"
+        },
+        {
+            "name": "vox_shuttle_inner_7_5"
+        },
+        {
+            "name": "vox_shuttle_inner_11_5"
+        },
+        {
+            "name": "vox_shuttle_inner_12_5"
+        },
+        {
+            "name": "vox_shuttle_inner_5_7t"
+        },
+        {
+            "name": "vox_shuttle_inner_12_7t"
+        },
+        {
+            "name": "vox_shuttle_inner_4_8"
+        },
+        {
+            "name": "vox_shuttle_inner_6_8"
+        },
+        {
+            "name": "vox_shuttle_inner_7_8"
+        },
+        {
+            "name": "vox_shuttle_inner_10_8"
+        },
+        {
+            "name": "vox_shuttle_inner_11_8"
+        },
+        {
+            "name": "vox_shuttle_inner_13_8"
+        },
+        {
+            "name": "window_bot"
+        },
+        {
+            "name": "window_top"
+        },
+        {
+            "name": "vox_shuttle_inner_7_13"
+        },
+        {
+            "name": "vox_shuttle_inner_10_13t"
+        },
+        {
+            "name": "vox_shuttle_inner_6_14"
+        },
+        {
+            "name": "vox_shuttle_inner_7_14"
+        },
+        {
+            "name": "vox_shuttle_inner_10_14t"
+        },
+        {
+            "name": "vox_shuttle_inner_11_14"
+        }
+    ]
+}
