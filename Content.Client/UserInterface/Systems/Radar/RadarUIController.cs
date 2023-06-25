@@ -1,18 +1,21 @@
-﻿using Content.Client.UserInterface.Systems.Gameplay;
+﻿using Content.Client.UserInterface.Screens;
+using Content.Client.UserInterface.Systems.Gameplay;
 using Content.Client.UserInterface.Systems.Radar.Widgets;
 using Content.Shared.Theta.RadarHUD;
 using Robust.Client.GameObjects;
+using Robust.Client.Graphics;
 using Robust.Client.Player;
-using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controllers;
+using Robust.Client.UserInterface.Controls;
 
 namespace Content.Client.UserInterface.Systems.Radar;
 
 public sealed class RadarUIController : UIController
 {
     [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private readonly IEyeManager _eyeManager = default!;
 
-    private RadarGui? RadarGui => UIManager.GetActiveUIWidgetOrNull<RadarGui>();
+    private RadarGui? RadarGui;
 
     public override void Initialize()
     {
@@ -27,37 +30,76 @@ public sealed class RadarUIController : UIController
 
     private void OnScreenLoad()
     {
-        UpdateGui();
-    }
-
-    private void OnScreenUnload()
-    {
-        UpdateGui();
+        InitializeRadarGui();
     }
 
     private void OnPlayerAttach(PlayerAttachedEvent ev)
     {
-        UpdateGui();
-    }
-
-    private void UpdateGui()
-    {
-        if (RadarGui == null)
-            return;
-        RadarGui.Visible = EntityManager.HasComponent<RadarHUDComponent>(_playerManager.LocalPlayer?.ControlledEntity);
+        InitializeRadarGui();
     }
 
     private void OnRadarHudAdded(ref RadarHudComponentAdded ev)
     {
-        if (RadarGui == null)
-            return;
-        RadarGui.Visible = true;
+        InitializeRadarGui();
     }
 
     private void OnRadarHudRemoved(ref RadarHudComponentRemoved ev)
     {
+        ClearRadarGui();
+    }
+
+    private void OnScreenUnload()
+    {
+        ClearRadarGui();
+    }
+
+    public void UpdateRadarMatrix()
+    {
         if (RadarGui == null)
             return;
-        RadarGui.Visible = false;
+
+        if (_playerManager.LocalPlayer?.ControlledEntity == null)
+            return;
+
+        var transform =
+            EntityManager.GetComponent<TransformComponent>(_playerManager.LocalPlayer!.ControlledEntity.Value);
+
+        RadarGui.SetMatrix(transform.Coordinates, _eyeManager.CurrentEye.Rotation);
+    }
+
+    private void InitializeRadarGui()
+    {
+        if (_playerManager.LocalPlayer?.ControlledEntity == null)
+            return;
+
+        if (!EntityManager.HasComponent<RadarHUDComponent>(_playerManager.LocalPlayer.ControlledEntity))
+        {
+            ClearRadarGui();
+            return;
+        }
+
+        if (RadarGui != null)
+            return;
+
+        RadarGui = new();
+        switch (UIManager.ActiveScreen)
+        {
+            case DefaultGameScreen game:
+                game.Radar.AddChild(RadarGui);
+                LayoutContainer.SetAnchorAndMarginPreset(game.Radar, LayoutContainer.LayoutPreset.BottomRight, margin: 10);
+                break;
+            case SeparatedChatGameScreen separated:
+                separated.Radar.AddChild(RadarGui);
+                LayoutContainer.SetAnchorAndMarginPreset(separated.Radar, LayoutContainer.LayoutPreset.BottomRight, margin: 10);
+                break;
+        }
+    }
+
+    private void ClearRadarGui()
+    {
+        if (RadarGui == null)
+            return;
+        RadarGui.Orphan();
+        RadarGui = null;
     }
 }

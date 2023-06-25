@@ -53,7 +53,7 @@
   - type: UserInterface
     interfaces:
       - key: enum.ShuttleConsoleUiKey.Key
-        type: ShuttleConsoleBoundUserInterface
+        type: ModularRadarShuttleConsoleBoundUserInterface
   - type: RadarConsole
   - type: WorldLoader
     radius: 256
