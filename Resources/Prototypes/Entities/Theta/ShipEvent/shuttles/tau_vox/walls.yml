@@ -12,6 +12,17 @@
       sprite: Theta/ShipEvent/Shuttles/tau_vox.rsi
     - type: Icon
       sprite: Theta/ShipEvent/Shuttles/tau_vox.rsi
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape:
+            !type:PhysShapeAabb
+            bounds: "-0.5,-0.5,0.5,0.5"
+          mask:
+            - FullTileMask
+          layer:
+            - WallLayer
+          density: 3000
     - type: Destructible
       thresholds:
         - trigger:
@@ -31,6 +42,23 @@
               acts: ["Destruction"]
       destroySound:
         path: /Audio/Effects/metalbreak.ogg
+
+- type: entity
+  parent: VoxShuttleWall
+  id: VoxShuttleWallOpaque
+  abstract: true
+  components:
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape:
+            !type:PhysShapeAabb
+            bounds: "-0.5,-0.5,0.5,0.5"
+          mask:
+            - FullTileMask
+          layer:
+            - GlassLayer
+          density: 3000
 
 - type: entity
   parent: VoxShuttleWall
@@ -263,7 +291,7 @@
       state: vox_shuttle_15_2
 
 - type: entity
-  parent: VoxShuttleWall
+  parent: VoxShuttleWallOpaque
   id: VoxShuttleWall16_2
   suffix: 16_2
   components:
@@ -303,7 +331,7 @@
       state: vox_shuttle_1_3
 
 - type: entity
-  parent: VoxShuttleWall
+  parent: VoxShuttleWallOpaque
   id: VoxShuttleWall2_3
   suffix: 2_3
   components:
@@ -373,7 +401,7 @@
       state: vox_shuttle_14_3
 
 - type: entity
-  parent: VoxShuttleWall
+  parent: VoxShuttleWallOpaque
   id: VoxShuttleWall15_3
   suffix: 15_3
   components:
@@ -383,7 +411,7 @@
       state: vox_shuttle_15_3
 
 - type: entity
-  parent: VoxShuttleWall
+  parent: VoxShuttleWallOpaque
   id: VoxShuttleWall16_3
   suffix: 16_3
   components:
@@ -393,7 +421,7 @@
       state: vox_shuttle_16_3
 
 - type: entity
-  parent: VoxShuttleWall
+  parent: VoxShuttleWallOpaque
   id: VoxShuttleWall17_3
   suffix: 17_3
   components:
@@ -413,7 +441,7 @@
       state: vox_shuttle_0_4
 
 - type: entity
-  parent: VoxShuttleWall
+  parent: VoxShuttleWallOpaque
   id: VoxShuttleWall1_4
   suffix: 1_4
   components:
@@ -423,7 +451,7 @@
       state: vox_shuttle_1_4
 
 - type: entity
-  parent: VoxShuttleWall
+  parent: VoxShuttleWallOpaque
   id: VoxShuttleWall16_4
   suffix: 16_4
   components:
@@ -433,7 +461,7 @@
       state: vox_shuttle_16_4
 
 - type: entity
-  parent: VoxShuttleWall
+  parent: VoxShuttleWallOpaque
   id: VoxShuttleWall17_4
   suffix: 17_4
   components:
@@ -453,7 +481,7 @@
       state: vox_shuttle_0_5
 
 - type: entity
-  parent: VoxShuttleWall
+  parent: VoxShuttleWallOpaque
   id: VoxShuttleWall1_5
   suffix: 1_5
   components:
@@ -463,7 +491,7 @@
       state: vox_shuttle_1_5
 
 - type: entity
-  parent: VoxShuttleWall
+  parent: VoxShuttleWallOpaque
   id: VoxShuttleWall16_5
   suffix: 16_5
   components:
@@ -473,7 +501,7 @@
       state: vox_shuttle_16_5
 
 - type: entity
-  parent: VoxShuttleWall
+  parent: VoxShuttleWallOpaque
   id: VoxShuttleWall17_5
   suffix: 17_5
   components:
@@ -493,7 +521,7 @@
       state: vox_shuttle_0_6
 
 - type: entity
-  parent: VoxShuttleWall
+  parent: VoxShuttleWallOpaque
   id: VoxShuttleWall1_6
   suffix: 1_6
   components:
@@ -503,7 +531,7 @@
       state: vox_shuttle_1_6
 
 - type: entity
-  parent: VoxShuttleWall
+  parent: VoxShuttleWallOpaque
   id: VoxShuttleWall16_6
   suffix: 16_6
   components:
@@ -513,7 +541,7 @@
       state: vox_shuttle_16_6
 
 - type: entity
-  parent: VoxShuttleWall
+  parent: VoxShuttleWallOpaque
   id: VoxShuttleWall17_6
   suffix: 17_6
   components:
@@ -553,7 +581,7 @@
       state: vox_shuttle_16_7
 
 - type: entity
-  parent: VoxShuttleWall
+  parent: VoxShuttleWallOpaque
   id: VoxShuttleWall17_7
   suffix: 17_7
   components:
@@ -633,7 +661,7 @@
       state: vox_shuttle_16_8
 
 - type: entity
-  parent: VoxShuttleWall
+  parent: VoxShuttleWallOpaque
   id: VoxShuttleWall17_8
   suffix: 17_8
   components:
@@ -1711,6 +1739,19 @@
       state: vox_shuttle_15_7
     - type: Icon
       state: vox_shuttle_15_7
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape:
+            !type:PolygonShape
+            vertices:
+              - "0.5,-0.5"
+              - "0.5,0.5"
+              - "-0.5,0.5"
+          mask:
+            - FullTileMask
+          layer:
+            - WallLayer
 
 - type: entity
   parent: VoxShuttleWall
@@ -1721,3 +1762,16 @@
       state: vox_shuttle_2_7
     - type: Icon
       state: vox_shuttle_2_7
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape:
+            !type:PolygonShape
+            vertices:
+              - "-0.5,-0.5"
+              - "-0.5,0.5"
+              - "0.5,0.5"
+          mask:
+            - FullTileMask
+          layer:
+            - WallLayer

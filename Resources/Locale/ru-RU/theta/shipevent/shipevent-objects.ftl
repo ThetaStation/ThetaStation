@@ -34,3 +34,15 @@ ent-ShipEventHeavyArtilleryCannon = артиллерийская пушка
     .desc = { "Противокорабельная пушка БС-3. Медленная, но мощная, она активно использовалась во время Второй Корпоративной Войны." }
     .suffix = { "ShipEvent" }
 
+ent-ShipEventMachineGunCannonLongMuzzle = пулемётная турель
+    .desc = { "Пулемёт мелкого калибра, отлично подходит против живой силы противника." }
+    .suffix = { "ShipEvent" }
+
+ent-ShipEventLightArtilleryCannonLongMuzzle = лёгкая пушка
+    .desc = { "Зенитная пушка 61-К. Несмотря на устаревшую модель, она всё ещё способна пробить броню современных кораблей." }
+    .suffix = { "ShipEvent" }
+
+ent-ShipEventHeavyArtilleryCannonLongMuzzle = артиллерийская пушка
+    .desc = { "Противокорабельная пушка БС-3. Медленная, но мощная, она активно использовалась во время Второй Корпоративной Войны." }
+    .suffix = { "ShipEvent" }
+
