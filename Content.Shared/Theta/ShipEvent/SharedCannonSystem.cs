@@ -37,6 +37,28 @@ public abstract class SharedCannonSystem : EntitySystem
         _gunSystem.AttemptShoot(ev.PilotUid, ev.CannonUid, gun, coords);
     }
 
+    public Angle Max(params Angle[] args)
+    {
+        Angle max = args[0];
+        foreach (Angle d in args)
+        {
+            if (d > max)
+                max = d;
+        }
+        return max;
+    }
+    
+    public Angle Min(params Angle[] args)
+    {
+        Angle min = args[0];
+        foreach (Angle d in args)
+        {
+            if (d < min)
+                min = d;
+        }
+        return min;
+    }
+    
     public Angle ReducedAndPositive(Angle a)
     {
         a = a.Reduced();
@@ -61,19 +83,32 @@ public abstract class SharedCannonSystem : EntitySystem
 
     public (Angle, Angle) CombinedSector(Angle s0, Angle w0, Angle s1, Angle w1)
     {
-        Angle e0, e1, l, h;
-        e0 = ReducedAndPositive(s0 + w0);
-        e1 = ReducedAndPositive(s1 + w1);
-
-        l = e0 < e1 ? e0 : e1;
-        l = l < s0 ? l : s0;
-        l = l < s1 ? l : s1;
+        (Angle e0, Angle e1) = (ReducedAndPositive(s0 + w0), ReducedAndPositive(s1 + w1));
+        Angle[] angles = {s0, e0, s1, e1};
         
-        h = e0 > e1 ? e0 : e1;
-        h = h > s0 ? h : s0;
-        h = h > s1 ? h : s1;
+        //edge case - full overlap
+        if (IsInsideSector(s0, s1, w1) && IsInsideSector(e0, s1, w1))
+            return (s1, w1);
+        if (IsInsideSector(s1, s0, w0) && IsInsideSector(e1, s0, w0))
+            return (s0, w0);
 
-        return (h, l - h);
+        Angle s, w, m, d;
+        s = Max(angles);
+        w = s == s0 ? w0 : s == e0 ? -w0 : s == s1 ? w1 : s == e1 ? -w1 : 0;
+
+        m = 0;
+        foreach (Angle a in angles)
+        {
+            if (Math.Abs(s - a) < 0.1)
+                continue;
+            
+            d = Angle.ShortestDistance(s, a);
+            d = Math.Sign(d) == Math.Sign(w) ? d : Math.Tau - Math.Abs(d);
+            if (Double.Abs(d) > Double.Abs(m))
+                m = d;
+        }
+
+        return (s, m);
     }
 
     private bool CanShoot(RequestCannonShootEvent args, GunComponent gun, CannonComponent cannon)

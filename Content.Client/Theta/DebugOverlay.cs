@@ -35,17 +35,20 @@ public sealed class DebugOverlay : Overlay
     {
         foreach ((TransformComponent form, CannonComponent cannon) in entMan.EntityQuery<TransformComponent, CannonComponent>())
         {
+            if (!form.ParentUid.IsValid())
+                continue;
+            Angle wr = formSys.GetWorldRotation(form.ParentUid);
+            Vector2 wp = formSys.GetWorldPosition(form);
+            
             foreach ((Angle s, Angle w) in cannon.ObstructedRanges)
             {
-                Angle wr = formSys.GetWorldRotation(form.ParentUid);
-                Vector2 wp = formSys.GetWorldPosition(form);
-                Vector2 sv = wp + (s+wr).ToVec() * 2;
-                Vector2 ev = wp + (s+w+wr).ToVec() * 2;
+                Vector2 sv = wp + (s+wr).ToVec() * 5;
+                Vector2 ev = wp + (s+w+wr).ToVec() * 5;
                 
                 args.WorldHandle.DrawCircle(wp, 0.1f, Color.Yellow);
                 args.WorldHandle.DrawLine(wp, sv, Color.Red);
                 args.WorldHandle.DrawLine(wp, ev, Color.Blue);
-                args.WorldHandle.DrawLine(wp, wp + (s+wr+w/2).ToVec() * 2, Color.Yellow);
+                args.WorldHandle.DrawLine(wp, wp + (s+wr+w/2).ToVec() * 5, Color.Yellow);
             }
         }
     }
