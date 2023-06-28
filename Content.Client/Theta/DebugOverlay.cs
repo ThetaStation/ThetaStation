@@ -5,6 +5,8 @@ using Robust.Shared.Enums;
 
 namespace Content.Client.Theta;
 
+
+
 public sealed class DebugOverlaySystem : EntitySystem
 {
     private DebugOverlay overlay = default!;
@@ -33,16 +35,17 @@ public sealed class DebugOverlay : Overlay
     {
         foreach ((TransformComponent form, CannonComponent cannon) in entMan.EntityQuery<TransformComponent, CannonComponent>())
         {
-            foreach ((Angle a, Angle b) in cannon.ObstructedRanges)
+            foreach ((Angle s, Angle w) in cannon.ObstructedRanges)
             {
                 Angle wr = formSys.GetWorldRotation(form.ParentUid);
                 Vector2 wp = formSys.GetWorldPosition(form);
-                Vector2 s = wp + (a+wr).ToVec() * 2;
-                Vector2 e = wp + (b+wr).ToVec() * 2;
+                Vector2 sv = wp + (s+wr).ToVec() * 2;
+                Vector2 ev = wp + (s+w+wr).ToVec() * 2;
                 
                 args.WorldHandle.DrawCircle(wp, 0.1f, Color.Yellow);
-                args.WorldHandle.DrawLine(wp, s, Color.Red);
-                args.WorldHandle.DrawLine(wp, e, Color.Blue);
+                args.WorldHandle.DrawLine(wp, sv, Color.Red);
+                args.WorldHandle.DrawLine(wp, ev, Color.Blue);
+                args.WorldHandle.DrawLine(wp, wp + (s+wr+w/2).ToVec() * 2, Color.Yellow);
             }
         }
     }

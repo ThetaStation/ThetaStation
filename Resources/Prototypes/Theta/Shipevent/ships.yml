@@ -43,3 +43,18 @@
   class: shipevent-shipclass-special
   previewImage: /Textures/Theta/ShipEvent/ShipPreviews/boxship-preview.png
   structurePrototype: "shipevent_boxship"
+
+- type: structure
+  id: shipevent_test
+  generator: !type:MapLoaderGenerator
+    mapPath: "/Maps/Theta/Shipevent/Ships/test.yml"
+  spawnWeight: 0
+  minDistance: 10
+
+- type: shiptype
+  id: shiptype_test
+  name: shipevent-boxship-name
+  description: shipevent-boxship-desc
+  class: shipevent-shipclass-special
+  previewImage: /Textures/Theta/ShipEvent/ShipPreviews/placeholder.png
+  structurePrototype: "shipevent_test"

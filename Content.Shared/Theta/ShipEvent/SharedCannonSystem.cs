@@ -14,21 +14,12 @@ public abstract class SharedCannonSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly ItemSlotsSystem _slotSys = default!;
 
-    private const int CollisionCheckDistance = 20;
-
     public override void Initialize()
     {
         base.Initialize();
         SubscribeAllEvent<RequestCannonShootEvent>(OnShootRequest);
         SubscribeAllEvent<RequestStopCannonShootEvent>(OnStopShootRequest);
         SubscribeLocalEvent<CannonComponent, AnchorStateChangedEvent>(OnAnchorChanged);
-        SubscribeLocalEvent<CannonComponent, ComponentInit>(OnInit);
-    }
-
-    protected void OnInit(EntityUid uid, CannonComponent cannon, ComponentInit args)
-    {
-        cannon.ObstructedRanges = CalculateFiringRanges(uid, GetCannonGun(uid)!);
-        Dirty(cannon);
     }
 
     private void OnShootRequest(RequestCannonShootEvent ev, EntitySessionEventArgs args)
@@ -46,17 +37,43 @@ public abstract class SharedCannonSystem : EntitySystem
         _gunSystem.AttemptShoot(ev.PilotUid, ev.CannonUid, gun, coords);
     }
 
-    private Angle ReducedAndPositive(Angle a)
+    public Angle ReducedAndPositive(Angle a)
     {
         a = a.Reduced();
         if (a < 0)
             a += 2 * Math.PI;
         return a;
     }
-
-    private bool IsInsideSector(Angle x, Angle s, Angle e)
+    
+    public bool IsInsideSector(Angle x, Angle s, Angle w)
     {
-        return s < e ? x >= s && x <= e : !(x < s) || x < e;
+        Angle d = Angle.ShortestDistance(s, x);
+        return Math.Sign(w) == Math.Sign(d) ? Math.Abs(w) >= Math.Abs(d) : Math.Abs(w) >= Math.Tau - Math.Abs(d);
+    }
+
+    public bool AreSectorsOverlapping(Angle s0, Angle w0, Angle s1, Angle w1)
+    {
+        Angle e0 = ReducedAndPositive(s0 + w0);
+        Angle e1 = ReducedAndPositive(s1 + w1);
+        return IsInsideSector(s0, s1, w1) || IsInsideSector(s1, s0, w0) ||
+               IsInsideSector(e0, s1, w1) || IsInsideSector(e1, s0, w0);
+    }
+
+    public (Angle, Angle) CombinedSector(Angle s0, Angle w0, Angle s1, Angle w1)
+    {
+        Angle e0, e1, l, h;
+        e0 = ReducedAndPositive(s0 + w0);
+        e1 = ReducedAndPositive(s1 + w1);
+
+        l = e0 < e1 ? e0 : e1;
+        l = l < s0 ? l : s0;
+        l = l < s1 ? l : s1;
+        
+        h = e0 > e1 ? e0 : e1;
+        h = h > s0 ? h : s0;
+        h = h > s1 ? h : s1;
+
+        return (h, l - h);
     }
 
     private bool CanShoot(RequestCannonShootEvent args, GunComponent gun, CannonComponent cannon)
@@ -71,9 +88,9 @@ public abstract class SharedCannonSystem : EntitySystem
 
         Angle firingAngle = ReducedAndPositive(new Angle(args.Coordinates - _transform.GetWorldPosition(cannonTransform)) - 
                                                _transform.GetWorldRotation(Transform(cannonTransform.GridUid ?? args.CannonUid)));
-        foreach ((Angle s, Angle e) in cannon.ObstructedRanges)
+        foreach ((Angle s, Angle w) in cannon.ObstructedRanges)
         {
-            if (IsInsideSector(firingAngle, s, e))
+            if (IsInsideSector(firingAngle, s, w))
                 return false;
         }
         
@@ -83,68 +100,7 @@ public abstract class SharedCannonSystem : EntitySystem
     protected virtual void OnAnchorChanged(EntityUid uid, CannonComponent cannon, ref AnchorStateChangedEvent args)
     {
         if (!args.Anchored)
-        {
             StopShoot(uid);
-            return;
-        }
-
-        cannon.ObstructedRanges = CalculateFiringRanges(uid, GetCannonGun(uid)!);
-        Dirty(cannon);
-    }
-    
-    private List<(Angle, Angle)> CalculateFiringRanges(EntityUid uid, GunComponent gun)
-    {
-        List<(Angle, Angle)> ranges = new();
-        TransformComponent gridForm = EntityManager.GetComponent<TransformComponent>(Transform(uid).ParentUid);
-
-        //todo: I haven't figured out how to get all fixtures in range. definitely should be possible, but...
-        foreach (EntityUid childUid in gridForm.ChildEntities)
-        {
-            TransformComponent form = Transform(childUid);
-            Vector2 dir = form.LocalPosition - Transform(uid).LocalPosition;
-            float dist = dir.Length;
-            if (dist > CollisionCheckDistance || dist < 1)
-                continue;
-
-            Angle width, dirAngle, s0, e0;
-            
-            dirAngle = Angle.FromWorldVec(dir);
-            //0.5/0.25 is triangle's base divided by two, squared. so in case if it's straight angle it's 0.5^2
-            //or (sqrt(2)/2)^2 for diagonal.
-            width = 2*Math.Asin(dist / Math.Sqrt(dirAngle % Math.PI*0.5 == 0 ? 0.25 : 0.5 + dist*dist));
-            if (width == double.NaN)
-                continue;
-
-            //0.08 is a 5 degree offset, just to be safe
-            s0 = ReducedAndPositive(dirAngle - width + gun.MaxAngle + 0.08);
-            e0 = ReducedAndPositive(dirAngle + width - gun.MaxAngle - 0.08);
-
-            List<(Angle, Angle)> overlaps = new();
-            (Angle s2, Angle e2) = (s0, e0);
-            foreach ((Angle s1, Angle e1) in ranges)
-            {
-                if (IsInsideSector(s0, s1, e1) || IsInsideSector(e0, s1, e1))
-                {
-                    if (s1 < s2)
-                        s2 = s1;
-                    if (e1 > e2)
-                        e2 = e1;
-                    
-                    overlaps.Add((s1, e1));
-                }
-            }
-
-            if (overlaps.Count > 1)
-            {
-                foreach ((Angle s, Angle e) in overlaps)
-                {
-                    ranges.Remove((s, e));
-                }
-            }
-            ranges.Add((s2, e2));
-        }
-
-        return ranges;
     }
 
     public GunComponent? GetCannonGun(EntityUid uid)

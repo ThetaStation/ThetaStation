@@ -1,9 +1,10 @@
 ﻿using Content.Shared.Theta.ShipEvent.Components;
+using Robust.Shared.GameStates;
 
 namespace Content.Shared.Theta.ShipEvent;
 
-[RegisterComponent]
-public sealed class CannonComponent : Component
+[NetworkedComponent, AutoGenerateComponentState, RegisterComponent]
+public sealed partial class CannonComponent : Component
 {
     /// <summary>
     /// TurretLoader bound to this turret
@@ -12,6 +13,8 @@ public sealed class CannonComponent : Component
     
     /// <summary>
     /// The TurretLoader's entity.
+    /// </summary>
+    [AutoNetworkedField]
     public EntityUid? BoundLoaderEntity;
 
     /// <summary>
@@ -23,6 +26,6 @@ public sealed class CannonComponent : Component
     /// <summary>
     /// Obstructed sectors around cannon, to prevent projectiles from colliding with the ship
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite)]
+    [ViewVariables(VVAccess.ReadWrite), AutoNetworkedField]
     public List<(Angle, Angle)> ObstructedRanges = new();
 }
