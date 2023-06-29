@@ -61,6 +61,25 @@
           density: 3000
 
 - type: entity
+  id: SkipjackThruster
+  parent: BaseStructureDynamic
+  abstract: true
+  components:
+    - type: AmbientSound
+      enabled: false
+      range: 4
+      volume: -4
+      sound:
+        path: /Audio/Effects/shuttle_thruster.ogg
+    - type: Thruster
+      damage:
+        types:
+          Heat: 40
+    - type: ApcPowerReceiver
+      powerLoad: 1500
+    - type: ExtensionCableReceiver
+
+- type: entity
   parent: VoxShuttleWall
   id: VoxShuttleWall5_0
   suffix: 5_0
@@ -101,7 +120,7 @@
       state: vox_shuttle_12_0
 
 - type: entity
-  parent: VoxShuttleWall
+  parent: [ VoxShuttleWall, SkipjackThruster ]
   id: VoxShuttleWall2_1
   suffix: 2_1
   components:
@@ -111,7 +130,7 @@
       state: vox_shuttle_2_1
 
 - type: entity
-  parent: VoxShuttleWall
+  parent: [ VoxShuttleWall, SkipjackThruster ]
   id: VoxShuttleWall3_1
   suffix: 3_1
   components:
@@ -121,7 +140,7 @@
       state: vox_shuttle_3_1
 
 - type: entity
-  parent: VoxShuttleWall
+  parent: [ VoxShuttleWall, SkipjackThruster ]
   id: VoxShuttleWall4_1
   suffix: 4_1
   components:
@@ -171,7 +190,7 @@
       state: vox_shuttle_12_1
 
 - type: entity
-  parent: VoxShuttleWall
+  parent: [ VoxShuttleWall, SkipjackThruster ]
   id: VoxShuttleWall13_1
   suffix: 13_1
   components:
@@ -181,7 +200,7 @@
       state: vox_shuttle_13_1
 
 - type: entity
-  parent: VoxShuttleWall
+  parent: [ VoxShuttleWall, SkipjackThruster ]
   id: VoxShuttleWall14_1
   suffix: 14_1
   components:
@@ -191,7 +210,7 @@
       state: vox_shuttle_14_1
 
 - type: entity
-  parent: VoxShuttleWall
+  parent: [ VoxShuttleWall, SkipjackThruster ]
   id: VoxShuttleWall15_1
   suffix: 15_1
   components:
@@ -201,7 +220,7 @@
       state: vox_shuttle_15_1
 
 - type: entity
-  parent: VoxShuttleWall
+  parent: [ VoxShuttleWall, SkipjackThruster ]
   id: VoxShuttleWall1_2
   suffix: 1_2
   components:
@@ -291,7 +310,7 @@
       state: vox_shuttle_15_2
 
 - type: entity
-  parent: VoxShuttleWallOpaque
+  parent: [ VoxShuttleWall, SkipjackThruster ]
   id: VoxShuttleWall16_2
   suffix: 16_2
   components:
