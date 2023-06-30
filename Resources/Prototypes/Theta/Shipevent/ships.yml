@@ -58,3 +58,4 @@
   class: shipevent-shipclass-heavyclass
   previewImage: /Textures/Theta/ShipEvent/ShipPreviews/skipjack-preview.png
   structurePrototype: "shipevent_skipjack"
+  minCrewAmount: 3

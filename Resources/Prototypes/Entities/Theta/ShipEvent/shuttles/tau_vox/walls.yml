@@ -52,8 +52,7 @@
       fixtures:
         fix1:
           shape:
-            !type:PhysShapeAabb
-            bounds: "-0.5,-0.5,0.5,0.5"
+            !type:PhysShapeAabb {}
           mask:
             - FullTileMask
           layer:
@@ -1550,7 +1549,7 @@
       state: vox_shuttle_6_20
 
 - type: entity
-  parent: VoxShuttleWall
+  parent: [ VoxShuttleWall, SkipjackThruster ]
   id: VoxShuttleWall7_20
   suffix: 7_20
   components:
@@ -1580,7 +1579,7 @@
       state: vox_shuttle_9_20
 
 - type: entity
-  parent: VoxShuttleWall
+  parent: [ VoxShuttleWall, SkipjackThruster ]
   id: VoxShuttleWall10_20
   suffix: 10_20
   components:

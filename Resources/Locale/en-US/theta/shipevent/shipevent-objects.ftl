@@ -36,13 +36,13 @@ ent-ShipEventHeavyArtilleryCannon = artillery cannon
 
 ent-ShipEventMachineGunCannonLongMuzzle = machine gun turret
     .desc = { "Machine gun turret, for dealing with enemy's manpower." }
-    .suffix = { "ShipEvent" }
+    .suffix = { "Muzzle Length - 2" }
 
 ent-ShipEventLightArtilleryCannonLongMuzzle = light cannon
     .desc = { "61-K anti-aircraft cannon. Despite being an outdated model, it's still capable of penetrating spacecraft armour." }
-    .suffix = { "ShipEvent" }
+    .suffix = { "Muzzle Length - 2" }
 
 ent-ShipEventHeavyArtilleryCannonLongMuzzle = artillery cannon
     .desc = { "BS-3 anti-ship cannon. Slow firing, but extremely powerful, it has proven itself on fields of The Second Corporate War." }
-    .suffix = { "ShipEvent" }
+    .suffix = { "Muzzle Length - 2" }
 
