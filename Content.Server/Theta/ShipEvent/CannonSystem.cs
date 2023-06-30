@@ -11,7 +11,7 @@ namespace Content.Server.Theta.ShipEvent;
 public sealed class CannonSystem : SharedCannonSystem
 {
     [Dependency] private readonly RotateToFaceSystem _rotateToFaceSystem = default!;
-    
+
     private const int CollisionCheckDistance = 10;
 
     public override void Initialize()
@@ -42,25 +42,13 @@ public sealed class CannonSystem : SharedCannonSystem
             if (dist > CollisionCheckDistance || dist < 1)
                 continue;
 
-            Angle dirAngle = ReducedAndPositive(new Angle(dir));
-            bool culling = false;
-            foreach ((Angle s, Angle w) in ranges)
-            {
-                //improves performance & helps to avoid some weird bugs with excess ranges
-                if (IsInsideSector(dirAngle - 0.08, s, w) && IsInsideSector(dirAngle + 0.08, s, w))
-                {
-                    culling = true;
-                    break;
-                }
-            }
-            if (culling)
-                continue;
-
             PhysicsComponent? phys = EntityManager.GetComponentOrNull<PhysicsComponent>(childUid);
             if (!form.Anchored || phys == null || !phys.Hard)
                 continue;
 
-            (Angle s0, Angle w0) = GetDirSector(dir, dirAngle);
+            (Angle s0, Angle w0) = GetDirSector(dir);
+            ranges.Add((s0, w0));
+            
             (Angle s2, Angle w2) = (s0, w0);
             
             List<(Angle, Angle)> overlaps = new();
@@ -77,17 +65,21 @@ public sealed class CannonSystem : SharedCannonSystem
             {
                 ranges.Remove((s1, w1));
             }
-            double ew = gun.MaxAngle + 0.04;
-            (s2, w2) = w2 < 0 ? (s2 + ew, w2 - ew) : (s2 - ew, w2 + ew);
-            s2 = ReducedAndPositive(s2);
             ranges.Add((s2, w2));
+        }
+        
+        double ew = gun.MaxAngle + 0.04;
+        for(int i = 0; i < ranges.Count; i++)
+        {
+            ranges[i] = (ReducedAndPositive(ranges[i].Item1 - ew), ranges[i].Item2 + ew);
         }
 
         return ranges;
     }
 
-    private (Angle, Angle) GetDirSector(Vector2 dir, Angle dirAngle)
+    private (Angle, Angle) GetDirSector(Vector2 dir)
     {
+        Angle dirAngle = ReducedAndPositive(new Angle(dir));
         Vector2 a, b;
 
         //this can be done without ugly conditional below, by rotating tile's square by dir angle and finding left- and rightmost points,
@@ -129,7 +121,14 @@ public sealed class CannonSystem : SharedCannonSystem
 
         Angle aa = ReducedAndPositive(new Angle(a));
         Angle ba = ReducedAndPositive(new Angle(b));
-        return (aa, Angle.ShortestDistance(aa, ba));
+        Angle w = Angle.ShortestDistance(aa, ba);
+        if (w < 0)
+        {
+            aa = ba;
+            w = -w;
+        }
+
+        return (aa, w);
     }
 
     protected override void OnAnchorChanged(EntityUid uid, CannonComponent cannon, ref AnchorStateChangedEvent args)

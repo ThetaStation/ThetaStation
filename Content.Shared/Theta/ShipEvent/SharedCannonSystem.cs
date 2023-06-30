@@ -81,34 +81,14 @@ public abstract class SharedCannonSystem : EntitySystem
                IsInsideSector(e0, s1, w1) || IsInsideSector(e1, s0, w0);
     }
 
+    //only accepts sectors with positive width
     public (Angle, Angle) CombinedSector(Angle s0, Angle w0, Angle s1, Angle w1)
     {
-        (Angle e0, Angle e1) = (ReducedAndPositive(s0 + w0), ReducedAndPositive(s1 + w1));
-        Angle[] angles = {s0, e0, s1, e1};
-        
-        //edge case - full overlap
-        if (IsInsideSector(s0, s1, w1) && IsInsideSector(e0, s1, w1))
-            return (s1, w1);
-        if (IsInsideSector(s1, s0, w0) && IsInsideSector(e1, s0, w0))
-            return (s0, w0);
+        Angle sl, wl, sh, wh, dh;
+        (sl, wl, sh, wh) = IsInsideSector(s1, s0, w0) ? (s0, w0, s1, w1) : (s1, w1, s0, w0);
+        dh = ReducedAndPositive(sh + wh) > sl ? sh + wh - sl : Math.Tau - sl + ReducedAndPositive(sh + wh);
 
-        Angle s, w, m, d;
-        s = Max(angles);
-        w = s == s0 ? w0 : s == e0 ? -w0 : s == s1 ? w1 : s == e1 ? -w1 : 0;
-
-        m = 0;
-        foreach (Angle a in angles)
-        {
-            if (Math.Abs(s - a) < 0.1)
-                continue;
-            
-            d = Angle.ShortestDistance(s, a);
-            d = Math.Sign(d) == Math.Sign(w) ? d : Math.Tau - Math.Abs(d);
-            if (Double.Abs(d) > Double.Abs(m))
-                m = d;
-        }
-
-        return (s, m);
+        return (sl, Math.Min(Math.Max(wl, dh), Math.Tau));
     }
 
     private bool CanShoot(RequestCannonShootEvent args, GunComponent gun, CannonComponent cannon)
