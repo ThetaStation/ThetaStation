@@ -71,6 +71,8 @@
       sound:
         path: /Audio/Effects/shuttle_thruster.ogg
     - type: Thruster
+      baseThrust: 150
+      thrust: 150
       damage:
         types:
           Heat: 40
