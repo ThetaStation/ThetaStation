@@ -5,8 +5,7 @@ using Robust.Shared.Enums;
 
 namespace Content.Client.Theta;
 
-
-
+#if DEBUG
 public sealed class DebugOverlaySystem : EntitySystem
 {
     private DebugOverlay overlay = default!;
@@ -53,3 +52,4 @@ public sealed class DebugOverlay : Overlay
         }
     }
 }
+#endif

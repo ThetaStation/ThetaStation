@@ -35,7 +35,6 @@
         - "shiptype_arrowhead"
         - "shiptype_mule"
         - "shiptype_boxship"
-        - "shiptype_test"
       
       #bounds
       boundsCompressionInterval: 0
