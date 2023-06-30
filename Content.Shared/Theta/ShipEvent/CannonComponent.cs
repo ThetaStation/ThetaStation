@@ -26,7 +26,7 @@ public sealed partial class CannonComponent : Component
     /// <summary>
     /// Obstructed sectors around cannon, to prevent projectiles from colliding with the ship
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite), AutoNetworkedField]
+    [ViewVariables(VVAccess.ReadWrite), AutoNetworkedField, DataField("ranges")] //datafield is for map serialization
     public List<(Angle, Angle)> ObstructedRanges = new();
 
     //so, when generating ranges instantly after component init/first anchor not all entities that should be present on parent grid are there,
