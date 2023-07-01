@@ -471,7 +471,7 @@ entities:
     - pos: 0.5,2.5
       parent: 1
       type: Transform
-- proto: DrinkBeer
+- proto: DrinkBeerBottleFull
   entities:
   - uid: 44
     components:

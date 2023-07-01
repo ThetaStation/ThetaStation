@@ -464,11 +464,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         xform.AttachToGridOrMap();
 
         playerMob.EnsureComponent<MindContainerComponent>();
-        var newMind = new Mind.Mind(player.UserId)
-        {
-            CharacterName = EntityManager.GetComponent<MetaDataComponent>(playerMob).EntityName
-        };
-        _mindSystem.ChangeOwningPlayer(newMind, player.UserId);
+
+        var newMind =  _mindSystem.CreateMind(player.UserId, EntityManager.GetComponent<MetaDataComponent>(playerMob).EntityName);
         _mindSystem.TransferTo(newMind, playerMob);
 
         return playerMob;
