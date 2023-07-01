@@ -1,10 +1,7 @@
-﻿using System.Linq;
-using Content.Shared.Physics;
-using Content.Shared.Weapons.Ranged.Components;
+﻿using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Map;
 using Content.Shared.Containers.ItemSlots;
-using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Serialization;
 
@@ -17,8 +14,6 @@ public abstract class SharedCannonSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly ItemSlotsSystem _slotSys = default!;
 
-    private const int CollisionRayDistance = 25;
-
     public override void Initialize()
     {
         base.Initialize();
@@ -29,44 +24,95 @@ public abstract class SharedCannonSystem : EntitySystem
 
     private void OnShootRequest(RequestCannonShootEvent ev, EntitySessionEventArgs args)
     {
-        var gun = GetCannonGun(ev.Cannon);
-        if (gun == null || !CanShoot(ev, gun))
+        var gun = GetCannonGun(ev.CannonUid);
+        var cannon = EntityManager.GetComponent<CannonComponent>(ev.CannonUid);
+        if (gun == null || !CanShoot(ev, gun, cannon))
         {
-            StopShoot(ev.Cannon);
+            StopShoot(ev.CannonUid);
             return;
         }
 
-        var mapCoords = new MapCoordinates(ev.Coordinates, Transform(ev.Cannon).MapID);
-        var coords = EntityCoordinates.FromMap(ev.Cannon, mapCoords, _transform);
-        _gunSystem.AttemptShoot(ev.Pilot, ev.Cannon, gun, coords);
+        var mapCoords = new MapCoordinates(ev.Coordinates, Transform(ev.CannonUid).MapID);
+        var coords = EntityCoordinates.FromMap(ev.CannonUid, mapCoords, _transform);
+        _gunSystem.AttemptShoot(ev.PilotUid, ev.CannonUid, gun, coords);
     }
 
-    private bool CanShoot(RequestCannonShootEvent args, GunComponent gun)
+    public Angle Max(params Angle[] args)
+    {
+        Angle max = args[0];
+        foreach (Angle d in args)
+        {
+            if (d > max)
+                max = d;
+        }
+        return max;
+    }
+    
+    public Angle Min(params Angle[] args)
+    {
+        Angle min = args[0];
+        foreach (Angle d in args)
+        {
+            if (d < min)
+                min = d;
+        }
+        return min;
+    }
+    
+    public Angle ReducedAndPositive(Angle x)
+    {
+        x = x.Reduced();
+        if (x < 0)
+            x += 2 * Math.PI;
+        return x;
+    }
+    
+    public bool IsInsideSector(Angle x, Angle start, Angle width)
+    {
+        Angle dist = Angle.ShortestDistance(start, x);
+        return Math.Sign(width) == Math.Sign(dist) ? Math.Abs(width) >= Math.Abs(dist) : Math.Abs(width) >= Math.Tau - Math.Abs(dist);
+    }
+
+    public bool AreSectorsOverlapping(Angle start0, Angle width0, Angle start1, Angle width1)
+    {
+        Angle end0 = ReducedAndPositive(start0 + width0);
+        Angle end1 = ReducedAndPositive(start1 + width1);
+        return IsInsideSector(start0, start1, width1) || IsInsideSector(start1, start0, width0) ||
+               IsInsideSector(end0, start1, width1) || IsInsideSector(end1, start0, width0);
+    }
+
+    //only accepts sectors with positive width
+    public (Angle, Angle) CombinedSector(Angle start0, Angle width0, Angle start1, Angle width1)
+    {
+        Angle startlow, widthlow, starthigh, widthhigh, disthigh;
+        (startlow, widthlow, starthigh, widthhigh) = IsInsideSector(start1, start0, width0) ? (start0, width0, start1, width1) : (start1, width1, start0, width0);
+        disthigh = ReducedAndPositive(starthigh + widthhigh) > startlow ? starthigh + widthhigh - startlow : Math.Tau - startlow + ReducedAndPositive(starthigh + widthhigh);
+
+        return (startlow, Math.Min(Math.Max(widthlow, disthigh), Math.Tau));
+    }
+
+    private bool CanShoot(RequestCannonShootEvent args, GunComponent gun, CannonComponent cannon)
     {
         if (!_gunSystem.CanShoot(gun))
             return false;
-        var cannonTransform = Transform(args.Cannon);
-        var pilotTransform = Transform(args.Pilot);
+        
+        TransformComponent cannonTransform = Transform(args.CannonUid);
+        TransformComponent pilotTransform = Transform(args.PilotUid);
         if (!pilotTransform.GridUid.Equals(cannonTransform.GridUid))
             return false;
 
-        var fromCoordinates = _transform.GetWorldPosition(cannonTransform);
-        var dir = args.Coordinates - fromCoordinates;
-        var offset = dir.Normalized * gun.OnSpawnBulletOffset;
-        fromCoordinates = fromCoordinates + offset;
-        var ray = new CollisionRay(fromCoordinates, dir.Normalized, (int)CollisionGroup.BulletImpassable);
-
-        var rayCastResult = _physics.IntersectRay(cannonTransform.MapID, ray, CollisionRayDistance).ToList();
-        foreach (var result in rayCastResult)
+        Angle firingAngle = ReducedAndPositive(new Angle(args.Coordinates - _transform.GetWorldPosition(cannonTransform)) - 
+                                               _transform.GetWorldRotation(Transform(cannonTransform.GridUid ?? args.CannonUid)));
+        foreach ((Angle start, Angle w) in cannon.ObstructedRanges)
         {
-            if (Transform(result.HitEntity).GridUid == cannonTransform.GridUid)
+            if (IsInsideSector(firingAngle, start, w))
                 return false;
         }
-
+        
         return true;
     }
 
-    protected virtual void OnAnchorChanged(EntityUid uid, CannonComponent component, ref AnchorStateChangedEvent args)
+    protected virtual void OnAnchorChanged(EntityUid uid, CannonComponent cannon, ref AnchorStateChangedEvent args)
     {
         if (!args.Anchored)
             StopShoot(uid);
@@ -79,7 +125,7 @@ public abstract class SharedCannonSystem : EntitySystem
 
     private void OnStopShootRequest(RequestStopCannonShootEvent ev)
     {
-        StopShoot(ev.Cannon);
+        StopShoot(ev.CannonUid);
     }
 
     private void StopShoot(EntityUid cannonUid)
@@ -114,8 +160,8 @@ public sealed class RotateCannonsEvent : EntityEventArgs
 [Serializable, NetSerializable]
 public sealed class RequestCannonShootEvent : EntityEventArgs
 {
-    public EntityUid Cannon;
-    public EntityUid Pilot;
+    public EntityUid CannonUid;
+    public EntityUid PilotUid;
     public Vector2 Coordinates;
 }
 
@@ -125,5 +171,5 @@ public sealed class RequestCannonShootEvent : EntityEventArgs
 [Serializable, NetSerializable]
 public sealed class RequestStopCannonShootEvent : EntityEventArgs
 {
-    public EntityUid Cannon;
+    public EntityUid CannonUid;
 }

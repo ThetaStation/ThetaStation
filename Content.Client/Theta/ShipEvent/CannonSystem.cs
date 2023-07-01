@@ -24,41 +24,42 @@ public sealed class CannonSystem : SharedCannonSystem
         SubscribeLocalEvent<CannonComponent, ComponentRemove>(OnComponentRemove);
     }
 
-    private void RequestCannonShoot(EntityUid uid, CannonComponent component, ref StartCannonFiringEvent args)
+    private void RequestCannonShoot(EntityUid uid, CannonComponent cannon, ref StartCannonFiringEvent args)
     {
         _firingCannons[uid] = (args.Pilot, args.Coordinates);
     }
 
-    private void OnComponentRemove(EntityUid uid, CannonComponent component, ComponentRemove args)
+    private void OnComponentRemove(EntityUid uid, CannonComponent cannon, ComponentRemove args)
     {
         _firingCannons.Remove(uid);
     }
 
-    private void RequestStopCannonShoot(EntityUid uid, CannonComponent component, ref StopCannonFiringEventEvent args)
+    private void RequestStopCannonShoot(EntityUid uid, CannonComponent cannon, ref StopCannonFiringEventEvent args)
     {
         if (_firingCannons.Remove(uid))
         {
             RaisePredictiveEvent(new RequestStopCannonShootEvent
             {
-                Cannon = uid,
+                CannonUid = uid,
             });
         }
     }
 
-    protected override void OnAnchorChanged(EntityUid uid, CannonComponent component, ref AnchorStateChangedEvent args)
+    protected override void OnAnchorChanged(EntityUid uid, CannonComponent cannon, ref AnchorStateChangedEvent args)
     {
-        base.OnAnchorChanged(uid, component, ref args);
+        base.OnAnchorChanged(uid, cannon, ref args);
+        
         if (!args.Anchored)
             _firingCannons.Remove(uid);
     }
 
-    private void RotateCannons(EntityUid uid, CannonComponent component, ref RotateCannonEvent args)
+    private void RotateCannons(EntityUid uid, CannonComponent cannon, ref RotateCannonEvent args)
     {
         _toUpdateRotation[uid] = args.Coordinates;
-        UpdateCoordinates(uid, args.Coordinates, args.Pilot);
+        UpdateCoordinates(uid, args.Coordinates, args.Pilot, cannon);
     }
 
-    private void UpdateCoordinates(EntityUid uid, Vector2 coords, EntityUid pilot)
+    private void UpdateCoordinates(EntityUid uid, Vector2 coords, EntityUid pilot, CannonComponent cannon)
     {
         if (!_firingCannons.ContainsKey(uid))
             return;
@@ -102,9 +103,9 @@ public sealed class CannonSystem : SharedCannonSystem
 
             RaisePredictiveEvent(new RequestCannonShootEvent
             {
-                Cannon = uid,
+                CannonUid = uid,
                 Coordinates = vector2,
-                Pilot = pilot
+                PilotUid = pilot
             });
         }
     }

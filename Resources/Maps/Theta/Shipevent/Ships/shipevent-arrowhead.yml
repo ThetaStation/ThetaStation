@@ -1314,12 +1314,14 @@ entities:
     - pos: 12.5,-0.5
       parent: 1
       type: Transform
+    - ranges:
+      - 1.0345128377744992 rad: 2.428830379636258 rad
+      type: Cannon
     - links:
       - 190
       - 90
       type: DeviceLinkSink
-    - provider: 191
-      container: storagebase
+    - container: ""
       type: ContainerAmmoProvider
   - uid: 149
     components:
@@ -1328,12 +1330,14 @@ entities:
     - pos: -2.5,-0.5
       parent: 1
       type: Transform
+    - ranges:
+      - 5.746901818159189 rad: 2.4288303796362585 rad
+      type: Cannon
     - links:
       - 184
       - 90
       type: DeviceLinkSink
-    - provider: 185
-      container: storagebase
+    - container: ""
       type: ContainerAmmoProvider
   - uid: 150
     components:
@@ -1343,12 +1347,15 @@ entities:
       pos: 11.5,8.5
       parent: 1
       type: Transform
+    - ranges:
+      - 4.550439118754167 rad: 0.9473480250279709 rad
+      - 1.8966829018660476 rad: 2.7631230149497306 rad
+      type: Cannon
     - links:
       - 188
       - 90
       type: DeviceLinkSink
-    - provider: 189
-      container: storagebase
+    - container: ""
       type: ContainerAmmoProvider
   - uid: 151
     components:
@@ -1358,12 +1365,15 @@ entities:
       pos: -1.5,8.5
       parent: 1
       type: Transform
+    - ranges:
+      - 3.7124578917878086 rad: 0.94734802502797 rad
+      - 4.550439118754167 rad: 2.7631230149497314 rad
+      type: Cannon
     - links:
       - 182
       - 90
       type: DeviceLinkSink
-    - provider: 183
-      container: storagebase
+    - container: ""
       type: ContainerAmmoProvider
   - uid: 152
     components:
@@ -1373,12 +1383,14 @@ entities:
       pos: 2.5,12.5
       parent: 1
       type: Transform
+    - ranges:
+      - 3.4674792286609444 rad: 3.1374566423396066 rad
+      type: Cannon
     - links:
       - 180
       - 90
       type: DeviceLinkSink
-    - provider: 181
-      container: storagebase
+    - container: ""
       type: ContainerAmmoProvider
   - uid: 153
     components:
@@ -1388,12 +1400,14 @@ entities:
       pos: 7.5,12.5
       parent: 1
       type: Transform
+    - ranges:
+      - 2.605309164569396 rad: 3.137456642339606 rad
+      type: Cannon
     - links:
       - 186
       - 90
       type: DeviceLinkSink
-    - provider: 187
-      container: storagebase
+    - container: ""
       type: ContainerAmmoProvider
 - proto: ShuttleWindow
   entities:

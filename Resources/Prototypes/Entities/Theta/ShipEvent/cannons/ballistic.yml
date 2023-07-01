@@ -8,6 +8,8 @@
   suffix: SHIPEVENT
   abstract: true
   components:
+    - type: Anchorable
+      delay: 7
     - type: CombatMode
       combatToggleAction:
         enabled: false

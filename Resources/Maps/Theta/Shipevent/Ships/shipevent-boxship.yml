@@ -565,6 +565,9 @@ entities:
       pos: 1.5,5.5
       parent: 1
       type: Transform
+    - ranges:
+      - 3.2989882105173156 rad: 2.7868015397347476 rad
+      type: Cannon
     - fireRate: 1
       type: Gun
     - links:
