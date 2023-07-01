@@ -33,7 +33,7 @@ public sealed class TurretLoaderComponent : Component
     public int CurrentContainerCapacity;
 
     /// <summary>
-    /// Player when container with invalid ammo type is inserted
+    /// Played when container with invalid ammo type is inserted
     /// </summary>
     [DataField("invalidAmmoSound")] 
     public SoundSpecifier InvalidAmmoTypeSound = new SoundPathSpecifier("");
