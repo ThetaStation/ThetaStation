@@ -19,4 +19,4 @@ shipevent-boxship-desc =
 
 shipevent-skipjack-name = Skipjack
 shipevent-skipjack-desc = A reshaped space pirate support ship that was once stolen from a landfill in the Solar System.
-    Owns powerful heavy armor and heavy weapons. It has the main engines of increased power, but it is deprived of auxiliary ones.
+    NO SIDE ENGINES AND VERY DIFFICULT TO CONTROL! Owns heavy armor and heavy weapons.
