@@ -1,10 +1,14 @@
 #changelog generator. triggered by action, when something is pushed into master, posting parsed PR's description to webhook.
 
+
 from os import environ
 from requests import post
 from github import Github
 from github.Commit import Commit
 from github.PullRequest import PullRequest
+
+repoName = "ThetaStation/ThetaStation"
+mainBranch = "master"
 
 try:
     hookUrl = environ.get("HOOK_URL")
@@ -12,10 +16,10 @@ except KeyError:
     raise RuntimeError("Hook URL is missing (HOOK_URL). Add it to the step environment.")
 
 g = Github()
-r = g.get_repo("ThetaStation/ThetaStation")
+r = g.get_repo(repoName)
 
 def getLatestCommit() -> Commit:
-    return r.get_branch("main").commit
+    return r.get_branch(mainBranch).commit
 
 def getPullRequestByCommit(commit: Commit) -> PullRequest:
     pulls = commit.get_pulls()
