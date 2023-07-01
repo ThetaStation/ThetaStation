@@ -32,11 +32,13 @@ def parsePullRequestDesc(desc: str) -> str:
             tuple(["fix"]):":wrench:",
             ("mod","modify","tweak"):":scales:"}
 
+    clFound = False
     result = ""
     lines = desc.split("\n")
 
     for i, line in enumerate(lines):
         if line.startswith("🆑"):
+            clFound = True
             result += line + "\n"
             for ti, tagLine in enumerate(lines[i+1:]):
                 if len(tagLine) == 0 or tagLine.isspace(): continue
@@ -49,6 +51,8 @@ def parsePullRequestDesc(desc: str) -> str:
                             tagFound = True
                 if not tagFound: raise RuntimeError(f"No tag found at line {i+ti+2}.")
             break
+
+    if not clFound: raise RuntimeError(f"No changelog start found.")
 
     return result
 
