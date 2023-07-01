@@ -3,6 +3,7 @@ using Content.Server.Actions;
 using Content.Server.Chat.Systems;
 using Content.Server.GameTicking;
 using Content.Server.IdentityManagement;
+using Content.Server.Mind;
 using Content.Server.Mind.Components;
 using Content.Server.Roles;
 using Content.Server.RoundEnd;
@@ -46,6 +47,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     [Dependency] private readonly IPlayerManager _playerMan = default!;
     [Dependency] private readonly TransformSystem _formSys = default!;
     [Dependency] private readonly RoundEndSystem _endSys = default!;
+    [Dependency] private readonly MindSystem _mindSystem = default!;
 
     private readonly Dictionary<string, int> _projectileDamage = new(); //cached damage for projectile prototypes
     private int _lastTeamNumber;
@@ -87,7 +89,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     public MapId TargetMap;
 
     public List<ShipEventFaction> Teams { get; } = new();
-    
+
     public List<Processor> ShipProcessors = new(); //applied to all ships on spawn
 
     public override void Initialize()
@@ -103,7 +105,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         SubscribeAllEvent<ShuttleConsoleChangeShipNameMessage>(OnShipNameChange); //un-directed event since we will have duplicate subscriptions otherwise
         SubscribeAllEvent<GetShipPickerInfoMessage>(OnShipPickerInfoRequest);
         SubscribeAllEvent<BoundsOverlayInfoRequest>(OnBoundsOverlayInfoRequest);
-        
+
         SubscribeAllEvent<ShipEventCaptainMenuRequestInfoMessage>(OnCapMenuInfoRequest);
         SubscribeAllEvent<ShipEventCaptainMenuChangeShipMessage>(OnShipChangeRequest);
         SubscribeAllEvent<ShipEventCaptainMenuChangeBlacklistMessage>(OnBlacklistChangeRequest);
@@ -128,7 +130,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         CheckBoundsCompressionTimer();
         CheckRoundendTimer();
     }
-    
+
     public void CheckRoundendTimer()
     {
         if (!TimedRoundEnd)
@@ -335,7 +337,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         var playerMob = SpawnPlayer(session, spawner);
         AfterSpawn(playerMob, spawner);
     }
-    
+
     private void OnCollision(EntityUid entity, ShipEventFactionMarkerComponent component, ref StartCollideEvent args)
     {
         if (component.Team == null)
@@ -410,7 +412,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                 break;
             }
         }
-        
+
         if (targetTeam.Members.Count >= GetMemberLimit())
         {
             _chatSys.SendSimpleMessage(Loc.GetString("shipevent-memberlimit"), player);
@@ -450,7 +452,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     {
         if (player.AttachedEntity != null)
         {
-            if (EntityManager.TryGetComponent<MindComponent>(player.AttachedEntity, out var mind))
+            if (EntityManager.TryGetComponent<MindContainerComponent>(player.AttachedEntity, out var mind))
                 mind.GhostOnShutdown = false; //to prevent ghost duplication
 
             EntityManager.DeleteEntity((EntityUid)player.AttachedEntity);
@@ -461,13 +463,10 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         var xform = EntityManager.GetComponent<TransformComponent>(playerMob);
         xform.AttachToGridOrMap();
 
-        playerMob.EnsureComponent<MindComponent>();
-        var newMind = new Mind.Mind(player.UserId)
-        {
-            CharacterName = EntityManager.GetComponent<MetaDataComponent>(playerMob).EntityName
-        };
-        newMind.ChangeOwningPlayer(player.UserId);
-        newMind.TransferTo(playerMob);
+        playerMob.EnsureComponent<MindContainerComponent>();
+
+        var newMind =  _mindSystem.CreateMind(player.UserId, EntityManager.GetComponent<MetaDataComponent>(playerMob).EntityName);
+        _mindSystem.TransferTo(newMind, playerMob);
 
         return playerMob;
     }
@@ -480,14 +479,14 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         if (!spawnedEntity.IsValid())
             return;
 
-        var mind = EntityManager.GetComponentOrNull<MindComponent>(spawnedEntity);
+        var mind = EntityManager.GetComponentOrNull<MindContainerComponent>(spawnedEntity);
         if (mind?.Mind?.Session == null)
             return;
         var session = mind.Mind.Session;
 
         ShipEventFaction team = default!;
-        
-        if (mind.Mind.HasRole<ShipEventRole>())
+
+        if (_mindSystem.HasRole<ShipEventRole>(mind.Mind))
             return;
 
         if (EntityManager.TryGetComponent<ShipEventFactionMarkerComponent>(spawnerEntity, out var spawnerMarker))
@@ -499,13 +498,13 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             var playerMarker = EntityManager.EnsureComponent<ShipEventFactionMarkerComponent>(spawnedEntity);
             playerMarker.Team = team;
         }
-        
+
         Role shipEventRole = new ShipEventRole(mind.Mind);
-        mind.Mind.AddRole(shipEventRole);
+        _mindSystem.AddRole(mind.Mind, shipEventRole);
         team.AddMember(shipEventRole);
 
         SetName(spawnedEntity, $"{GetName(spawnedEntity)} ({team.Name})");
-        
+
         SetupActions(spawnedEntity, team, session);
 
         if (EntityManager.TryGetComponent<MobHUDComponent>(spawnedEntity, out var hud))
@@ -516,7 +515,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             _hudSys.SetActiveHUDs(hud, new List<MobHUDPrototype> { hudProt });
         }
     }
-    
+
     /// <summary>
     /// Sets up action buttons for specified player
     /// </summary>

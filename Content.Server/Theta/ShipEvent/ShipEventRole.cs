@@ -1,4 +1,5 @@
 ﻿using Content.Server.Chat.Managers;
+using Content.Server.Mind;
 using Content.Server.Roles;
 
 namespace Content.Server.Theta.ShipEvent;
@@ -19,7 +20,8 @@ public sealed class ShipEventRole : Role
 
     public override void Greet()
     {
-        if (Mind.TryGetSession(out var session))
+        var mindSystem = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<MindSystem>();
+        if (mindSystem.TryGetSession(Mind, out var session))
         {
             var chatMgr = IoCManager.Resolve<IChatManager>();
             chatMgr.DispatchServerMessage(session, Loc.GetString("shipevent-role-greet"));

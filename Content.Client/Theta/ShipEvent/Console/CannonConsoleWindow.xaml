@@ -1,6 +1,6 @@
 ﻿<controls:FancyWindow xmlns="https://spacestation14.io"
                       xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
-                      xmlns:ui="clr-namespace:Content.Client.Shuttles.UI"
+                      xmlns:radarSetups="clr-namespace:Content.Client.Theta.ModularRadar.RadarSetups"
                       Title="{Loc 'cannon-console-window-title'}"
                       SetSize="878 648"
                       MinSize="788 320">
@@ -18,10 +18,11 @@
                 <BoxContainer Name="AmmoStatusContents" Orientation="Vertical"></BoxContainer>
             </BoxContainer>
         </BoxContainer>
-        <ui:RadarControl Name="RadarScreen"
-                         MouseFilter="Stop"
-                         Margin="4"
-                         HorizontalExpand="True"
-                         VerticalExpand="True" />
+        <radarSetups:CannonModularRadar
+            Name="RadarScreen"
+            MouseFilter="Stop"
+            Margin="4"
+            HorizontalExpand="True"
+            VerticalExpand="True" />
     </GridContainer>
 </controls:FancyWindow>

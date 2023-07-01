@@ -1,7 +1,7 @@
 ﻿<widgets:RadarGui xmlns="https://spacestation14.io"
                   xmlns:widgets="clr-namespace:Content.Client.UserInterface.Systems.Radar.Widgets"
                   xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
-                  xmlns:ui="clr-namespace:Content.Client.UserInterface.Systems.Radar.Controls"
+                  xmlns:radarSetups="clr-namespace:Content.Client.Theta.ModularRadar.RadarSetups"
                   MouseFilter="Ignore"
                   MinSize="160 160"
                   MaxSize="460 460">
@@ -13,7 +13,7 @@
         <PanelContainer.PanelOverride>
             <graphics:StyleBoxFlat BackgroundColor="#00000000" />
         </PanelContainer.PanelOverride>
-        <ui:SimpleRadarControl Name="Radar"
+        <radarSetups:ModularRadarHUD Name="Radar"
                                MouseFilter="Ignore"
                                HorizontalAlignment="Stretch"
                                VerticalAlignment="Stretch" />

@@ -46,7 +46,8 @@ namespace Content.IntegrationTests.Tests
             "/Maps/infiltrator.yml",
             "/Maps/Theta/Shipevent/Ships/shipevent-arrowhead.yml",
             "/Maps/Theta/Shipevent/Ships/shipevent-mule.yml",
-            "/Maps/Theta/Shipevent/Ships/shipevent-boxship.yml"
+            "/Maps/Theta/Shipevent/Ships/shipevent-boxship.yml",
+            "/Maps/Theta/Shipevent/Ships/shipevent-skipjack.yml"
         };
 
         /// <summary>
@@ -61,7 +62,7 @@ namespace Content.IntegrationTests.Tests
             var mapLoader = server.ResolveDependency<IEntitySystemManager>().GetEntitySystem<MapLoaderSystem>();
             var mapManager = server.ResolveDependency<IMapManager>();
             var cfg = server.ResolveDependency<IConfigurationManager>();
-            Assert.That(cfg.GetCVar(CCVars.DisableGridFill), Is.False);
+            Assert.That(cfg.GetCVar(CCVars.GridFill), Is.False);
 
             await server.WaitPost(() =>
             {
@@ -191,7 +192,7 @@ namespace Content.IntegrationTests.Tests
             var shuttleSystem = entManager.EntitySysManager.GetEntitySystem<ShuttleSystem>();
             var xformQuery = entManager.GetEntityQuery<TransformComponent>();
             var cfg = server.ResolveDependency<IConfigurationManager>();
-            Assert.That(cfg.GetCVar(CCVars.DisableGridFill), Is.False);
+            Assert.That(cfg.GetCVar(CCVars.GridFill), Is.False);
 
             await server.WaitPost(() =>
             {
@@ -355,7 +356,7 @@ namespace Content.IntegrationTests.Tests
             var mapLoader = server.ResolveDependency<IEntitySystemManager>().GetEntitySystem<MapLoaderSystem>();
             var mapManager = server.ResolveDependency<IMapManager>();
             var cfg = server.ResolveDependency<IConfigurationManager>();
-            Assert.That(cfg.GetCVar(CCVars.DisableGridFill), Is.False);
+            Assert.That(cfg.GetCVar(CCVars.GridFill), Is.False);
 
             await server.WaitPost(() =>
             {

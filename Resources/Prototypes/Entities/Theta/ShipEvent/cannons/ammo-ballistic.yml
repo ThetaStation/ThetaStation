@@ -122,11 +122,10 @@
   suffix: SHIPEVENT
   components:
     - type: Appearance
-      visuals:
-        - type: StorageVisualizer
-          state: bomb
-          state_open: bomb_open
-          state_closed: bomb_door
+    - type: EntityStorageVisuals
+      stateBaseClosed: bomb
+      stateDoorClosed: bomb_door
+      stateDoorOpen: bomb_open
 
 - type: entity
   id: MachineGunAmmoClosetShipEvent

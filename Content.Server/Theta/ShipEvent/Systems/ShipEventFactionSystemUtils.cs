@@ -27,18 +27,18 @@ public sealed class ShipEventFaction : PlayerFaction
     public int Kills;
     public int Points;
     public int Respawns;
-    
+
     public ShipTypePrototype? ChosenShipType;
     public EntityUid Ship;
     public string ShipName = "";
-    
+
     public bool ShouldRespawn; //whether this team is currently waiting for respawn
     public float TimeSinceRemoval; //time since last removal
 
     public bool OutOfBoundsWarningReceived; //whether this team has already received warning about going out of play area
-    
+
     public int LastBonusInterval; //how much times this team has acquired bonus points for surviving bonus interval
-    
+
     public ShipEventFaction(string name, string iconPath, Color color, string captain,
         int points = 0, List<string>? blacklist = null) : base(name, iconPath)
     {
@@ -117,7 +117,7 @@ public sealed partial class ShipEventFactionSystem
 
         return entities;
     }
-    
+
     private List<T> GetShipComponents<T>(EntityUid shipEntity) where T : IComponent
     {
         List<T> comps = new();
@@ -162,7 +162,7 @@ public sealed partial class ShipEventFactionSystem
 
     private IPlayerSession? GetSession(EntityUid entity)
     {
-        if (EntityManager.TryGetComponent<MindComponent>(entity, out var mindComp))
+        if (EntityManager.TryGetComponent<MindContainerComponent>(entity, out var mindComp))
         {
             if (mindComp.HasMind)
             {
@@ -183,7 +183,7 @@ public sealed partial class ShipEventFactionSystem
 
         return null;
     }
-    
+
     public bool IsValidName(string name)
     {
         if (name == "")
@@ -248,12 +248,12 @@ public sealed partial class ShipEventFactionSystem
     private EntityUid RandomPosSpawn(string mapPath)
     {
         const int shipCollisionCheckRange = 30;
-        
+
         Vector2i mapPos = Vector2i.Zero;
         for (int c = 0; c < 100; c++)
         {
             mapPos = (Vector2i) _random.NextVector2Box(0, 0, MaxSpawnOffset, MaxSpawnOffset).Rounded();
-            if (!_mapMan.FindGridsIntersecting(TargetMap, 
+            if (!_mapMan.FindGridsIntersecting(TargetMap,
                     new Box2(mapPos - shipCollisionCheckRange, mapPos + shipCollisionCheckRange)).Any())
                 break;
         }
@@ -275,7 +275,7 @@ public sealed partial class ShipEventFactionSystem
     public void ClearMindTracker()
     {
         _mindTrack.ClearMindSet();
-        foreach (var mind in EntityManager.EntityQuery<MindComponent>())
+        foreach (var mind in EntityManager.EntityQuery<MindContainerComponent>())
         {
             if(mind.HasMind)
                 _mindTrack.AddMind(mind.Mind!);

@@ -98,7 +98,7 @@ public abstract partial class SharedGunSystem : EntitySystem
     private void OnMapInit(EntityUid uid, GunComponent component, MapInitEvent args)
     {
         if (component.NextFire > Timing.CurTime)
-            Logger.Warning($"Initializing a map that contains an entity that is on cooldown. Entity: {ToPrettyString(uid)}");
+            Log.Warning($"Initializing a map that contains an entity that is on cooldown. Entity: {ToPrettyString(uid)}");
 
         DebugTools.Assert((component.AvailableModes & component.SelectedMode) != 0x0);
 #endif
@@ -228,8 +228,13 @@ public abstract partial class SharedGunSystem : EntitySystem
 
         var curTime = Timing.CurTime;
 
-        // Maybe Raise an event for this? CanAttack doesn't seem appropriate.
-        if (TryComp<MeleeWeaponComponent>(gunUid, out var melee) && melee.NextAttack > curTime)
+        // check if anything wants to prevent shooting
+        var prevention = new ShotAttemptedEvent
+        {
+            User = user
+        };
+        RaiseLocalEvent(gunUid, ref prevention);
+        if (prevention.Cancelled)
             return;
 
         // Need to do this to play the clicking sound for empty automatic weapons
@@ -321,15 +326,16 @@ public abstract partial class SharedGunSystem : EntitySystem
         }
 
         // Shoot confirmed - sounds also played here in case it's invalid (e.g. cartridge already spent).
-        Shoot(gunUid, gun, ev.Ammo, fromCoordinates, toCoordinates.Value, user, throwItems: attemptEv.ThrowItems);
-        var shotEv = new GunShotEvent(user);
+        Shoot(gunUid, gun, ev.Ammo, fromCoordinates, toCoordinates.Value, out var userImpulse, user, throwItems: attemptEv.ThrowItems);
+        var shotEv = new GunShotEvent(user, ev.Ammo);
         RaiseLocalEvent(gunUid, ref shotEv);
-        // Projectiles cause impulses especially important in non gravity environments
-        if (TryComp<PhysicsComponent>(gun.Owner, out var userPhysics))
+
+        if (userImpulse && TryComp<PhysicsComponent>(gun.Owner, out var userPhysics))
         {
             if (_gravity.IsWeightless(gun.Owner, userPhysics))
                 CauseImpulse(fromCoordinates, toCoordinates.Value, gun.Owner, userPhysics);
         }
+
         Dirty(gun);
     }
 
@@ -339,11 +345,12 @@ public abstract partial class SharedGunSystem : EntitySystem
         EntityUid ammo,
         EntityCoordinates fromCoordinates,
         EntityCoordinates toCoordinates,
+        out bool userImpulse,
         EntityUid? user = null,
         bool throwItems = false)
     {
         var shootable = EnsureComp<AmmoComponent>(ammo);
-        Shoot(gunUid, gun, new List<(EntityUid? Entity, IShootable Shootable)>(1) { (ammo, shootable) }, fromCoordinates, toCoordinates, user, throwItems);
+        Shoot(gunUid, gun, new List<(EntityUid? Entity, IShootable Shootable)>(1) { (ammo, shootable) }, fromCoordinates, toCoordinates, out userImpulse, user, throwItems);
     }
 
     public abstract void Shoot(
@@ -352,6 +359,7 @@ public abstract partial class SharedGunSystem : EntitySystem
         List<(EntityUid? Entity, IShootable Shootable)> ammo,
         EntityCoordinates fromCoordinates,
         EntityCoordinates toCoordinates,
+        out bool userImpulse,
         EntityUid? user = null,
         bool throwItems = false);
 
@@ -444,7 +452,7 @@ public record struct AttemptShootEvent(EntityUid User, string? Message, bool Can
 /// </summary>
 /// <param name="User">The user that fired this gun.</param>
 [ByRefEvent]
-public record struct GunShotEvent(EntityUid User);
+public record struct GunShotEvent(EntityUid User, List<(EntityUid? Uid, IShootable Shootable)> Ammo);
 
 public enum EffectLayers : byte
 {
