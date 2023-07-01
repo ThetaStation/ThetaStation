@@ -64,6 +64,10 @@
   parent: BaseStructureDynamic
   abstract: true
   components:
+    - type: Sprite
+      sprite: Theta/ShipEvent/Shuttles/tau_vox.rsi
+    - type: Icon
+      sprite: Theta/ShipEvent/Shuttles/tau_vox.rsi
     - type: AmbientSound
       enabled: false
       range: 4
