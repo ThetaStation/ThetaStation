@@ -44,6 +44,7 @@
 - type: entity
   id: ShipEventMachineGunCannon
   parent: ShipEventCannonBallisticBase
+  name: machine gun turret
   components:
     - type: Cannon
       ammoPrototypes:
@@ -87,6 +88,7 @@
 - type: entity
   id: ShipEventLightArtilleryCannon
   parent: ShipEventCannonBallisticBase
+  name: light cannon
   components:
     - type: Cannon
       ammoPrototypes:
@@ -129,6 +131,7 @@
 - type: entity
   id: ShipEventHeavyArtilleryCannon
   parent: ShipEventCannonBallisticBase
+  name: artillery cannon
   components:
     - type: Cannon
       ammoPrototypes:

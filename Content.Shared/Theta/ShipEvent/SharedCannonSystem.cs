@@ -50,8 +50,11 @@ public abstract class SharedCannonSystem : EntitySystem
         if (!pilotTransform.GridUid.Equals(cannonTransform.GridUid))
             return false;
 
-        var dir = args.Coordinates - _transform.GetWorldPosition(cannonTransform);
-        var ray = new CollisionRay(_transform.GetWorldPosition(cannonTransform), dir.Normalized, (int)CollisionGroup.BulletImpassable);
+        var fromCoordinates = _transform.GetWorldPosition(cannonTransform);
+        var dir = args.Coordinates - fromCoordinates;
+        var offset = dir.Normalized * gun.OnSpawnBulletOffset;
+        fromCoordinates = fromCoordinates + offset;
+        var ray = new CollisionRay(fromCoordinates, dir.Normalized, (int)CollisionGroup.BulletImpassable);
 
         var rayCastResult = _physics.IntersectRay(cannonTransform.MapID, ray, CollisionRayDistance).ToList();
         foreach (var result in rayCastResult)
