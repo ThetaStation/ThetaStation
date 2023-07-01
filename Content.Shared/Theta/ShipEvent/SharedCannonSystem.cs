@@ -59,36 +59,36 @@ public abstract class SharedCannonSystem : EntitySystem
         return min;
     }
     
-    public Angle ReducedAndPositive(Angle a)
+    public Angle ReducedAndPositive(Angle x)
     {
-        a = a.Reduced();
-        if (a < 0)
-            a += 2 * Math.PI;
-        return a;
+        x = x.Reduced();
+        if (x < 0)
+            x += 2 * Math.PI;
+        return x;
     }
     
-    public bool IsInsideSector(Angle x, Angle s, Angle w)
+    public bool IsInsideSector(Angle x, Angle start, Angle width)
     {
-        Angle d = Angle.ShortestDistance(s, x);
-        return Math.Sign(w) == Math.Sign(d) ? Math.Abs(w) >= Math.Abs(d) : Math.Abs(w) >= Math.Tau - Math.Abs(d);
+        Angle dist = Angle.ShortestDistance(start, x);
+        return Math.Sign(width) == Math.Sign(dist) ? Math.Abs(width) >= Math.Abs(dist) : Math.Abs(width) >= Math.Tau - Math.Abs(dist);
     }
 
-    public bool AreSectorsOverlapping(Angle s0, Angle w0, Angle s1, Angle w1)
+    public bool AreSectorsOverlapping(Angle start0, Angle width0, Angle start1, Angle width1)
     {
-        Angle e0 = ReducedAndPositive(s0 + w0);
-        Angle e1 = ReducedAndPositive(s1 + w1);
-        return IsInsideSector(s0, s1, w1) || IsInsideSector(s1, s0, w0) ||
-               IsInsideSector(e0, s1, w1) || IsInsideSector(e1, s0, w0);
+        Angle end0 = ReducedAndPositive(start0 + width0);
+        Angle end1 = ReducedAndPositive(start1 + width1);
+        return IsInsideSector(start0, start1, width1) || IsInsideSector(start1, start0, width0) ||
+               IsInsideSector(end0, start1, width1) || IsInsideSector(end1, start0, width0);
     }
 
     //only accepts sectors with positive width
-    public (Angle, Angle) CombinedSector(Angle s0, Angle w0, Angle s1, Angle w1)
+    public (Angle, Angle) CombinedSector(Angle start0, Angle width0, Angle start1, Angle width1)
     {
-        Angle sl, wl, sh, wh, dh;
-        (sl, wl, sh, wh) = IsInsideSector(s1, s0, w0) ? (s0, w0, s1, w1) : (s1, w1, s0, w0);
-        dh = ReducedAndPositive(sh + wh) > sl ? sh + wh - sl : Math.Tau - sl + ReducedAndPositive(sh + wh);
+        Angle startlow, widthlow, starthigh, widthhigh, disthigh;
+        (startlow, widthlow, starthigh, widthhigh) = IsInsideSector(start1, start0, width0) ? (start0, width0, start1, width1) : (start1, width1, start0, width0);
+        disthigh = ReducedAndPositive(starthigh + widthhigh) > startlow ? starthigh + widthhigh - startlow : Math.Tau - startlow + ReducedAndPositive(starthigh + widthhigh);
 
-        return (sl, Math.Min(Math.Max(wl, dh), Math.Tau));
+        return (startlow, Math.Min(Math.Max(widthlow, disthigh), Math.Tau));
     }
 
     private bool CanShoot(RequestCannonShootEvent args, GunComponent gun, CannonComponent cannon)
@@ -103,9 +103,9 @@ public abstract class SharedCannonSystem : EntitySystem
 
         Angle firingAngle = ReducedAndPositive(new Angle(args.Coordinates - _transform.GetWorldPosition(cannonTransform)) - 
                                                _transform.GetWorldRotation(Transform(cannonTransform.GridUid ?? args.CannonUid)));
-        foreach ((Angle s, Angle w) in cannon.ObstructedRanges)
+        foreach ((Angle start, Angle w) in cannon.ObstructedRanges)
         {
-            if (IsInsideSector(firingAngle, s, w))
+            if (IsInsideSector(firingAngle, start, w))
                 return false;
         }
         

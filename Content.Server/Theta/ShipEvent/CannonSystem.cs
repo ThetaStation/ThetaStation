@@ -46,26 +46,26 @@ public sealed class CannonSystem : SharedCannonSystem
             if (!form.Anchored || phys == null || !phys.Hard)
                 continue;
 
-            (Angle s0, Angle w0) = GetDirSector(dir);
-            ranges.Add((s0, w0));
+            (Angle start0, Angle width0) = GetDirSector(dir);
+            ranges.Add((start0, width0));
             
-            (Angle s2, Angle w2) = (s0, w0);
+            (Angle start2, Angle width2) = (start0, width0);
             
             List<(Angle, Angle)> overlaps = new();
-            foreach ((Angle s1, Angle w1) in ranges)
+            foreach ((Angle start1, Angle width1) in ranges)
             {
-                if (AreSectorsOverlapping(s0, w0, s1, w1))
+                if (AreSectorsOverlapping(start0, width0, start1, width1))
                 {
-                    (s2, w2) = CombinedSector(s2, w2, s1, w1);
-                    overlaps.Add((s1, w1));
+                    (start2, width2) = CombinedSector(start2, width2, start1, width1);
+                    overlaps.Add((start1, width1));
                 }
             }
             
-            foreach ((Angle s1, Angle w1) in overlaps)
+            foreach ((Angle start1, Angle width1) in overlaps)
             {
-                ranges.Remove((s1, w1));
+                ranges.Remove((start1, width1));
             }
-            ranges.Add((s2, w2));
+            ranges.Add((start2, width2));
         }
         
         double ew = gun.MaxAngle + 0.04;
@@ -119,16 +119,16 @@ public sealed class CannonSystem : SharedCannonSystem
             b = dir - 0.5f;
         }
 
-        Angle aa = ReducedAndPositive(new Angle(a));
-        Angle ba = ReducedAndPositive(new Angle(b));
-        Angle w = Angle.ShortestDistance(aa, ba);
+        Angle aangle = ReducedAndPositive(new Angle(a));
+        Angle bangle = ReducedAndPositive(new Angle(b));
+        Angle w = Angle.ShortestDistance(aangle, bangle);
         if (w < 0)
         {
-            aa = ba;
+            aangle = bangle;
             w = -w;
         }
 
-        return (aa, w);
+        return (aangle, w);
     }
 
     protected override void OnAnchorChanged(EntityUid uid, CannonComponent cannon, ref AnchorStateChangedEvent args)
