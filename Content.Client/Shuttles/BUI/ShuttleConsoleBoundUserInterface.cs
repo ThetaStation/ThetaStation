@@ -22,6 +22,7 @@ public sealed class ShuttleConsoleBoundUserInterface : BoundUserInterface
         _window.StartAutodockPressed += OnAutodockPressed;
         _window.StopAutodockPressed += OnStopAutodockPressed;
         _window.DestinationPressed += OnDestinationPressed;
+        _window.ChangeNamePressed += OnChangeNamePressed;
         _window.OpenCentered();
         _window.OnClose += OnClose;
     }
@@ -31,6 +32,14 @@ public sealed class ShuttleConsoleBoundUserInterface : BoundUserInterface
         SendMessage(new ShuttleConsoleFTLRequestMessage()
         {
             Destination = obj,
+        });
+    }
+
+    private void OnChangeNamePressed(string name)
+    {
+        SendMessage(new ShuttleConsoleChangeShipNameMessage()
+        {
+            NewShipName = name
         });
     }
 

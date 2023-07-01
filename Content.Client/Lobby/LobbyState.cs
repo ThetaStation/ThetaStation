@@ -17,6 +17,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Content.Client.UserInterface.Systems.EscapeMenu;
+using Content.Shared.Corvax.CCCVars;
 
 
 namespace Content.Client.Lobby
@@ -73,7 +74,10 @@ namespace Content.Client.Lobby
             };
 
             LayoutContainer.SetAnchorPreset(_lobby, LayoutContainer.LayoutPreset.Wide);
-            _lobby.ServerName.Text = _baseClient.GameInfo?.ServerName; //The eye of refactor gazes upon you...
+            var serverName = _configurationManager.GetCVar(CCCVars.ServerNameLobby);
+            if (string.IsNullOrWhiteSpace(serverName))
+                serverName = _baseClient.GameInfo?.ServerName;
+            _lobby.ServerName.Text = serverName; //The eye of refactor gazes upon you...
             UpdateLobbyUi();
 
             _lobby.CharacterPreview.CharacterSetupButton.OnPressed += OnSetupPressed;

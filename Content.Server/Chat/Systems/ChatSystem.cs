@@ -238,6 +238,11 @@ public sealed partial class ChatSystem : SharedChatSystem
         }
     }
 
+    public void SendSimpleMessage(string message, IPlayerSession player, ChatChannel channel = ChatChannel.Local, Color? color = null)
+    {
+        _chatManager.ChatMessageToOne(channel, message, message, default, false, player.ConnectedClient, color);
+    }
+
     #region Announcements
 
     /// <summary>

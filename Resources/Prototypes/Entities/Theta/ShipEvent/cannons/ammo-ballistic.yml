@@ -1,0 +1,158 @@
+# Machine Gun caseless
+- type: entity
+  id: CartridgeLightRifleCaseless
+  parent: CartridgeLightRifle
+  components:
+  - type: CartridgeAmmo
+    proto: BulletLightRifle
+    deleteOnSpawn: true
+
+# Light Cannon round
+- type: entity
+  id: BulletArtilleryLight
+  name: bullet (light cannon)
+  parent: BaseBullet
+  noSpawn: true
+  components:
+  - type: Item
+    size: 1
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 100
+        Blunt: 100
+  - type: Sprite
+    sprite: /Textures/Theta/ShipEvent/Objects/AmmoArtillery.rsi
+    layers:
+    - state: bullet
+
+- type: entity
+  id: CartridgeArtilleryLight
+  name: light cannon cartridge
+  parent: BaseCartridge
+  components:
+  - type: Item
+    size: 2
+  - type: Tag
+    tags:
+    - Cartridge
+  - type: CartridgeAmmo
+    proto: BulletArtilleryLight
+    deleteOnSpawn: true
+  - type: Sprite
+    netsync: false
+    sprite: /Textures/Theta/ShipEvent/Objects/AmmoArtillery.rsi
+    layers:
+    - state: cartridge
+  - type: StaticPrice
+    price: 20
+
+# Artillery round
+- type: entity
+  id: BulletArtilleryHeavy
+  name: bullet (artillery)
+  parent: BaseBulletTrigger
+  noSpawn: true
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 100
+        Blunt: 100
+  - type: Sprite
+    sprite: /Textures/Theta/ShipEvent/Objects/AmmoArtillery.rsi
+    layers:
+    - state: bullet
+  - type: ExplodeOnTrigger
+  - type: Explosive
+    explosionType: Default
+    maxIntensity: 20
+    intensitySlope: 5
+    totalIntensity: 100
+
+- type: entity
+  id: CartridgeArtilleryHeavy
+  name: artillery cartridge
+  parent: CartridgeArtilleryLight
+  components:
+  - type: Item
+    size: 5
+  - type: CartridgeAmmo
+    proto: BulletArtilleryHeavy
+    deleteOnSpawn: true
+  - type: StaticPrice
+    price: 70
+
+# Ammo containers
+- type: entity
+  id: TurretAmmoContainerMachineGunFilled
+  name: Machine gun ammo container
+  parent: TurretAmmoContainerRegular
+  components:
+    - type: StorageFill
+      contents:
+        - id: CartridgeLightRifleCaseless
+          amount: 100
+
+- type: entity
+  id: TurretAmmoContainerLightArtilleryFilled
+  name: Light cannon ammo container
+  parent: TurretAmmoContainerRegular
+  components:
+    - type: StorageFill
+      contents:
+        - id: CartridgeArtilleryLight
+          amount: 50
+
+- type: entity
+  id: TurretAmmoContainerHeavyArtilleryFilled
+  name: Artillery ammo container
+  parent: TurretAmmoContainerRegular
+  components:
+    - type: StorageFill
+      contents:
+        - id: CartridgeArtilleryHeavy
+          amount: 20
+
+#closets
+- type: entity
+  id: ShipEventCloset
+  name: closet
+  parent: ClosetBase
+  suffix: SHIPEVENT
+  components:
+    - type: Appearance
+    - type: EntityStorageVisuals
+      stateBaseClosed: bomb
+      stateDoorClosed: bomb_door
+      stateDoorOpen: bomb_open
+
+- type: entity
+  id: MachineGunAmmoClosetShipEvent
+  name: Machine gun Ammo Closet
+  parent: ShipEventCloset
+  components:
+    - type: StorageFill
+      contents:
+        - id: TurretAmmoContainerMachineGunFilled
+          amount: 10
+
+- type: entity
+  id: LightArtilleryAmmoClosetShipEvent
+  name: Light cannon Ammo Closet
+  parent: ShipEventCloset
+  components:
+    - type: StorageFill
+      contents:
+        - id: TurretAmmoContainerLightArtilleryFilled
+          amount: 10
+
+- type: entity
+  id: HeavyArtilleryAmmoClosetShipEvent
+  name: Artillery Ammo Closet
+  parent: ShipEventCloset
+  components:
+    - type: StorageFill
+      contents:
+        - id: TurretAmmoContainerHeavyArtilleryFilled
+          amount: 10

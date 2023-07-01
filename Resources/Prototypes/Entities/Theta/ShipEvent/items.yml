@@ -1,0 +1,48 @@
+﻿- type: Tag
+  id: TurretAmmoContainer
+
+- type: entity
+  id: TurretAmmoContainerRegular
+  name: ammo container
+  parent: BaseItem
+  components:
+    - type: Tag
+      tags:
+      - TurretAmmoContainer
+    - type: Item
+      size: 9999
+    - type: Sprite
+      drawdepth: Items
+      sprite: Theta/ShipEvent/Objects/AmmoContainer.rsi
+      state: container
+    - type: Storage
+      capacity: 100
+      quickInsert: true
+      areaInsert: true
+      whitelist:
+        components:
+        - Ammo
+    - type: ContainerContainer
+      containers:
+        storagebase: !type:Container
+          ents: [ ]
+    - type: Dumpable
+    - type: UserInterface
+      interfaces:
+      - key: enum.StorageUiKey.Key
+        type: StorageBoundUserInterface
+
+- type: entity
+  id: TurretAmmoContainerBluespace
+  name: bluespace ammo container
+  parent: TurretAmmoContainerRegular
+  components:
+    - type: Sprite
+      drawdepth: Items
+      sprite: Theta/ShipEvent/Objects/AmmoContainer.rsi
+      state: container-bluespace
+    - type: Storage
+      capacity: 500
+      whitelist:
+        components:
+        - Ammo
