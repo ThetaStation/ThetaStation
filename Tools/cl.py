@@ -9,7 +9,7 @@ from github.PullRequest import PullRequest
 try:
     hookUrl = environ.get("HOOK_URL")
 except KeyError:
-    raise RuntimeError("Error: Hook URL is missing (HOOK_URL). Add it to the step environment.")
+    raise RuntimeError("Hook URL is missing (HOOK_URL). Add it to the step environment.")
 
 g = Github()
 r = g.get_repo("ThetaStation/ThetaStation")
@@ -52,7 +52,7 @@ latest = getLatestCommit()
 print(f"Latest commit: {latest.sha}")
 
 pr = getPullRequestByCommit(latest)
-if pr is None: raise RuntimeError("Error: Latest commit does not belong to any pull request.")
+if pr is None: raise RuntimeError("Latest commit does not belong to any pull request.")
 
 message = f"# {pr.title} (#{pr.number})\n{parsePullRequestDesc(pr.body)}"
 print(f"Changelog generated successfully.\n---\n{message}\n---")
