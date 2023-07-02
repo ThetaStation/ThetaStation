@@ -40,6 +40,15 @@
       #bounds
       boundsCompressionInterval: 0
       boundsCompressionDistance: 0
+        
+      #lootboxes
+      lootboxSpawnInterval: 360
+      lootboxSpawnAmount: 2
+      lootboxLifetime: 180
+      lootboxTypes:
+        - "lootbox_box"
+        - "lootbox_abandonedship"
+        - "lootbox_asteroid"
 
       obstacleTypes:
         - "asteroid_small"
