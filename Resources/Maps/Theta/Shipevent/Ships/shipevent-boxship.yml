@@ -568,7 +568,7 @@ entities:
     - ranges:
       - 3.2989882105173156 rad: 2.7868015397347476 rad
       type: Cannon
-    - fireRate: 1
+    - fireRate: 0.5
       type: Gun
     - links:
       - 41
