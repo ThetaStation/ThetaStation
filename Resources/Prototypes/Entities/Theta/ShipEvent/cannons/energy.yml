@@ -31,9 +31,9 @@
       voltage: Medium
     - type: PowerNetworkBattery
       maxSupply: 0
-      maxChargeRate: 1000
-      supplyRampTolerance: 1000
-      supplyRampRate: 1000
+      maxChargeRate: 500
+      supplyRampTolerance: 0
+      supplyRampRate: 0
     - type: ExaminableBattery
     - type: NodeContainer
       examinable: true
@@ -43,14 +43,14 @@
           nodeGroupID: MVPower
     - type: ProjectileBatteryAmmoProvider
       proto: IonBolt
-      fireCost: 200
+      fireCost: 1000
     - type: Gun
       minAngle: 0
       maxAngle: 10
       angleIncrease: 2
       angleDecay: 1
       fireRate: 2
-      projectileSpeed: 100
+      projectileSpeed: 70
       selectedMode: FullAuto
       availableModes:
         - FullAuto
