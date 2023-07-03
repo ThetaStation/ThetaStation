@@ -58,3 +58,5 @@
         path: /Audio/Weapons/Guns/Gunshots/laser_cannon.ogg
         params:
           volume: 10
+    - type: StaticPrice #fails arbitrage test without it
+      price: 999
