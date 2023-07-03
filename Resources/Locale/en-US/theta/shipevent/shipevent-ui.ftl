@@ -48,7 +48,7 @@ shipevent-teamcreation-shippickerbutton = PICK SHIP
 
 shipevent-shippicker-windowtitle = SHIP SELECTION
 
-shipevent-shippicker-mincrewamount = Recommended minimal crew amount: 
+shipevent-shippicker-mincrewamount = Recommended minimal crew amount:
 shipevent-shippicker-selectionbutton = Select
 
 shipevent-shippicker-lightclass = [color=green]Light[/color]
@@ -89,6 +89,8 @@ shipevent-turretloader-turret = Turret:
 
 shipevent-turretloader-ejectcontainerbutton = EJECT CONTAINER
 shipevent-turretloader-refreshbutton = REFRESH UI
+
+shipevent-turretloader-ammocount-examine = Ammo count: {$count}
 
 
 ## Cannon console

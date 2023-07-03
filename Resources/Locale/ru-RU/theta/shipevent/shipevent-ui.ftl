@@ -48,7 +48,7 @@ shipevent-teamcreation-shippickerbutton = ВЫБРАТЬ КОРАБЛЬ
 
 shipevent-shippicker-windowtitle = ВЫБОР КОРАБЛЯ
 
-shipevent-shippicker-mincrewamount = Рекомендуемое минимальное кол-во экипажа: 
+shipevent-shippicker-mincrewamount = Рекомендуемое минимальное кол-во экипажа:
 shipevent-shippicker-selectionbutton = Выбрать
 
 shipevent-shippicker-lightclass = [color=green]Лёгкий[/color]
@@ -90,6 +90,7 @@ shipevent-turretloader-turret = Турель:
 shipevent-turretloader-ejectcontainerbutton = ИЗВЛЕЧЬ КОНТЕЙНЕР
 shipevent-turretloader-refreshbutton = ОБНОВИТЬ UI
 
+shipevent-turretloader-ammocount-examine = Количество патронов: {$count}
 
 ## Cannon console
 
