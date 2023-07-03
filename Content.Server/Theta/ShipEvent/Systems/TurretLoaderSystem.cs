@@ -10,6 +10,7 @@ using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
 using Content.Shared.Throwing;
 using Content.Shared.Weapons.Ranged.Components;
+using Robust.Shared.Audio;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
@@ -17,6 +18,7 @@ public sealed class TurretLoaderSystem : EntitySystem
 {
     [Dependency] private readonly ItemSlotsSystem _slotSys = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearanceSys = default!;
+    [Dependency] private readonly SharedAudioSystem _audioSys = default!;
 
     public override void Initialize()
     {
@@ -74,11 +76,14 @@ public sealed class TurretLoaderSystem : EntitySystem
     private void UpdateAmmoContainer(TurretLoaderComponent loader)
     {
         ContainerAmmoProviderComponent? turretContainer = null;
-        if (EntityManager.EntityExists(loader.BoundTurret))
+        List<string>? turretAmmoProts = null;
+        
+        if (loader.BoundTurret != null && EntityManager.EntityExists(loader.BoundTurret))
         {
-            turretContainer = EntityManager.EnsureComponent<ContainerAmmoProviderComponent>(loader.BoundTurret!.Value);
+            turretContainer = EntityManager.EnsureComponent<ContainerAmmoProviderComponent>(loader.BoundTurret.Value);
             turretContainer.ProviderUid = null;
             turretContainer.Container = "";
+            turretAmmoProts = EntityManager.GetComponent<CannonComponent>(loader.BoundTurret.Value).AmmoPrototypes;
         }
 
         loader.AmmoContainer = null;
@@ -90,6 +95,18 @@ public sealed class TurretLoaderSystem : EntitySystem
         {
             if (storage.Storage != null)
             {
+                if (turretAmmoProts != null && storage.Storage.ContainedEntities.Count > 0 &&
+                    !turretAmmoProts.Contains(EntityManager
+                                                  .GetComponent<MetaDataComponent>(storage.Storage.ContainedEntities[0])
+                                                  .EntityPrototype?.ID ?? ""))
+                {
+                    _audioSys.PlayPredicted(loader.InvalidAmmoTypeSound, loader.Owner, loader.Owner);
+                    
+                    if (loader.ContainerSlot == null)
+                        return;
+                    _slotSys.TryEject(loader.Owner, loader.ContainerSlot, loader.Owner, out _);
+                }
+                
                 loader.AmmoContainer = storage.Storage;
                 loader.MaxContainerCapacity = storage.StorageCapacityMax;
                 loader.CurrentContainerCapacity = storage.StorageUsed;

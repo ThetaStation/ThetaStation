@@ -1,4 +1,5 @@
 using Content.Shared.Containers.ItemSlots;
+using Robust.Shared.Audio;
 using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
@@ -30,6 +31,12 @@ public sealed class TurretLoaderComponent : Component
     /// How much capacity of loaded container is currently used
     /// </summary>
     public int CurrentContainerCapacity;
+
+    /// <summary>
+    /// Played when container with invalid ammo type is inserted
+    /// </summary>
+    [DataField("invalidAmmoSound")] 
+    public SoundSpecifier InvalidAmmoTypeSound = new SoundPathSpecifier("");
 }
 
 [Serializable, NetSerializable]
