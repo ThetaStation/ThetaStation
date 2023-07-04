@@ -725,7 +725,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// <param name="removeReason">Message to show in announcement</param>
     /// <param name="silent">Whether to announce removal</param>
     /// <param name="killPoints">Whether to add points to other teams for hits on removed one</param>
-    private void RemoveTeam(ShipEventFaction team, string removeReason = "", bool silent = false, bool killPoints = true)
+    public void RemoveTeam(ShipEventFaction team, string removeReason = "", bool silent = false, bool killPoints = true)
     {
         if (!silent)
         {
