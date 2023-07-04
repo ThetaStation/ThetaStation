@@ -44,8 +44,6 @@
     sprite: /Textures/Theta/ShipEvent/Objects/AmmoArtillery.rsi
     layers:
     - state: cartridge
-  - type: StaticPrice
-    price: 20
 
 # Artillery round
 - type: entity
@@ -80,8 +78,6 @@
   - type: CartridgeAmmo
     proto: BulletArtilleryHeavy
     deleteOnSpawn: true
-  - type: StaticPrice
-    price: 70
 
 # Ammo containers
 - type: entity

@@ -3,7 +3,7 @@
 
 #base
 - type: entity
-  id: ShipEventCannonBallisticBase
+  id: ShipEventCannonBase
   parent: BaseStructure
   suffix: SHIPEVENT
   abstract: true
@@ -45,7 +45,7 @@
 # Machine Gun
 - type: entity
   id: ShipEventMachineGunCannon
-  parent: ShipEventCannonBallisticBase
+  parent: ShipEventCannonBase
   name: machine gun turret
   components:
     - type: Cannon
@@ -89,7 +89,7 @@
 # Light Cannon
 - type: entity
   id: ShipEventLightArtilleryCannon
-  parent: ShipEventCannonBallisticBase
+  parent: ShipEventCannonBase
   name: light cannon
   components:
     - type: Cannon
@@ -132,7 +132,7 @@
 # Artillery
 - type: entity
   id: ShipEventHeavyArtilleryCannon
-  parent: ShipEventCannonBallisticBase
+  parent: ShipEventCannonBase
   name: artillery cannon
   components:
     - type: Cannon
