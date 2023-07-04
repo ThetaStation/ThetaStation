@@ -2,9 +2,11 @@
 using Content.Server.Actions;
 using Content.Server.Chat.Systems;
 using Content.Server.GameTicking;
+using Content.Server.Humanoid;
 using Content.Server.IdentityManagement;
 using Content.Server.Mind;
 using Content.Server.Mind.Components;
+using Content.Server.Preferences.Managers;
 using Content.Server.Roles;
 using Content.Server.RoundEnd;
 using Content.Server.Shuttles.Components;
@@ -16,6 +18,7 @@ using Content.Shared.Actions;
 using Content.Shared.Actions.ActionTypes;
 using Content.Shared.GameTicking;
 using Content.Shared.Mobs;
+using Content.Shared.Preferences;
 using Content.Shared.Projectiles;
 using Content.Shared.Shuttles.Events;
 using Content.Shared.Theta.MobHUD;
@@ -48,6 +51,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     [Dependency] private readonly TransformSystem _formSys = default!;
     [Dependency] private readonly RoundEndSystem _endSys = default!;
     [Dependency] private readonly MindSystem _mindSystem = default!;
+    [Dependency] private readonly HumanoidAppearanceSystem _humanoidAppearanceSystem = default!;
+    [Dependency] private readonly IServerPreferencesManager _prefsManager = default!;
 
     private readonly Dictionary<string, int> _projectileDamage = new(); //cached damage for projectile prototypes
     private int _lastTeamNumber;
@@ -467,6 +472,14 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         var newMind =  _mindSystem.CreateMind(player.UserId, EntityManager.GetComponent<MetaDataComponent>(playerMob).EntityName);
         _mindSystem.TransferTo(newMind, playerMob);
+
+        HumanoidCharacterProfile profile;
+        if (_prefsManager.TryGetCachedPreferences(player.UserId, out var preferences))
+            profile = (HumanoidCharacterProfile) preferences.GetProfile(preferences.SelectedCharacterIndex);
+        else
+            profile = HumanoidCharacterProfile.Random();
+
+        _humanoidAppearanceSystem.LoadProfile(playerMob, profile);
 
         return playerMob;
     }

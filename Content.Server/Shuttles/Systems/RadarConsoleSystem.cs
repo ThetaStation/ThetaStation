@@ -56,6 +56,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
         if (!TryComp<TransformComponent>(component.Owner, out var xform))
             return list;
 
+        var xformQuery = GetEntityQuery<TransformComponent>();
         foreach (var (_, mobState, transform) in EntityManager
                      .EntityQuery<MindContainerComponent, MobStateComponent, TransformComponent>())
         {
@@ -64,9 +65,10 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
             if (!xform.MapPosition.InRange(transform.MapPosition, component.MaxRange))
                 continue;
 
+            var coords = _transformSystem.GetMoverCoordinates(transform, xformQuery);
             list.Add(new MobInterfaceState
             {
-                Coordinates = transform.Coordinates,
+                Coordinates = coords,
             });
         }
 
