@@ -37,7 +37,7 @@ def parsePullRequestDesc(desc: str) -> str:
     lines = desc.split("\n")
 
     for i, line in enumerate(lines):
-        if line.startswith("🆑"):
+        if line.startswith(":cl:"):
             clFound = True
             result += line + "\n"
             for ti, tagLine in enumerate(lines[i+1:]):
