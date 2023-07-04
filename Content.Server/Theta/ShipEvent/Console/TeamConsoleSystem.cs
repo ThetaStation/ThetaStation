@@ -27,7 +27,7 @@ public sealed class TeamConsoleSystem : EntitySystem
 
     private void OnInit(EntityUid uid, TeamConsoleComponent component, ComponentInit args)
     {
-        if (!_ticker.IsGameRuleAdded("ShipEvent"))
+        if (!_shipSys.RuleSelected)
         {
             _ticker.StartGameRule("ShipEvent");
         }

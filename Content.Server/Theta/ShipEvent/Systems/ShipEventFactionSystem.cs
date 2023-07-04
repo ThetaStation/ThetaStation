@@ -408,6 +408,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     {
         EntityUid? shipUid = null;
         ShipEventFaction targetTeam = default!;
+
         foreach (var team in Teams)
         {
             if (team.Name == teamName)
@@ -795,15 +796,22 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     private void CheckTeams(float deltaTime)
     {
+        List<ShipEventFaction> toRemove = new();
         foreach (var team in Teams)
         {
+            if (team.ActiveMembers.Count == 0)
+            {
+                toRemove.Add(team);
+                continue;
+            }
+            
             if (!team.GetLivingMembersMinds().Any() && team.Members.Any() && !team.ShouldRespawn)
             {
                 RespawnTeam(
                     team,
                     Loc.GetString("shipevent-respawn-dead"));
                 team.TimeSinceRemoval = 0;
-                break;
+                continue;
             }
 
             if (!GetShipComponentHolders<ShuttleConsoleComponent>(team.Ship).Any() && !team.ShouldRespawn)
@@ -812,7 +820,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                     team,
                     Loc.GetString("shipevent-respawn-tech"));
                 team.TimeSinceRemoval = 0;
-                break;
+                continue;
             }
 
             if (IsTeamOutOfBounds(team))
@@ -833,16 +841,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             {
                 if (team.Members.Any())
                 {
-                    string newCap = "";
-                    for (int c = 0; c < 100; c++)
-                    {
-                        var newCapRole = _random.Pick(team.Members);
-                        if (newCapRole.Mind.Session != null)
-                        {
-                            newCap = newCapRole.Mind.Session.ConnectedClient.UserName;
-                            break;
-                        }
-                    }
+                    string newCap = team.ActiveMembers.Count > 0 ? team.ActiveMembers[0].Mind.Session!.ConnectedClient.UserName : "N/A";
 
                     TeamMessage(team, Loc.GetString("shipevent-team-captainchange", ("oldcap", team.Captain), ("newcap", newCap)));
                     team.Captain = newCap;
@@ -868,6 +867,11 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             }
 
             team.TimeSinceRemoval += deltaTime;
+        }
+
+        foreach (ShipEventFaction team in toRemove)
+        {
+            RemoveTeam(team, Loc.GetString("shipevent-remove-noplayers"));
         }
     }
 }

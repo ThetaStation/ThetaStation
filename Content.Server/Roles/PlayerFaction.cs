@@ -1,4 +1,5 @@
-﻿using Content.Server.Mind;
+﻿using System.Linq;
+using Content.Server.Mind;
 using Robust.Server.Player;
 using Robust.Shared.Utility;
 
@@ -20,6 +21,13 @@ public class PlayerFaction
     /// Members of the faction
     /// </summary>
     public List<Role> Members { get; }
+
+    /// <summary>
+    /// List of members with attached clients
+    /// </summary>
+    public List<Role> ActiveMembers => Members.Where(r => r.Mind.Session != null).ToList();
+    
+    public List<string> ActiveMemberUsernames => ActiveMembers.Select(r => r.Mind.Session!.ConnectedClient.UserName).ToList();
 
     public PlayerFaction(string name, string iconPath = "")
     {
