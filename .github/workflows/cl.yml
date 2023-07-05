@@ -24,6 +24,6 @@ jobs:
 
       - name: run generator
         env:
-          COMMIT_SHA: ${{GITHUB_SHA}}
-          HOOK_URL: ${{secrets.CL_HOOK_URL}}
+          GITHUB_SHA: ${{ github.GITHUB_SHA }}
+          HOOK_URL: ${{ secrets.CL_HOOK_URL }}
         run: python Tools/cl.py
