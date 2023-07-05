@@ -1,5 +1,7 @@
 using System.Linq;
 using Content.Server.Mind.Components;
+using Content.Server.Power.Components;
+using Content.Server.Storage.Components;
 using Content.Server.Theta.ShipEvent.Console;
 using Content.Server.UserInterface;
 using Content.Shared.DeviceLinking;
@@ -9,9 +11,11 @@ using Content.Shared.Projectiles;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
+using Content.Shared.Storage;
 using Content.Shared.Theta.ShipEvent;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Server.GameObjects;
+using Robust.Shared.Containers;
 using Robust.Shared.Map;
 
 namespace Content.Server.Shuttles.Systems;
@@ -23,6 +27,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
     [Dependency] private readonly TransformSystem _transformSystem = default!;
     [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
+    [Dependency] private readonly SharedContainerSystem _contSys = default!;
 
     private const string OutputPortName = "CannonConsoleSender";
 
@@ -115,17 +120,29 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 
             var controlled = false;
             if (controlledCannons != null)
-            {
                 controlled = controlledCannons.Contains(cannon.Owner);
-            }
 
             var color = controlled ? Color.Lime : (isCannonConsole ? Color.LightGreen : Color.YellowGreen);
 
             var ammoCountEv = new GetAmmoCountEvent();
             RaiseLocalEvent(cannon.Owner, ref ammoCountEv);
 
-            var maxCapacity = cannon.BoundLoader?.MaxContainerCapacity != null ? cannon.BoundLoader.MaxContainerCapacity : 0;
-            var usedCapacity = cannon.BoundLoader?.CurrentContainerCapacity != null ? cannon.BoundLoader.CurrentContainerCapacity : 0;
+            int maxCapacity = 0;
+            int usedCapacity = 0;
+            
+            if (cannon.BallisticAmmoProvider != null)
+            {
+                if (EntityManager.TryGetComponent<ServerStorageComponent>(cannon.BallisticAmmoProvider.ProviderUid, out ServerStorageComponent? storage))
+                {
+                    maxCapacity = storage.StorageCapacityMax;
+                    usedCapacity = storage.StorageUsed;
+                }
+            }
+            else if (cannon.EnergyAmmoProvider != null)
+            {
+                maxCapacity = cannon.EnergyAmmoProvider.Capacity;
+                usedCapacity = cannon.EnergyAmmoProvider.Shots;
+            }
 
             list.Add(new CannonInformationInterfaceState
             {

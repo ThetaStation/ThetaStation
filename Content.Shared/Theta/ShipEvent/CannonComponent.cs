@@ -1,4 +1,5 @@
 ﻿using Content.Shared.Theta.ShipEvent.Components;
+using Content.Shared.Weapons.Ranged.Components;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared.Theta.ShipEvent;
@@ -10,12 +11,16 @@ public sealed partial class CannonComponent : Component
     /// TurretLoader bound to this turret
     /// </summary>
     public TurretLoaderComponent? BoundLoader;
-    
+
     /// <summary>
     /// The TurretLoader's entity.
     /// </summary>
     [AutoNetworkedField]
     public EntityUid? BoundLoaderEntity;
+    
+    public ContainerAmmoProviderComponent? BallisticAmmoProvider;
+
+    public ProjectileBatteryAmmoProviderComponent? EnergyAmmoProvider;
 
     /// <summary>
     /// Ammo prototypes which this turret can use

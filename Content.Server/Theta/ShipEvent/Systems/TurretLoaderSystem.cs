@@ -88,7 +88,6 @@ public sealed class TurretLoaderSystem : EntitySystem
 
         loader.AmmoContainer = null;
         loader.MaxContainerCapacity = 0;
-        loader.CurrentContainerCapacity = 0;
 
         var container = loader.ContainerSlot?.Item;
         if (EntityManager.TryGetComponent<ServerStorageComponent>(container, out var storage))
@@ -109,7 +108,6 @@ public sealed class TurretLoaderSystem : EntitySystem
                 
                 loader.AmmoContainer = storage.Storage;
                 loader.MaxContainerCapacity = storage.StorageCapacityMax;
-                loader.CurrentContainerCapacity = storage.StorageUsed;
 
                 if (turretContainer != null)
                 {

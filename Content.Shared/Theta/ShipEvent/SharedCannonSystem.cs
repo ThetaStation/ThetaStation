@@ -20,6 +20,13 @@ public abstract class SharedCannonSystem : EntitySystem
         SubscribeAllEvent<RequestCannonShootEvent>(OnShootRequest);
         SubscribeAllEvent<RequestStopCannonShootEvent>(OnStopShootRequest);
         SubscribeLocalEvent<CannonComponent, AnchorStateChangedEvent>(OnAnchorChanged);
+        SubscribeLocalEvent<CannonComponent, ComponentInit>(OnInit);
+    }
+
+    private void OnInit(EntityUid uid, CannonComponent cannon, ComponentInit args)
+    {
+        cannon.BallisticAmmoProvider = EntityManager.GetComponentOrNull<ContainerAmmoProviderComponent>(uid);
+        cannon.EnergyAmmoProvider = EntityManager.GetComponentOrNull<ProjectileBatteryAmmoProviderComponent>(uid);
     }
 
     private void OnShootRequest(RequestCannonShootEvent ev, EntitySessionEventArgs args)
