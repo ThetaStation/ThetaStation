@@ -1,24 +1,21 @@
-- type: entity
-  id: TheseusShip
-  parent:
-    - BaseStation
-    - BaseStationJobsSpawning
-    - BaseStationNanotrasen
-  noSpawn: true
-  components:
-    - type: Transform
-
 - type: gameMap
-  id: TheseusShip
-  mapName: 'NSV Theseus'
-  mapPath: /Maps/Theta/ShipMaps/Theseus.yml
-  minPlayers: 1
+  id: Theseus
+  mapName: 'gameMap'
+  mapPath: /Maps/Theta/ShipMaps/theseus.yml
+  minPlayers: 0
+  maxPlayers: 35
+  fallback: true
   stations:
-    LobbyShipevent:
-      stationProto: TheseusShip
+    Theseus:
+      stationProto: StandardNanotrasenStation
       components:
         - type: StationNameSetup
-          mapNameTemplate: 'Theseus'
+          mapNameTemplate: '{0} Theseus {1}'
+          nameGenerator:
+            !type:NanotrasenNameGenerator
+            prefixCreator: '14'
+        - type: StationEmergencyShuttle
+          emergencyShuttlePath: /Maps/Shuttles/corvax_emergency.yml # Corvax-EmergencyShuttle
         - type: StationJobs
           overflowJobs:
           - Passenger
