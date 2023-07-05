@@ -1,5 +1,6 @@
 #changelog generator. triggered by action, when something is pushed into master, posting parsed PR's description to webhook.
 
+repoName = "ThetaStation/ThetaStation"
 
 from os import environ
 from requests import post
@@ -7,19 +8,13 @@ from github import Github
 from github.Commit import Commit
 from github.PullRequest import PullRequest
 
-repoName = "ThetaStation/ThetaStation"
-mainBranch = "master"
-
-try:
-    hookUrl = environ.get("HOOK_URL")
-except KeyError:
-    raise RuntimeError("Hook URL is missing (HOOK_URL). Add it to the step environment.")
+try: hookUrl = environ.get("HOOK_URL")
+except KeyError: raise RuntimeError("Hook URL is missing (HOOK_URL). Add it to the step environment.")
+try: commitSha = environ.get("COMMIT_SHA")
+except KeyError: raise RuntimeError("Target commit hash is missing (COMMIT_SHA). Add it to the step environment (stored in GITHUB_SHA).")
 
 g = Github()
 r = g.get_repo(repoName)
-
-def getLatestCommit() -> Commit:
-    return r.get_branch(mainBranch).commit
 
 def getPullRequestByCommit(commit: Commit) -> PullRequest:
     pulls = commit.get_pulls()
@@ -37,7 +32,7 @@ def parsePullRequestDesc(desc: str) -> str:
     lines = desc.split("\n")
 
     for i, line in enumerate(lines):
-        if line.startswith(":cl:"):
+        if line.startswith(":cl:") or line.startswith("🆑"):
             clFound = True
             result += line + "\n"
             for ti, tagLine in enumerate(lines[i+1:]):
@@ -56,11 +51,9 @@ def parsePullRequestDesc(desc: str) -> str:
 
     return result
 
-latest = getLatestCommit()
-print(f"Latest commit: {latest.sha}")
-
-pr = getPullRequestByCommit(latest)
-if pr is None: raise RuntimeError("Latest commit does not belong to any pull request.")
+print(f"Target commit: {commitSha}")
+pr = getPullRequestByCommit(r.get_commit(commitSha))
+if pr is None: raise RuntimeError("Target commit does not belong to any pull request.")
 
 message = f"# {pr.title} (#{pr.number})\n{parsePullRequestDesc(pr.body)}"
 print(f"Changelog generated successfully.\n---\n{message}\n---")
