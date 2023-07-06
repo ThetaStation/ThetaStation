@@ -29,8 +29,8 @@
       outOfBoundsPenalty: 2000
 
       #map gen
-      initialObstacleAmount: 150
-      maxSpawnOffset: 1000
+      initialObstacleAmount: 200
+      maxSpawnOffset: 2000
       shipTypes:
         - "shiptype_arrowhead"
         - "shiptype_mule"
@@ -44,7 +44,7 @@
       #lootboxes
       lootboxSpawnInterval: 360
       lootboxSpawnAmount: 2
-      lootboxLifetime: 180
+      lootboxLifetime: 240
       lootboxTypes:
         - "lootbox_box"
         - "lootbox_abandonedship"
