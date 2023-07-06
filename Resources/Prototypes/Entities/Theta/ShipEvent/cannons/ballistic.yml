@@ -1,5 +1,5 @@
 #All ballistic cannons - 7.62mm (.30), 37mm, 100mm
-#todo: draw some sick sprites for 37 & 100mm cannons, since they look like generic machine gun turret rn
+#todo: draw some sick sprites for light & heavy cannon, since they look like generic machine gun turret rn
 
 #base
 - type: entity

@@ -12,13 +12,17 @@ ent-TeamCreationConsoleShipEvent = team console
 ent-TurretLoaderShipEvent = weapon loader
     .desc = { "Universal ammo loader for weapons of various types. Uses bluespace teleportation for delivering shells to the chamber." }
     .suffix = { "ShipEvent" }
+    
+## Items
 ent-TurretAmmoContainerRegular = ammo container
     .desc = { "Standartised metal container for use in weapon loaders." }
     .suffix = { "ShipEvent" }
 ent-TurretAmmoContainerBluespace = ammo container (bluespace)
     .desc = { "Extended version of standard ammo container." }
     .suffix = { "ShipEvent" }
-
+ent-LootboxSpawnTriggerItem = lootbox caller
+    .desc = { "God bless NT." }
+    .suffix = { "ShipEvent" }
 
 ## Guns
 

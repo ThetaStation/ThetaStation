@@ -17,6 +17,7 @@ using Content.Server.Theta.ShipEvent.Components;
 using Content.Shared.Actions;
 using Content.Shared.Actions.ActionTypes;
 using Content.Shared.GameTicking;
+using Content.Shared.Interaction.Events;
 using Content.Shared.Mobs;
 using Content.Shared.Preferences;
 using Content.Shared.Projectiles;
@@ -59,6 +60,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     private float _teamCheckTimer;
     private float _roundendTimer;
     private float _boundsCompressionTimer;
+    private float _lootboxTimer;
     private int _lastAnnoucementMinute;
 
     //all time-related fields are specified in seconds
@@ -67,6 +69,11 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     public float TeamCheckInterval;
     public float RespawnDelay;
+
+    public float LootboxSpawnInterval;
+    public int LootboxSpawnAmount;
+    public float LootboxLifetime;
+    public List<StructurePrototype> LootboxPrototypes = new();
 
     public int MaxSpawnOffset;
 
@@ -95,7 +102,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     public List<ShipEventFaction> Teams { get; } = new();
 
-    public List<Processor> ShipProcessors = new(); //applied to all ships on spawn
+    public List<Processor> ShipProcessors = new();
+    public List<Processor> LootboxProcessors = new();
 
     public override void Initialize()
     {
@@ -106,6 +114,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, StartCollideEvent>(OnCollision);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, MobStateChangedEvent>(OnPlayerStateChange);
+        
+        SubscribeLocalEvent<ShipEventLootboxSpawnTriggerComponent, UseInHandEvent>(OnLootboxSpawnTriggered);
 
         SubscribeAllEvent<ShuttleConsoleChangeShipNameMessage>(OnShipNameChange); //un-directed event since we will have duplicate subscriptions otherwise
         SubscribeAllEvent<GetShipPickerInfoMessage>(OnShipPickerInfoRequest);
@@ -122,9 +132,13 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     public override void Update(float frametime)
     {
+        if (!RuleSelected)
+            return;
+        
         _teamCheckTimer += frametime;
         _roundendTimer += frametime;
         _boundsCompressionTimer += frametime;
+        _lootboxTimer += frametime;
 
         if (_teamCheckTimer > TeamCheckInterval)
         {
@@ -133,10 +147,11 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         }
 
         CheckBoundsCompressionTimer();
+        CheckLootboxTimer(frametime);
         CheckRoundendTimer();
     }
 
-    public void CheckRoundendTimer()
+    private void CheckRoundendTimer()
     {
         if (!TimedRoundEnd)
             return;
@@ -556,7 +571,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// <summary>
     /// Creates new faction with all the specified data. Does not spawn ship, if you want to put new team in game right away use CreateTeam
     /// </summary>
-    private ShipEventFaction RegisterTeam(string captain, string name, Color color, List<string>? blacklist = null, bool silent = false)
+    private ShipEventFaction RegisterTeam(string captain, string name, Color color, List<string>? blacklist = null, bool announce = true)
     {
         var teamName = IsValidName(name) ? name : GenerateTeamName();
         var teamColor = IsValidColor(color) ? color : GenerateTeamColor();
@@ -571,7 +586,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         Teams.Add(team);
 
-        if (!silent)
+        if (announce)
         {
             Announce(Loc.GetString(
                 "shipevent-team-add",
@@ -611,12 +626,12 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// </summary>
     /// <param name="team">Team to respawn</param>
     /// <param name="respawnReason">Message to show in announcement</param>
-    /// <param name="silent">Whether to announce respawn</param>
+    /// <param name="announce">Whether to announce respawn</param>
     /// <param name="immediate">If this team should be respawned without delay</param>
     /// <param name="killPoints">Whether to add points to other teams for hits on respawned one</param>
-    private void RespawnTeam(ShipEventFaction team, string respawnReason = "", bool silent = false, bool immediate = false, bool killPoints = true)
+    private void RespawnTeam(ShipEventFaction team, string respawnReason = "", bool announce = true, bool immediate = false, bool killPoints = true)
     {
-        if (!silent)
+        if (announce)
         {
             var message = Loc.GetString(
                 "shipevent-team-respawn",
@@ -723,11 +738,11 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// </summary>
     /// <param name="team">Team to remove</param>
     /// <param name="removeReason">Message to show in announcement</param>
-    /// <param name="silent">Whether to announce removal</param>
+    /// <param name="announce">Whether to announce removal</param>
     /// <param name="killPoints">Whether to add points to other teams for hits on removed one</param>
-    public void RemoveTeam(ShipEventFaction team, string removeReason = "", bool silent = false, bool killPoints = true)
+    private void RemoveTeam(ShipEventFaction team, string removeReason = "", bool announce = true, bool killPoints = true)
     {
-        if (!silent)
+        if (announce)
         {
             var message = Loc.GetString(
                 "shipevent-team-remove",
