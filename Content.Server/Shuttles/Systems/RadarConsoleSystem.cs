@@ -13,6 +13,7 @@ using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
 using Content.Shared.Storage;
 using Content.Shared.Theta.ShipEvent;
+using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
@@ -129,19 +130,22 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 
             int maxCapacity = 0;
             int usedCapacity = 0;
-            
-            if (cannon.BallisticAmmoProvider != null)
+
+            if (cannon.AmmoProvider != null)
             {
-                if (EntityManager.TryGetComponent<ServerStorageComponent>(cannon.BallisticAmmoProvider.ProviderUid, out ServerStorageComponent? storage))
+                if (cannon.AmmoProvider is ContainerAmmoProviderComponent cprov)
                 {
-                    maxCapacity = storage.StorageCapacityMax;
-                    usedCapacity = storage.StorageUsed;
+                    if (EntityManager.TryGetComponent<ServerStorageComponent>(cprov.ProviderUid, out ServerStorageComponent? storage))
+                    {
+                        maxCapacity = storage.StorageCapacityMax;
+                        usedCapacity = storage.StorageUsed;
+                    }
                 }
-            }
-            else if (cannon.EnergyAmmoProvider != null)
-            {
-                maxCapacity = cannon.EnergyAmmoProvider.Capacity;
-                usedCapacity = cannon.EnergyAmmoProvider.Shots;
+                else
+                {
+                    maxCapacity = ammoCountEv.Capacity;
+                    usedCapacity = ammoCountEv.Count;
+                }
             }
 
             list.Add(new CannonInformationInterfaceState

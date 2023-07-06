@@ -17,10 +17,8 @@ public sealed partial class CannonComponent : Component
     /// </summary>
     [AutoNetworkedField]
     public EntityUid? BoundLoaderEntity;
-    
-    public ContainerAmmoProviderComponent? BallisticAmmoProvider;
 
-    public ProjectileBatteryAmmoProviderComponent? EnergyAmmoProvider;
+    public AmmoProviderComponent? AmmoProvider;
 
     /// <summary>
     /// Ammo prototypes which this turret can use

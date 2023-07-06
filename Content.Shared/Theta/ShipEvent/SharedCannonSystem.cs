@@ -25,8 +25,14 @@ public abstract class SharedCannonSystem : EntitySystem
 
     private void OnInit(EntityUid uid, CannonComponent cannon, ComponentInit args)
     {
-        cannon.BallisticAmmoProvider = EntityManager.GetComponentOrNull<ContainerAmmoProviderComponent>(uid);
-        cannon.EnergyAmmoProvider = EntityManager.GetComponentOrNull<ProjectileBatteryAmmoProviderComponent>(uid);
+        foreach (IComponent comp in EntityManager.GetComponents(uid))
+        {
+            if (comp is AmmoProviderComponent provider)
+            {
+                cannon.AmmoProvider = provider;
+                break;
+            }
+        }
     }
 
     private void OnShootRequest(RequestCannonShootEvent ev, EntitySessionEventArgs args)
