@@ -272,7 +272,7 @@ public sealed partial class ShipEventFactionSystem
     }
 
     //to avoid cluttering roundend statistics
-    public void ClearMindTracker()
+    private void ClearMindTracker()
     {
         _mindTrack.ClearMindSet();
         foreach (var mind in EntityManager.EntityQuery<MindContainerComponent>())

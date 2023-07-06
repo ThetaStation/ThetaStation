@@ -46,3 +46,13 @@
       whitelist:
         components:
         - Ammo
+
+- type: entity
+  id: TurretAmmoContainerRare
+  name: strange ammo container
+  parent: TurretAmmoContainerRegular
+  components:
+    - type: Sprite
+      drawdepth: Items
+      sprite: Theta/ShipEvent/Objects/AmmoContainer.rsi
+      state: container-rare
