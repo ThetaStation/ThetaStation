@@ -740,7 +740,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// <param name="removeReason">Message to show in announcement</param>
     /// <param name="announce">Whether to announce removal</param>
     /// <param name="killPoints">Whether to add points to other teams for hits on removed one</param>
-    private void RemoveTeam(ShipEventFaction team, string removeReason = "", bool announce = true, bool killPoints = true)
+    public void RemoveTeam(ShipEventFaction team, string removeReason = "", bool announce = true, bool killPoints = true)
     {
         if (announce)
         {
