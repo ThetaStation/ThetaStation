@@ -231,6 +231,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         _roundendTimer = 0;
         _lastAnnoucementMinute = 0;
         _lastTeamNumber = 0;
+        _boundsCompressionTimer = 0;
+        CurrentBoundsOffset = 0;
     }
 
     private void OnRoundEnd(RoundEndTextAppendEvent args)
