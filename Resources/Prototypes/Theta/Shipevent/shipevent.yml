@@ -31,7 +31,7 @@
       #map gen
       initialObstacleAmount: 200
       minFieldSize: 1000
-      maxFieldSize: 5000
+      maxFieldSize: 3000
       metersPerPlayer: 100
       roundFieldSizeTo: 1000
       shipTypes:
