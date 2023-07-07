@@ -30,7 +30,10 @@
 
       #map gen
       initialObstacleAmount: 200
-      maxSpawnOffset: 2000
+      minFieldSize: 1000
+      maxFieldSize: 5000
+      metersPerPlayer: 100
+      roundFieldSizeTo: 1000
       shipTypes:
         - "shiptype_arrowhead"
         - "shiptype_mule"
