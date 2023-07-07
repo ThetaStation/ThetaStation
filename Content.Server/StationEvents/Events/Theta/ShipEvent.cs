@@ -7,6 +7,7 @@ using Content.Shared.Theta.ShipEvent;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Server.Theta.ShipEvent.Systems;
 using Content.Shared.Shuttles.Components;
+using Robust.Server.Player;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -29,7 +30,13 @@ public sealed class ShipEventRuleComponent : Component
 
     [DataField("initialObstacleAmount")] public int InitialObstacleAmount;
 
-    [DataField("maxSpawnOffset")] public int MaxSpawnOffset;
+    [DataField("minFieldSize")] public int MinFieldSize;
+
+    [DataField("maxFieldSize")] public int MaxFieldSize;
+
+    [DataField("metersPerPlayer")] public int MetersPerPlayer; //scaling field based on online (at roundstart)
+
+    [DataField("roundFieldSizeTo")] public int RoundFieldSizeTo;
 
     [DataField("bonusInterval")] public int BonusInterval;
 
@@ -76,6 +83,7 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
     [Dependency] private DebrisGenerationSystem _debrisSys = default!;
     [Dependency] private readonly IMapManager _mapMan = default!;
     [Dependency] private readonly IPrototypeManager _protMan = default!;
+    [Dependency] private readonly IPlayerManager _playerMan = default!;
     [Dependency] private IRobustRandom _rand = default!;
 
     //Creates ComponentRegistryEntry for ChangeIFFOnSplit comp. Used by AddComponentProcessor to prevent splitted grids from getting labels.
@@ -118,7 +126,10 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         _shipSys.HUDPrototypeId = component.HUDPrototypeId;
         _shipSys.CaptainHUDPrototypeId = component.CaptainHUDPrototypeId;
         
-        _shipSys.MaxSpawnOffset = component.MaxSpawnOffset;
+        _shipSys.MaxSpawnOffset = Math.Clamp(
+            (int)Math.Round((float)_playerMan.PlayerCount * component.MetersPerPlayer / component.RoundFieldSizeTo) * component.RoundFieldSizeTo, 
+            component.MinFieldSize, 
+            component.MaxFieldSize);
 
         _shipSys.BoundsCompressionInterval = component.BoundsCompressionInterval;
         _shipSys.BoundsCompression = component.BoundsCompressionInterval > 0;
@@ -178,7 +189,7 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         _debrisSys.SpawnStructures(map,
             Vector2i.Zero,
             component.InitialObstacleAmount + _rand.Next(-component.ObstacleAmountAmplitude, component.ObstacleAmountAmplitude),
-            component.MaxSpawnOffset,
+            _shipSys.MaxSpawnOffset,
             obstacleStructProts,
             globalProcessors);
         
