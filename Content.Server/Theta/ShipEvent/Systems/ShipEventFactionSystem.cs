@@ -350,8 +350,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         }
     }
 
-    private void OnCapMenuToggle(EntityUid uid, ShipEventCaptainMenuComponent component,
-        ShipEventCaptainMenuToggleEvent args)
+    private void OnCapMenuToggle(EntityUid uid, ShipEventCaptainMenuComponent component, ShipEventCaptainMenuToggleEvent args)
     {
         if (!RuleSelected || args.Handled)
             return;
