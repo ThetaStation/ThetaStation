@@ -25,6 +25,7 @@ shipevent-respawn-dead = смерти всего её состава
 shipevent-respawn-tech = уничтожения жизненно важных компонентов её корабля
 
 shipevent-remove-default = недовольства адмирала
+shipevent-remove-noplayers = отсутствия активности
 
 shipevent-outofbounds = ВНИМАНИЕ! Ваша команда покинула пределы испытательного полигона. Немедленно вернитесь, в противном случае будут применены дисциплинарные меры.
 shipevent-boundscompressed = Границы полигона были сжаты на { $distance } метров.
