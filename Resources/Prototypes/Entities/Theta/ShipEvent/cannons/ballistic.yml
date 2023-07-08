@@ -95,6 +95,8 @@
     - type: Cannon
       ammoPrototypes:
         - "CartridgeArtilleryLight"
+        - "CartridgeArtilleryLightHE"
+        - "CartridgeArtilleryLightEMP"
     - type: Sprite
       layers:
         - state: syndie_lethal
