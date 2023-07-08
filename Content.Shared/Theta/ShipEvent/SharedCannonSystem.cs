@@ -20,6 +20,19 @@ public abstract class SharedCannonSystem : EntitySystem
         SubscribeAllEvent<RequestCannonShootEvent>(OnShootRequest);
         SubscribeAllEvent<RequestStopCannonShootEvent>(OnStopShootRequest);
         SubscribeLocalEvent<CannonComponent, AnchorStateChangedEvent>(OnAnchorChanged);
+        SubscribeLocalEvent<CannonComponent, ComponentInit>(OnInit);
+    }
+
+    private void OnInit(EntityUid uid, CannonComponent cannon, ComponentInit args)
+    {
+        foreach (IComponent comp in EntityManager.GetComponents(uid))
+        {
+            if (comp is AmmoProviderComponent provider)
+            {
+                cannon.AmmoProvider = provider;
+                break;
+            }
+        }
     }
 
     private void OnShootRequest(RequestCannonShootEvent ev, EntitySessionEventArgs args)

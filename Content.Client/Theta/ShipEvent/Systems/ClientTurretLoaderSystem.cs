@@ -45,7 +45,6 @@ public sealed class ClientTurretLoaderSystem : EntitySystem
 
         loader.BoundTurret = loaderState.BoundTurret;
         loader.MaxContainerCapacity = loaderState.MaxContainerCapacity;
-        loader.CurrentContainerCapacity = loaderState.CurrentContainerCapacity;
 
         if (loaderState.ContainerSlotID != null)
         {
