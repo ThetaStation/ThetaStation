@@ -58,7 +58,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     private readonly Dictionary<string, int> _projectileDamage = new(); //cached damage for projectile prototypes
     private int _lastTeamNumber;
     private float _teamCheckTimer;
-    private float _roundendTimer;
+    public float RoundendTimer;
     private float _boundsCompressionTimer;
     private float _lootboxTimer;
     private int _lastAnnoucementMinute;
@@ -136,7 +136,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             return;
         
         _teamCheckTimer += frametime;
-        _roundendTimer += frametime;
+        RoundendTimer += frametime;
         _boundsCompressionTimer += frametime;
         _lootboxTimer += frametime;
 
@@ -156,7 +156,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         if (!TimedRoundEnd)
             return;
 
-        var remaining = RoundDuration - _roundendTimer;
+        var remaining = RoundDuration - RoundendTimer;
         if (remaining <= 60 * 10 && _lastAnnoucementMinute == 0)
         {
             Announce(Loc.GetString("shipevent-roundendtimer-tenmins"));
@@ -243,7 +243,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         TargetMap = MapId.Nullspace;
         RuleSelected = false;
         _teamCheckTimer = 0;
-        _roundendTimer = 0;
+        RoundendTimer = 0;
         _lastAnnoucementMinute = 0;
         _lastTeamNumber = 0;
         _boundsCompressionTimer = 0;
