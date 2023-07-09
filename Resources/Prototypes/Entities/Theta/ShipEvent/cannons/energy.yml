@@ -31,7 +31,7 @@
       voltage: Medium
     - type: PowerNetworkBattery
       maxSupply: 0
-      maxChargeRate: 150
+      maxChargeRate: 120
       supplyRampTolerance: 0
       supplyRampRate: 0
     - type: ExaminableBattery
