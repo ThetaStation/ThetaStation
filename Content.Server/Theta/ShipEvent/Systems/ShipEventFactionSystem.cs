@@ -239,40 +239,15 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     public void OnRoundRestart(RoundRestartCleanupEvent ev)
     {
-        _projectileDamage.Clear();
         _lastTeamNumber = 0;
         _teamCheckTimer = 0;
         RoundendTimer = 0;
         _boundsCompressionTimer = 0;
         _lootboxTimer = 0;
         _lastAnnoucementMinute = 0;
-
-        RoundDuration = 0;
-        TimedRoundEnd = false;
-
-        TeamCheckInterval = 0;
-        RespawnDelay = 0;
-
-        LootboxSpawnInterval = 0;
-        LootboxSpawnAmount = 0;
-        LootboxLifetime = 0;
+        
         LootboxPrototypes.Clear();
-
-        MaxSpawnOffset = 0;
-
-        BonusInterval = 0;
-        PointsPerInterval = 0;
-
-        PointsPerHitMultiplier = 0;
-        PointsPerAssist = 0;
-        PointsPerKill = 0;
-        OutOfBoundsPenalty = 0;
-
-        PlayersPerTeamPlace = 0;
-
-        BoundsCompression = false;
-        BoundsCompressionInterval = 0;
-        BoundsCompressionDistance = 0;
+        
         CurrentBoundsOffset = 0;
 
         ShipTypes.Clear();
