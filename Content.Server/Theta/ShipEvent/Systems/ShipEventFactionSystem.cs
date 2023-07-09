@@ -114,7 +114,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, StartCollideEvent>(OnCollision);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, MobStateChangedEvent>(OnPlayerStateChange);
-        
+
         SubscribeLocalEvent<ShipEventLootboxSpawnTriggerComponent, UseInHandEvent>(OnLootboxSpawnTriggered);
 
         SubscribeAllEvent<ShuttleConsoleChangeShipNameMessage>(OnShipNameChange); //un-directed event since we will have duplicate subscriptions otherwise
@@ -134,7 +134,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     {
         if (!RuleSelected)
             return;
-        
+
         _teamCheckTimer += frametime;
         RoundendTimer += frametime;
         _boundsCompressionTimer += frametime;
@@ -239,15 +239,49 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     public void OnRoundRestart(RoundRestartCleanupEvent ev)
     {
-        Teams.Clear();
-        TargetMap = MapId.Nullspace;
-        RuleSelected = false;
+        _projectileDamage.Clear();
+        _lastTeamNumber = 0;
         _teamCheckTimer = 0;
         RoundendTimer = 0;
-        _lastAnnoucementMinute = 0;
-        _lastTeamNumber = 0;
         _boundsCompressionTimer = 0;
+        _lootboxTimer = 0;
+        _lastAnnoucementMinute = 0;
+
+        RoundDuration = 0;
+        TimedRoundEnd = false;
+
+        TeamCheckInterval = 0;
+        RespawnDelay = 0;
+
+        LootboxSpawnInterval = 0;
+        LootboxSpawnAmount = 0;
+        LootboxLifetime = 0;
+        LootboxPrototypes.Clear();
+
+        MaxSpawnOffset = 0;
+
+        BonusInterval = 0;
+        PointsPerInterval = 0;
+
+        PointsPerHitMultiplier = 0;
+        PointsPerAssist = 0;
+        PointsPerKill = 0;
+        OutOfBoundsPenalty = 0;
+
+        PlayersPerTeamPlace = 0;
+
+        BoundsCompression = false;
+        BoundsCompressionInterval = 0;
+        BoundsCompressionDistance = 0;
         CurrentBoundsOffset = 0;
+
+        ShipTypes.Clear();
+        TargetMap = MapId.Nullspace;
+
+        Teams.Clear();
+
+        ShipProcessors.Clear();
+        LootboxProcessors.Clear();
     }
 
     private void OnRoundEnd(RoundEndTextAppendEvent args)
@@ -821,7 +855,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                 toRemove.Add(team);
                 continue;
             }
-            
+
             if (!team.GetLivingMembersMinds().Any() && team.Members.Any() && !team.ShouldRespawn)
             {
                 RespawnTeam(
