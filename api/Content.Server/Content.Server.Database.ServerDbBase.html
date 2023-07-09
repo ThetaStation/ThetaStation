@@ -1,0 +1,3184 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class ServerDbBase
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class ServerDbBase
+   ">
+    <meta name="generator" content="docfx 2.56.7.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Content.Server.Database.ServerDbBase">
+  
+  
+  <h1 id="Content_Server_Database_ServerDbBase" data-uid="Content.Server.Database.ServerDbBase" class="text-break">Class ServerDbBase
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">ServerDbBase</span></div>
+      <div class="level2"><a class="xref" href="Content.Server.Database.ServerDbPostgres.html">ServerDbPostgres</a></div>
+      <div class="level2"><a class="xref" href="Content.Server.Database.ServerDbSqlite.html">ServerDbSqlite</a></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Content.Server.Database.html">Content.Server.Database</a></h6>
+  <h6><strong>Assembly</strong>: Content.Server.dll</h6>
+  <h5 id="Content_Server_Database_ServerDbBase_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class ServerDbBase : object</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_AddAdminAsync_Content_Server_Database_Admin_CancellationToken_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.AddAdminAsync(Content.Server.Database.Admin%2CCancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L604">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_AddAdminAsync_" data-uid="Content.Server.Database.ServerDbBase.AddAdminAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_AddAdminAsync_Content_Server_Database_Admin_CancellationToken_" data-uid="Content.Server.Database.ServerDbBase.AddAdminAsync(Content.Server.Database.Admin,CancellationToken)">AddAdminAsync(Admin, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task AddAdminAsync(Admin admin, CancellationToken cancel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Content.Server.Database.Admin</span></td>
+        <td><span class="parametername">admin</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">CancellationToken</span></td>
+        <td><span class="parametername">cancel</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_AddAdminLogs_List_Content_Server_Database_AdminLog__.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.AddAdminLogs(List%7BContent.Server.Database.AdminLog%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L734">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_AddAdminLogs_" data-uid="Content.Server.Database.ServerDbBase.AddAdminLogs*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_AddAdminLogs_List_Content_Server_Database_AdminLog__" data-uid="Content.Server.Database.ServerDbBase.AddAdminLogs(List{Content.Server.Database.AdminLog})">AddAdminLogs(List&lt;AdminLog&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task AddAdminLogs(List&lt;AdminLog&gt; logs)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">List</span>&lt;<span class="xref">Content.Server.Database.AdminLog</span>&gt;</td>
+        <td><span class="parametername">logs</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_AddAdminNote_Content_Server_Database_AdminNote_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.AddAdminNote(Content.Server.Database.AdminNote)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L962">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_AddAdminNote_" data-uid="Content.Server.Database.ServerDbBase.AddAdminNote*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_AddAdminNote_Content_Server_Database_AdminNote_" data-uid="Content.Server.Database.ServerDbBase.AddAdminNote(Content.Server.Database.AdminNote)">AddAdminNote(AdminNote)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Task&lt;int&gt; AddAdminNote(AdminNote note)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Content.Server.Database.AdminNote</span></td>
+        <td><span class="parametername">note</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<span class="xref">System.Int32</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_AddAdminRankAsync_Content_Server_Database_AdminRank_CancellationToken_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.AddAdminRankAsync(Content.Server.Database.AdminRank%2CCancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L635">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_AddAdminRankAsync_" data-uid="Content.Server.Database.ServerDbBase.AddAdminRankAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_AddAdminRankAsync_Content_Server_Database_AdminRank_CancellationToken_" data-uid="Content.Server.Database.ServerDbBase.AddAdminRankAsync(Content.Server.Database.AdminRank,CancellationToken)">AddAdminRankAsync(AdminRank, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task AddAdminRankAsync(AdminRank rank, CancellationToken cancel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Content.Server.Database.AdminRank</span></td>
+        <td><span class="parametername">rank</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">CancellationToken</span></td>
+        <td><span class="parametername">cancel</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_AddConnectionLogAsync_Robust_Shared_Network_NetUserId_System_String_IPAddress_ImmutableArray_System_Byte__System_Nullable_Content_Server_Database_ConnectionDenyReason__.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.AddConnectionLogAsync(Robust.Shared.Network.NetUserId%2CSystem.String%2CIPAddress%2CImmutableArray%7BSystem.Byte%7D%2CSystem.Nullable%7BContent.Server.Database.ConnectionDenyReason%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L542">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_AddConnectionLogAsync_" data-uid="Content.Server.Database.ServerDbBase.AddConnectionLogAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_AddConnectionLogAsync_Robust_Shared_Network_NetUserId_System_String_IPAddress_ImmutableArray_System_Byte__System_Nullable_Content_Server_Database_ConnectionDenyReason__" data-uid="Content.Server.Database.ServerDbBase.AddConnectionLogAsync(Robust.Shared.Network.NetUserId,System.String,IPAddress,ImmutableArray{System.Byte},System.Nullable{Content.Server.Database.ConnectionDenyReason})">AddConnectionLogAsync(NetUserId, String, IPAddress, ImmutableArray&lt;Byte&gt;, Nullable&lt;ConnectionDenyReason&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract Task&lt;int&gt; AddConnectionLogAsync(NetUserId userId, string userName, IPAddress address, ImmutableArray&lt;byte&gt; hwId, ConnectionDenyReason? denied)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Robust.Shared.Network.NetUserId</span></td>
+        <td><span class="parametername">userId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">userName</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">IPAddress</span></td>
+        <td><span class="parametername">address</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">ImmutableArray</span>&lt;<span class="xref">System.Byte</span>&gt;</td>
+        <td><span class="parametername">hwId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">Content.Server.Database.ConnectionDenyReason</span>&gt;</td>
+        <td><span class="parametername">denied</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<span class="xref">System.Int32</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_AddNewRound_Content_Server_Database_Server_Guid___.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.AddNewRound(Content.Server.Database.Server%2CGuid%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L644">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_AddNewRound_" data-uid="Content.Server.Database.ServerDbBase.AddNewRound*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_AddNewRound_Content_Server_Database_Server_Guid___" data-uid="Content.Server.Database.ServerDbBase.AddNewRound(Content.Server.Database.Server,Guid[])">AddNewRound(Server, Guid[])</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Task&lt;int&gt; AddNewRound(Server server, params Guid[] playerIds)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Content.Server.Database.Server</span></td>
+        <td><span class="parametername">server</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Guid</span>[]</td>
+        <td><span class="parametername">playerIds</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<span class="xref">System.Int32</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_AddOrGetServer_System_String_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.AddOrGetServer(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L712">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_AddOrGetServer_" data-uid="Content.Server.Database.ServerDbBase.AddOrGetServer*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_AddOrGetServer_System_String_" data-uid="Content.Server.Database.ServerDbBase.AddOrGetServer(System.String)">AddOrGetServer(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;(Server, bool existed)&gt; AddOrGetServer(string serverName)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">serverName</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<span class="xref">System.ValueTuple</span>&lt;<span class="xref">Content.Server.Database.Server</span>, <span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_AddRoundPlayers_System_Int32_Guid___.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.AddRoundPlayers(System.Int32%2CGuid%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L676">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_AddRoundPlayers_" data-uid="Content.Server.Database.ServerDbBase.AddRoundPlayers*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_AddRoundPlayers_System_Int32_Guid___" data-uid="Content.Server.Database.ServerDbBase.AddRoundPlayers(System.Int32,Guid[])">AddRoundPlayers(Int32, Guid[])</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task AddRoundPlayers(int id, Guid[] playerIds)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">id</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Guid</span>[]</td>
+        <td><span class="parametername">playerIds</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_AddServerBanAsync_Content_Server_Database_ServerBanDef_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.AddServerBanAsync(Content.Server.Database.ServerBanDef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L347">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_AddServerBanAsync_" data-uid="Content.Server.Database.ServerDbBase.AddServerBanAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_AddServerBanAsync_Content_Server_Database_ServerBanDef_" data-uid="Content.Server.Database.ServerDbBase.AddServerBanAsync(Content.Server.Database.ServerBanDef)">AddServerBanAsync(ServerBanDef)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract Task AddServerBanAsync(ServerBanDef serverBan)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Content.Server.Database.ServerBanDef.html">ServerBanDef</a></td>
+        <td><span class="parametername">serverBan</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_AddServerBanHitsAsync_System_Int32_IEnumerable_Content_Server_Database_ServerBanDef__.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.AddServerBanHitsAsync(System.Int32%2CIEnumerable%7BContent.Server.Database.ServerBanDef%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L549">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_AddServerBanHitsAsync_" data-uid="Content.Server.Database.ServerDbBase.AddServerBanHitsAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_AddServerBanHitsAsync_System_Int32_IEnumerable_Content_Server_Database_ServerBanDef__" data-uid="Content.Server.Database.ServerDbBase.AddServerBanHitsAsync(System.Int32,IEnumerable{Content.Server.Database.ServerBanDef})">AddServerBanHitsAsync(Int32, IEnumerable&lt;ServerBanDef&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task AddServerBanHitsAsync(int connection, IEnumerable&lt;ServerBanDef&gt; bans)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">connection</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="Content.Server.Database.ServerBanDef.html">ServerBanDef</a>&gt;</td>
+        <td><span class="parametername">bans</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_AddServerRoleBanAsync_Content_Server_Database_ServerRoleBanDef_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.AddServerRoleBanAsync(Content.Server.Database.ServerRoleBanDef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L424">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_AddServerRoleBanAsync_" data-uid="Content.Server.Database.ServerDbBase.AddServerRoleBanAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_AddServerRoleBanAsync_Content_Server_Database_ServerRoleBanDef_" data-uid="Content.Server.Database.ServerDbBase.AddServerRoleBanAsync(Content.Server.Database.ServerRoleBanDef)">AddServerRoleBanAsync(ServerRoleBanDef)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract Task AddServerRoleBanAsync(ServerRoleBanDef serverRoleBan)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Content.Server.Database.ServerRoleBanDef.html">ServerRoleBanDef</a></td>
+        <td><span class="parametername">serverRoleBan</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_AddServerRoleUnbanAsync_Content_Server_Database_ServerRoleUnbanDef_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.AddServerRoleUnbanAsync(Content.Server.Database.ServerRoleUnbanDef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L425">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_AddServerRoleUnbanAsync_" data-uid="Content.Server.Database.ServerDbBase.AddServerRoleUnbanAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_AddServerRoleUnbanAsync_Content_Server_Database_ServerRoleUnbanDef_" data-uid="Content.Server.Database.ServerDbBase.AddServerRoleUnbanAsync(Content.Server.Database.ServerRoleUnbanDef)">AddServerRoleUnbanAsync(ServerRoleUnbanDef)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract Task AddServerRoleUnbanAsync(ServerRoleUnbanDef serverRoleUnban)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Content.Server.Database.ServerRoleUnbanDef.html">ServerRoleUnbanDef</a></td>
+        <td><span class="parametername">serverRoleUnban</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_AddServerUnbanAsync_Content_Server_Database_ServerUnbanDef_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.AddServerUnbanAsync(Content.Server.Database.ServerUnbanDef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L348">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_AddServerUnbanAsync_" data-uid="Content.Server.Database.ServerDbBase.AddServerUnbanAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_AddServerUnbanAsync_Content_Server_Database_ServerUnbanDef_" data-uid="Content.Server.Database.ServerDbBase.AddServerUnbanAsync(Content.Server.Database.ServerUnbanDef)">AddServerUnbanAsync(ServerUnbanDef)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract Task AddServerUnbanAsync(ServerUnbanDef serverUnban)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Content.Server.Database.ServerUnbanDef.html">ServerUnbanDef</a></td>
+        <td><span class="parametername">serverUnban</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_AddToWhitelistAsync_Robust_Shared_Network_NetUserId_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.AddToWhitelistAsync(Robust.Shared.Network.NetUserId)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L890">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_AddToWhitelistAsync_" data-uid="Content.Server.Database.ServerDbBase.AddToWhitelistAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_AddToWhitelistAsync_Robust_Shared_Network_NetUserId_" data-uid="Content.Server.Database.ServerDbBase.AddToWhitelistAsync(Robust.Shared.Network.NetUserId)">AddToWhitelistAsync(NetUserId)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task AddToWhitelistAsync(NetUserId player)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Robust.Shared.Network.NetUserId</span></td>
+        <td><span class="parametername">player</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_AddUploadedResourceLogAsync_Robust_Shared_Network_NetUserId_DateTime_System_String_System_Byte___.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.AddUploadedResourceLogAsync(Robust.Shared.Network.NetUserId%2CDateTime%2CSystem.String%2CSystem.Byte%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L934">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_AddUploadedResourceLogAsync_" data-uid="Content.Server.Database.ServerDbBase.AddUploadedResourceLogAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_AddUploadedResourceLogAsync_Robust_Shared_Network_NetUserId_DateTime_System_String_System_Byte___" data-uid="Content.Server.Database.ServerDbBase.AddUploadedResourceLogAsync(Robust.Shared.Network.NetUserId,DateTime,System.String,System.Byte[])">AddUploadedResourceLogAsync(NetUserId, DateTime, String, Byte[])</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task AddUploadedResourceLogAsync(NetUserId user, DateTime date, string path, byte[] data)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Robust.Shared.Network.NetUserId</span></td>
+        <td><span class="parametername">user</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">DateTime</span></td>
+        <td><span class="parametername">date</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">data</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_AssignUserIdAsync_System_String_Robust_Shared_Network_NetUserId_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.AssignUserIdAsync(System.String%2CRobust.Shared.Network.NetUserId)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L291">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_AssignUserIdAsync_" data-uid="Content.Server.Database.ServerDbBase.AssignUserIdAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_AssignUserIdAsync_System_String_Robust_Shared_Network_NetUserId_" data-uid="Content.Server.Database.ServerDbBase.AssignUserIdAsync(System.String,Robust.Shared.Network.NetUserId)">AssignUserIdAsync(String, NetUserId)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task AssignUserIdAsync(string name, NetUserId netUserId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Robust.Shared.Network.NetUserId</span></td>
+        <td><span class="parametername">netUserId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_CountAdminLogs_System_Int32_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.CountAdminLogs(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L873">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_CountAdminLogs_" data-uid="Content.Server.Database.ServerDbBase.CountAdminLogs*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_CountAdminLogs_System_Int32_" data-uid="Content.Server.Database.ServerDbBase.CountAdminLogs(System.Int32)">CountAdminLogs(Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;int&gt; CountAdminLogs(int round)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">round</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<span class="xref">System.Int32</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_DeleteAdminNote_System_Int32_Guid_DateTime_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.DeleteAdminNote(System.Int32%2CGuid%2CDateTime)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L996">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_DeleteAdminNote_" data-uid="Content.Server.Database.ServerDbBase.DeleteAdminNote*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_DeleteAdminNote_System_Int32_Guid_DateTime_" data-uid="Content.Server.Database.ServerDbBase.DeleteAdminNote(System.Int32,Guid,DateTime)">DeleteAdminNote(Int32, Guid, DateTime)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task DeleteAdminNote(int id, Guid deletedBy, DateTime deletedAt)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">id</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Guid</span></td>
+        <td><span class="parametername">deletedBy</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">DateTime</span></td>
+        <td><span class="parametername">deletedAt</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_DeleteSlotAndSetSelectedIndex_Robust_Shared_Network_NetUserId_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.DeleteSlotAndSetSelectedIndex(Robust.Shared.Network.NetUserId%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L129">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_DeleteSlotAndSetSelectedIndex_" data-uid="Content.Server.Database.ServerDbBase.DeleteSlotAndSetSelectedIndex*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_DeleteSlotAndSetSelectedIndex_Robust_Shared_Network_NetUserId_System_Int32_System_Int32_" data-uid="Content.Server.Database.ServerDbBase.DeleteSlotAndSetSelectedIndex(Robust.Shared.Network.NetUserId,System.Int32,System.Int32)">DeleteSlotAndSetSelectedIndex(NetUserId, Int32, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task DeleteSlotAndSetSelectedIndex(NetUserId userId, int deleteSlot, int newSlot)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Robust.Shared.Network.NetUserId</span></td>
+        <td><span class="parametername">userId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">deleteSlot</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">newSlot</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_EditAdminNote_System_Int32_System_String_Guid_DateTime_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.EditAdminNote(System.Int32%2CSystem.String%2CGuid%2CDateTime)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L1009">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_EditAdminNote_" data-uid="Content.Server.Database.ServerDbBase.EditAdminNote*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_EditAdminNote_System_Int32_System_String_Guid_DateTime_" data-uid="Content.Server.Database.ServerDbBase.EditAdminNote(System.Int32,System.String,Guid,DateTime)">EditAdminNote(Int32, String, Guid, DateTime)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task EditAdminNote(int id, string message, Guid editedBy, DateTime editedAt)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">id</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">message</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Guid</span></td>
+        <td><span class="parametername">editedBy</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">DateTime</span></td>
+        <td><span class="parametername">editedAt</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_GetAdminDataForAsync_Robust_Shared_Network_NetUserId_CancellationToken_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.GetAdminDataForAsync(Robust.Shared.Network.NetUserId%2CCancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L570">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_GetAdminDataForAsync_" data-uid="Content.Server.Database.ServerDbBase.GetAdminDataForAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_GetAdminDataForAsync_Robust_Shared_Network_NetUserId_CancellationToken_" data-uid="Content.Server.Database.ServerDbBase.GetAdminDataForAsync(Robust.Shared.Network.NetUserId,CancellationToken)">GetAdminDataForAsync(NetUserId, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;Admin&gt; GetAdminDataForAsync(NetUserId userId, CancellationToken cancel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Robust.Shared.Network.NetUserId</span></td>
+        <td><span class="parametername">userId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">CancellationToken</span></td>
+        <td><span class="parametername">cancel</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<span class="xref">Content.Server.Database.Admin</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_GetAdminLogMessages_Content_Server_Administration_Logs_LogFilter_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.GetAdminLogMessages(Content.Server.Administration.Logs.LogFilter)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L833">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_GetAdminLogMessages_" data-uid="Content.Server.Database.ServerDbBase.GetAdminLogMessages*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_GetAdminLogMessages_Content_Server_Administration_Logs_LogFilter_" data-uid="Content.Server.Database.ServerDbBase.GetAdminLogMessages(Content.Server.Administration.Logs.LogFilter)">GetAdminLogMessages(LogFilter)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IAsyncEnumerable&lt;string&gt; GetAdminLogMessages(LogFilter filter = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Content.Server.Administration.Logs.LogFilter.html">LogFilter</a></td>
+        <td><span class="parametername">filter</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IAsyncEnumerable</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_GetAdminLogs_Content_Server_Administration_Logs_LogFilter_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.GetAdminLogs(Content.Server.Administration.Logs.LogFilter)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L844">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_GetAdminLogs_" data-uid="Content.Server.Database.ServerDbBase.GetAdminLogs*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_GetAdminLogs_Content_Server_Administration_Logs_LogFilter_" data-uid="Content.Server.Database.ServerDbBase.GetAdminLogs(Content.Server.Administration.Logs.LogFilter)">GetAdminLogs(LogFilter)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IAsyncEnumerable&lt;SharedAdminLog&gt; GetAdminLogs(LogFilter filter = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Content.Server.Administration.Logs.LogFilter.html">LogFilter</a></td>
+        <td><span class="parametername">filter</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IAsyncEnumerable</span>&lt;<span class="xref">Content.Shared.Administration.Logs.SharedAdminLog</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_GetAdminLogsJson_Content_Server_Administration_Logs_LogFilter_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.GetAdminLogsJson(Content.Server.Administration.Logs.LogFilter)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L862">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_GetAdminLogsJson_" data-uid="Content.Server.Database.ServerDbBase.GetAdminLogsJson*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_GetAdminLogsJson_Content_Server_Administration_Logs_LogFilter_" data-uid="Content.Server.Database.ServerDbBase.GetAdminLogsJson(Content.Server.Administration.Logs.LogFilter)">GetAdminLogsJson(LogFilter)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IAsyncEnumerable&lt;JsonDocument&gt; GetAdminLogsJson(LogFilter filter = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Content.Server.Administration.Logs.LogFilter.html">LogFilter</a></td>
+        <td><span class="parametername">filter</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IAsyncEnumerable</span>&lt;<span class="xref">JsonDocument</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_GetAdminNote_System_Int32_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.GetAdminNote(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L970">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_GetAdminNote_" data-uid="Content.Server.Database.ServerDbBase.GetAdminNote*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_GetAdminNote_System_Int32_" data-uid="Content.Server.Database.ServerDbBase.GetAdminNote(System.Int32)">GetAdminNote(Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;AdminNote&gt; GetAdminNote(int id)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">id</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<span class="xref">Content.Server.Database.AdminNote</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_GetAdminNotes_Guid_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.GetAdminNotes(Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L983">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_GetAdminNotes_" data-uid="Content.Server.Database.ServerDbBase.GetAdminNotes*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_GetAdminNotes_Guid_" data-uid="Content.Server.Database.ServerDbBase.GetAdminNotes(Guid)">GetAdminNotes(Guid)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;List&lt;AdminNote&gt;&gt; GetAdminNotes(Guid player)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Guid</span></td>
+        <td><span class="parametername">player</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<span class="xref">List</span>&lt;<span class="xref">Content.Server.Database.AdminNote</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_GetAdminRankDataForAsync_System_Int32_CancellationToken_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.GetAdminRankDataForAsync(System.Int32%2CCancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L585">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_GetAdminRankDataForAsync_" data-uid="Content.Server.Database.ServerDbBase.GetAdminRankDataForAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_GetAdminRankDataForAsync_System_Int32_CancellationToken_" data-uid="Content.Server.Database.ServerDbBase.GetAdminRankDataForAsync(System.Int32,CancellationToken)">GetAdminRankDataForAsync(Int32, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;AdminRank&gt; GetAdminRankDataForAsync(int id, CancellationToken cancel = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">id</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">CancellationToken</span></td>
+        <td><span class="parametername">cancel</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<span class="xref">Content.Server.Database.AdminRank</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_GetAllAdminAndRanksAsync_CancellationToken_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.GetAllAdminAndRanksAsync(CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L582">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_GetAllAdminAndRanksAsync_" data-uid="Content.Server.Database.ServerDbBase.GetAllAdminAndRanksAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_GetAllAdminAndRanksAsync_CancellationToken_" data-uid="Content.Server.Database.ServerDbBase.GetAllAdminAndRanksAsync(CancellationToken)">GetAllAdminAndRanksAsync(CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract Task&lt;((Admin, string? lastUserName)[] admins, AdminRank[])&gt; GetAllAdminAndRanksAsync(CancellationToken cancel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">CancellationToken</span></td>
+        <td><span class="parametername">cancel</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<span class="xref">System.ValueTuple</span>&lt;<span class="xref">System.ValueTuple</span>&lt;<span class="xref">Content.Server.Database.Admin</span>, <span class="xref">System.Nullable</span>&lt;<span class="xref">System.String</span>&gt;&gt;[], <span class="xref">Content.Server.Database.AdminRank</span>[]&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_GetAssignedUserIdAsync_System_String_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.GetAssignedUserIdAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L283">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_GetAssignedUserIdAsync_" data-uid="Content.Server.Database.ServerDbBase.GetAssignedUserIdAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_GetAssignedUserIdAsync_System_String_" data-uid="Content.Server.Database.ServerDbBase.GetAssignedUserIdAsync(System.String)">GetAssignedUserIdAsync(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;NetUserId?&gt; GetAssignedUserIdAsync(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<span class="xref">System.Nullable</span>&lt;<span class="xref">Robust.Shared.Network.NetUserId</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_GetBanExemption_Robust_Shared_Network_NetUserId_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.GetBanExemption(Robust.Shared.Network.NetUserId)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L387">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_GetBanExemption_" data-uid="Content.Server.Database.ServerDbBase.GetBanExemption*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_GetBanExemption_Robust_Shared_Network_NetUserId_" data-uid="Content.Server.Database.ServerDbBase.GetBanExemption(Robust.Shared.Network.NetUserId)">GetBanExemption(NetUserId)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;ServerBanExemptFlags&gt; GetBanExemption(NetUserId userId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Robust.Shared.Network.NetUserId</span></td>
+        <td><span class="parametername">userId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<span class="xref">Content.Server.Database.ServerBanExemptFlags</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_GetBanExemptionCore_Content_Server_Database_ServerDbBase_DbGuard_System_Nullable_Robust_Shared_Network_NetUserId__.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.GetBanExemptionCore(Content.Server.Database.ServerDbBase.DbGuard%2CSystem.Nullable%7BRobust.Shared.Network.NetUserId%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L350">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_GetBanExemptionCore_" data-uid="Content.Server.Database.ServerDbBase.GetBanExemptionCore*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_GetBanExemptionCore_Content_Server_Database_ServerDbBase_DbGuard_System_Nullable_Robust_Shared_Network_NetUserId__" data-uid="Content.Server.Database.ServerDbBase.GetBanExemptionCore(Content.Server.Database.ServerDbBase.DbGuard,System.Nullable{Robust.Shared.Network.NetUserId})">GetBanExemptionCore(ServerDbBase.DbGuard, Nullable&lt;NetUserId&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected static Task&lt;ServerBanExemptFlags?&gt; GetBanExemptionCore(ServerDbBase.DbGuard db, NetUserId? userId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Content.Server.Database.ServerDbBase.DbGuard.html">ServerDbBase.DbGuard</a></td>
+        <td><span class="parametername">db</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">Robust.Shared.Network.NetUserId</span>&gt;</td>
+        <td><span class="parametername">userId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<span class="xref">System.Nullable</span>&lt;<span class="xref">Content.Server.Database.ServerBanExemptFlags</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_GetDb.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.GetDb%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L1023">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_GetDb_" data-uid="Content.Server.Database.ServerDbBase.GetDb*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_GetDb" data-uid="Content.Server.Database.ServerDbBase.GetDb">GetDb()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract Task&lt;ServerDbBase.DbGuard&gt; GetDb()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<a class="xref" href="Content.Server.Database.ServerDbBase.DbGuard.html">ServerDbBase.DbGuard</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_GetLastReadRules_Robust_Shared_Network_NetUserId_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.GetLastReadRules(Robust.Shared.Network.NetUserId)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L906">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_GetLastReadRules_" data-uid="Content.Server.Database.ServerDbBase.GetLastReadRules*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_GetLastReadRules_Robust_Shared_Network_NetUserId_" data-uid="Content.Server.Database.ServerDbBase.GetLastReadRules(Robust.Shared.Network.NetUserId)">GetLastReadRules(NetUserId)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;DateTime?&gt; GetLastReadRules(NetUserId player)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Robust.Shared.Network.NetUserId</span></td>
+        <td><span class="parametername">player</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<span class="xref">System.Nullable</span>&lt;<span class="xref">DateTime</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_GetPlayerPreferencesAsync_Robust_Shared_Network_NetUserId_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.GetPlayerPreferencesAsync(Robust.Shared.Network.NetUserId)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L21">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_GetPlayerPreferencesAsync_" data-uid="Content.Server.Database.ServerDbBase.GetPlayerPreferencesAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_GetPlayerPreferencesAsync_Robust_Shared_Network_NetUserId_" data-uid="Content.Server.Database.ServerDbBase.GetPlayerPreferencesAsync(Robust.Shared.Network.NetUserId)">GetPlayerPreferencesAsync(NetUserId)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;PlayerPreferences&gt; GetPlayerPreferencesAsync(NetUserId userId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Robust.Shared.Network.NetUserId</span></td>
+        <td><span class="parametername">userId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<a class="xref" href="../Content.Shared/Content.Shared.Preferences.PlayerPreferences.html">PlayerPreferences</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_GetPlayerRecordByUserId_Robust_Shared_Network_NetUserId_CancellationToken_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.GetPlayerRecordByUserId(Robust.Shared.Network.NetUserId%2CCancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L525">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_GetPlayerRecordByUserId_" data-uid="Content.Server.Database.ServerDbBase.GetPlayerRecordByUserId*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_GetPlayerRecordByUserId_Robust_Shared_Network_NetUserId_CancellationToken_" data-uid="Content.Server.Database.ServerDbBase.GetPlayerRecordByUserId(Robust.Shared.Network.NetUserId,CancellationToken)">GetPlayerRecordByUserId(NetUserId, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;PlayerRecord&gt; GetPlayerRecordByUserId(NetUserId userId, CancellationToken cancel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Robust.Shared.Network.NetUserId</span></td>
+        <td><span class="parametername">userId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">CancellationToken</span></td>
+        <td><span class="parametername">cancel</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<a class="xref" href="Content.Server.Database.PlayerRecord.html">PlayerRecord</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_GetPlayerRecordByUserName_System_String_CancellationToken_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.GetPlayerRecordByUserName(System.String%2CCancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L511">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_GetPlayerRecordByUserName_" data-uid="Content.Server.Database.ServerDbBase.GetPlayerRecordByUserName*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_GetPlayerRecordByUserName_System_String_CancellationToken_" data-uid="Content.Server.Database.ServerDbBase.GetPlayerRecordByUserName(System.String,CancellationToken)">GetPlayerRecordByUserName(String, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;PlayerRecord&gt; GetPlayerRecordByUserName(string userName, CancellationToken cancel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">userName</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">CancellationToken</span></td>
+        <td><span class="parametername">cancel</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<a class="xref" href="Content.Server.Database.PlayerRecord.html">PlayerRecord</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_GetPlayTimes_Guid_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.GetPlayTimes(Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L429">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_GetPlayTimes_" data-uid="Content.Server.Database.ServerDbBase.GetPlayTimes*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_GetPlayTimes_Guid_" data-uid="Content.Server.Database.ServerDbBase.GetPlayTimes(Guid)">GetPlayTimes(Guid)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;List&lt;PlayTime&gt;&gt; GetPlayTimes(Guid player)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Guid</span></td>
+        <td><span class="parametername">player</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<span class="xref">List</span>&lt;<span class="xref">Content.Server.Database.PlayTime</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_GetRound_System_Int32_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.GetRound(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L665">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_GetRound_" data-uid="Content.Server.Database.ServerDbBase.GetRound*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_GetRound_System_Int32_" data-uid="Content.Server.Database.ServerDbBase.GetRound(System.Int32)">GetRound(Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;Round&gt; GetRound(int id)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">id</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<span class="xref">Content.Server.Database.Round</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_GetServerBanAsync_System_Int32_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.GetServerBanAsync(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L315">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_GetServerBanAsync_" data-uid="Content.Server.Database.ServerDbBase.GetServerBanAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_GetServerBanAsync_System_Int32_" data-uid="Content.Server.Database.ServerDbBase.GetServerBanAsync(System.Int32)">GetServerBanAsync(Int32)</h4>
+  <div class="markdown level1 summary"><p>Looks up a ban by id.
+This will return a pardoned ban as well.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract Task&lt;ServerBanDef&gt; GetServerBanAsync(int id)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">id</span></td>
+        <td><p>The ban id to look for.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<a class="xref" href="Content.Server.Database.ServerBanDef.html">ServerBanDef</a>&gt;</td>
+        <td><p>The ban with the given id or null if none exist.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_GetServerBanAsync_System_Nullable_IPAddress__System_Nullable_Robust_Shared_Network_NetUserId__System_Nullable_ImmutableArray_System_Byte___.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.GetServerBanAsync(System.Nullable%7BIPAddress%7D%2CSystem.Nullable%7BRobust.Shared.Network.NetUserId%7D%2CSystem.Nullable%7BImmutableArray%7BSystem.Byte%7D%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L326">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_GetServerBanAsync_" data-uid="Content.Server.Database.ServerDbBase.GetServerBanAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_GetServerBanAsync_System_Nullable_IPAddress__System_Nullable_Robust_Shared_Network_NetUserId__System_Nullable_ImmutableArray_System_Byte___" data-uid="Content.Server.Database.ServerDbBase.GetServerBanAsync(System.Nullable{IPAddress},System.Nullable{Robust.Shared.Network.NetUserId},System.Nullable{ImmutableArray{System.Byte}})">GetServerBanAsync(Nullable&lt;IPAddress&gt;, Nullable&lt;NetUserId&gt;, Nullable&lt;ImmutableArray&lt;Byte&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Looks up an user's most recent received un-pardoned ban.
+This will NOT return a pardoned ban.
+One of <see cref="!:address"></see> or <see cref="!:userId"></see> need to not be null.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract Task&lt;ServerBanDef&gt; GetServerBanAsync(IPAddress? address, NetUserId? userId, ImmutableArray&lt;byte&gt;? hwId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">IPAddress</span>&gt;</td>
+        <td><span class="parametername">address</span></td>
+        <td><p>The ip address of the user.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">Robust.Shared.Network.NetUserId</span>&gt;</td>
+        <td><span class="parametername">userId</span></td>
+        <td><p>The id of the user.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">ImmutableArray</span>&lt;<span class="xref">System.Byte</span>&gt;&gt;</td>
+        <td><span class="parametername">hwId</span></td>
+        <td><p>The HWId of the user.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<a class="xref" href="Content.Server.Database.ServerBanDef.html">ServerBanDef</a>&gt;</td>
+        <td><p>The user's latest received un-pardoned ban, or null if none exist.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_GetServerBansAsync_System_Nullable_IPAddress__System_Nullable_Robust_Shared_Network_NetUserId__System_Nullable_ImmutableArray_System_Byte___System_Boolean_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.GetServerBansAsync(System.Nullable%7BIPAddress%7D%2CSystem.Nullable%7BRobust.Shared.Network.NetUserId%7D%2CSystem.Nullable%7BImmutableArray%7BSystem.Byte%7D%7D%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L341">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_GetServerBansAsync_" data-uid="Content.Server.Database.ServerDbBase.GetServerBansAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_GetServerBansAsync_System_Nullable_IPAddress__System_Nullable_Robust_Shared_Network_NetUserId__System_Nullable_ImmutableArray_System_Byte___System_Boolean_" data-uid="Content.Server.Database.ServerDbBase.GetServerBansAsync(System.Nullable{IPAddress},System.Nullable{Robust.Shared.Network.NetUserId},System.Nullable{ImmutableArray{System.Byte}},System.Boolean)">GetServerBansAsync(Nullable&lt;IPAddress&gt;, Nullable&lt;NetUserId&gt;, Nullable&lt;ImmutableArray&lt;Byte&gt;&gt;, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Looks up an user's ban history.
+This will return pardoned bans as well.
+One of <see cref="!:address"></see> or <see cref="!:userId"></see> need to not be null.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract Task&lt;List&lt;ServerBanDef&gt;&gt; GetServerBansAsync(IPAddress? address, NetUserId? userId, ImmutableArray&lt;byte&gt;? hwId, bool includeUnbanned)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">IPAddress</span>&gt;</td>
+        <td><span class="parametername">address</span></td>
+        <td><p>The ip address of the user.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">Robust.Shared.Network.NetUserId</span>&gt;</td>
+        <td><span class="parametername">userId</span></td>
+        <td><p>The id of the user.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">ImmutableArray</span>&lt;<span class="xref">System.Byte</span>&gt;&gt;</td>
+        <td><span class="parametername">hwId</span></td>
+        <td><p>The HWId of the user.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeUnbanned</span></td>
+        <td><p>Include pardoned and expired bans.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<span class="xref">List</span>&lt;<a class="xref" href="Content.Server.Database.ServerBanDef.html">ServerBanDef</a>&gt;&gt;</td>
+        <td><p>The user's ban history.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_GetServerRoleBanAsync_System_Int32_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.GetServerRoleBanAsync(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L407">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_GetServerRoleBanAsync_" data-uid="Content.Server.Database.ServerDbBase.GetServerRoleBanAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_GetServerRoleBanAsync_System_Int32_" data-uid="Content.Server.Database.ServerDbBase.GetServerRoleBanAsync(System.Int32)">GetServerRoleBanAsync(Int32)</h4>
+  <div class="markdown level1 summary"><p>Looks up a role ban by id.
+This will return a pardoned role ban as well.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract Task&lt;ServerRoleBanDef&gt; GetServerRoleBanAsync(int id)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">id</span></td>
+        <td><p>The role ban id to look for.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<a class="xref" href="Content.Server.Database.ServerRoleBanDef.html">ServerRoleBanDef</a>&gt;</td>
+        <td><p>The role ban with the given id or null if none exist.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_GetServerRoleBansAsync_System_Nullable_IPAddress__System_Nullable_Robust_Shared_Network_NetUserId__System_Nullable_ImmutableArray_System_Byte___System_Boolean_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.GetServerRoleBansAsync(System.Nullable%7BIPAddress%7D%2CSystem.Nullable%7BRobust.Shared.Network.NetUserId%7D%2CSystem.Nullable%7BImmutableArray%7BSystem.Byte%7D%7D%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L419">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_GetServerRoleBansAsync_" data-uid="Content.Server.Database.ServerDbBase.GetServerRoleBansAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_GetServerRoleBansAsync_System_Nullable_IPAddress__System_Nullable_Robust_Shared_Network_NetUserId__System_Nullable_ImmutableArray_System_Byte___System_Boolean_" data-uid="Content.Server.Database.ServerDbBase.GetServerRoleBansAsync(System.Nullable{IPAddress},System.Nullable{Robust.Shared.Network.NetUserId},System.Nullable{ImmutableArray{System.Byte}},System.Boolean)">GetServerRoleBansAsync(Nullable&lt;IPAddress&gt;, Nullable&lt;NetUserId&gt;, Nullable&lt;ImmutableArray&lt;Byte&gt;&gt;, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Looks up an user's role ban history.
+This will return pardoned role bans based on the <see cref="!:includeUnbanned"></see> bool.
+Requires one of <see cref="!:address"></see>, <see cref="!:userId"></see>, or <see cref="!:hwId"></see> to not be null.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract Task&lt;List&lt;ServerRoleBanDef&gt;&gt; GetServerRoleBansAsync(IPAddress? address, NetUserId? userId, ImmutableArray&lt;byte&gt;? hwId, bool includeUnbanned)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">IPAddress</span>&gt;</td>
+        <td><span class="parametername">address</span></td>
+        <td><p>The IP address of the user.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">Robust.Shared.Network.NetUserId</span>&gt;</td>
+        <td><span class="parametername">userId</span></td>
+        <td><p>The NetUserId of the user.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">ImmutableArray</span>&lt;<span class="xref">System.Byte</span>&gt;&gt;</td>
+        <td><span class="parametername">hwId</span></td>
+        <td><p>The Hardware Id of the user.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeUnbanned</span></td>
+        <td><p>Whether expired and pardoned bans are included.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<span class="xref">List</span>&lt;<a class="xref" href="Content.Server.Database.ServerRoleBanDef.html">ServerRoleBanDef</a>&gt;&gt;</td>
+        <td><p>The user's role ban history.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_GetWhitelistStatusAsync_Robust_Shared_Network_NetUserId_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.GetWhitelistStatusAsync(Robust.Shared.Network.NetUserId)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L883">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_GetWhitelistStatusAsync_" data-uid="Content.Server.Database.ServerDbBase.GetWhitelistStatusAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_GetWhitelistStatusAsync_Robust_Shared_Network_NetUserId_" data-uid="Content.Server.Database.ServerDbBase.GetWhitelistStatusAsync(Robust.Shared.Network.NetUserId)">GetWhitelistStatusAsync(NetUserId)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;bool&gt; GetWhitelistStatusAsync(NetUserId player)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Robust.Shared.Network.NetUserId</span></td>
+        <td><span class="parametername">player</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<span class="xref">System.Boolean</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_InitPrefsAsync_Robust_Shared_Network_NetUserId_Content_Shared_Preferences_ICharacterProfile_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.InitPrefsAsync(Robust.Shared.Network.NetUserId%2CContent.Shared.Preferences.ICharacterProfile)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L108">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_InitPrefsAsync_" data-uid="Content.Server.Database.ServerDbBase.InitPrefsAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_InitPrefsAsync_Robust_Shared_Network_NetUserId_Content_Shared_Preferences_ICharacterProfile_" data-uid="Content.Server.Database.ServerDbBase.InitPrefsAsync(Robust.Shared.Network.NetUserId,Content.Shared.Preferences.ICharacterProfile)">InitPrefsAsync(NetUserId, ICharacterProfile)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;PlayerPreferences&gt; InitPrefsAsync(NetUserId userId, ICharacterProfile defaultProfile)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Robust.Shared.Network.NetUserId</span></td>
+        <td><span class="parametername">userId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Preferences.ICharacterProfile.html">ICharacterProfile</a></td>
+        <td><span class="parametername">defaultProfile</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<a class="xref" href="../Content.Shared/Content.Shared.Preferences.PlayerPreferences.html">PlayerPreferences</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_MakePlayerRecord_Content_Server_Database_Player_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.MakePlayerRecord(Content.Server.Database.Player)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L535">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_MakePlayerRecord_" data-uid="Content.Server.Database.ServerDbBase.MakePlayerRecord*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_MakePlayerRecord_Content_Server_Database_Player_" data-uid="Content.Server.Database.ServerDbBase.MakePlayerRecord(Content.Server.Database.Player)">MakePlayerRecord(Player)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract PlayerRecord MakePlayerRecord(Player player)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Content.Server.Database.Player</span></td>
+        <td><span class="parametername">player</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Content.Server.Database.PlayerRecord.html">PlayerRecord</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_PurgeUploadedResourceLogAsync_System_Int32_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.PurgeUploadedResourceLogAsync(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L942">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_PurgeUploadedResourceLogAsync_" data-uid="Content.Server.Database.ServerDbBase.PurgeUploadedResourceLogAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_PurgeUploadedResourceLogAsync_System_Int32_" data-uid="Content.Server.Database.ServerDbBase.PurgeUploadedResourceLogAsync(System.Int32)">PurgeUploadedResourceLogAsync(Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task PurgeUploadedResourceLogAsync(int days)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">days</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_RemoveAdminAsync_Robust_Shared_Network_NetUserId_CancellationToken_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.RemoveAdminAsync(Robust.Shared.Network.NetUserId%2CCancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L594">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_RemoveAdminAsync_" data-uid="Content.Server.Database.ServerDbBase.RemoveAdminAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_RemoveAdminAsync_Robust_Shared_Network_NetUserId_CancellationToken_" data-uid="Content.Server.Database.ServerDbBase.RemoveAdminAsync(Robust.Shared.Network.NetUserId,CancellationToken)">RemoveAdminAsync(NetUserId, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task RemoveAdminAsync(NetUserId userId, CancellationToken cancel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Robust.Shared.Network.NetUserId</span></td>
+        <td><span class="parametername">userId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">CancellationToken</span></td>
+        <td><span class="parametername">cancel</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_RemoveAdminRankAsync_System_Int32_CancellationToken_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.RemoveAdminRankAsync(System.Int32%2CCancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L625">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_RemoveAdminRankAsync_" data-uid="Content.Server.Database.ServerDbBase.RemoveAdminRankAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_RemoveAdminRankAsync_System_Int32_CancellationToken_" data-uid="Content.Server.Database.ServerDbBase.RemoveAdminRankAsync(System.Int32,CancellationToken)">RemoveAdminRankAsync(Int32, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task RemoveAdminRankAsync(int rankId, CancellationToken cancel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">rankId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">CancellationToken</span></td>
+        <td><span class="parametername">cancel</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_RemoveFromWhitelistAsync_Robust_Shared_Network_NetUserId_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.RemoveFromWhitelistAsync(Robust.Shared.Network.NetUserId)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L898">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_RemoveFromWhitelistAsync_" data-uid="Content.Server.Database.ServerDbBase.RemoveFromWhitelistAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_RemoveFromWhitelistAsync_Robust_Shared_Network_NetUserId_" data-uid="Content.Server.Database.ServerDbBase.RemoveFromWhitelistAsync(Robust.Shared.Network.NetUserId)">RemoveFromWhitelistAsync(NetUserId)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task RemoveFromWhitelistAsync(NetUserId player)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Robust.Shared.Network.NetUserId</span></td>
+        <td><span class="parametername">player</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_SaveAdminOOCColorAsync_Robust_Shared_Network_NetUserId_Color_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.SaveAdminOOCColorAsync(Robust.Shared.Network.NetUserId%2CColor)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L139">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_SaveAdminOOCColorAsync_" data-uid="Content.Server.Database.ServerDbBase.SaveAdminOOCColorAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_SaveAdminOOCColorAsync_Robust_Shared_Network_NetUserId_Color_" data-uid="Content.Server.Database.ServerDbBase.SaveAdminOOCColorAsync(Robust.Shared.Network.NetUserId,Color)">SaveAdminOOCColorAsync(NetUserId, Color)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task SaveAdminOOCColorAsync(NetUserId userId, Color color)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Robust.Shared.Network.NetUserId</span></td>
+        <td><span class="parametername">userId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Color</span></td>
+        <td><span class="parametername">color</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_SaveCharacterSlotAsync_Robust_Shared_Network_NetUserId_Content_Shared_Preferences_ICharacterProfile_System_Int32_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.SaveCharacterSlotAsync(Robust.Shared.Network.NetUserId%2CContent.Shared.Preferences.ICharacterProfile%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L54">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_SaveCharacterSlotAsync_" data-uid="Content.Server.Database.ServerDbBase.SaveCharacterSlotAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_SaveCharacterSlotAsync_Robust_Shared_Network_NetUserId_Content_Shared_Preferences_ICharacterProfile_System_Int32_" data-uid="Content.Server.Database.ServerDbBase.SaveCharacterSlotAsync(Robust.Shared.Network.NetUserId,Content.Shared.Preferences.ICharacterProfile,System.Int32)">SaveCharacterSlotAsync(NetUserId, ICharacterProfile, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task SaveCharacterSlotAsync(NetUserId userId, ICharacterProfile profile, int slot)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Robust.Shared.Network.NetUserId</span></td>
+        <td><span class="parametername">userId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Preferences.ICharacterProfile.html">ICharacterProfile</a></td>
+        <td><span class="parametername">profile</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">slot</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_SaveSelectedCharacterIndexAsync_Robust_Shared_Network_NetUserId_System_Int32_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.SaveSelectedCharacterIndexAsync(Robust.Shared.Network.NetUserId%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L45">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_SaveSelectedCharacterIndexAsync_" data-uid="Content.Server.Database.ServerDbBase.SaveSelectedCharacterIndexAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_SaveSelectedCharacterIndexAsync_Robust_Shared_Network_NetUserId_System_Int32_" data-uid="Content.Server.Database.ServerDbBase.SaveSelectedCharacterIndexAsync(Robust.Shared.Network.NetUserId,System.Int32)">SaveSelectedCharacterIndexAsync(NetUserId, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task SaveSelectedCharacterIndexAsync(NetUserId userId, int index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Robust.Shared.Network.NetUserId</span></td>
+        <td><span class="parametername">userId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_SetLastReadRules_Robust_Shared_Network_NetUserId_DateTime_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.SetLastReadRules(Robust.Shared.Network.NetUserId%2CDateTime)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L916">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_SetLastReadRules_" data-uid="Content.Server.Database.ServerDbBase.SetLastReadRules*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_SetLastReadRules_Robust_Shared_Network_NetUserId_DateTime_" data-uid="Content.Server.Database.ServerDbBase.SetLastReadRules(Robust.Shared.Network.NetUserId,DateTime)">SetLastReadRules(NetUserId, DateTime)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task SetLastReadRules(NetUserId player, DateTime date)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Robust.Shared.Network.NetUserId</span></td>
+        <td><span class="parametername">player</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">DateTime</span></td>
+        <td><span class="parametername">date</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_UpdateAdminAsync_Content_Server_Database_Admin_CancellationToken_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.UpdateAdminAsync(Content.Server.Database.Admin%2CCancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L613">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_UpdateAdminAsync_" data-uid="Content.Server.Database.ServerDbBase.UpdateAdminAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_UpdateAdminAsync_Content_Server_Database_Admin_CancellationToken_" data-uid="Content.Server.Database.ServerDbBase.UpdateAdminAsync(Content.Server.Database.Admin,CancellationToken)">UpdateAdminAsync(Admin, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task UpdateAdminAsync(Admin admin, CancellationToken cancel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Content.Server.Database.Admin</span></td>
+        <td><span class="parametername">admin</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">CancellationToken</span></td>
+        <td><span class="parametername">cancel</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_UpdateAdminRankAsync_Content_Server_Database_AdminRank_CancellationToken_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.UpdateAdminRankAsync(Content.Server.Database.AdminRank%2CCancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L695">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_UpdateAdminRankAsync_" data-uid="Content.Server.Database.ServerDbBase.UpdateAdminRankAsync*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_UpdateAdminRankAsync_Content_Server_Database_AdminRank_CancellationToken_" data-uid="Content.Server.Database.ServerDbBase.UpdateAdminRankAsync(Content.Server.Database.AdminRank,CancellationToken)">UpdateAdminRankAsync(AdminRank, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task UpdateAdminRankAsync(AdminRank rank, CancellationToken cancel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Content.Server.Database.AdminRank</span></td>
+        <td><span class="parametername">rank</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">CancellationToken</span></td>
+        <td><span class="parametername">cancel</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_UpdateBanExemption_Robust_Shared_Network_NetUserId_Content_Server_Database_ServerBanExemptFlags_.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.UpdateBanExemption(Robust.Shared.Network.NetUserId%2CContent.Server.Database.ServerBanExemptFlags)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L361">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_UpdateBanExemption_" data-uid="Content.Server.Database.ServerDbBase.UpdateBanExemption*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_UpdateBanExemption_Robust_Shared_Network_NetUserId_Content_Server_Database_ServerBanExemptFlags_" data-uid="Content.Server.Database.ServerDbBase.UpdateBanExemption(Robust.Shared.Network.NetUserId,Content.Server.Database.ServerBanExemptFlags)">UpdateBanExemption(NetUserId, ServerBanExemptFlags)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task UpdateBanExemption(NetUserId userId, ServerBanExemptFlags flags)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Robust.Shared.Network.NetUserId</span></td>
+        <td><span class="parametername">userId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Content.Server.Database.ServerBanExemptFlags</span></td>
+        <td><span class="parametername">flags</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_UpdatePlayerRecord_Robust_Shared_Network_NetUserId_System_String_IPAddress_ImmutableArray_System_Byte__.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.UpdatePlayerRecord(Robust.Shared.Network.NetUserId%2CSystem.String%2CIPAddress%2CImmutableArray%7BSystem.Byte%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L485">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_UpdatePlayerRecord_" data-uid="Content.Server.Database.ServerDbBase.UpdatePlayerRecord*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_UpdatePlayerRecord_Robust_Shared_Network_NetUserId_System_String_IPAddress_ImmutableArray_System_Byte__" data-uid="Content.Server.Database.ServerDbBase.UpdatePlayerRecord(Robust.Shared.Network.NetUserId,System.String,IPAddress,ImmutableArray{System.Byte})">UpdatePlayerRecord(NetUserId, String, IPAddress, ImmutableArray&lt;Byte&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task UpdatePlayerRecord(NetUserId userId, string userName, IPAddress address, ImmutableArray&lt;byte&gt; hwId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Robust.Shared.Network.NetUserId</span></td>
+        <td><span class="parametername">userId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">userName</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">IPAddress</span></td>
+        <td><span class="parametername">address</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">ImmutableArray</span>&lt;<span class="xref">System.Byte</span>&gt;</td>
+        <td><span class="parametername">hwId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase_UpdatePlayTimes_IReadOnlyCollection_PlayTimeUpdate__.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase.UpdatePlayTimes(IReadOnlyCollection%7BPlayTimeUpdate%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L438">View Source</a>
+  </span>
+  <a id="Content_Server_Database_ServerDbBase_UpdatePlayTimes_" data-uid="Content.Server.Database.ServerDbBase.UpdatePlayTimes*"></a>
+  <h4 id="Content_Server_Database_ServerDbBase_UpdatePlayTimes_IReadOnlyCollection_PlayTimeUpdate__" data-uid="Content.Server.Database.ServerDbBase.UpdatePlayTimes(IReadOnlyCollection{PlayTimeUpdate})">UpdatePlayTimes(IReadOnlyCollection&lt;PlayTimeUpdate&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task UpdatePlayTimes(IReadOnlyCollection&lt;PlayTimeUpdate&gt; updates)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IReadOnlyCollection</span>&lt;<span class="xref">PlayTimeUpdate</span>&gt;</td>
+        <td><span class="parametername">updates</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Database_ServerDbBase.md&amp;value=---%0Auid%3A%20Content.Server.Database.ServerDbBase%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Database/ServerDbBase.cs/#L18" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5>In This Article</h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              
+              <span>Generated by <strong>DocFX</strong></span>
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

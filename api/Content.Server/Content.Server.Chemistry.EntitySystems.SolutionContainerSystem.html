@@ -1,0 +1,2392 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class SolutionContainerSystem
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class SolutionContainerSystem
+   ">
+    <meta name="generator" content="docfx 2.56.7.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem">
+  
+  
+  <h1 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem" class="text-break">Class SolutionContainerSystem
+  </h1>
+  <div class="markdown level0 summary"><p>Part of Chemistry system deal with SolutionContainers</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">SolutionContainerSystem</span></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Content.Server.Chemistry.EntitySystems.html">Content.Server.Chemistry.EntitySystems</a></h6>
+  <h6><strong>Assembly</strong>: Content.Server.dll</h6>
+  <h5 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class SolutionContainerSystem : EntitySystem</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_AddThermalEnergy_EntityUid_Content_Shared_Chemistry_Components_Solution_System_Single_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.AddThermalEnergy(EntityUid%2CContent.Shared.Chemistry.Components.Solution%2CSystem.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.cs/#L637">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_AddThermalEnergy_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.AddThermalEnergy*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_AddThermalEnergy_EntityUid_Content_Shared_Chemistry_Components_Solution_System_Single_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.AddThermalEnergy(EntityUid,Content.Shared.Chemistry.Components.Solution,System.Single)">AddThermalEnergy(EntityUid, Solution, Single)</h4>
+  <div class="markdown level1 summary"><p>Adds some thermal energy to a solution and then checks for reaction processing.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void AddThermalEnergy(EntityUid owner, Solution solution, float thermalEnergy)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">owner</span></td>
+        <td><p>The entity in which the solution is located.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">solution</span></td>
+        <td><p>The solution to set the thermal energy of.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">thermalEnergy</span></td>
+        <td><p>The new value to set the thermal energy to.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_Drain_EntityUid_Content_Shared_Chemistry_Components_Solution_Content_Shared_FixedPoint_FixedPoint2_Content_Shared_Chemistry_Components_DrainableSolutionComponent_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.Drain(EntityUid%2CContent.Shared.Chemistry.Components.Solution%2CContent.Shared.FixedPoint.FixedPoint2%2CContent.Shared.Chemistry.Components.DrainableSolutionComponent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.Capabilities.cs/#L38">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_Drain_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.Drain*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_Drain_EntityUid_Content_Shared_Chemistry_Components_Solution_Content_Shared_FixedPoint_FixedPoint2_Content_Shared_Chemistry_Components_DrainableSolutionComponent_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.Drain(EntityUid,Content.Shared.Chemistry.Components.Solution,Content.Shared.FixedPoint.FixedPoint2,Content.Shared.Chemistry.Components.DrainableSolutionComponent)">Drain(EntityUid, Solution, FixedPoint2, DrainableSolutionComponent)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Solution Drain(EntityUid targetUid, Solution targetSolution, FixedPoint2 amount, DrainableSolutionComponent drainableSolution = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">targetUid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">targetSolution</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.FixedPoint.FixedPoint2.html">FixedPoint2</a></td>
+        <td><span class="parametername">amount</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.DrainableSolutionComponent.html">DrainableSolutionComponent</a></td>
+        <td><span class="parametername">drainableSolution</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_DrainAvailable_EntityUid_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.DrainAvailable(EntityUid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.Capabilities.cs/#L109">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_DrainAvailable_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.DrainAvailable*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_DrainAvailable_EntityUid_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.DrainAvailable(EntityUid)">DrainAvailable(EntityUid)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public FixedPoint2 DrainAvailable(EntityUid uid)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">uid</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.FixedPoint.FixedPoint2.html">FixedPoint2</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_Draw_EntityUid_Content_Shared_Chemistry_Components_Solution_Content_Shared_FixedPoint_FixedPoint2_Content_Server_Chemistry_Components_SolutionManager_DrawableSolutionComponent_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.Draw(EntityUid%2CContent.Shared.Chemistry.Components.Solution%2CContent.Shared.FixedPoint.FixedPoint2%2CContent.Server.Chemistry.Components.SolutionManager.DrawableSolutionComponent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.Capabilities.cs/#L29">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_Draw_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.Draw*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_Draw_EntityUid_Content_Shared_Chemistry_Components_Solution_Content_Shared_FixedPoint_FixedPoint2_Content_Server_Chemistry_Components_SolutionManager_DrawableSolutionComponent_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.Draw(EntityUid,Content.Shared.Chemistry.Components.Solution,Content.Shared.FixedPoint.FixedPoint2,Content.Server.Chemistry.Components.SolutionManager.DrawableSolutionComponent)">Draw(EntityUid, Solution, FixedPoint2, DrawableSolutionComponent)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Solution Draw(EntityUid targetUid, Solution solution, FixedPoint2 amount, DrawableSolutionComponent drawableSolution = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">targetUid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">solution</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.FixedPoint.FixedPoint2.html">FixedPoint2</a></td>
+        <td><span class="parametername">amount</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Content.Server.Chemistry.Components.SolutionManager.DrawableSolutionComponent.html">DrawableSolutionComponent</a></td>
+        <td><span class="parametername">drawableSolution</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_EnsureSolution_EntityUid_System_String_Content_Server_Chemistry_Components_SolutionManager_SolutionContainerManagerComponent_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.EnsureSolution(EntityUid%2CSystem.String%2CContent.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.cs/#L442">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_EnsureSolution_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.EnsureSolution*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_EnsureSolution_EntityUid_System_String_Content_Server_Chemistry_Components_SolutionManager_SolutionContainerManagerComponent_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.EnsureSolution(EntityUid,System.String,Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent)">EnsureSolution(EntityUid, String, SolutionContainerManagerComponent)</h4>
+  <div class="markdown level1 summary"><p>Will ensure a solution is added to given entity even if it's missing solutionContainerManager</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Solution EnsureSolution(EntityUid uid, string name, SolutionContainerManagerComponent solutionsMgr = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">uid</span></td>
+        <td><p>EntityUid to which to add solution</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>name for the solution</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent.html">SolutionContainerManagerComponent</a></td>
+        <td><span class="parametername">solutionsMgr</span></td>
+        <td><p>solution components used in resolves</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><p>solution</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_EnsureSolution_EntityUid_System_String_Content_Shared_FixedPoint_FixedPoint2_System_Boolean__Content_Server_Chemistry_Components_SolutionManager_SolutionContainerManagerComponent_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.EnsureSolution(EntityUid%2CSystem.String%2CContent.Shared.FixedPoint.FixedPoint2%2CSystem.Boolean%40%2CContent.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.cs/#L453">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_EnsureSolution_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.EnsureSolution*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_EnsureSolution_EntityUid_System_String_Content_Shared_FixedPoint_FixedPoint2_System_Boolean__Content_Server_Chemistry_Components_SolutionManager_SolutionContainerManagerComponent_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.EnsureSolution(EntityUid,System.String,Content.Shared.FixedPoint.FixedPoint2,System.Boolean@,Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent)">EnsureSolution(EntityUid, String, FixedPoint2, out Boolean, SolutionContainerManagerComponent)</h4>
+  <div class="markdown level1 summary"><p>Will ensure a solution is added to given entity even if it's missing solutionContainerManager</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Solution EnsureSolution(EntityUid uid, string name, FixedPoint2 minVol, out bool existed, SolutionContainerManagerComponent solutionsMgr = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">uid</span></td>
+        <td><p>EntityUid to which to add solution</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>name for the solution</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.FixedPoint.FixedPoint2.html">FixedPoint2</a></td>
+        <td><span class="parametername">minVol</span></td>
+        <td><p>Ensures that the solution's maximum volume is larger than this value.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">existed</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent.html">SolutionContainerManagerComponent</a></td>
+        <td><span class="parametername">solutionsMgr</span></td>
+        <td><p>solution components used in resolves</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><p>solution</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_EnsureSolution_EntityUid_System_String_IEnumerable_Content_Shared_Chemistry_Components_Solution_ReagentQuantity__System_Boolean_Content_Server_Chemistry_Components_SolutionManager_SolutionContainerManagerComponent_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.EnsureSolution(EntityUid%2CSystem.String%2CIEnumerable%7BContent.Shared.Chemistry.Components.Solution.ReagentQuantity%7D%2CSystem.Boolean%2CContent.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.cs/#L475">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_EnsureSolution_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.EnsureSolution*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_EnsureSolution_EntityUid_System_String_IEnumerable_Content_Shared_Chemistry_Components_Solution_ReagentQuantity__System_Boolean_Content_Server_Chemistry_Components_SolutionManager_SolutionContainerManagerComponent_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.EnsureSolution(EntityUid,System.String,IEnumerable{Content.Shared.Chemistry.Components.Solution.ReagentQuantity},System.Boolean,Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent)">EnsureSolution(EntityUid, String, IEnumerable&lt;Solution.ReagentQuantity&gt;, Boolean, SolutionContainerManagerComponent)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Solution EnsureSolution(EntityUid uid, string name, IEnumerable&lt;Solution.ReagentQuantity&gt; reagents, bool setMaxVol = true, SolutionContainerManagerComponent solutionsMgr = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">uid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.ReagentQuantity.html">Solution.ReagentQuantity</a>&gt;</td>
+        <td><span class="parametername">reagents</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">setMaxVol</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent.html">SolutionContainerManagerComponent</a></td>
+        <td><span class="parametername">solutionsMgr</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_EnsureSolution_EntityUid_System_String_System_Boolean__Content_Server_Chemistry_Components_SolutionManager_SolutionContainerManagerComponent_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.EnsureSolution(EntityUid%2CSystem.String%2CSystem.Boolean%40%2CContent.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.cs/#L415">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_EnsureSolution_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.EnsureSolution*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_EnsureSolution_EntityUid_System_String_System_Boolean__Content_Server_Chemistry_Components_SolutionManager_SolutionContainerManagerComponent_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.EnsureSolution(EntityUid,System.String,System.Boolean@,Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent)">EnsureSolution(EntityUid, String, out Boolean, SolutionContainerManagerComponent)</h4>
+  <div class="markdown level1 summary"><p>Will ensure a solution is added to given entity even if it's missing solutionContainerManager</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Solution EnsureSolution(EntityUid uid, string name, out bool existed, SolutionContainerManagerComponent solutionsMgr = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">uid</span></td>
+        <td><p>EntityUid to which to add solution</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>name for the solution</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">existed</span></td>
+        <td><p>true if the solution already existed</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent.html">SolutionContainerManagerComponent</a></td>
+        <td><span class="parametername">solutionsMgr</span></td>
+        <td><p>solution components used in resolves</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><p>solution</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_GetMaxReagent_Content_Server_Chemistry_Components_SolutionManager_SolutionContainerManagerComponent_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.GetMaxReagent(Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.cs/#L571">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_GetMaxReagent_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.GetMaxReagent*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_GetMaxReagent_Content_Server_Chemistry_Components_SolutionManager_SolutionContainerManagerComponent_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.GetMaxReagent(Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent)">GetMaxReagent(SolutionContainerManagerComponent)</h4>
+  <div class="markdown level1 summary"><p>Gets the most common reagent across all solutions by volume.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ReagentPrototype GetMaxReagent(SolutionContainerManagerComponent component)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent.html">SolutionContainerManagerComponent</a></td>
+        <td><span class="parametername">component</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Reagent.ReagentPrototype.html">ReagentPrototype</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_GetReagentQuantity_EntityUid_System_String_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.GetReagentQuantity(EntityUid%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.cs/#L522">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_GetReagentQuantity_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.GetReagentQuantity*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_GetReagentQuantity_EntityUid_System_String_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.GetReagentQuantity(EntityUid,System.String)">GetReagentQuantity(EntityUid, String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public FixedPoint2 GetReagentQuantity(EntityUid owner, string reagentId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">owner</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">reagentId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.FixedPoint.FixedPoint2.html">FixedPoint2</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_GetSound_Content_Server_Chemistry_Components_SolutionManager_SolutionContainerManagerComponent_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.GetSound(Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.cs/#L593">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_GetSound_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.GetSound*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_GetSound_Content_Server_Chemistry_Components_SolutionManager_SolutionContainerManagerComponent_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.GetSound(Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent)">GetSound(SolutionContainerManagerComponent)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SoundSpecifier GetSound(SolutionContainerManagerComponent component)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent.html">SolutionContainerManagerComponent</a></td>
+        <td><span class="parametername">component</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Robust.Shared.Audio.SoundSpecifier</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_Initialize.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.Initialize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.cs/#L45">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_Initialize_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.Initialize*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_Initialize" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.Initialize">Initialize()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Initialize()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_Inject_EntityUid_Content_Shared_Chemistry_Components_Solution_Content_Shared_Chemistry_Components_Solution_Content_Server_Chemistry_Components_SolutionManager_InjectableSolutionComponent_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.Inject(EntityUid%2CContent.Shared.Chemistry.Components.Solution%2CContent.Shared.Chemistry.Components.Solution%2CContent.Server.Chemistry.Components.SolutionManager.InjectableSolutionComponent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.Capabilities.cs/#L20">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_Inject_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.Inject*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_Inject_EntityUid_Content_Shared_Chemistry_Components_Solution_Content_Shared_Chemistry_Components_Solution_Content_Server_Chemistry_Components_SolutionManager_InjectableSolutionComponent_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.Inject(EntityUid,Content.Shared.Chemistry.Components.Solution,Content.Shared.Chemistry.Components.Solution,Content.Server.Chemistry.Components.SolutionManager.InjectableSolutionComponent)">Inject(EntityUid, Solution, Solution, InjectableSolutionComponent)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Inject(EntityUid targetUid, Solution targetSolution, Solution addedSolution, InjectableSolutionComponent injectableSolution = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">targetUid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">targetSolution</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">addedSolution</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Content.Server.Chemistry.Components.SolutionManager.InjectableSolutionComponent.html">InjectableSolutionComponent</a></td>
+        <td><span class="parametername">injectableSolution</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_PercentFull_EntityUid_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.PercentFull(EntityUid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.Capabilities.cs/#L116">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_PercentFull_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.PercentFull*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_PercentFull_EntityUid_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.PercentFull(EntityUid)">PercentFull(EntityUid)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public float PercentFull(EntityUid uid)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">uid</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_Refill_EntityUid_Content_Shared_Chemistry_Components_Solution_Content_Shared_Chemistry_Components_Solution_Content_Shared_Chemistry_Components_RefillableSolutionComponent_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.Refill(EntityUid%2CContent.Shared.Chemistry.Components.Solution%2CContent.Shared.Chemistry.Components.Solution%2CContent.Shared.Chemistry.Components.RefillableSolutionComponent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.Capabilities.cs/#L11">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_Refill_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.Refill*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_Refill_EntityUid_Content_Shared_Chemistry_Components_Solution_Content_Shared_Chemistry_Components_Solution_Content_Shared_Chemistry_Components_RefillableSolutionComponent_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.Refill(EntityUid,Content.Shared.Chemistry.Components.Solution,Content.Shared.Chemistry.Components.Solution,Content.Shared.Chemistry.Components.RefillableSolutionComponent)">Refill(EntityUid, Solution, Solution, RefillableSolutionComponent)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Refill(EntityUid targetUid, Solution targetSolution, Solution addedSolution, RefillableSolutionComponent refillableSolution = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">targetUid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">targetSolution</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">addedSolution</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.RefillableSolutionComponent.html">RefillableSolutionComponent</a></td>
+        <td><span class="parametername">refillableSolution</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_RemoveAllSolution_EntityUid_Content_Server_Chemistry_Components_SolutionManager_SolutionContainerManagerComponent_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.RemoveAllSolution(EntityUid%2CContent.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.cs/#L226">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_RemoveAllSolution_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.RemoveAllSolution*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_RemoveAllSolution_EntityUid_Content_Server_Chemistry_Components_SolutionManager_SolutionContainerManagerComponent_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.RemoveAllSolution(EntityUid,Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent)">RemoveAllSolution(EntityUid, SolutionContainerManagerComponent)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void RemoveAllSolution(EntityUid uid, SolutionContainerManagerComponent solutionContainerManager = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">uid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent.html">SolutionContainerManagerComponent</a></td>
+        <td><span class="parametername">solutionContainerManager</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_RemoveAllSolution_EntityUid_Content_Shared_Chemistry_Components_Solution_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.RemoveAllSolution(EntityUid%2CContent.Shared.Chemistry.Components.Solution)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.cs/#L217">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_RemoveAllSolution_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.RemoveAllSolution*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_RemoveAllSolution_EntityUid_Content_Shared_Chemistry_Components_Solution_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.RemoveAllSolution(EntityUid,Content.Shared.Chemistry.Components.Solution)">RemoveAllSolution(EntityUid, Solution)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void RemoveAllSolution(EntityUid uid, Solution solutionHolder)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">uid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">solutionHolder</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_RemoveEachReagent_EntityUid_Content_Shared_Chemistry_Components_Solution_Content_Shared_FixedPoint_FixedPoint2_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.RemoveEachReagent(EntityUid%2CContent.Shared.Chemistry.Components.Solution%2CContent.Shared.FixedPoint.FixedPoint2)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.cs/#L500">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_RemoveEachReagent_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.RemoveEachReagent*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_RemoveEachReagent_EntityUid_Content_Shared_Chemistry_Components_Solution_Content_Shared_FixedPoint_FixedPoint2_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.RemoveEachReagent(EntityUid,Content.Shared.Chemistry.Components.Solution,Content.Shared.FixedPoint.FixedPoint2)">RemoveEachReagent(EntityUid, Solution, FixedPoint2)</h4>
+  <div class="markdown level1 summary"><p>Removes an amount from all reagents in a solution, adding it to a new solution.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Solution RemoveEachReagent(EntityUid uid, Solution solution, FixedPoint2 quantity)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">uid</span></td>
+        <td><p>The entity containing the solution.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">solution</span></td>
+        <td><p>The solution to remove reagents from.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.FixedPoint.FixedPoint2.html">FixedPoint2</a></td>
+        <td><span class="parametername">quantity</span></td>
+        <td><p>The amount to remove from every reagent in the solution.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><p>A new solution containing every removed reagent from the original solution.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_SetCapacity_EntityUid_Content_Shared_Chemistry_Components_Solution_Content_Shared_FixedPoint_FixedPoint2_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.SetCapacity(EntityUid%2CContent.Shared.Chemistry.Components.Solution%2CContent.Shared.FixedPoint.FixedPoint2)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.cs/#L243">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_SetCapacity_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.SetCapacity*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_SetCapacity_EntityUid_Content_Shared_Chemistry_Components_Solution_Content_Shared_FixedPoint_FixedPoint2_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.SetCapacity(EntityUid,Content.Shared.Chemistry.Components.Solution,Content.Shared.FixedPoint.FixedPoint2)">SetCapacity(EntityUid, Solution, FixedPoint2)</h4>
+  <div class="markdown level1 summary"><p>Sets the capacity (maximum volume) of a solution to a new value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetCapacity(EntityUid targetUid, Solution targetSolution, FixedPoint2 capacity)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">targetUid</span></td>
+        <td><p>The entity containing the solution.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">targetSolution</span></td>
+        <td><p>The solution to set the capacity of.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.FixedPoint.FixedPoint2.html">FixedPoint2</a></td>
+        <td><span class="parametername">capacity</span></td>
+        <td><p>The value to set the capacity of the solution to.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_SetTemperature_EntityUid_Content_Shared_Chemistry_Components_Solution_System_Single_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.SetTemperature(EntityUid%2CContent.Shared.Chemistry.Components.Solution%2CSystem.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.cs/#L609">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_SetTemperature_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.SetTemperature*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_SetTemperature_EntityUid_Content_Shared_Chemistry_Components_Solution_System_Single_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.SetTemperature(EntityUid,Content.Shared.Chemistry.Components.Solution,System.Single)">SetTemperature(EntityUid, Solution, Single)</h4>
+  <div class="markdown level1 summary"><p>Sets the temperature of a solution to a new value and then checks for reaction processing.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetTemperature(EntityUid owner, Solution solution, float temperature)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">owner</span></td>
+        <td><p>The entity in which the solution is located.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">solution</span></td>
+        <td><p>The solution to set the temperature of.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">temperature</span></td>
+        <td><p>The new value to set the temperature to.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_SetThermalEnergy_EntityUid_Content_Shared_Chemistry_Components_Solution_System_Single_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.SetThermalEnergy(EntityUid%2CContent.Shared.Chemistry.Components.Solution%2CSystem.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.cs/#L624">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_SetThermalEnergy_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.SetThermalEnergy*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_SetThermalEnergy_EntityUid_Content_Shared_Chemistry_Components_Solution_System_Single_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.SetThermalEnergy(EntityUid,Content.Shared.Chemistry.Components.Solution,System.Single)">SetThermalEnergy(EntityUid, Solution, Single)</h4>
+  <div class="markdown level1 summary"><p>Sets the thermal energy of a solution to a new value and then checks for reaction processing.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetThermalEnergy(EntityUid owner, Solution solution, float thermalEnergy)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">owner</span></td>
+        <td><p>The entity in which the solution is located.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">solution</span></td>
+        <td><p>The solution to set the thermal energy of.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">thermalEnergy</span></td>
+        <td><p>The new value to set the thermal energy to.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_SplitSolution_EntityUid_Content_Shared_Chemistry_Components_Solution_Content_Shared_FixedPoint_FixedPoint2_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.SplitSolution(EntityUid%2CContent.Shared.Chemistry.Components.Solution%2CContent.Shared.FixedPoint.FixedPoint2)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.cs/#L177">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_SplitSolution_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.SplitSolution*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_SplitSolution_EntityUid_Content_Shared_Chemistry_Components_Solution_Content_Shared_FixedPoint_FixedPoint2_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.SplitSolution(EntityUid,Content.Shared.Chemistry.Components.Solution,Content.Shared.FixedPoint.FixedPoint2)">SplitSolution(EntityUid, Solution, FixedPoint2)</h4>
+  <div class="markdown level1 summary"><p>Removes part of the solution in the container.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Solution SplitSolution(EntityUid targetUid, Solution solutionHolder, FixedPoint2 quantity)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">targetUid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">solutionHolder</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.FixedPoint.FixedPoint2.html">FixedPoint2</a></td>
+        <td><span class="parametername">quantity</span></td>
+        <td><p>the volume of solution to remove.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><p>The solution that was removed.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_SplitSolutionWithout_EntityUid_Content_Shared_Chemistry_Components_Solution_Content_Shared_FixedPoint_FixedPoint2_System_String___.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.SplitSolutionWithout(EntityUid%2CContent.Shared.Chemistry.Components.Solution%2CContent.Shared.FixedPoint.FixedPoint2%2CSystem.String%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.cs/#L195">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_SplitSolutionWithout_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.SplitSolutionWithout*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_SplitSolutionWithout_EntityUid_Content_Shared_Chemistry_Components_Solution_Content_Shared_FixedPoint_FixedPoint2_System_String___" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.SplitSolutionWithout(EntityUid,Content.Shared.Chemistry.Components.Solution,Content.Shared.FixedPoint.FixedPoint2,System.String[])">SplitSolutionWithout(EntityUid, Solution, FixedPoint2, String[])</h4>
+  <div class="markdown level1 summary"><p>Splits a solution without the specified reagent(s).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Solution SplitSolutionWithout(EntityUid targetUid, Solution solutionHolder, FixedPoint2 quantity, params string[] reagents)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">targetUid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">solutionHolder</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.FixedPoint.FixedPoint2.html">FixedPoint2</a></td>
+        <td><span class="parametername">quantity</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">reagents</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_SplitStackSolution_EntityUid_Content_Shared_Chemistry_Components_Solution_Content_Shared_FixedPoint_FixedPoint2_System_Int32_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.SplitStackSolution(EntityUid%2CContent.Shared.Chemistry.Components.Solution%2CContent.Shared.FixedPoint.FixedPoint2%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.cs/#L184">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_SplitStackSolution_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.SplitStackSolution*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_SplitStackSolution_EntityUid_Content_Shared_Chemistry_Components_Solution_Content_Shared_FixedPoint_FixedPoint2_System_Int32_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.SplitStackSolution(EntityUid,Content.Shared.Chemistry.Components.Solution,Content.Shared.FixedPoint.FixedPoint2,System.Int32)">SplitStackSolution(EntityUid, Solution, FixedPoint2, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Solution SplitStackSolution(EntityUid targetUid, Solution solutionHolder, FixedPoint2 quantity, int stackCount)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">targetUid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">solutionHolder</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.FixedPoint.FixedPoint2.html">FixedPoint2</a></td>
+        <td><span class="parametername">quantity</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">stackCount</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_ToPrettyString_Content_Shared_Chemistry_Components_Solution_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.ToPrettyString(Content.Shared.Chemistry.Components.Solution)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.Capabilities.cs/#L139">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_ToPrettyString_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.ToPrettyString*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_ToPrettyString_Content_Shared_Chemistry_Components_Solution_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.ToPrettyString(Content.Shared.Chemistry.Components.Solution)">ToPrettyString(Solution)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string ToPrettyString(Solution solution)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">solution</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryAddReagent_EntityUid_Content_Shared_Chemistry_Components_Solution_System_String_Content_Shared_FixedPoint_FixedPoint2_Content_Shared_FixedPoint_FixedPoint2__System_Nullable_System_Single__.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryAddReagent(EntityUid%2CContent.Shared.Chemistry.Components.Solution%2CSystem.String%2CContent.Shared.FixedPoint.FixedPoint2%2CContent.Shared.FixedPoint.FixedPoint2%40%2CSystem.Nullable%7BSystem.Single%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.cs/#L264">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryAddReagent_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryAddReagent*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryAddReagent_EntityUid_Content_Shared_Chemistry_Components_Solution_System_String_Content_Shared_FixedPoint_FixedPoint2_Content_Shared_FixedPoint_FixedPoint2__System_Nullable_System_Single__" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryAddReagent(EntityUid,Content.Shared.Chemistry.Components.Solution,System.String,Content.Shared.FixedPoint.FixedPoint2,Content.Shared.FixedPoint.FixedPoint2@,System.Nullable{System.Single})">TryAddReagent(EntityUid, Solution, String, FixedPoint2, out FixedPoint2, Nullable&lt;Single&gt;)</h4>
+  <div class="markdown level1 summary"><p>Adds reagent of an Id to the container.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TryAddReagent(EntityUid targetUid, Solution targetSolution, string reagentId, FixedPoint2 quantity, out FixedPoint2 acceptedQuantity, float? temperature = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">targetUid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">targetSolution</span></td>
+        <td><p>Container to which we are adding reagent</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">reagentId</span></td>
+        <td><p>The Id of the reagent to add.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.FixedPoint.FixedPoint2.html">FixedPoint2</a></td>
+        <td><span class="parametername">quantity</span></td>
+        <td><p>The amount of reagent to add.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.FixedPoint.FixedPoint2.html">FixedPoint2</a></td>
+        <td><span class="parametername">acceptedQuantity</span></td>
+        <td><p>The amount of reagent successfully added.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Single</span>&gt;</td>
+        <td><span class="parametername">temperature</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>If all the reagent could be added.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryAddSolution_EntityUid_Content_Shared_Chemistry_Components_Solution_Content_Shared_Chemistry_Components_Solution_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryAddSolution(EntityUid%2CContent.Shared.Chemistry.Components.Solution%2CContent.Shared.Chemistry.Components.Solution)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.cs/#L307">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryAddSolution_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryAddSolution*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryAddSolution_EntityUid_Content_Shared_Chemistry_Components_Solution_Content_Shared_Chemistry_Components_Solution_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryAddSolution(EntityUid,Content.Shared.Chemistry.Components.Solution,Content.Shared.Chemistry.Components.Solution)">TryAddSolution(EntityUid, Solution, Solution)</h4>
+  <div class="markdown level1 summary"><p>Adds a solution to the container, if it can fully fit.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TryAddSolution(EntityUid targetUid, Solution targetSolution, Solution addedSolution)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">targetUid</span></td>
+        <td><p>entity holding targetSolution</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">targetSolution</span></td>
+        <td><p>entity holding targetSolution</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">addedSolution</span></td>
+        <td><p>solution being added</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>If the solution could be added.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryGetDrainableSolution_EntityUid_Content_Shared_Chemistry_Components_Solution__Content_Shared_Chemistry_Components_DrainableSolutionComponent_Content_Server_Chemistry_Components_SolutionManager_SolutionContainerManagerComponent_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryGetDrainableSolution(EntityUid%2CContent.Shared.Chemistry.Components.Solution%40%2CContent.Shared.Chemistry.Components.DrainableSolutionComponent%2CContent.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.Capabilities.cs/#L79">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryGetDrainableSolution_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryGetDrainableSolution*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryGetDrainableSolution_EntityUid_Content_Shared_Chemistry_Components_Solution__Content_Shared_Chemistry_Components_DrainableSolutionComponent_Content_Server_Chemistry_Components_SolutionManager_SolutionContainerManagerComponent_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryGetDrainableSolution(EntityUid,Content.Shared.Chemistry.Components.Solution@,Content.Shared.Chemistry.Components.DrainableSolutionComponent,Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent)">TryGetDrainableSolution(EntityUid, out Solution, DrainableSolutionComponent, SolutionContainerManagerComponent)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TryGetDrainableSolution(EntityUid uid, out Solution solution, DrainableSolutionComponent drainable = null, SolutionContainerManagerComponent manager = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">uid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">solution</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.DrainableSolutionComponent.html">DrainableSolutionComponent</a></td>
+        <td><span class="parametername">drainable</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent.html">SolutionContainerManagerComponent</a></td>
+        <td><span class="parametername">manager</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryGetDrawableSolution_EntityUid_Content_Shared_Chemistry_Components_Solution__Content_Server_Chemistry_Components_SolutionManager_DrawableSolutionComponent_Content_Server_Chemistry_Components_SolutionManager_SolutionContainerManagerComponent_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryGetDrawableSolution(EntityUid%2CContent.Shared.Chemistry.Components.Solution%40%2CContent.Server.Chemistry.Components.SolutionManager.DrawableSolutionComponent%2CContent.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.Capabilities.cs/#L94">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryGetDrawableSolution_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryGetDrawableSolution*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryGetDrawableSolution_EntityUid_Content_Shared_Chemistry_Components_Solution__Content_Server_Chemistry_Components_SolutionManager_DrawableSolutionComponent_Content_Server_Chemistry_Components_SolutionManager_SolutionContainerManagerComponent_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryGetDrawableSolution(EntityUid,Content.Shared.Chemistry.Components.Solution@,Content.Server.Chemistry.Components.SolutionManager.DrawableSolutionComponent,Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent)">TryGetDrawableSolution(EntityUid, out Solution, DrawableSolutionComponent, SolutionContainerManagerComponent)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TryGetDrawableSolution(EntityUid uid, out Solution solution, DrawableSolutionComponent drawable = null, SolutionContainerManagerComponent manager = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">uid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">solution</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Content.Server.Chemistry.Components.SolutionManager.DrawableSolutionComponent.html">DrawableSolutionComponent</a></td>
+        <td><span class="parametername">drawable</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent.html">SolutionContainerManagerComponent</a></td>
+        <td><span class="parametername">manager</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryGetFitsInDispenser_EntityUid_Content_Shared_Chemistry_Components_Solution__Content_Shared_Chemistry_Components_FitsInDispenserComponent_Content_Server_Chemistry_Components_SolutionManager_SolutionContainerManagerComponent_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryGetFitsInDispenser(EntityUid%2CContent.Shared.Chemistry.Components.Solution%40%2CContent.Shared.Chemistry.Components.FitsInDispenserComponent%2CContent.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.Capabilities.cs/#L124">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryGetFitsInDispenser_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryGetFitsInDispenser*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryGetFitsInDispenser_EntityUid_Content_Shared_Chemistry_Components_Solution__Content_Shared_Chemistry_Components_FitsInDispenserComponent_Content_Server_Chemistry_Components_SolutionManager_SolutionContainerManagerComponent_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryGetFitsInDispenser(EntityUid,Content.Shared.Chemistry.Components.Solution@,Content.Shared.Chemistry.Components.FitsInDispenserComponent,Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent)">TryGetFitsInDispenser(EntityUid, out Solution, FitsInDispenserComponent, SolutionContainerManagerComponent)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TryGetFitsInDispenser(EntityUid owner, out Solution solution, FitsInDispenserComponent dispenserFits = null, SolutionContainerManagerComponent solutionManager = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">owner</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">solution</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.FitsInDispenserComponent.html">FitsInDispenserComponent</a></td>
+        <td><span class="parametername">dispenserFits</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent.html">SolutionContainerManagerComponent</a></td>
+        <td><span class="parametername">solutionManager</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryGetInjectableSolution_EntityUid_Content_Shared_Chemistry_Components_Solution__Content_Server_Chemistry_Components_SolutionManager_InjectableSolutionComponent_Content_Server_Chemistry_Components_SolutionManager_SolutionContainerManagerComponent_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryGetInjectableSolution(EntityUid%2CContent.Shared.Chemistry.Components.Solution%40%2CContent.Server.Chemistry.Components.SolutionManager.InjectableSolutionComponent%2CContent.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.Capabilities.cs/#L47">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryGetInjectableSolution_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryGetInjectableSolution*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryGetInjectableSolution_EntityUid_Content_Shared_Chemistry_Components_Solution__Content_Server_Chemistry_Components_SolutionManager_InjectableSolutionComponent_Content_Server_Chemistry_Components_SolutionManager_SolutionContainerManagerComponent_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryGetInjectableSolution(EntityUid,Content.Shared.Chemistry.Components.Solution@,Content.Server.Chemistry.Components.SolutionManager.InjectableSolutionComponent,Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent)">TryGetInjectableSolution(EntityUid, out Solution, InjectableSolutionComponent, SolutionContainerManagerComponent)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TryGetInjectableSolution(EntityUid targetUid, out Solution solution, InjectableSolutionComponent injectable = null, SolutionContainerManagerComponent manager = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">targetUid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">solution</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Content.Server.Chemistry.Components.SolutionManager.InjectableSolutionComponent.html">InjectableSolutionComponent</a></td>
+        <td><span class="parametername">injectable</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent.html">SolutionContainerManagerComponent</a></td>
+        <td><span class="parametername">manager</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryGetMixableSolution_EntityUid_Content_Shared_Chemistry_Components_Solution__Content_Server_Chemistry_Components_SolutionManager_SolutionContainerManagerComponent_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryGetMixableSolution(EntityUid%2CContent.Shared.Chemistry.Components.Solution%40%2CContent.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.cs/#L537">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryGetMixableSolution_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryGetMixableSolution*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryGetMixableSolution_EntityUid_Content_Shared_Chemistry_Components_Solution__Content_Server_Chemistry_Components_SolutionManager_SolutionContainerManagerComponent_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryGetMixableSolution(EntityUid,Content.Shared.Chemistry.Components.Solution@,Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent)">TryGetMixableSolution(EntityUid, out Solution, SolutionContainerManagerComponent)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TryGetMixableSolution(EntityUid uid, out Solution solution, SolutionContainerManagerComponent solutionsMgr = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">uid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">solution</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent.html">SolutionContainerManagerComponent</a></td>
+        <td><span class="parametername">solutionsMgr</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryGetRefillableSolution_EntityUid_Content_Shared_Chemistry_Components_Solution__Content_Server_Chemistry_Components_SolutionManager_SolutionContainerManagerComponent_Content_Shared_Chemistry_Components_RefillableSolutionComponent_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryGetRefillableSolution(EntityUid%2CContent.Shared.Chemistry.Components.Solution%40%2CContent.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent%2CContent.Shared.Chemistry.Components.RefillableSolutionComponent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.Capabilities.cs/#L63">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryGetRefillableSolution_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryGetRefillableSolution*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryGetRefillableSolution_EntityUid_Content_Shared_Chemistry_Components_Solution__Content_Server_Chemistry_Components_SolutionManager_SolutionContainerManagerComponent_Content_Shared_Chemistry_Components_RefillableSolutionComponent_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryGetRefillableSolution(EntityUid,Content.Shared.Chemistry.Components.Solution@,Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent,Content.Shared.Chemistry.Components.RefillableSolutionComponent)">TryGetRefillableSolution(EntityUid, out Solution, SolutionContainerManagerComponent, RefillableSolutionComponent)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TryGetRefillableSolution(EntityUid targetUid, out Solution solution, SolutionContainerManagerComponent solutionManager = null, RefillableSolutionComponent refillable = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">targetUid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">solution</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent.html">SolutionContainerManagerComponent</a></td>
+        <td><span class="parametername">solutionManager</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.RefillableSolutionComponent.html">RefillableSolutionComponent</a></td>
+        <td><span class="parametername">refillable</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryGetSolution_System_Nullable_EntityUid__System_String_Content_Shared_Chemistry_Components_Solution__Content_Server_Chemistry_Components_SolutionManager_SolutionContainerManagerComponent_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryGetSolution(System.Nullable%7BEntityUid%7D%2CSystem.String%2CContent.Shared.Chemistry.Components.Solution%40%2CContent.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.cs/#L393">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryGetSolution_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryGetSolution*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryGetSolution_System_Nullable_EntityUid__System_String_Content_Shared_Chemistry_Components_Solution__Content_Server_Chemistry_Components_SolutionManager_SolutionContainerManagerComponent_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryGetSolution(System.Nullable{EntityUid},System.String,Content.Shared.Chemistry.Components.Solution@,Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent)">TryGetSolution(Nullable&lt;EntityUid&gt;, String, out Solution, SolutionContainerManagerComponent)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TryGetSolution(EntityUid? uid, string name, out Solution solution, SolutionContainerManagerComponent solutionsMgr = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">EntityUid</span>&gt;</td>
+        <td><span class="parametername">uid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">solution</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Content.Server.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent.html">SolutionContainerManagerComponent</a></td>
+        <td><span class="parametername">solutionsMgr</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryMixAndOverflow_EntityUid_Content_Shared_Chemistry_Components_Solution_Content_Shared_Chemistry_Components_Solution_Content_Shared_FixedPoint_FixedPoint2_Content_Shared_Chemistry_Components_Solution__.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryMixAndOverflow(EntityUid%2CContent.Shared.Chemistry.Components.Solution%2CContent.Shared.Chemistry.Components.Solution%2CContent.Shared.FixedPoint.FixedPoint2%2CContent.Shared.Chemistry.Components.Solution%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.cs/#L375">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryMixAndOverflow_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryMixAndOverflow*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryMixAndOverflow_EntityUid_Content_Shared_Chemistry_Components_Solution_Content_Shared_Chemistry_Components_Solution_Content_Shared_FixedPoint_FixedPoint2_Content_Shared_Chemistry_Components_Solution__" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryMixAndOverflow(EntityUid,Content.Shared.Chemistry.Components.Solution,Content.Shared.Chemistry.Components.Solution,Content.Shared.FixedPoint.FixedPoint2,Content.Shared.Chemistry.Components.Solution@)">TryMixAndOverflow(EntityUid, Solution, Solution, FixedPoint2, out Solution)</h4>
+  <div class="markdown level1 summary"><p>Adds a solution to the container, overflowing the rest.
+It will
+Unlike <a class="xref" href="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.html#Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryAddSolution_EntityUid_Content_Shared_Chemistry_Components_Solution_Content_Shared_Chemistry_Components_Solution_">TryAddSolution(EntityUid, Solution, Solution)</a> it will ignore size limits.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TryMixAndOverflow(EntityUid targetUid, Solution targetSolution, Solution addedSolution, FixedPoint2 overflowThreshold, out Solution overflowingSolution)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">targetUid</span></td>
+        <td><p>entity holding targetSolution</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">targetSolution</span></td>
+        <td><p>The container to which we try to add.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">addedSolution</span></td>
+        <td><p>solution being added</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.FixedPoint.FixedPoint2.html">FixedPoint2</a></td>
+        <td><span class="parametername">overflowThreshold</span></td>
+        <td><p>After addition this much will be left in targetSolution. Should be less
+than targetSolution.TotalVolume</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">overflowingSolution</span></td>
+        <td><p>Solution that exceeded overflowThreshold</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryRemoveReagent_EntityUid_Content_Shared_Chemistry_Components_Solution_System_String_Content_Shared_FixedPoint_FixedPoint2_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryRemoveReagent(EntityUid%2CContent.Shared.Chemistry.Components.Solution%2CSystem.String%2CContent.Shared.FixedPoint.FixedPoint2)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.cs/#L290">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryRemoveReagent_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryRemoveReagent*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryRemoveReagent_EntityUid_Content_Shared_Chemistry_Components_Solution_System_String_Content_Shared_FixedPoint_FixedPoint2_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryRemoveReagent(EntityUid,Content.Shared.Chemistry.Components.Solution,System.String,Content.Shared.FixedPoint.FixedPoint2)">TryRemoveReagent(EntityUid, Solution, String, FixedPoint2)</h4>
+  <div class="markdown level1 summary"><p>Removes reagent of an Id to the container.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TryRemoveReagent(EntityUid targetUid, Solution container, string reagentId, FixedPoint2 quantity)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">targetUid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">container</span></td>
+        <td><p>Solution container from which we are removing reagent</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">reagentId</span></td>
+        <td><p>The Id of the reagent to remove.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.FixedPoint.FixedPoint2.html">FixedPoint2</a></td>
+        <td><span class="parametername">quantity</span></td>
+        <td><p>The amount of reagent to remove.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>If the reagent to remove was found in the container.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryTransferSolution_EntityUid_EntityUid_Content_Shared_Chemistry_Components_Solution_Content_Shared_Chemistry_Components_Solution_Content_Shared_FixedPoint_FixedPoint2_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryTransferSolution(EntityUid%2CEntityUid%2CContent.Shared.Chemistry.Components.Solution%2CContent.Shared.Chemistry.Components.Solution%2CContent.Shared.FixedPoint.FixedPoint2)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.cs/#L326">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryTransferSolution_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryTransferSolution*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryTransferSolution_EntityUid_EntityUid_Content_Shared_Chemistry_Components_Solution_Content_Shared_Chemistry_Components_Solution_Content_Shared_FixedPoint_FixedPoint2_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryTransferSolution(EntityUid,EntityUid,Content.Shared.Chemistry.Components.Solution,Content.Shared.Chemistry.Components.Solution,Content.Shared.FixedPoint.FixedPoint2)">TryTransferSolution(EntityUid, EntityUid, Solution, Solution, FixedPoint2)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TryTransferSolution(EntityUid sourceUid, EntityUid targetUid, Solution source, Solution target, FixedPoint2 quantity)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">sourceUid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">targetUid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">source</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">target</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.FixedPoint.FixedPoint2.html">FixedPoint2</a></td>
+        <td><span class="parametername">quantity</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryTransferSolution_EntityUid_EntityUid_System_String_System_String_Content_Shared_FixedPoint_FixedPoint2_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryTransferSolution(EntityUid%2CEntityUid%2CSystem.String%2CSystem.String%2CContent.Shared.FixedPoint.FixedPoint2)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.cs/#L352">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryTransferSolution_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryTransferSolution*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_TryTransferSolution_EntityUid_EntityUid_System_String_System_String_Content_Shared_FixedPoint_FixedPoint2_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.TryTransferSolution(EntityUid,EntityUid,System.String,System.String,Content.Shared.FixedPoint.FixedPoint2)">TryTransferSolution(EntityUid, EntityUid, String, String, FixedPoint2)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TryTransferSolution(EntityUid sourceUid, EntityUid targetUid, string source, string target, FixedPoint2 quantity)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">sourceUid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">targetUid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">source</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">target</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.FixedPoint.FixedPoint2.html">FixedPoint2</a></td>
+        <td><span class="parametername">quantity</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_UpdateAppearance_EntityUid_Content_Shared_Chemistry_Components_Solution_System_Nullable_AppearanceComponent__.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.UpdateAppearance(EntityUid%2CContent.Shared.Chemistry.Components.Solution%2CSystem.Nullable%7BAppearanceComponent%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.cs/#L146">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_UpdateAppearance_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.UpdateAppearance*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_UpdateAppearance_EntityUid_Content_Shared_Chemistry_Components_Solution_System_Nullable_AppearanceComponent__" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.UpdateAppearance(EntityUid,Content.Shared.Chemistry.Components.Solution,System.Nullable{AppearanceComponent})">UpdateAppearance(EntityUid, Solution, Nullable&lt;AppearanceComponent&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void UpdateAppearance(EntityUid uid, Solution solution, AppearanceComponent? appearanceComponent = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">uid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">solution</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">AppearanceComponent</span>&gt;</td>
+        <td><span class="parametername">appearanceComponent</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_UpdateChemicals_EntityUid_Content_Shared_Chemistry_Components_Solution_System_Boolean_Content_Shared_Chemistry_Reaction_ReactionMixerComponent_.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.UpdateChemicals(EntityUid%2CContent.Shared.Chemistry.Components.Solution%2CSystem.Boolean%2CContent.Shared.Chemistry.Reaction.ReactionMixerComponent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.cs/#L203">View Source</a>
+  </span>
+  <a id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_UpdateChemicals_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.UpdateChemicals*"></a>
+  <h4 id="Content_Server_Chemistry_EntitySystems_SolutionContainerSystem_UpdateChemicals_EntityUid_Content_Shared_Chemistry_Components_Solution_System_Boolean_Content_Shared_Chemistry_Reaction_ReactionMixerComponent_" data-uid="Content.Server.Chemistry.EntitySystems.SolutionContainerSystem.UpdateChemicals(EntityUid,Content.Shared.Chemistry.Components.Solution,System.Boolean,Content.Shared.Chemistry.Reaction.ReactionMixerComponent)">UpdateChemicals(EntityUid, Solution, Boolean, ReactionMixerComponent)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void UpdateChemicals(EntityUid uid, Solution solutionHolder, bool needsReactionsProcessing = false, ReactionMixerComponent mixerComponent = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">uid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Components.Solution.html">Solution</a></td>
+        <td><span class="parametername">solutionHolder</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">needsReactionsProcessing</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Chemistry.Reaction.ReactionMixerComponent.html">ReactionMixerComponent</a></td>
+        <td><span class="parametername">mixerComponent</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Chemistry_EntitySystems_SolutionContainerSystem.md&amp;value=---%0Auid%3A%20Content.Server.Chemistry.EntitySystems.SolutionContainerSystem%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Chemistry/EntitySystems/SolutionContainerSystem.cs/#L34" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5>In This Article</h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              
+              <span>Generated by <strong>DocFX</strong></span>
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,1082 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class ActionType
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class ActionType
+   ">
+    <meta name="generator" content="docfx 2.56.7.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Content.Shared.Actions.ActionTypes.ActionType">
+  
+  
+  <h1 id="Content_Shared_Actions_ActionTypes_ActionType" data-uid="Content.Shared.Actions.ActionTypes.ActionType" class="text-break">Class ActionType
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">ActionType</span></div>
+      <div class="level2"><a class="xref" href="Content.Shared.Actions.ActionTypes.InstantAction.html">InstantAction</a></div>
+      <div class="level2"><a class="xref" href="Content.Shared.Actions.ActionTypes.TargetedAction.html">TargetedAction</a></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">IComparable</span></div>
+    <div><span class="xref">ICloneable</span></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Content.Shared.Actions.ActionTypes.html">Content.Shared.Actions.ActionTypes</a></h6>
+  <h6><strong>Assembly</strong>: Content.Shared.dll</h6>
+  <h5 id="Content_Shared_Actions_ActionTypes_ActionType_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class ActionType : IEquatable&lt;ActionType&gt;, IComparable, ICloneable</code></pre>
+  </div>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Shared_Actions_ActionTypes_ActionType_AttachedEntity.md&amp;value=---%0Auid%3A%20Content.Shared.Actions.ActionTypes.ActionType.AttachedEntity%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Shared/Actions/ActionTypes/ActionType.cs/#L132">View Source</a>
+  </span>
+  <h4 id="Content_Shared_Actions_ActionTypes_ActionType_AttachedEntity" data-uid="Content.Shared.Actions.ActionTypes.ActionType.AttachedEntity">AttachedEntity</h4>
+  <div class="markdown level1 summary"><p>What entity, if any, currently has this action in the actions component?</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public EntityUid? AttachedEntity</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">EntityUid</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Shared_Actions_ActionTypes_ActionType_AutoPopulate.md&amp;value=---%0Auid%3A%20Content.Shared.Actions.ActionTypes.ActionType.AutoPopulate%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Shared/Actions/ActionTypes/ActionType.cs/#L138">View Source</a>
+  </span>
+  <h4 id="Content_Shared_Actions_ActionTypes_ActionType_AutoPopulate" data-uid="Content.Shared.Actions.ActionTypes.ActionType.AutoPopulate">AutoPopulate</h4>
+  <div class="markdown level1 summary"><p>Whether or not to automatically add this action to the action bar when it becomes available.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool AutoPopulate</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Shared_Actions_ActionTypes_ActionType_AutoRemove.md&amp;value=---%0Auid%3A%20Content.Shared.Actions.ActionTypes.ActionType.AutoRemove%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Shared/Actions/ActionTypes/ActionType.cs/#L145">View Source</a>
+  </span>
+  <h4 id="Content_Shared_Actions_ActionTypes_ActionType_AutoRemove" data-uid="Content.Shared.Actions.ActionTypes.ActionType.AutoRemove">AutoRemove</h4>
+  <div class="markdown level1 summary"><p>Whether or not to automatically remove this action to the action bar when it becomes unavailable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool AutoRemove</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Shared_Actions_ActionTypes_ActionType_Charges.md&amp;value=---%0Auid%3A%20Content.Shared.Actions.ActionTypes.ActionType.Charges%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Shared/Actions/ActionTypes/ActionType.cs/#L90">View Source</a>
+  </span>
+  <h4 id="Content_Shared_Actions_ActionTypes_ActionType_Charges" data-uid="Content.Shared.Actions.ActionTypes.ActionType.Charges">Charges</h4>
+  <div class="markdown level1 summary"><p>Convenience tool for actions with limited number of charges. Automatically decremented on use, and the
+action is disabled when it reaches zero. Does NOT automatically remove the action from the action bar.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int? Charges</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Int32</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Shared_Actions_ActionTypes_ActionType_CheckCanInteract.md&amp;value=---%0Auid%3A%20Content.Shared.Actions.ActionTypes.ActionType.CheckCanInteract%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Shared/Actions/ActionTypes/ActionType.cs/#L114">View Source</a>
+  </span>
+  <h4 id="Content_Shared_Actions_ActionTypes_ActionType_CheckCanInteract" data-uid="Content.Shared.Actions.ActionTypes.ActionType.CheckCanInteract">CheckCanInteract</h4>
+  <div class="markdown level1 summary"><p>Whether the action system should block this action if the user cannot currently interact. Some spells or
+abilities may want to disable this and implement their own checks.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CheckCanInteract</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Shared_Actions_ActionTypes_ActionType_ClientExclusive.md&amp;value=---%0Auid%3A%20Content.Shared.Actions.ActionTypes.ActionType.ClientExclusive%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Shared/Actions/ActionTypes/ActionType.cs/#L120">View Source</a>
+  </span>
+  <h4 id="Content_Shared_Actions_ActionTypes_ActionType_ClientExclusive" data-uid="Content.Shared.Actions.ActionTypes.ActionType.ClientExclusive">ClientExclusive</h4>
+  <div class="markdown level1 summary"><p>If true, will simply execute the action locally without sending to the server.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool ClientExclusive</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Shared_Actions_ActionTypes_ActionType_Cooldown.md&amp;value=---%0Auid%3A%20Content.Shared.Actions.ActionTypes.ActionType.Cooldown%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Shared/Actions/ActionTypes/ActionType.cs/#L77">View Source</a>
+  </span>
+  <h4 id="Content_Shared_Actions_ActionTypes_ActionType_Cooldown" data-uid="Content.Shared.Actions.ActionTypes.ActionType.Cooldown">Cooldown</h4>
+  <div class="markdown level1 summary"><p>The current cooldown on the action.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public (TimeSpan Start, TimeSpan End)? Cooldown</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.ValueTuple</span>&lt;<span class="xref">TimeSpan</span>, <span class="xref">TimeSpan</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Shared_Actions_ActionTypes_ActionType_Description.md&amp;value=---%0Auid%3A%20Content.Shared.Actions.ActionTypes.ActionType.Description%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Shared/Actions/ActionTypes/ActionType.cs/#L51">View Source</a>
+  </span>
+  <h4 id="Content_Shared_Actions_ActionTypes_ActionType_Description" data-uid="Content.Shared.Actions.ActionTypes.ActionType.Description">Description</h4>
+  <div class="markdown level1 summary"><p>Description to show in UI. Accepts formatting.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string Description</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Shared_Actions_ActionTypes_ActionType_DisplayName.md&amp;value=---%0Auid%3A%20Content.Shared.Actions.ActionTypes.ActionType.DisplayName%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Shared/Actions/ActionTypes/ActionType.cs/#L38">View Source</a>
+  </span>
+  <h4 id="Content_Shared_Actions_ActionTypes_ActionType_DisplayName" data-uid="Content.Shared.Actions.ActionTypes.ActionType.DisplayName">DisplayName</h4>
+  <div class="markdown level1 summary"><p>Name to show in UI.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string DisplayName</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Shared_Actions_ActionTypes_ActionType_Enabled.md&amp;value=---%0Auid%3A%20Content.Shared.Actions.ActionTypes.ActionType.Enabled%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Shared/Actions/ActionTypes/ActionType.cs/#L63">View Source</a>
+  </span>
+  <h4 id="Content_Shared_Actions_ActionTypes_ActionType_Enabled" data-uid="Content.Shared.Actions.ActionTypes.ActionType.Enabled">Enabled</h4>
+  <div class="markdown level1 summary"><p>Whether this action is currently enabled. If not enabled, this action cannot be performed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Enabled</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Shared_Actions_ActionTypes_ActionType_Icon.md&amp;value=---%0Auid%3A%20Content.Shared.Actions.ActionTypes.ActionType.Icon%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Shared/Actions/ActionTypes/ActionType.cs/#L15">View Source</a>
+  </span>
+  <h4 id="Content_Shared_Actions_ActionTypes_ActionType_Icon" data-uid="Content.Shared.Actions.ActionTypes.ActionType.Icon">Icon</h4>
+  <div class="markdown level1 summary"><p>Icon representing this action in the UI.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SpriteSpecifier Icon</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Robust.Shared.Utility.SpriteSpecifier</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Shared_Actions_ActionTypes_ActionType_IconColor.md&amp;value=---%0Auid%3A%20Content.Shared.Actions.ActionTypes.ActionType.IconColor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Shared/Actions/ActionTypes/ActionType.cs/#L32">View Source</a>
+  </span>
+  <h4 id="Content_Shared_Actions_ActionTypes_ActionType_IconColor" data-uid="Content.Shared.Actions.ActionTypes.ActionType.IconColor">IconColor</h4>
+  <div class="markdown level1 summary"><p>If not null, this color will modulate the action icon color.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Color IconColor</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Color</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Content_Shared_Actions_ActionTypes_ActionType_IconColor_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This currently only exists for decal-placement actions, so that the action icons correspond to the color of
+the decal. But this is probably useful for other actions, including maybe changing color on toggle.</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Shared_Actions_ActionTypes_ActionType_IconOn.md&amp;value=---%0Auid%3A%20Content.Shared.Actions.ActionTypes.ActionType.IconOn%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Shared/Actions/ActionTypes/ActionType.cs/#L22">View Source</a>
+  </span>
+  <h4 id="Content_Shared_Actions_ActionTypes_ActionType_IconOn" data-uid="Content.Shared.Actions.ActionTypes.ActionType.IconOn">IconOn</h4>
+  <div class="markdown level1 summary"><p>For toggle actions only, icon to show when toggled on. If omitted, the action will simply be highlighted
+when turned on.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SpriteSpecifier IconOn</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Robust.Shared.Utility.SpriteSpecifier</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Shared_Actions_ActionTypes_ActionType_ItemIconStyle.md&amp;value=---%0Auid%3A%20Content.Shared.Actions.ActionTypes.ActionType.ItemIconStyle%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Shared/Actions/ActionTypes/ActionType.cs/#L165">View Source</a>
+  </span>
+  <h4 id="Content_Shared_Actions_ActionTypes_ActionType_ItemIconStyle" data-uid="Content.Shared.Actions.ActionTypes.ActionType.ItemIconStyle">ItemIconStyle</h4>
+  <div class="markdown level1 summary"><p>Determines the appearance of the entity-icon for actions that are enabled via some entity.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ItemActionIconStyle ItemIconStyle</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Content.Shared.Actions.ItemActionIconStyle.html">ItemActionIconStyle</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Shared_Actions_ActionTypes_ActionType_Keywords.md&amp;value=---%0Auid%3A%20Content.Shared.Actions.ActionTypes.ActionType.Keywords%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Shared/Actions/ActionTypes/ActionType.cs/#L57">View Source</a>
+  </span>
+  <h4 id="Content_Shared_Actions_ActionTypes_ActionType_Keywords" data-uid="Content.Shared.Actions.ActionTypes.ActionType.Keywords">Keywords</h4>
+  <div class="markdown level1 summary"><p>Keywords that can be used to search for this action in the action menu.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public HashSet&lt;string&gt; Keywords</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">HashSet</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Shared_Actions_ActionTypes_ActionType_Priority.md&amp;value=---%0Auid%3A%20Content.Shared.Actions.ActionTypes.ActionType.Priority%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Shared/Actions/ActionTypes/ActionType.cs/#L126">View Source</a>
+  </span>
+  <h4 id="Content_Shared_Actions_ActionTypes_ActionType_Priority" data-uid="Content.Shared.Actions.ActionTypes.ActionType.Priority">Priority</h4>
+  <div class="markdown level1 summary"><p>Determines the order in which actions are automatically added the action bar.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Priority</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Shared_Actions_ActionTypes_ActionType_Provider.md&amp;value=---%0Auid%3A%20Content.Shared.Actions.ActionTypes.ActionType.Provider%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Shared/Actions/ActionTypes/ActionType.cs/#L96">View Source</a>
+  </span>
+  <h4 id="Content_Shared_Actions_ActionTypes_ActionType_Provider" data-uid="Content.Shared.Actions.ActionTypes.ActionType.Provider">Provider</h4>
+  <div class="markdown level1 summary"><p>The entity that enables / provides this action. If the action is innate, this may be the user themselves. If
+this action has no provider (e.g., mapping tools), the this will result in broadcast events.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public EntityUid? Provider</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">EntityUid</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Shared_Actions_ActionTypes_ActionType_RawName.md&amp;value=---%0Auid%3A%20Content.Shared.Actions.ActionTypes.ActionType.RawName%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Shared/Actions/ActionTypes/ActionType.cs/#L45">View Source</a>
+  </span>
+  <h4 id="Content_Shared_Actions_ActionTypes_ActionType_RawName" data-uid="Content.Shared.Actions.ActionTypes.ActionType.RawName">RawName</h4>
+  <div class="markdown level1 summary"><p>This is just <a class="xref" href="Content.Shared.Actions.ActionTypes.ActionType.html#Content_Shared_Actions_ActionTypes_ActionType_DisplayName">DisplayName</a> with localized strings resolved and markup removed. If null, will be
+inferred from <a class="xref" href="Content.Shared.Actions.ActionTypes.ActionType.html#Content_Shared_Actions_ActionTypes_ActionType_DisplayName">DisplayName</a>. This is cached to speed up game state handling.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string? RawName</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Shared_Actions_ActionTypes_ActionType_Sound.md&amp;value=---%0Auid%3A%20Content.Shared.Actions.ActionTypes.ActionType.Sound%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Shared/Actions/ActionTypes/ActionType.cs/#L171">View Source</a>
+  </span>
+  <h4 id="Content_Shared_Actions_ActionTypes_ActionType_Sound" data-uid="Content.Shared.Actions.ActionTypes.ActionType.Sound">Sound</h4>
+  <div class="markdown level1 summary"><p>If not null, this sound will be played when performing this action.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SoundSpecifier Sound</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Robust.Shared.Audio.SoundSpecifier</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Shared_Actions_ActionTypes_ActionType_Temporary.md&amp;value=---%0Auid%3A%20Content.Shared.Actions.ActionTypes.ActionType.Temporary%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Shared/Actions/ActionTypes/ActionType.cs/#L157">View Source</a>
+  </span>
+  <h4 id="Content_Shared_Actions_ActionTypes_ActionType_Temporary" data-uid="Content.Shared.Actions.ActionTypes.ActionType.Temporary">Temporary</h4>
+  <div class="markdown level1 summary"><p>Temporary actions are removed from the action component when removed from the action-bar/GUI. Currently,
+should only be used for client-exclusive actions (server is not notified).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Temporary</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Content_Shared_Actions_ActionTypes_ActionType_Temporary_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>Currently there is no way for a player to just voluntarily remove actions. They can hide them from the
+toolbar, but not actually remove them. This is undesirable for things like dynamically added mapping
+entity-selection actions, as the # of actions would just keep increasing.</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Shared_Actions_ActionTypes_ActionType_Toggled.md&amp;value=---%0Auid%3A%20Content.Shared.Actions.ActionTypes.ActionType.Toggled%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Shared/Actions/ActionTypes/ActionType.cs/#L72">View Source</a>
+  </span>
+  <h4 id="Content_Shared_Actions_ActionTypes_ActionType_Toggled" data-uid="Content.Shared.Actions.ActionTypes.ActionType.Toggled">Toggled</h4>
+  <div class="markdown level1 summary"><p>The toggle state of this action. Toggling switches the currently displayed icon, see <a class="xref" href="Content.Shared.Actions.ActionTypes.ActionType.html#Content_Shared_Actions_ActionTypes_ActionType_Icon">Icon</a> and <a class="xref" href="Content.Shared.Actions.ActionTypes.ActionType.html#Content_Shared_Actions_ActionTypes_ActionType_IconOn">IconOn</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Toggled</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Content_Shared_Actions_ActionTypes_ActionType_Toggled_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>The toggle can set directly via <see cref="!:SharedActionsSystem.SetToggled()"></see>, but it will also be
+automatically toggled for targeted-actions while selecting a target.</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Shared_Actions_ActionTypes_ActionType_UseDelay.md&amp;value=---%0Auid%3A%20Content.Shared.Actions.ActionTypes.ActionType.UseDelay%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Shared/Actions/ActionTypes/ActionType.cs/#L83">View Source</a>
+  </span>
+  <h4 id="Content_Shared_Actions_ActionTypes_ActionType_UseDelay" data-uid="Content.Shared.Actions.ActionTypes.ActionType.UseDelay">UseDelay</h4>
+  <div class="markdown level1 summary"><p>Time interval between action uses.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSpan? UseDelay</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">TimeSpan</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Shared_Actions_ActionTypes_ActionType_EntityIcon.md&amp;value=---%0Auid%3A%20Content.Shared.Actions.ActionTypes.ActionType.EntityIcon%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Shared/Actions/ActionTypes/ActionType.cs/#L101">View Source</a>
+  </span>
+  <a id="Content_Shared_Actions_ActionTypes_ActionType_EntityIcon_" data-uid="Content.Shared.Actions.ActionTypes.ActionType.EntityIcon*"></a>
+  <h4 id="Content_Shared_Actions_ActionTypes_ActionType_EntityIcon" data-uid="Content.Shared.Actions.ActionTypes.ActionType.EntityIcon">EntityIcon</h4>
+  <div class="markdown level1 summary"><p>Entity to use for the action icon. Defaults to using <a class="xref" href="Content.Shared.Actions.ActionTypes.ActionType.html#Content_Shared_Actions_ActionTypes_ActionType_Provider">Provider</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public EntityUid? EntityIcon { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">EntityUid</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Shared_Actions_ActionTypes_ActionType_Clone.md&amp;value=---%0Auid%3A%20Content.Shared.Actions.ActionTypes.ActionType.Clone%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Shared/Actions/ActionTypes/ActionType.cs/#L214">View Source</a>
+  </span>
+  <a id="Content_Shared_Actions_ActionTypes_ActionType_Clone_" data-uid="Content.Shared.Actions.ActionTypes.ActionType.Clone*"></a>
+  <h4 id="Content_Shared_Actions_ActionTypes_ActionType_Clone" data-uid="Content.Shared.Actions.ActionTypes.ActionType.Clone">Clone()</h4>
+  <div class="markdown level1 summary"><p>Proper client-side state handling requires the ability to clone an action from the component state.
+Otherwise modifying the action can lead to modifying the stored server state.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract object Clone()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Shared_Actions_ActionTypes_ActionType_CompareTo_System_Nullable_System_Object__.md&amp;value=---%0Auid%3A%20Content.Shared.Actions.ActionTypes.ActionType.CompareTo(System.Nullable%7BSystem.Object%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Shared/Actions/ActionTypes/ActionType.cs/#L181">View Source</a>
+  </span>
+  <a id="Content_Shared_Actions_ActionTypes_ActionType_CompareTo_" data-uid="Content.Shared.Actions.ActionTypes.ActionType.CompareTo*"></a>
+  <h4 id="Content_Shared_Actions_ActionTypes_ActionType_CompareTo_System_Nullable_System_Object__" data-uid="Content.Shared.Actions.ActionTypes.ActionType.CompareTo(System.Nullable{System.Object})">CompareTo(Nullable&lt;Object&gt;)</h4>
+  <div class="markdown level1 summary"><p>Compares two actions based on their properties. This is used to determine equality when the client requests the
+server to perform some action. Also determines the order in which actions are automatically added to the action bar.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int CompareTo(object? obj)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Object</span>&gt;</td>
+        <td><span class="parametername">obj</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Content_Shared_Actions_ActionTypes_ActionType_CompareTo_System_Nullable_System_Object___remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>Basically: if an action has the same priority, name, and is enabled by the same entity, then the actions are considered equal.
+The entity-check is required to avoid toggling all flashlights simultaneously whenever a flashlight-hoarder uses an action.</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Shared_Actions_ActionTypes_ActionType_CopyFrom_System_Object_.md&amp;value=---%0Auid%3A%20Content.Shared.Actions.ActionTypes.ActionType.CopyFrom(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Shared/Actions/ActionTypes/ActionType.cs/#L216">View Source</a>
+  </span>
+  <a id="Content_Shared_Actions_ActionTypes_ActionType_CopyFrom_" data-uid="Content.Shared.Actions.ActionTypes.ActionType.CopyFrom*"></a>
+  <h4 id="Content_Shared_Actions_ActionTypes_ActionType_CopyFrom_System_Object_" data-uid="Content.Shared.Actions.ActionTypes.ActionType.CopyFrom(System.Object)">CopyFrom(Object)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void CopyFrom(object objectToClone)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">objectToClone</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Shared_Actions_ActionTypes_ActionType_Equals_Content_Shared_Actions_ActionTypes_ActionType_.md&amp;value=---%0Auid%3A%20Content.Shared.Actions.ActionTypes.ActionType.Equals(Content.Shared.Actions.ActionTypes.ActionType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Shared/Actions/ActionTypes/ActionType.cs/#L247">View Source</a>
+  </span>
+  <a id="Content_Shared_Actions_ActionTypes_ActionType_Equals_" data-uid="Content.Shared.Actions.ActionTypes.ActionType.Equals*"></a>
+  <h4 id="Content_Shared_Actions_ActionTypes_ActionType_Equals_Content_Shared_Actions_ActionTypes_ActionType_" data-uid="Content.Shared.Actions.ActionTypes.ActionType.Equals(Content.Shared.Actions.ActionTypes.ActionType)">Equals(ActionType)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Equals(ActionType other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Content.Shared.Actions.ActionTypes.ActionType.html">ActionType</a></td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Shared_Actions_ActionTypes_ActionType_GetHashCode.md&amp;value=---%0Auid%3A%20Content.Shared.Actions.ActionTypes.ActionType.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Shared/Actions/ActionTypes/ActionType.cs/#L252">View Source</a>
+  </span>
+  <a id="Content_Shared_Actions_ActionTypes_ActionType_GetHashCode_" data-uid="Content.Shared.Actions.ActionTypes.ActionType.GetHashCode*"></a>
+  <h4 id="Content_Shared_Actions_ActionTypes_ActionType_GetHashCode" data-uid="Content.Shared.Actions.ActionTypes.ActionType.GetHashCode">GetHashCode()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">IComparable</span>
+  </div>
+  <div>
+      <span class="xref">ICloneable</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Shared_Actions_ActionTypes_ActionType.md&amp;value=---%0Auid%3A%20Content.Shared.Actions.ActionTypes.ActionType%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Shared/Actions/ActionTypes/ActionType.cs/#L7" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5>In This Article</h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              
+              <span>Generated by <strong>DocFX</strong></span>
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

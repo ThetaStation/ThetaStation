@@ -1,0 +1,759 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class StorageSystem
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class StorageSystem
+   ">
+    <meta name="generator" content="docfx 2.56.7.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Content.Server.Storage.EntitySystems.StorageSystem">
+  
+  
+  <h1 id="Content_Server_Storage_EntitySystems_StorageSystem" data-uid="Content.Server.Storage.EntitySystems.StorageSystem" class="text-break">Class StorageSystem
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">StorageSystem</span></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Content.Server.Storage.EntitySystems.html">Content.Server.Storage.EntitySystems</a></h6>
+  <h6><strong>Assembly</strong>: Content.Server.dll</h6>
+  <h5 id="Content_Server_Storage_EntitySystems_StorageSystem_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class StorageSystem : EntitySystem</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Storage_EntitySystems_StorageSystem_CanInsert_EntityUid_EntityUid_System_Nullable_System_String___Content_Server_Storage_Components_ServerStorageComponent_.md&amp;value=---%0Auid%3A%20Content.Server.Storage.EntitySystems.StorageSystem.CanInsert(EntityUid%2CEntityUid%2CSystem.Nullable%7BSystem.String%7D%40%2CContent.Server.Storage.Components.ServerStorageComponent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Storage/EntitySystems/StorageSystem.cs/#L490">View Source</a>
+  </span>
+  <a id="Content_Server_Storage_EntitySystems_StorageSystem_CanInsert_" data-uid="Content.Server.Storage.EntitySystems.StorageSystem.CanInsert*"></a>
+  <h4 id="Content_Server_Storage_EntitySystems_StorageSystem_CanInsert_EntityUid_EntityUid_System_Nullable_System_String___Content_Server_Storage_Components_ServerStorageComponent_" data-uid="Content.Server.Storage.EntitySystems.StorageSystem.CanInsert(EntityUid,EntityUid,System.Nullable{System.String}@,Content.Server.Storage.Components.ServerStorageComponent)">CanInsert(EntityUid, EntityUid, out Nullable&lt;String&gt;, ServerStorageComponent)</h4>
+  <div class="markdown level1 summary"><p>Verifies if an entity can be stored and if it fits</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CanInsert(EntityUid uid, EntityUid insertEnt, out string? reason, ServerStorageComponent storageComp = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">uid</span></td>
+        <td><p>The entity to check</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">insertEnt</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">reason</span></td>
+        <td><p>If returning false, the reason displayed to the player</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Content.Server.Storage.Components.ServerStorageComponent.html">ServerStorageComponent</a></td>
+        <td><span class="parametername">storageComp</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>true if it can be inserted, false otherwise</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Storage_EntitySystems_StorageSystem_CloseNestedInterfaces_EntityUid_Robust_Server_Player_IPlayerSession_Content_Server_Storage_Components_ServerStorageComponent_.md&amp;value=---%0Auid%3A%20Content.Server.Storage.EntitySystems.StorageSystem.CloseNestedInterfaces(EntityUid%2CRobust.Server.Player.IPlayerSession%2CContent.Server.Storage.Components.ServerStorageComponent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Storage/EntitySystems/StorageSystem.cs/#L716">View Source</a>
+  </span>
+  <a id="Content_Server_Storage_EntitySystems_StorageSystem_CloseNestedInterfaces_" data-uid="Content.Server.Storage.EntitySystems.StorageSystem.CloseNestedInterfaces*"></a>
+  <h4 id="Content_Server_Storage_EntitySystems_StorageSystem_CloseNestedInterfaces_EntityUid_Robust_Server_Player_IPlayerSession_Content_Server_Storage_Components_ServerStorageComponent_" data-uid="Content.Server.Storage.EntitySystems.StorageSystem.CloseNestedInterfaces(EntityUid,Robust.Server.Player.IPlayerSession,Content.Server.Storage.Components.ServerStorageComponent)">CloseNestedInterfaces(EntityUid, IPlayerSession, ServerStorageComponent)</h4>
+  <div class="markdown level1 summary"><p>If the user has nested-UIs open (e.g., PDA UI open when pda is in a backpack), close them.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void CloseNestedInterfaces(EntityUid uid, IPlayerSession session, ServerStorageComponent storageComp = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">uid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Robust.Server.Player.IPlayerSession</span></td>
+        <td><span class="parametername">session</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Content.Server.Storage.Components.ServerStorageComponent.html">ServerStorageComponent</a></td>
+        <td><span class="parametername">storageComp</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Storage_EntitySystems_StorageSystem_GetAvailableSpace_EntityUid_Content_Server_Storage_Components_ServerStorageComponent_.md&amp;value=---%0Auid%3A%20Content.Server.Storage.EntitySystems.StorageSystem.GetAvailableSpace(EntityUid%2CContent.Server.Storage.Components.ServerStorageComponent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Storage/EntitySystems/StorageSystem.cs/#L450">View Source</a>
+  </span>
+  <a id="Content_Server_Storage_EntitySystems_StorageSystem_GetAvailableSpace_" data-uid="Content.Server.Storage.EntitySystems.StorageSystem.GetAvailableSpace*"></a>
+  <h4 id="Content_Server_Storage_EntitySystems_StorageSystem_GetAvailableSpace_EntityUid_Content_Server_Storage_Components_ServerStorageComponent_" data-uid="Content.Server.Storage.EntitySystems.StorageSystem.GetAvailableSpace(EntityUid,Content.Server.Storage.Components.ServerStorageComponent)">GetAvailableSpace(EntityUid, ServerStorageComponent)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int GetAvailableSpace(EntityUid uid, ServerStorageComponent component = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">uid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Content.Server.Storage.Components.ServerStorageComponent.html">ServerStorageComponent</a></td>
+        <td><span class="parametername">component</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Storage_EntitySystems_StorageSystem_Initialize.md&amp;value=---%0Auid%3A%20Content.Server.Storage.EntitySystems.StorageSystem.Initialize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Storage/EntitySystems/StorageSystem.cs/#L63">View Source</a>
+  </span>
+  <a id="Content_Server_Storage_EntitySystems_StorageSystem_Initialize_" data-uid="Content.Server.Storage.EntitySystems.StorageSystem.Initialize*"></a>
+  <h4 id="Content_Server_Storage_EntitySystems_StorageSystem_Initialize" data-uid="Content.Server.Storage.EntitySystems.StorageSystem.Initialize">Initialize()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Initialize()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Storage_EntitySystems_StorageSystem_Insert_EntityUid_EntityUid_Content_Server_Storage_Components_ServerStorageComponent_System_Boolean_.md&amp;value=---%0Auid%3A%20Content.Server.Storage.EntitySystems.StorageSystem.Insert(EntityUid%2CEntityUid%2CContent.Server.Storage.Components.ServerStorageComponent%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Storage/EntitySystems/StorageSystem.cs/#L538">View Source</a>
+  </span>
+  <a id="Content_Server_Storage_EntitySystems_StorageSystem_Insert_" data-uid="Content.Server.Storage.EntitySystems.StorageSystem.Insert*"></a>
+  <h4 id="Content_Server_Storage_EntitySystems_StorageSystem_Insert_EntityUid_EntityUid_Content_Server_Storage_Components_ServerStorageComponent_System_Boolean_" data-uid="Content.Server.Storage.EntitySystems.StorageSystem.Insert(EntityUid,EntityUid,Content.Server.Storage.Components.ServerStorageComponent,System.Boolean)">Insert(EntityUid, EntityUid, ServerStorageComponent, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Inserts into the storage container</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Insert(EntityUid uid, EntityUid insertEnt, ServerStorageComponent storageComp = null, bool playSound = true)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">uid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">insertEnt</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Content.Server.Storage.Components.ServerStorageComponent.html">ServerStorageComponent</a></td>
+        <td><span class="parametername">storageComp</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">playSound</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>true if the entity was inserted, false otherwise</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Storage_EntitySystems_StorageSystem_OpenStorageUI_EntityUid_EntityUid_Content_Server_Storage_Components_ServerStorageComponent_System_Boolean_.md&amp;value=---%0Auid%3A%20Content.Server.Storage.EntitySystems.StorageSystem.OpenStorageUI(EntityUid%2CEntityUid%2CContent.Server.Storage.Components.ServerStorageComponent%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Storage/EntitySystems/StorageSystem.cs/#L691">View Source</a>
+  </span>
+  <a id="Content_Server_Storage_EntitySystems_StorageSystem_OpenStorageUI_" data-uid="Content.Server.Storage.EntitySystems.StorageSystem.OpenStorageUI*"></a>
+  <h4 id="Content_Server_Storage_EntitySystems_StorageSystem_OpenStorageUI_EntityUid_EntityUid_Content_Server_Storage_Components_ServerStorageComponent_System_Boolean_" data-uid="Content.Server.Storage.EntitySystems.StorageSystem.OpenStorageUI(EntityUid,EntityUid,Content.Server.Storage.Components.ServerStorageComponent,System.Boolean)">OpenStorageUI(EntityUid, EntityUid, ServerStorageComponent, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Opens the storage UI for an entity</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void OpenStorageUI(EntityUid uid, EntityUid entity, ServerStorageComponent storageComp = null, bool silent = false)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">uid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">entity</span></td>
+        <td><p>The entity to open the UI for</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Content.Server.Storage.Components.ServerStorageComponent.html">ServerStorageComponent</a></td>
+        <td><span class="parametername">storageComp</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">silent</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Storage_EntitySystems_StorageSystem_PlayerInsertEntityInWorld_EntityUid_EntityUid_EntityUid_Content_Server_Storage_Components_ServerStorageComponent_.md&amp;value=---%0Auid%3A%20Content.Server.Storage.EntitySystems.StorageSystem.PlayerInsertEntityInWorld(EntityUid%2CEntityUid%2CEntityUid%2CContent.Server.Storage.Components.ServerStorageComponent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Storage/EntitySystems/StorageSystem.cs/#L674">View Source</a>
+  </span>
+  <a id="Content_Server_Storage_EntitySystems_StorageSystem_PlayerInsertEntityInWorld_" data-uid="Content.Server.Storage.EntitySystems.StorageSystem.PlayerInsertEntityInWorld*"></a>
+  <h4 id="Content_Server_Storage_EntitySystems_StorageSystem_PlayerInsertEntityInWorld_EntityUid_EntityUid_EntityUid_Content_Server_Storage_Components_ServerStorageComponent_" data-uid="Content.Server.Storage.EntitySystems.StorageSystem.PlayerInsertEntityInWorld(EntityUid,EntityUid,EntityUid,Content.Server.Storage.Components.ServerStorageComponent)">PlayerInsertEntityInWorld(EntityUid, EntityUid, EntityUid, ServerStorageComponent)</h4>
+  <div class="markdown level1 summary"><p>Inserts an Entity (<code data-dev-comment-type="paramref" class="paramref">toInsert</code>) in the world into storage, informing <code data-dev-comment-type="paramref" class="paramref">player</code> if it fails.
+<code data-dev-comment-type="paramref" class="paramref">toInsert</code> is <em>NOT</em> held, see <see cref="!:PlayerInsertHeldEntity(Robust.Shared.GameObjects.EntityUid)"></see>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool PlayerInsertEntityInWorld(EntityUid uid, EntityUid player, EntityUid toInsert, ServerStorageComponent storageComp = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">uid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">player</span></td>
+        <td><p>The player to insert an entity with</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">toInsert</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Content.Server.Storage.Components.ServerStorageComponent.html">ServerStorageComponent</a></td>
+        <td><span class="parametername">storageComp</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>true if inserted, false otherwise</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Storage_EntitySystems_StorageSystem_PlayerInsertHeldEntity_EntityUid_EntityUid_Content_Server_Storage_Components_ServerStorageComponent_.md&amp;value=---%0Auid%3A%20Content.Server.Storage.EntitySystems.StorageSystem.PlayerInsertHeldEntity(EntityUid%2CEntityUid%2CContent.Server.Storage.Components.ServerStorageComponent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Storage/EntitySystems/StorageSystem.cs/#L646">View Source</a>
+  </span>
+  <a id="Content_Server_Storage_EntitySystems_StorageSystem_PlayerInsertHeldEntity_" data-uid="Content.Server.Storage.EntitySystems.StorageSystem.PlayerInsertHeldEntity*"></a>
+  <h4 id="Content_Server_Storage_EntitySystems_StorageSystem_PlayerInsertHeldEntity_EntityUid_EntityUid_Content_Server_Storage_Components_ServerStorageComponent_" data-uid="Content.Server.Storage.EntitySystems.StorageSystem.PlayerInsertHeldEntity(EntityUid,EntityUid,Content.Server.Storage.Components.ServerStorageComponent)">PlayerInsertHeldEntity(EntityUid, EntityUid, ServerStorageComponent)</h4>
+  <div class="markdown level1 summary"><p>Inserts an entity into storage from the player's active hand</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool PlayerInsertHeldEntity(EntityUid uid, EntityUid player, ServerStorageComponent storageComp = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">uid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">player</span></td>
+        <td><p>The player to insert an entity from</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Content.Server.Storage.Components.ServerStorageComponent.html">ServerStorageComponent</a></td>
+        <td><span class="parametername">storageComp</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>true if inserted, false otherwise</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Storage_EntitySystems_StorageSystem_RecalculateStorageUsed_Content_Server_Storage_Components_ServerStorageComponent_.md&amp;value=---%0Auid%3A%20Content.Server.Storage.EntitySystems.StorageSystem.RecalculateStorageUsed(Content.Server.Storage.Components.ServerStorageComponent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Storage/EntitySystems/StorageSystem.cs/#L429">View Source</a>
+  </span>
+  <a id="Content_Server_Storage_EntitySystems_StorageSystem_RecalculateStorageUsed_" data-uid="Content.Server.Storage.EntitySystems.StorageSystem.RecalculateStorageUsed*"></a>
+  <h4 id="Content_Server_Storage_EntitySystems_StorageSystem_RecalculateStorageUsed_Content_Server_Storage_Components_ServerStorageComponent_" data-uid="Content.Server.Storage.EntitySystems.StorageSystem.RecalculateStorageUsed(Content.Server.Storage.Components.ServerStorageComponent)">RecalculateStorageUsed(ServerStorageComponent)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void RecalculateStorageUsed(ServerStorageComponent storageComp)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Content.Server.Storage.Components.ServerStorageComponent.html">ServerStorageComponent</a></td>
+        <td><span class="parametername">storageComp</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Storage_EntitySystems_StorageSystem_RemoveAndDrop_EntityUid_EntityUid_Content_Server_Storage_Components_ServerStorageComponent_.md&amp;value=---%0Auid%3A%20Content.Server.Storage.EntitySystems.StorageSystem.RemoveAndDrop(EntityUid%2CEntityUid%2CContent.Server.Storage.Components.ServerStorageComponent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Storage/EntitySystems/StorageSystem.cs/#L629">View Source</a>
+  </span>
+  <a id="Content_Server_Storage_EntitySystems_StorageSystem_RemoveAndDrop_" data-uid="Content.Server.Storage.EntitySystems.StorageSystem.RemoveAndDrop*"></a>
+  <h4 id="Content_Server_Storage_EntitySystems_StorageSystem_RemoveAndDrop_EntityUid_EntityUid_Content_Server_Storage_Components_ServerStorageComponent_" data-uid="Content.Server.Storage.EntitySystems.StorageSystem.RemoveAndDrop(EntityUid,EntityUid,Content.Server.Storage.Components.ServerStorageComponent)">RemoveAndDrop(EntityUid, EntityUid, ServerStorageComponent)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool RemoveAndDrop(EntityUid uid, EntityUid removeEnt, ServerStorageComponent storageComp = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">uid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">removeEnt</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Content.Server.Storage.Components.ServerStorageComponent.html">ServerStorageComponent</a></td>
+        <td><span class="parametername">storageComp</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Storage_EntitySystems_StorageSystem_TransferEntities_EntityUid_EntityUid_Content_Server_Storage_Components_ServerStorageComponent_Content_Shared_Lock_LockComponent_Content_Server_Storage_Components_ServerStorageComponent_Content_Shared_Lock_LockComponent_.md&amp;value=---%0Auid%3A%20Content.Server.Storage.EntitySystems.StorageSystem.TransferEntities(EntityUid%2CEntityUid%2CContent.Server.Storage.Components.ServerStorageComponent%2CContent.Shared.Lock.LockComponent%2CContent.Server.Storage.Components.ServerStorageComponent%2CContent.Shared.Lock.LockComponent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Storage/EntitySystems/StorageSystem.cs/#L461">View Source</a>
+  </span>
+  <a id="Content_Server_Storage_EntitySystems_StorageSystem_TransferEntities_" data-uid="Content.Server.Storage.EntitySystems.StorageSystem.TransferEntities*"></a>
+  <h4 id="Content_Server_Storage_EntitySystems_StorageSystem_TransferEntities_EntityUid_EntityUid_Content_Server_Storage_Components_ServerStorageComponent_Content_Shared_Lock_LockComponent_Content_Server_Storage_Components_ServerStorageComponent_Content_Shared_Lock_LockComponent_" data-uid="Content.Server.Storage.EntitySystems.StorageSystem.TransferEntities(EntityUid,EntityUid,Content.Server.Storage.Components.ServerStorageComponent,Content.Shared.Lock.LockComponent,Content.Server.Storage.Components.ServerStorageComponent,Content.Shared.Lock.LockComponent)">TransferEntities(EntityUid, EntityUid, ServerStorageComponent, LockComponent, ServerStorageComponent, LockComponent)</h4>
+  <div class="markdown level1 summary"><p>Move entities from one storage to another.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void TransferEntities(EntityUid source, EntityUid target, ServerStorageComponent sourceComp = null, LockComponent sourceLock = null, ServerStorageComponent targetComp = null, LockComponent targetLock = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">source</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">target</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Content.Server.Storage.Components.ServerStorageComponent.html">ServerStorageComponent</a></td>
+        <td><span class="parametername">sourceComp</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Lock.LockComponent.html">LockComponent</a></td>
+        <td><span class="parametername">sourceLock</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Content.Server.Storage.Components.ServerStorageComponent.html">ServerStorageComponent</a></td>
+        <td><span class="parametername">targetComp</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Content.Shared/Content.Shared.Lock.LockComponent.html">LockComponent</a></td>
+        <td><span class="parametername">targetLock</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Storage_EntitySystems_StorageSystem_UpdateStorageUI_EntityUid_Content_Server_Storage_Components_ServerStorageComponent_.md&amp;value=---%0Auid%3A%20Content.Server.Storage.EntitySystems.StorageSystem.UpdateStorageUI(EntityUid%2CContent.Server.Storage.Components.ServerStorageComponent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Storage/EntitySystems/StorageSystem.cs/#L741">View Source</a>
+  </span>
+  <a id="Content_Server_Storage_EntitySystems_StorageSystem_UpdateStorageUI_" data-uid="Content.Server.Storage.EntitySystems.StorageSystem.UpdateStorageUI*"></a>
+  <h4 id="Content_Server_Storage_EntitySystems_StorageSystem_UpdateStorageUI_EntityUid_Content_Server_Storage_Components_ServerStorageComponent_" data-uid="Content.Server.Storage.EntitySystems.StorageSystem.UpdateStorageUI(EntityUid,Content.Server.Storage.Components.ServerStorageComponent)">UpdateStorageUI(EntityUid, ServerStorageComponent)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void UpdateStorageUI(EntityUid uid, ServerStorageComponent storageComp)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">EntityUid</span></td>
+        <td><span class="parametername">uid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Content.Server.Storage.Components.ServerStorageComponent.html">ServerStorageComponent</a></td>
+        <td><span class="parametername">storageComp</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Storage_EntitySystems_StorageSystem.md&amp;value=---%0Auid%3A%20Content.Server.Storage.EntitySystems.StorageSystem%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Storage/EntitySystems/StorageSystem.Fill.cs/#L6" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5>In This Article</h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              
+              <span>Generated by <strong>DocFX</strong></span>
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

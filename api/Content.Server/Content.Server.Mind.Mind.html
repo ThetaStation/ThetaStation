@@ -1,0 +1,684 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class Mind
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class Mind
+   ">
+    <meta name="generator" content="docfx 2.56.7.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Content.Server.Mind.Mind">
+  
+  
+  <h1 id="Content_Server_Mind_Mind" data-uid="Content.Server.Mind.Mind" class="text-break">Class Mind
+  </h1>
+  <div class="markdown level0 summary"><p>A mind represents the IC &quot;mind&quot; of a player. Stores roles currently.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">Mind</span></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Content.Server.Mind.html">Content.Server.Mind</a></h6>
+  <h6><strong>Assembly</strong>: Content.Server.dll</h6>
+  <h5 id="Content_Server_Mind_Mind_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class Mind : object</code></pre>
+  </div>
+  <h5 id="Content_Server_Mind_Mind_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks"><p>Think of it like this: if a player is supposed to have their memories,
+their mind follows along.</p>
+<p>Things such as respawning do not follow, because you're a new character.
+Getting borged, cloned, turned into a catbeast, etc... will keep it following you.</p>
+</div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Mind_Mind__ctor.md&amp;value=---%0Auid%3A%20Content.Server.Mind.Mind.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Mind/Mind.cs/#L34">View Source</a>
+  </span>
+  <a id="Content_Server_Mind_Mind__ctor_" data-uid="Content.Server.Mind.Mind.#ctor*"></a>
+  <h4 id="Content_Server_Mind_Mind__ctor" data-uid="Content.Server.Mind.Mind.#ctor">Mind()</h4>
+  <div class="markdown level1 summary"><p>Creates the new mind.
+Note: the Mind is NOT initially attached!
+The provided UserId is solely for tracking of intended owner.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Mind()</code></pre>
+  </div>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Mind_Mind_Briefing.md&amp;value=---%0Auid%3A%20Content.Server.Mind.Mind.Briefing%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Mind/Mind.cs/#L27">View Source</a>
+  </span>
+  <h4 id="Content_Server_Mind_Mind_Briefing" data-uid="Content.Server.Mind.Mind.Briefing">Briefing</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string Briefing</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Mind_Mind_AllObjectives.md&amp;value=---%0Auid%3A%20Content.Server.Mind.Mind.AllObjectives%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Mind/Mind.cs/#L93">View Source</a>
+  </span>
+  <a id="Content_Server_Mind_Mind_AllObjectives_" data-uid="Content.Server.Mind.Mind.AllObjectives*"></a>
+  <h4 id="Content_Server_Mind_Mind_AllObjectives" data-uid="Content.Server.Mind.Mind.AllObjectives">AllObjectives</h4>
+  <div class="markdown level1 summary"><p>An enumerable over all the objectives this mind has.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;Objective&gt; AllObjectives { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="Content.Server.Objectives.Objective.html">Objective</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Mind_Mind_AllRoles.md&amp;value=---%0Auid%3A%20Content.Server.Mind.Mind.AllRoles%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Mind/Mind.cs/#L87">View Source</a>
+  </span>
+  <a id="Content_Server_Mind_Mind_AllRoles_" data-uid="Content.Server.Mind.Mind.AllRoles*"></a>
+  <h4 id="Content_Server_Mind_Mind_AllRoles" data-uid="Content.Server.Mind.Mind.AllRoles">AllRoles</h4>
+  <div class="markdown level1 summary"><p>An enumerable over all the roles this mind has.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;Role&gt; AllRoles { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="Content.Server.Roles.Role.html">Role</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Mind_Mind_CharacterName.md&amp;value=---%0Auid%3A%20Content.Server.Mind.Mind.CharacterName%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Mind/Mind.cs/#L60">View Source</a>
+  </span>
+  <a id="Content_Server_Mind_Mind_CharacterName_" data-uid="Content.Server.Mind.Mind.CharacterName*"></a>
+  <h4 id="Content_Server_Mind_Mind_CharacterName" data-uid="Content.Server.Mind.Mind.CharacterName">CharacterName</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string? CharacterName { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Mind_Mind_CurrentEntity.md&amp;value=---%0Auid%3A%20Content.Server.Mind.Mind.CurrentEntity%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Mind/Mind.cs/#L57">View Source</a>
+  </span>
+  <a id="Content_Server_Mind_Mind_CurrentEntity_" data-uid="Content.Server.Mind.Mind.CurrentEntity*"></a>
+  <h4 id="Content_Server_Mind_Mind_CurrentEntity" data-uid="Content.Server.Mind.Mind.CurrentEntity">CurrentEntity</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public EntityUid? CurrentEntity { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">EntityUid</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Mind_Mind_CurrentJob.md&amp;value=---%0Auid%3A%20Content.Server.Mind.Mind.CurrentJob%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Mind/Mind.cs/#L120">View Source</a>
+  </span>
+  <a id="Content_Server_Mind_Mind_CurrentJob_" data-uid="Content.Server.Mind.Mind.CurrentJob*"></a>
+  <h4 id="Content_Server_Mind_Mind_CurrentJob" data-uid="Content.Server.Mind.Mind.CurrentJob">CurrentJob</h4>
+  <div class="markdown level1 summary"><p>Gets the current job</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Job CurrentJob { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Content.Server.Roles.Job.html">Job</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Mind_Mind_IsVisitingEntity.md&amp;value=---%0Auid%3A%20Content.Server.Mind.Mind.IsVisitingEntity%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Mind/Mind.cs/#L51">View Source</a>
+  </span>
+  <a id="Content_Server_Mind_Mind_IsVisitingEntity_" data-uid="Content.Server.Mind.Mind.IsVisitingEntity*"></a>
+  <h4 id="Content_Server_Mind_Mind_IsVisitingEntity" data-uid="Content.Server.Mind.Mind.IsVisitingEntity">IsVisitingEntity</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsVisitingEntity { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Mind_Mind_OriginalOwnerUserId.md&amp;value=---%0Auid%3A%20Content.Server.Mind.Mind.OriginalOwnerUserId%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Mind/Mind.cs/#L48">View Source</a>
+  </span>
+  <a id="Content_Server_Mind_Mind_OriginalOwnerUserId_" data-uid="Content.Server.Mind.Mind.OriginalOwnerUserId*"></a>
+  <h4 id="Content_Server_Mind_Mind_OriginalOwnerUserId" data-uid="Content.Server.Mind.Mind.OriginalOwnerUserId">OriginalOwnerUserId</h4>
+  <div class="markdown level1 summary"><p>The session ID of the original owner, if any.
+May end up used for round-end information (as the owner may have abandoned Mind since)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public NetUserId? OriginalOwnerUserId { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">Robust.Shared.Network.NetUserId</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Mind_Mind_OwnedComponent.md&amp;value=---%0Auid%3A%20Content.Server.Mind.Mind.OwnedComponent%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Mind/Mind.cs/#L74">View Source</a>
+  </span>
+  <a id="Content_Server_Mind_Mind_OwnedComponent_" data-uid="Content.Server.Mind.Mind.OwnedComponent*"></a>
+  <h4 id="Content_Server_Mind_Mind_OwnedComponent" data-uid="Content.Server.Mind.Mind.OwnedComponent">OwnedComponent</h4>
+  <div class="markdown level1 summary"><p>The component currently owned by this mind.
+Can be null.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public MindContainerComponent OwnedComponent { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Content.Server.Mind.Components.MindContainerComponent.html">MindContainerComponent</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Mind_Mind_OwnedEntity.md&amp;value=---%0Auid%3A%20Content.Server.Mind.Mind.OwnedEntity%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Mind/Mind.cs/#L81">View Source</a>
+  </span>
+  <a id="Content_Server_Mind_Mind_OwnedEntity_" data-uid="Content.Server.Mind.Mind.OwnedEntity*"></a>
+  <h4 id="Content_Server_Mind_Mind_OwnedEntity" data-uid="Content.Server.Mind.Mind.OwnedEntity">OwnedEntity</h4>
+  <div class="markdown level1 summary"><p>The entity currently owned by this mind.
+Can be null.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public EntityUid? OwnedEntity { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">EntityUid</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Mind_Mind_PreventGhosting.md&amp;value=---%0Auid%3A%20Content.Server.Mind.Mind.PreventGhosting%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Mind/Mind.cs/#L99">View Source</a>
+  </span>
+  <a id="Content_Server_Mind_Mind_PreventGhosting_" data-uid="Content.Server.Mind.Mind.PreventGhosting*"></a>
+  <h4 id="Content_Server_Mind_Mind_PreventGhosting" data-uid="Content.Server.Mind.Mind.PreventGhosting">PreventGhosting</h4>
+  <div class="markdown level1 summary"><p>Prevents user from ghosting out</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool PreventGhosting { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Mind_Mind_PreventSuicide.md&amp;value=---%0Auid%3A%20Content.Server.Mind.Mind.PreventSuicide%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Mind/Mind.cs/#L106">View Source</a>
+  </span>
+  <a id="Content_Server_Mind_Mind_PreventSuicide_" data-uid="Content.Server.Mind.Mind.PreventSuicide*"></a>
+  <h4 id="Content_Server_Mind_Mind_PreventSuicide" data-uid="Content.Server.Mind.Mind.PreventSuicide">PreventSuicide</h4>
+  <div class="markdown level1 summary"><p>Prevents user from suiciding</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool PreventSuicide { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Mind_Mind_Session.md&amp;value=---%0Auid%3A%20Content.Server.Mind.Mind.Session%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Mind/Mind.cs/#L114">View Source</a>
+  </span>
+  <a id="Content_Server_Mind_Mind_Session_" data-uid="Content.Server.Mind.Mind.Session*"></a>
+  <h4 id="Content_Server_Mind_Mind_Session" data-uid="Content.Server.Mind.Mind.Session">Session</h4>
+  <div class="markdown level1 summary"><p>The session of the player owning this mind.
+Can be null, in which case the player is currently not logged in.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IPlayerSession Session { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Robust.Server.Player.IPlayerSession</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Mind_Mind_TimeOfDeath.md&amp;value=---%0Auid%3A%20Content.Server.Mind.Mind.TimeOfDeath%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Mind/Mind.cs/#L67">View Source</a>
+  </span>
+  <a id="Content_Server_Mind_Mind_TimeOfDeath_" data-uid="Content.Server.Mind.Mind.TimeOfDeath*"></a>
+  <h4 id="Content_Server_Mind_Mind_TimeOfDeath" data-uid="Content.Server.Mind.Mind.TimeOfDeath">TimeOfDeath</h4>
+  <div class="markdown level1 summary"><p>The time of death for this Mind.
+Can be null - will be null if the Mind is not considered &quot;dead&quot;.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSpan? TimeOfDeath { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">TimeSpan</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Mind_Mind_UserId.md&amp;value=---%0Auid%3A%20Content.Server.Mind.Mind.UserId%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Mind/Mind.cs/#L41">View Source</a>
+  </span>
+  <a id="Content_Server_Mind_Mind_UserId_" data-uid="Content.Server.Mind.Mind.UserId*"></a>
+  <h4 id="Content_Server_Mind_Mind_UserId" data-uid="Content.Server.Mind.Mind.UserId">UserId</h4>
+  <div class="markdown level1 summary"><p>The session ID of the player owning this mind.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public NetUserId? UserId { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">Robust.Shared.Network.NetUserId</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Mind_Mind_VisitingEntity.md&amp;value=---%0Auid%3A%20Content.Server.Mind.Mind.VisitingEntity%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Mind/Mind.cs/#L54">View Source</a>
+  </span>
+  <a id="Content_Server_Mind_Mind_VisitingEntity_" data-uid="Content.Server.Mind.Mind.VisitingEntity*"></a>
+  <h4 id="Content_Server_Mind_Mind_VisitingEntity" data-uid="Content.Server.Mind.Mind.VisitingEntity">VisitingEntity</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public EntityUid? VisitingEntity { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">EntityUid</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/ThetaStation/ThetaStation/new/master/apiSpec/new?filename=Content_Server_Mind_Mind.md&amp;value=---%0Auid%3A%20Content.Server.Mind.Mind%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/ThetaStation/ThetaStation/blob/master/Content.Server/Mind/Mind.cs/#L21" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5>In This Article</h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              
+              <span>Generated by <strong>DocFX</strong></span>
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
