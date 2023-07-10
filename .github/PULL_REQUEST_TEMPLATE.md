@@ -1,33 +1,28 @@
 <!--
-Хороший гайд из другого репозитория: https://github.com/TauCetiStation/TauCetiClassic/blob/master/.github/wiki/STYLING_OF_PR.md
+Description: Describe changes in this PR. If there are issues that will be resolved by it - also put them here (to close them automatically use keywords https://help.github.com/en/articles/closing-issues-using-keywords).
 
-Описание:
-Опишите изменения данного ПР-а. Если есть связные ишью (issues), или другие ПРы - укажите их тут, для автоматического закрытия ишью следует использовать ключевые слова https://help.github.com/en/articles/closing-issues-using-keywords
+What will this PR improve: Describe motivation for your changes. This point is especially important for balance changes/new mechanics.
 
-Почему и что этот ПР улучшит:
-Опишите причину для изменений. Этот пункт особенно важен для описания изменений баланса, новых механик.
+Changelog: 
+Changelog supports following tags:
+add/new - new content
+del/delete - content removal
+mod/modify/tweak - content tweaks (ex: balances changes)
+fix - bugfixes
 
-Чейнджлог:
-Чейнджлог поддерживает следущие теги:
-add/new - новый контент
-del/delete - удаление контента
-mod/modify/tweak - изменение контента (например баланс)
-fix - исправление багов
-
-Вы можете указать своё имя после символа :cl: (вместо Theta Station). В случае если в вашем ПРе используются чужие ассеты/код, то сюда же следует поместить имена других авторов.
+You can put your name after :cl: (instead of ThetaStation). In case if your PR uses assets/code which is not yours, you should also add other authors here.
 -->
 
 
+## Description
 
-## Описание PR
+**Screenshots**
 
-**Скриншоты**
+## What will this PR improve
 
-## Почему и что этот ПР улучшит
-
-## Чеинжлог
+## Changelog
 :cl: ThetaStation
-add: Добавлено веселье!
-del: Убрано веселье!
-mod: Изменено веселье!
-fix: Исправлено веселье!
+add: Added fun
+del: Removed fun
+mod: Tweaked fun
+fix: Fixed fun
