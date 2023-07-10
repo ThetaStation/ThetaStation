@@ -10,8 +10,9 @@ from github.PullRequest import PullRequest
 
 try: hookUrl = environ.get("HOOK_URL")
 except KeyError: raise RuntimeError("Hook URL is missing (HOOK_URL). Add it to the step environment.")
-try: commitSha = environ.get("GITHUB_SHA")
-except KeyError: raise RuntimeError("Target commit hash is missing (GITHUB_SHA). Something went really wrong.")
+try: commitSha = environ.get("COMMIT_SHA")
+except KeyError: raise RuntimeError("Target commit hash is missing (COMMIT_SHA). Add it to the step environment (stored in GITHUB_SHA).")
+
 
 g = Github()
 r = g.get_repo(repoName)
@@ -21,7 +22,7 @@ def getPullRequestByCommit(commit: Commit) -> PullRequest:
     if pulls.totalCount == 0: return None
     return pulls[0]
 
-def parsePullRequestDesc(desc: str) -> str:
+def parsePullRequestDesc(authorName: str, desc: str) -> str:
     tags = {("add","new"):":new:",
             ("del","delete","remove"):":wastebasket:",
             tuple(["fix"]):":wrench:",
@@ -34,7 +35,13 @@ def parsePullRequestDesc(desc: str) -> str:
     for i, line in enumerate(lines):
         if line.startswith(":cl:") or line.startswith("🆑"):
             clFound = True
-            result += line + "\n"
+
+            authors = line
+            authors = authors.removeprefix(":cl:")
+            authors = authors.removeprefix("🆑")
+
+            result += ":cl:" + (" " + authorName if authors.isspace() else authors) + "\n"
+
             for ti, tagLine in enumerate(lines[i+1:]):
                 if len(tagLine) == 0 or tagLine.isspace(): continue
 
@@ -55,7 +62,7 @@ print(f"Target commit: {commitSha}")
 pr = getPullRequestByCommit(r.get_commit(commitSha))
 if pr is None: raise RuntimeError("Target commit does not belong to any pull request.")
 
-message = parsePullRequestDesc(pr.body)
+message = parsePullRequestDesc(pr.user.login, pr.body)
 print(f"Changelog generated successfully.\n---\n{message}\n---")
 
 response = post(hookUrl, json={"content" : message})
