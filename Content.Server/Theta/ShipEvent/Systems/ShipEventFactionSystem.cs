@@ -245,9 +245,9 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         _boundsCompressionTimer = 0;
         _lootboxTimer = 0;
         _lastAnnoucementMinute = 0;
-        
+
         LootboxPrototypes.Clear();
-        
+
         CurrentBoundsOffset = 0;
 
         ShipTypes.Clear();
@@ -543,7 +543,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         _mindSystem.AddRole(mind.Mind, shipEventRole);
         team.AddMember(shipEventRole);
 
-        SetName(spawnedEntity, $"{GetName(spawnedEntity)} ({team.Name})");
+        SetPlayerCharacterName(spawnedEntity, $"{GetName(spawnedEntity)} ({team.Name})");
 
         SetupActions(spawnedEntity, team, session);
 
@@ -630,18 +630,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         var markerShip = EntityManager.EnsureComponent<ShipEventFactionMarkerComponent>(shipEntity);
         markerShip.Team = team;
-    }
-
-    /// <summary>
-    ///     Sets ship name.
-    /// </summary>
-    /// <param name="shipUid">Ship grid uid</param>
-    /// <param name="shipName">Name of ship</param>
-    private void SetShipName(EntityUid shipUid, string shipName)
-    {
-        if (!TryComp<MetaDataComponent>(shipUid, out var meta))
-            return;
-        meta.EntityName = shipName;
     }
 
     /// <summary>
