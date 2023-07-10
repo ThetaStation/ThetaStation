@@ -1,7 +1,9 @@
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Shared.Interaction.Events;
+using Content.Shared.Theta.ShipEvent;
 using Content.Shared.Theta.ShipEvent.UI;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Random;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
@@ -9,6 +11,34 @@ namespace Content.Server.Theta.ShipEvent.Systems;
 public sealed partial class ShipEventFactionSystem
 {
     public List<(EntityUid, float)> Lootboxes = new();
+    
+    private void OnLootboxInfoRequest(LootboxInfoRequest msg, EntitySessionEventArgs args)
+    {
+        List<EntityUid> ents = new();
+        List<Box2> bounds = new();
+        List<float> lifetime = new();
+        
+        foreach ((EntityUid ent, float lt) in Lootboxes)
+        {
+            ents.Add(ent);
+            lifetime.Add(lt);
+            if (EntityManager.TryGetComponent<MapGridComponent>(ent, out MapGridComponent? grid))
+            {
+                Vector2 worldPos = _formSys.GetWorldPosition(ent);
+                Box2 worldBounds = grid.LocalAABB;
+                worldBounds.BottomLeft += worldPos;
+                worldBounds.TopRight += worldPos;
+                bounds.Add(worldBounds);
+            }
+            else
+            {
+                Log.Error("Lootbox without grid component: " + ent);
+                bounds.Add(new Box2(0, 0, 0, 0));
+            }
+        }
+        
+        RaiseNetworkEvent(new LootboxInfo(ents, bounds, lifetime));
+    }
     
     private void OnLootboxSpawnTriggered(EntityUid uid, ShipEventLootboxSpawnTriggerComponent trigger, UseInHandEvent args)
     {
