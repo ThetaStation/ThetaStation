@@ -10,7 +10,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-    - pos: 35.836506,0.4235164
+    - pos: 45.836506,10.423516
       parent: invalid
       type: Transform
     - chunks:
@@ -44,9 +44,23 @@ entities:
       data:
         tiles:
           0,0:
-            0: 7
+            0: 52991
           0,-1:
-            0: 32256
+            0: 65216
+          0,1:
+            0: 8
+          1,0:
+            0: 65535
+          1,1:
+            0: 52991
+          2,0:
+            0: 30579
+          2,1:
+            0: 307
+          1,-1:
+            0: 65527
+          2,-1:
+            0: 12544
         uniqueMixes:
         - volume: 2500
           temperature: 293.15
@@ -415,28 +429,28 @@ entities:
       type: Transform
 - proto: lanternextrabright
   entities:
-  - uid: 72
+  - uid: 71
     components:
     - pos: 6.5,2.5
       parent: 1
       type: Transform
 - proto: Pickaxe
   entities:
-  - uid: 71
+  - uid: 72
     components:
     - pos: 4.5,2.5
       parent: 1
       type: Transform
 - proto: ShipeventLootboxHatsSpawner
   entities:
-  - uid: 74
+  - uid: 73
     components:
     - pos: 5.5,-1.5
       parent: 1
       type: Transform
 - proto: ShipeventLootboxLootSpawner
   entities:
-  - uid: 73
+  - uid: 74
     components:
     - pos: 6.5,1.5
       parent: 1
@@ -444,6 +458,11 @@ entities:
   - uid: 75
     components:
     - pos: 4.5,0.5
+      parent: 1
+      type: Transform
+  - uid: 76
+    components:
+    - pos: 2.5,0.5
       parent: 1
       type: Transform
 ...

@@ -35,7 +35,7 @@ shipevent-roundendtimer-fivemins = До окончания раунда оста
 shipevent-roundendtimer-onemin = Раунд вот-вот закончится...
 
 shipevent-lootboxspawned = Новая партия схронов уже на поле. Бегите их собирать!
-
+shipevent-pointsadded = Команде добавлено { $points } очков, возрадуйтесь!
 
 ## Role stuff
 

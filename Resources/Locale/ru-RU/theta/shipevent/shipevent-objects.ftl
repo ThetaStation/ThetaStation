@@ -23,6 +23,9 @@ ent-TurretAmmoContainerBluespace = контейнер для боеприпас�
 ent-LootboxSpawnTriggerItem = призыв лутбоксов
     .desc = { "Боже, НТ храни." }
     .suffix = { "ShipEvent" }
+ent-PointStorageItem = хранилище очков
+    .desc = { "Боже, НТ храни." }
+    .suffix = { "ShipEvent" }
 
 ## Guns
 

@@ -1,5 +1,7 @@
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Shared.Interaction.Events;
+using Content.Shared.Theta.ShipEvent.UI;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Robust.Shared.Random;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
@@ -11,6 +13,18 @@ public sealed partial class ShipEventFactionSystem
     private void OnLootboxSpawnTriggered(EntityUid uid, ShipEventLootboxSpawnTriggerComponent trigger, UseInHandEvent args)
     {
         SpawnLootboxes(trigger.LootboxSpawnAmount);
+    }
+    
+    private void OnPointStorageTriggered(EntityUid uid, ShipEventPointStorageComponent storage, UseInHandEvent args)
+    {
+        if (EntityManager.TryGetComponent<ShipEventFactionMarkerComponent>(args.User, out ShipEventFactionMarkerComponent? marker))
+        {
+            if (marker.Team != null)
+            {
+                TeamMessage(marker.Team, Loc.GetString("shipevent-pointsadded", ("points", storage.Points)));
+                marker.Team.Points += storage.Points;
+            }
+        }
     }
 
     private void CheckLootboxTimer(float deltaTime)

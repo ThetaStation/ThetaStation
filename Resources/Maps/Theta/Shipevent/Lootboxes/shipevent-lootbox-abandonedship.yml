@@ -13,7 +13,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-    - pos: 11.121021,0.32809448
+    - pos: 21.121021,10.3280945
       parent: invalid
       type: Transform
     - chunks:
@@ -53,9 +53,31 @@ entities:
       data:
         tiles:
           0,0:
-            0: 119
+            0: 65535
           0,-1:
-            0: 28672
+            0: 65535
+          0,1:
+            0: 36079
+          0,2:
+            0: 2184
+          1,0:
+            0: 13182
+          1,1:
+            0: 19
+          0,-2:
+            0: 63458
+          1,-2:
+            0: 65350
+          1,-1:
+            0: 30591
+          1,-3:
+            0: 17408
+          -1,0:
+            0: 136
+          -1,-2:
+            0: 52352
+          -1,-1:
+            0: 34956
         uniqueMixes:
         - volume: 2500
           temperature: 293.15
@@ -78,14 +100,14 @@ entities:
     - type: RadiationGridResistance
 - proto: Bed
   entities:
-  - uid: 47
+  - uid: 2
     components:
     - pos: 1.5,3.5
       parent: 1
       type: Transform
 - proto: BedsheetRed
   entities:
-  - uid: 48
+  - uid: 3
     components:
     - rot: 1.5707963267948966 rad
       pos: 1.5,3.5
@@ -93,34 +115,34 @@ entities:
       type: Transform
 - proto: BookMap
   entities:
-  - uid: 51
+  - uid: 4
     components:
     - pos: 0.5,-0.5
       parent: 1
       type: Transform
 - proto: Bookshelf
   entities:
-  - uid: 49
+  - uid: 5
     components:
     - pos: 0.5,0.5
       parent: 1
       type: Transform
 - proto: CannonBall
   entities:
-  - uid: 50
+  - uid: 6
     components:
     - pos: 3.5,-0.5
       parent: 1
       type: Transform
 - proto: ChairWood
   entities:
-  - uid: 40
+  - uid: 7
     components:
     - rot: 1.5707963267948966 rad
       pos: 4.5,-1.5
       parent: 1
       type: Transform
-  - uid: 46
+  - uid: 8
     components:
     - rot: 1.5707963267948966 rad
       pos: 2.5,4.5
@@ -128,31 +150,31 @@ entities:
       type: Transform
 - proto: CrateFunPirate
   entities:
-  - uid: 41
+  - uid: 9
     components:
     - pos: 4.5,3.5
       parent: 1
       type: Transform
 - proto: Girder
   entities:
-  - uid: 5
+  - uid: 10
     components:
     - pos: -0.5,-0.5
       parent: 1
       type: Transform
-  - uid: 8
+  - uid: 11
     components:
     - pos: 7.5,-5.5
       parent: 1
       type: Transform
 - proto: ShipeventLootboxHatsSpawner
   entities:
-  - uid: 31
+  - uid: 12
     components:
     - pos: 5.5,-1.5
       parent: 1
       type: Transform
-  - uid: 42
+  - uid: 13
     components:
     - rot: 1.5707963267948966 rad
       pos: 1.5,3.5
@@ -160,26 +182,31 @@ entities:
       type: Transform
 - proto: ShipeventLootboxLootSpawner
   entities:
-  - uid: 43
+  - uid: 14
     components:
     - rot: 1.5707963267948966 rad
       pos: 4.5,3.5
       parent: 1
       type: Transform
-  - uid: 44
+  - uid: 15
     components:
     - rot: 1.5707963267948966 rad
       pos: 3.5,4.5
       parent: 1
       type: Transform
+  - uid: 53
+    components:
+    - pos: 1.5,0.5
+      parent: 1
+      type: Transform
 - proto: TableWood
   entities:
-  - uid: 39
+  - uid: 16
     components:
     - pos: 5.5,-1.5
       parent: 1
       type: Transform
-  - uid: 45
+  - uid: 17
     components:
     - rot: 1.5707963267948966 rad
       pos: 3.5,4.5
@@ -187,162 +214,162 @@ entities:
       type: Transform
 - proto: WallWood
   entities:
-  - uid: 2
+  - uid: 18
     components:
     - pos: -1.5,-5.5
       parent: 1
       type: Transform
-  - uid: 3
+  - uid: 19
     components:
     - pos: -1.5,-4.5
       parent: 1
       type: Transform
-  - uid: 4
+  - uid: 20
     components:
     - pos: -1.5,-3.5
       parent: 1
       type: Transform
-  - uid: 6
+  - uid: 21
     components:
     - pos: -0.5,-3.5
       parent: 1
       type: Transform
-  - uid: 7
+  - uid: 22
     components:
     - pos: -0.5,-1.5
       parent: 1
       type: Transform
-  - uid: 9
+  - uid: 23
     components:
     - pos: -0.5,0.5
       parent: 1
       type: Transform
-  - uid: 10
+  - uid: 24
     components:
     - pos: -0.5,1.5
       parent: 1
       type: Transform
-  - uid: 11
+  - uid: 25
     components:
     - pos: 0.5,1.5
       parent: 1
       type: Transform
-  - uid: 12
+  - uid: 26
     components:
     - pos: 0.5,2.5
       parent: 1
       type: Transform
-  - uid: 13
+  - uid: 27
     components:
     - pos: 0.5,3.5
       parent: 1
       type: Transform
-  - uid: 14
+  - uid: 28
     components:
     - pos: 0.5,4.5
       parent: 1
       type: Transform
-  - uid: 15
+  - uid: 29
     components:
     - pos: 1.5,4.5
       parent: 1
       type: Transform
-  - uid: 16
+  - uid: 30
     components:
     - pos: 1.5,5.5
       parent: 1
       type: Transform
-  - uid: 17
+  - uid: 31
     components:
     - pos: 2.5,5.5
       parent: 1
       type: Transform
-  - uid: 18
+  - uid: 32
     components:
     - pos: 3.5,5.5
       parent: 1
       type: Transform
-  - uid: 19
+  - uid: 33
     components:
     - pos: 4.5,5.5
       parent: 1
       type: Transform
-  - uid: 20
+  - uid: 34
     components:
     - pos: 4.5,4.5
       parent: 1
       type: Transform
-  - uid: 21
+  - uid: 35
     components:
     - pos: 5.5,4.5
       parent: 1
       type: Transform
-  - uid: 22
+  - uid: 36
     components:
     - pos: 5.5,3.5
       parent: 1
       type: Transform
-  - uid: 23
+  - uid: 37
     components:
     - pos: 6.5,1.5
       parent: 1
       type: Transform
-  - uid: 24
+  - uid: 38
     components:
     - pos: 6.5,-0.5
       parent: 1
       type: Transform
-  - uid: 25
+  - uid: 39
     components:
     - pos: 6.5,-1.5
       parent: 1
       type: Transform
-  - uid: 26
+  - uid: 40
     components:
     - pos: 6.5,-2.5
       parent: 1
       type: Transform
-  - uid: 27
+  - uid: 41
     components:
     - pos: 6.5,-3.5
       parent: 1
       type: Transform
-  - uid: 28
+  - uid: 42
     components:
     - pos: 7.5,-3.5
       parent: 1
       type: Transform
-  - uid: 29
+  - uid: 43
     components:
     - pos: 7.5,-4.5
       parent: 1
       type: Transform
-  - uid: 34
+  - uid: 44
     components:
     - pos: 1.5,2.5
       parent: 1
       type: Transform
-  - uid: 35
+  - uid: 45
     components:
     - pos: 5.5,2.5
       parent: 1
       type: Transform
-  - uid: 36
+  - uid: 46
     components:
     - pos: 4.5,2.5
       parent: 1
       type: Transform
-  - uid: 37
+  - uid: 47
     components:
     - pos: 5.5,-2.5
       parent: 1
       type: Transform
-  - uid: 38
+  - uid: 48
     components:
     - pos: 4.5,-2.5
       parent: 1
       type: Transform
-  - uid: 52
+  - uid: 49
     components:
     - rot: 1.5707963267948966 rad
       pos: 3.5,-2.5
@@ -350,19 +377,19 @@ entities:
       type: Transform
 - proto: WeaponLauncherPirateCannon
   entities:
-  - uid: 30
+  - uid: 50
     components:
     - pos: 4.5,-0.5
       parent: 1
       type: Transform
 - proto: WoodDoor
   entities:
-  - uid: 32
+  - uid: 51
     components:
     - pos: 3.5,2.5
       parent: 1
       type: Transform
-  - uid: 33
+  - uid: 52
     components:
     - pos: 2.5,2.5
       parent: 1
