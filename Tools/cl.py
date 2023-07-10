@@ -40,7 +40,7 @@ def parsePullRequestDesc(authorName: str, desc: str) -> str:
             authors = authors.removeprefix(":cl:")
             authors = authors.removeprefix("🆑")
 
-            result += ":cl: " + (authorName if authors.isspace() else authors) + "\n"
+            result += ":cl:" + (" " + authorName if authors.isspace() else authors) + "\n"
 
             for ti, tagLine in enumerate(lines[i+1:]):
                 if len(tagLine) == 0 or tagLine.isspace(): continue
