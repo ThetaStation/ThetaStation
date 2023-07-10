@@ -55,7 +55,7 @@ print(f"Target commit: {commitSha}")
 pr = getPullRequestByCommit(r.get_commit(commitSha))
 if pr is None: raise RuntimeError("Target commit does not belong to any pull request.")
 
-message = f"{parsePullRequestDesc(pr.body)}"
+message = parsePullRequestDesc(pr.body)
 print(f"Changelog generated successfully.\n---\n{message}\n---")
 
 response = post(hookUrl, json={"content" : message})
