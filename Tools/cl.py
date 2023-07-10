@@ -10,8 +10,8 @@ from github.PullRequest import PullRequest
 
 try: hookUrl = environ.get("HOOK_URL")
 except KeyError: raise RuntimeError("Hook URL is missing (HOOK_URL). Add it to the step environment.")
-try: commitSha = environ.get("COMMIT_SHA")
-except KeyError: raise RuntimeError("Target commit hash is missing (COMMIT_SHA). Add it to the step environment (stored in GITHUB_SHA).")
+try: commitSha = environ.get("GITHUB_SHA")
+except KeyError: raise RuntimeError("Target commit hash is missing (GITHUB_SHA). Something went really wrong.")
 
 
 g = Github()
