@@ -721,6 +721,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             return;
 
         SetMarkers(newShip, team);
+        SetName(newShip, team.ShipName);
 
         team.Ship = newShip;
 
