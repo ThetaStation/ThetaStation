@@ -13,7 +13,11 @@ public sealed class RadarLootboxTimer : RadarModule
     private readonly IResourceCache resCache;
     private readonly LootboxInfoSystem lootboxInfoSys;
     private LootboxInfo? lootboxInfo;
+    
     private Font font;
+    private const int offsetX = 0;
+    private const int offsetY = -6;
+    
     private DateTime lastTime = DateTime.MinValue;
 
     public RadarLootboxTimer(ModularRadarControl parentRadar) : base(parentRadar)
@@ -42,7 +46,7 @@ public sealed class RadarLootboxTimer : RadarModule
 
         if (lootboxInfo == null)
             return;
-
+        
         for(int i = 0; i < lootboxInfo.Entities.Count; i++)
         {
             Vector2 pos = lootboxInfo.Bounds[i].Center;
@@ -50,8 +54,13 @@ public sealed class RadarLootboxTimer : RadarModule
             pos = parameters.DrawMatrix.Transform(pos);
             pos.Y = -pos.Y;
             pos = ScalePosition(pos);
+            pos.X += offsetX;
+            pos.Y += offsetY;
             
-            handle.DrawString(font, pos, ((int)lootboxInfo.Lifetime[i]).ToString(), Color.Yellow);
+            int minutes = (int)Math.Floor(lootboxInfo.Lifetime[i] / 60);
+            int seconds = (int)lootboxInfo.Lifetime[i] - minutes*60;
+            
+            handle.DrawString(font, pos, $"{minutes:D2}:{seconds:D2}", Color.HotPink);
             lootboxInfo.Lifetime[i] -= dt; //so we don't stop counting if we can't fetch new lootbox data rn
         }
     }

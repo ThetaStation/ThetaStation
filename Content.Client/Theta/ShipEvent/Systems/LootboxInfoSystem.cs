@@ -11,7 +11,7 @@ public sealed class LootboxInfoSystem : EntitySystem
 {
     public event LootboxInfoHandler? OnLootboxInfoReceived;
     private float syncTimer;
-    private const float syncInterval = 10;
+    private const float syncInterval = 50;
     
     public override void Initialize()
     {
