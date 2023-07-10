@@ -50,6 +50,9 @@ shipevent-roundend-team = Team '[color={ $color }]{ $name }[/color]' (ship name 
 shipevent-roundend-teamstats = Has collected { $points } points, { $kills } kills, { $assists } assists, and they have respawned { $respawns } time(s).
 shipevent-roundend-winner = THE WINNER IS - TEAM '{ $name }'! Let's all congratulate them with their victory via OOC! (or badmouth them for their luck).
 
+## For discord roundend messages
+shipevent-roundend-discord-team = Team under the guidance of '{ $capname }' wins.
+shipevent-roundend-discord-teamstats = Has collected { $points } points, { $kills } kills, { $assists } assists, and they have respawned { $respawns } time(s).
 
 ## Misc.
 

@@ -1,5 +1,5 @@
-name: "Оставить предложение"
-description: "Любые идеи."
+name: "Leave feedback"
+description: "Any ideas."
 labels: ["Proposal"]
 body:
   - type: textarea
@@ -7,5 +7,5 @@ body:
     validations:
       required: true
     attributes:
-      label: "Описание"
-      description: "Опишите идею"
+      label: "Description"
+      description: "Describe your idea"
