@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Content.Server.Actions;
 using Content.Server.Chat.Systems;
+using Content.Server.Corvax.RoundNotifications;
 using Content.Server.GameTicking;
 using Content.Server.Humanoid;
 using Content.Server.IdentityManagement;
@@ -127,6 +128,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         SubscribeAllEvent<ShipEventCaptainMenuKickMemberMessage>(OnKickMemberRequest);
 
         SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEnd);
+        SubscribeLocalEvent<RoundEndDiscordTextAppendEvent>(OnRoundEndDiscord);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
     }
 
@@ -282,7 +284,31 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         args.AddLine(Loc.GetString("shipevent-roundend-winner", ("name", winner.Name)));
     }
 
-    private void OnViewToggle(EntityUid entity, ShipEventFactionViewComponent component, ShipEventTeamViewToggleEvent args)
+    private void OnRoundEndDiscord(ref RoundEndDiscordTextAppendEvent args)
+    {
+        if (!RuleSelected || !Teams.Any())
+            return;
+
+        var winner = Teams.First();
+        foreach (var team in Teams)
+        {
+            if (team.Points > winner.Points)
+                winner = team;
+        }
+
+        args.AddLine(Loc.GetString("shipevent-roundend-discord-team",
+            ("capname", winner.Captain)
+        ));
+        args.AddLine(Loc.GetString("shipevent-roundend-discord-teamstats",
+            ("points", winner.Points),
+            ("kills", winner.Kills),
+            ("assists", winner.Assists),
+            ("respawns", winner.Respawns)
+        ));
+    }
+
+    private void OnViewToggle(EntityUid entity, ShipEventFactionViewComponent component,
+        ShipEventTeamViewToggleEvent args)
     {
         if (!RuleSelected || args.Handled)
             return;

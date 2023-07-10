@@ -88,6 +88,13 @@ public sealed class RoundNotificationsSystem : EntitySystem
             ("hours", e.RoundDuration.Hours),
             ("minutes", e.RoundDuration.Minutes),
             ("seconds", e.RoundDuration.Seconds));
+
+        var ev = new RoundEndDiscordTextAppendEvent();
+        RaiseLocalEvent(ref ev);
+
+        text += "\n";
+        text += ev.Text;
+
         var payload = new WebhookPayload() { Content = text };
 
         SendDiscordMessage(payload);
@@ -123,3 +130,23 @@ public sealed class RoundNotificationsSystem : EntitySystem
         }
     }
 }
+
+/// <summary>
+///     Event raised to allow subscribers to add text to the round end discord webhook.
+/// </summary>
+[ByRefEvent]
+public record struct RoundEndDiscordTextAppendEvent()
+{
+    private bool _doNewLine;
+
+    public string Text = string.Empty;
+
+    public void AddLine(string text)
+    {
+        if (_doNewLine)
+            Text += "\n";
+
+        Text += text;
+        _doNewLine = true;
+    }
+};
