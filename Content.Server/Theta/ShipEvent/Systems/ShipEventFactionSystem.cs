@@ -223,7 +223,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         {
             if (team.Ship == shipGrid)
             {
-                var newName = GetName(shipGrid.Value);
+                var newName = args.NewShipName;
 
                 var message = Loc.GetString(
                     "shipevent-team-shiprename",
@@ -633,6 +633,18 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     }
 
     /// <summary>
+    ///     Sets ship name.
+    /// </summary>
+    /// <param name="shipUid">Ship grid uid</param>
+    /// <param name="shipName">Name of ship</param>
+    private void SetShipName(EntityUid shipUid, string shipName)
+    {
+        if (!TryComp<MetaDataComponent>(shipUid, out var meta))
+            return;
+        meta.EntityName = shipName;
+    }
+
+    /// <summary>
     ///     Deletes current team ship & members, and marks it for respawn
     /// </summary>
     /// <param name="team">Team to respawn</param>
@@ -721,6 +733,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             return;
 
         SetMarkers(newShip, team);
+        SetShipName(newShip, team.ShipName);
 
         team.Ship = newShip;
 

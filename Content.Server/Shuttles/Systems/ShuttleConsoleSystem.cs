@@ -76,7 +76,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
     private void OnChangeShipName(EntityUid uid, ShuttleConsoleComponent component,
         ShuttleConsoleChangeShipNameMessage args)
     {
-        if (args.NewShipName == null)
+        if (string.IsNullOrWhiteSpace(args.NewShipName))
             return;
         if (!TryComp<TransformComponent>(uid, out var xform))
             return;
