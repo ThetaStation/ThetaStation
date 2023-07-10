@@ -81,4 +81,4 @@ jobs:
           source_branch: ${{ env.UPDATE_BRANCH }}
           destination_branch: ${{ steps.main.outputs.current_branch }}
           pr_title: "Pull SS14 RU upstream to Theta"
-          pr_body: "An automated PR to sync changes from the SS14 RU into this repo"
+          pr_body: "An automated PR to sync changes from the SS14 RU into this repo. \n\n:cl: ThetaStation \n - sync: Sync with upstream."
