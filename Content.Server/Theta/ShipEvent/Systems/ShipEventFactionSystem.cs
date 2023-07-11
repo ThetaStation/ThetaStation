@@ -225,7 +225,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         {
             if (team.Ship == shipGrid)
             {
-                var newName = GetName(shipGrid.Value);
+                var newName = args.NewShipName;
 
                 var message = Loc.GetString(
                     "shipevent-team-shiprename",
@@ -247,9 +247,9 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         _boundsCompressionTimer = 0;
         _lootboxTimer = 0;
         _lastAnnoucementMinute = 0;
-        
+
         LootboxPrototypes.Clear();
-        
+
         CurrentBoundsOffset = 0;
 
         ShipTypes.Clear();
@@ -569,7 +569,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         _mindSystem.AddRole(mind.Mind, shipEventRole);
         team.AddMember(shipEventRole);
 
-        SetName(spawnedEntity, $"{GetName(spawnedEntity)} ({team.Name})");
+        SetPlayerCharacterName(spawnedEntity, $"{GetName(spawnedEntity)} ({team.Name})");
 
         SetupActions(spawnedEntity, team, session);
 
@@ -747,6 +747,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             return;
 
         SetMarkers(newShip, team);
+        SetShipName(newShip, team.ShipName);
 
         team.Ship = newShip;
 

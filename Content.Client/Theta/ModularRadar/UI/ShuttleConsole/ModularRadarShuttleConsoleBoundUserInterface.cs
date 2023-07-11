@@ -38,10 +38,7 @@ public sealed class ModularRadarShuttleConsoleBoundUserInterface : BoundUserInte
 
     private void OnChangeNamePressed(string name)
     {
-        SendMessage(new ShuttleConsoleChangeShipNameMessage()
-        {
-            NewShipName = name
-        });
+        SendMessage(new ShuttleConsoleChangeShipNameMessage(name));
     }
 
     private void OnClose()

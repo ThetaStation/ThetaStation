@@ -93,7 +93,7 @@ public sealed partial class ShipEventFactionSystem
         return string.Empty;
     }
 
-    private void SetName(EntityUid entity, string name)
+    private void SetPlayerCharacterName(EntityUid entity, string name)
     {
         if (EntityManager.TryGetComponent(entity, out MetaDataComponent? metaComp))
             metaComp.EntityName = name;
@@ -104,6 +104,18 @@ public sealed partial class ShipEventFactionSystem
         }
 
         _idSys.QueueIdentityUpdate(entity);
+    }
+
+    /// <summary>
+    ///     Sets ship name.
+    /// </summary>
+    /// <param name="shipUid">Ship grid uid</param>
+    /// <param name="shipName">Name of ship</param>
+    private void SetShipName(EntityUid shipUid, string shipName)
+    {
+        if (!TryComp<MetaDataComponent>(shipUid, out var meta))
+            return;
+        meta.EntityName = shipName;
     }
 
     private List<EntityUid> GetShipComponentHolders<T>(EntityUid shipEntity) where T : IComponent
