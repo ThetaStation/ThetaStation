@@ -8,7 +8,9 @@ Changelog supports following tags:
 add/new - new content
 del/delete - content removal
 mod/modify/tweak - content tweaks (ex: balances changes)
-fix - bugfixes
+fix/bugfix - bugfixes
+Adding [link] to the tag will provide a link to the Pull Request with this changelog, for example
+fix[link]: Fixed that one annoying bug everyone keeps talking about.
 
 You can put your name after :cl: (instead of ThetaStation). In case if your PR uses assets/code which is not yours, you should also add other authors here.
 -->

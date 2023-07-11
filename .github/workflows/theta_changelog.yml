@@ -1,4 +1,4 @@
-name: CL
+name: Changelog Generation
 
 on:
   push:
@@ -9,20 +9,20 @@ jobs:
   generate-cl:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout repo content
+      - name: Checkout Repo Content
         uses: actions/checkout@v2 # checkout the repository content
 
-      - name: setup python
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10' # install the python version needed
 
-      - name: install python packages
+      - name: Install Python Packages
         run: |
           python -m pip install --upgrade pip
           pip install -r Tools/cl-req.txt
 
-      - name: run generator
+      - name: Run Generator
         env:
           GITHUB_SHA: ${{ github.GITHUB_SHA }}
           HOOK_URL: ${{ secrets.CL_HOOK_URL }}
