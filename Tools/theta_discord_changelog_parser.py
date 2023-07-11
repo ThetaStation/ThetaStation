@@ -215,7 +215,7 @@ def parse_change_line(line: str, pr_link: str) -> str:
         for tag in tag_group:
             for tag_prefix in POSSIBLE_TAG_PREFIXES:
                 if line.startswith(tag_prefix + tag + ":"):
-                    replaced_line = line.replace(f"{tag_prefix}{tag}:", emoji)
+                    replaced_line = line.replace(f"{tag_prefix}{tag}:", emoji).rstrip()
                     return f"\n- {replaced_line}"
                 if line.startswith(tag_prefix + tag + "[link]:"):
                     replaced_line = line.replace(f"{tag_prefix}{tag}[link]:", emoji).rstrip()
@@ -237,27 +237,32 @@ def parse_changelog(changelog: str, author: str, pr_link: str) -> List[str]:
 
     in_changelog_scope = False
 
+    CHANGELOG_TOKENS = [":cl:", "🆑"]
+
     for i, line in enumerate(changelog.split("\n")):
         if len(line) == 0 or line.isspace():
             continue
-        if line.startswith(":cl:"):
+
+        found_changelog_token = False
+        for token in CHANGELOG_TOKENS:
+            if not line.startswith(token):
+                continue
             in_changelog_scope = True
-            current_author = line.removeprefix(":cl:").lstrip()
+            found_changelog_token = True
+            current_author = line.removeprefix(token).strip()
             if current_author == "" or current_author.isspace():
                 current_author = author
+            break
+        if found_changelog_token:
             continue
-        if line.startswith("🆑"):
-            in_changelog_scope = True
-            current_author = line.removeprefix("🆑").lstrip()
-            if current_author == "" or current_author.isspace():
-                current_author = author
-            continue
+
         if line.startswith("/:cl:") or line.startswith("/🆑"):
             if current_parse != "":
                 parses.append(f"\n**{current_author}:**" + current_parse)
                 current_parse = ""
             in_changelog_scope = False
             continue
+
         if in_changelog_scope:
             parsed_line = parse_change_line(line, pr_link)
             if parsed_line == "":
