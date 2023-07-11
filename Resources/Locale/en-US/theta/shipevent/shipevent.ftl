@@ -34,7 +34,8 @@ shipevent-roundendtimer-tenmins = Ten minutes left until round end, raise those 
 shipevent-roundendtimer-fivemins = Five mins left until round end, destroy some ships asap.
 shipevent-roundendtimer-onemin = Round will end very soon...
 
-shipevent-lootboxspawned = New stashes are already on field. Hurry to collect them!
+shipevent-lootboxspawned = New stashes are already on field. Go get them!
+shipevent-pointsadded = Team received { $points } points, rejoice!
 
 
 ## Role stuff

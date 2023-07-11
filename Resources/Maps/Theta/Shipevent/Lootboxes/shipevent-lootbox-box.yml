@@ -52,13 +52,13 @@ entities:
       data:
         tiles:
           0,0:
-            0: 51
+            0: 1911
           0,-1:
-            0: 12288
+            0: 30464
           -1,-1:
-            0: 32768
+            0: 52224
           -1,0:
-            0: 136
+            0: 3276
         uniqueMixes:
         - volume: 2500
           temperature: 293.15
@@ -81,61 +81,66 @@ entities:
     - type: RadiationGridResistance
 - proto: ShipeventLootboxHatsSpawner
   entities:
-  - uid: 12
+  - uid: 2
     components:
     - pos: 0.5,0.5
       parent: 1
       type: Transform
 - proto: ShipeventLootboxLootSpawner
   entities:
-  - uid: 10
+  - uid: 3
     components:
     - pos: 0.5,0.5
       parent: 1
       type: Transform
-  - uid: 11
+  - uid: 4
+    components:
+    - pos: 0.5,0.5
+      parent: 1
+      type: Transform
+  - uid: 13
     components:
     - pos: 0.5,0.5
       parent: 1
       type: Transform
 - proto: WallReinforced
   entities:
-  - uid: 2
+  - uid: 5
     components:
     - pos: 1.5,1.5
       parent: 1
       type: Transform
-  - uid: 3
+  - uid: 6
     components:
     - pos: 0.5,1.5
       parent: 1
       type: Transform
-  - uid: 4
+  - uid: 7
     components:
     - pos: -0.5,1.5
       parent: 1
       type: Transform
-  - uid: 5
+  - uid: 8
     components:
     - pos: -0.5,0.5
       parent: 1
       type: Transform
-  - uid: 6
+  - uid: 9
     components:
     - pos: -0.5,-0.5
       parent: 1
       type: Transform
-  - uid: 7
+  - uid: 10
     components:
     - pos: 0.5,-0.5
       parent: 1
       type: Transform
-  - uid: 8
+  - uid: 11
     components:
     - pos: 1.5,-0.5
       parent: 1
       type: Transform
-  - uid: 9
+  - uid: 12
     components:
     - pos: 1.5,0.5
       parent: 1

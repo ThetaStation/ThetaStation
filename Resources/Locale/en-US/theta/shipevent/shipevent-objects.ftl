@@ -23,6 +23,9 @@ ent-TurretAmmoContainerBluespace = ammo container (bluespace)
 ent-LootboxSpawnTriggerItem = lootbox caller
     .desc = { "God bless NT." }
     .suffix = { "ShipEvent" }
+ent-PointStorageItem = point storage
+    .desc = { "God bless NT." }
+    .suffix = { "ShipEvent" }
 
 ## Guns
 

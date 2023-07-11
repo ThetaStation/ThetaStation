@@ -13,6 +13,21 @@
       delay: 0
     - type: DeleteOnTrigger
 
+# Point storage
+- type: entity
+  parent: BaseItem
+  id: PointStorageItem
+  name: point storage
+  components:
+    - type: Sprite
+      sprite: Objects/Devices/signaller.rsi
+      state: signaller
+    - type: ShipEventPointStorage
+      points: 5000
+    - type: OnUseTimerTrigger
+      delay: 0
+    - type: DeleteOnTrigger
+
 # Ebic ammo - HE
 - type: entity
   id: BulletArtilleryLightHE
@@ -125,6 +140,7 @@
       offset: 0
       prototypes:
         - LootboxSpawnTriggerItem
+        - PointStorageItem
         - TurretAmmoContainerLightArtilleryFilledHE
         - TurretAmmoContainerLightArtilleryFilledEMP
         - RCDExperimental

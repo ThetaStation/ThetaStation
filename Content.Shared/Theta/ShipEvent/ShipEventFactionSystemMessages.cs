@@ -18,3 +18,21 @@ public sealed class BoundsOverlayInfo : EntityEventArgs
         Bounds = bounds;
     }
 }
+
+[NetSerializable, Serializable]
+public sealed class LootboxInfoRequest : EntityEventArgs { }
+
+[NetSerializable, Serializable]
+public sealed class LootboxInfo : EntityEventArgs
+{
+    public List<EntityUid> Entities;
+    public List<Box2> Bounds;
+    public List<float> Lifetime;
+
+    public LootboxInfo(List<EntityUid> ents, List<Box2> bounds, List<float> lifetime)
+    {
+        Entities = ents;
+        Bounds = bounds;
+        Lifetime = lifetime;
+    }
+}
