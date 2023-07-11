@@ -1,3 +1,4 @@
+using System.Numerics;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Shared.Interaction.Events;
 using Robust.Shared.Random;
@@ -7,7 +8,7 @@ namespace Content.Server.Theta.ShipEvent.Systems;
 public sealed partial class ShipEventFactionSystem
 {
     public List<(EntityUid, float)> Lootboxes = new();
-    
+
     private void OnLootboxSpawnTriggered(EntityUid uid, ShipEventLootboxSpawnTriggerComponent trigger, UseInHandEvent args)
     {
         SpawnLootboxes(trigger.LootboxSpawnAmount);
@@ -41,7 +42,7 @@ public sealed partial class ShipEventFactionSystem
     {
         if(announce)
             Announce(Loc.GetString("shipevent-lootboxspawned"));
-        
+
         for (int i = 0; i < amount; i++)
         {
             EntityUid lootbox = _debrisSys.RandomPosSpawn(TargetMap, Vector2.Zero, MaxSpawnOffset, 50, _random.Pick(LootboxPrototypes), LootboxProcessors);

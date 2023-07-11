@@ -1,4 +1,5 @@
-﻿using Content.Client.Weapons.Ranged.Systems;
+﻿using System.Numerics;
+using Content.Client.Weapons.Ranged.Systems;
 using Content.Shared.Theta.ShipEvent;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
@@ -48,7 +49,7 @@ public sealed class CannonSystem : SharedCannonSystem
     protected override void OnAnchorChanged(EntityUid uid, CannonComponent cannon, ref AnchorStateChangedEvent args)
     {
         base.OnAnchorChanged(uid, cannon, ref args);
-        
+
         if (!args.Anchored)
             _firingCannons.Remove(uid);
     }

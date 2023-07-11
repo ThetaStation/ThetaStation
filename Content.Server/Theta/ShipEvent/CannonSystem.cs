@@ -1,4 +1,5 @@
-﻿using Content.Server.Theta.ShipEvent.Components;
+﻿using System.Numerics;
+using Content.Server.Theta.ShipEvent.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Theta.ShipEvent;
 using Content.Shared.Theta.ShipEvent.UI;
@@ -38,7 +39,7 @@ public sealed class CannonSystem : SharedCannonSystem
         {
             TransformComponent form = Transform(childUid);
             Vector2 dir = form.LocalPosition - Transform(uid).LocalPosition;
-            float dist = dir.Length;
+            float dist = dir.Length();
             if (dist > CollisionCheckDistance || dist < 1)
                 continue;
 
@@ -48,9 +49,9 @@ public sealed class CannonSystem : SharedCannonSystem
 
             (Angle start0, Angle width0) = GetDirSector(dir);
             ranges.Add((start0, width0));
-            
+
             (Angle start2, Angle width2) = (start0, width0);
-            
+
             List<(Angle, Angle)> overlaps = new();
             foreach ((Angle start1, Angle width1) in ranges)
             {
@@ -60,14 +61,14 @@ public sealed class CannonSystem : SharedCannonSystem
                     overlaps.Add((start1, width1));
                 }
             }
-            
+
             foreach ((Angle start1, Angle width1) in overlaps)
             {
                 ranges.Remove((start1, width1));
             }
             ranges.Add((start2, width2));
         }
-        
+
         double ew = gun.MaxAngle + 0.04;
         for(int i = 0; i < ranges.Count; i++)
         {
@@ -89,19 +90,19 @@ public sealed class CannonSystem : SharedCannonSystem
             switch (dirAngle.Theta)
             {
                 case 0: case Math.Tau:
-                    a = dir - 0.5f;
+                    a = dir - Vector2Helpers.Half;
                     b = new Vector2(dir.X - 0.5f, dir.Y + 0.5f);
                     break;
                 case Math.PI*0.5:
-                    a = dir - 0.5f;
+                    a = dir - Vector2Helpers.Half;
                     b = new Vector2(dir.X + 0.5f, dir.Y - 0.5f);
                     break;
                 case Math.PI:
-                    a = dir + 0.5f;
+                    a = dir + Vector2Helpers.Half;
                     b = new Vector2(dir.X + 0.5f, dir.Y - 0.5f);
                     break;
                 case Math.PI*1.5:
-                    a = dir + 0.5f;
+                    a = dir + Vector2Helpers.Half;
                     b = new Vector2(dir.X - 0.5f, dir.Y + 0.5f);
                     break;
                 default:
@@ -115,8 +116,8 @@ public sealed class CannonSystem : SharedCannonSystem
         }
         else
         {
-            a = dir + 0.5f;
-            b = dir - 0.5f;
+            a = dir + Vector2Helpers.Half;
+            b = dir - Vector2Helpers.Half;
         }
 
         Angle aangle = ReducedAndPositive(new Angle(a));
@@ -139,11 +140,11 @@ public sealed class CannonSystem : SharedCannonSystem
             cannon.FirstAnchor = false;
             return;
         }
-        
+
         base.OnAnchorChanged(uid, cannon, ref args);
         if (!args.Anchored)
             return;
-        
+
         cannon.ObstructedRanges = CalculateFiringRanges(uid, GetCannonGun(uid)!);
         Dirty(cannon);
     }

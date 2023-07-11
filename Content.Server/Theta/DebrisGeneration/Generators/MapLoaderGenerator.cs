@@ -1,3 +1,4 @@
+using System.Numerics;
 using Robust.Server.Maps;
 using Robust.Shared.Map;
 
@@ -8,9 +9,9 @@ namespace Content.Server.Theta.DebrisGeneration.Generators;
 /// </summary>
 public sealed class MapLoaderGenerator : Generator
 {
-    [DataField("mapPath", required: true)] 
+    [DataField("mapPath", required: true)]
     public string MapPath = "";
-    
+
     public override EntityUid Generate(DebrisGenerationSystem sys, MapId targetMap)
     {
         var loadOptions = new MapLoadOptions
@@ -22,7 +23,7 @@ public sealed class MapLoaderGenerator : Generator
 
         if (sys.MapLoader.TryLoad(targetMap, MapPath, out var rootUids, loadOptions))
             return rootUids[0];
-        
+
         return EntityUid.Invalid;
     }
 }

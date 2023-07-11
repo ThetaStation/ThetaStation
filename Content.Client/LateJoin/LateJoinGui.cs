@@ -1,3 +1,4 @@
+using System.Numerics;
 using System.Linq;
 using Content.Client.CrewManifest;
 using Content.Client.GameTicking.Managers;
@@ -39,7 +40,7 @@ namespace Content.Client.LateJoin
 
         public LateJoinGui()
         {
-            MinSize = SetSize = (450, 560);
+            MinSize = SetSize = new Vector2(450, 560);
             IoCManager.InjectDependencies(this);
             _sprites = _entitySystem.GetEntitySystem<SpriteSystem>();
             _crewManifest = _entitySystem.GetEntitySystem<CrewManifestSystem>();
@@ -241,7 +242,7 @@ namespace Content.Client.LateJoin
 
                         var icon = new TextureRect
                         {
-                            TextureScale = (2, 2),
+                            TextureScale = new Vector2(2, 2),
                             Stretch = TextureRect.StretchMode.KeepCentered
                         };
 
@@ -274,7 +275,7 @@ namespace Content.Client.LateJoin
 
                             jobSelector.AddChild(new TextureRect
                             {
-                                TextureScale = (0.4f, 0.4f),
+                                TextureScale = new Vector2(0.4f, 0.4f),
                                 Stretch = TextureRect.StretchMode.KeepCentered,
                                 Texture = _sprites.Frame0(new SpriteSpecifier.Texture(new ("/Textures/Interface/Nano/lock.svg.192dpi.png"))),
                                 HorizontalExpand = true,

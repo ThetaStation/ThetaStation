@@ -9,7 +9,7 @@ public sealed class TurretLoaderBoundUserInterface : BoundUserInterface
     private IEntityManager _entMan = default!;
     private TurretLoaderWindow? _window;
 
-    public TurretLoaderBoundUserInterface(ClientUserInterfaceComponent owner, Enum uiKey) : base(owner, uiKey) { }
+    public TurretLoaderBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey) { }
 
     protected override void Open()
     {
@@ -21,8 +21,8 @@ public sealed class TurretLoaderBoundUserInterface : BoundUserInterface
 
         _window.OnClose += Close;
         _window.EjectButtonPressed += _ => { SendMessage(new TurretLoaderEjectRequest()); };
-        _window.RefreshButtonPressed += _ => { _window.UpdateState(Refresh()); }; 
-        
+        _window.RefreshButtonPressed += _ => { _window.UpdateState(Refresh()); };
+
         _window.UpdateState(Refresh());
     }
 
@@ -30,22 +30,22 @@ public sealed class TurretLoaderBoundUserInterface : BoundUserInterface
     {
         if (state is not TurretLoaderBoundUserInterfaceState loaderState)
             return;
-        
+
         base.UpdateState(state);
         _window?.UpdateState(loaderState);
     }
 
     private TurretLoaderBoundUserInterfaceState Refresh()
     {
-        if (_entMan.TryGetComponent<TurretLoaderComponent>(Owner.Owner, out var loader))
+        if (_entMan.TryGetComponent<TurretLoaderComponent>(Owner, out var loader))
         {
             var ammoCount = 0;
-            
+
             //slot contents check may seem redundant, when AmmoContainer is updated based on slot contents anyway when loader component
             //changes state, however due to unknown reasons AmmoContainer is sometimes updated incorrectly, so it's better to double-check
             if (loader.AmmoContainer != null && loader.ContainerSlot?.Item != null)
                 ammoCount = loader.AmmoContainer.ContainedEntities.Count;
-                    
+
             return new TurretLoaderBoundUserInterfaceState(
                 ammoCount,
                 loader.BoundTurret.GetHashCode(),
