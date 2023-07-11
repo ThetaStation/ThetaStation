@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Content.Server.Actions;
 using Content.Server.Chat.Systems;
+using Content.Server.Corvax.RoundNotifications;
 using Content.Server.GameTicking;
 using Content.Server.Humanoid;
 using Content.Server.IdentityManagement;
@@ -129,6 +130,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         SubscribeAllEvent<ShipEventCaptainMenuKickMemberMessage>(OnKickMemberRequest);
 
         SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEnd);
+        SubscribeLocalEvent<RoundEndDiscordTextAppendEvent>(OnRoundEndDiscord);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
     }
 
@@ -225,7 +227,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         {
             if (team.Ship == shipGrid)
             {
-                var newName = GetName(shipGrid.Value);
+                var newName = args.NewShipName;
 
                 var message = Loc.GetString(
                     "shipevent-team-shiprename",
@@ -247,9 +249,9 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         _boundsCompressionTimer = 0;
         _lootboxTimer = 0;
         _lastAnnoucementMinute = 0;
-        
+
         LootboxPrototypes.Clear();
-        
+
         CurrentBoundsOffset = 0;
 
         ShipTypes.Clear();
@@ -293,7 +295,31 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         args.AddLine(Loc.GetString("shipevent-roundend-winner", ("name", winner.Name)));
     }
 
-    private void OnViewToggle(EntityUid entity, ShipEventFactionViewComponent component, ShipEventTeamViewToggleEvent args)
+    private void OnRoundEndDiscord(ref RoundEndDiscordTextAppendEvent args)
+    {
+        if (!RuleSelected || !Teams.Any())
+            return;
+
+        var winner = Teams.First();
+        foreach (var team in Teams)
+        {
+            if (team.Points > winner.Points)
+                winner = team;
+        }
+
+        args.AddLine(Loc.GetString("shipevent-roundend-discord-team",
+            ("capname", winner.Captain)
+        ));
+        args.AddLine(Loc.GetString("shipevent-roundend-discord-teamstats",
+            ("points", winner.Points),
+            ("kills", winner.Kills),
+            ("assists", winner.Assists),
+            ("respawns", winner.Respawns)
+        ));
+    }
+
+    private void OnViewToggle(EntityUid entity, ShipEventFactionViewComponent component,
+        ShipEventTeamViewToggleEvent args)
     {
         if (!RuleSelected || args.Handled)
             return;
@@ -545,7 +571,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         _mindSystem.AddRole(mind.Mind, shipEventRole);
         team.AddMember(shipEventRole);
 
-        SetName(spawnedEntity, $"{GetName(spawnedEntity)} ({team.Name})");
+        SetPlayerCharacterName(spawnedEntity, $"{GetName(spawnedEntity)} ({team.Name})");
 
         SetupActions(spawnedEntity, team, session);
 
@@ -723,7 +749,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             return;
 
         SetMarkers(newShip, team);
-        SetName(newShip, team.ShipName);
+        SetShipName(newShip, team.ShipName);
 
         team.Ship = newShip;
 

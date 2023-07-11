@@ -50,6 +50,9 @@ shipevent-roundend-team = Команда '[color={ $color }]{ $name }[/color]' (
 shipevent-roundend-teamstats = Набрала { $points } очков, { $kills } фрагов и { $assists } ассистов, а также зареспавнилась { $respawns } раз.
 shipevent-roundend-winner = ПОБЕДИТЕЛЬ - КОМАНДА '{ $name }'! Поздравьте их в ООЦ (или полейте грязью).
 
+## For discord roundedn messages
+shipevent-roundend-discord-team = Победила команда под руководством '{ $capname }'.
+shipevent-roundend-discord-teamstats =  Набрала { $points } очков, { $kills } фрагов и { $assists } ассистов, а также зареспавнилась { $respawns } раз.
 
 ## Misc.
 

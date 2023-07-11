@@ -1,11 +1,22 @@
-# Machine Gun caseless
+# Machine Gun rounds
 - type: entity
-  id: CartridgeLightRifleCaseless
+  id: CartridgeLightRifleCaseless #this name does not fit, but changing it to CartridgeMachineGun requires mapping changes (ehhh)
   parent: CartridgeLightRifle
   components:
   - type: CartridgeAmmo
-    proto: BulletLightRifle
+    proto: BulletMachineGun
     deleteOnSpawn: true
+    
+- type: entity
+  id: BulletMachineGun
+  name: bullet
+  parent: BaseBullet
+  noSpawn: true
+  components:
+    - type: Projectile
+      damage:
+        types:
+          Piercing: 50
 
 # Light Cannon round
 - type: entity

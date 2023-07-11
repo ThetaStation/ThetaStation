@@ -51,13 +51,6 @@ public sealed class RadarGrids : RadarModule
             if (grid.Owner == ourGridId || !fixturesQuery.HasComponent(grid.Owner))
                 continue;
 
-            var gridBody = bodyQuery.GetComponent(grid.Owner);
-            if (gridBody.Mass < 10f)
-            {
-                ClearLabel(grid.Owner);
-                continue;
-            }
-
             EntManager.TryGetComponent<IFFComponent>(grid.Owner, out var iff);
 
             // Hide it entirely.
@@ -104,6 +97,7 @@ public sealed class RadarGrids : RadarModule
                     label = (Label) control;
                 }
 
+                var gridBody = bodyQuery.GetComponent(grid.Owner);
                 label.FontColorOverride = color;
                 var gridCentre = matty.Transform(gridBody.LocalCenter);
                 gridCentre.Y = -gridCentre.Y;

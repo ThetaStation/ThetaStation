@@ -78,7 +78,7 @@ public sealed class RadarUIController : UIController
             return;
         }
 
-        if (RadarGui != null)
+        if (RadarGui != null || UIManager.ActiveScreen == null)
             return;
 
         RadarGui = new();
