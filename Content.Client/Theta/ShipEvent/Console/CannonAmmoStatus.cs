@@ -1,4 +1,5 @@
-﻿using Content.Client.Stylesheets;
+﻿using System.Numerics;
+using Content.Client.Stylesheets;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 
@@ -23,7 +24,7 @@ public sealed class CannonAmmoStatus : Control
             Margin = new Thickness(0, 1),
             Children =
             {
-                new Control { MinSize = (5, 0) },
+                new Control { MinSize = new Vector2(5, 0) },
                 new Control
                 {
                     HorizontalExpand = true,
@@ -46,7 +47,7 @@ public sealed class CannonAmmoStatus : Control
                         })
                     }
                 },
-                new Control { MinSize = (5, 0) },
+                new Control { MinSize = new Vector2(5, 0) },
             }
         });
     }

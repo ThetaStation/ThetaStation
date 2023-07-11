@@ -10,8 +10,7 @@ public sealed class ModularRadarShuttleConsoleBoundUserInterface : BoundUserInte
 {
     private ModularRadarShuttleConsoleWindow? _window;
 
-    public ModularRadarShuttleConsoleBoundUserInterface(ClientUserInterfaceComponent owner, Enum uiKey) : base(owner,
-        uiKey)
+    public ModularRadarShuttleConsoleBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
     }
 

@@ -1,3 +1,4 @@
+using System.Numerics;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Theta.ShipEvent;
@@ -85,7 +86,7 @@ public sealed partial class ShipEventFactionSystem
     {
         if(announce)
             Announce(Loc.GetString("shipevent-lootboxspawned"));
-        
+
         for (int i = 0; i < amount; i++)
         {
             EntityUid lootbox = _debrisSys.RandomPosSpawn(TargetMap, Vector2.Zero, MaxSpawnOffset, 50, _random.Pick(LootboxPrototypes), LootboxProcessors);

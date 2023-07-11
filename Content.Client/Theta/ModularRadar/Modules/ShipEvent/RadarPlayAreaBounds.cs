@@ -1,4 +1,5 @@
-﻿using Content.Client.Theta.ShipEvent.Systems;
+﻿using System.Numerics;
+using Content.Client.Theta.ShipEvent.Systems;
 using Robust.Client.Graphics;
 
 namespace Content.Client.Theta.ModularRadar.Modules.ShipEvent;

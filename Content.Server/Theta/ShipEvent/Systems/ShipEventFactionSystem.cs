@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Numerics;
 using Content.Server.Actions;
 using Content.Server.Chat.Systems;
 using Content.Server.Corvax.RoundNotifications;
@@ -349,7 +350,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         if (_uiSys.TryGetUi(entity, uiKey, out var bui))
         {
             _uiSys.OpenUi(bui, session);
-            _uiSys.SetUiState(bui, new TeamViewBoundUserInterfaceState(teamsInfo));
+            UserInterfaceSystem.SetUiState(bui, new TeamViewBoundUserInterfaceState(teamsInfo));
         }
     }
 

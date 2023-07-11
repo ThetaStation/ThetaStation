@@ -1,4 +1,5 @@
-﻿using Content.Shared.Shuttles.Components;
+﻿using System.Numerics;
+using Content.Shared.Shuttles.Components;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
@@ -46,7 +47,7 @@ public sealed class RadarGrids : RadarModule
         var shown = new HashSet<EntityUid>();
         // Draw other grids... differently
         foreach (var grid in MapManager.FindGridsIntersecting(mapPosition.MapId,
-                     new Box2(mapPosition.Position - MaxRadarRange, mapPosition.Position + MaxRadarRange)))
+                     new Box2(mapPosition.Position - MaxRadarRangeVector, mapPosition.Position + MaxRadarRangeVector)))
         {
             if (grid.Owner == ourGridId || !fixturesQuery.HasComponent(grid.Owner))
                 continue;
@@ -204,7 +205,7 @@ public sealed class RadarGrids : RadarModule
                 var adjustedStart = matrix.Transform(start);
                 var adjustedEnd = matrix.Transform(end);
 
-                if (adjustedStart.Length > ActualRadarRange || adjustedEnd.Length > ActualRadarRange)
+                if (adjustedStart.Length() > ActualRadarRange || adjustedEnd.Length() > ActualRadarRange)
                     continue;
 
                 start = ScalePosition(new Vector2(adjustedStart.X, -adjustedStart.Y));

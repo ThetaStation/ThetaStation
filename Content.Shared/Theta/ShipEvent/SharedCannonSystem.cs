@@ -1,4 +1,5 @@
-﻿using Content.Shared.Weapons.Ranged.Components;
+﻿using System.Numerics;
+using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Map;
 using Content.Shared.Containers.ItemSlots;
@@ -60,7 +61,7 @@ public abstract class SharedCannonSystem : EntitySystem
         }
         return max;
     }
-    
+
     public Angle Min(params Angle[] args)
     {
         Angle min = args[0];
@@ -71,7 +72,7 @@ public abstract class SharedCannonSystem : EntitySystem
         }
         return min;
     }
-    
+
     public Angle ReducedAndPositive(Angle x)
     {
         x = x.Reduced();
@@ -79,7 +80,7 @@ public abstract class SharedCannonSystem : EntitySystem
             x += 2 * Math.PI;
         return x;
     }
-    
+
     public bool IsInsideSector(Angle x, Angle start, Angle width)
     {
         Angle dist = Angle.ShortestDistance(start, x);
@@ -108,20 +109,20 @@ public abstract class SharedCannonSystem : EntitySystem
     {
         if (!_gunSystem.CanShoot(gun))
             return false;
-        
+
         TransformComponent cannonTransform = Transform(args.CannonUid);
         TransformComponent pilotTransform = Transform(args.PilotUid);
         if (!pilotTransform.GridUid.Equals(cannonTransform.GridUid))
             return false;
 
-        Angle firingAngle = ReducedAndPositive(new Angle(args.Coordinates - _transform.GetWorldPosition(cannonTransform)) - 
+        Angle firingAngle = ReducedAndPositive(new Angle(args.Coordinates - _transform.GetWorldPosition(cannonTransform)) -
                                                _transform.GetWorldRotation(Transform(cannonTransform.GridUid ?? args.CannonUid)));
         foreach ((Angle start, Angle w) in cannon.ObstructedRanges)
         {
             if (IsInsideSector(firingAngle, start, w))
                 return false;
         }
-        
+
         return true;
     }
 
