@@ -53,7 +53,6 @@ public sealed partial class ShuttleSystem
         if (jungleDiff < MinimumImpactVelocity)
             return;
 
-        Console.WriteLine($"Diff: {jungleDiff} OUR: {ourVelocity} OTHER: {otherVelocity}");
         var coordinates = new EntityCoordinates(ourXform.MapUid.Value, args.WorldPoint);
         var volume = MathF.Min(10f, 1f * MathF.Pow(jungleDiff, 0.5f) - 5f);
         var audioParams = AudioParams.Default.WithVariation(0.05f).WithVolume(volume);
