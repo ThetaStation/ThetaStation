@@ -1,4 +1,4 @@
-- type: entity
+﻿- type: entity
   parent: ClothingShoesBase
   id: ClothingShoesBootsMag
   name: magboots
@@ -63,6 +63,13 @@
     - HighRiskItem
   - type: StaticPrice
     price: 750
+
+- type: entity
+  parent: ClothingShoesBootsMagAdv
+  id: ClothingShoesBootsMagAdvOn
+  components:
+    - type: Magboots
+      on: true
 
 - type: entity
   parent: ClothingShoesBootsMag

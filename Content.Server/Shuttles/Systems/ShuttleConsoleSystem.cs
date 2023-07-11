@@ -34,6 +34,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
     [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly TagSystem _tags = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private readonly RadarConsoleSystem _radarConsoleSystem = default!;
     [Dependency] private readonly SharedContentEyeSystem _eyeSystem = default!;
 
     public override void Initialize()
@@ -45,6 +46,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         SubscribeLocalEvent<ShuttleConsoleComponent, AnchorStateChangedEvent>(OnConsoleAnchorChange);
         SubscribeLocalEvent<ShuttleConsoleComponent, ActivatableUIOpenAttemptEvent>(OnConsoleUIOpenAttempt);
         SubscribeLocalEvent<ShuttleConsoleComponent, ShuttleConsoleFTLRequestMessage>(OnDestinationMessage);
+        SubscribeLocalEvent<ShuttleConsoleComponent, ShuttleConsoleChangeShipNameMessage>(OnChangeShipName);
         SubscribeLocalEvent<ShuttleConsoleComponent, BoundUIClosedEvent>(OnConsoleUIClose);
 
         SubscribeLocalEvent<DroneConsoleComponent, ConsoleShuttleEvent>(OnCargoGetConsole);
@@ -69,6 +71,23 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
     private void OnFtlDestShutdown(EntityUid uid, FTLDestinationComponent component, ComponentShutdown args)
     {
         RefreshShuttleConsoles();
+    }
+
+    private void OnChangeShipName(EntityUid uid, ShuttleConsoleComponent component,
+        ShuttleConsoleChangeShipNameMessage args)
+    {
+        if (string.IsNullOrWhiteSpace(args.NewShipName))
+            return;
+        if (!TryComp<TransformComponent>(uid, out var xform))
+            return;
+        if (!TryComp<MetaDataComponent>(xform.GridUid, out var meta))
+            return;
+        meta.EntityName = args.NewShipName;
+        var shuttleComponent = EntityQueryEnumerator<ShuttleConsoleComponent>();
+        while (shuttleComponent.MoveNext(out var uidS, out var _))
+        {
+            UpdateState(uidS);
+        }
     }
 
     private void OnDestinationMessage(EntityUid uid, ShuttleConsoleComponent component,
@@ -326,6 +345,21 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         }
 
         docks ??= GetAllDocks();
+        List<MobInterfaceState> mobs;
+        List<ProjectilesInterfaceState> projectiles;
+        List<CannonInformationInterfaceState> cannons;
+        if (radar != null)
+        {
+            mobs = _radarConsoleSystem.GetMobsAround(radar);
+            projectiles = _radarConsoleSystem.GetProjectilesAround(radar);
+            cannons = _radarConsoleSystem.GetCannonInfosByMyGrid(radar);
+        }
+        else
+        {
+            mobs = new List<MobInterfaceState>();
+            projectiles = new List<ProjectilesInterfaceState>();
+            cannons = new List<CannonInformationInterfaceState>();
+        }
 
         if (_ui.TryGetUi(consoleUid, ShuttleConsoleUiKey.Key, out var bui))
             UserInterfaceSystem.SetUiState(bui, new ShuttleConsoleBoundInterfaceState(
@@ -335,8 +369,10 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
                 range,
                 consoleXform?.Coordinates,
                 consoleXform?.LocalRotation,
-                docks
-            ));
+                docks,
+                mobs,
+                projectiles,
+                cannons));
     }
 
     public override void Update(float frameTime)
@@ -361,7 +397,16 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         {
             RemovePilot(uid, comp);
         }
+
+        var shuttleComponent = EntityQueryEnumerator<ShuttleConsoleComponent>();
+        while (shuttleComponent.MoveNext(out var uid, out var _))
+        {
+            if(!_ui.IsUiOpen(uid, ShuttleConsoleUiKey.Key))
+                continue;
+            UpdateState(uid);
+        }
     }
+
 
     /// <summary>
     /// If pilot is moved then we'll stop them from piloting.

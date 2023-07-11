@@ -142,6 +142,13 @@ public partial class GunComponent : Component
     /// </summary>
     [DataField("showExamineText")]
     public bool ShowExamineText = true;
+
+    /// <summary>
+    /// Defines offset for spawned bullet.
+    /// For example, if the muzzle of the weapon is longer than one tile.
+    /// </summary>
+    [DataField("onSpawnBulletOffset")]
+    public int OnSpawnBulletOffset = 0;
 }
 
 [Flags]

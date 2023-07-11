@@ -1,0 +1,25 @@
+- type: ambientMusic
+  id: ShipEventOnShip
+  sound:
+    collection: AmbienceShipEventOnShip
+  rules: OnBattleShip
+  fadeIn: true
+  interruptable: true
+  priority: 10
+
+# Sound collections
+- type: soundCollection
+  id: AmbienceShipEventOnShip
+  files:
+    - /Audio/Theta/Shipevent/loop_armory.ogg
+    - /Audio/Theta/Shipevent/loop_nuke_ops.ogg
+    - /Audio/Theta/Shipevent/syndicate_station.ogg
+
+- type: rules
+  id: OnBattleShip
+  rules:
+    - !type:NearbyComponentsRule
+      components:
+        - type: CannonConsole
+        - type: TurretLoader
+        - type: ShipEventFactionMarker

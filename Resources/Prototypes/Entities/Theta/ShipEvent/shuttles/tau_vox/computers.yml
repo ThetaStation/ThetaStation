@@ -1,0 +1,33 @@
+﻿- type: entity
+  id: SkipjackCannonComputerShipEvent
+  name: cannon console
+  parent: CannonComputerShipEvent
+  components:
+    - type: PointLight
+      radius: 1.5
+      energy: 1.6
+      color: "#9837f2"
+    - type: Sprite
+      sprite: Theta/ShipEvent/Structures/Machines/skipjack_computers.rsi
+      layers:
+        - map: ["computerLayerBody"]
+          state: left_off
+        - map: ["computerLayerScreen"]
+          state: left
+
+- type: entity
+  parent: ComputerShuttleSyndieShipEvent
+  id: SkipjackShuttleComputer
+  name:
+  components:
+    - type: PointLight
+      radius: 1.5
+      energy: 1.6
+      color: "#43ccb5"
+    - type: Sprite
+      sprite: Theta/ShipEvent/Structures/Machines/skipjack_computers.rsi
+      layers:
+        - map: ["computerLayerBody"]
+          state: right_off
+        - map: ["computerLayerScreen"]
+          state: right

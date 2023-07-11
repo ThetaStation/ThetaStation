@@ -94,6 +94,16 @@
   description: signal-port-description-logic-input
 
 - type: sinkPort
+  id: B2
+  name: "Input B2"
+  description: "Input B2"
+  
+- type: sinkPort
+  id: CannonConsoleReceiver
+  name: "Cannon console receiver"
+  description: "Cannon console receiver"
+
+- type: sinkPort
   id: SetParticleDelta
   name: signal-port-name-set-particle-delta
   description: signal-port-description-set-particle-delta
