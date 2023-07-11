@@ -1,4 +1,5 @@
-﻿using Content.Shared.Shuttles.BUIStates;
+﻿using System.Numerics;
+using Content.Shared.Shuttles.BUIStates;
 using Robust.Client.Graphics;
 
 namespace Content.Client.Theta.ModularRadar.Modules;

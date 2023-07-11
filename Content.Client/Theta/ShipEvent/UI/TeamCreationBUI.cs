@@ -10,7 +10,7 @@ public sealed class ShipEventLobbyBoundUserInterface : BoundUserInterface
     private TeamCreationWindow? _teamCreation;
     private TeamLobbyWindow? _lobby;
 
-    public ShipEventLobbyBoundUserInterface(ClientUserInterfaceComponent owner, Enum uiKey) : base(owner, uiKey) { }
+    public ShipEventLobbyBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey) { }
 
     protected override void Open()
     {
@@ -30,7 +30,7 @@ public sealed class ShipEventLobbyBoundUserInterface : BoundUserInterface
         {
             SendMessage(new JoinToShipTeamsEvent(name));
         };
-        
+
         _teamCreation.CreationButtonPressed += _ =>
         {
             SendMessage(new TeamCreationRequest(_teamCreation.TeamName, _teamCreation.TeamColor, _teamCreation.Blacklist, _teamCreation.ShipType));

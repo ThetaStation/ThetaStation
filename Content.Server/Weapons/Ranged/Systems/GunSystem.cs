@@ -104,7 +104,7 @@ public sealed partial class GunSystem : SharedGunSystem
 
         if (gun.OnSpawnBulletOffset > 0)
         {
-            var offsetVector = mapDirection.Normalized * gun.OnSpawnBulletOffset;
+            var offsetVector = mapDirection.Normalized() * gun.OnSpawnBulletOffset;
             fromCoordinates = fromCoordinates.Offset(offsetVector);
             fromMap = fromMap.Offset(offsetVector);
         }

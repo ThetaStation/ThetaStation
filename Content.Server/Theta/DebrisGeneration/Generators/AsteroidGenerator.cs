@@ -1,3 +1,4 @@
+using System.Numerics;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -13,14 +14,14 @@ public sealed class AsteroidGenerator : Generator
 {
     [DataField("size", required: true)]
     public int Size;
-    
-    [DataField("circleAmount", required: true)] 
+
+    [DataField("circleAmount", required: true)]
     public int CircleAmount;
-    
-    [DataField("maxCircleRadius", required: true)] 
+
+    [DataField("maxCircleRadius", required: true)]
     public int MaxCircleRadius;
-    
-    [DataField("minCircleRadius", required: true)] 
+
+    [DataField("minCircleRadius", required: true)]
     public int MinCircleRadius;
 
     /// <summary>
@@ -31,14 +32,14 @@ public sealed class AsteroidGenerator : Generator
 
     [DataField("floorId", required: true)]
     public string FloorId = "";
-    
+
     [DataField("wallPrototypeId", required: true, customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
     public string WallPrototypeId = "";
-    
+
     public override EntityUid Generate(DebrisGenerationSystem sys, MapId targetMap)
     {
         var tileDefMan = sys.TileDefMan;
-            
+
         var tileSet = GenerateTileSet(sys.Rand);
 
         var gridComp = sys.MapMan.CreateGrid(targetMap);
@@ -54,7 +55,7 @@ public sealed class AsteroidGenerator : Generator
                 continue;
             ents.Add((new EntityCoordinates(gridUid, pos), WallPrototypeId));
         }
-        
+
         gridComp.SetTiles(tiles);
         foreach ((EntityCoordinates coords, string protId) in ents)
         {
@@ -64,13 +65,13 @@ public sealed class AsteroidGenerator : Generator
 
         return gridUid;
     }
-    
+
     private HashSet<Vector2i> GenerateTileSet(IRobustRandom random)
     {
         HashSet<Vector2i> tileSet = new();
         Vector2 lastCirclePos = Vector2.Zero;
         int lastCircleRadius = 0;
-        
+
         for (int n = 0; n < CircleAmount; n++)
         {
             for (int m = 0; m < 100; m++)
@@ -80,7 +81,7 @@ public sealed class AsteroidGenerator : Generator
                     Logger.Warning("AsteroidGenerator: size of asteroid is too small, can't place minimum radius circle properly. Please check your prototypes.");
                     return new HashSet<Vector2i>();
                 }
-                
+
                 Vector2i pos = new Vector2i(random.Next(MaxCircleRadius, Size - MaxCircleRadius), random.Next(MaxCircleRadius, Size - MaxCircleRadius));
 
                 int maxRadius = MaxCircleRadius;
@@ -93,7 +94,7 @@ public sealed class AsteroidGenerator : Generator
                 if (pos.Y - maxRadius < 0)
                     maxRadius = pos.Y;
 
-                if ((pos - lastCirclePos).Length < lastCircleRadius + maxRadius || lastCirclePos == Vector2.Zero)
+                if ((pos - lastCirclePos).Length() < lastCircleRadius + maxRadius || lastCirclePos == Vector2.Zero)
                 {
                     PlaceCircle(ref tileSet, pos, maxRadius);
                     lastCirclePos = pos;
@@ -104,7 +105,7 @@ public sealed class AsteroidGenerator : Generator
 
         return tileSet;
     }
-    
+
     private void PlaceCircle(ref HashSet<Vector2i> tileSet, Vector2i pos, int radius)
     {
         for (int y = -radius; y <= radius; y++)

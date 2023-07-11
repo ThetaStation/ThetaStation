@@ -1,3 +1,4 @@
+using System.Numerics;
 using Content.Server.Explosion.EntitySystems;
 using Content.Shared.Theta.ShipEvent;
 using Robust.Shared.Map;
@@ -13,17 +14,17 @@ public sealed partial class ShipEventFactionSystem
     Box2 GetPlayAreaBounds()
     {
         return new Box2i(
-            CurrentBoundsOffset, 
-            CurrentBoundsOffset, 
-            MaxSpawnOffset - CurrentBoundsOffset, 
+            CurrentBoundsOffset,
+            CurrentBoundsOffset,
+            MaxSpawnOffset - CurrentBoundsOffset,
             MaxSpawnOffset - CurrentBoundsOffset);
     }
-    
+
     private void CheckBoundsCompressionTimer()
     {
         if (!BoundsCompression)
             return;
-        
+
         if (_boundsCompressionTimer > BoundsCompressionInterval)
         {
             _boundsCompressionTimer -= BoundsCompressionInterval;
@@ -35,7 +36,7 @@ public sealed partial class ShipEventFactionSystem
     {
         if (!team.ShouldRespawn)
         {
-            if (EntityManager.TryGetComponent<TransformComponent>(team.Ship, out var form) && 
+            if (EntityManager.TryGetComponent<TransformComponent>(team.Ship, out var form) &&
                 EntityManager.TryGetComponent<PhysicsComponent>(team.Ship, out var grid))
             {
                 Matrix3 wmat = _formSys.GetWorldMatrix(form);
@@ -52,7 +53,7 @@ public sealed partial class ShipEventFactionSystem
         team.Points = Math.Max(0, team.Points - OutOfBoundsPenalty);
 
         Vector2 teamShipPos = _formSys.GetWorldPosition(Transform(team.Ship));
-        MapCoordinates mapCoords = new MapCoordinates(teamShipPos + 5 + _random.NextVector2(5), TargetMap);
+        MapCoordinates mapCoords = new MapCoordinates(teamShipPos + new Vector2(5, 5) + _random.NextVector2(5), TargetMap);
         _expSys.QueueExplosion(mapCoords, ExplosionSystem.DefaultExplosionPrototypeId, 300, 5, 100);
     }
 
@@ -66,7 +67,7 @@ public sealed partial class ShipEventFactionSystem
     private void UpdateBoundsOverlay(ICommonSession? recipient = null)
     {
         Box2 bounds = GetPlayAreaBounds();
-        
+
         if (recipient == null)
         {
             RaiseNetworkEvent(new BoundsOverlayInfo(TargetMap, bounds));

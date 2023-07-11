@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 using Content.Client.UserInterface.Controls;
 using Content.Shared.Shuttles.BUIStates;
 using Robust.Client.Graphics;
@@ -109,7 +110,7 @@ public abstract class ModularRadarControl : MapGridControl
         base.Draw(handle);
 
         var background = GetBackground();
-        handle.DrawCircle((MidPoint, MidPoint), ScaledMinimapRadius, background);
+        handle.DrawCircle(new Vector2(MidPoint, MidPoint), ScaledMinimapRadius, background);
 
         // No data
         if (_coordinates == null || _rotation == null)
@@ -124,14 +125,14 @@ public abstract class ModularRadarControl : MapGridControl
 
         for (var i = 1; i < gridLinesEquatorial + 1; i++)
         {
-            handle.DrawCircle((MidPoint, MidPoint), GridLinesDistance * MinimapScale * i, gridLines, false);
+            handle.DrawCircle(new Vector2(MidPoint, MidPoint), GridLinesDistance * MinimapScale * i, gridLines, false);
         }
 
         for (var i = 0; i < gridLinesRadial; i++)
         {
             Angle angle = (Math.PI / gridLinesRadial) * i;
             var aExtent = angle.ToVec() * ScaledMinimapRadius;
-            handle.DrawLine((MidPoint, MidPoint) - aExtent, (MidPoint, MidPoint) + aExtent, gridLines);
+            handle.DrawLine(new Vector2(MidPoint, MidPoint) - aExtent, new Vector2(MidPoint, MidPoint) + aExtent, gridLines);
         }
 
         var offsetMatrix = GetOffsetMatrix();

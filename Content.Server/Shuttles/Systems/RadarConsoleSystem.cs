@@ -1,6 +1,5 @@
 using System.Linq;
 using Content.Server.Mind.Components;
-using Content.Server.Power.Components;
 using Content.Server.Storage.Components;
 using Content.Server.Theta.ShipEvent.Console;
 using System.Numerics;
@@ -12,12 +11,10 @@ using Content.Shared.Projectiles;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
-using Content.Shared.Storage;
 using Content.Shared.Theta.ShipEvent;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Server.GameObjects;
-using Robust.Shared.Containers;
 using Robust.Shared.Map;
 
 namespace Content.Server.Shuttles.Systems;
@@ -29,7 +26,6 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
     [Dependency] private readonly TransformSystem _transformSystem = default!;
     [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
-    [Dependency] private readonly SharedContainerSystem _contSys = default!;
 
     private const string OutputPortName = "CannonConsoleSender";
 
@@ -48,11 +44,12 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
     {
         base.Update(frameTime);
 
-        foreach (var radar in EntityManager.EntityQuery<RadarConsoleComponent>())
+        var query = EntityQueryEnumerator<RadarConsoleComponent>();
+        while (query.MoveNext(out var uid, out var radar))
         {
-            if (!_uiSystem.IsUiOpen(radar.Owner, RadarConsoleUiKey.Key))
+            if (!_uiSystem.IsUiOpen(uid, RadarConsoleUiKey.Key))
                 continue;
-            UpdateState(radar);
+            UpdateState(uid, radar);
         }
     }
 
@@ -63,16 +60,15 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
         if (!TryComp<TransformComponent>(component.Owner, out var xform))
             return list;
 
-        var xformQuery = GetEntityQuery<TransformComponent>();
-        foreach (var (_, mobState, transform) in EntityManager
-                     .EntityQuery<MindContainerComponent, MobStateComponent, TransformComponent>())
+        var query = EntityQueryEnumerator<MindContainerComponent, MobStateComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out _, out var mobState, out var transform))
         {
-            if (_mobStateSystem.IsIncapacitated(mobState.Owner, mobState))
+            if (_mobStateSystem.IsIncapacitated(uid, mobState))
                 continue;
             if (!xform.MapPosition.InRange(transform.MapPosition, component.MaxRange))
                 continue;
 
-            var coords = _transformSystem.GetMoverCoordinates(transform, xformQuery);
+            var coords = _transformSystem.GetMoverCoordinates(uid, transform);
             list.Add(new MobInterfaceState
             {
                 Coordinates = coords,
@@ -136,7 +132,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
             {
                 if (cannon.AmmoProvider is ContainerAmmoProviderComponent cprov)
                 {
-                    if (EntityManager.TryGetComponent<ServerStorageComponent>(cprov.ProviderUid, out ServerStorageComponent? storage))
+                    if (EntityManager.TryGetComponent(cprov.ProviderUid, out ServerStorageComponent? storage))
                     {
                         maxCapacity = storage.StorageCapacityMax;
                         usedCapacity = storage.StorageUsed;

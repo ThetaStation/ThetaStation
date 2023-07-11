@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Numerics;
 using Content.Server.Theta.DebrisGeneration.Prototypes;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
@@ -22,7 +23,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
     [Dependency] public readonly IPrototypeManager ProtMan = default!;
     [Dependency] public readonly IRobustRandom Rand = default!;
     public IEntityManager EntMan => EntityManager;
-    
+
     public MapId TargetMap = MapId.Nullspace;
     public List<EntityUid> SpawnedGrids = new();
 
@@ -45,16 +46,16 @@ public sealed class DebrisGenerationSystem : EntitySystem
         Vector2i startPos,
         int structureAmount,
         int maxOffset,
-        List<StructurePrototype> structures, 
+        List<StructurePrototype> structures,
         List<Processor> globalProcessors)
     {
         if (targetMap == MapId.Nullspace || !MapMan.MapExists(targetMap))
             return;
         TargetMap = targetMap;
         MapMan.SetMapPaused(TargetMap, true);
-        
+
         SetupGrid(startPos, maxOffset);
-        
+
         for (int n = 0; n < structureAmount; n++)
         {
             var structProt = PickStructure(structures);
@@ -67,9 +68,9 @@ public sealed class DebrisGenerationSystem : EntitySystem
             var grid = structProt.Generator.Generate(this, TargetMap);
             var gridComp = EntMan.GetComponent<MapGridComponent>(grid);
             var gridForm = EntMan.GetComponent<TransformComponent>(grid);
-            
+
             var spawnPos = GenerateSpawnPosition((Box2i)gridComp.LocalAABB.Enlarged(structProt.MinDistance));
-            
+
             if (spawnPos == null)
             {
                 Logger.Warning("Debris generation, GenerateDebris: Failed to find spawn position, deleting grid");
@@ -93,7 +94,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
         {
             proc.Process(this, TargetMap, MapMan.GetMapEntityId(TargetMap), true);
         }
-        
+
         MapMan.SetMapPaused(TargetMap, false);
         TargetMap = MapId.Nullspace;
         Logger.Info($"Debris generation, GenerateDebris: Spawned {SpawnedGrids.Count} grids");
@@ -102,25 +103,25 @@ public sealed class DebrisGenerationSystem : EntitySystem
         spawnSectors.Clear();
         spawnSectorVolumes.Clear();
     }
-    
+
     /// <summary>
     /// Randomly places specified structure onto map. Does not optimise collision checking in any way
     /// </summary>
-    public EntityUid RandomPosSpawn(MapId targetMap, Vector2 startPos, int maxOffset, int tries, 
+    public EntityUid RandomPosSpawn(MapId targetMap, Vector2 startPos, int maxOffset, int tries,
         StructurePrototype structure, List<Processor>? extraProcessors = null, bool forceIfFailed = false)
     {
         TargetMap = targetMap;
-        
+
         var grid = structure.Generator.Generate(this, TargetMap);
         var gridComp = EntMan.GetComponent<MapGridComponent>(grid);
         var gridForm = EntMan.GetComponent<TransformComponent>(grid);
-        var bounds = new Box2(startPos.X, 
-            startPos.Y, 
-            startPos.X + maxOffset - gridComp.LocalAABB.Width, 
+        var bounds = new Box2(startPos.X,
+            startPos.Y,
+            startPos.X + maxOffset - gridComp.LocalAABB.Width,
             startPos.Y + maxOffset - gridComp.LocalAABB.Height);
-        
+
         var finalDistance = (int)Math.Ceiling(structure.MinDistance + Math.Max(gridComp.LocalAABB.Height, gridComp.LocalAABB.Width));
-        
+
         Vector2i mapPos = Vector2i.Zero;
         var result = false;
         for (int n = 0; n < tries; n++)
@@ -133,9 +134,9 @@ public sealed class DebrisGenerationSystem : EntitySystem
                 break;
             }
         }
-        
+
         TargetMap = MapId.Nullspace;
-        
+
         if (result)
         {
             Logger.Info($"Debris generation, RandomPosSpawn: Spawned grid {grid.ToString()} successfully");
@@ -146,10 +147,10 @@ public sealed class DebrisGenerationSystem : EntitySystem
             Logger.Info($"Debris generation, RandomPosSpawn: Failed to find spawn position for grid {grid.ToString()}," +
                         "but forceIfFailed is set to true; proceeding to force-spawn");
             mapPos = (Vector2i) Rand.NextVector2Box(bounds.Left, bounds.Bottom, bounds.Right, bounds.Top).Rounded();
-            
+
             gridForm.Coordinates = new EntityCoordinates(gridForm.Coordinates.EntityId, mapPos);
         }
-        
+
         if (result || forceIfFailed)
         {
             if (extraProcessors != null)
@@ -162,7 +163,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
 
             return grid;
         }
-        
+
         Logger.Error($"Debris generation, RandomPosSpawn: Failed to find spawn position, deleting grid {grid.ToString()}");
         EntityManager.DeleteEntity(grid);
         return EntityUid.Invalid;
@@ -178,7 +179,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
                 Vector2i sectorPos = new Vector2i(startPos.X + x, startPos.Y + y);
                 spawnSectors[sectorPos] = new HashSet<SectorRange>
                 {
-                    new SectorRange(sectorPos.Y, sectorPos.Y + spawnSectorSize, 
+                    new SectorRange(sectorPos.Y, sectorPos.Y + spawnSectorSize,
                         new List<(int, int)>{(sectorPos.X, sectorPos.X + spawnSectorSize)})
                 };
                 spawnSectorVolumes[sectorPos] = spawnSectorSize * spawnSectorSize;
@@ -207,14 +208,14 @@ public sealed class DebrisGenerationSystem : EntitySystem
 
         return picked;
     }
-    
+
     //Generates spawn position in random sector of the grid
     private Vector2? GenerateSpawnPosition(Box2i bounds)
     {
         var volume = bounds.Height * bounds.Width;
         var shuffledSectors = spawnSectors.Keys.ToList();
         Rand.Shuffle(shuffledSectors);
-        
+
         foreach(var randomSector in shuffledSectors)
         {
             if (spawnSectorVolumes[randomSector] < volume)
@@ -223,10 +224,10 @@ public sealed class DebrisGenerationSystem : EntitySystem
             if (result)
                 return spawnPos;
         }
-        
+
         return null;
     }
-    
+
     /// <summary>
     /// Tries to find spot with enough space to fit given bounding box
     /// </summary>
@@ -258,7 +259,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
                     }
                     SectorRange combinedRange = CombineRangesVertically(spawnSectors[sectorPos], start, end, range.Bottom, range.Top, bounds.Width);
 
-                    if (combinedRange.Top - combinedRange.Bottom >= bounds.Height) 
+                    if (combinedRange.Top - combinedRange.Bottom >= bounds.Height)
                     {
                         result = true;
                         (int startc, int endc) = combinedRange.XRanges.First();
@@ -318,7 +319,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
                     rangesNew.Add(new SectorRange(range.Top, rangeOther.Top, rangeOther.XRanges));
                     overlapTop = range.Top;
                 }
-                
+
                 rangesNew.Add(new SectorRange(overlapBottom, overlapTop, SubtractXRanges(rangeOther.XRanges, range.XRanges)));
             }
             else
@@ -349,11 +350,11 @@ public sealed class DebrisGenerationSystem : EntitySystem
                 OrderBy(x => above ? x.Top : x.Bottom).ToList();
             if (!above)
                 sranges.Reverse();
-            
+
             if (sranges.Count == 0)
                 return null;
             SectorRange srange = sranges[0];
-            
+
             if (Math.Abs((above ? srange.Bottom : srange.Top) - (above ? topn : bottomn)) > 1)
                 return null;
 
@@ -376,7 +377,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
                 break;
             bottomn = r.Value.Bottom;
             (startn, endn) = r.Value.XRanges[0];
-            
+
         }
 
         while (true)
@@ -444,7 +445,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
 
             return r;
         }
-        
+
         List<(int, int)> newRanges = new(ranges1);
         foreach ((int, int) range2 in ranges2)
         {
