@@ -249,7 +249,7 @@ def parse_changelog(changelog: str, author: str, pr_link: str) -> List[str]:
                 continue
             in_changelog_scope = True
             found_changelog_token = True
-            current_author = line.removeprefix(token).lstrip().rstrip()
+            current_author = line.removeprefix(token).strip()
             if current_author == "" or current_author.isspace():
                 current_author = author
             break
