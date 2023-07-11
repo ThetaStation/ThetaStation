@@ -12,13 +12,13 @@ public sealed partial class ShuttleSystem
 {
     [Dependency] private readonly TransformSystem _formSys = default!;
     [Dependency] private readonly ExplosionSystem _expSys = default!;
-    
+
     /// <summary>
     /// Minimum velocity difference between 2 bodies for a shuttle "impact" to occur.
     /// </summary>
     private const int MinimumImpactVelocity = 10;
-    
-    private const double IntensityMultiplier = 10E-7; //carefully picked by trial & error
+
+    private const double IntensityMultiplier = 0.01; //carefully picked by trial & error
 
     private readonly SoundCollectionSpecifier _shuttleImpactSound = new("ShuttleImpactSound");
 
@@ -43,8 +43,8 @@ public sealed partial class ShuttleSystem
 
         var otherXform = Transform(args.OtherEntity);
 
-        var ourPoint = _formSys.GetWorldMatrix(ourXform).Transform(args.WorldPoint);
-        var otherPoint = _formSys.GetWorldMatrix(otherXform).Transform(args.WorldPoint);
+        var ourPoint = _formSys.GetInvWorldMatrix(ourXform).Transform(args.WorldPoint);
+        var otherPoint = _formSys.GetInvWorldMatrix(otherXform).Transform(args.WorldPoint);
 
         var ourVelocity = _physics.GetLinearVelocity(uid, ourPoint, ourBody, ourXform);
         var otherVelocity = _physics.GetLinearVelocity(args.OtherEntity, otherPoint, otherBody, otherXform);
@@ -58,7 +58,7 @@ public sealed partial class ShuttleSystem
         var audioParams = AudioParams.Default.WithVariation(0.05f).WithVolume(volume);
 
         _audio.Play(_shuttleImpactSound, Filter.Pvs(coordinates, rangeMultiplier: 4f, entityMan: EntityManager), coordinates, true, audioParams);
-        
+
         var kineticEnergy = ourBody.Mass * Math.Pow(jungleDiff, 2) / 2;
 		var mapCoords = coordinates.ToMap(EntityManager);
 		var intensity = (float)(kineticEnergy*IntensityMultiplier);

@@ -102,7 +102,7 @@ public sealed class RadarGrids : RadarModule
                 label.FontColorOverride = color;
                 var gridCentre = matty.Transform(gridBody.LocalCenter);
                 gridCentre.Y = -gridCentre.Y;
-                var distance = gridCentre.Length;
+                var distance = gridCentre.Length();
 
                 // y-offset the control to always render below the grid (vertically)
                 var yOffset = Math.Max(gridBounds.Height, gridBounds.Width) * MinimapScale / 1.8f / Radar.UIScale;
