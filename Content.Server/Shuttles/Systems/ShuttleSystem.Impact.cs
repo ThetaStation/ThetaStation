@@ -3,7 +3,6 @@ using Content.Server.Shuttles.Components;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Map;
-using Robust.Shared.Physics.Dynamics;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Player;
 
@@ -19,7 +18,7 @@ public sealed partial class ShuttleSystem
     /// </summary>
     private const int MinimumImpactVelocity = 10;
     
-    private const double IntensityMultiplier = 0.01;
+    private const double IntensityMultiplier = 10E-7; //carefully picked by trial & error
 
     private readonly SoundCollectionSpecifier _shuttleImpactSound = new("ShuttleImpactSound");
 
