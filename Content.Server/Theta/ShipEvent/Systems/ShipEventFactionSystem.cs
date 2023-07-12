@@ -255,6 +255,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         CurrentBoundsOffset = 0;
 
+        RuleSelected = false;
+
         ShipTypes.Clear();
         TargetMap = MapId.Nullspace;
 
