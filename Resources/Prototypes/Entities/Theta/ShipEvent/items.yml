@@ -1,4 +1,20 @@
-﻿- type: Tag
+﻿# Uplink
+- type: entity
+  parent: BaseUplinkRadio
+  id: ShipEventUplink40TC
+  suffix: 40 TC, ShipEvent
+  components:
+    - type: Store
+      preset: StorePresetUplink
+      balance:
+        Telecrystal: 40
+    - type: Tag
+      tags:
+        - NukeOpsUplink
+        - ShipEventUplink
+
+# Ammo containers
+- type: Tag
   id: TurretAmmoContainer
 
 - type: entity
