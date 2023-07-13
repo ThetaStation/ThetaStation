@@ -495,6 +495,9 @@
     whitelist:
       tags:
       - NukeOpsUplink
+    blacklist:
+      tags:
+      - ShipEventUplink
   - !type:BuyerWhitelistCondition
     blacklist:
       components:
