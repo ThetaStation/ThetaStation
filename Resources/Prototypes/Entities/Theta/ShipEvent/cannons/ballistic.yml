@@ -1,0 +1,175 @@
+#All ballistic cannons - 7.62mm (.30), 37mm, 100mm
+#todo: draw some sick sprites for light & heavy cannon, since they look like generic machine gun turret rn
+
+#base
+- type: entity
+  id: ShipEventCannonBase
+  parent: BaseStructure
+  suffix: SHIPEVENT
+  abstract: true
+  components:
+    - type: Anchorable
+      delay: 7
+    - type: CombatMode
+      combatToggleAction:
+        enabled: false
+        autoPopulate: false
+        name: action-name-combat
+    - type: Actions
+    - type: Cannon
+    - type: Gun
+    - type: Sprite
+      netsync: false
+      sprite: Objects/Weapons/Guns/Turrets/turrets.rsi
+      drawdepth: WallMountedItems
+      layers:
+        - state: syndie_broken
+    - type: InteractionOutline
+    - type: InteractionPopup
+      interactDelay: 0.2
+      successChance: 0.8
+      interactSuccessString: petting-success-generic
+      interactFailureString: petting-failure-generic
+      interactSuccessSound:
+        path: /Audio/Effects/double_beep.ogg
+    - type: Damageable
+      damageContainer: Inorganic
+    - type: DeviceNetwork
+      deviceNetId: Wireless
+    - type: WirelessNetworkConnection
+      range: 200
+    - type: DeviceLinkSink
+      ports:
+        - CannonConsoleReceiver
+
+# Machine Gun
+- type: entity
+  id: ShipEventMachineGunCannon
+  parent: ShipEventCannonBase
+  name: machine gun turret
+  components:
+    - type: Cannon
+      ammoPrototypes:
+        - "CartridgeLightRifle"
+        - "CartridgeLightRifleCaseless"
+    - type: Sprite
+      layers:
+        - state: syndie_lethal
+    - type: Destructible
+      thresholds:
+        - trigger:
+            !type:DamageTrigger
+            damage: 300
+          behaviors:
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+            - !type:PlaySoundBehavior
+              sound:
+                path: /Audio/Effects/metalbreak.ogg
+            - !type:SpawnEntitiesBehavior
+              spawn:
+                SheetSteel1:
+                  min: 3
+                  max: 5
+    - type: Gun
+      minAngle: 2
+      maxAngle: 10
+      angleIncrease: 2
+      angleDecay: 1
+      fireRate: 3
+      projectileSpeed: 100
+      selectedMode: FullAuto
+      availableModes:
+        - FullAuto
+      soundGunshot:
+        path: /Audio/Weapons/Guns/Gunshots/gun_sentry.ogg
+        params:
+          volume: 10
+
+# Light Cannon
+- type: entity
+  id: ShipEventLightArtilleryCannon
+  parent: ShipEventCannonBase
+  name: light cannon
+  components:
+    - type: Cannon
+      ammoPrototypes:
+        - "CartridgeArtilleryLight"
+        - "CartridgeArtilleryLightHE"
+        - "CartridgeArtilleryLightEMP"
+    - type: Sprite
+      layers:
+        - state: syndie_lethal
+    - type: Destructible
+      thresholds:
+        - trigger:
+            !type:DamageTrigger
+            damage: 300
+          behaviors:
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+            - !type:PlaySoundBehavior
+              sound:
+                path: /Audio/Effects/metalbreak.ogg
+            - !type:SpawnEntitiesBehavior
+              spawn:
+                SheetSteel1:
+                  min: 3
+                  max: 5
+    - type: Gun
+      minAngle: 0
+      maxAngle: 10
+      angleIncrease: 2
+      angleDecay: 1
+      fireRate: 2
+      projectileSpeed: 100
+      selectedMode: FullAuto
+      availableModes:
+        - FullAuto
+      soundGunshot:
+        path: /Audio/Theta/Shipevent/artillery.ogg
+        params:
+          volume: 10
+
+# Artillery
+- type: entity
+  id: ShipEventHeavyArtilleryCannon
+  parent: ShipEventCannonBase
+  name: artillery cannon
+  components:
+    - type: Cannon
+      ammoPrototypes:
+        - "CartridgeArtilleryHeavy"
+    - type: Sprite
+      layers:
+        - state: syndie_lethal
+    - type: Destructible
+      thresholds:
+        - trigger:
+            !type:DamageTrigger
+            damage: 300
+          behaviors:
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+            - !type:PlaySoundBehavior
+              sound:
+                path: /Audio/Effects/metalbreak.ogg
+            - !type:SpawnEntitiesBehavior
+              spawn:
+                SheetSteel1:
+                  min: 3
+                  max: 5
+    - type: Gun
+      minAngle: 0
+      maxAngle: 0
+      angleIncrease: 0
+      angleDecay: 0
+      fireRate: 0.5
+      projectileSpeed: 30
+      selectedMode: FullAuto
+      availableModes:
+        - FullAuto
+      soundGunshot:
+        path: /Audio/Theta/Shipevent/artillery.ogg
+        params:
+          volume: 20

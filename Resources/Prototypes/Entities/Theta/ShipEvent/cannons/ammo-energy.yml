@@ -1,0 +1,15 @@
+- type: entity
+  id: IonBolt
+  name: energy
+  parent: BaseBulletTrigger
+  noSpawn: true
+  components:
+    - type: Projectile
+    - type: Sprite
+      sprite: /Textures/Theta/ShipEvent/Objects/Energy.rsi
+      layers:
+        - state: blue
+    - type: EmpOnTrigger
+      range: 4
+      energyConsumption: 3000
+      

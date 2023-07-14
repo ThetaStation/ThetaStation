@@ -1,0 +1,169 @@
+# --Items--
+# Lootbox caller
+- type: entity
+  parent: BaseItem
+  id: LootboxSpawnTriggerItem
+  name: lootbox caller
+  components:
+    - type: Sprite
+      sprite: Objects/Devices/signaller.rsi
+      state: signaller
+    - type: ShipEventLootboxSpawnTrigger
+    - type: OnUseTimerTrigger
+      delay: 0
+    - type: DeleteOnTrigger
+
+# Point storage
+- type: entity
+  parent: BaseItem
+  id: PointStorageItem
+  name: point storage
+  components:
+    - type: Sprite
+      sprite: Objects/Devices/signaller.rsi
+      state: signaller
+    - type: ShipEventPointStorage
+      points: 5000
+    - type: OnUseTimerTrigger
+      delay: 0
+    - type: DeleteOnTrigger
+
+# Ebic ammo - HE
+- type: entity
+  id: BulletArtilleryLightHE
+  name: bullet
+  parent: BaseBulletTrigger
+  noSpawn: true
+  components:
+    - type: Item
+      size: 1
+    - type: Projectile
+      damage:
+        types:
+          Piercing: 100
+          Blunt: 100
+    - type: Sprite
+      sprite: /Textures/Theta/ShipEvent/Objects/AmmoArtillery.rsi
+      layers:
+        - state: bullet
+    - type: ExplodeOnTrigger
+    - type: Explosive
+      explosionType: Default
+      maxIntensity: 20
+      intensitySlope: 5
+      totalIntensity: 60
+    
+- type: entity
+  id: CartridgeArtilleryLightHE
+  name: light cannon cartridge (HE)
+  parent: CartridgeArtilleryLight
+  components:
+    - type: CartridgeAmmo
+      proto: BulletArtilleryLightHE
+      deleteOnSpawn: true
+
+- type: entity
+  id: TurretAmmoContainerLightArtilleryFilledHE
+  name: Light cannon HE ammo container
+  parent: TurretAmmoContainerRare
+  components:
+    - type: StorageFill
+      contents:
+        - id: CartridgeArtilleryLightHE
+          amount: 20 #less than maximum, since they are kinda OP
+          
+# Ebic ammo - EMP
+- type: entity
+  id: BulletArtilleryLightEMP
+  name: bullet
+  parent: BaseBulletTrigger
+  noSpawn: true
+  components:
+    - type: Item
+      size: 1
+    - type: Projectile
+      damage:
+        types:
+          Piercing: 100
+          Blunt: 100
+    - type: Sprite
+      sprite: /Textures/Theta/ShipEvent/Objects/AmmoArtillery.rsi
+      layers:
+        - state: bullet
+    - type: EmpOnTrigger
+      range: 4
+      energyConsumption: 50000
+  
+- type: entity
+  id: CartridgeArtilleryLightEMP
+  name: light cannon cartridge (EMP)
+  parent: CartridgeArtilleryLight
+  components:
+    - type: CartridgeAmmo
+      proto: BulletArtilleryLightEMP
+      deleteOnSpawn: true
+
+- type: entity
+  id: TurretAmmoContainerLightArtilleryFilledEMP
+  name: Light cannon EMP ammo container
+  parent: TurretAmmoContainerRare
+  components:
+    - type: StorageFill
+      contents:
+        - id: CartridgeArtilleryLightEMP
+          amount: 20
+          
+# Misc
+- type: entity
+  name: the nuclear option
+  description: Please don't throw it, think of the children.
+  parent: NuclearGrenade
+  id: NuclearGrenadeWeakened
+  components:
+    - type: Explosive
+      explosionType: Default
+      totalIntensity: 5000
+      intensitySlope: 5
+      maxIntensity: 50
+
+# --Spawners--
+- type: entity
+  parent: MarkerBase
+  id: ShipeventLootboxLootSpawner
+  name: lootbox loot spawner
+  components:
+    - type: Sprite
+      sprite: Markers/cross.rsi
+      layers:
+      - state: red
+    - type: RandomSpawner
+      offset: 0
+      prototypes:
+        - LootboxSpawnTriggerItem
+        - PointStorageItem
+        - TurretAmmoContainerLightArtilleryFilledHE
+        - TurretAmmoContainerLightArtilleryFilledEMP
+        - RCDExperimental
+        - NuclearGrenadeWeakened
+        - WeaponMinigun
+
+#every lootbox must have hats
+- type: entity
+  parent: MarkerBase
+  id: ShipeventLootboxHatsSpawner
+  name: lootbox hat spawner
+  components:
+    - type: Sprite
+      sprite: Markers/cross.rsi
+      layers:
+        - state: green
+    - type: RandomSpawner
+      offset: 0
+      prototypes:
+        - ClothingHeadHatCardborg
+        - ClothingHeadHatPirate
+        - ClothingHeadHatUshanka
+        - ClothingHeadPaperSack
+        - ClothingHeadFishCap
+        - ClothingHeadHatWatermelon
+        - ClothingHeadHatBunny

@@ -17,6 +17,12 @@ namespace Content.Server.Roles
         public Mind.Mind Mind { get; }
 
         /// <summary>
+        ///     Faction to which this role is assigned.
+        /// </summary>
+        [ViewVariables]
+        public PlayerFaction? Faction { get; set; }
+
+        /// <summary>
         ///     A friendly name for this role type.
         /// </summary>
         [ViewVariables]
