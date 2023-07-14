@@ -1,4 +1,4 @@
-#All ballistic cannons - 7.62mm (.30), 37mm, 100mm
+#All ballistic cannons (except artillery) - machine gun, flak, spg
 #todo: draw some sick sprites for light & heavy cannon, since they look like generic machine gun turret rn
 
 #base
@@ -50,8 +50,7 @@
   components:
     - type: Cannon
       ammoPrototypes:
-        - "CartridgeLightRifle"
-        - "CartridgeLightRifleCaseless"
+        - "CartridgeMachineGun"
     - type: Sprite
       layers:
         - state: syndie_lethal
@@ -86,17 +85,17 @@
         params:
           volume: 10
 
-# Light Cannon
+# Flak Cannon
 - type: entity
-  id: ShipEventLightArtilleryCannon
+  id: ShipEventFlakCannon
   parent: ShipEventCannonBase
-  name: light cannon
+  name: flak cannon
   components:
     - type: Cannon
       ammoPrototypes:
-        - "CartridgeArtilleryLight"
-        - "CartridgeArtilleryLightHE"
-        - "CartridgeArtilleryLightEMP"
+        - "CartridgeFlak"
+        - "CartridgeFlakHE"
+        - "CartridgeFlakEMP"
     - type: Sprite
       layers:
         - state: syndie_lethal
@@ -131,15 +130,15 @@
         params:
           volume: 10
 
-# Artillery
+# SPG
 - type: entity
-  id: ShipEventHeavyArtilleryCannon
+  id: ShipEventSPG
   parent: ShipEventCannonBase
-  name: artillery cannon
+  name: self propelled artillery
   components:
     - type: Cannon
       ammoPrototypes:
-        - "CartridgeArtilleryHeavy"
+        - "CartridgeSPG"
     - type: Sprite
       layers:
         - state: syndie_lethal
@@ -165,11 +164,11 @@
       angleIncrease: 0
       angleDecay: 0
       fireRate: 0.5
-      projectileSpeed: 30
+      projectileSpeed: 1
       selectedMode: FullAuto
       availableModes:
         - FullAuto
       soundGunshot:
-        path: /Audio/Theta/Shipevent/artillery.ogg
+        path: /Audio/Theta/Shipevent/rocket.ogg
         params:
           volume: 20

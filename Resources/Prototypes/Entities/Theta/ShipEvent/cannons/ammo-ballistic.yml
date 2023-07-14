@@ -1,6 +1,6 @@
 # Machine Gun rounds
 - type: entity
-  id: CartridgeLightRifleCaseless #this name does not fit, but changing it to CartridgeMachineGun requires mapping changes (ehhh)
+  id: CartridgeMachineGun
   parent: CartridgeLightRifle
   components:
   - type: CartridgeAmmo
@@ -13,15 +13,17 @@
   parent: BaseBullet
   noSpawn: true
   components:
-    - type: Projectile
-      damage:
-        types:
-          Piercing: 50
+  - type: TimedDespawn
+    lifetime: 5
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 50
 
-# Light Cannon round
+# Flak Cannon round
 - type: entity
-  id: BulletArtilleryLight
-  name: bullet (light cannon)
+  id: BulletFlak
+  name: bullet
   parent: BaseBullet
   noSpawn: true
   components:
@@ -38,8 +40,8 @@
     - state: bullet
 
 - type: entity
-  id: CartridgeArtilleryLight
-  name: light cannon cartridge
+  id: CartridgeFlak
+  name: flak cartridge
   parent: BaseCartridge
   components:
   - type: Item
@@ -48,7 +50,7 @@
     tags:
     - Cartridge
   - type: CartridgeAmmo
-    proto: BulletArtilleryLight
+    proto: BulletFlak
     deleteOnSpawn: true
   - type: Sprite
     netsync: false
@@ -56,10 +58,10 @@
     layers:
     - state: cartridge
 
-# Artillery round
+# SPG round
 - type: entity
-  id: BulletArtilleryHeavy
-  name: bullet (artillery)
+  id: BulletSPG
+  name: bullet
   parent: BaseBulletTrigger
   noSpawn: true
   components:
@@ -72,22 +74,32 @@
     sprite: /Textures/Theta/ShipEvent/Objects/AmmoArtillery.rsi
     layers:
     - state: bullet
-  - type: ExplodeOnTrigger
+  - type: TimedDespawn
+    lifetime: 21
+  - type: ActiveTimerTrigger
+    timeRemaining: 20
+  - type: VelocityExplosionTrigger
+    minVelocity: 10
+    intensityMultiplier: 4
+    maxIntensity: 200
   - type: Explosive
     explosionType: Default
     maxIntensity: 20
     intensitySlope: 5
-    totalIntensity: 100
+    totalIntensity: 1 #gets overriden by VelocityExplosionTrigger
+  - type: MovementAcceleration
+    acceleration: 10
+    maxVelocity: 100
 
 - type: entity
-  id: CartridgeArtilleryHeavy
-  name: artillery cartridge
-  parent: CartridgeArtilleryLight
+  id: CartridgeSPG
+  name: SPG cartridge
+  parent: CartridgeFlak
   components:
   - type: Item
     size: 5
   - type: CartridgeAmmo
-    proto: BulletArtilleryHeavy
+    proto: BulletSPG
     deleteOnSpawn: true
 
 # Ammo containers
@@ -98,30 +110,30 @@
   components:
     - type: StorageFill
       contents:
-        - id: CartridgeLightRifleCaseless
+        - id: CartridgeMachineGun
           amount: 100
 
 - type: entity
-  id: TurretAmmoContainerLightArtilleryFilled
-  name: Light cannon ammo container
+  id: TurretAmmoContainerFlakFilled
+  name: Flak ammo container
   parent: TurretAmmoContainerRegular
   components:
     - type: StorageFill
       contents:
-        - id: CartridgeArtilleryLight
+        - id: CartridgeFlak
           amount: 50
 
 - type: entity
-  id: TurretAmmoContainerHeavyArtilleryFilled
-  name: Artillery ammo container
+  id: TurretAmmoContainerSPGFilled
+  name: SPG ammo container
   parent: TurretAmmoContainerRegular
   components:
     - type: StorageFill
       contents:
-        - id: CartridgeArtilleryHeavy
+        - id: CartridgeSPG
           amount: 20
 
-#closets
+# Closets
 - type: entity
   id: ShipEventCloset
   name: closet
@@ -145,21 +157,21 @@
           amount: 10
 
 - type: entity
-  id: LightArtilleryAmmoClosetShipEvent
-  name: Light cannon Ammo Closet
+  id: FlakAmmoClosetShipEvent
+  name: Flak Ammo Closet
   parent: ShipEventCloset
   components:
     - type: StorageFill
       contents:
-        - id: TurretAmmoContainerLightArtilleryFilled
+        - id: TurretAmmoContainerFlakFilled
           amount: 10
 
 - type: entity
-  id: HeavyArtilleryAmmoClosetShipEvent
-  name: Artillery Ammo Closet
+  id: SPGAmmoClosetShipEvent
+  name: SPG Ammo Closet
   parent: ShipEventCloset
   components:
     - type: StorageFill
       contents:
-        - id: TurretAmmoContainerHeavyArtilleryFilled
+        - id: TurretAmmoContainerSPGFilled
           amount: 10

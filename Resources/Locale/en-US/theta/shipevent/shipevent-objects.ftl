@@ -33,23 +33,23 @@ ent-ShipEventMachineGunCannon = machine gun turret
     .desc = { "Machine gun turret, for dealing with enemy's manpower." }
     .suffix = { "ShipEvent" }
 
-ent-ShipEventLightArtilleryCannon = light cannon
-    .desc = { "61-K anti-aircraft cannon. Despite being an outdated model, it's still capable of penetrating spacecraft armour." }
+ent-ShipEventFlakCannon = flak cannon
+    .desc = { "Flak cannon, effective in close & medium range combat." }
     .suffix = { "ShipEvent" }
 
-ent-ShipEventHeavyArtilleryCannon = artillery cannon
-    .desc = { "BS-3 anti-ship cannon. Slow firing, but extremely powerful, it has proven itself on fields of The Second Corporate War." }
+ent-ShipEventSPGCannon = self propelled artillery
+    .desc = { "SPG, fires self propelled projectiles. While they take some time to fully accelerate, their damage is devastating." }
     .suffix = { "ShipEvent" }
 
 ent-ShipEventMachineGunCannonLongMuzzle = machine gun turret
     .desc = { "Machine gun turret, for dealing with enemy's manpower." }
     .suffix = { "Muzzle Length - 2" }
 
-ent-ShipEventLightArtilleryCannonLongMuzzle = light cannon
-    .desc = { "61-K anti-aircraft cannon. Despite being an outdated model, it's still capable of penetrating spacecraft armour." }
+ent-ShipEventFlakCannonLongMuzzle = flak cannon
+    .desc = { "Flak cannon, effective in close & medium range combat." }
     .suffix = { "Muzzle Length - 2" }
 
-ent-ShipEventHeavyArtilleryCannonLongMuzzle = artillery cannon
-    .desc = { "BS-3 anti-ship cannon. Slow firing, but extremely powerful, it has proven itself on fields of The Second Corporate War." }
+ent-ShipEventSPGLongMuzzle = self propelled artillery
+    .desc = { "SPG, fires self propelled projectiles. While they take some time to fully accelerate, their damage is devastating." }
     .suffix = { "Muzzle Length - 2" }
 

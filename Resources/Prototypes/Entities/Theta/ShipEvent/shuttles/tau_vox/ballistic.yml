@@ -9,8 +9,8 @@
 
 # Light Cannon
 - type: entity
-  id: ShipEventLightArtilleryCannonLongMuzzle
-  parent: ShipEventLightArtilleryCannon
+  id: ShipEventFlakCannonLongMuzzle
+  parent: ShipEventFlakCannon
   suffix: Muzzle Length - 2
   components:
     - type: Gun
@@ -18,8 +18,8 @@
 
 # Artillery
 - type: entity
-  id: ShipEventHeavyArtilleryCannonLongMuzzle
-  parent: ShipEventHeavyArtilleryCannon
+  id: ShipEventSPGLongMuzzle
+  parent: ShipEventSPG
   suffix: Muzzle Length - 2
   components:
     - type: Gun
