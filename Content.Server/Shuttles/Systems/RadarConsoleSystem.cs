@@ -1,6 +1,8 @@
 using System.Linq;
 using Content.Server.Mind.Components;
+using Content.Server.Storage.Components;
 using Content.Server.Theta.ShipEvent.Console;
+using System.Numerics;
 using Content.Server.UserInterface;
 using Content.Shared.DeviceLinking;
 using Content.Shared.Mobs.Components;
@@ -10,6 +12,7 @@ using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
 using Content.Shared.Theta.ShipEvent;
+using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
@@ -34,18 +37,19 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 
     private void OnRadarStartup(EntityUid uid, RadarConsoleComponent component, ComponentStartup args)
     {
-        UpdateState(component);
+        UpdateState(uid, component);
     }
 
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
 
-        foreach (var radar in EntityManager.EntityQuery<RadarConsoleComponent>())
+        var query = EntityQueryEnumerator<RadarConsoleComponent>();
+        while (query.MoveNext(out var uid, out var radar))
         {
-            if (!_uiSystem.IsUiOpen(radar.Owner, RadarConsoleUiKey.Key))
+            if (!_uiSystem.IsUiOpen(uid, RadarConsoleUiKey.Key))
                 continue;
-            UpdateState(radar);
+            UpdateState(uid, radar);
         }
     }
 
@@ -56,16 +60,15 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
         if (!TryComp<TransformComponent>(component.Owner, out var xform))
             return list;
 
-        var xformQuery = GetEntityQuery<TransformComponent>();
-        foreach (var (_, mobState, transform) in EntityManager
-                     .EntityQuery<MindContainerComponent, MobStateComponent, TransformComponent>())
+        var query = EntityQueryEnumerator<MindContainerComponent, MobStateComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out _, out var mobState, out var transform))
         {
-            if (_mobStateSystem.IsIncapacitated(mobState.Owner, mobState))
+            if (_mobStateSystem.IsIncapacitated(uid, mobState))
                 continue;
             if (!xform.MapPosition.InRange(transform.MapPosition, component.MaxRange))
                 continue;
 
-            var coords = _transformSystem.GetMoverCoordinates(transform, xformQuery);
+            var coords = _transformSystem.GetMoverCoordinates(uid, transform);
             list.Add(new MobInterfaceState
             {
                 Coordinates = coords,
@@ -115,17 +118,32 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 
             var controlled = false;
             if (controlledCannons != null)
-            {
                 controlled = controlledCannons.Contains(cannon.Owner);
-            }
 
             var color = controlled ? Color.Lime : (isCannonConsole ? Color.LightGreen : Color.YellowGreen);
 
             var ammoCountEv = new GetAmmoCountEvent();
             RaiseLocalEvent(cannon.Owner, ref ammoCountEv);
 
-            var maxCapacity = cannon.BoundLoader?.MaxContainerCapacity != null ? cannon.BoundLoader.MaxContainerCapacity : 0;
-            var usedCapacity = cannon.BoundLoader?.CurrentContainerCapacity != null ? cannon.BoundLoader.CurrentContainerCapacity : 0;
+            int maxCapacity = 0;
+            int usedCapacity = 0;
+
+            if (cannon.AmmoProvider != null)
+            {
+                if (cannon.AmmoProvider is ContainerAmmoProviderComponent cprov)
+                {
+                    if (EntityManager.TryGetComponent(cprov.ProviderUid, out ServerStorageComponent? storage))
+                    {
+                        maxCapacity = storage.StorageCapacityMax;
+                        usedCapacity = storage.StorageUsed;
+                    }
+                }
+                else
+                {
+                    maxCapacity = ammoCountEv.Capacity;
+                    usedCapacity = ammoCountEv.Count;
+                }
+            }
 
             list.Add(new CannonInformationInterfaceState
             {
@@ -155,9 +173,9 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
         return null;
     }
 
-    protected override void UpdateState(RadarConsoleComponent component)
+    protected override void UpdateState(EntityUid uid, RadarConsoleComponent component)
     {
-        var xform = Transform(component.Owner);
+        var xform = Transform(uid);
         var onGrid = xform.ParentUid == xform.GridUid;
         Angle? angle = onGrid ? xform.LocalRotation : Angle.Zero;
         // find correct grid
@@ -171,13 +189,13 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
         EntityCoordinates? coordinates = onGrid ? xform.Coordinates : null;
 
         // Use ourself I guess.
-        if (TryComp<IntrinsicUIComponent>(component.Owner, out var intrinsic))
+        if (TryComp<IntrinsicUIComponent>(uid, out var intrinsic))
         {
             foreach (var uiKey in intrinsic.UIs)
             {
                 if (uiKey.Key?.Equals(RadarConsoleUiKey.Key) == true)
                 {
-                    coordinates = new EntityCoordinates(component.Owner, Vector2.Zero);
+                    coordinates = new EntityCoordinates(uid, Vector2.Zero);
                     angle = Angle.Zero;
                     break;
                 }
@@ -198,6 +216,6 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
             cannons
         );
 
-        _uiSystem.TrySetUiState(component.Owner, RadarConsoleUiKey.Key, radarState);
+        _uiSystem.TrySetUiState(uid, RadarConsoleUiKey.Key, radarState);
     }
 }

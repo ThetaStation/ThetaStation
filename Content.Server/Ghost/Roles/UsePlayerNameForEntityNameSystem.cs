@@ -12,7 +12,10 @@ public sealed class UsePlayerNameForEntityNameSystem : EntitySystem
 
     private void ChangeEntityName(EntityUid uid, UsePlayerNameForEntityNameComponent component, PlayerAttachedEvent args)
     {
+        if(component.Applied)
+            return;
         var metaDataComponent = EntityManager.GetComponent<MetaDataComponent>(args.Entity);
         metaDataComponent.EntityName = args.Player.Name;
+        component.Applied = true;
     }
 }

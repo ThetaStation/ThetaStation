@@ -1,0 +1,20 @@
+- type: structure
+  id: lootbox_box
+  generator: !type:MapLoaderGenerator
+    mapPath: "/Maps/Theta/Shipevent/Lootboxes/shipevent-lootbox-box.yml"
+  spawnWeight: 0
+  minDistance: 10
+  
+- type: structure
+  id: lootbox_abandonedship
+  generator: !type:MapLoaderGenerator
+    mapPath: "/Maps/Theta/Shipevent/Lootboxes/shipevent-lootbox-abandonedship.yml"
+  spawnWeight: 0
+  minDistance: 10
+  
+- type: structure
+  id: lootbox_asteroid
+  generator: !type:MapLoaderGenerator
+    mapPath: "/Maps/Theta/Shipevent/Lootboxes/shipevent-lootbox-asteroid.yml"
+  spawnWeight: 0
+  minDistance: 10

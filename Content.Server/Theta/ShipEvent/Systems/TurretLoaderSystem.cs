@@ -3,6 +3,7 @@ using Content.Server.Storage.Components;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.DeviceLinking;
 using Content.Shared.DeviceLinking.Events;
+using Content.Shared.Examine;
 using Content.Shared.Theta.ShipEvent;
 using Content.Shared.Theta.ShipEvent.Components;
 using Content.Shared.Theta.ShipEvent.UI;
@@ -30,6 +31,7 @@ public sealed class TurretLoaderSystem : EntitySystem
         SubscribeLocalEvent<TurretLoaderComponent, EntRemovedFromContainerMessage>(OnContainerRemove);
 
         SubscribeLocalEvent<TurretLoaderComponent, ThrowHitByEvent>(HandleThrowCollide);
+        SubscribeLocalEvent<TurretLoaderComponent, ExaminedEvent>(OnExamined);
 
         SubscribeLocalEvent<TurretLoaderComponent, TurretLoaderEjectRequest>(OnEject);
         SubscribeLocalEvent<TurretLoaderComponent, TurretLoaderAfterShotMessage>(AfterShot);
@@ -88,7 +90,6 @@ public sealed class TurretLoaderSystem : EntitySystem
 
         loader.AmmoContainer = null;
         loader.MaxContainerCapacity = 0;
-        loader.CurrentContainerCapacity = 0;
 
         var container = loader.ContainerSlot?.Item;
         if (EntityManager.TryGetComponent<ServerStorageComponent>(container, out var storage))
@@ -109,7 +110,6 @@ public sealed class TurretLoaderSystem : EntitySystem
                 
                 loader.AmmoContainer = storage.Storage;
                 loader.MaxContainerCapacity = storage.StorageCapacityMax;
-                loader.CurrentContainerCapacity = storage.StorageUsed;
 
                 if (turretContainer != null)
                 {
@@ -118,7 +118,7 @@ public sealed class TurretLoaderSystem : EntitySystem
                 }
             }
         }
-        
+
         Dirty(loader);
         if(turretContainer != null)
             Dirty(turretContainer);
@@ -181,7 +181,7 @@ public sealed class TurretLoaderSystem : EntitySystem
     {
         SetupLoader(uid, loader, args.Sink);
     }
-    
+
     private void AfterShot(EntityUid uid, TurretLoaderComponent loader, TurretLoaderAfterShotMessage args)
     {
         if (loader.AmmoContainer != null && loader.ContainerSlot != null)
@@ -203,5 +203,17 @@ public sealed class TurretLoaderSystem : EntitySystem
             return;
 
         _slotSys.TryInsert(uid, component.ContainerSlot, args.Thrown, args.User);
+    }
+
+    private void OnExamined(EntityUid uid, TurretLoaderComponent component, ExaminedEvent args)
+    {
+        var ammoCount = 0;
+
+        //slot contents check may seem redundant, when AmmoContainer is updated based on slot contents anyway when loader component
+        //changes state, however due to unknown reasons AmmoContainer is sometimes updated incorrectly, so it's better to double-check
+        if (component.AmmoContainer != null && component.ContainerSlot?.Item != null)
+            ammoCount = component.AmmoContainer.ContainedEntities.Count;
+
+        args.PushMarkup(Loc.GetString("shipevent-turretloader-ammocount-examine", ("count", ammoCount)));
     }
 }

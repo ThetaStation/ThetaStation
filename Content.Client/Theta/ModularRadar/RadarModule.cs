@@ -1,4 +1,5 @@
-﻿using Robust.Client.Graphics;
+﻿using System.Numerics;
+using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Shared.Map;
 
@@ -14,6 +15,10 @@ public abstract class RadarModule
     protected EntityCoordinates? ParentCoordinates => Radar.GetConsoleCoordinates();
     protected Angle? ParentRotation => Radar.GetConsoleRotation();
 
+
+    protected Vector2 MaxRadarRangeVector => new Vector2(MaxRadarRange, MaxRadarRange);
+
+    protected Vector2 MidpointVector => new Vector2(MidPoint, MidPoint);
     protected int MidPoint => SizeFull / 2;
     protected int SizeFull => (int) ((Radar.GetUIDisplayRadius() + Radar.GetMinimapMargin()) * 2 * Radar.UIScale);
     protected int ScaledMinimapRadius => (int) (Radar.GetUIDisplayRadius() * Radar.UIScale);
@@ -64,12 +69,12 @@ public abstract class RadarModule
 
     protected Vector2 ScalePosition(Vector2 value)
     {
-        return value * MinimapScale + MidPoint;
+        return value * MinimapScale + MidpointVector;
     }
 
     protected Vector2 InverseScalePosition(Vector2 value)
     {
-        return (value - MidPoint) / MinimapScale;
+        return (value - MidpointVector) / MinimapScale;
     }
 
     public sealed class Parameters

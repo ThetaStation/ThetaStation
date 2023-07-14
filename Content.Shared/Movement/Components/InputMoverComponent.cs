@@ -1,3 +1,4 @@
+using System.Numerics;
 using Content.Shared.Movement.Systems;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
@@ -45,14 +46,13 @@ namespace Content.Shared.Movement.Components
         /// <summary>
         /// Entity our movement is relative to.
         /// </summary>
-        public EntityUid? RelativeEntity;
+        [ViewVariables] public EntityUid? RelativeEntity;
 
         /// <summary>
         /// Although our movement might be relative to a particular entity we may have an additional relative rotation
         /// e.g. if we've snapped to a different cardinal direction
         /// </summary>
-        [ViewVariables]
-        public Angle TargetRelativeRotation = Angle.Zero;
+        [ViewVariables] public Angle TargetRelativeRotation = Angle.Zero;
 
         /// <summary>
         /// The current relative rotation. This will lerp towards the <see cref="TargetRelativeRotation"/>.

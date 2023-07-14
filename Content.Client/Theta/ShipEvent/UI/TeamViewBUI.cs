@@ -7,7 +7,7 @@ public sealed class TeamViewBoundUserInterface : BoundUserInterface
 {
     private TeamViewWindow? _window;
 
-    public TeamViewBoundUserInterface(ClientUserInterfaceComponent owner, Enum uiKey) : base(owner, uiKey) { }
+    public TeamViewBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey) { }
 
     protected override void Open()
     {

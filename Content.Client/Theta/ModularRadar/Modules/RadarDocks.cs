@@ -1,4 +1,5 @@
-﻿using Content.Shared.Shuttles.BUIStates;
+﻿using System.Numerics;
+using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using Robust.Client.Graphics;
 using Robust.Shared.Map.Components;
@@ -57,7 +58,7 @@ public sealed class RadarDocks : RadarModule
         var mapPosition = ParentCoordinates.Value.ToMap(EntManager);
 
         foreach (var grid in MapManager.FindGridsIntersecting(mapPosition.MapId,
-                     new Box2(mapPosition.Position - MaxRadarRange, mapPosition.Position + MaxRadarRange)))
+                     new Box2(mapPosition.Position - MaxRadarRangeVector, mapPosition.Position + MaxRadarRangeVector)))
         {
             if (grid.Owner == ourGridId || !fixturesQuery.HasComponent(grid.Owner))
                 continue;
@@ -91,7 +92,8 @@ public sealed class RadarDocks : RadarModule
                 var position = state.Coordinates.Position;
                 var uiPosition = parameters.DrawMatrix.Transform(position);
 
-                if (uiPosition.Length > WorldRange - DockScale) continue;
+                if (uiPosition.Length() > WorldRange - DockScale)
+                    continue;
 
                 var color = HighlightedDock == ent ? state.HighlightedColor : state.Color;
 

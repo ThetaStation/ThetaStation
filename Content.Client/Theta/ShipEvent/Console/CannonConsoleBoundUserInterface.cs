@@ -9,7 +9,7 @@ public sealed class CannonConsoleBoundUserInterface : BoundUserInterface
 {
     private CannonConsoleWindow? _window;
 
-    public CannonConsoleBoundUserInterface(ClientUserInterfaceComponent owner, Enum uiKey) : base(owner, uiKey) {}
+    public CannonConsoleBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey) {}
 
     protected override void Open()
     {

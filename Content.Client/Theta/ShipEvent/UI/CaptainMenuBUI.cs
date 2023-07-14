@@ -9,8 +9,8 @@ namespace Content.Client.Theta.ShipEvent.UI;
 public sealed class CaptainMenuBoundUserInterface : BoundUserInterface
 {
     private CaptainMenuWindow? _window;
-    
-    public CaptainMenuBoundUserInterface(ClientUserInterfaceComponent owner, Enum uiKey) : base(owner, uiKey) { }
+
+    public CaptainMenuBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey) { }
 
     protected override void Open()
     {

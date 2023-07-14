@@ -11,4 +11,5 @@
         - state: blue
     - type: EmpOnTrigger
       range: 4
-      energyConsumption: 50000
+      energyConsumption: 3000
+      

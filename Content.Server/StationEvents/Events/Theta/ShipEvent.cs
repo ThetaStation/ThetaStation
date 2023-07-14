@@ -7,13 +7,13 @@ using Content.Shared.Theta.ShipEvent;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Server.Theta.ShipEvent.Systems;
 using Content.Shared.Shuttles.Components;
+using Robust.Server.Player;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Serialization.Markdown;
 using Robust.Shared.Serialization.Markdown.Mapping;
 using Robust.Shared.Serialization.Markdown.Value;
-using YamlDotNet.Core.Events;
 
 namespace Content.Server.StationEvents.Events.Theta;
 
@@ -30,7 +30,13 @@ public sealed class ShipEventRuleComponent : Component
 
     [DataField("initialObstacleAmount")] public int InitialObstacleAmount;
 
-    [DataField("maxSpawnOffset")] public int MaxSpawnOffset;
+    [DataField("minFieldSize")] public int MinFieldSize;
+
+    [DataField("maxFieldSize")] public int MaxFieldSize;
+
+    [DataField("metersPerPlayer")] public int MetersPerPlayer; //scaling field based on online (at roundstart)
+
+    [DataField("roundFieldSizeTo")] public int RoundFieldSizeTo;
 
     [DataField("bonusInterval")] public int BonusInterval;
 
@@ -61,6 +67,14 @@ public sealed class ShipEventRuleComponent : Component
     [DataField("boundsCompressionInterval")] public float BoundsCompressionInterval;
     
     [DataField("boundsCompressionDistance")] public int BoundsCompressionDistance;
+
+    [DataField("lootboxSpawnInterval")] public int LootboxSpawnInterval;
+
+    [DataField("lootboxSpawnAmount")] public int LootboxSpawnAmount;
+
+    [DataField("lootboxLifetime")] public float LootboxLifetime;
+
+    [DataField("lootboxTypes")] public List<string> LootboxTypes = new();
 }
 
 public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
@@ -69,6 +83,7 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
     [Dependency] private DebrisGenerationSystem _debrisSys = default!;
     [Dependency] private readonly IMapManager _mapMan = default!;
     [Dependency] private readonly IPrototypeManager _protMan = default!;
+    [Dependency] private readonly IPlayerManager _playerMan = default!;
     [Dependency] private IRobustRandom _rand = default!;
 
     //Creates ComponentRegistryEntry for ChangeIFFOnSplit comp. Used by AddComponentProcessor to prevent splitted grids from getting labels.
@@ -111,15 +126,27 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         _shipSys.HUDPrototypeId = component.HUDPrototypeId;
         _shipSys.CaptainHUDPrototypeId = component.CaptainHUDPrototypeId;
         
-        _shipSys.MaxSpawnOffset = component.MaxSpawnOffset;
+        _shipSys.MaxSpawnOffset = Math.Clamp(
+            (int)Math.Round((float)_playerMan.PlayerCount * component.MetersPerPlayer / component.RoundFieldSizeTo) * component.RoundFieldSizeTo, 
+            component.MinFieldSize, 
+            component.MaxFieldSize);
 
         _shipSys.BoundsCompressionInterval = component.BoundsCompressionInterval;
         _shipSys.BoundsCompression = component.BoundsCompressionInterval > 0;
         _shipSys.BoundsCompressionDistance = component.BoundsCompressionDistance;
 
+        _shipSys.LootboxSpawnInterval = component.LootboxSpawnInterval;
+        _shipSys.LootboxSpawnAmount = component.LootboxSpawnAmount;
+        _shipSys.LootboxLifetime = component.LootboxLifetime;
+
         foreach (var shipTypeProtId in component.ShipTypes)
         {
             _shipSys.ShipTypes.Add(_protMan.Index<ShipTypePrototype>(shipTypeProtId));
+        }
+        
+        foreach (var structProtId in component.LootboxTypes)
+        {
+            _shipSys.LootboxPrototypes.Add(_protMan.Index<StructurePrototype>(structProtId));
         }
 
         List<StructurePrototype> obstacleStructProts = new();
@@ -153,15 +180,21 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         iffFlagProc.Flags = new() { IFFFlags.HideLabel };
         iffFlagProc.ColorOverride = Color.Gold;
 
+        FlagIFFProcessor iffFlagProcLootbox = new();
+        iffFlagProcLootbox.NameOverride = Loc.GetString("shipevent-lootboxname");
+        iffFlagProcLootbox.ColorOverride = Color.Magenta;
+
         List<Processor> globalProcessors = new() { iffSplitProc, iffFlagProc };
 
         _debrisSys.SpawnStructures(map,
             Vector2i.Zero,
             component.InitialObstacleAmount + _rand.Next(-component.ObstacleAmountAmplitude, component.ObstacleAmountAmplitude),
-            component.MaxSpawnOffset,
+            _shipSys.MaxSpawnOffset,
             obstacleStructProts,
             globalProcessors);
         
         _shipSys.ShipProcessors.Add(iffSplitProc);
+        _shipSys.LootboxProcessors.Add(iffSplitProc);
+        _shipSys.LootboxProcessors.Add(iffFlagProcLootbox);
     }
 }

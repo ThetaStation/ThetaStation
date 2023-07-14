@@ -4,7 +4,7 @@ shipevent-title = Ship Battle
 shipevent-desc = NanoTrasen has started a contest to test out their light battle cruisers in combat situations
 
 
-## Global annoucements & team messages
+## Global announcements & team messages
 
 shipevent-announcement-title = NanoTrasen Fleet Command
 
@@ -25,9 +25,18 @@ shipevent-respawn-dead = the death of all team members
 shipevent-respawn-tech = the destruction of critically important ship components
 
 shipevent-remove-default = the admiral's dissapointment
+shipevent-remove-noplayers = the absence of activity
 
 shipevent-outofbounds = WARNING! Your team has left test polygon's area. Return immediately, otherwise disciplinary measures will be applied.
 shipevent-boundscompressed = Test area bounds were compressed by { $distance } meters.
+
+shipevent-roundendtimer-tenmins = Ten minutes left until round end, raise those scores!
+shipevent-roundendtimer-fivemins = Five mins left until round end, destroy some ships asap.
+shipevent-roundendtimer-onemin = Round will end very soon...
+
+shipevent-lootboxspawned = New stashes are already on field. Go get them!
+shipevent-pointsadded = Team received { $points } points, rejoice!
+
 
 ## Role stuff
 
@@ -42,6 +51,9 @@ shipevent-roundend-team = Team '[color={ $color }]{ $name }[/color]' (ship name 
 shipevent-roundend-teamstats = Has collected { $points } points, { $kills } kills, { $assists } assists, and they have respawned { $respawns } time(s).
 shipevent-roundend-winner = THE WINNER IS - TEAM '{ $name }'! Let's all congratulate them with their victory via OOC! (or badmouth them for their luck).
 
+## For discord roundend messages
+shipevent-roundend-discord-team = Team under the guidance of '{ $capname }' wins.
+shipevent-roundend-discord-teamstats = Has collected { $points } points, { $kills } kills, { $assists } assists, and they have respawned { $respawns } time(s).
 
 ## Misc.
 
@@ -49,6 +61,4 @@ shipevent-memberlimit = There's no free places in this team! Wait until someone 
 shipevent-blacklist = You're in this team's blacklist. Their captain is probably quite dissapointed in you.
 shipevent-kicked = You got kicked from team! Use team menu to find a new one.
 shipevent-respawnfailed = Couldn't respawn you, quite possibly your ship's spawner is destroyed. Wait until someone builds new spawner/ship respawns.
-shipevent-roundendtimer-tenmins = Ten minutes left until round end, raise those scores!
-shipevent-roundendtimer-fivemins = Five mins left until round end, destroy some ships asap.
-shipevent-roundendtimer-onemin = Round will end very soon...
+shipevent-lootboxname = Stash

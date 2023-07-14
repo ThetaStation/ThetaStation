@@ -17,6 +17,9 @@ public sealed class FlagIFFProcessor : Processor
     /// </summary>
     [DataField("resetOldFlags")]
     public bool ResetOldFlags;
+
+    [DataField("nameOverride")] 
+    public string? NameOverride;
     
     [DataField("colorOverride")]
     public Color? ColorOverride;
@@ -43,8 +46,14 @@ public sealed class FlagIFFProcessor : Processor
         
         if (ResetOldFlags)
             shuttleSys.ResetIFFFlags(gridUid, iffComp);
-        
-        if(ColorOverride != null)
+
+        if (NameOverride != null)
+        {
+            if (entMan.TryGetComponent<MetaDataComponent>(gridUid, out MetaDataComponent? meta))
+                meta.EntityName = NameOverride;
+        }
+
+        if(ColorOverride != null) 
             shuttleSys.SetIFFColor(gridUid, ColorOverride.Value, iffComp);
 
         foreach (IFFFlags flag in Flags) 

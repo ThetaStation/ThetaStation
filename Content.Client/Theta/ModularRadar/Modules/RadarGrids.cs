@@ -1,4 +1,5 @@
-﻿using Content.Shared.Shuttles.Components;
+﻿using System.Numerics;
+using Content.Shared.Shuttles.Components;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
@@ -46,17 +47,10 @@ public sealed class RadarGrids : RadarModule
         var shown = new HashSet<EntityUid>();
         // Draw other grids... differently
         foreach (var grid in MapManager.FindGridsIntersecting(mapPosition.MapId,
-                     new Box2(mapPosition.Position - MaxRadarRange, mapPosition.Position + MaxRadarRange)))
+                     new Box2(mapPosition.Position - MaxRadarRangeVector, mapPosition.Position + MaxRadarRangeVector)))
         {
             if (grid.Owner == ourGridId || !fixturesQuery.HasComponent(grid.Owner))
                 continue;
-
-            var gridBody = bodyQuery.GetComponent(grid.Owner);
-            if (gridBody.Mass < 10f)
-            {
-                ClearLabel(grid.Owner);
-                continue;
-            }
 
             EntManager.TryGetComponent<IFFComponent>(grid.Owner, out var iff);
 
@@ -104,10 +98,11 @@ public sealed class RadarGrids : RadarModule
                     label = (Label) control;
                 }
 
+                var gridBody = bodyQuery.GetComponent(grid.Owner);
                 label.FontColorOverride = color;
                 var gridCentre = matty.Transform(gridBody.LocalCenter);
                 gridCentre.Y = -gridCentre.Y;
-                var distance = gridCentre.Length;
+                var distance = gridCentre.Length();
 
                 // y-offset the control to always render below the grid (vertically)
                 var yOffset = Math.Max(gridBounds.Height, gridBounds.Width) * MinimapScale / 1.8f / Radar.UIScale;
@@ -210,7 +205,7 @@ public sealed class RadarGrids : RadarModule
                 var adjustedStart = matrix.Transform(start);
                 var adjustedEnd = matrix.Transform(end);
 
-                if (adjustedStart.Length > ActualRadarRange || adjustedEnd.Length > ActualRadarRange)
+                if (adjustedStart.Length() > ActualRadarRange || adjustedEnd.Length() > ActualRadarRange)
                     continue;
 
                 start = ScalePosition(new Vector2(adjustedStart.X, -adjustedStart.Y));

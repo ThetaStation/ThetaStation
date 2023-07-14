@@ -6,5 +6,5 @@
 [RegisterComponent]
 public sealed class UsePlayerNameForEntityNameComponent : Component
 {
-
+    public bool Applied = false;
 }

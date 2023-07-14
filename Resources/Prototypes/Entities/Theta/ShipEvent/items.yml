@@ -1,4 +1,20 @@
-﻿- type: Tag
+﻿# Uplink
+- type: entity
+  parent: BaseUplinkRadio
+  id: ShipEventUplink40TC
+  suffix: 40 TC, ShipEvent
+  components:
+    - type: Store
+      preset: StorePresetUplink
+      balance:
+        Telecrystal: 40
+    - type: Tag
+      tags:
+        - NukeOpsUplink
+        - ShipEventUplink
+
+# Ammo containers
+- type: Tag
   id: TurretAmmoContainer
 
 - type: entity
@@ -6,6 +22,7 @@
   name: ammo container
   parent: BaseItem
   components:
+    - type: AmmoContainer
     - type: Tag
       tags:
       - TurretAmmoContainer
@@ -46,3 +63,13 @@
       whitelist:
         components:
         - Ammo
+
+- type: entity
+  id: TurretAmmoContainerRare
+  name: strange ammo container
+  parent: TurretAmmoContainerRegular
+  components:
+    - type: Sprite
+      drawdepth: Items
+      sprite: Theta/ShipEvent/Objects/AmmoContainer.rsi
+      state: container-rare

@@ -8,5 +8,10 @@ namespace Content.Shared.Shuttles.Events;
 [Serializable, NetSerializable]
 public sealed class ShuttleConsoleChangeShipNameMessage : BoundUserInterfaceMessage
 {
-    public string? NewShipName;
+    public string NewShipName;
+
+    public ShuttleConsoleChangeShipNameMessage(string newShipName)
+    {
+        NewShipName = newShipName;
+    }
 }

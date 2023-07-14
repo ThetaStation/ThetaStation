@@ -25,10 +25,17 @@ shipevent-respawn-dead = смерти всего её состава
 shipevent-respawn-tech = уничтожения жизненно важных компонентов её корабля
 
 shipevent-remove-default = недовольства адмирала
+shipevent-remove-noplayers = отсутствия активности
 
 shipevent-outofbounds = ВНИМАНИЕ! Ваша команда покинула пределы испытательного полигона. Немедленно вернитесь, в противном случае будут применены дисциплинарные меры.
 shipevent-boundscompressed = Границы полигона были сжаты на { $distance } метров.
 
+shipevent-roundendtimer-tenmins = До окончания раунда осталось 10 минут! Успейте набрать побольше очков.
+shipevent-roundendtimer-fivemins = До окончания раунда осталось всего 5 минут! Срочно уничтожьте побольше кораблей.
+shipevent-roundendtimer-onemin = Раунд вот-вот закончится...
+
+shipevent-lootboxspawned = Новая партия схронов уже на поле. Бегите их собирать!
+shipevent-pointsadded = Команде добавлено { $points } очков, возрадуйтесь!
 
 ## Role stuff
 
@@ -43,6 +50,9 @@ shipevent-roundend-team = Команда '[color={ $color }]{ $name }[/color]' (
 shipevent-roundend-teamstats = Набрала { $points } очков, { $kills } фрагов и { $assists } ассистов, а также зареспавнилась { $respawns } раз.
 shipevent-roundend-winner = ПОБЕДИТЕЛЬ - КОМАНДА '{ $name }'! Поздравьте их в ООЦ (или полейте грязью).
 
+## For discord roundedn messages
+shipevent-roundend-discord-team = Победила команда под руководством '{ $capname }'.
+shipevent-roundend-discord-teamstats =  Набрала { $points } очков, { $kills } фрагов и { $assists } ассистов, а также зареспавнилась { $respawns } раз.
 
 ## Misc.
 
@@ -50,6 +60,4 @@ shipevent-memberlimit = В этой команде нет места! Подож
 shipevent-blacklist = Вы в блеклисте сией команды. Наверное, вы чем-то обидели капитана.
 shipevent-kicked = Вас выгнали из команды! Используйте меню команд чтоб найти новое пристанище.
 shipevent-respawnfailed = Респавн не удался. Вероятно кто-то уничтожил спавнер вашей команды. Ожидайте пока построят новый/корабль зареспавнится, или перейдите в другую команду.
-shipevent-roundendtimer-tenmins = До окончания раунда осталось 10 минут! Успейте набрать побольше очков.
-shipevent-roundendtimer-fivemins = До окончания раунда осталось всего 5 минут! Срочно уничтожьте побольше кораблей.
-shipevent-roundendtimer-onemin = Раунд вот-вот закончится...
+shipevent-lootboxname = Схрон

@@ -10,9 +10,12 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
 
     steps:
+#    - name: Install dependencies
+#      run: sudo apt-get install -y python3-paramiko
+#
     - uses: actions/checkout@v2
       with:
         submodules: 'recursive'
