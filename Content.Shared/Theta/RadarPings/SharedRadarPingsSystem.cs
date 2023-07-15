@@ -16,7 +16,6 @@ public abstract class SharedRadarPingsSystem : EntitySystem
     {
         Audio.Play(PingSound, hearer, from, false);
     }
-
 }
 
 [Serializable, NetSerializable]

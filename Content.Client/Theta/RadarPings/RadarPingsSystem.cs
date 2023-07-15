@@ -3,13 +3,19 @@ using Content.Client.Shuttles;
 using Content.Shared.Theta.RadarPings;
 using Robust.Client.Player;
 using Robust.Shared.Player;
+using Robust.Shared.Timing;
 
 namespace Content.Client.Theta.RadarPings;
 
 public sealed class RadarPingsSystem : SharedRadarPingsSystem
 {
     [Dependency] private readonly IPlayerManager _playerManager = default!;
+
     public event Action<PingInformation>? OnEventReceived;
+
+    private readonly TimeSpan _networkPingCd = TimeSpan.FromSeconds(0.5);
+
+    private bool _canNetworkPing = true;
 
     public override void Initialize()
     {
@@ -25,7 +31,12 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
     public PingInformation SendPing(EntityUid pingOwner, Vector2 coordinates)
     {
         var sender = _playerManager.LocalPlayer!.ControlledEntity!.Value;
-        RaiseNetworkEvent(new SpreadPingEvent(sender, pingOwner, coordinates));
+        if (_canNetworkPing)
+        {
+            RaiseNetworkEvent(new SpreadPingEvent(sender, pingOwner, coordinates));
+            _canNetworkPing = false;
+            Timer.Spawn(_networkPingCd, () => _canNetworkPing = true);
+        }
 
         var ping = GetPing(pingOwner, coordinates);
         PlaySignalSound(Filter.Entities(sender), pingOwner);
