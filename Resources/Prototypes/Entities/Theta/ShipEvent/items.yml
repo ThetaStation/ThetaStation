@@ -10,7 +10,6 @@
         Telecrystal: 40
     - type: Tag
       tags:
-        - NukeOpsUplink
         - ShipEventUplink
 
 # Ammo containers
