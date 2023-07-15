@@ -66,6 +66,11 @@ binds:
 - function: ShuttleBrake
   type: State
   key: Space
+#Theta-Start
+- function: PingOnRadar
+  type: State
+  key: X
+#Theta-End
 # Camera
 - function: CameraRotateLeft
   type: State
