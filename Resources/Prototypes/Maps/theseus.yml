@@ -1,12 +1,11 @@
 - type: gameMap
   id: Theseus
-  mapName: "gameMap"
+  mapName: "Theseus"
   mapPath: /Maps/Theta/ShipMaps/theseus.yml
   minPlayers: 0
   maxPlayers: 35
-  fallback: true
   stations:
-    Theseus:
+    TheseusShip:
       stationProto: StandardNanotrasenStation
       components:
         - type: StationNameSetup
@@ -14,7 +13,7 @@
           nameGenerator: !type:NanotrasenNameGenerator
             prefixCreator: "14"
         - type: StationEmergencyShuttle
-          emergencyShuttlePath: /Maps/Shuttles/corvax_emergency.yml # Corvax-EmergencyShuttle
+          emergencyShuttlePath: /Maps/Shuttles/corvax_emergency.yml
         - type: StationJobs
           overflowJobs:
             - Passenger

@@ -220,8 +220,11 @@ entities:
       type: Fixtures
     - type: OccluderTree
     - type: SpreaderGrid
-    - type: Shuttle
     - type: GridPathfinding
+    - id: TheseusShip
+      type: BecomesStation
+    - type: OccluderTree
+    - type: Shuttle
     - gravityShakeSound: !type:SoundPathSpecifier
         path: /Audio/Effects/alert.ogg
       type: Gravity
@@ -2683,7 +2686,6 @@ entities:
       parent: 1
       type: Transform
     - ShutdownSubscribers:
-      - invalid
       - 10332
       - 2315
       - 2316
@@ -5785,9 +5787,6 @@ entities:
       - 8508
       - 8509
       type: DeviceLinkSink
-    - following:
-      - invalid
-      type: Followed
   - uid: 6229
     components:
     - pos: 5.5,92.5
@@ -5797,9 +5796,6 @@ entities:
       - 8509
       - 8508
       type: DeviceLinkSink
-    - following:
-      - invalid
-      type: Followed
   - uid: 6230
     components:
     - pos: 5.5,91.5
@@ -5809,9 +5805,6 @@ entities:
       - 8508
       - 8509
       type: DeviceLinkSink
-    - following:
-      - invalid
-      type: Followed
 - proto: BookAtmosDistro
   entities:
   - uid: 10303
@@ -37422,7 +37415,6 @@ entities:
       parent: 1
       type: Transform
     - ShutdownSubscribers:
-      - invalid
       - 2316
       - 2315
       - 10333
@@ -64774,9 +64766,6 @@ entities:
       - 10137
       - 10138
       type: DeviceLinkSink
-    - following:
-      - invalid
-      type: Followed
   - uid: 2401
     components:
     - pos: -5.5,-61.5
