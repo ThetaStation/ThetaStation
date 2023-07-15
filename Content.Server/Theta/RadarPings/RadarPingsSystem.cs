@@ -30,9 +30,11 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
 
     private void ReceivePing(SpreadPingEvent ev)
     {
-        var ping = GetPing(ev.Sender, ev.Coordinates);
+        var ping = GetPing(ev.PingOwner, ev.Coordinates);
 
-        RaiseNetworkEvent(new SendPingEvent(ping), GetPlayersFilter(ev));
+        var filter = GetPlayersFilter(ev);
+        PlaySignalSound(filter, ev.PingOwner);
+        RaiseNetworkEvent(new SendPingEvent(ping), filter);
     }
 
     private Filter GetPlayersFilter(SpreadPingEvent ev)

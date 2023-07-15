@@ -1,11 +1,21 @@
 ﻿using System.Numerics;
+using Robust.Shared.Player;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.Theta.RadarPings;
 
 public abstract class SharedRadarPingsSystem : EntitySystem
 {
+    [Dependency] private readonly SharedAudioSystem Audio = default!;
+
+    private const string PingSound = "/Audio/Theta/Shipevent/radar_ping.ogg";
+
     protected abstract PingInformation GetPing(EntityUid sender, Vector2 coordinates);
+
+    protected void PlaySignalSound(Filter hearer, EntityUid from)
+    {
+        Audio.Play(PingSound, hearer, from, false);
+    }
 
 }
 
@@ -13,11 +23,13 @@ public abstract class SharedRadarPingsSystem : EntitySystem
 public sealed class SpreadPingEvent : EntityEventArgs
 {
     public EntityUid Sender;
+    public EntityUid PingOwner;
     public Vector2 Coordinates;
 
-    public SpreadPingEvent(EntityUid sender, Vector2 coordinates)
+    public SpreadPingEvent(EntityUid sender, EntityUid pingOwner, Vector2 coordinates)
     {
         Sender = sender;
+        PingOwner = pingOwner;
         Coordinates = coordinates;
     }
 }
