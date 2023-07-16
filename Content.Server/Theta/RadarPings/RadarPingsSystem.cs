@@ -15,7 +15,6 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
 
     public override void Initialize()
     {
-        base.Initialize();
         SubscribeNetworkEvent<SpreadPingEvent>(ReceivePing);
     }
 
