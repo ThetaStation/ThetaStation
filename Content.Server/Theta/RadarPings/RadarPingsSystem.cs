@@ -19,6 +19,15 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
         SubscribeNetworkEvent<SpreadPingEvent>(ReceivePing);
     }
 
+    private void ReceivePing(SpreadPingEvent ev)
+    {
+        var filter = GetPlayersFilter(ev);
+        PlaySignalSound(filter, ev.PingOwner);
+
+        var ping = GetPing(ev.PingOwner, ev.Coordinates);
+        RaiseNetworkEvent(new SendPingEvent(ping), filter);
+    }
+
     protected override PingInformation GetPing(EntityUid sender, Vector2 coordinates)
     {
         var color = Color.Blue;
@@ -28,18 +37,11 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
         return new PingInformation(coordinates, color);
     }
 
-    private void ReceivePing(SpreadPingEvent ev)
-    {
-        var ping = GetPing(ev.PingOwner, ev.Coordinates);
-
-        var filter = GetPlayersFilter(ev);
-        PlaySignalSound(filter, ev.PingOwner);
-        RaiseNetworkEvent(new SendPingEvent(ping), filter);
-    }
-
     private Filter GetPlayersFilter(SpreadPingEvent ev)
     {
         var filter = Filter.Empty();
+
+        // Fallback for non-shipevent rounds
         if (_shipEventSystem.RuleSelected)
         {
             foreach (var team in _shipEventSystem.Teams)
@@ -53,7 +55,7 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
             filter = Filter.BroadcastGrid(ev.Sender);
         }
 
-        if(_playerManager.TryGetSessionByEntity(ev.Sender, out var session))
+        if (_playerManager.TryGetSessionByEntity(ev.Sender, out var session))
             filter.RemovePlayer(session);
 
         return filter;
