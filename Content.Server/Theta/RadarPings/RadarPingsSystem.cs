@@ -2,6 +2,7 @@
 using System.Numerics;
 using Content.Server.Shuttles.Components;
 using Content.Server.Theta.ShipEvent.Systems;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Theta.RadarPings;
 using Robust.Shared.Player;
 using Robust.Shared.Players;
@@ -32,6 +33,8 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
         var color = Color.Blue;
         if (HasComp<ShuttleConsoleComponent>(sender))
             color = Color.Red;
+        else if (HasComp<MobStateComponent>(sender))
+            color = Color.LightGreen;
 
         return new PingInformation(coordinates, color);
     }
