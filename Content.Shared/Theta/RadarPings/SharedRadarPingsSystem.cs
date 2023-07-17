@@ -34,7 +34,7 @@ public sealed class SpreadPingEvent : EntityEventArgs
 }
 
 [Serializable, NetSerializable]
-public sealed class SendPingEvent: EntityEventArgs
+public sealed class SendPingEvent : EntityEventArgs
 {
     public PingInformation Ping;
 

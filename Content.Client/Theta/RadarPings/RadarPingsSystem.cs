@@ -12,9 +12,9 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
     [Dependency] private readonly IPlayerManager _playerManager = default!;
 
     public event Action<PingInformation>? OnEventReceived;
+    public TimeSpan PingDuration = TimeSpan.FromSeconds(2);
 
-    private readonly TimeSpan _networkPingCd = TimeSpan.FromSeconds(0.5);
-
+    private readonly TimeSpan _networkPingCd = TimeSpan.FromSeconds(0.3);
     private bool _canNetworkPing = true;
 
     public override void Initialize()
