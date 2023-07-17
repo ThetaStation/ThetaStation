@@ -198,16 +198,12 @@ public sealed partial class ShipEventFactionSystem
 
     public bool IsValidName(string name)
     {
-        if (name == "")
+        if (string.IsNullOrWhiteSpace(name))
+            return false;
+        if (name.Length > 25)
             return false;
 
-        foreach (var team in Teams)
-        {
-            if (team.Name == name)
-                return false;
-        }
-
-        return true;
+        return Teams.All(team => team.Name != name);
     }
 
     private Color GenerateTeamColor()
