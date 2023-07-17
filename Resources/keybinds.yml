@@ -69,7 +69,9 @@ binds:
 #Theta-Start
 - function: PingOnRadar
   type: State
-  key: X
+  key: MouseRight
+  canFocus: true
+  priority: -1
 #Theta-End
 # Camera
 - function: CameraRotateLeft
