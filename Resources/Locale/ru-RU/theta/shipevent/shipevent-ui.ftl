@@ -31,7 +31,7 @@ shipevent-lobby-crew = Экипаж
 
 shipevent-teamcreation-windowtitle = СОЗДАНИЕ КОМАНДЫ
 
-shipevent-teamcreation-response-invalidname = Данное имя уже занято/недоступно по другой причине.
+shipevent-teamcreation-response-invalidname = Данное название уже занято/слишком длинное/недоступно по иной причине.
 shipevent-teamcreation-response-invalidcolor = Данный цвет уже занят/недоступен по другой причине.
 shipevent-teamcreation-response-blacklistself = Зачем вы пытаетесь добавить себя же в блеклист?
 shipevent-teamcreation-response-waitpls = Запрос на создание команды получен, ПОЖАЛУЙСТА ОЖИДАЙТЕ.
