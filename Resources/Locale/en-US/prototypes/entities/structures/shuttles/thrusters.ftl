@@ -8,7 +8,10 @@ ent-DebugThruster = debug thruster
     .desc = It goes nyooooooom. It doesn't need power nor space.
 
 ent-Gyroscope = gyroscope
-    .desc = Increases the shuttle's potential angular rotation.
+    .desc = Increases the shuttle's potential angular rotation
+
+ent-SkipjackGyroscope = { ent-Gyroscope }
+    .desc = { ent-Gyroscope }
 
 ent-DebugGyroscope = debug gyroscope
     .desc = { ent-Gyroscope.desc }
