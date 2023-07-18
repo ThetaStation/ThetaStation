@@ -190,3 +190,10 @@
     - type: DeviceLinkSource
       ports:
       - TurretLoaderSender
+
+- type: entity
+  id: APCShipEvent
+  parent: APCHighCapacity
+  components:
+    - type: AccessReader
+      enabled: false

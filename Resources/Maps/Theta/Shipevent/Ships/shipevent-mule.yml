@@ -259,7 +259,7 @@ entities:
       pos: 5.5,7.5
       parent: 1
       type: Transform
-- proto: APCHighCapacity
+- proto: APCShipEvent
   entities:
   - uid: 13
     components:
