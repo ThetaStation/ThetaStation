@@ -8,10 +8,13 @@
   },
   "states": [
     {
+      "name": "yellow"
+    },
+    {
       "name": "blue"
     },
     {
-      "name": "green"
+      "name": "orange"
     }
   ]
 }

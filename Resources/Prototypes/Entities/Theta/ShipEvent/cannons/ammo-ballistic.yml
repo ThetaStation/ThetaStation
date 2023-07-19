@@ -32,8 +32,8 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 100
-        Blunt: 100
+        Piercing: 150
+        Blunt: 150
   - type: Sprite
     sprite: /Textures/Theta/ShipEvent/Objects/AmmoArtillery.rsi
     layers:
@@ -68,8 +68,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 100
-        Blunt: 100
+        Blunt: 10
   - type: Sprite
     sprite: /Textures/Theta/ShipEvent/Objects/AmmoArtillery.rsi
     layers:

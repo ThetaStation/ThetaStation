@@ -1,10 +1,10 @@
+# Ion
 - type: entity
   id: IonBolt
   name: energy
   parent: BaseBulletTrigger
   noSpawn: true
   components:
-    - type: Projectile
     - type: Sprite
       sprite: /Textures/Theta/ShipEvent/Objects/Energy.rsi
       layers:
@@ -13,3 +13,43 @@
       range: 4
       energyConsumption: 3000
       
+# Plasma
+- type: entity
+  id: PlasmaCannonShot
+  name: energy
+  parent: BaseBullet
+  noSpawn: true
+  components:
+    - type: CartridgeAmmo
+      proto: PlasmaBolt
+      deleteOnSpawn: true
+      count: 4
+      spread: 90
+    - type: Sprite
+      sprite: /Textures/Theta/ShipEvent/Objects/Energy.rsi
+      layers:
+        - state: orange
+
+- type: entity
+  id: PlasmaBolt
+  name: energy
+  parent: BaseBulletTrigger
+  noSpawn: true
+  components:
+    - type: TimedDespawn
+      lifetime: 2
+    - type: Projectile
+      damage:
+        types:
+          Burn: 1000
+          Heat: 1000
+    - type: ExplodeOnTrigger
+    - type: Explosive
+      explosionType: Default
+      maxIntensity: 5
+      intensitySlope: 5
+      totalIntensity: 5 #explosion is for aesthetic purposes
+    - type: Sprite
+      sprite: /Textures/Theta/ShipEvent/Objects/Energy.rsi
+      layers:
+        - state: orange
