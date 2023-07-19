@@ -44,11 +44,15 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
 
     protected override PingInformation GetPing(EntityUid sender, Vector2 coordinates)
     {
-        var color = Color.Blue;
+        var color = DefaultPingColor;
         if (HasComp<ShuttleConsoleComponent>(sender))
-            color = Color.Red;
+        {
+            color = CaptainPingColor;
+        }
         else if (HasComp<MobStateComponent>(sender))
-            color = Color.LightGreen;
+        {
+            color = MobPingColor;
+        }
 
         return new PingInformation(coordinates, color);
     }

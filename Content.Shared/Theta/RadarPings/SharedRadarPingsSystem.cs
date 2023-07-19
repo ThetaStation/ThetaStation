@@ -9,6 +9,10 @@ public abstract class SharedRadarPingsSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem Audio = default!;
 
     private const string PingSound = "/Audio/Theta/Shipevent/radar_ping.ogg";
+    protected readonly Color DefaultPingColor = Color.Blue;
+    protected readonly Color CaptainPingColor = Color.Red;
+    protected readonly Color MobPingColor = Color.LightGreen;
+
 
     protected abstract PingInformation GetPing(EntityUid sender, Vector2 coordinates);
 
