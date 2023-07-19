@@ -59,7 +59,7 @@ public sealed class RadarPingsModule : RadarModule
             if (ping.StartAnimationTick == TimeSpan.Zero)
                 ping.StartAnimationTick = _gameTiming.RealTime;
 
-            if (ping.StartAnimationTick + _radarPingsSystem.PingDuration < _gameTiming.RealTime)
+            if (ping.StartAnimationTick + ping.PingDuration < _gameTiming.RealTime)
             {
                 pingsToRemove.Add(ping);
                 continue;
@@ -71,7 +71,7 @@ public sealed class RadarPingsModule : RadarModule
 
             handle.DrawCircle(ScalePosition(uiPosition), ping.DotRadius, ping.Color);
 
-            var animationTick = (_gameTiming.RealTime - ping.StartAnimationTick) / (_radarPingsSystem.PingDuration / 5);
+            var animationTick = (_gameTiming.RealTime - ping.StartAnimationTick) / (ping.PingDuration / 5);
             var coefficient = (float)Math.Abs(Math.Sin(animationTick));
             var radiusDelta = ping.MaxCircleRadius - ping.MinCircleRadius;
 
@@ -94,6 +94,8 @@ public sealed class RadarPingsModule : RadarModule
         public float DotRadius = 3f;
         public float MinCircleRadius = 7f;
         public float MaxCircleRadius = 11f;
+
+        public TimeSpan PingDuration = TimeSpan.FromSeconds(2);
 
         public AnimationPingInformation(Vector2 coordinates, Color color)
         {
