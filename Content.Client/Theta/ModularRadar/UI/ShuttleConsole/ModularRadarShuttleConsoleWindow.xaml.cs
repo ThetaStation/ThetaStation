@@ -114,7 +114,7 @@ public sealed partial class ModularRadarShuttleConsoleWindow : FancyWindow,
         var name = ShipName.Text;
         if (string.IsNullOrWhiteSpace(name))
             return;
-        if (name.Length > 25)
+        if (name.Length is > 25 or < 3)
             return;
 
         ChangeNamePressed?.Invoke(name);
