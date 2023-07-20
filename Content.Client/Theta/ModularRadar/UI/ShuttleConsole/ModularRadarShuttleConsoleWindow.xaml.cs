@@ -118,6 +118,11 @@ public sealed partial class ModularRadarShuttleConsoleWindow : FancyWindow,
         RadarScreen.SetMatrix(coordinates, angle);
     }
 
+    public void SetOwner(EntityUid uid)
+    {
+        RadarScreen.SetOwnerUid(uid);
+    }
+
     public void UpdateState(BoundUserInterfaceState scc)
     {
         if (scc is ShuttleConsoleBoundInterfaceState cState)
