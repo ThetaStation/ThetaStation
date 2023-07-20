@@ -33,7 +33,7 @@ public sealed class ChangeIFFOnSplitComponent : Component
     public bool Replicate;
 
     /// <summary>
-    /// If set, all child grids will be deleted when parent grid deleted
+    /// If set, all child grids will be deleted after delay
     /// In seconds.
     /// </summary>
     [DataField("deleteInheritedGridsDelay")]
