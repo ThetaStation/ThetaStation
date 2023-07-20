@@ -78,7 +78,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
     {
         if (string.IsNullOrWhiteSpace(args.NewShipName))
             return;
-        if (args.NewShipName.Length > 25)
+        if (args.NewShipName.Length is > 25 or < 3)
             return;
         if (!TryComp<TransformComponent>(uid, out var xform))
             return;

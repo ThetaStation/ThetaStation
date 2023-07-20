@@ -200,7 +200,7 @@ public sealed partial class ShipEventFactionSystem
     {
         if (string.IsNullOrWhiteSpace(name))
             return false;
-        if (name.Length > 25)
+        if (name.Length is > 25 or < 3)
             return false;
 
         return Teams.All(team => team.Name != name);
