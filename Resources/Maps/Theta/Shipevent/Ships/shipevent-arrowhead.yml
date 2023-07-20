@@ -126,6 +126,8 @@ entities:
     - pos: 3.5,5.5
       parent: 1
       type: Transform
+    - enabled: False
+      type: AccessReader
 - proto: AtmosDeviceFanTiny
   entities:
   - uid: 5
@@ -519,6 +521,54 @@ entities:
     - pos: 2.5,7.5
       parent: 1
       type: Transform
+- proto: CannonComputerShipEvent
+  entities:
+  - uid: 197
+    components:
+    - pos: 2.5,9.5
+      parent: 1
+      type: Transform
+    - enabled: True
+      type: PointLight
+    - linkedPorts:
+        199:
+        - CannonConsoleSender: CannonConsoleReceiver
+        201:
+        - CannonConsoleSender: CannonConsoleReceiver
+        202:
+        - CannonConsoleSender: CannonConsoleReceiver
+        203:
+        - CannonConsoleSender: CannonConsoleReceiver
+        200:
+        - CannonConsoleSender: CannonConsoleReceiver
+        196:
+        - CannonConsoleSender: CannonConsoleReceiver
+      registeredSinks:
+        CannonConsoleSender:
+        - 199
+        - 201
+        - 202
+        - 203
+        - 200
+        - 196
+      type: DeviceLinkSource
+  - uid: 198
+    components:
+    - pos: 4.5,9.5
+      parent: 1
+      type: Transform
+    - enabled: True
+      type: PointLight
+    - linkedPorts:
+        204:
+        - CannonConsoleSender: CannonConsoleReceiver
+        205:
+        - CannonConsoleSender: CannonConsoleReceiver
+      registeredSinks:
+        CannonConsoleSender:
+        - 204
+        - 205
+      type: DeviceLinkSource
 - proto: Catwalk
   entities:
   - uid: 68
@@ -615,6 +665,13 @@ entities:
     - pos: 0.5,6.5
       parent: 1
       type: Transform
+- proto: FlakAmmoClosetShipEvent
+  entities:
+  - uid: 207
+    components:
+    - pos: 0.5,4.5
+      parent: 1
+      type: Transform
 - proto: GeneratorUranium
   entities:
   - uid: 85
@@ -655,7 +712,7 @@ entities:
   entities:
   - uid: 90
     components:
-    - pos: 3.5,6.5
+    - pos: 2.5,4.5
       parent: 1
       type: Transform
 - proto: NetworkConfigurator
@@ -722,6 +779,120 @@ entities:
       pos: 2.5,7.5
       parent: 1
       type: Transform
+- proto: ShipEventFlakCannon
+  entities:
+  - uid: 196
+    components:
+    - flags: SessionSpecific
+      type: MetaData
+    - pos: 9.5,-1.5
+      parent: 1
+      type: Transform
+    - links:
+      - 190
+      - 197
+      type: DeviceLinkSink
+    - provider: 191
+      container: storagebase
+      type: ContainerAmmoProvider
+  - uid: 199
+    components:
+    - flags: SessionSpecific
+      type: MetaData
+    - pos: -2.5,-1.5
+      parent: 1
+      type: Transform
+    - links:
+      - 184
+      - 197
+      type: DeviceLinkSink
+    - provider: 185
+      container: storagebase
+      type: ContainerAmmoProvider
+  - uid: 200
+    components:
+    - flags: SessionSpecific
+      type: MetaData
+    - rot: 3.141592653589793 rad
+      pos: 9.5,7.5
+      parent: 1
+      type: Transform
+    - links:
+      - 192
+      - 197
+      type: DeviceLinkSink
+    - provider: 193
+      container: storagebase
+      type: ContainerAmmoProvider
+  - uid: 201
+    components:
+    - flags: SessionSpecific
+      type: MetaData
+    - rot: 3.141592653589793 rad
+      pos: -2.5,7.5
+      parent: 1
+      type: Transform
+    - links:
+      - 186
+      - 197
+      type: DeviceLinkSink
+    - provider: 187
+      container: storagebase
+      type: ContainerAmmoProvider
+  - uid: 202
+    components:
+    - flags: SessionSpecific
+      type: MetaData
+    - rot: 3.141592653589793 rad
+      pos: -0.5,10.5
+      parent: 1
+      type: Transform
+    - links:
+      - 188
+      - 197
+      type: DeviceLinkSink
+    - provider: 189
+      container: storagebase
+      type: ContainerAmmoProvider
+  - uid: 203
+    components:
+    - flags: SessionSpecific
+      type: MetaData
+    - rot: 3.141592653589793 rad
+      pos: 7.5,10.5
+      parent: 1
+      type: Transform
+    - links:
+      - 194
+      - 197
+      type: DeviceLinkSink
+    - provider: 195
+      container: storagebase
+      type: ContainerAmmoProvider
+- proto: ShipEventIonCannon
+  entities:
+  - uid: 204
+    components:
+    - flags: SessionSpecific
+      type: MetaData
+    - rot: 3.141592653589793 rad
+      pos: 1.5,12.5
+      parent: 1
+      type: Transform
+    - links:
+      - 198
+      type: DeviceLinkSink
+  - uid: 205
+    components:
+    - flags: SessionSpecific
+      type: MetaData
+    - rot: 3.141592653589793 rad
+      pos: 5.5,12.5
+      parent: 1
+      type: Transform
+    - links:
+      - 198
+      type: DeviceLinkSink
 - proto: ShuttleWindow
   entities:
   - uid: 103
@@ -857,6 +1028,166 @@ entities:
     - pos: 2.5,7.5
       parent: 1
       type: Transform
+- proto: TurretAmmoContainerFlakFilled
+  entities:
+  - uid: 185
+    components:
+    - flags: InContainer
+      type: MetaData
+    - parent: 184
+      type: Transform
+    - canCollide: False
+      type: Physics
+  - uid: 187
+    components:
+    - flags: InContainer
+      type: MetaData
+    - parent: 186
+      type: Transform
+    - canCollide: False
+      type: Physics
+  - uid: 189
+    components:
+    - flags: InContainer
+      type: MetaData
+    - parent: 188
+      type: Transform
+    - canCollide: False
+      type: Physics
+  - uid: 191
+    components:
+    - flags: InContainer
+      type: MetaData
+    - parent: 190
+      type: Transform
+    - canCollide: False
+      type: Physics
+  - uid: 193
+    components:
+    - flags: InContainer
+      type: MetaData
+    - parent: 192
+      type: Transform
+    - canCollide: False
+      type: Physics
+  - uid: 195
+    components:
+    - flags: InContainer
+      type: MetaData
+    - parent: 194
+      type: Transform
+    - canCollide: False
+      type: Physics
+- proto: TurretLoaderShipEvent
+  entities:
+  - uid: 184
+    components:
+    - pos: 0.5,2.5
+      parent: 1
+      type: Transform
+    - containers:
+        ammoContainer: !type:ContainerSlot
+          showEnts: False
+          occludes: True
+          ent: 185
+      type: ContainerContainer
+    - linkedPorts:
+        199:
+        - TurretLoaderSender: CannonConsoleReceiver
+      registeredSinks:
+        TurretLoaderSender:
+        - 199
+      type: DeviceLinkSource
+  - uid: 186
+    components:
+    - pos: 1.5,2.5
+      parent: 1
+      type: Transform
+    - containers:
+        ammoContainer: !type:ContainerSlot
+          showEnts: False
+          occludes: True
+          ent: 187
+      type: ContainerContainer
+    - linkedPorts:
+        201:
+        - TurretLoaderSender: CannonConsoleReceiver
+      registeredSinks:
+        TurretLoaderSender:
+        - 201
+      type: DeviceLinkSource
+  - uid: 188
+    components:
+    - pos: 2.5,2.5
+      parent: 1
+      type: Transform
+    - containers:
+        ammoContainer: !type:ContainerSlot
+          showEnts: False
+          occludes: True
+          ent: 189
+      type: ContainerContainer
+    - linkedPorts:
+        202:
+        - TurretLoaderSender: CannonConsoleReceiver
+      registeredSinks:
+        TurretLoaderSender:
+        - 202
+      type: DeviceLinkSource
+  - uid: 190
+    components:
+    - pos: 4.5,2.5
+      parent: 1
+      type: Transform
+    - containers:
+        ammoContainer: !type:ContainerSlot
+          showEnts: False
+          occludes: True
+          ent: 191
+      type: ContainerContainer
+    - linkedPorts:
+        196:
+        - TurretLoaderSender: CannonConsoleReceiver
+      registeredSinks:
+        TurretLoaderSender:
+        - 196
+      type: DeviceLinkSource
+  - uid: 192
+    components:
+    - pos: 5.5,2.5
+      parent: 1
+      type: Transform
+    - containers:
+        ammoContainer: !type:ContainerSlot
+          showEnts: False
+          occludes: True
+          ent: 193
+      type: ContainerContainer
+    - linkedPorts:
+        200:
+        - TurretLoaderSender: CannonConsoleReceiver
+      registeredSinks:
+        TurretLoaderSender:
+        - 200
+      type: DeviceLinkSource
+  - uid: 194
+    components:
+    - pos: 6.5,2.5
+      parent: 1
+      type: Transform
+    - containers:
+        ammoContainer: !type:ContainerSlot
+          showEnts: False
+          occludes: True
+          ent: 195
+      type: ContainerContainer
+    - linkedPorts:
+        203:
+        - TurretLoaderSender: CannonConsoleReceiver
+      registeredSinks:
+        TurretLoaderSender:
+        - 203
+      type: DeviceLinkSource
 - proto: VendingMachineMedical
   entities:
   - uid: 122
