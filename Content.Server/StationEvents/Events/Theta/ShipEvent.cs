@@ -65,7 +65,7 @@ public sealed class ShipEventRuleComponent : Component
     [DataField("obstacleSizeAmplitude")] public int ObstacleSizeAmplitude;
 
     [DataField("boundsCompressionInterval")] public float BoundsCompressionInterval;
-    
+
     [DataField("boundsCompressionDistance")] public int BoundsCompressionDistance;
 
     [DataField("lootboxSpawnInterval")] public int LootboxSpawnInterval;
@@ -93,6 +93,7 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         var iffSplitComp = new ChangeIFFOnSplitComponent();
         iffSplitComp.NewFlags = IFFFlags.HideLabel;
         iffSplitComp.Replicate = true;
+        iffSplitComp.DeleteInheritedGridsDelay = 120;
 
         MappingDataNode mapping = new MappingDataNode(new Dictionary<DataNode, DataNode>
         {
@@ -125,10 +126,10 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
 
         _shipSys.HUDPrototypeId = component.HUDPrototypeId;
         _shipSys.CaptainHUDPrototypeId = component.CaptainHUDPrototypeId;
-        
+
         _shipSys.MaxSpawnOffset = Math.Clamp(
-            (int)Math.Round((float)_playerMan.PlayerCount * component.MetersPerPlayer / component.RoundFieldSizeTo) * component.RoundFieldSizeTo, 
-            component.MinFieldSize, 
+            (int)Math.Round((float)_playerMan.PlayerCount * component.MetersPerPlayer / component.RoundFieldSizeTo) * component.RoundFieldSizeTo,
+            component.MinFieldSize,
             component.MaxFieldSize);
 
         _shipSys.BoundsCompressionInterval = component.BoundsCompressionInterval;
@@ -143,7 +144,7 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         {
             _shipSys.ShipTypes.Add(_protMan.Index<ShipTypePrototype>(shipTypeProtId));
         }
-        
+
         foreach (var structProtId in component.LootboxTypes)
         {
             _shipSys.LootboxPrototypes.Add(_protMan.Index<StructurePrototype>(structProtId));
@@ -192,7 +193,7 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
             _shipSys.MaxSpawnOffset,
             obstacleStructProts,
             globalProcessors);
-        
+
         _shipSys.ShipProcessors.Add(iffSplitProc);
         _shipSys.LootboxProcessors.Add(iffSplitProc);
         _shipSys.LootboxProcessors.Add(iffFlagProcLootbox);
