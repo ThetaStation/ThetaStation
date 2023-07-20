@@ -42,8 +42,6 @@ public sealed class ChangeIFFOnSplitSystem : EntitySystem
         Color color = comp.NewColor ?? (originIff?.Color ?? Color.Gold);
 
         var newIff = EnsureComp<IFFComponent>(args.Grid);
-        Logger.Info($"Adding flags: {flags}. Comp override flags: {(comp.NewFlags == null ? "NULL" : comp.NewFlags)}; " +
-                    $"Origin IFF flags: {(originIff?.Flags == null ? "NULL" : originIff.Flags)};");
         _shuttleSystem.AddIFFFlag(args.Grid, flags, newIff);
         _shuttleSystem.SetIFFColor(args.Grid, color, newIff);
     }
