@@ -10,6 +10,7 @@ jobs:
   Label:
     if: github.actor != 'IanComradeBot'
     runs-on: [self-hosted, linux, x64]
+    permissions: write-all
     steps:
       - name: Check for Merge Conflicts
         uses: ike709/actions-label-merge-conflict@9eefdd17e10566023c46d2dc6dc04fcb8ec76142
