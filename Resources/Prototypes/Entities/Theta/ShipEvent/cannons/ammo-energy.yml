@@ -37,7 +37,7 @@
   noSpawn: true
   components:
     - type: TimedDespawn
-      lifetime: 2
+      lifetime: 1.5
     - type: Projectile
       damage:
         types:
