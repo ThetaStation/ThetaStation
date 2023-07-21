@@ -31,7 +31,7 @@ shipevent-lobby-crew = Crew
 
 shipevent-teamcreation-windowtitle = TEAM CREATION
 
-shipevent-teamcreation-response-invalidname = This name is already taken/too long/too short/unavailable for some other reason.
+shipevent-teamcreation-response-invalidname = This name is already taken/unavailable for some other reason.
 shipevent-teamcreation-response-invalidcolor = This color is already taken/unavailable for some other reason.
 shipevent-teamcreation-response-blacklistself = Why are you trying to blacklist yourself?
 shipevent-teamcreation-response-waitpls = Team creation request was received, PLEASE WAIT.

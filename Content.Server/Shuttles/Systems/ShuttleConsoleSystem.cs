@@ -78,8 +78,6 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
     {
         if (string.IsNullOrWhiteSpace(args.NewShipName))
             return;
-        if (args.NewShipName.Length is > 25 or < 3)
-            return;
         if (!TryComp<TransformComponent>(uid, out var xform))
             return;
         if (!TryComp<MetaDataComponent>(xform.GridUid, out var meta))
@@ -232,7 +230,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         {
             RemovePilot(user, pilotComponent);
 
-            // This feels backwards; is this intended to be a toggle?
+            // This feels backwards; is this intended to be a toggle? 
             if (console == uid)
                 return false;
         }

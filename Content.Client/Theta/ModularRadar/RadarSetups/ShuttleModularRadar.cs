@@ -16,6 +16,7 @@ public sealed class ShuttleModularRadar : ModularRadarControl
         Modules.Add(new RadarProjectiles(this));
         Modules.Add(new RadarMobs(this));
         Modules.Add(new RadarVelocity(this));
+        Modules.Add(new RadarPingsModule(this));
     }
 }
 
