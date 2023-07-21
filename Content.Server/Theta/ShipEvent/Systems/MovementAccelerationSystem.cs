@@ -15,7 +15,10 @@ public sealed class MovementAccelerationSystem : EntitySystem
         foreach ((var body, var accel) in 
                  EntityManager.EntityQuery<PhysicsComponent, MovementAccelerationComponent>())
         {
-            float v = Math.Min(accel.Acceleration * frameTime, accel.MaxVelocity);
+            if (body.LinearVelocity.Length() >= accel.MaxVelocity)
+                return;
+            
+            float v = accel.Acceleration * frameTime;
             Vector2 vv = body.LinearVelocity.Normalized() * (v + body.LinearVelocity.Length());
             physSys.SetLinearVelocity(body.Owner, vv, body: body);
         }
