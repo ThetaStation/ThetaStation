@@ -1039,8 +1039,6 @@ entities:
     - enabled: True
       type: PointLight
     - linkedPorts:
-        237:
-        - CannonConsoleSender: CannonConsoleReceiver
         232:
         - CannonConsoleSender: CannonConsoleReceiver
         231:
@@ -1051,7 +1049,6 @@ entities:
         - CannonConsoleSender: CannonConsoleReceiver
       registeredSinks:
         CannonConsoleSender:
-        - 237
         - 232
         - 231
         - 229
@@ -1291,6 +1288,8 @@ entities:
     - pos: 3.5,7.5
       parent: 1
       type: Transform
+    - supplyRate: 30000
+      type: PowerSupplier
 - proto: GravityGeneratorMini
   entities:
   - uid: 172
@@ -1422,6 +1421,11 @@ entities:
   - uid: 193
     components:
     - pos: 6.5,14.5
+      parent: 1
+      type: Transform
+  - uid: 421
+    components:
+    - pos: 2.5,6.5
       parent: 1
       type: Transform
 - proto: OperatingTable
@@ -1652,7 +1656,8 @@ entities:
       - 285
       - 132
       type: DeviceLinkSink
-    - container: ""
+    - provider: 286
+      container: storagebase
       type: ContainerAmmoProvider
   - uid: 227
     components:
@@ -1669,7 +1674,8 @@ entities:
       - 283
       - 132
       type: DeviceLinkSink
-    - container: ""
+    - provider: 284
+      container: storagebase
       type: ContainerAmmoProvider
   - uid: 228
     components:
@@ -1686,7 +1692,8 @@ entities:
       - 281
       - 132
       type: DeviceLinkSink
-    - container: ""
+    - provider: 282
+      container: storagebase
       type: ContainerAmmoProvider
   - uid: 229
     components:
@@ -1702,7 +1709,8 @@ entities:
       - 279
       - 133
       type: DeviceLinkSink
-    - container: ""
+    - provider: 280
+      container: storagebase
       type: ContainerAmmoProvider
   - uid: 230
     components:
@@ -1718,7 +1726,8 @@ entities:
       - 287
       - 132
       type: DeviceLinkSink
-    - container: ""
+    - provider: 288
+      container: storagebase
       type: ContainerAmmoProvider
   - uid: 231
     components:
@@ -1735,7 +1744,8 @@ entities:
       - 277
       - 133
       type: DeviceLinkSink
-    - container: ""
+    - provider: 278
+      container: storagebase
       type: ContainerAmmoProvider
   - uid: 232
     components:
@@ -1752,7 +1762,8 @@ entities:
       - 275
       - 133
       type: DeviceLinkSink
-    - container: ""
+    - provider: 276
+      container: storagebase
       type: ContainerAmmoProvider
   - uid: 233
     components:
@@ -1768,7 +1779,8 @@ entities:
       - 289
       - 133
       type: DeviceLinkSink
-    - container: ""
+    - provider: 290
+      container: storagebase
       type: ContainerAmmoProvider
 - proto: ShipEventPlasmaCannon
   entities:
@@ -1817,7 +1829,8 @@ entities:
       - 134
       - 295
       type: DeviceLinkSink
-    - container: ""
+    - provider: 296
+      container: storagebase
       type: ContainerAmmoProvider
   - uid: 237
     components:
@@ -1831,11 +1844,11 @@ entities:
       - 3.4233432174107574 rad: 4.233242859636203 rad
       type: Cannon
     - links:
-      - 133
       - 297
       - 134
       type: DeviceLinkSink
-    - container: ""
+    - provider: 298
+      container: storagebase
       type: ContainerAmmoProvider
   - uid: 238
     components:
@@ -1852,7 +1865,8 @@ entities:
       - 131
       - 291
       type: DeviceLinkSink
-    - container: ""
+    - provider: 292
+      container: storagebase
       type: ContainerAmmoProvider
   - uid: 239
     components:
@@ -1869,7 +1883,8 @@ entities:
       - 131
       - 293
       type: DeviceLinkSink
-    - container: ""
+    - provider: 294
+      container: storagebase
       type: ContainerAmmoProvider
 - proto: SkipjackAirlockHatch
   entities:
