@@ -92,19 +92,11 @@ public sealed partial class ShuttleConsoleWindow : FancyWindow,
 
     private void OnChangeNamePressed(BaseButton.ButtonEventArgs args)
     {
-        ChangeName();
-        ShipName.Text = String.Empty;
-    }
-
-    private void ChangeName()
-    {
         var name = ShipName.Text;
-        if (string.IsNullOrWhiteSpace(name))
+        if(name == string.Empty)
             return;
-        if (name.Length is > 25 or < 3)
-            return;
-
         ChangeNamePressed?.Invoke(name);
+        ShipName.Text = String.Empty;
     }
 
     public void SetMatrix(EntityCoordinates? coordinates, Angle? angle)

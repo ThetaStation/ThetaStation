@@ -32,6 +32,11 @@ public sealed partial class CannonConsoleWindow : FancyWindow,
         RadarScreen.SetMatrix(coordinates, angle);
     }
 
+    public void SetOwner(EntityUid uid)
+    {
+        RadarScreen.SetOwnerUid(uid);
+    }
+
     private void UpdateAmmo(List<CannonInformationInterfaceState> controlledCannons)
     {
         AmmoStatusContents.RemoveAllChildren();

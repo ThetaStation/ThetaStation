@@ -76,6 +76,7 @@ ui-options-header-ui = Интерфейс
 ui-options-header-misc = Разное
 ui-options-header-hotbar = Хотбар
 ui-options-header-shuttle = Шаттл
+ui-options-header-theta = Тета
 ui-options-header-map-editor = Редактор карт
 ui-options-header-dev = Разработка
 ui-options-header-general = Основное
@@ -208,3 +209,6 @@ ui-options-net-pvs-leave-tooltip =
     привести к неправильным предугадываниям и другим проблемам.
 cmd-options-desc = Открывает меню опций, опционально с конкретно выбранной вкладкой.
 cmd-options-help = Использование: options [tab]
+
+## Theta
+ui-options-function-ping-on-radar = Отправить сигнал на радаре
