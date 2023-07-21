@@ -24,7 +24,7 @@
       proto: PlasmaBolt
       deleteOnSpawn: true
       count: 4
-      spread: 90
+      spread: 45
     - type: Sprite
       sprite: /Textures/Theta/ShipEvent/Objects/Energy.rsi
       layers:
