@@ -2,16 +2,14 @@ using Content.Shared.Actions;
 using Content.Shared.Gravity;
 using Content.Shared.Hands;
 using Content.Shared.Interaction.Events;
-using Content.Shared.Item;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Events;
 using Content.Shared.Popups;
+using Content.Shared.Theta.RadarHUD;
 using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
-using Robust.Shared.Network;
-using Robust.Shared.Player;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Serialization;
-using Robust.Shared.Timing;
 
 namespace Content.Shared.Movement.Systems;
 
@@ -21,6 +19,7 @@ public abstract class SharedJetpackSystem : EntitySystem
     [Dependency] protected readonly SharedAppearanceSystem Appearance = default!;
     [Dependency] protected readonly SharedContainerSystem Container = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly SharedTransformSystem _formSys = default!;
     [Dependency] private readonly SharedMoverController _mover = default!;
 
     public override void Initialize()
@@ -98,6 +97,15 @@ public abstract class SharedJetpackSystem : EntitySystem
         {
             bool canEnable = CanEnableOnGrid(args.Transform.GridUid);
             SetEnabled(jetpack, canEnable, uid);
+
+            //For some reason mover relay prevents player's mover from updating it's relative entity (jetpack mover has correct entity btw)
+            //which leads to undesirable effects, like player's eye thinking it's still attached to the grid you've just left, causing it to rotate with it
+            //so yeah, doing this manually
+            if (TryComp<InputMoverComponent>(uid, out var umover))
+            {
+                _mover.TryUpdateRelative(umover, args.Transform, EntityManager.GetEntityQuery<TransformComponent>());
+            }
+
             if(!canEnable)
                 _popup.PopupClient(Loc.GetString("jetpack-to-grid"), uid, uid);
         }
@@ -183,7 +191,7 @@ public abstract class SharedJetpackSystem : EntitySystem
 
     public bool IsUserFlying(EntityUid uid)
     {
-        if (TryComp<JetpackUserComponent>(uid, out JetpackUserComponent? user))
+        if (TryComp(uid, out JetpackUserComponent? user))
             return IsEnabled(user.Jetpack);
         return false;
     }

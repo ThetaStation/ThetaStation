@@ -77,5 +77,6 @@ public sealed class ModularRadarShuttleConsoleBoundUserInterface : BoundUserInte
             _window?.SetMatrix(cState.Coordinates, cState.Angle);
 
         _window?.UpdateState(state);
+        _window?.SetOwner(Owner);
     }
 }
