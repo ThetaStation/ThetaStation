@@ -34,7 +34,7 @@
     outerClothing: ClothingOuterHardsuitSyndie
     id: AgentIDCard
     pocket1: ExtendedEmergencyOxygenTankFilled
-    pocket2: BaseUplinkRadio40TC
+    pocket2: ShipEventUplink40TC
     belt: ClothingBeltMilitaryWebbing
   innerclothingskirt: ClothingUniformJumpskirtOperative
   satchel: ClothingBackpackDuffelSyndicateOperative

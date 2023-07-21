@@ -26,6 +26,11 @@ public sealed partial class RadarGui : UIWidget
         Radar.SetMatrix(coordinates, angle);
     }
 
+    public void SetOwner(EntityUid uid)
+    {
+        Radar.SetOwnerUid(uid);
+    }
+
     private void ToggleRadar(BaseButton.ButtonEventArgs obj)
     {
         Radar.Visible = !Radar.Visible;

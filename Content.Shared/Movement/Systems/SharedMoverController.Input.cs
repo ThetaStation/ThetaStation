@@ -146,7 +146,7 @@ namespace Content.Shared.Movement.Systems
             Dirty(mover);
         }
 
-        private bool TryUpdateRelative(InputMoverComponent mover, TransformComponent xform, EntityQuery<TransformComponent> xformQuery)
+        public bool TryUpdateRelative(InputMoverComponent mover, TransformComponent xform, EntityQuery<TransformComponent> xformQuery)
         {
             var relative = xform.GridUid;
             relative ??= xform.MapUid;

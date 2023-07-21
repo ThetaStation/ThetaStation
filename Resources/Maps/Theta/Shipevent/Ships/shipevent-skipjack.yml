@@ -150,6 +150,16 @@ entities:
       type: GridAtmosphere
     - type: GasTileOverlay
     - type: RadiationGridResistance
+  - uid: 206
+    components:
+    - type: MetaData
+    - type: Transform
+    - type: Map
+    - type: PhysicsMap
+    - type: GridTree
+    - type: MovedGrids
+    - type: Broadphase
+    - type: OccluderTree
 - proto: APCHighCapacity
   entities:
   - uid: 2
