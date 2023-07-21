@@ -17,6 +17,7 @@ namespace Content.Server.Theta.ShipEvent.Systems;
 
 public sealed class ShipEventFaction : PlayerFaction
 {
+    public int Assists;
     public List<string>? Blacklist; //black list for ckeys
     public string Captain; //ckey
 
@@ -24,7 +25,6 @@ public sealed class ShipEventFaction : PlayerFaction
 
     public Dictionary<ShipEventFaction, int> Hits = new(); //hits from other teams, not vice-versa
     public int Kills;
-    public int Assists;
     public int Points;
     public int Respawns;
 
@@ -198,16 +198,12 @@ public sealed partial class ShipEventFactionSystem
 
     public bool IsValidName(string name)
     {
-        if (name == "")
+        if (string.IsNullOrWhiteSpace(name))
+            return false;
+        if (name.Length is > 25 or < 3)
             return false;
 
-        foreach (var team in Teams)
-        {
-            if (team.Name == name)
-                return false;
-        }
-
-        return true;
+        return Teams.All(team => team.Name != name);
     }
 
     private Color GenerateTeamColor()

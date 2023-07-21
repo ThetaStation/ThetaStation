@@ -1,4 +1,4 @@
-name: Build & Test Release
+name: Build & Test Debug
 
 on:
   push:
@@ -42,17 +42,18 @@ jobs:
       run: dotnet restore
 
     - name: Build Project
-      run: dotnet build --configuration Tools --no-restore /p:WarningsAsErrors=nullable /m
+      run: dotnet build --configuration DebugOpt --no-restore /p:WarningsAsErrors=nullable /m
 
     - name: Run Content.Tests
-      run: dotnet test --configuration Tools --no-build Content.Tests/Content.Tests.csproj -- NUnit.ConsoleOut=0
+      run: dotnet test --no-build --configuration DebugOpt Content.Tests/Content.Tests.csproj -- NUnit.ConsoleOut=0
 
     - name: Run Content.IntegrationTests
+      shell: pwsh
       run: |
-        export DOTNET_gcServer=1
-        dotnet test --configuration Tools --no-build Content.IntegrationTests/Content.IntegrationTests.csproj -- NUnit.ConsoleOut=0
+        $env:DOTNET_gcServer=1
+        dotnet test --no-build --configuration DebugOpt Content.IntegrationTests/Content.IntegrationTests.csproj -- NUnit.ConsoleOut=0
   ci-success:
-    name: Build & Test Release
+    name: Build & Test Debug
     needs:
       - build
     runs-on: ubuntu-latest

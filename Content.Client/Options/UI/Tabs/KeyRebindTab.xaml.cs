@@ -179,9 +179,6 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(ContentKeyFunctions.ShuttleRotateRight);
             AddButton(ContentKeyFunctions.ShuttleBrake);
 
-            AddHeader("ui-options-header-theta");
-            AddButton(ContentKeyFunctions.PingOnRadar);
-
             AddHeader("ui-options-header-map-editor");
             AddButton(EngineKeyFunctions.EditorPlaceObject);
             AddButton(EngineKeyFunctions.EditorCancelPlace);

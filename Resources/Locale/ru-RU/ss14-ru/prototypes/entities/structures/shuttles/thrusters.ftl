@@ -10,5 +10,3 @@ ent-Gyroscope = гироскоп
 ent-DebugGyroscope = гироскоп
     .desc = Увеличивает потенциальное угловое вращение шаттла.
     .suffix = DEBUG
-ent-SkipjackGyroscope = { ent-Gyroscope }
-    .desc = { ent-Gyroscope }

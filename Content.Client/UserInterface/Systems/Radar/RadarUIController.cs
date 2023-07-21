@@ -82,7 +82,6 @@ public sealed class RadarUIController : UIController
             return;
 
         RadarGui = new();
-        RadarGui.SetOwner(_playerManager.LocalPlayer.ControlledEntity.Value);
         switch (UIManager.ActiveScreen)
         {
             case DefaultGameScreen game:

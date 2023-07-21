@@ -1,5 +1,6 @@
 ﻿- type: entity
   id: SkipjackCannonComputerShipEvent
+  name: cannon console
   parent: CannonComputerShipEvent
   components:
     - type: PointLight
@@ -15,8 +16,9 @@
           state: left
 
 - type: entity
-  id: SkipjackShuttleComputer
   parent: ComputerShuttleSyndieShipEvent
+  id: SkipjackShuttleComputer
+  name:
   components:
     - type: PointLight
       radius: 1.5
@@ -29,11 +31,3 @@
           state: right_off
         - map: ["computerLayerScreen"]
           state: right
-
-- type: entity
-  id: SkipjackGyroscope
-  parent: Gyroscope
-  components:
-    - type: Thruster
-      baseThrust: 1000
-      thrust: 1000

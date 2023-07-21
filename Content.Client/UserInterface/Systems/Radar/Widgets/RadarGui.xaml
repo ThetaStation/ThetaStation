@@ -6,16 +6,16 @@
                   MinSize="160 160"
                   MaxSize="460 460">
     <PanelContainer HorizontalExpand="True" VerticalExpand="True">
-        <PanelContainer.PanelOverride>
-            <graphics:StyleBoxFlat BackgroundColor="#00000000" />
-        </PanelContainer.PanelOverride>
-        <radarSetups:ModularRadarHUD Name="Radar"
-                               MouseFilter="Pass"
-                               HorizontalAlignment="Stretch"
-                               VerticalAlignment="Stretch" />
         <TextureButton Name="ToggleButton"
                        HorizontalAlignment="Right"
                        VerticalAlignment="Bottom"
                        Scale="0.6 0.6"></TextureButton>
+        <PanelContainer.PanelOverride>
+            <graphics:StyleBoxFlat BackgroundColor="#00000000" />
+        </PanelContainer.PanelOverride>
+        <radarSetups:ModularRadarHUD Name="Radar"
+                               MouseFilter="Ignore"
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Stretch" />
     </PanelContainer>
 </widgets:RadarGui>

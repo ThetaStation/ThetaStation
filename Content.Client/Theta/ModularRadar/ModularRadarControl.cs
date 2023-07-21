@@ -24,8 +24,6 @@ public abstract class ModularRadarControl : MapGridControl
 
     private Angle? _rotation;
 
-    public EntityUid OwnerUid;
-
     protected readonly List<RadarModule> Modules = new();
 
     public ModularRadarControl(float minRange = 64f, float maxRange = 256f, float range = 256f)
@@ -82,11 +80,6 @@ public abstract class ModularRadarControl : MapGridControl
     {
         _coordinates = coordinates;
         _rotation = angle;
-    }
-
-    public void SetOwnerUid(EntityUid uid)
-    {
-        OwnerUid = uid;
     }
 
     public void UpdateState(BoundUserInterfaceState ls)

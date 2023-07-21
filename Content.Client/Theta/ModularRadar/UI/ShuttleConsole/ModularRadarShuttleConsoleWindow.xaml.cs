@@ -105,22 +105,25 @@ public sealed partial class ModularRadarShuttleConsoleWindow : FancyWindow,
 
     private void OnChangeNamePressed(BaseButton.ButtonEventArgs args)
     {
-        var name = ShipName.Text;
-        if(name == string.Empty)
-            return;
-        ChangeNamePressed?.Invoke(name);
+        ChangeName();
         ShipName.Text = String.Empty;
+    }
+
+    private void ChangeName()
+    {
+        var name = ShipName.Text;
+        if (string.IsNullOrWhiteSpace(name))
+            return;
+        if (name.Length is > 25 or < 3)
+            return;
+
+        ChangeNamePressed?.Invoke(name);
     }
 
     public void SetMatrix(EntityCoordinates? coordinates, Angle? angle)
     {
         _shuttleUid = coordinates?.EntityId;
         RadarScreen.SetMatrix(coordinates, angle);
-    }
-
-    public void SetOwner(EntityUid uid)
-    {
-        RadarScreen.SetOwnerUid(uid);
     }
 
     public void UpdateState(BoundUserInterfaceState scc)
