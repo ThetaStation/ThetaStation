@@ -24,10 +24,10 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
 
     private void ReceivePing(SendPingEvent ev)
     {
-        OnEventReceived?.Invoke(ev.Ping);
+        PlayPing(ev.Ping);
     }
 
-    public PingInformation SendPing(EntityUid pingOwner, Vector2 coordinates)
+    public void SendPing(EntityUid pingOwner, Vector2 coordinates)
     {
         var sender = _playerManager.LocalPlayer!.ControlledEntity!.Value;
         if (_canNetworkPing)
@@ -37,9 +37,13 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
             Timer.Spawn(_networkPingCd, () => _canNetworkPing = true);
         }
 
-        var ping = GetPing(pingOwner, coordinates);
         PlaySignalSound(Filter.Entities(sender), pingOwner);
-        return ping;
+        PlayPing(GetPing(pingOwner, coordinates));
+    }
+
+    private void PlayPing(PingInformation ping)
+    {
+        OnEventReceived?.Invoke(ping);
     }
 
     protected override PingInformation GetPing(EntityUid sender, Vector2 coordinates)
