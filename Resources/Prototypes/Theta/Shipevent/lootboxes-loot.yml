@@ -30,7 +30,7 @@
 
 # Ebic ammo - HE
 - type: entity
-  id: BulletArtilleryLightHE
+  id: BulletFlakHE
   name: bullet
   parent: BaseBulletTrigger
   noSpawn: true
@@ -54,27 +54,27 @@
       totalIntensity: 60
     
 - type: entity
-  id: CartridgeArtilleryLightHE
-  name: light cannon cartridge (HE)
-  parent: CartridgeArtilleryLight
+  id: CartridgeFlakHE
+  name: flak cartridge (HE)
+  parent: CartridgeFlak
   components:
     - type: CartridgeAmmo
-      proto: BulletArtilleryLightHE
+      proto: BulletFlakHE
       deleteOnSpawn: true
 
 - type: entity
-  id: TurretAmmoContainerLightArtilleryFilledHE
-  name: Light cannon HE ammo container
+  id: TurretAmmoContainerFlakHEFilled
+  name: Flak HE ammo container
   parent: TurretAmmoContainerRare
   components:
     - type: StorageFill
       contents:
-        - id: CartridgeArtilleryLightHE
-          amount: 20 #less than maximum, since they are kinda OP
+        - id: CartridgeFlakHE
+          amount: 50
           
 # Ebic ammo - EMP
 - type: entity
-  id: BulletArtilleryLightEMP
+  id: BulletFlakEMP
   name: bullet
   parent: BaseBulletTrigger
   noSpawn: true
@@ -95,23 +95,23 @@
       energyConsumption: 50000
   
 - type: entity
-  id: CartridgeArtilleryLightEMP
-  name: light cannon cartridge (EMP)
-  parent: CartridgeArtilleryLight
+  id: CartridgeFlakEMP
+  name: flak cartridge (EMP)
+  parent: CartridgeFlak
   components:
     - type: CartridgeAmmo
-      proto: BulletArtilleryLightEMP
+      proto: BulletFlakEMP
       deleteOnSpawn: true
 
 - type: entity
-  id: TurretAmmoContainerLightArtilleryFilledEMP
-  name: Light cannon EMP ammo container
+  id: TurretAmmoContainerFlakEMPFilled
+  name: Flak EMP ammo container
   parent: TurretAmmoContainerRare
   components:
     - type: StorageFill
       contents:
-        - id: CartridgeArtilleryLightEMP
-          amount: 20
+        - id: CartridgeFlakEMP
+          amount: 50
           
 # Misc
 - type: entity
@@ -141,8 +141,8 @@
       prototypes:
         - LootboxSpawnTriggerItem
         - PointStorageItem
-        - TurretAmmoContainerLightArtilleryFilledHE
-        - TurretAmmoContainerLightArtilleryFilledEMP
+        - TurretAmmoContainerFlakHEFilled
+        - TurretAmmoContainerFlakEMPFilled
         - RCDExperimental
         - NuclearGrenadeWeakened
         - WeaponMinigun
