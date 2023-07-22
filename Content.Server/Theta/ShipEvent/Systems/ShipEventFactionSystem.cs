@@ -4,6 +4,7 @@ using Content.Server.Actions;
 using Content.Server.Chat.Systems;
 using Content.Server.Corvax.RoundNotifications;
 using Content.Server.GameTicking;
+using Content.Server.Ghost.Components;
 using Content.Server.Humanoid;
 using Content.Server.IdentityManagement;
 using Content.Server.Mind;
@@ -16,7 +17,6 @@ using Content.Server.Theta.DebrisGeneration;
 using Content.Server.Theta.DebrisGeneration.Prototypes;
 using Content.Server.Theta.MobHUD;
 using Content.Server.Theta.ShipEvent.Components;
-using Content.Shared.Actions;
 using Content.Shared.Actions.ActionTypes;
 using Content.Shared.GameTicking;
 using Content.Shared.Interaction.Events;
@@ -116,6 +116,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, StartCollideEvent>(OnCollision);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, MobStateChangedEvent>(OnPlayerStateChange);
+        SubscribeLocalEvent<ShipEventFactionMarkerComponent, MindTransferredMessage>(OnPlayerTransfer);
 
         SubscribeLocalEvent<ShipEventLootboxSpawnTriggerComponent, UseInHandEvent>(OnLootboxSpawnTriggered);
         SubscribeLocalEvent<ShipEventPointStorageComponent, UseInHandEvent>(OnPointStorageTriggered);
@@ -399,6 +400,19 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         var playerMob = SpawnPlayer(session, spawner);
         AfterSpawn(playerMob, spawner);
     }
+    
+    private void OnPlayerTransfer(EntityUid uid, ShipEventFactionMarkerComponent marker, MindTransferredMessage args)
+    {
+        if (args.NewEntity == null)
+            return;
+
+        if (EntityManager.HasComponent<GhostComponent>(args.NewEntity))
+        {
+            var newMarker = EntityManager.EnsureComponent<ShipEventFactionMarkerComponent>(args.NewEntity.Value);
+            newMarker.Team = marker.Team;
+            SetupActions(args.NewEntity.Value, newMarker.Team, GetSession(uid));
+        }
+    }
 
     private void OnCollision(EntityUid entity, ShipEventFactionMarkerComponent component, ref StartCollideEvent args)
     {
@@ -593,20 +607,17 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// <param name="uid">player's uid</param>
     /// <param name="team">player's team</param>
     /// <param name="session">player's session</param>
-    private void SetupActions(EntityUid uid, ShipEventFaction team, IPlayerSession session)
+    private void SetupActions(EntityUid uid, ShipEventFaction? team, IPlayerSession? session)
     {
-        if (EntityManager.TryGetComponent<ActionsComponent>(uid, out var actComp))
+        var teamView = EntityManager.EnsureComponent<ShipEventFactionViewComponent>(uid);
+        teamView.ToggleAction = (InstantAction)_protMan.Index<InstantActionPrototype>("ShipEventTeamViewToggle").Clone();
+        _actSys.AddAction(uid, teamView.ToggleAction, null);
+            
+        if (team != null && session != null && team.Captain == session.ConnectedClient.UserName) 
         {
-            var teamView = EntityManager.EnsureComponent<ShipEventFactionViewComponent>(uid);
-            teamView.ToggleAction = (InstantAction)_protMan.Index<InstantActionPrototype>("ShipEventTeamViewToggle").Clone();
-            _actSys.AddAction(uid, teamView.ToggleAction, null, actComp);
-
-            if (team.Captain == session.ConnectedClient.UserName)
-            {
-                var capMenu = EntityManager.EnsureComponent<ShipEventCaptainMenuComponent>(uid);
-                capMenu.ToggleAction = (InstantAction)_protMan.Index<InstantActionPrototype>("ShipEventCaptainMenuToggle").Clone();
-                _actSys.AddAction(uid, capMenu.ToggleAction, null, actComp);
-            }
+            var capMenu = EntityManager.EnsureComponent<ShipEventCaptainMenuComponent>(uid);
+            capMenu.ToggleAction = (InstantAction)_protMan.Index<InstantActionPrototype>("ShipEventCaptainMenuToggle").Clone();
+            _actSys.AddAction(uid, capMenu.ToggleAction, null);
         }
     }
 

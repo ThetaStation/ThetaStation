@@ -6,6 +6,7 @@
   description: shipevent-teamview-toggle-desc
   itemIconStyle: NoItem
   event: !type:ShipEventTeamViewToggleEvent
+  checkCanInteract: false
     
 - type: instantAction
   id: ShipEventCaptainMenuToggle
@@ -15,3 +16,4 @@
   description: shipevent-capmenu-toggle-desc
   itemIconStyle: NoItem
   event: !type:ShipEventCaptainMenuToggleEvent
+  checkCanInteract: false

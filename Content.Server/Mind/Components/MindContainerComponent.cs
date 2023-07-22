@@ -1,4 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Server.Mind.Components
 {
@@ -36,6 +38,12 @@ namespace Content.Server.Mind.Components
         [DataField("ghostOnShutdown")]
         [Access(typeof(MindSystem), Other = AccessPermissions.ReadWriteExecute)] // FIXME Friends
         public bool GhostOnShutdown { get; set; } = true;
+
+        /// <summary>
+        ///     Ghost type which will be spawned when this component is shutting down. Also requires ghostOnShutdown.
+        /// </summary>
+        [DataField("ghostPrototype", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+        public string GhostPrototype = "MobObserver";
     }
 
     public sealed class MindRemovedMessage : EntityEventArgs
@@ -44,5 +52,17 @@ namespace Content.Server.Mind.Components
 
     public sealed class MindAddedMessage : EntityEventArgs
     {
+    }
+
+    public sealed class MindTransferredMessage : EntityEventArgs
+    {
+        public EntityUid? NewEntity;
+        public MindContainerComponent? NewComponent;
+
+        public MindTransferredMessage(EntityUid? newEnt, MindContainerComponent? newComp)
+        {
+            NewEntity = newEnt;
+            NewComponent = newComp;
+        }
     }
 }
