@@ -37,6 +37,7 @@ shipevent-roundendtimer-onemin = Раунд вот-вот закончится..
 shipevent-lootboxspawned = Новая партия схронов уже на поле. Бегите их собирать!
 shipevent-pointsadded = Команде добавлено { $points } очков, возрадуйтесь!
 
+
 ## Role stuff
 
 shipevent-role-name = Пилот
@@ -56,6 +57,7 @@ shipevent-roundend-discord-teamstats =  Набрала { $points } очков, {
 
 ## Misc.
 
+department-Unsorted = Прочее
 shipevent-memberlimit = В этой команде нет места! Подождите пока из неё кто-то уйдёт/повысится общий лимит на кол-во членов.
 shipevent-blacklist = Вы в блеклисте сией команды. Наверное, вы чем-то обидели капитана.
 shipevent-kicked = Вас выгнали из команды! Используйте меню команд чтоб найти новое пристанище.

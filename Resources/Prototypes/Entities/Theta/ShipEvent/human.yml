@@ -8,8 +8,10 @@
       interfaces:
       - key: enum.TeamViewUiKey.Key
         type: TeamViewBoundUserInterface
+        requireInputValidation: false
       - key: enum.CaptainMenuUiKey.Key
         type: CaptainMenuBoundUserInterface
+        requireInputValidation: false
     - type: MindContainer
       ghostPrototype: ObserverShipEvent
 

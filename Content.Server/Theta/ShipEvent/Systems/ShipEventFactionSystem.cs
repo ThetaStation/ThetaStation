@@ -21,7 +21,6 @@ using Content.Shared.Actions.ActionTypes;
 using Content.Shared.GameTicking;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Mobs;
-using Content.Shared.Movement.Components;
 using Content.Shared.Preferences;
 using Content.Shared.Projectiles;
 using Content.Shared.Shuttles.Events;
