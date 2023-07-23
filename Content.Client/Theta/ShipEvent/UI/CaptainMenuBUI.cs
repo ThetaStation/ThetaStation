@@ -14,7 +14,6 @@ public sealed class CaptainMenuBoundUserInterface : BoundUserInterface
 
     protected override void Open()
     {
-
         base.Open();
 
         _window = new CaptainMenuWindow();
