@@ -1,6 +1,6 @@
 - type: instantAction
   id: ShipEventTeamViewToggle
-  icon: { sprite: "/Textures/Theta/ShipEvent/ShipTeamView.rsi", state: icon }
+  icon: { sprite: "/Textures/Theta/ShipEvent/Actions.rsi", state: team }
   iconOn: "/Textures/Theta/ShipEvent/ShipTeamView.rsi"
   name: shipevent-teamview-toggle-name
   description: shipevent-teamview-toggle-desc
@@ -10,10 +10,20 @@
     
 - type: instantAction
   id: ShipEventCaptainMenuToggle
-  icon: { sprite: "/Textures/Theta/ShipEvent/CapMenu.rsi", state: icon }
+  icon: { sprite: "/Textures/Theta/ShipEvent/Actions.rsi", state: cap }
   iconOn: "/Textures/Theta/ShipEvent/CapMenu.rsi"
   name: shipevent-capmenu-toggle-name
   description: shipevent-capmenu-toggle-desc
   itemIconStyle: NoItem
   event: !type:ShipEventCaptainMenuToggleEvent
+  checkCanInteract: false
+
+- type: instantAction
+  id: ShipEventReturnToLobbyAction
+  icon: { sprite: "/Textures/Theta/ShipEvent/Actions.rsi", state: lobby }
+  iconOn: "/Textures/Theta/ShipEvent/Actions.rsi"
+  name: shipevent-returntolobby-name
+  description: shipevent-returntolobby-desc
+  itemIconStyle: NoItem
+  event: !type:ShipEventReturnToLobbyEvent
   checkCanInteract: false

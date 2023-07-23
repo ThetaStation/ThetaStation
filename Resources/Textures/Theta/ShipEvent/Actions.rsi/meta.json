@@ -8,7 +8,13 @@
   },
   "states": [
     {
-      "name" : "icon"
+      "name" : "team"
+    },
+    {
+      "name" :  "cap"
+    },
+    {
+      "name" : "lobby"
     }
   ]
 }

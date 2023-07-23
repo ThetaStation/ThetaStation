@@ -96,3 +96,9 @@ shipevent-turretloader-ammocount-examine = Ammo count: {$count}
 ## Cannon console
 
 shipevent-cannonconsole-ammostatus = Ammo
+
+
+## Return to lobby action
+
+shipevent-returntolobby-name = Return to lobby
+shipevent-returntolobby-desc = Instantly respawns you, so you can enter lobby and select team again.

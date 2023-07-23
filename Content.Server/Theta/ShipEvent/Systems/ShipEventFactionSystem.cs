@@ -21,6 +21,7 @@ using Content.Shared.Actions.ActionTypes;
 using Content.Shared.GameTicking;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Mobs;
+using Content.Shared.Movement.Components;
 using Content.Shared.Preferences;
 using Content.Shared.Projectiles;
 using Content.Shared.Shuttles.Events;
@@ -40,21 +41,38 @@ namespace Content.Server.Theta.ShipEvent.Systems;
 
 public sealed partial class ShipEventFactionSystem : EntitySystem
 {
+    [Dependency] private readonly GameTicker _ticker = default!;
+    
     [Dependency] private readonly ActionsSystem _actSys = default!;
+    
     [Dependency] private readonly ChatSystem _chatSys = default!;
+    
     [Dependency] private readonly MobHUDSystem _hudSys = default!;
+    
     [Dependency] private readonly DebrisGenerationSystem _debrisSys = default!;
+    
     [Dependency] private readonly IdentitySystem _idSys = default!;
+    
     [Dependency] private readonly MapLoaderSystem _mapSys = default!;
+    
     [Dependency] private readonly IMapManager _mapMan = default!;
+    
     [Dependency] private readonly IPrototypeManager _protMan = default!;
+    
     [Dependency] private readonly IRobustRandom _random = default!;
+    
     [Dependency] private readonly UserInterfaceSystem _uiSys = default!;
+    
     [Dependency] private readonly IPlayerManager _playerMan = default!;
+    
     [Dependency] private readonly TransformSystem _formSys = default!;
+    
     [Dependency] private readonly RoundEndSystem _endSys = default!;
+    
     [Dependency] private readonly MindSystem _mindSystem = default!;
+    
     [Dependency] private readonly HumanoidAppearanceSystem _humanoidAppearanceSystem = default!;
+    
     [Dependency] private readonly IServerPreferencesManager _prefsManager = default!;
 
     private readonly Dictionary<string, int> _projectileDamage = new(); //cached damage for projectile prototypes
@@ -111,8 +129,9 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<ShipEventFactionViewComponent, ShipEventTeamViewToggleEvent>(OnViewToggle);
-        SubscribeLocalEvent<ShipEventCaptainMenuComponent, ShipEventCaptainMenuToggleEvent>(OnCapMenuToggle);
+        SubscribeLocalEvent<ShipEventFactionMarkerComponent, ShipEventTeamViewToggleEvent>(OnViewToggle);
+        SubscribeLocalEvent<ShipEventFactionMarkerComponent, ShipEventCaptainMenuToggleEvent>(OnCapMenuToggle);
+        SubscribeLocalEvent<ShipEventFactionMarkerComponent, ShipEventReturnToLobbyEvent>(OnReturnToLobbyAction);
 
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, StartCollideEvent>(OnCollision);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, MobStateChangedEvent>(OnPlayerStateChange);
@@ -322,7 +341,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         ));
     }
 
-    private void OnViewToggle(EntityUid entity, ShipEventFactionViewComponent component,
+    private void OnViewToggle(EntityUid entity, ShipEventFactionMarkerComponent marker,
         ShipEventTeamViewToggleEvent args)
     {
         if (!RuleSelected || args.Handled)
@@ -357,7 +376,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         }
     }
 
-    private void OnCapMenuToggle(EntityUid uid, ShipEventCaptainMenuComponent component, ShipEventCaptainMenuToggleEvent args)
+    private void OnCapMenuToggle(EntityUid uid, ShipEventFactionMarkerComponent marker, ShipEventCaptainMenuToggleEvent args)
     {
         if (!RuleSelected || args.Handled)
             return;
@@ -373,6 +392,15 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             return;
         if (_uiSys.TryGetUi(uid, uiKey, out var bui))
             _uiSys.OpenUi(bui, session);
+    }
+    
+    private void OnReturnToLobbyAction(EntityUid uid, ShipEventFactionMarkerComponent marker, ShipEventReturnToLobbyEvent args)
+    {
+        var session = GetSession(args.Performer);
+        if (session == null)
+            return;
+        
+        _ticker.Respawn(session);
     }
 
     private void OnPlayerStateChange(EntityUid entity, ShipEventFactionMarkerComponent marker, MobStateChangedEvent args)
@@ -410,7 +438,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         {
             var newMarker = EntityManager.EnsureComponent<ShipEventFactionMarkerComponent>(args.NewEntity.Value);
             newMarker.Team = marker.Team;
-            SetupActions(args.NewEntity.Value, newMarker.Team, GetSession(uid));
+            SetupActions(args.NewEntity.Value, newMarker.Team, GetSession(args.NewEntity.Value), true);
         }
     }
 
@@ -607,17 +635,21 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// <param name="uid">player's uid</param>
     /// <param name="team">player's team</param>
     /// <param name="session">player's session</param>
-    private void SetupActions(EntityUid uid, ShipEventFaction? team, IPlayerSession? session)
+    private void SetupActions(EntityUid uid, ShipEventFaction? team, IPlayerSession? session, bool isGhost = false)
     {
-        var teamView = EntityManager.EnsureComponent<ShipEventFactionViewComponent>(uid);
-        teamView.ToggleAction = (InstantAction)_protMan.Index<InstantActionPrototype>("ShipEventTeamViewToggle").Clone();
-        _actSys.AddAction(uid, teamView.ToggleAction, null);
+        var teamViewToggle = (InstantAction)_protMan.Index<InstantActionPrototype>("ShipEventTeamViewToggle").Clone();
+        _actSys.AddAction(uid, teamViewToggle, null);
             
         if (team != null && session != null && team.Captain == session.ConnectedClient.UserName) 
         {
-            var capMenu = EntityManager.EnsureComponent<ShipEventCaptainMenuComponent>(uid);
-            capMenu.ToggleAction = (InstantAction)_protMan.Index<InstantActionPrototype>("ShipEventCaptainMenuToggle").Clone();
-            _actSys.AddAction(uid, capMenu.ToggleAction, null);
+            var capMenuToggle = (InstantAction)_protMan.Index<InstantActionPrototype>("ShipEventCaptainMenuToggle").Clone();
+            _actSys.AddAction(uid, capMenuToggle, null);
+        }
+
+        if (isGhost)
+        {
+            var retToLobbyAction = (InstantAction)_protMan.Index<InstantActionPrototype>("ShipEventReturnToLobbyAction").Clone();
+            _actSys.AddAction(uid, retToLobbyAction, null);
         }
     }
 
