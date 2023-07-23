@@ -13,6 +13,8 @@ public abstract class SharedRadarPingsSystem : EntitySystem
     protected readonly Color CaptainPingColor = Color.Red;
     protected readonly Color MobPingColor = Color.LightGreen;
 
+    protected readonly TimeSpan NetworkPingCd = TimeSpan.FromSeconds(0.3);
+
 
     protected abstract PingInformation GetPing(EntityUid sender, Vector2 coordinates);
 

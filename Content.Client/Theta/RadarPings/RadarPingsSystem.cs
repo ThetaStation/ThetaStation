@@ -14,7 +14,6 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
 
     public event Action<PingInformation>? OnEventReceived;
 
-    private readonly TimeSpan _networkPingCd = TimeSpan.FromSeconds(0.3);
     private bool _canNetworkPing = true;
 
     public override void Initialize()
@@ -34,7 +33,7 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
         {
             RaiseNetworkEvent(new SpreadPingEvent(sender, pingOwner, coordinates));
             _canNetworkPing = false;
-            Timer.Spawn(_networkPingCd, () => _canNetworkPing = true);
+            Timer.Spawn(NetworkPingCd, () => _canNetworkPing = true);
         }
 
         PlaySignalSound(Filter.Entities(sender), pingOwner);
