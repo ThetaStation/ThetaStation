@@ -1,8 +1,6 @@
 name: Build & Test Release
 
 on:
-  push:
-    branches: [ master, staging, trying ]
   merge_group:
   pull_request:
     types: [ opened, reopened, synchronize, ready_for_review ]
@@ -10,9 +8,9 @@ on:
 
 jobs:
   build:
-    if: github.actor != 'IanComradeBot' && github.event.pull_request.draft == false
+    if: github.actor != 'IanComradeBot' && github.event.pull_request.draft == false && github.event.review.state == 'approved'
 
-    runs-on: [self-hosted, linux, x64]
+    runs-on: windows-latest
 
     steps:
     - name: Checkout Master
@@ -45,8 +43,9 @@ jobs:
       run: dotnet test --configuration Tools --no-build Content.Tests/Content.Tests.csproj -- NUnit.ConsoleOut=0
 
     - name: Run Content.IntegrationTests
+      shell: pwsh
       run: |
-        export DOTNET_gcServer=1
+        $env:DOTNET_gcServer=1
         dotnet test --configuration Tools --no-build Content.IntegrationTests/Content.IntegrationTests.csproj -- NUnit.ConsoleOut=0
   ci-success:
     name: Build & Test Release

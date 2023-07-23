@@ -1,9 +1,6 @@
 name: RSI Validator
 
 on:
-  push:
-    branches: [ staging, trying ]
-  merge_group:
   pull_request:
     paths:
       - '**.rsi/**'
@@ -12,6 +9,7 @@ jobs:
   validate_rsis:
     name: Validate RSIs
     runs-on: [self-hosted, linux, x64]
+    if: github.actor != 'IanComradeBot' && github.event.pull_request.draft == false && github.event.review.state == 'approved'
     steps:
       - uses: actions/checkout@v2
       - name: Setup Submodule

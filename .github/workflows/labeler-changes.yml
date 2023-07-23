@@ -6,8 +6,6 @@ on:
 
 jobs:
   update_label:
-    permissions:
-      pull-requests: write
     if: github.event.review.state == 'changes_requested'
     runs-on: [self-hosted, linux, x64]
     steps:

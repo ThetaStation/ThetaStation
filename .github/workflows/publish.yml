@@ -53,16 +53,6 @@ jobs:
         remote_user: ${{ secrets.USERNAME }}
         remote_key: ${{ secrets.SSHKEY }}
         remote_port: ${{ secrets.PORT }}
-  
-#    - name: Update release version
-#      uses: garygrossgarten/github-action-scp@release
-#      with:
-#        local: release/SS14.Client.zip
-#        remote: release/SS14.Client.zip
-#        host: ${{ secrets.HOST }}
-#        port: ${{ secrets.PORT }}
-#        username: ${{ secrets.USERNAME }}
-#        privateKey: ${{ secrets.SSHKEY }}
 
     - name: Update manifest JSON
       uses: appleboy/ssh-action@master
