@@ -289,6 +289,10 @@ def run_tests():
 
 def parse_pr_changelog():
     try:
+        gh_token = environ.get("GH_TOKEN")
+    except KeyError:
+        print("Github token is missing (GH_TOKEN). Parser may fail due to insufficient access (private repo)/API request limit.")
+    try:
         hook_url = environ.get("HOOK_URL")
     except KeyError:
         raise RuntimeError("Hook URL is missing (HOOK_URL). Add it to the step environment.")
@@ -297,7 +301,7 @@ def parse_pr_changelog():
     except KeyError:
         raise RuntimeError("Target commit hash is missing (GITHUB_SHA). Something went really wrong.")
 
-    github_api = Github()
+    github_api = Github(gh_token)
     repo_handler = github_api.get_repo(GITHUB_REPOSITORY_NAME)
 
     print(f"Target commit: {commit_sha}")

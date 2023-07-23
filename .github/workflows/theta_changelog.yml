@@ -24,6 +24,7 @@ jobs:
 
       - name: Run Generator
         env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
           GITHUB_SHA: ${{ github.GITHUB_SHA }}
           HOOK_URL: ${{ secrets.CL_HOOK_URL }}
         run: python Tools/theta_discord_changelog_parser.py
