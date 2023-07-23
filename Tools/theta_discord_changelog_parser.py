@@ -288,7 +288,6 @@ def run_tests():
         print("No errors.")
 
 def parse_pr_changelog():
-    gh_token = None
     try:
         gh_token = environ.get("GH_TOKEN")
     except KeyError:
