@@ -6,7 +6,7 @@ namespace Content.Shared.Theta.RadarPings;
 
 public abstract class SharedRadarPingsSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem Audio = default!;
+    [Dependency] private readonly SharedAudioSystem _audioSystem = default!;
 
     private const string PingSound = "/Audio/Theta/Shipevent/radar_ping.ogg";
     protected readonly Color DefaultPingColor = Color.Blue;
@@ -18,7 +18,7 @@ public abstract class SharedRadarPingsSystem : EntitySystem
 
     protected void PlaySignalSound(Filter hearer, EntityUid from)
     {
-        Audio.Play(PingSound, hearer, from, false);
+        _audioSystem.Play(PingSound, hearer, from, false);
     }
 }
 
