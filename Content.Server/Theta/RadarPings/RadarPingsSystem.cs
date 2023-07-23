@@ -50,7 +50,8 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
         // Fallback for non-shipevent rounds
         if (_shipEventSystem.RuleSelected)
         {
-            foreach (var team in _shipEventSystem.Teams)
+            var team = _shipEventSystem.TryGetTeamByMember(ev.Sender);
+            if (team != null)
             {
                 var list = team.Members.Where(r => r.Mind.Session != null).Select(r => team.GetMemberSession(r)!);
                 filter.AddPlayers(list);

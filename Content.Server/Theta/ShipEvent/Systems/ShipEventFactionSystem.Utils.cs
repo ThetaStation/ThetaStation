@@ -289,5 +289,16 @@ public sealed partial class ShipEventFactionSystem
                 _mindTrack.AddMind(mind.Mind!);
         }
     }
+
+    public PlayerFaction? TryGetTeamByMember(EntityUid member)
+    {
+        foreach (var team in Teams)
+        {
+            var memberRole = team.TryGetRoleByEntity(member);
+            if (memberRole != null)
+                return team;
+        }
+        return null;
+    }
 }
 

@@ -26,7 +26,7 @@ public class PlayerFaction
     /// List of members with attached clients
     /// </summary>
     public List<Role> ActiveMembers => Members.Where(r => r.Mind.Session != null).ToList();
-    
+
     public List<string> ActiveMemberUsernames => ActiveMembers.Select(r => r.Mind.Session!.ConnectedClient.UserName).ToList();
 
     public PlayerFaction(string name, string iconPath = "")
@@ -65,6 +65,17 @@ public class PlayerFaction
             return (EntityUid) entity;
 
         return EntityUid.Invalid;
+    }
+
+    public Role? TryGetRoleByEntity(EntityUid member)
+    {
+        foreach (var role in Members)
+        {
+            if (role.Mind.OwnedEntity == member)
+                return role;
+        }
+
+        return null;
     }
 
     public IPlayerSession? GetMemberSession(Role member)
