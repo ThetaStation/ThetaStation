@@ -9,6 +9,8 @@
       sprite: /Textures/Theta/ShipEvent/Objects/Energy.rsi
       layers:
         - state: blue
+    - type: PointLight
+      color: blue
     - type: EmpOnTrigger
       range: 4
       energyConsumption: 3000
@@ -53,3 +55,5 @@
       sprite: /Textures/Theta/ShipEvent/Objects/Energy.rsi
       layers:
         - state: orange
+    - type: PointLight
+      color: orange
