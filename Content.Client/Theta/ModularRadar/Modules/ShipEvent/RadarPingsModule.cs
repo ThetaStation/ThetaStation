@@ -36,7 +36,7 @@ public sealed class RadarPingsModule : RadarModule
         if (ParentCoordinates == null)
             return;
 
-        var offsetMatrix = GetOffsetMatrix;
+        var offsetMatrix = ParentOffsetMatrix;
         var relativePositionToCoordinates = RelativePositionToCoordinates(mouseRelativePosition, offsetMatrix);
 
         _radarPingsSystem.SendPing(OwnerUid, relativePositionToCoordinates);

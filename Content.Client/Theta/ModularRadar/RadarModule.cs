@@ -26,7 +26,7 @@ public abstract class RadarModule
     protected float MaxRadarRange => Radar.MaxRadarRange;
     protected float WorldRange => Radar.WorldRange;
     protected float ActualRadarRange => Radar.GetActualRadarRange();
-    protected Matrix3 GetOffsetMatrix => Radar.GetOffsetMatrix().Invert();
+    protected Matrix3 ParentOffsetMatrix => Radar.GetOffsetMatrix().Invert();
 
     protected RadarModule(ModularRadarControl parentRadar)
     {
