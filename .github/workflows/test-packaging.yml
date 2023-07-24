@@ -14,7 +14,6 @@ on:
       - 'RobustToolbox/**'
   pull_request_review:
     types: [submitted]
-    branches: [ master ]
     paths:
       - '**.cs'
       - '**.csproj'
@@ -27,7 +26,7 @@ on:
 jobs:
   build:
     name: Test Packaging
-    if: github.actor != 'IanComradeBot' && github.event.pull_request.draft == false && github.event.review.state == 'approved'
+    if: github.event.pull_request.base.ref == 'master' && github.actor != 'IanComradeBot' && github.event.pull_request.draft == false && github.event.review.state == 'approved'
     runs-on: [self-hosted, linux, x64]
 
     steps:

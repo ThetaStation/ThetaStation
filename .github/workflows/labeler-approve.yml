@@ -5,12 +5,10 @@ on:
     types: [submitted]
 
 jobs:
-  remove_label:
+  add_label:
     if: github.event.review.state == 'approved'
     runs-on: [self-hosted, linux, x64]
     steps:
-    - uses: actions-ecosystem/action-remove-labels@v1
+    - uses: actions-ecosystem/action-add-labels@v1
       with:
-        labels: |
-          Status: Needs Review
-          Status: Awaiting Changes
+        labels: "Status: Approved"

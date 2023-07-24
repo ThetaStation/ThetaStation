@@ -7,11 +7,10 @@ on:
     branches: [ master ]
   pull_request_review:
     types: [submitted]
-    branches: [ master ]
 
 jobs:
   build:
-    if: github.actor != 'IanComradeBot' && github.event.pull_request.draft == false && github.event.review.state == 'approved'
+    if: github.event.pull_request.base.ref == 'master' && github.actor != 'IanComradeBot' && github.event.pull_request.draft == false && github.event.review.state == 'approved'
 
     runs-on: windows-latest
 
