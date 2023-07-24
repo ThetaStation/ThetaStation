@@ -12,6 +12,17 @@ on:
       - '**.yml'
       - 'RobustToolbox'
       - 'RobustToolbox/**'
+  pull_request_review:
+    types: [submitted]
+    branches: [ master ]
+    paths:
+      - '**.cs'
+      - '**.csproj'
+      - '**.sln'
+      - '**.git**'
+      - '**.yml'
+      - 'RobustToolbox'
+      - 'RobustToolbox/**'
 
 jobs:
   build:

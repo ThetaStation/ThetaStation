@@ -4,6 +4,10 @@ on:
   pull_request_target:
     paths:
       - '**.rsi/**.png'
+  pull_request_review:
+    types: [submitted]
+    paths:
+      - '**.rsi/**.png'
 
 jobs:
   diff:
