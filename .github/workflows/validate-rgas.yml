@@ -2,6 +2,8 @@ name: RGA schema validator
 on:
   pull_request:
     types: [ opened, reopened, synchronize, ready_for_review ]
+  pull_request_review:
+    types: [submitted]
 
 jobs:
   yaml-schema-validation:

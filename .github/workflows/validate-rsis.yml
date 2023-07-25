@@ -4,11 +4,15 @@ on:
   pull_request:
     paths:
       - '**.rsi/**'
+  pull_request_review:
+    types: [submitted]
+    paths:
+      - '**.rsi/**'
 
 jobs:
   validate_rsis:
     name: Validate RSIs
-    runs-on: [self-hosted, linux, x64]
+    runs-on: ubuntu-latest
     if: github.actor != 'IanComradeBot' && github.event.pull_request.draft == false && github.event.review.state == 'approved'
     steps:
       - uses: actions/checkout@v2
