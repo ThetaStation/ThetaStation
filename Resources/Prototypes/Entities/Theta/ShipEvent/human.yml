@@ -1,9 +1,36 @@
 ﻿- type: entity
+  id: ObserverShipEvent
+  name: observer
+  parent: MobObserver
+  components:
+    - type: ShipEventFactionMarker
+    - type: UserInterface
+      interfaces:
+      - key: enum.TeamViewUiKey.Key
+        type: TeamViewBoundUserInterface
+        requireInputValidation: false
+      - key: enum.CaptainMenuUiKey.Key
+        type: CaptainMenuBoundUserInterface
+        requireInputValidation: false
+    - type: MindContainer
+      ghostPrototype: ObserverShipEvent
+
+- type: entity
   name: ShipEvent Agent
   id: MobHumanShipEvent
   parent: MobHuman
   suffix: SHIPEVENT
   components:
+    - type: Bloodstream #shitton of runtimes without it
+      maxBleedAmount: 0 
+      bloodlossDamage:
+        types:
+          Bloodloss:
+            0
+      bloodlossHealDamage:
+        types:
+          Bloodloss:
+            -1
     - type: RandomHumanoidAppearance
     - type: Loadout
       prototype: ShipEventStandard
@@ -18,6 +45,8 @@
       - key: enum.CaptainMenuUiKey.Key
         type: CaptainMenuBoundUserInterface
     - type: MobHUD
+    - type: MindContainer
+      ghostPrototype: ObserverShipEvent
 
 # Space Ship - Poverty
 - type: startingGear

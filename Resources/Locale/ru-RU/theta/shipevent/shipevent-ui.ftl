@@ -92,6 +92,13 @@ shipevent-turretloader-refreshbutton = ОБНОВИТЬ UI
 
 shipevent-turretloader-ammocount-examine = Количество патронов: {$count}
 
+
 ## Cannon console
 
 shipevent-cannonconsole-ammostatus = Боезапас
+
+
+## Return to lobby action
+
+shipevent-returntolobby-name = Вернутся в лобби
+shipevent-returntolobby-desc = Мгновенно вас респавнит, позволяя снова вернуться в лобби и выбрать команду.

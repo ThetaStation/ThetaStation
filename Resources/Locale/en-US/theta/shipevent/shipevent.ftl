@@ -57,6 +57,7 @@ shipevent-roundend-discord-teamstats = Has collected { $points } points, { $kill
 
 ## Misc.
 
+department-Unsorted = Unsorted
 shipevent-memberlimit = There's no free places in this team! Wait until someone leaves it/member limit will rise
 shipevent-blacklist = You're in this team's blacklist. Their captain is probably quite dissapointed in you.
 shipevent-kicked = You got kicked from team! Use team menu to find a new one.
