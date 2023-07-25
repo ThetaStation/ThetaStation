@@ -26,6 +26,7 @@ public abstract class RadarModule
     protected float MaxRadarRange => Radar.MaxRadarRange;
     protected float WorldRange => Radar.WorldRange;
     protected float ActualRadarRange => Radar.GetActualRadarRange();
+    protected Matrix3 OffsetMatrix => Radar.GetOffsetMatrix().Invert();
 
     protected RadarModule(ModularRadarControl parentRadar)
     {
@@ -39,26 +40,6 @@ public abstract class RadarModule
     public virtual void UpdateState(BoundUserInterfaceState state) { }
     public virtual void Draw(DrawingHandleScreen handle, Parameters parameters) { }
     public virtual void OnClear() { }
-
-    protected Matrix3 GetOffsetMatrix()
-    {
-        if (ParentCoordinates == null || ParentRotation == null)
-            return Matrix3.Zero;
-
-        var mapPosition = ParentCoordinates.Value.ToMap(EntManager);
-        if (mapPosition.MapId == MapId.Nullspace)
-            return Matrix3.Zero;
-
-        var xformQuery = EntManager.GetEntityQuery<TransformComponent>();
-
-        if (!xformQuery.TryGetComponent(ParentCoordinates.Value.EntityId, out var xform))
-            return Matrix3.Zero;
-
-        var offsetMatrix = Matrix3.CreateTransform(
-            mapPosition.Position,
-            xform.WorldRotation - ParentRotation.Value);
-        return offsetMatrix;
-    }
 
     protected Vector2 RelativePositionToCoordinates(Vector2 pos, Matrix3 matrix)
     {

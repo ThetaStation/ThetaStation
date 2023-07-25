@@ -167,7 +167,7 @@ public abstract class ModularRadarControl : MapGridControl
         }
     }
 
-    private Matrix3 GetOffsetMatrix()
+    public Matrix3 GetOffsetMatrix()
     {
         if (_coordinates == null || _rotation == null)
             return Matrix3.Zero;

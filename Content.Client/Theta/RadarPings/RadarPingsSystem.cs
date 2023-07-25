@@ -14,7 +14,6 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
 
     public event Action<PingInformation>? OnEventReceived;
 
-    private readonly TimeSpan _networkPingCd = TimeSpan.FromSeconds(0.3);
     private bool _canNetworkPing = true;
 
     public override void Initialize()
@@ -24,22 +23,26 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
 
     private void ReceivePing(SendPingEvent ev)
     {
-        OnEventReceived?.Invoke(ev.Ping);
+        PlayPing(ev.Ping);
     }
 
-    public PingInformation SendPing(EntityUid pingOwner, Vector2 coordinates)
+    public void SendPing(EntityUid pingOwner, Vector2 coordinates)
     {
         var sender = _playerManager.LocalPlayer!.ControlledEntity!.Value;
         if (_canNetworkPing)
         {
             RaiseNetworkEvent(new SpreadPingEvent(sender, pingOwner, coordinates));
             _canNetworkPing = false;
-            Timer.Spawn(_networkPingCd, () => _canNetworkPing = true);
+            Timer.Spawn(NetworkPingCd, () => _canNetworkPing = true);
         }
 
-        var ping = GetPing(pingOwner, coordinates);
         PlaySignalSound(Filter.Entities(sender), pingOwner);
-        return ping;
+        PlayPing(GetPing(pingOwner, coordinates));
+    }
+
+    private void PlayPing(PingInformation ping)
+    {
+        OnEventReceived?.Invoke(ping);
     }
 
     protected override PingInformation GetPing(EntityUid sender, Vector2 coordinates)
