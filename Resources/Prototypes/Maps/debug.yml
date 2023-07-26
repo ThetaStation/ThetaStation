@@ -21,8 +21,8 @@
   mapPath: /Maps/Test/dev_map.yml
   minPlayers: 0
   stations:
-    Dev:
-      stationProto: StandardNanotrasenStation
+    DevStation:
+      stationProto: LobbyShipeventStation
       components:
         - type: StationNameSetup
           mapNameTemplate: "Dev"

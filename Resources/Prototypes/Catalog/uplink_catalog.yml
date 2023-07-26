@@ -10,6 +10,11 @@
     Telecrystal: 3
   categories:
   - UplinkWeapons
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkRevolverPython
@@ -20,6 +25,11 @@
     Telecrystal: 4
   categories:
   - UplinkWeapons
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 # Inbuilt suppressor so it's sneaky + more expensive.
 - type: listing
@@ -31,6 +41,11 @@
     Telecrystal: 4
   categories:
   - UplinkWeapons
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 # Poor accuracy, slow to fire, cheap option
 - type: listing
@@ -42,6 +57,11 @@
     Telecrystal: 1
   categories:
   - UplinkWeapons
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkEsword
@@ -64,6 +84,11 @@
     Telecrystal: 2
   categories:
   - UplinkWeapons
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkFireAxeFlaming
@@ -147,6 +172,10 @@
     blacklist:
       components:
       - SurplusBundle
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+        - ShipEventUplink
 
 - type: listing
   id: UplinkC4
@@ -203,6 +232,11 @@
     Telecrystal: 5
   categories:
   - UplinkExplosives
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 # Ammo
 
@@ -216,6 +250,11 @@
     Telecrystal: 1
   categories:
   - UplinkAmmo
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 # For the Cobra
 - type: listing
@@ -228,6 +267,11 @@
     Telecrystal: 1
   categories:
   - UplinkAmmo
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 # For the Python
 - type: listing
@@ -240,6 +284,11 @@
     Telecrystal: 1
   categories:
   - UplinkAmmo
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 # For the mosin
 - type: listing
@@ -251,6 +300,11 @@
     Telecrystal: 1
   categories:
   - UplinkAmmo
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 #Utility
 
@@ -269,6 +323,7 @@
     blacklist:
       tags:
       - NukeOpsUplink
+      - ShipEventUplink
 
 - type: listing
   id: UplinkHolster
@@ -279,6 +334,11 @@
     Telecrystal: 1
   categories:
   - UplinkUtility
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkEmag
@@ -299,6 +359,11 @@
     Telecrystal: 3
   categories:
   - UplinkUtility
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkJetpack
@@ -324,6 +389,7 @@
     - !type:StoreWhitelistCondition
       blacklist:
         tags:
+          - ShipEventUplink
           - NukeOpsUplink
 
 - type: listing
@@ -352,6 +418,11 @@
     Telecrystal: 8
   categories:
   - UplinkUtility
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkStealthBox
@@ -361,7 +432,12 @@
   cost:
     Telecrystal: 5
   categories:
-  - UplinkUtility
+    - UplinkUtility
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 #TODO: Remove this from the uplink
 - type: listing
@@ -373,6 +449,11 @@
     Telecrystal: 4
   categories:
   - UplinkUtility
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkHeadsetEncryptionKey
@@ -384,6 +465,11 @@
     Telecrystal: 2
   categories:
   - UplinkUtility
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkHypopen
@@ -395,6 +481,11 @@
     Telecrystal: 6
   categories:
   - UplinkUtility
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkVoiceMask
@@ -405,6 +496,11 @@
     Telecrystal: 6
   categories:
   - UplinkUtility
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkRadioJammer
@@ -415,6 +511,11 @@
     Telecrystal: 5
   categories:
   - UplinkUtility
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 # Implants
 
@@ -433,6 +534,7 @@
       blacklist:
         tags:
           - NukeOpsUplink
+          - ShipEventUplink
 
 - type: listing
   id: UplinkFreedomImplanter
@@ -460,6 +562,7 @@
       whitelist:
         tags:
           - NukeOpsUplink
+          - ShipEventUplink
     - !type:BuyerWhitelistCondition
       blacklist:
         components:
@@ -475,6 +578,11 @@
     Telecrystal: 10
   categories:
     - UplinkImplants
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkEmpImplanter
@@ -502,6 +610,7 @@
       whitelist:
         tags:
           - NukeOpsUplink
+          - ShipEventUplink
     - !type:BuyerWhitelistCondition
       blacklist:
         components:
@@ -522,6 +631,7 @@
       blacklist:
         tags:
           - NukeOpsUplink
+          - ShipEventUplink
 
 - type: listing
   id: UplinkDeathRattle
@@ -660,6 +770,7 @@
     blacklist:
       tags:
       - NukeOpsUplink
+      - ShipEventUplink
   - !type:BuyerWhitelistCondition
     blacklist:
       components:
@@ -679,6 +790,7 @@
     blacklist:
       tags:
       - NukeOpsUplink
+      - ShipEventUplink
   - !type:BuyerWhitelistCondition
     blacklist:
       components:
@@ -715,6 +827,11 @@
     Telecrystal: 4
   categories:
   - UplinkTools
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkPowerSink
@@ -932,6 +1049,11 @@
     Telecrystal: 6
   categories:
     - UplinkArmor
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkClothingNoSlipsShoes
@@ -942,6 +1064,11 @@
     Telecrystal: 2
   categories:
   - UplinkArmor
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkgClothingThievingGloves
@@ -952,6 +1079,11 @@
     Telecrystal: 4
   categories:
   - UplinkArmor
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkClothingOuterVestWeb
@@ -962,6 +1094,11 @@
     Telecrystal: 3
   categories:
   - UplinkArmor
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkHardsuitSyndie
@@ -994,6 +1131,11 @@
     Telecrystal: 2
   categories:
   - UplinkArmor
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkClothingOuterHardsuitJuggernaut
@@ -1016,6 +1158,11 @@
     Telecrystal: 3
   categories:
   - UplinkMisc
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkDecoyDisk
@@ -1026,6 +1173,11 @@
     Telecrystal: 1
   categories:
   - UplinkMisc
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkCigarettes
@@ -1036,6 +1188,11 @@
     Telecrystal: 2
   categories:
   - UplinkMisc
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkEshield
@@ -1057,6 +1214,11 @@
     Telecrystal: 1
   categories:
   - UplinkMisc
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkUltrabrightLantern
@@ -1067,6 +1229,11 @@
     Telecrystal: 2
   categories:
   - UplinkMisc
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 # - type: listing
 #   id: UplinkGigacancerScanner
@@ -1087,6 +1254,11 @@
     Telecrystal: 5
   categories:
   - UplinkMisc
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkCombatMedkit
@@ -1143,6 +1315,10 @@
     blacklist:
       components:
       - SurplusBundle
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+        - ShipEventUplink
 
  # Pointless
 

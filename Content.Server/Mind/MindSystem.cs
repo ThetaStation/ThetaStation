@@ -187,7 +187,7 @@ public sealed class MindSystem : EntitySystem
                     return;
                 }
 
-                var ghost = Spawn("MobObserver", spawnPosition);
+                var ghost = Spawn(component.GhostPrototype, spawnPosition);
                 var ghostComponent = Comp<GhostComponent>(ghost);
                 _ghostSystem.SetCanReturnToBody(ghostComponent, false);
 
@@ -438,6 +438,9 @@ public sealed class MindSystem : EntitySystem
             mind.Session.AttachToEntity(entity);
             Log.Info($"Session {mind.Session.Name} transferred to entity {entity}.");
         }
+        
+        if(oldEntity != null)
+            RaiseLocalEvent(oldEntity.Value, new MindTransferredMessage(entity, component));
     }
 
     /// <summary>

@@ -1,21 +1,18 @@
 name: Build & Test Release
 
 on:
-  push:
-    branches: [ master, staging, trying ]
   merge_group:
   pull_request:
     types: [ opened, reopened, synchronize, ready_for_review ]
     branches: [ master ]
+  pull_request_review:
+    types: [submitted]
 
 jobs:
   build:
-    if: github.actor != 'IanComradeBot' && github.event.pull_request.draft == false
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
+    if: github.event.pull_request.base.ref == 'master' && github.actor != 'IanComradeBot' && github.event.pull_request.draft == false && github.event.review.state == 'approved'
 
-    runs-on: ${{ matrix.os }}
+    runs-on: windows-latest
 
     steps:
     - name: Checkout Master
@@ -56,7 +53,7 @@ jobs:
     name: Build & Test Release
     needs:
       - build
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     steps:
       - name: CI succeeded
         run: exit 0

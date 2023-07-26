@@ -1,0 +1,62 @@
+﻿- type: entity
+  noSpawn: true
+  id: ShipEvent
+  parent: BaseGameRule
+  components:
+    - type: ShipEventRule
+      id: ShipEvent
+      startAnnouncement: shipevent-eventannouncement
+      maxOccurrences: 0 # only shitspawn
+      endAfter: 1
+
+      hudPrototypeId: "ShipeventHUD"
+      captainHudPrototypeId: "ShipeventHUDCaptain"
+
+      #time
+      roundDuration: 1800
+      teamCheckInterval: 5.0
+      respawnDelay: 60
+      bonusInterval: 600
+
+      #teams
+      playersPerTeamPlace: 2
+
+      #points
+      pointsPerInterval: 5000
+      pointsPerHitMultiplier: 0.01
+      pointsPerAssist: 5000
+      pointsPerKill : 10000
+      outOfBoundsPenalty: 2000
+
+      #map gen
+      initialObstacleAmount: 200
+      minFieldSize: 1000
+      maxFieldSize: 3000
+      metersPerPlayer: 100
+      roundFieldSizeTo: 1000
+      shipTypes:
+        - "shiptype_arrowhead"
+        - "shiptype_mule"
+        - "shiptype_boxship"
+        - "shiptype_skipjack"
+
+      #bounds
+      boundsCompressionInterval: 0
+      boundsCompressionDistance: 0
+        
+      #lootboxes
+      lootboxSpawnInterval: 360
+      lootboxSpawnAmount: 2
+      lootboxLifetime: 240
+      lootboxTypes:
+        - "lootbox_box"
+        - "lootbox_abandonedship"
+        - "lootbox_asteroid"
+
+      obstacleTypes:
+        - "asteroid_small"
+        - "asteroid_large"
+
+      #randomisation
+      obstacleAmountAmplitude: 0
+      obstacleSizeAmplitude: 0
