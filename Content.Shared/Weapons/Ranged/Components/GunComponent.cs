@@ -149,6 +149,13 @@ public partial class GunComponent : Component
     /// </summary>
     [DataField("onSpawnBulletOffset")]
     public int OnSpawnBulletOffset = 0;
+
+    /// <summary>
+    /// Whether or not someone with the
+    /// clumsy trait can shoot this
+    /// </summary>
+    [DataField("clumsyProof")]
+    public bool ClumsyProof = false;
 }
 
 [Flags]

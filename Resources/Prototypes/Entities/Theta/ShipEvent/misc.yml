@@ -1,17 +1,17 @@
 - type: instantAction
   id: ShipEventTeamViewToggle
   icon: { sprite: "/Textures/Theta/ShipEvent/Actions.rsi", state: team }
-  iconOn: "/Textures/Theta/ShipEvent/ShipTeamView.rsi"
+  iconOn: { sprite: "/Textures/Theta/ShipEvent/Actions.rsi", state: team }
   name: shipevent-teamview-toggle-name
   description: shipevent-teamview-toggle-desc
   itemIconStyle: NoItem
   event: !type:ShipEventTeamViewToggleEvent
   checkCanInteract: false
-    
+
 - type: instantAction
   id: ShipEventCaptainMenuToggle
   icon: { sprite: "/Textures/Theta/ShipEvent/Actions.rsi", state: cap }
-  iconOn: "/Textures/Theta/ShipEvent/CapMenu.rsi"
+  iconOn: { sprite: "/Textures/Theta/ShipEvent/Actions.rsi", state: cap }
   name: shipevent-capmenu-toggle-name
   description: shipevent-capmenu-toggle-desc
   itemIconStyle: NoItem
