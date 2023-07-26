@@ -22,7 +22,7 @@
   minPlayers: 0
   stations:
     DevStation:
-      stationProto: StandardNanotrasenStation
+      stationProto: LobbyShipeventStation
       components:
         - type: StationNameSetup
           mapNameTemplate: "Dev"
