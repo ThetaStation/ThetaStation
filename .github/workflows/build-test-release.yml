@@ -1,10 +1,6 @@
 name: Build & Test Release
 
 on:
-  merge_group:
-  pull_request:
-    types: [ opened, reopened, synchronize, ready_for_review ]
-    branches: [ master ]
   pull_request_review:
     types: [submitted]
 

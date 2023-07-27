@@ -10,7 +10,7 @@ jobs:
   diff:
     name: Diff
     runs-on: [self-hosted, linux, x64]
-    if: github.event.label.name == 'Status: Approved' && github.actor != 'IanComradeBot' && github.event.pull_request.draft == false && github.event.review.state == 'approved'
+    if: github.actor != 'IanComradeBot' && github.event.pull_request.draft == false && github.event.review.state == 'approved' && github.event.label.name == 'Approved'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
