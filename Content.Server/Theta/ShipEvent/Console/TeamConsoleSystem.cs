@@ -27,7 +27,7 @@ public sealed class TeamConsoleSystem : EntitySystem
 
     private void OnInit(EntityUid uid, TeamConsoleComponent component, ComponentInit args)
     {
-        // It's a terrible horror that extra code is not executed during tests
+        // Disabling asteroid generation for map-related tests
 #if !TOOLS // The code said "kill me please".
         if (!_shipSys.RuleSelected)
         {
