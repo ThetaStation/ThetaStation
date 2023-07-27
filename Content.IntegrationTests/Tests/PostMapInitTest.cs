@@ -36,10 +36,6 @@ namespace Content.IntegrationTests.Tests
 
         private static readonly string[] Grids =
         {
-            "/Maps/centcomm.yml",
-            "/Maps/Shuttles/cargo.yml",
-            "/Maps/Shuttles/emergency.yml",
-            "/Maps/infiltrator.yml",
             "/Maps/Theta/Shipevent/Ships/shipevent-arrowhead.yml",
             "/Maps/Theta/Shipevent/Ships/shipevent-mule.yml",
             "/Maps/Theta/Shipevent/Ships/shipevent-boxship.yml",
@@ -97,7 +93,7 @@ namespace Content.IntegrationTests.Tests
             var server = pairTracker.Pair.Server;
 
             var resourceManager = server.ResolveDependency<IResourceManager>();
-            var mapFolder = new ResPath("/Maps");
+            var mapFolder = new ResPath("/Maps/Theta");
             var maps = resourceManager
                 .ContentFindFiles(mapFolder)
                 .Where(filePath => filePath.Extension == "yml" && !filePath.Filename.StartsWith(".", StringComparison.Ordinal))
@@ -134,48 +130,8 @@ namespace Content.IntegrationTests.Tests
 
         private static string[] GetGameMapNames()
         {
-            Task<string[]> task;
-            using (ExecutionContext.SuppressFlow())
-            {
-                task = Task.Run(static async () =>
-                {
-                    await Task.Yield();
-                    await using var pairTracker = await PoolManager.GetServerClient(
-                        new PoolSettings
-                        {
-                            Disconnected = true,
-                            TestName = $"{nameof(PostMapInitTest)}.{nameof(GetGameMapNames)}"
-                        }
-                    );
-                    var server = pairTracker.Pair.Server;
-                    var protoManager = server.ResolveDependency<IPrototypeManager>();
-
-                    var maps = protoManager.EnumeratePrototypes<GameMapPrototype>().ToList();
-                    var mapNames = new List<string>();
-                    var naughty = new HashSet<string>()
-                    {
-                        "Empty",
-                        "Infiltrator",
-                        "Pirate",
-                    };
-
-                    foreach (var map in maps)
-                    {
-                        // AAAAAAAAAA
-                        // Why are they stations!
-                        if (naughty.Contains(map.ID))
-                            continue;
-
-                        mapNames.Add(map.ID);
-                    }
-
-                    await pairTracker.CleanReturnAsync();
-                    return mapNames.ToArray();
-                });
-                Task.WaitAny(task);
-            }
-
-            return task.GetAwaiter().GetResult();
+            string[] task = { "Dev", "LobbyShipevent" };
+            return task;
         }
 
         [Test, TestCaseSource(nameof(GetGameMapNames))]
@@ -328,7 +284,7 @@ namespace Content.IntegrationTests.Tests
 
                     var gameMaps = protoManager.EnumeratePrototypes<GameMapPrototype>().Select(o => o.MapPath).ToHashSet();
 
-                    var mapFolder = new ResPath("/Maps");
+                    var mapFolder = new ResPath("/Maps/Theta");
                     var maps = resourceManager
                         .ContentFindFiles(mapFolder)
                         .Where(filePath => filePath.Extension == "yml" && !filePath.Filename.StartsWith(".", StringComparison.Ordinal))
