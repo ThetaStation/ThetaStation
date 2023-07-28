@@ -1,9 +1,6 @@
 name: RSI Validator
 
 on:
-  pull_request:
-    paths:
-      - '**.rsi/**'
   pull_request_review:
     types: [submitted]
     paths:
