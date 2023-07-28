@@ -74,6 +74,9 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     
     [Dependency] private readonly IServerPreferencesManager _prefsManager = default!;
 
+    //used when setting up buttons for ghosts, in cases when mind from shipevent agent is transferred to null and not to ghost entity directly
+    private Dictionary<IPlayerSession, ShipEventFaction> lastTeamLookup = new();
+
     private readonly Dictionary<string, int> _projectileDamage = new(); //cached damage for projectile prototypes
     private int _lastTeamNumber;
     private float _teamCheckTimer;
@@ -280,6 +283,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         TargetMap = MapId.Nullspace;
 
         Teams.Clear();
+        lastTeamLookup.Clear();
 
         ShipProcessors.Clear();
         LootboxProcessors.Clear();
@@ -431,7 +435,28 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     private void OnPlayerTransfer(EntityUid uid, ShipEventFactionMarkerComponent marker, MindTransferredMessage args)
     {
         if (args.NewEntity == null)
+        {
+            IPlayerSession? session = GetSession(uid);
+            if (session == null || marker.Team == null)
+                return;
+
+            lastTeamLookup[session] = marker.Team;
             return;
+        }
+        
+        //'null' ghost case
+        if (args.NewEntity == uid)
+        {
+            IPlayerSession? session = GetSession(uid);
+            if (session == null)
+                return;
+
+            if (lastTeamLookup.TryGetValue(session, out ShipEventFaction? team))
+            {
+                marker.Team = team;
+                lastTeamLookup.Remove(session);
+            }
+        }
 
         if (EntityManager.HasComponent<GhostComponent>(args.NewEntity))
         {
@@ -559,7 +584,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             if (EntityManager.TryGetComponent<MindContainerComponent>(player.AttachedEntity, out var mind))
                 mind.GhostOnShutdown = false; //to prevent ghost duplication
 
-            EntityManager.DeleteEntity((EntityUid)player.AttachedEntity);
+            EntityManager.QueueDeleteEntity((EntityUid)player.AttachedEntity);
         }
 
         var spawner = EntityManager.GetComponent<ShipEventSpawnerComponent>(spawnerUid);
@@ -733,7 +758,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         foreach (var member in team.Members)
         {
-            EntityManager.DeleteEntity(team.GetMemberEntity(member));
+            EntityManager.QueueDeleteEntity(team.GetMemberEntity(member));
             if (member.Mind.OwnedEntity != null && member.Mind.Session != null)
                 SetupActions(member.Mind.OwnedEntity.Value, team, member.Mind.Session); //so ghosts have team view & other stuff enabled too
         }
@@ -750,7 +775,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         }
 
         if (team.Ship != EntityUid.Invalid)
-            EntityManager.DeleteEntity(team.Ship);
+            EntityManager.QueueDeleteEntity(team.Ship);
 
         team.Ship = EntityUid.Invalid;
 
@@ -842,11 +867,11 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         foreach (var member in team.Members)
         {
-            EntityManager.DeleteEntity(team.GetMemberEntity(member));
+            EntityManager.QueueDeleteEntity(team.GetMemberEntity(member));
         }
 
         if (team.Ship != EntityUid.Invalid)
-            EntityManager.DeleteEntity(team.Ship);
+            EntityManager.QueueDeleteEntity(team.Ship);
 
         Teams.Remove(team);
     }
