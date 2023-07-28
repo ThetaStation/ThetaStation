@@ -27,6 +27,8 @@ public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
 
     public readonly List<CannonInformationInterfaceState> Cannons;
 
+    public readonly List<CommonRadarEntityInterfaceState> All;
+
     public RadarConsoleBoundInterfaceState(
         float maxRange,
         EntityCoordinates? coordinates,
@@ -34,7 +36,8 @@ public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
         List<DockingInterfaceState> docks,
         List<MobInterfaceState> mobs,
         List<ProjectilesInterfaceState> projectiles,
-        List<CannonInformationInterfaceState> cannons)
+        List<CannonInformationInterfaceState> cannons,
+        List<CommonRadarEntityInterfaceState> all)
     {
         MaxRange = maxRange;
         Coordinates = coordinates;
@@ -43,6 +46,23 @@ public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
         MobsAround = mobs;
         Projectiles = projectiles;
         Cannons = cannons;
+        All = all;
+    }
+}
+
+[Serializable, NetSerializable]
+public sealed class CommonRadarEntityInterfaceState
+{
+    public EntityCoordinates Coordinates;
+    public Angle Angle;
+    public string RadarViewPrototype;
+    public Color? OverrideColor;
+
+    public CommonRadarEntityInterfaceState(EntityCoordinates coordinates, Angle angle, string radarViewPrototype, Color? color = null)
+    {
+        Coordinates = coordinates;
+        Angle = angle;
+        RadarViewPrototype = radarViewPrototype;
     }
 }
 

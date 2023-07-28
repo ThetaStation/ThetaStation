@@ -3,6 +3,7 @@ using Content.Server.Mind.Components;
 using Content.Server.Storage.Components;
 using Content.Server.Theta.ShipEvent.Console;
 using System.Numerics;
+using Content.Server.Theta.RadarRenderable;
 using Content.Server.UserInterface;
 using Content.Shared.DeviceLinking;
 using Content.Shared.Mobs.Components;
@@ -95,6 +96,27 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
                 Coordinates = transform.Coordinates,
                 Angle = _transformSystem.GetWorldRotation(xform),
             });
+        }
+
+        return list;
+    }
+
+    public List<CommonRadarEntityInterfaceState> GetAllAround(RadarConsoleComponent component)
+    {
+        var list = new List<CommonRadarEntityInterfaceState>();
+        if (!TryComp<TransformComponent>(component.Owner, out var xform))
+            return list;
+
+        foreach (var (radarRenderable, transform) in EntityManager.EntityQuery<RadarRenderableComponent, TransformComponent>())
+        {
+            if (!xform.MapPosition.InRange(transform.MapPosition, component.MaxRange))
+                continue;
+
+            list.Add(new CommonRadarEntityInterfaceState(
+                transform.Coordinates,
+                _transformSystem.GetWorldRotation(xform),
+                radarRenderable.RadarView
+                ));
         }
 
         return list;
@@ -205,6 +227,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
         var mobs = GetMobsAround(component);
         var projectiles = GetProjectilesAround(component);
         var cannons = GetCannonInfosByMyGrid(component);
+        var all = GetAllAround(component);
 
         var radarState = new RadarConsoleBoundInterfaceState(
             component.MaxRange,
@@ -213,7 +236,8 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
             new List<DockingInterfaceState>(),
             mobs,
             projectiles,
-            cannons
+            cannons,
+            all
         );
 
         _uiSystem.TrySetUiState(uid, RadarConsoleUiKey.Key, radarState);
