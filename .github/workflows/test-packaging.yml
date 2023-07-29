@@ -1,17 +1,6 @@
 ﻿name: Test Packaging
 
 on:
-  pull_request:
-    types: [ opened, reopened, synchronize, ready_for_review ]
-    branches: [ master ]
-    paths:
-      - '**.cs'
-      - '**.csproj'
-      - '**.sln'
-      - '**.git**'
-      - '**.yml'
-      - 'RobustToolbox'
-      - 'RobustToolbox/**'
   pull_request_review:
     types: [submitted]
     paths:

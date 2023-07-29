@@ -27,10 +27,13 @@ public sealed class TeamConsoleSystem : EntitySystem
 
     private void OnInit(EntityUid uid, TeamConsoleComponent component, ComponentInit args)
     {
+        // Disabling asteroid generation for map-related tests
+#if !TOOLS // The code said "kill me please".
         if (!_shipSys.RuleSelected)
         {
             _ticker.StartGameRule("ShipEvent");
         }
+#endif
     }
 
     private void TryJoinToShipTeam(EntityUid uid, TeamConsoleComponent component, JoinToShipTeamsEvent args)
@@ -96,7 +99,7 @@ public sealed class TeamConsoleSystem : EntitySystem
             SendResponse(uid, args.UiKey, ResponseTypes.BlacklistedSelf);
             return;
         }
-        
+
         _shipSys.CreateTeam(args.Session, args.Name, color, args.ShipType, blacklist);
     }
 
@@ -118,7 +121,7 @@ public sealed class TeamConsoleSystem : EntitySystem
                 text = "shipevent-teamcreation-response-waitpls";
                 break;
         }
-        
+
         _uiSystem.TrySetUiState(uid, uiKey, new ShipEventCreateTeamBoundUserInterfaceState(Loc.GetString(text)));
     }
 
