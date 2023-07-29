@@ -436,11 +436,10 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     {
         if (args.NewEntity == null)
         {
-            IPlayerSession? session = GetSession(uid);
-            if (session == null || marker.Team == null)
+            if (args.Mind.Session == null || marker.Team == null)
                 return;
 
-            lastTeamLookup[session] = marker.Team;
+            lastTeamLookup[args.Mind.Session] = marker.Team;
             return;
         }
         
@@ -641,7 +640,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         team.AddMember(shipEventRole);
 
         SetPlayerCharacterName(spawnedEntity, $"{GetName(spawnedEntity)} ({team.Name})");
-
+        
         SetupActions(spawnedEntity, team, session);
 
         if (EntityManager.TryGetComponent<MobHUDComponent>(spawnedEntity, out var hud))
@@ -759,8 +758,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         foreach (var member in team.Members)
         {
             EntityManager.QueueDeleteEntity(team.GetMemberEntity(member));
-            if (member.Mind.OwnedEntity != null && member.Mind.Session != null)
-                SetupActions(member.Mind.OwnedEntity.Value, team, member.Mind.Session); //so ghosts have team view & other stuff enabled too
         }
 
         foreach (var marker in GetShipComponents<ShipEventFactionMarkerComponent>(team.Ship))
