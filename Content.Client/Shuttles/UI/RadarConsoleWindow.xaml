@@ -5,7 +5,8 @@
                       SetSize="648 648"
                       MinSize="256 256">
     <ui:RadarControl Name="RadarScreen"
-                     Margin="4"
-                     HorizontalExpand = "True"
-                     VerticalExpand = "True"/>
+                            MouseFilter="Stop"
+                            Margin="4"
+                            HorizontalExpand="True"
+                            VerticalExpand="True" />
 </controls:FancyWindow>
