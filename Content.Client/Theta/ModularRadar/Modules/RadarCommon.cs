@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using Content.Client.Theta.RadarRenderable;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Theta.RadarRenderable;
 using Robust.Client.Graphics;
@@ -9,14 +10,30 @@ namespace Content.Client.Theta.ModularRadar.Modules;
 public sealed class RadarCommon : RadarModule
 {
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
+    [Dependency] private readonly SharedTransformSystem _transformSystem;
+    [Dependency] private readonly RadarRenderableSystem _radarRenderableSystem;
 
     private List<CommonRadarEntityInterfaceState> _all = new();
-    private List<string> _subscriptions = new();
+    private RadarRenderableGroup _subscriptions;
 
     public RadarCommon(ModularRadarControl parentRadar) : base(parentRadar)
     {
         _transformSystem = EntManager.System<SharedTransformSystem>();
+        _radarRenderableSystem = EntManager.System<RadarRenderableSystem>();
+
+        _radarRenderableSystem.SubscribeUI(_subscriptions, AddNewRenderableStates);
+        _radarRenderableSystem.ClearOldStates += ClearOldStates;
+        // подписываться на систему
+    }
+
+    private void AddNewRenderableStates(List<CommonRadarEntityInterfaceState> info)
+    {
+        _all.AddRange(info);
+    }
+
+    private void ClearOldStates()
+    {
+        _all.Clear();
     }
 
     public override void UpdateState(BoundUserInterfaceState state)
@@ -24,6 +41,11 @@ public sealed class RadarCommon : RadarModule
         if (state is not RadarConsoleBoundInterfaceState radarState)
             return;
         _all = radarState.All;
+    }
+
+    public override void OnDispose()
+    {
+        // убирать подписку от системы
     }
 
     public override void Draw(DrawingHandleScreen handle, Parameters parameters)

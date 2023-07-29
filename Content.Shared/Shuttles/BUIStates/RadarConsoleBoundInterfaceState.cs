@@ -1,3 +1,4 @@
+using Content.Shared.Theta.RadarRenderable;
 using Robust.Shared.Map;
 using Robust.Shared.Serialization;
 
@@ -56,13 +57,17 @@ public sealed class CommonRadarEntityInterfaceState
     public EntityCoordinates Coordinates;
     public Angle Angle;
     public string RadarViewPrototype;
+    public RadarRenderableGroup Group;
     public Color? OverrideColor;
 
-    public CommonRadarEntityInterfaceState(EntityCoordinates coordinates, Angle angle, string radarViewPrototype, Color? color = null)
+    public CommonRadarEntityInterfaceState(EntityCoordinates coordinates, Angle angle, string radarViewPrototype,
+        RadarRenderableGroup group, Color? color = null)
     {
         Coordinates = coordinates;
         Angle = angle;
         RadarViewPrototype = radarViewPrototype;
+        Group = group;
+        OverrideColor = color;
     }
 }
 
