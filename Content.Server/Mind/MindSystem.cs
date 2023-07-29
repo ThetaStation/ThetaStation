@@ -438,9 +438,12 @@ public sealed class MindSystem : EntitySystem
             mind.Session.AttachToEntity(entity);
             Log.Info($"Session {mind.Session.Name} transferred to entity {entity}.");
         }
-        
+
+        var msg = new MindTransferredMessage(oldEntity, entity, component);
         if(oldEntity != null)
-            RaiseLocalEvent(oldEntity.Value, new MindTransferredMessage(entity, component));
+            RaiseLocalEvent(oldEntity.Value, msg);
+        if(entity != null)
+            RaiseLocalEvent(entity.Value, msg);
     }
 
     /// <summary>

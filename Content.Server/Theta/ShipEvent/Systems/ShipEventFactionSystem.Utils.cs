@@ -54,6 +54,8 @@ public sealed partial class ShipEventFactionSystem
     [Dependency] private readonly IdCardSystem _cardSystem = default!;
     [Dependency] private readonly MindTrackerSystem _mindTrack = default!;
 
+    private const int minimalColorDelta = 100;
+
     private void Announce(string message)
     {
         _chatSys.DispatchGlobalAnnouncement(message, Loc.GetString("shipevent-announcement-title"));
@@ -220,8 +222,6 @@ public sealed partial class ShipEventFactionSystem
 
     public bool IsValidColor(Color color)
     {
-        var minimalColorDelta = 200; //not based on anything, simply a magic number for comparison
-
         foreach (var team in Teams)
         {
             var otherColor = team.Color;
