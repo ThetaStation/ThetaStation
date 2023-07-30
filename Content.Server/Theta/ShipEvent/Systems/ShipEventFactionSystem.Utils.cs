@@ -135,19 +135,16 @@ public sealed partial class ShipEventFactionSystem
         return entities;
     }
 
-    private void DetachTeamFromGrid(EntityUid gridUid, ShipEventFaction? team)
+    private void DetachEnemyTeamsFromGrid(EntityUid gridUid, ShipEventFaction? myTeam)
     {
         DetachEntitiesFromGrid<GhostComponent>(gridUid);
-        
         var query = EntityQueryEnumerator<ShipEventFactionMarkerComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var marker, out var transform))
         {
             if (transform.GridUid != gridUid)
                 continue;
 
-            if(team == null)
-                DetachEntityFromGrid(uid, transform);
-            else if(team == marker.Team)
+            if(myTeam == null || myTeam != marker.Team)
                 DetachEntityFromGrid(uid, transform);
         }
     }
