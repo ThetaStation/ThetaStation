@@ -13,7 +13,7 @@ entities:
     components:
     - type: MetaData
     - pos: -0.859375,0.46874237
-      parent: invalid
+      parent: 77
       type: Transform
     - chunks:
         0,0:
@@ -107,6 +107,16 @@ entities:
       type: GridAtmosphere
     - type: GasTileOverlay
     - type: RadiationGridResistance
+  - uid: 77
+    components:
+    - type: MetaData
+    - type: Transform
+    - type: Map
+    - type: PhysicsMap
+    - type: GridTree
+    - type: MovedGrids
+    - type: Broadphase
+    - type: OccluderTree
 - proto: AirlockExternal
   entities:
   - uid: 2
@@ -543,14 +553,6 @@ entities:
         - CannonConsoleSender: CannonConsoleReceiver
         102:
         - CannonConsoleSender: CannonConsoleReceiver
-      registeredSinks:
-        CannonConsoleSender:
-        - 103
-        - 105
-        - 106
-        - 107
-        - 104
-        - 102
       type: DeviceLinkSource
   - uid: 69
     components:
@@ -564,10 +566,6 @@ entities:
         - CannonConsoleSender: CannonConsoleReceiver
         109:
         - CannonConsoleSender: CannonConsoleReceiver
-      registeredSinks:
-        CannonConsoleSender:
-        - 108
-        - 109
       type: DeviceLinkSource
 - proto: Catwalk
   entities:
@@ -606,11 +604,6 @@ entities:
     - pos: 0.5,3.5
       parent: 1
       type: Transform
-  - uid: 77
-    components:
-    - pos: 1.5,3.5
-      parent: 1
-      type: Transform
   - uid: 78
     components:
     - pos: 2.5,3.5
@@ -629,6 +622,11 @@ entities:
   - uid: 81
     components:
     - pos: 6.5,3.5
+      parent: 1
+      type: Transform
+  - uid: 207
+    components:
+    - pos: 1.5,3.5
       parent: 1
       type: Transform
 - proto: ChairPilotSeat
@@ -794,8 +792,10 @@ entities:
     - links:
       - 138
       - 68
+      - 142
       type: DeviceLinkSink
-    - container: ""
+    - provider: 143
+      container: storagebase
       type: ContainerAmmoProvider
   - uid: 103
     components:
@@ -811,7 +811,8 @@ entities:
       - 132
       - 68
       type: DeviceLinkSink
-    - container: ""
+    - provider: 133
+      container: storagebase
       type: ContainerAmmoProvider
   - uid: 104
     components:
@@ -828,7 +829,8 @@ entities:
       - 140
       - 68
       type: DeviceLinkSink
-    - container: ""
+    - provider: 141
+      container: storagebase
       type: ContainerAmmoProvider
   - uid: 105
     components:
@@ -845,7 +847,8 @@ entities:
       - 134
       - 68
       type: DeviceLinkSink
-    - container: ""
+    - provider: 135
+      container: storagebase
       type: ContainerAmmoProvider
   - uid: 106
     components:
@@ -862,7 +865,8 @@ entities:
       - 136
       - 68
       type: DeviceLinkSink
-    - container: ""
+    - provider: 137
+      container: storagebase
       type: ContainerAmmoProvider
   - uid: 107
     components:
@@ -878,8 +882,10 @@ entities:
     - links:
       - 142
       - 68
+      - 138
       type: DeviceLinkSink
-    - container: ""
+    - provider: 139
+      container: storagebase
       type: ContainerAmmoProvider
 - proto: ShipEventIonCannon
   entities:
@@ -1112,9 +1118,6 @@ entities:
     - linkedPorts:
         103:
         - TurretLoaderSender: CannonConsoleReceiver
-      registeredSinks:
-        TurretLoaderSender:
-        - 103
       type: DeviceLinkSource
   - uid: 134
     components:
@@ -1130,9 +1133,6 @@ entities:
     - linkedPorts:
         105:
         - TurretLoaderSender: CannonConsoleReceiver
-      registeredSinks:
-        TurretLoaderSender:
-        - 105
       type: DeviceLinkSource
   - uid: 136
     components:
@@ -1148,9 +1148,6 @@ entities:
     - linkedPorts:
         106:
         - TurretLoaderSender: CannonConsoleReceiver
-      registeredSinks:
-        TurretLoaderSender:
-        - 106
       type: DeviceLinkSource
   - uid: 138
     components:
@@ -1166,9 +1163,8 @@ entities:
     - linkedPorts:
         102:
         - TurretLoaderSender: CannonConsoleReceiver
-      registeredSinks:
-        TurretLoaderSender:
-        - 102
+        107:
+        - TurretLoaderSender: CannonConsoleReceiver
       type: DeviceLinkSource
   - uid: 140
     components:
@@ -1184,9 +1180,6 @@ entities:
     - linkedPorts:
         104:
         - TurretLoaderSender: CannonConsoleReceiver
-      registeredSinks:
-        TurretLoaderSender:
-        - 104
       type: DeviceLinkSource
   - uid: 142
     components:
@@ -1202,9 +1195,8 @@ entities:
     - linkedPorts:
         107:
         - TurretLoaderSender: CannonConsoleReceiver
-      registeredSinks:
-        TurretLoaderSender:
-        - 107
+        102:
+        - TurretLoaderSender: CannonConsoleReceiver
       type: DeviceLinkSource
 - proto: VendingMachineMedical
   entities:
