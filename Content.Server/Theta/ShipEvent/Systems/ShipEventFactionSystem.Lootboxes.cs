@@ -85,7 +85,7 @@ public sealed partial class ShipEventFactionSystem
 
     private void DeleteLootbox(EntityUid lootboxUid)
     {
-        DetachAnyShipEventFromGrid(lootboxUid);
+        DetachTeamFromGrid(lootboxUid, null);
         EntityManager.DeleteEntity(lootboxUid);
     }
 

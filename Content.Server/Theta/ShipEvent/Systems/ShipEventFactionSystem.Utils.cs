@@ -14,6 +14,7 @@ using Content.Shared.Projectiles;
 using Content.Shared.Theta.ShipEvent;
 using Robust.Server.Maps;
 using Robust.Server.Player;
+using Robust.Shared.Physics;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
@@ -134,47 +135,38 @@ public sealed partial class ShipEventFactionSystem
         return entities;
     }
 
-    private List<T> GetEntitiesOnGridBy<T>(EntityUid gridUid) where T : Component
+    private void DetachTeamFromGrid(EntityUid gridUid, ShipEventFaction? team)
     {
-        List<T> comps = new();
-        foreach (var comp in EntityManager.EntityQuery<T>())
+        DetachEntitiesFromGrid<GhostComponent>(gridUid);
+        
+        var query = EntityQueryEnumerator<ShipEventFactionMarkerComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var marker, out var transform))
         {
-            if (Transform(comp.Owner).GridUid == gridUid)
-                comps.Add(comp);
-        }
-
-        return comps;
-    }
-
-    private void DetachTeamFromGrid(EntityUid grid, ShipEventFaction team)
-    {
-        DetachEntitiesFromGrid<GhostComponent>(grid);
-        foreach (var component in GetEntitiesOnGridBy<ShipEventFactionMarkerComponent>(grid))
-        {
-            if (component.Team == team)
+            if (transform.GridUid != gridUid)
                 continue;
-            DetachEntityFromGrid(component);
+
+            if(team == null)
+                DetachEntityFromGrid(uid, transform);
+            else if(team == marker.Team)
+                DetachEntityFromGrid(uid, transform);
         }
     }
 
-    private void DetachAnyShipEventFromGrid(EntityUid grid)
+    private void DetachEntitiesFromGrid<T>(EntityUid gridUid) where T : Component
     {
-        DetachEntitiesFromGrid<GhostComponent>(grid);
-        DetachEntitiesFromGrid<ShipEventFactionMarkerComponent>(grid);
-    }
-
-    private void DetachEntitiesFromGrid<T>(EntityUid grid) where T : Component
-    {
-        foreach (var component in GetEntitiesOnGridBy<T>(grid))
+        var query = EntityQueryEnumerator<T, TransformComponent>();
+        while (query.MoveNext(out var uid, out _, out var transform))
         {
-            DetachEntityFromGrid(component);
+            if (transform.GridUid != gridUid)
+                continue;
+
+            DetachEntityFromGrid(uid, transform);
         }
     }
 
-    private void DetachEntityFromGrid(Component component)
+    private void DetachEntityFromGrid(EntityUid uid, TransformComponent transform)
     {
-        var transform = Transform(component.Owner);
-        _formSys.SetParent(transform.Owner, _mapMan.GetMapEntityId(transform.MapID));
+        _formSys.SetParent(uid, _mapMan.GetMapEntityId(transform.MapID));
     }
 
     private int GetProjectileDamage(EntityUid entity)
