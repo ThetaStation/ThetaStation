@@ -153,8 +153,7 @@ public sealed partial class ShipEventFactionSystem
         {
             if (component.Team == team)
                 continue;
-            var transform = Transform(component.Owner);
-            _formSys.SetParent(transform.Owner, _mapMan.GetMapEntityId(transform.MapID));
+            DetachEntityFromGrid(component);
         }
     }
 
@@ -168,9 +167,14 @@ public sealed partial class ShipEventFactionSystem
     {
         foreach (var component in GetEntitiesOnGridBy<T>(grid))
         {
-            var transform = Transform(component.Owner);
-            _formSys.SetParent(transform.Owner, _mapMan.GetMapEntityId(transform.MapID));
+            DetachEntityFromGrid(component);
         }
+    }
+
+    private void DetachEntityFromGrid(Component component)
+    {
+        var transform = Transform(component.Owner);
+        _formSys.SetParent(transform.Owner, _mapMan.GetMapEntityId(transform.MapID));
     }
 
     private int GetProjectileDamage(EntityUid entity)
