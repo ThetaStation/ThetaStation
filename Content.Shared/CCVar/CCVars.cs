@@ -316,7 +316,7 @@ namespace Content.Shared.CCVar
         /// What is the primary language of the server, with the fallback being en-US.
         /// </summary>
         public static readonly CVarDef<string> CultureLocale =
-            CVarDef.Create("game.culture_locale", "en-US", CVar.SERVERONLY);
+            CVarDef.Create("game.culture_locale", "en-US", CVar.REPLICATED | CVar.SERVER);
 
         /*
          * Discord
