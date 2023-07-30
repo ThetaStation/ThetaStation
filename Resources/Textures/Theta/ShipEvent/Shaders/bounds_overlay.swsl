@@ -1,8 +1,8 @@
 uniform sampler2D SCREEN_TEXTURE;
 uniform highp float BRIGHTNESS;
-uniform lowp int DET_LEVELS = 2;
-uniform highp mat2 SCALE_MATRIX = mat2(2.0, 1.2, -1.2, 2.0);
-uniform highp vec3 BASE_COLOR = vec3(1.0,0.0,0.0);
+uniform lowp int DET_LEVELS;
+uniform highp mat3 SCALE_MATRIX; //this should be mat2, read BoundsOverlay.cs comments
+uniform highp vec3 BASE_COLOR;
 
 highp float rand(highp vec2 n) { 
     return fract(sin(dot(n, vec2(12.9898, 4.1414))) * 43758.5453);
@@ -31,7 +31,8 @@ highp float fbm(highp vec2 uv, highp mat2 m){
 }
 
 void fragment() {
-    highp float f = fbm(UV, SCALE_MATRIX); //Fractional brownian motion warp overlay, based on https://www.shadertoy.com/view/tdG3Rd
-    for(int c = 0; c < DET_LEVELS; c++){f = fbm(UV + f, SCALE_MATRIX);}
+    highp mat2 scale_mat2 = mat2(SCALE_MATRIX[0][1], SCALE_MATRIX[0][2], SCALE_MATRIX[1][1], SCALE_MATRIX[1][2]);
+    highp float f = fbm(UV, scale_mat2); //Fractional brownian motion warp overlay, based on https://www.shadertoy.com/view/tdG3Rd
+    for(int c = 0; c < DET_LEVELS; c++){f = fbm(UV + f, scale_mat2);}
     COLOR.xyz = mix(texture(SCREEN_TEXTURE, UV).xyz, BASE_COLOR, f*BRIGHTNESS);
 }
