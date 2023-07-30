@@ -3,9 +3,11 @@
 using System.Linq;
 using Content.Server.Access.Systems;
 using Content.Server.Explosion.Components;
+using Content.Server.Ghost.Components;
 using Content.Server.Mind;
 using Content.Server.Mind.Components;
 using Content.Server.Roles;
+using Content.Server.Theta.ShipEvent.Components;
 using Content.Shared.Chat;
 using Content.Shared.Explosion;
 using Content.Shared.Projectiles;
@@ -132,16 +134,43 @@ public sealed partial class ShipEventFactionSystem
         return entities;
     }
 
-    private List<T> GetShipComponents<T>(EntityUid shipEntity) where T : IComponent
+    private List<T> GetEntitiesOnGridBy<T>(EntityUid gridUid) where T : Component
     {
         List<T> comps = new();
         foreach (var comp in EntityManager.EntityQuery<T>())
         {
-            if (Transform(comp.Owner).GridUid == shipEntity)
+            if (Transform(comp.Owner).GridUid == gridUid)
                 comps.Add(comp);
         }
 
         return comps;
+    }
+
+    private void DetachTeamFromGrid(EntityUid grid, ShipEventFaction team)
+    {
+        DetachEntitiesFromGrid<GhostComponent>(grid);
+        foreach (var component in GetEntitiesOnGridBy<ShipEventFactionMarkerComponent>(grid))
+        {
+            if (component.Team == team)
+                continue;
+            var transform = Transform(component.Owner);
+            _formSys.SetParent(transform.Owner, _mapMan.GetMapEntityId(transform.MapID));
+        }
+    }
+
+    private void DetachAnyShipEventFromGrid(EntityUid grid)
+    {
+        DetachEntitiesFromGrid<GhostComponent>(grid);
+        DetachEntitiesFromGrid<ShipEventFactionMarkerComponent>(grid);
+    }
+
+    private void DetachEntitiesFromGrid<T>(EntityUid grid) where T : Component
+    {
+        foreach (var component in GetEntitiesOnGridBy<T>(grid))
+        {
+            var transform = Transform(component.Owner);
+            _formSys.SetParent(transform.Owner, _mapMan.GetMapEntityId(transform.MapID));
+        }
     }
 
     private int GetProjectileDamage(EntityUid entity)

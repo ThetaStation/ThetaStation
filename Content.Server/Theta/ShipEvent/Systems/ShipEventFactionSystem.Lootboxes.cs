@@ -83,15 +83,10 @@ public sealed partial class ShipEventFactionSystem
         }
     }
 
-    private void DeleteLootbox(EntityUid uid)
+    private void DeleteLootbox(EntityUid lootboxUid)
     {
-        foreach (var marker in GetShipComponents<ShipEventFactionMarkerComponent>(uid))
-        {
-            var transform = Transform(marker.Owner);
-            _formSys.SetParent(transform.Owner, _mapMan.GetMapEntityId(transform.MapID));
-        }
-
-        EntityManager.DeleteEntity(uid);
+        DetachAnyShipEventFromGrid(lootboxUid);
+        EntityManager.DeleteEntity(lootboxUid);
     }
 
     private void SpawnLootboxes(int amount, bool announce = true)

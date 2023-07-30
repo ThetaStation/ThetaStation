@@ -763,14 +763,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                 SetupActions(member.Mind.OwnedEntity.Value, team, member.Mind.Session); //so ghosts have team view & other stuff enabled too
         }
 
-        foreach (var marker in GetShipComponents<ShipEventFactionMarkerComponent>(team.Ship))
-        {
-            if (marker.Team != team)
-            {
-                var transform = Transform(marker.Owner);
-                _formSys.SetParent(transform.Owner, _mapMan.GetMapEntityId(transform.MapID));
-            }
-        }
+        DetachTeamFromGrid(team.Ship, team);
 
         EntityManager.DeleteEntity(team.Ship);
 
