@@ -908,7 +908,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     private int GetBalancedMaxTeamMembers()
     {
         if (Teams.Count == 0)
-            return 0;
+            return int.MaxValue;
         var totalMembers = Teams.Sum(team => team.Members.Count);
         return totalMembers / Teams.Count + PlayersPerTeamPlace;
     }
