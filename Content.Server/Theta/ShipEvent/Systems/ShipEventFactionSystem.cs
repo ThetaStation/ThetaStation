@@ -542,7 +542,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             }
         }
 
-        if (targetTeam.Members.Count >= GetMemberLimit())
+        if (targetTeam.Members.Count >= GetBalancedMaxTeamMembers())
         {
             _chatSys.SendSimpleMessage(Loc.GetString("shipevent-memberlimit"), player);
             return;
@@ -905,18 +905,12 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         }
     }
 
-    private int GetMemberLimit()
+    private int GetBalancedMaxTeamMembers()
     {
-        int totalMembers = 0;
-        int minMembers = 0;
-        foreach (var team in Teams)
-        {
-            totalMembers += team.Members.Count;
-            if (team.Members.Count < minMembers || minMembers == 0)
-                minMembers = team.Members.Count;
-        }
-
-        return minMembers + totalMembers / PlayersPerTeamPlace;
+        if (Teams.Count == 0)
+            return 0;
+        var totalMembers = Teams.Sum(team => team.Members.Count);
+        return totalMembers / Teams.Count + PlayersPerTeamPlace;
     }
 
     private void CheckTeams(float deltaTime)
