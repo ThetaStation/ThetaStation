@@ -266,7 +266,7 @@ public sealed partial class ChatSystem : SharedChatSystem
     /// <param name="playSound">Play the announcement sound</param>
     /// <param name="colorOverride">Optional color for the announcement message</param>
     public void DispatchGlobalAnnouncement(string message, string sender = "Central Command",
-        bool playSound = true, SoundSpecifier? announcementSound = null, Color? colorOverride = null)
+        bool playSound = false, SoundSpecifier? announcementSound = null, Color? colorOverride = null)
     {
         var wrappedMessage = Loc.GetString("chat-manager-sender-announcement-wrap-message", ("sender", sender), ("message", FormattedMessage.EscapeText(message)));
         _chatManager.ChatMessageToAll(ChatChannel.Radio, message, wrappedMessage, default, false, true, colorOverride);
