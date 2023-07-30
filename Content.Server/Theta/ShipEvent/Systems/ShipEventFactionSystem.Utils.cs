@@ -61,7 +61,7 @@ public sealed partial class ShipEventFactionSystem
 
     private void Announce(string message)
     {
-        _chatSys.DispatchGlobalAnnouncement(message, Loc.GetString("shipevent-announcement-title"));
+        _chatSys.DispatchGlobalAnnouncement(message, Loc.GetString("shipevent-announcement-title"), playSound = false);
     }
 
     /// <summary>
