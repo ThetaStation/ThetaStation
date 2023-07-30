@@ -3,15 +3,18 @@
 using System.Linq;
 using Content.Server.Access.Systems;
 using Content.Server.Explosion.Components;
+using Content.Server.Ghost.Components;
 using Content.Server.Mind;
 using Content.Server.Mind.Components;
 using Content.Server.Roles;
+using Content.Server.Theta.ShipEvent.Components;
 using Content.Shared.Chat;
 using Content.Shared.Explosion;
 using Content.Shared.Projectiles;
 using Content.Shared.Theta.ShipEvent;
 using Robust.Server.Maps;
 using Robust.Server.Player;
+using Robust.Shared.Physics;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
@@ -132,16 +135,35 @@ public sealed partial class ShipEventFactionSystem
         return entities;
     }
 
-    private List<T> GetShipComponents<T>(EntityUid shipEntity) where T : IComponent
+    private void DetachEnemyTeamsFromGrid(EntityUid gridUid, ShipEventFaction? myTeam)
     {
-        List<T> comps = new();
-        foreach (var comp in EntityManager.EntityQuery<T>())
+        DetachEntitiesFromGrid<GhostComponent>(gridUid);
+        var query = EntityQueryEnumerator<ShipEventFactionMarkerComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var marker, out var transform))
         {
-            if (Transform(comp.Owner).GridUid == shipEntity)
-                comps.Add(comp);
-        }
+            if (transform.GridUid != gridUid)
+                continue;
 
-        return comps;
+            if(myTeam == null || myTeam != marker.Team)
+                DetachEntityFromGrid(uid, transform);
+        }
+    }
+
+    private void DetachEntitiesFromGrid<T>(EntityUid gridUid) where T : Component
+    {
+        var query = EntityQueryEnumerator<T, TransformComponent>();
+        while (query.MoveNext(out var uid, out _, out var transform))
+        {
+            if (transform.GridUid != gridUid)
+                continue;
+
+            DetachEntityFromGrid(uid, transform);
+        }
+    }
+
+    private void DetachEntityFromGrid(EntityUid uid, TransformComponent transform)
+    {
+        _formSys.SetParent(uid, _mapMan.GetMapEntityId(transform.MapID));
     }
 
     private int GetProjectileDamage(EntityUid entity)

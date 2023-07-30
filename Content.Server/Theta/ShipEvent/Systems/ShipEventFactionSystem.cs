@@ -41,37 +41,37 @@ namespace Content.Server.Theta.ShipEvent.Systems;
 public sealed partial class ShipEventFactionSystem : EntitySystem
 {
     [Dependency] private readonly GameTicker _ticker = default!;
-    
+
     [Dependency] private readonly ActionsSystem _actSys = default!;
-    
+
     [Dependency] private readonly ChatSystem _chatSys = default!;
-    
+
     [Dependency] private readonly MobHUDSystem _hudSys = default!;
-    
+
     [Dependency] private readonly DebrisGenerationSystem _debrisSys = default!;
-    
+
     [Dependency] private readonly IdentitySystem _idSys = default!;
-    
+
     [Dependency] private readonly MapLoaderSystem _mapSys = default!;
-    
+
     [Dependency] private readonly IMapManager _mapMan = default!;
-    
+
     [Dependency] private readonly IPrototypeManager _protMan = default!;
-    
+
     [Dependency] private readonly IRobustRandom _random = default!;
-    
+
     [Dependency] private readonly UserInterfaceSystem _uiSys = default!;
-    
+
     [Dependency] private readonly IPlayerManager _playerMan = default!;
-    
+
     [Dependency] private readonly TransformSystem _formSys = default!;
-    
+
     [Dependency] private readonly RoundEndSystem _endSys = default!;
-    
+
     [Dependency] private readonly MindSystem _mindSystem = default!;
-    
+
     [Dependency] private readonly HumanoidAppearanceSystem _humanoidAppearanceSystem = default!;
-    
+
     [Dependency] private readonly IServerPreferencesManager _prefsManager = default!;
 
     //used when setting up buttons for ghosts, in cases when mind from shipevent agent is transferred to null and not to ghost entity directly
@@ -396,13 +396,13 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         if (_uiSys.TryGetUi(uid, uiKey, out var bui))
             _uiSys.OpenUi(bui, session);
     }
-    
+
     private void OnReturnToLobbyAction(EntityUid uid, ShipEventFactionMarkerComponent marker, ShipEventReturnToLobbyEvent args)
     {
         var session = GetSession(args.Performer);
         if (session == null)
             return;
-        
+
         _ticker.Respawn(session);
     }
 
@@ -431,7 +431,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         var playerMob = SpawnPlayer(session, spawner);
         AfterSpawn(playerMob, spawner);
     }
-    
+
     private void OnPlayerTransfer(EntityUid uid, ShipEventFactionMarkerComponent marker, MindTransferredMessage args)
     {
         if (args.NewEntity == null)
@@ -442,7 +442,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             lastTeamLookup[args.Mind.Session] = marker.Team;
             return;
         }
-        
+
         //'null' ghost case
         if (args.NewEntity == uid)
         {
@@ -662,8 +662,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     {
         var teamViewToggle = (InstantAction)_protMan.Index<InstantActionPrototype>("ShipEventTeamViewToggle").Clone();
         _actSys.AddAction(uid, teamViewToggle, null);
-            
-        if (team != null && session != null && team.Captain == session.ConnectedClient.UserName) 
+
+        if (team != null && session != null && team.Captain == session.ConnectedClient.UserName)
         {
             var capMenuToggle = (InstantAction)_protMan.Index<InstantActionPrototype>("ShipEventCaptainMenuToggle").Clone();
             _actSys.AddAction(uid, capMenuToggle, null);
@@ -760,19 +760,9 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             EntityManager.QueueDeleteEntity(team.GetMemberEntity(member));
         }
 
-        foreach (var marker in GetShipComponents<ShipEventFactionMarkerComponent>(team.Ship))
-        {
-            if (marker.Team != team)
-            {
-                var transform = Transform(marker.Owner);
-                _formSys.SetParent(transform.Owner, _mapMan.GetMapEntityId(transform.MapID));
-                _formSys.SetGridId(marker.Owner, transform, null);
-                Dirty(transform);
-            }
-        }
+        DetachEnemyTeamsFromGrid(team.Ship, team);
 
-        if (team.Ship != EntityUid.Invalid)
-            EntityManager.QueueDeleteEntity(team.Ship);
+        EntityManager.DeleteEntity(team.Ship);
 
         team.Ship = EntityUid.Invalid;
 
