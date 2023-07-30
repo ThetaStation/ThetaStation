@@ -1,0 +1,15 @@
+﻿name: "Labels: Remove approval"
+
+on:
+  pull_request_review:
+    types: [submitted, edited, dismissed]
+
+jobs:
+  remove_label:
+    if: github.event.review.state != 'approved'
+    runs-on: [self-hosted, linux, x64]
+    steps:
+    - uses: actions-ecosystem/action-remove-labels@v1
+      with:
+        labels: |
+          labels: "Approved"

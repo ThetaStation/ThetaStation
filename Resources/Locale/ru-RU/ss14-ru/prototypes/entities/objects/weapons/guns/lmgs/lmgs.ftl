@@ -3,3 +3,6 @@ ent-BaseWeaponLightMachineGun = BaseWeaponLightMachineGun
 ent-WeaponLightMachineGunL6 = L6 SAW
     .desc = Весьма традиционный легкий пулемет с удобной лакированной деревянной пистолетной рукоятью. Использует патроны калибра .30 винтовочный.
     .suffix = Пулемёт
+ent-WeaponLightMachineGunL6Event = L6 SAW (Взрывной)
+    .desc = Просто пила, но со взрывными пулями
+    .suffix = SHIPEVENT

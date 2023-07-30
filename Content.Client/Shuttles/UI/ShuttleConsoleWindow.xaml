@@ -16,6 +16,13 @@
                       Orientation="Vertical">
             <BoxContainer Orientation="Vertical">
                 <controls:StripeBack>
+                    <Label Name="NameShipLabel" Text="{Loc 'shuttle-console-name-label'}" HorizontalAlignment="Center"/>
+                </controls:StripeBack>
+                <LineEdit Name="ShipName" Access="Public" HorizontalExpand="True"/>
+                <Button Name="ChangeNameShip" Access="Public" Text="{Loc 'shuttle-console-name-change'}"/>
+            </BoxContainer>
+            <BoxContainer Orientation="Vertical">
+                <controls:StripeBack>
                     <Label Name="DockingPortsLabel" Text="{Loc 'shuttle-console-dock-label'}" HorizontalAlignment="Center"/>
                 </controls:StripeBack>
                 <BoxContainer Name="DockPorts"
@@ -34,10 +41,10 @@
                         HorizontalExpand = "True"
                         VerticalExpand = "True">
             <ui:RadarControl Name="RadarScreen"
-                             MouseFilter="Stop"
-                             Margin="4"
-                             HorizontalExpand = "True"
-                             VerticalExpand = "True"/>
+                                    MouseFilter="Stop"
+                                    Margin="4"
+                                    HorizontalExpand = "True"
+                                    VerticalExpand = "True"/>
             <ui:DockingControl Name="DockingScreen"
                                Visible="False"
                                MouseFilter="Stop"

@@ -141,6 +141,7 @@ namespace Content.Client.Entry
             _prototypeManager.RegisterIgnore("stationGoal"); // Corvax-StationGoal
             _prototypeManager.RegisterIgnore("loadout"); // Corvax-Loadout
             _prototypeManager.RegisterIgnore("flavor");
+            _prototypeManager.RegisterIgnore("structure"); //theta debris-gen
 
             _componentFactory.GenerateNetIds();
             _adminManager.Initialize();
