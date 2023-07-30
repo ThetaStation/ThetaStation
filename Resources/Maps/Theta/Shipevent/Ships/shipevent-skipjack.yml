@@ -19,7 +19,7 @@ entities:
     components:
     - type: MetaData
     - pos: -3.2670264,-1.4003296
-      parent: invalid
+      parent: 442
       type: Transform
     - chunks:
         0,0:
@@ -33,7 +33,7 @@ entities:
           tiles: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAZQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGUAAABlAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABlAAAAZQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAZQAAAGUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
         0,-2:
           ind: 0,-2
-          tiles: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGUAAABlAAAAAAAAAAAAAAAAAAAAAAAAAGUAAABlAAAAAAAAAAAAAAAAAAAAAAAAAGUAAABlAAAAZQAAAGUAAABlAAAAZQAAAGUAAABSAAAAUgAAAGUAAABlAAAAZQAAAGUAAABlAAAAZQAAAGUAAABlAAAAZQAAAGUAAABlAAAAZQAAAFcAAABVAAAAVgAAAFYAAABVAAAAVwAAAGUAAABlAAAAZQAAAGUAAABlAAAAZQAAAGUAAABlAAAAZQAAAGUAAABXAAAAUgAAAFMAAABUAAAAUgAAAFcAAABlAAAAZQAAAGUAAABlAAAAZQAAAGUAAABXAAAAVwAAAFcAAABnAAAAVwAAAFUAAABYAAAAWAAAAFUAAABXAAAAZwAAAFIAAABSAAAAVwAAAA==
+          tiles: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGUAAABlAAAAZQAAAGUAAABlAAAAZQAAAGUAAABlAAAAAAAAAAAAAAAAAAAAAAAAAGUAAABlAAAAZQAAAGUAAABlAAAAZQAAAGUAAABSAAAAUgAAAGUAAABlAAAAZQAAAGUAAABlAAAAZQAAAGUAAABlAAAAZQAAAGUAAABlAAAAZQAAAFcAAABVAAAAVgAAAFYAAABVAAAAVwAAAGUAAABlAAAAZQAAAGUAAABlAAAAZQAAAGUAAABlAAAAZQAAAGUAAABXAAAAUgAAAFMAAABUAAAAUgAAAFcAAABlAAAAZQAAAGUAAABlAAAAZQAAAGUAAABXAAAAVwAAAFcAAABnAAAAVwAAAFUAAABYAAAAWAAAAFUAAABXAAAAZwAAAFIAAABSAAAAVwAAAA==
         0,-1:
           ind: 0,-1
           tiles: ZQAAAGUAAABSAAAAUgAAAFIAAABnAAAAZwAAAGcAAABSAAAAUgAAAGcAAABnAAAAZwAAAFIAAABSAAAAUgAAAGUAAABlAAAAUgAAAFIAAABSAAAAUgAAAFIAAABSAAAAVgAAAFYAAABSAAAAUgAAAFIAAABSAAAAUgAAAFIAAABlAAAAZQAAAFIAAABXAAAAVwAAAGcAAABXAAAAVwAAAFUAAABVAAAAVwAAAFcAAABnAAAAVwAAAFcAAABSAAAAZQAAAGUAAABlAAAAZQAAAGcAAABnAAAAZwAAAGcAAABSAAAAUgAAAGcAAABnAAAAZwAAAGcAAABlAAAAZQAAAGUAAABlAAAAZQAAAGUAAABSAAAAUgAAAFIAAABnAAAAUgAAAFIAAABnAAAAVwAAAFIAAABXAAAAZQAAAGUAAAAAAAAAZQAAAGUAAABlAAAAUgAAAFUAAABSAAAAZwAAAFIAAABSAAAAZwAAAFcAAABVAAAAVwAAAGUAAABlAAAAAAAAAGUAAABlAAAAZQAAAFIAAABVAAAAUgAAAFIAAABVAAAAVQAAAFIAAABSAAAAVQAAAFIAAABlAAAAZQAAAAAAAABlAAAAZQAAAGUAAABSAAAAVQAAAFIAAABnAAAAUgAAAFIAAABnAAAAVwAAAFUAAABXAAAAZQAAAGUAAAAAAAAAZQAAAGUAAABlAAAAUgAAAFIAAABSAAAAZwAAAFgAAABYAAAAZwAAAFcAAABSAAAAVwAAAGUAAABlAAAAAAAAAGUAAABlAAAAZQAAAGUAAABlAAAAZwAAAGcAAABSAAAAUgAAAGcAAABnAAAAZQAAAGUAAABlAAAAZQAAAAAAAAAAAAAAZQAAAGUAAABlAAAAZQAAAFcAAABSAAAAVgAAAFYAAABSAAAAVwAAAGUAAABlAAAAZQAAAGUAAAAAAAAAAAAAAGUAAABlAAAAZQAAAGUAAABXAAAAUgAAAFUAAABVAAAAUgAAAFcAAABlAAAAZQAAAGUAAABlAAAAAAAAAAAAAABlAAAAZQAAAGUAAABlAAAAVwAAAFIAAABSAAAAUgAAAFIAAABXAAAAZQAAAGUAAABlAAAAZQAAAAAAAAAAAAAAAAAAAGUAAABlAAAAZQAAAGUAAABlAAAAVwAAAFcAAABlAAAAZQAAAGUAAABlAAAAZQAAAAAAAAAAAAAAAAAAAGUAAABlAAAAZQAAAGUAAABlAAAAZQAAAFIAAABSAAAAZQAAAGUAAABlAAAAZQAAAGUAAABlAAAAAAAAAAAAAABlAAAAZQAAAGUAAABlAAAAZQAAAGUAAABlAAAAZQAAAGUAAABlAAAAZQAAAGUAAABlAAAAZQAAAA==
@@ -150,6 +150,16 @@ entities:
       type: GridAtmosphere
     - type: GasTileOverlay
     - type: RadiationGridResistance
+  - uid: 442
+    components:
+    - type: MetaData
+    - type: Transform
+    - type: Map
+    - type: PhysicsMap
+    - type: GridTree
+    - type: MovedGrids
+    - type: Broadphase
+    - type: OccluderTree
 - proto: APCHighCapacity
   entities:
   - uid: 2
@@ -661,11 +671,6 @@ entities:
         - CannonConsoleSender: CannonConsoleReceiver
         166:
         - CannonConsoleSender: CannonConsoleReceiver
-      registeredSinks:
-        CannonConsoleSender:
-        - 168
-        - 167
-        - 166
       type: DeviceLinkSource
   - uid: 95
     components:
@@ -684,12 +689,6 @@ entities:
         - CannonConsoleSender: CannonConsoleReceiver
         155:
         - CannonConsoleSender: CannonConsoleReceiver
-      registeredSinks:
-        CannonConsoleSender:
-        - 152
-        - 153
-        - 154
-        - 155
       type: DeviceLinkSource
   - uid: 96
     components:
@@ -706,11 +705,6 @@ entities:
         - CannonConsoleSender: CannonConsoleReceiver
         160:
         - CannonConsoleSender: CannonConsoleReceiver
-      registeredSinks:
-        CannonConsoleSender:
-        - 156
-        - 157
-        - 160
       type: DeviceLinkSource
   - uid: 97
     components:
@@ -727,11 +721,6 @@ entities:
         - CannonConsoleSender: CannonConsoleReceiver
         171:
         - CannonConsoleSender: CannonConsoleReceiver
-      registeredSinks:
-        CannonConsoleSender:
-        - 169
-        - 170
-        - 171
       type: DeviceLinkSource
   - uid: 98
     components:
@@ -748,11 +737,6 @@ entities:
         - CannonConsoleSender: CannonConsoleReceiver
         161:
         - CannonConsoleSender: CannonConsoleReceiver
-      registeredSinks:
-        CannonConsoleSender:
-        - 159
-        - 158
-        - 161
       type: DeviceLinkSource
 - proto: ChairPilotSeat
   entities:
@@ -1525,12 +1509,6 @@ entities:
         - CannonConsoleSender: CannonConsoleReceiver
         162:
         - CannonConsoleSender: CannonConsoleReceiver
-      registeredSinks:
-        CannonConsoleSender:
-        - 165
-        - 164
-        - 163
-        - 162
       type: DeviceLinkSource
 - proto: SkipjackShuttleComputer
   entities:
@@ -1788,9 +1766,6 @@ entities:
     - linkedPorts:
         156:
         - TurretLoaderSender: CannonConsoleReceiver
-      registeredSinks:
-        TurretLoaderSender:
-        - 156
       type: DeviceLinkSource
   - uid: 199
     components:
@@ -1806,9 +1781,6 @@ entities:
     - linkedPorts:
         160:
         - TurretLoaderSender: CannonConsoleReceiver
-      registeredSinks:
-        TurretLoaderSender:
-        - 160
       type: DeviceLinkSource
   - uid: 201
     components:
@@ -1824,9 +1796,6 @@ entities:
     - linkedPorts:
         157:
         - TurretLoaderSender: CannonConsoleReceiver
-      registeredSinks:
-        TurretLoaderSender:
-        - 157
       type: DeviceLinkSource
   - uid: 203
     components:
@@ -1842,9 +1811,6 @@ entities:
     - linkedPorts:
         161:
         - TurretLoaderSender: CannonConsoleReceiver
-      registeredSinks:
-        TurretLoaderSender:
-        - 161
       type: DeviceLinkSource
   - uid: 205
     components:
@@ -1860,9 +1826,6 @@ entities:
     - linkedPorts:
         158:
         - TurretLoaderSender: CannonConsoleReceiver
-      registeredSinks:
-        TurretLoaderSender:
-        - 158
       type: DeviceLinkSource
   - uid: 207
     components:
@@ -1878,9 +1841,6 @@ entities:
     - linkedPorts:
         159:
         - TurretLoaderSender: CannonConsoleReceiver
-      registeredSinks:
-        TurretLoaderSender:
-        - 159
       type: DeviceLinkSource
   - uid: 209
     components:
@@ -1896,9 +1856,6 @@ entities:
     - linkedPorts:
         153:
         - TurretLoaderSender: CannonConsoleReceiver
-      registeredSinks:
-        TurretLoaderSender:
-        - 153
       type: DeviceLinkSource
   - uid: 211
     components:
@@ -1914,9 +1871,6 @@ entities:
     - linkedPorts:
         152:
         - TurretLoaderSender: CannonConsoleReceiver
-      registeredSinks:
-        TurretLoaderSender:
-        - 152
       type: DeviceLinkSource
   - uid: 213
     components:
@@ -1932,9 +1886,6 @@ entities:
     - linkedPorts:
         154:
         - TurretLoaderSender: CannonConsoleReceiver
-      registeredSinks:
-        TurretLoaderSender:
-        - 154
       type: DeviceLinkSource
   - uid: 215
     components:
@@ -1950,9 +1901,6 @@ entities:
     - linkedPorts:
         155:
         - TurretLoaderSender: CannonConsoleReceiver
-      registeredSinks:
-        TurretLoaderSender:
-        - 155
       type: DeviceLinkSource
   - uid: 217
     components:
@@ -1968,9 +1916,6 @@ entities:
     - linkedPorts:
         163:
         - TurretLoaderSender: CannonConsoleReceiver
-      registeredSinks:
-        TurretLoaderSender:
-        - 163
       type: DeviceLinkSource
   - uid: 219
     components:
@@ -1986,9 +1931,6 @@ entities:
     - linkedPorts:
         162:
         - TurretLoaderSender: CannonConsoleReceiver
-      registeredSinks:
-        TurretLoaderSender:
-        - 162
       type: DeviceLinkSource
   - uid: 221
     components:
@@ -2004,9 +1946,6 @@ entities:
     - linkedPorts:
         164:
         - TurretLoaderSender: CannonConsoleReceiver
-      registeredSinks:
-        TurretLoaderSender:
-        - 164
       type: DeviceLinkSource
   - uid: 223
     components:
@@ -2022,9 +1961,6 @@ entities:
     - linkedPorts:
         165:
         - TurretLoaderSender: CannonConsoleReceiver
-      registeredSinks:
-        TurretLoaderSender:
-        - 165
       type: DeviceLinkSource
   - uid: 225
     components:
@@ -2040,9 +1976,6 @@ entities:
     - linkedPorts:
         168:
         - TurretLoaderSender: CannonConsoleReceiver
-      registeredSinks:
-        TurretLoaderSender:
-        - 168
       type: DeviceLinkSource
   - uid: 227
     components:
@@ -2058,9 +1991,6 @@ entities:
     - linkedPorts:
         167:
         - TurretLoaderSender: CannonConsoleReceiver
-      registeredSinks:
-        TurretLoaderSender:
-        - 167
       type: DeviceLinkSource
   - uid: 229
     components:
@@ -2076,9 +2006,6 @@ entities:
     - linkedPorts:
         166:
         - TurretLoaderSender: CannonConsoleReceiver
-      registeredSinks:
-        TurretLoaderSender:
-        - 166
       type: DeviceLinkSource
   - uid: 231
     components:
@@ -2094,9 +2021,6 @@ entities:
     - linkedPorts:
         171:
         - TurretLoaderSender: CannonConsoleReceiver
-      registeredSinks:
-        TurretLoaderSender:
-        - 171
       type: DeviceLinkSource
   - uid: 233
     components:
@@ -2112,9 +2036,6 @@ entities:
     - linkedPorts:
         170:
         - TurretLoaderSender: CannonConsoleReceiver
-      registeredSinks:
-        TurretLoaderSender:
-        - 170
       type: DeviceLinkSource
   - uid: 235
     components:
@@ -2130,9 +2051,6 @@ entities:
     - linkedPorts:
         169:
         - TurretLoaderSender: CannonConsoleReceiver
-      registeredSinks:
-        TurretLoaderSender:
-        - 169
       type: DeviceLinkSource
 - proto: VoxShuttleInnerWall10_13
   entities:
