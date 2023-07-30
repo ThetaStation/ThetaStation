@@ -63,7 +63,7 @@
       needsPower: false
     - type: Destructible
       thresholds:
-        - trigger:
+        - trigger: # override the parent slot for immortality
             !type:DamageTrigger
             damage: 100000
 
