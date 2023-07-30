@@ -25,8 +25,9 @@ namespace Content.Shared.Localizations
 
         public void Initialize()
         {
-            var culture = new CultureInfo(_cfg.GetCVar(CCVars.CultureLocale));
-            var fallbackCulture = new CultureInfo("en-US"); // Corvax-Localization
+            var Culture = _cfg.GetCVar(CCVars.CultureLocale);
+            var culture = new CultureInfo(Culture);
+            var fallbackCulture = new CultureInfo(Culture == "en-US" ? "ru-RU" : "en-US"); // Corvax-Localization
 
             _loc.LoadCulture(culture);
             _loc.LoadCulture(fallbackCulture); // Corvax-Localization
