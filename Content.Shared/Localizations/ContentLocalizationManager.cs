@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Robust.Shared.Utility;
 using Robust.Shared.Configuration;
+using Content.Shared.CCVar;
 
 namespace Content.Shared.Localizations
 {
@@ -24,7 +25,7 @@ namespace Content.Shared.Localizations
 
         public void Initialize()
         {
-            var culture = new CultureInfo(_cfg.GetCVar(CCVars.LocaleCulture));
+            var culture = new CultureInfo(_cfg.GetCVar(CCVars.CultureLocale));
             var fallbackCulture = new CultureInfo("en-US"); // Corvax-Localization
 
             _loc.LoadCulture(culture);
@@ -70,7 +71,7 @@ namespace Content.Shared.Localizations
         {
             var number = ((LocValueNumber) args.Args[0]).Value * 100;
             var maxDecimals = (int)Math.Floor(((LocValueNumber) args.Args[1]).Value);
-            var formatter = (NumberFormatInfo)NumberFormatInfo.GetInstance(CultureInfo.GetCultureInfo(Culture)).Clone();
+            var formatter = (NumberFormatInfo)NumberFormatInfo.GetInstance(CultureInfo.GetCultureInfo(_cfg.GetCVar(CCVars.CultureLocale))).Clone();
             formatter.NumberDecimalDigits = maxDecimals;
             return new LocValueString(string.Format(formatter, "{0:N}", number).TrimEnd('0').TrimEnd('.') + "%");
         }
@@ -79,7 +80,7 @@ namespace Content.Shared.Localizations
         {
             var number = ((LocValueNumber) args.Args[0]).Value;
             var maxDecimals = (int)Math.Floor(((LocValueNumber) args.Args[1]).Value);
-            var formatter = (NumberFormatInfo)NumberFormatInfo.GetInstance(CultureInfo.GetCultureInfo(Culture)).Clone();
+            var formatter = (NumberFormatInfo)NumberFormatInfo.GetInstance(CultureInfo.GetCultureInfo(_cfg.GetCVar(CCVars.CultureLocale))).Clone();
             formatter.NumberDecimalDigits = maxDecimals;
             return new LocValueString(string.Format(formatter, "{0:N}", number).TrimEnd('0').TrimEnd('.'));
         }
