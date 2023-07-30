@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using Robust.Shared.Utility;
+using Robust.Shared.Configuration;
 
 namespace Content.Shared.Localizations
 {
