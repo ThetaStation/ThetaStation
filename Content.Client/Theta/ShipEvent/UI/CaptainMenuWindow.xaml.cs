@@ -59,6 +59,6 @@ public sealed partial class CaptainMenuWindow : DefaultWindow
         MemberList.Text = string.Join(';', state.Members);
         ShipName.Text = Loc.GetString(state.CurrentShipType?.Name ?? "N/A");
         PasswordEdit.Text = state.Password ?? "";
-        MaxMembersEdit.Value = state.MaxMembers == int.MaxValue ? 0 : state.MaxMembers;
+        MaxMembersEdit.Value = state.MaxMembers;
     }
 }

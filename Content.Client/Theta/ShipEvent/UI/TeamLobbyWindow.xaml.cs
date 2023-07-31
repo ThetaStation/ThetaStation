@@ -69,7 +69,7 @@ public sealed partial class TeamLobbyWindow : DefaultWindow
                 Text = teamState.Captain,
             });
 
-            var maximumPlayersStr = teamState.MaxMembers == int.MaxValue ? "∞" : teamState.MaxMembers.ToString();
+            var maximumPlayersStr = teamState.MaxMembers == 0 ? "∞" : teamState.MaxMembers.ToString();
             TeamsContainer.AddChild(new Label
             {
                 Text = $"{teamState.Members}/{maximumPlayersStr}",
