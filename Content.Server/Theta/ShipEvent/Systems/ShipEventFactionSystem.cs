@@ -107,8 +107,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     public int PointsPerKill;
     public int OutOfBoundsPenalty; //deducted every update cycle for teams which left play area
 
-    public int PlayersPerTeamPlace;
-
     public string HUDPrototypeId = "ShipeventHUD";
     public string CaptainHUDPrototypeId = "";
 
@@ -649,7 +647,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         team.AddMember(shipEventRole);
 
         SetPlayerCharacterName(spawnedEntity, $"{GetName(spawnedEntity)} ({team.Name})");
-        
+
         SetupActions(spawnedEntity, team, session);
 
         if (EntityManager.TryGetComponent<MobHUDComponent>(spawnedEntity, out var hud))
