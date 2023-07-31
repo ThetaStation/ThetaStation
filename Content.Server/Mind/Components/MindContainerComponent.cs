@@ -58,11 +58,14 @@ namespace Content.Server.Mind.Components
     {
         public EntityUid? OldEntity;
         public EntityUid? NewEntity;
+        public Mind Mind;
         public MindContainerComponent? NewComponent;
 
-        public MindTransferredMessage(EntityUid? oldEnt, EntityUid? newEnt, MindContainerComponent? newComp)
+        public MindTransferredMessage(EntityUid? oldEnt, EntityUid? newEnt, Mind mind, MindContainerComponent? newComp)
         {
             NewEntity = newEnt;
+            OldEntity = oldEnt;
+            Mind = mind;
             NewComponent = newComp;
         }
     }

@@ -2,16 +2,15 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using Robust.Shared.Utility;
+using Robust.Shared.Configuration;
+using Content.Shared.CCVar;
 
 namespace Content.Shared.Localizations
 {
     public sealed class ContentLocalizationManager
     {
         [Dependency] private readonly ILocalizationManager _loc = default!;
-
-        // If you want to change your codebase's language, do it here.
-        private const string Culture = "ru-RU"; // Corvax-Localization
-        private const string FallbackCulture = "en-US"; // Corvax-Localization
+        [Dependency] private readonly IConfigurationManager _cfg = default!;
 
         /// <summary>
         /// Custom format strings used for parsing and displaying minutes:seconds timespans.
@@ -26,8 +25,9 @@ namespace Content.Shared.Localizations
 
         public void Initialize()
         {
+            var Culture = _cfg.GetCVar(CCVars.CultureLocale);
             var culture = new CultureInfo(Culture);
-            var fallbackCulture = new CultureInfo(FallbackCulture); // Corvax-Localization
+            var fallbackCulture = new CultureInfo(Culture == "en-US" ? "ru-RU" : "en-US"); // Corvax-Localization
 
             _loc.LoadCulture(culture);
             _loc.LoadCulture(fallbackCulture); // Corvax-Localization
@@ -72,7 +72,7 @@ namespace Content.Shared.Localizations
         {
             var number = ((LocValueNumber) args.Args[0]).Value * 100;
             var maxDecimals = (int)Math.Floor(((LocValueNumber) args.Args[1]).Value);
-            var formatter = (NumberFormatInfo)NumberFormatInfo.GetInstance(CultureInfo.GetCultureInfo(Culture)).Clone();
+            var formatter = (NumberFormatInfo)NumberFormatInfo.GetInstance(CultureInfo.GetCultureInfo(_cfg.GetCVar(CCVars.CultureLocale))).Clone();
             formatter.NumberDecimalDigits = maxDecimals;
             return new LocValueString(string.Format(formatter, "{0:N}", number).TrimEnd('0').TrimEnd('.') + "%");
         }
@@ -81,7 +81,7 @@ namespace Content.Shared.Localizations
         {
             var number = ((LocValueNumber) args.Args[0]).Value;
             var maxDecimals = (int)Math.Floor(((LocValueNumber) args.Args[1]).Value);
-            var formatter = (NumberFormatInfo)NumberFormatInfo.GetInstance(CultureInfo.GetCultureInfo(Culture)).Clone();
+            var formatter = (NumberFormatInfo)NumberFormatInfo.GetInstance(CultureInfo.GetCultureInfo(_cfg.GetCVar(CCVars.CultureLocale))).Clone();
             formatter.NumberDecimalDigits = maxDecimals;
             return new LocValueString(string.Format(formatter, "{0:N}", number).TrimEnd('0').TrimEnd('.'));
         }
