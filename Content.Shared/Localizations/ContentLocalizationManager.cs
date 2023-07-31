@@ -28,8 +28,6 @@ namespace Content.Shared.Localizations
 
         public void Initialize()
         {
-            _cfg.OnValueChanged(CCVars.CultureLocale, OnChangeLocalization);
-
             var defaultCultureName = _cfg.GetCVar(CCVars.CultureLocale);
             var culture = new CultureInfo(defaultCultureName);
             _loc.LoadCulture(culture);
@@ -55,6 +53,8 @@ namespace Content.Shared.Localizations
 
             _loc.AddFunction(cultureEn, "MAKEPLURAL", FormatMakePlural);
             _loc.AddFunction(cultureEn, "MANY", FormatMany);
+
+            _cfg.OnValueChanged(CCVars.CultureLocale, OnChangeLocalization, true);
         }
 
         public void OnChangeLocalization(string newLocal)
