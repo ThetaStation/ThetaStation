@@ -8,6 +8,9 @@ namespace Content.Shared.Theta.ShipEvent.Components;
 public sealed partial class CircularShieldComponent : Component
 {
     [AutoNetworkedField, ViewVariables(VVAccess.ReadWrite)]
+    public EntityUid? BoundConsole;
+    
+    [AutoNetworkedField, ViewVariables(VVAccess.ReadWrite)]
     public bool Enabled;
 
     [AutoNetworkedField, ViewVariables(VVAccess.ReadWrite)]
@@ -16,8 +19,9 @@ public sealed partial class CircularShieldComponent : Component
     [DataField("consumptionPerM2"), ViewVariables(VVAccess.ReadWrite)]
     public float ConsumptionPerSquareMeter;
 
+    //specified in degrees, for prototypes
     [DataField("maxWidth"), ViewVariables(VVAccess.ReadWrite)]
-    public int MaxWidth;
+    public int MaxWidth = 360;
     
     [DataField("maxRadius"), ViewVariables(VVAccess.ReadWrite)]
     public int MaxRadius;
@@ -53,7 +57,7 @@ public abstract class CircularShieldEffect
 }
 
 [RegisterComponent, AutoGenerateComponentState]
-public sealed class CircularShieldConsoleComponent : Component
+public sealed partial class CircularShieldConsoleComponent : Component
 {
     [AutoNetworkedField, ViewVariables(VVAccess.ReadWrite)]
     public EntityUid? BoundShield;
@@ -63,7 +67,7 @@ public sealed class CircularShieldConsoleComponent : Component
 public sealed class CircularShieldChangeParametersMessage : BoundUserInterfaceMessage
 {
     public bool Enabled;
-
+    
     public Angle Angle;
 
     public Angle Width;
@@ -72,7 +76,6 @@ public sealed class CircularShieldChangeParametersMessage : BoundUserInterfaceMe
 
     public CircularShieldChangeParametersMessage(bool enabled, Angle angle, Angle width, int radius)
     {
-        Enabled = enabled;
         Angle = angle;
         Width = width;
         Radius = radius;

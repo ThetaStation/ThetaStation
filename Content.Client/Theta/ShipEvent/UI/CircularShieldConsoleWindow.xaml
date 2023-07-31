@@ -1,0 +1,22 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+               xmlns:radarSetups="clr-namespace:Content.Client.Theta.ModularRadar.RadarSetups"
+               Title="{Loc 'shipevent-shieldconsole-windowtitle'}"
+               MinSize="600 300"
+               SetSize="300 300">
+    <BoxContainer Orientation="Horizontal">
+        <radarSetups:CircularShieldModularRadar
+            Name="RadarScreen"
+            MouseFilter="Stop"
+            Margin="4"
+            HorizontalExpand="True"
+            VerticalExpand="True" />
+        <BoxContainer Orientation="Vertical">
+            <Button Name="ShieldEnableButton" Text="{Loc 'shipevent-shieldconsole-enablebutton'}" />
+            <Label Name="ShieldPowerStatusLabel" Text="N/A" />
+            <Label Name="ShieldPowerDrawLabel" Text="N/A" />
+            <SliderIntInput Name="ShieldAngleSlider" HorizontalExpand="True" />
+            <SliderIntInput Name="ShieldWidthSlider" HorizontalExpand="True" />
+            <SliderIntInput Name="ShieldRadiusSlider" HorizontalExpand="True" />
+        </BoxContainer>
+    </BoxContainer>
+</DefaultWindow>

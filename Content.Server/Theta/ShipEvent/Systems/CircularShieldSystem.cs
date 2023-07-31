@@ -2,6 +2,7 @@ using System.Numerics;
 using Content.Server.Power.Components;
 using Content.Shared.Physics;
 using Content.Shared.Theta.ShipEvent.Components;
+using Content.Shared.Theta.ShipEvent.UI;
 using Robust.Server.GameObjects;
 using Robust.Shared.Physics.Collision.Shapes;
 using Robust.Shared.Physics.Dynamics;
@@ -15,17 +16,44 @@ public sealed class CircularShieldSystem : EntitySystem
 {
     [Dependency] public readonly PhysicsSystem physSys = default!;
     [Dependency] public readonly FixtureSystem fixSys = default!;
+    [Dependency] public readonly UserInterfaceSystem uiSys = default!;
 
     private const string ShieldFixtureId = "ShieldFixture";
     
     public override void Initialize()
     {
         base.Initialize();
+        
         SubscribeLocalEvent<CircularShieldConsoleComponent, CircularShieldChangeParametersMessage>(OnShieldChangeParams);
+        SubscribeLocalEvent<CircularShieldConsoleComponent, CircularShieldConsoleInfoRequest>(OnConsoleInfoRequest);
+
         SubscribeLocalEvent<CircularShieldComponent, ComponentInit>(OnShieldInit);
-        SubscribeLocalEvent<CircularShieldComponent, PowerChangedEvent>((uid, shield, args) => shield.Powered = args.Powered);
+        SubscribeLocalEvent<CircularShieldComponent, PowerChangedEvent>(OnShieldPowerChanged);
         SubscribeLocalEvent<CircularShieldComponent, StartCollideEvent>(OnShieldFixtureEnter);
         SubscribeLocalEvent<CircularShieldComponent, EndCollideEvent>(OnShieldFixtureExit);
+    }
+
+    private void OnConsoleInfoRequest(EntityUid uid, CircularShieldConsoleComponent console, CircularShieldConsoleInfoRequest args)
+    {
+        SendShieldConsoleUpdates(uid);
+    }
+
+    private void SendShieldConsoleUpdates(EntityUid uid)
+    {
+        if (!TryComp(uid, out CircularShieldConsoleComponent? console) || console.BoundShield == null)
+            return;
+
+        if (!TryComp(console.BoundShield, out CircularShieldComponent? shield))
+            return;
+
+        uiSys.TrySetUiState(uid, CircularShieldConsoleUiKey.Key, new CircularShieldConsoleWindowBoundsUserInterfaceState(
+            shield.Enabled,
+            shield.Powered,
+            (int)shield.Angle.Degrees,
+            (int)shield.Width.Degrees,
+            shield.MaxWidth,
+            shield.Radius,
+            shield.MaxRadius));
     }
 
     private void OnShieldChangeParams(EntityUid uid, CircularShieldConsoleComponent console, CircularShieldChangeParametersMessage args)
@@ -36,12 +64,13 @@ public sealed class CircularShieldSystem : EntitySystem
         if (!TryComp(console.BoundShield, out CircularShieldComponent? shield))
             return;
 
-        if (args.Radius > shield.MaxRadius || args.Width > shield.MaxWidth)
+        if (args.Radius > shield.MaxRadius || args.Width.Degrees > shield.MaxWidth)
             return;
 
         shield.Enabled = args.Enabled;
-        shield.Radius = args.Radius;
+        shield.Angle = args.Angle;
         shield.Width = args.Width;
+        shield.Radius = args.Radius;
         UpdateShieldFixture(uid, shield);
 
         if (TryComp<ApcPowerReceiverComponent>(uid, out ApcPowerReceiverComponent? receiver))
@@ -54,13 +83,22 @@ public sealed class CircularShieldSystem : EntitySystem
                 shield.Powered = false;
         }
     }
-    
+
     private void OnShieldInit(EntityUid uid, CircularShieldComponent shield, ComponentInit args)
     {
         foreach (CircularShieldEffect effect in shield.Effects)
         {
             effect.OnShieldInit(uid, shield);
         }
+    }
+
+    private void OnShieldPowerChanged(EntityUid uid, CircularShieldComponent shield, ref PowerChangedEvent args)
+    {
+        shield.Powered = args.Powered;
+        
+        if (shield.BoundConsole == null)
+            return;
+        SendShieldConsoleUpdates(shield.BoundConsole.Value);
     }
     
     private void OnShieldFixtureEnter(EntityUid uid, CircularShieldComponent shield, ref StartCollideEvent args)
