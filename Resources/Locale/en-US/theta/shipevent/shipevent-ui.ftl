@@ -34,13 +34,11 @@ shipevent-teamcreation-windowtitle = TEAM CREATION
 
 shipevent-teamcreation-response-invalidname = This name is already taken/too long/too short/unavailable for some other reason.
 shipevent-teamcreation-response-invalidcolor = This color is already taken/unavailable for some other reason.
-shipevent-teamcreation-response-blacklistself = Why are you trying to blacklist yourself?
 shipevent-teamcreation-response-waitpls = Team creation request was received, PLEASE WAIT.
 
 shipevent-teamcreation-name = Team name:
 shipevent-teamcreation-color = Team color (hex):
 shipevent-teamcreation-ship = Initial ship:
-shipevent-teamcreation-blacklist = Blacklist (ckeys separated with commas):
 shipevent-teamcreation-maxmembers = Max. Members (0 is ∞):
 shipevent-teamcreation-password = Password:
 shipevent-teamcreation-creationbutton = CREATE TEAM
@@ -70,7 +68,6 @@ shipevent-capmenu-shippickerbutton = PICK SHIP
 
 shipevent-capmenu-membermanagement = Member management:
 shipevent-capmenu-memberlist = Members:
-shipevent-capmenu-blacklistbutton = CHANGE BLACKLIST
 shipevent-capmenu-kickbutton = KICK MEMBER
 shipevent-capmenu-setpassword = SET PASSWORD
 shipevent-capmenu-setmaxcrew = SET CREW

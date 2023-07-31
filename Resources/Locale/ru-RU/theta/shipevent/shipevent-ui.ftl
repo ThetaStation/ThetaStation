@@ -34,13 +34,11 @@ shipevent-teamcreation-windowtitle = СОЗДАНИЕ КОМАНДЫ
 
 shipevent-teamcreation-response-invalidname = Данное название уже занято/слишком длинное/слишком короткое/недоступно по иной причине.
 shipevent-teamcreation-response-invalidcolor = Данный цвет уже занят/недоступен по другой причине.
-shipevent-teamcreation-response-blacklistself = Зачем вы пытаетесь добавить себя же в блеклист?
 shipevent-teamcreation-response-waitpls = Запрос на создание команды получен, ПОЖАЛУЙСТА ОЖИДАЙТЕ.
 
 shipevent-teamcreation-name = Имя команды:
 shipevent-teamcreation-color = Цвет команды (hex):
 shipevent-teamcreation-ship = Начальный корабль:
-shipevent-teamcreation-blacklist = Блеклист (сикеи через запятую):
 shipevent-teamcreation-maxmembers = Макс. экипажа (0 - это ∞):
 shipevent-teamcreation-password = Пароль:
 shipevent-teamcreation-creationbutton = СОЗДАТЬ КОМАНДУ
@@ -70,7 +68,6 @@ shipevent-capmenu-shippickerbutton = ВЫБРАТЬ КОРАБЛЬ
 
 shipevent-capmenu-membermanagement = Управление членами команды:
 shipevent-capmenu-memberlist = Члены команды:
-shipevent-capmenu-blacklistbutton = ИЗМЕНИТЬ ЧС
 shipevent-capmenu-kickbutton = ВЫГНАТЬ ЧЛЕНА
 shipevent-capmenu-setpassword = УСТАНОВИТЬ ПАРОЛЬ
 shipevent-capmenu-setmaxcrew = УСТАНОВИТЬ МАКСИМУМ

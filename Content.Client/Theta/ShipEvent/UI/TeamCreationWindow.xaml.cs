@@ -23,8 +23,6 @@ public sealed partial class TeamCreationWindow : DefaultWindow
 
     public Color TeamColor => ColorEdit.Color;
 
-    public string Blacklist => BlacklistEdit.Text;
-
     public ShipTypePrototype? ShipType => ShipPicker.Selection;
 
     public TeamCreationWindow()

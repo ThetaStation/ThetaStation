@@ -85,20 +85,7 @@ public sealed class TeamConsoleSystem : EntitySystem
 
         color = args.Color;
 
-        List<string> blacklist = new();
-        if (!string.IsNullOrEmpty(args.Blacklist))
-        {
-            blacklist = args.Blacklist.Split(",").ToList();
-            blacklist = blacklist.Select(ckey => ckey.Trim()).ToList();
-        }
-
-        if (blacklist.Contains(args.Session.ConnectedClient.UserName))
-        {
-            SendResponse(uid, args.UiKey, ResponseTypes.BlacklistedSelf);
-            return;
-        }
-
-        _shipSys.CreateTeam(args.Session, args.Name, color, args.ShipType, blacklist, args.Password, args.MaxPlayers);
+        _shipSys.CreateTeam(args.Session, args.Name, color, args.ShipType, args.Password, args.MaxPlayers);
     }
 
     private void SendResponse(EntityUid uid, Enum uiKey, ResponseTypes response)
@@ -111,9 +98,6 @@ public sealed class TeamConsoleSystem : EntitySystem
                 break;
             case ResponseTypes.InvalidColor:
                 text = "shipevent-teamcreation-response-invalidcolor";
-                break;
-            case ResponseTypes.BlacklistedSelf:
-                text = "shipevent-teamcreation-response-blacklistself";
                 break;
             case ResponseTypes.SettingUp:
                 text = "shipevent-teamcreation-response-waitpls";
@@ -128,7 +112,6 @@ public sealed class TeamConsoleSystem : EntitySystem
     {
         InvalidName,
         InvalidColor,
-        BlacklistedSelf,
         SettingUp
     }
 }

@@ -18,10 +18,6 @@
                 <Label Name="MemberList" Text="N/A" />
             </BoxContainer>
             <BoxContainer Orientation="Horizontal" SeparationOverride="4">
-                <LineEdit Name="BlackListEdit" MinWidth="200" />
-                <Button Name="BlackListButton" Text="{Loc 'shipevent-capmenu-blacklistbutton'}" />
-            </BoxContainer>
-            <BoxContainer Orientation="Horizontal" SeparationOverride="4">
                 <LineEdit Name="KickCKeyEdit" MinWidth="200" />
                 <Button Name="KickButton" Text="{Loc 'shipevent-capmenu-kickbutton'}" />
             </BoxContainer>

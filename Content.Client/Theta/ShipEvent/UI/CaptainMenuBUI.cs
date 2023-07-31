@@ -24,11 +24,6 @@ public sealed class CaptainMenuBoundUserInterface : BoundUserInterface
         {
             SendMessage(new GetShipPickerInfoMessage());
         };
-        _window.BlackListButtonPressed += _ =>
-        {
-            List<string> blacklist = _window.BlacklistText.Split(",").ToList();
-            SendMessage(new ShipEventCaptainMenuChangeBlacklistMessage(blacklist));
-        };
         _window.KickButtonPressed += _ =>
         {
             SendMessage(new ShipEventCaptainMenuKickMemberMessage(_window.KickCKey));

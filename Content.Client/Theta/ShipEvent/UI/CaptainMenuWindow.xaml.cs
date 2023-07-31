@@ -13,12 +13,10 @@ public sealed partial class CaptainMenuWindow : DefaultWindow
     public ShipPickerWindow shipPicker = default!;
 
     public event Action<BaseButton.ButtonEventArgs>? ShipPickerButtonPressed;
-    public event Action<BaseButton.ButtonEventArgs>? BlackListButtonPressed;
     public event Action<BaseButton.ButtonEventArgs>? KickButtonPressed;
     public event Action<BaseButton.ButtonEventArgs>? SetMaxMembersButtonPressed;
     public event Action<BaseButton.ButtonEventArgs>? SetPasswordButtonPressed;
 
-    public string BlacklistText => BlackListEdit.Text;
     public string KickCKey => KickCKeyEdit.Text;
     public string Password => PasswordEdit.Text;
     public int MaxMembers => MaxMembersEdit.Value;
@@ -35,10 +33,6 @@ public sealed partial class CaptainMenuWindow : DefaultWindow
         {
             shipPicker.OpenCentered();
             ShipPickerButtonPressed?.Invoke(_);
-        };
-        BlackListButton.OnPressed += _ =>
-        {
-            BlackListButtonPressed?.Invoke(_);
         };
         KickButton.OnPressed += _ =>
         {

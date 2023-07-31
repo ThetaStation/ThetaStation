@@ -47,7 +47,6 @@ public sealed class ShipEventLobbyBoundUserInterface : BoundUserInterface
             SendMessage(new TeamCreationRequest(
                 _teamCreation.TeamName,
                 _teamCreation.TeamColor,
-                _teamCreation.Blacklist,
                 _teamCreation.ShipType,
                 password,
                 _teamCreation.MaxMembers));

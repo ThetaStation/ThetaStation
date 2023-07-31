@@ -23,12 +23,6 @@
         <Button Name="ShipPickerButton"
                 Text="{Loc 'shipevent-teamcreation-shippickerbutton'}" />
 
-        <Label Name="BlacklistLabel"
-               Text="{Loc 'shipevent-teamcreation-blacklist'}" />
-        <Control MinSize="0 10" />
-        <LineEdit Name="BlacklistEdit"
-                  HorizontalExpand="True" />
-
         <BoxContainer Orientation="Horizontal">
             <Label Name="MaxMembersLabel"
                    Text="{Loc 'shipevent-teamcreation-maxmembers'}" />

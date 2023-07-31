@@ -486,7 +486,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// Does everything needed to create a new team, from faction creation to ship spawning.
     /// </summary>
     public void CreateTeam(ICommonSession captainSession, string name, Color color, ShipTypePrototype? initialShipType,
-        List<string>? blacklist, string? password, int maxMembers)
+        string? password, int maxMembers)
     {
         if (!RuleSelected)
             return;
@@ -506,7 +506,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         if (!spawners.Any())
             return;
 
-        var team = RegisterTeam(captainSession.ConnectedClient.UserName, name, color, blacklist);
+        var team = RegisterTeam(captainSession.ConnectedClient.UserName, name, color);
         team.ChosenShipType = shipType;
         team.Ship = newShip;
         team.JoinPassword = password;
@@ -549,15 +549,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         {
             _chatSys.SendSimpleMessage(Loc.GetString("shipevent-memberlimit"), player);
             return;
-        }
-
-        if (targetTeam.Blacklist != null)
-        {
-            if (targetTeam.Blacklist.Contains(player.ConnectedClient.UserName))
-            {
-                _chatSys.SendSimpleMessage(Loc.GetString("shipevent-blacklist"), player);
-                return;
-            }
         }
 
         if (shipUid == EntityUid.Invalid)
@@ -686,7 +677,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// <summary>
     /// Creates new faction with all the specified data. Does not spawn ship, if you want to put new team in game right away use CreateTeam
     /// </summary>
-    private ShipEventFaction RegisterTeam(string captain, string name, Color color, List<string>? blacklist = null, bool announce = true)
+    private ShipEventFaction RegisterTeam(string captain, string name, Color color, bool announce = true)
     {
         var teamName = IsValidName(name) ? name : GenerateTeamName();
         var teamColor = IsValidColor(color) ? color : GenerateTeamColor();
@@ -695,8 +686,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             teamName,
             "",
             teamColor,
-            captain,
-            blacklist: blacklist);
+            captain);
 
 
         Teams.Add(team);

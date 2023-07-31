@@ -20,7 +20,6 @@ namespace Content.Server.Theta.ShipEvent.Systems;
 
 public sealed class ShipEventFaction : PlayerFaction
 {
-    public List<string>? Blacklist; //black list for ckeys
     public string Captain; //ckey
 
     public Color Color;
@@ -52,12 +51,11 @@ public sealed class ShipEventFaction : PlayerFaction
     public int MaxMembers { get; set; }
 
     public ShipEventFaction(string name, string iconPath, Color color, string captain,
-        int points = 0, List<string>? blacklist = null) : base(name, iconPath)
+        int points = 0) : base(name, iconPath)
     {
         Color = color;
         Captain = captain;
         Points = points;
-        Blacklist = blacklist;
     }
 }
 

@@ -9,7 +9,6 @@ public partial class ShipEventFactionSystem
     {
         SubscribeAllEvent<ShipEventCaptainMenuRequestInfoMessage>(OnCapMenuInfoRequest);
         SubscribeAllEvent<ShipEventCaptainMenuChangeShipMessage>(OnShipChangeRequest);
-        SubscribeAllEvent<ShipEventCaptainMenuChangeBlacklistMessage>(OnBlacklistChangeRequest);
         SubscribeAllEvent<ShipEventCaptainMenuKickMemberMessage>(OnKickMemberRequest);
         SubscribeAllEvent<ShipEventCaptainMenuSetPasswordMessage>(OnSetNewPassword);
         SubscribeAllEvent<ShipEventCaptainMenuSetMaxMembersMessage>(OnSetNewMaxMembers);
@@ -49,18 +48,6 @@ public partial class ShipEventFactionSystem
                 var shipName = team.ChosenShipType.Name;
                 TeamMessage(team, Loc.GetString("shipevent-team-ship-changed", ("name", Loc.GetString(shipName))),
                     color:  team.Color);
-                break;
-            }
-        }
-    }
-
-    private void OnBlacklistChangeRequest(ShipEventCaptainMenuChangeBlacklistMessage msg)
-    {
-        foreach (var team in Teams)
-        {
-            if (team.Captain == msg.Session.ConnectedClient.UserName)
-            {
-                team.Blacklist = msg.NewBlacklist;
                 break;
             }
         }

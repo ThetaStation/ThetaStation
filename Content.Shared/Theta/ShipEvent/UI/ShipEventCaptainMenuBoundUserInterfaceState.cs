@@ -34,17 +34,6 @@ public sealed class ShipEventCaptainMenuChangeShipMessage : BoundUserInterfaceMe
 }
 
 [Serializable, NetSerializable]
-public sealed class ShipEventCaptainMenuChangeBlacklistMessage : BoundUserInterfaceMessage
-{
-    public List<string> NewBlacklist;
-
-    public ShipEventCaptainMenuChangeBlacklistMessage(List<string> newBlacklist)
-    {
-        NewBlacklist = newBlacklist;
-    }
-}
-
-[Serializable, NetSerializable]
 public sealed class ShipEventCaptainMenuKickMemberMessage : BoundUserInterfaceMessage
 {
     public string CKey;
