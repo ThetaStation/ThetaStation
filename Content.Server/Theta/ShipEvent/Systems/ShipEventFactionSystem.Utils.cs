@@ -59,9 +59,9 @@ public sealed partial class ShipEventFactionSystem
 
     private const int minimalColorDelta = 100;
 
-    private void Announce(string message)
+    private void Announce(string message, bool playSound = true)
     {
-        _chatSys.DispatchGlobalAnnouncement(message, Loc.GetString("shipevent-announcement-title"));
+        _chatSys.DispatchGlobalAnnouncement(message, Loc.GetString("shipevent-announcement-title"), playSound);
     }
 
     /// <summary>
@@ -144,7 +144,7 @@ public sealed partial class ShipEventFactionSystem
             if (transform.GridUid != gridUid)
                 continue;
 
-            if(myTeam == null || myTeam != marker.Team)
+            if (myTeam == null || myTeam != marker.Team)
                 DetachEntityFromGrid(uid, transform);
         }
     }
@@ -307,7 +307,7 @@ public sealed partial class ShipEventFactionSystem
         _mindTrack.ClearMindSet();
         foreach (var mind in EntityManager.EntityQuery<MindContainerComponent>())
         {
-            if(mind.HasMind)
+            if (mind.HasMind)
                 _mindTrack.AddMind(mind.Mind!);
         }
     }

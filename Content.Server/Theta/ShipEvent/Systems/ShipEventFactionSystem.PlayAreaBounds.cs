@@ -59,7 +59,6 @@ public sealed partial class ShipEventFactionSystem
 
     private void CompressBounds()
     {
-        Announce(Loc.GetString("shipevent-boundscompressed", ("distance", BoundsCompressionDistance)));
         CurrentBoundsOffset = Math.Min(MaxSpawnOffset / 2, CurrentBoundsOffset + BoundsCompressionDistance);
         UpdateBoundsOverlay();
     }

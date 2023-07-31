@@ -10,10 +10,7 @@ shipevent-announcement-title = NanoTrasen Fleet Command
 
 shipevent-eventannouncement = Station has plunged into chaos after NT began testing their light battle ships nearby
 
-shipevent-team-add = A new team '{ $teamname }' has entered the competition!
-shipevent-team-remove = The team '{ $teamname }' (ship name- '{ $shipname }') has withdrawn from the competition because of { $removereason }
 shipevent-team-respawn = The team '{ $teamname }' (ship name - '{ $shipname }') was temporarily withdrawn from the competition due to { $respawnreason }. Expected time before they return: { $respawntime } minute(s).
-shipevent-team-shiprename = The team '{ $teamname }' has changed their ship name from '{ $oldname }' to '{ $newname }'
 shipevent-team-captainchange = Captain { $oldcap } has been replaced by { $newcap }. Long live the new captain!
 shipevent-team-respawnnow = Team respawn is in progress...
 shipevent-team-bonusinterval = The team has survived without respawning for { $time } minutes, thus they receive { $points } points!
@@ -28,13 +25,11 @@ shipevent-remove-default = the admiral's dissapointment
 shipevent-remove-noplayers = the absence of activity
 
 shipevent-outofbounds = WARNING! Your team has left test polygon's area. Return immediately, otherwise disciplinary measures will be applied.
-shipevent-boundscompressed = Test area bounds were compressed by { $distance } meters.
 
 shipevent-roundendtimer-tenmins = Ten minutes left until round end, raise those scores!
 shipevent-roundendtimer-fivemins = Five mins left until round end, destroy some ships asap.
 shipevent-roundendtimer-onemin = Round will end very soon...
 
-shipevent-lootboxspawned = New stashes are already on field. Go get them!
 shipevent-pointsadded = Team received { $points } points, rejoice!
 
 

@@ -89,11 +89,8 @@ public sealed partial class ShipEventFactionSystem
         EntityManager.DeleteEntity(lootboxUid);
     }
 
-    private void SpawnLootboxes(int amount, bool announce = true)
+    private void SpawnLootboxes(int amount)
     {
-        if (announce)
-            Announce(Loc.GetString("shipevent-lootboxspawned"));
-
         for (int i = 0; i < amount; i++)
         {
             EntityUid lootbox = _debrisSys.RandomPosSpawn(TargetMap, Vector2.Zero, MaxSpawnOffset, 50, _random.Pick(LootboxPrototypes), LootboxProcessors);
