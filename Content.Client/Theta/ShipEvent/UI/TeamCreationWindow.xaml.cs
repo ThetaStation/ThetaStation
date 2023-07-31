@@ -17,6 +17,10 @@ public sealed partial class TeamCreationWindow : DefaultWindow
 
     public string TeamName => NameEdit.Text;
 
+    public string Password => PasswordEdit.Text;
+
+    public int MaxMembers => MaxMembersEdit.Value;
+
     public Color TeamColor => ColorEdit.Color;
 
     public string Blacklist => BlacklistEdit.Text;
@@ -36,6 +40,9 @@ public sealed partial class TeamCreationWindow : DefaultWindow
         };
         ShipPicker.OnSelectionMade += SetChosenShipLabel;
         SetChosenShipLabel();
+
+        MaxMembersEdit.IsValid = value => value >= 0 && value <= 100;
+        MaxMembersEdit.InitDefaultButtons();
     }
 
     private void SetChosenShipLabel(ShipTypePrototype? _ = null)

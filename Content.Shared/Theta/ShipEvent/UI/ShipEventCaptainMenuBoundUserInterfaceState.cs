@@ -7,11 +7,15 @@ public sealed class ShipEventCaptainMenuBoundUserInterfaceState : BoundUserInter
 {
     public ShipTypePrototype? CurrentShipType;
     public List<string> Members;
+    public string? Password;
+    public int MaxMembers;
 
-    public ShipEventCaptainMenuBoundUserInterfaceState(List<string> members, ShipTypePrototype? currentShipType)
+    public ShipEventCaptainMenuBoundUserInterfaceState(List<string> members, ShipTypePrototype? currentShipType, string? password, int maxMembers)
     {
         Members = members;
         CurrentShipType = currentShipType;
+        Password = password;
+        MaxMembers = maxMembers;
     }
 }
 
@@ -48,6 +52,28 @@ public sealed class ShipEventCaptainMenuKickMemberMessage : BoundUserInterfaceMe
     public ShipEventCaptainMenuKickMemberMessage(string ckey)
     {
         CKey = ckey;
+    }
+}
+
+[Serializable, NetSerializable]
+public sealed class ShipEventCaptainMenuSetPasswordMessage : BoundUserInterfaceMessage
+{
+    public string? Password;
+
+    public ShipEventCaptainMenuSetPasswordMessage(string? password)
+    {
+        Password = password;
+    }
+}
+
+[Serializable, NetSerializable]
+public sealed class ShipEventCaptainMenuSetMaxMembersMessage : BoundUserInterfaceMessage
+{
+    public int MaxMembers;
+
+    public ShipEventCaptainMenuSetMaxMembersMessage(int maxMembers)
+    {
+        MaxMembers = maxMembers;
     }
 }
 

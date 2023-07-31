@@ -39,6 +39,20 @@ public sealed class ShipEventFaction : PlayerFaction
 
     public int LastBonusInterval; //how much times this team has acquired bonus points for surviving bonus interval
 
+    private string? _password;
+    public string? JoinPassword
+    {
+        get => _password;
+        set => _password = _password != "" ? value : null;
+    }
+
+    private int _maxMembers = int.MaxValue;
+    public int MaxMembers
+    {
+        get => _maxMembers;
+        set => _maxMembers = value == 0 ? int.MaxValue : value;
+    }
+
     public ShipEventFaction(string name, string iconPath, Color color, string captain,
         int points = 0, List<string>? blacklist = null) : base(name, iconPath)
     {

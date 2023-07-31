@@ -12,7 +12,7 @@ public sealed partial class TeamLobbyWindow : DefaultWindow
 {
     public event Action<BaseButton.ButtonEventArgs>? CreateTeamButtonPressed;
     public event Action<BaseButton.ButtonEventArgs>? RefreshButtonPressed;
-    public event Action<string>? JoinButtonPressed;
+    public event Action<string, bool>? JoinButtonPressed;
 
     public TeamLobbyWindow()
     {
@@ -49,6 +49,12 @@ public sealed partial class TeamLobbyWindow : DefaultWindow
             HorizontalAlignment = HAlignment.Right,
         });
 
+        TeamsContainer.AddChild(new Label
+        {
+            Text = Loc.GetString("shipevent-lobby-password"),
+            HorizontalAlignment = HAlignment.Right,
+        });
+
         TeamsContainer.AddChild(new Control());
 
         foreach (var teamState in msg.Teams)
@@ -63,9 +69,16 @@ public sealed partial class TeamLobbyWindow : DefaultWindow
                 Text = teamState.Captain,
             });
 
+            var maximumPlayersStr = teamState.MaxMembers == int.MaxValue ? "∞" : teamState.MaxMembers.ToString();
             TeamsContainer.AddChild(new Label
             {
-                Text = teamState.Members.ToString(),
+                Text = $"{teamState.Members}/{maximumPlayersStr}",
+                HorizontalAlignment = HAlignment.Right,
+            });
+
+            TeamsContainer.AddChild(new Label
+            {
+                Text = teamState.HasPassword ? "*****" : "",
                 HorizontalAlignment = HAlignment.Right,
             });
 
@@ -76,7 +89,7 @@ public sealed partial class TeamLobbyWindow : DefaultWindow
 
             button.OnPressed += _ =>
             {
-                JoinButtonPressed?.Invoke(teamState.Name);
+                JoinButtonPressed?.Invoke(teamState.Name, teamState.HasPassword);
             };
 
             TeamsContainer.AddChild(button);

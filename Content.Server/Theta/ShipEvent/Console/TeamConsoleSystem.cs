@@ -35,7 +35,7 @@ public sealed class TeamConsoleSystem : EntitySystem
 
     private void TryJoinToShipTeam(EntityUid uid, TeamConsoleComponent component, JoinToShipTeamsEvent args)
     {
-        _shipSys.JoinTeam((IPlayerSession) args.Session, args.Name);
+        _shipSys.JoinTeam((IPlayerSession) args.Session, args.Name, args.Password);
     }
 
     private void OnRefreshTeams(EntityUid uid, TeamConsoleComponent component, RefreshShipTeamsEvent args)
@@ -58,7 +58,8 @@ public sealed class TeamConsoleSystem : EntitySystem
         List<ShipTeamForLobbyState> teamStates = new();
         foreach (var team in _shipSys.Teams)
         {
-            teamStates.Add(new ShipTeamForLobbyState(team.Name, team.Members.Count, team.Captain));
+            var hasPassword = team.JoinPassword != null;
+            teamStates.Add(new ShipTeamForLobbyState(team.Name, team.Members.Count, team.Captain, hasPassword, team.MaxMembers));
         }
 
         return teamStates;
@@ -97,7 +98,7 @@ public sealed class TeamConsoleSystem : EntitySystem
             return;
         }
 
-        _shipSys.CreateTeam(args.Session, args.Name, color, args.ShipType, blacklist);
+        _shipSys.CreateTeam(args.Session, args.Name, color, args.ShipType, blacklist, args.Password, args.MaxPlayers);
     }
 
     private void SendResponse(EntityUid uid, Enum uiKey, ResponseTypes response)

@@ -8,6 +8,7 @@ namespace Content.Client.Theta.ShipEvent.UI;
 public sealed class ShipEventLobbyBoundUserInterface : BoundUserInterface
 {
     private TeamCreationWindow? _teamCreation;
+    private EnterPasswordWindow? _enterPassword;
     private TeamLobbyWindow? _lobby;
 
     public ShipEventLobbyBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey) { }
@@ -16,6 +17,7 @@ public sealed class ShipEventLobbyBoundUserInterface : BoundUserInterface
     {
         _teamCreation = new TeamCreationWindow();
         _lobby = new TeamLobbyWindow();
+        _enterPassword = new EnterPasswordWindow();
 
         _lobby.OnClose += Close;
         _lobby.CreateTeamButtonPressed += _ =>
@@ -26,18 +28,39 @@ public sealed class ShipEventLobbyBoundUserInterface : BoundUserInterface
         {
             SendMessage(new RefreshShipTeamsEvent());
         };
-        _lobby.JoinButtonPressed += name =>
+        _lobby.JoinButtonPressed += (name, hasPassword) =>
         {
-            SendMessage(new JoinToShipTeamsEvent(name));
+            if (hasPassword)
+            {
+                _enterPassword.SaveChosenTeamName(name);
+                _enterPassword.OpenCentered();
+            }
+            else
+            {
+                SendMessage(new JoinToShipTeamsEvent(name, null));
+            }
         };
 
         _teamCreation.CreationButtonPressed += _ =>
         {
-            SendMessage(new TeamCreationRequest(_teamCreation.TeamName, _teamCreation.TeamColor, _teamCreation.Blacklist, _teamCreation.ShipType));
+            var password = _teamCreation.Password != "" ? _teamCreation.Password : null;
+            SendMessage(new TeamCreationRequest(
+                _teamCreation.TeamName,
+                _teamCreation.TeamColor,
+                _teamCreation.Blacklist,
+                _teamCreation.ShipType,
+                password,
+                _teamCreation.MaxMembers));
         };
+
         _teamCreation.ShipPickerButtonPressed += _ =>
         {
             SendMessage(new GetShipPickerInfoMessage());
+        };
+
+        _enterPassword.EnterPasswordPressed += () =>
+        {
+            SendMessage(new JoinToShipTeamsEvent(_enterPassword.ChosenTeamName, _enterPassword.Password));
         };
 
         _lobby.OpenCentered();

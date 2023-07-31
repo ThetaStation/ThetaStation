@@ -40,6 +40,15 @@ public sealed class CaptainMenuBoundUserInterface : BoundUserInterface
 
             SendMessage(new ShipEventCaptainMenuChangeShipMessage(_window.shipPicker.Selection));
         };
+        _window.SetMaxMembersButtonPressed += _ =>
+        {
+            SendMessage(new ShipEventCaptainMenuSetMaxMembersMessage(_window.MaxMembers));
+        };
+        _window.SetPasswordButtonPressed += _ =>
+        {
+            var password = _window.Password != "" ? _window.Password : null;
+            SendMessage(new ShipEventCaptainMenuSetPasswordMessage(password));
+        };
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)

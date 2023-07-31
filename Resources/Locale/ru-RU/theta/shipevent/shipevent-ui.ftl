@@ -25,6 +25,7 @@ shipevent-lobby-join = Войти
 shipevent-lobby-team = Команда
 shipevent-lobby-captain = Капитан
 shipevent-lobby-crew = Экипаж
+shipevent-lobby-password = Пароль
 
 
 ## Team console - team creation
@@ -40,6 +41,8 @@ shipevent-teamcreation-name = Имя команды:
 shipevent-teamcreation-color = Цвет команды (hex):
 shipevent-teamcreation-ship = Начальный корабль:
 shipevent-teamcreation-blacklist = Блеклист (сикеи через запятую):
+shipevent-teamcreation-maxmembers = Макс. экипажа (0 - это ∞):
+shipevent-teamcreation-password = Пароль:
 shipevent-teamcreation-creationbutton = СОЗДАТЬ КОМАНДУ
 shipevent-teamcreation-shippickerbutton = ВЫБРАТЬ КОРАБЛЬ
 
@@ -69,6 +72,8 @@ shipevent-capmenu-membermanagement = Управление членами ком�
 shipevent-capmenu-memberlist = Члены команды:
 shipevent-capmenu-blacklistbutton = ИЗМЕНИТЬ ЧС
 shipevent-capmenu-kickbutton = ВЫГНАТЬ ЧЛЕНА
+shipevent-capmenu-setpassword = УСТАНОВИТЬ ПАРОЛЬ
+shipevent-capmenu-setmaxcrew = УСТАНОВИТЬ МАКСИМУМ
 
 shipevent-capmenu-toggle-name = Управление командой
 shipevent-capmenu-toggle-desc = Меняйте корабль, кикайте участников, делайте объявления и т.д.
@@ -91,6 +96,12 @@ shipevent-turretloader-ejectcontainerbutton = ИЗВЛЕЧЬ КОНТЕЙНЕР
 shipevent-turretloader-refreshbutton = ОБНОВИТЬ UI
 
 shipevent-turretloader-ammocount-examine = Количество патронов: {$count}
+
+## Enter Password Menu
+shipevent-enter-password-windowtitle = ПАРОЛЬ
+shipevent-enter-password-enterpass = Введите пароль:
+shipevent-enter-password-enter-button = Войти
+shipevent-enter-password-cancel-button = Отмена
 
 
 ## Cannon console

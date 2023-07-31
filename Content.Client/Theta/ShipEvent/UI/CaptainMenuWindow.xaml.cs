@@ -15,14 +15,22 @@ public sealed partial class CaptainMenuWindow : DefaultWindow
     public event Action<BaseButton.ButtonEventArgs>? ShipPickerButtonPressed;
     public event Action<BaseButton.ButtonEventArgs>? BlackListButtonPressed;
     public event Action<BaseButton.ButtonEventArgs>? KickButtonPressed;
+    public event Action<BaseButton.ButtonEventArgs>? SetMaxMembersButtonPressed;
+    public event Action<BaseButton.ButtonEventArgs>? SetPasswordButtonPressed;
 
     public string BlacklistText => BlackListEdit.Text;
     public string KickCKey => KickCKeyEdit.Text;
+    public string Password => PasswordEdit.Text;
+    public int MaxMembers => MaxMembersEdit.Value;
 
     public CaptainMenuWindow()
     {
-        shipPicker = new ShipPickerWindow();
         RobustXamlLoader.Load(this);
+
+        shipPicker = new ShipPickerWindow();
+        MaxMembersEdit.IsValid = value => value >= 0 && value <= 100;
+        MaxMembersEdit.InitDefaultButtons();
+
         ShipPickerButton.OnPressed += _ =>
         {
             shipPicker.OpenCentered();
@@ -36,11 +44,21 @@ public sealed partial class CaptainMenuWindow : DefaultWindow
         {
             KickButtonPressed?.Invoke(_);
         };
+        SetMaxMembersButton.OnPressed += _ =>
+        {
+            SetMaxMembersButtonPressed?.Invoke(_);
+        };
+        SetPasswordButton.OnPressed += _ =>
+        {
+            SetPasswordButtonPressed?.Invoke(_);
+        };
     }
 
     public void UpdateState(ShipEventCaptainMenuBoundUserInterfaceState state)
     {
         MemberList.Text = string.Join(';', state.Members);
         ShipName.Text = Loc.GetString(state.CurrentShipType?.Name ?? "N/A");
+        PasswordEdit.Text = state.Password ?? "";
+        MaxMembersEdit.Value = state.MaxMembers == int.MaxValue ? 0 : state.MaxMembers;
     }
 }
