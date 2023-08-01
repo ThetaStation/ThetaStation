@@ -19,7 +19,6 @@ public abstract class ColorPalette
         _currentColorPos += 1;
         if (_currentColorPos == Palette.Count)
             _currentColorPos = 0;
-        Log.Debug(_currentColorPos.ToString());
         return color;
     }
 }
