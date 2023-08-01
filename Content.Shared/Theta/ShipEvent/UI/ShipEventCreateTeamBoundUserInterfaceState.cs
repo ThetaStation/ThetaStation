@@ -88,15 +88,13 @@ public sealed class ShipEventCreateTeamBoundUserInterfaceState : BoundUserInterf
 public sealed class TeamCreationRequest : BoundUserInterfaceMessage
 {
     public readonly string Name;
-    public readonly Color Color;
     public readonly ShipTypePrototype? ShipType;
     public readonly string? Password;
     public readonly int MaxPlayers;
 
-    public TeamCreationRequest(string name, Color color, ShipTypePrototype? shipType, string? password, int maxPlayers)
+    public TeamCreationRequest(string name, ShipTypePrototype? shipType, string? password, int maxPlayers)
     {
         Name = name;
-        Color = color;
         ShipType = shipType;
         Password = password;
         MaxPlayers = maxPlayers;

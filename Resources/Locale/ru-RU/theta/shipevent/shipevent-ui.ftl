@@ -37,7 +37,6 @@ shipevent-teamcreation-response-invalidcolor = Данный цвет уже за
 shipevent-teamcreation-response-waitpls = Запрос на создание команды получен, ПОЖАЛУЙСТА ОЖИДАЙТЕ.
 
 shipevent-teamcreation-name = Имя команды:
-shipevent-teamcreation-color = Цвет команды (hex):
 shipevent-teamcreation-ship = Начальный корабль:
 shipevent-teamcreation-maxmembers = Макс. экипажа (0 - это ∞):
 shipevent-teamcreation-password = Пароль:

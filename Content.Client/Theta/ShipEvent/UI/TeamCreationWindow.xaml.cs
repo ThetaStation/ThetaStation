@@ -21,15 +21,12 @@ public sealed partial class TeamCreationWindow : DefaultWindow
 
     public int MaxMembers => MaxMembersEdit.Value;
 
-    public Color TeamColor => ColorEdit.Color;
-
     public ShipTypePrototype? ShipType => ShipPicker.Selection;
 
     public TeamCreationWindow()
     {
         RobustXamlLoader.Load(this);
         ShipPicker = new ShipPickerWindow();
-        ColorEdit.OnColorChanged += _ => OnColorChanged(); //will runtime if no callback for this event is set
         CreationButton.OnPressed += _ => CreationButtonPressed?.Invoke(_);
         ShipPickerButton.OnPressed += _ =>
         {
@@ -49,8 +46,6 @@ public sealed partial class TeamCreationWindow : DefaultWindow
         var ship = Loc.GetString(ShipPicker.Selection?.Name ?? "N/A");
         ShipLabel.Text = $"{desc} {ship}";
     }
-
-    public void OnColorChanged() { }
 
     public void UpdateState(ShipEventCreateTeamBoundUserInterfaceState state)
     {

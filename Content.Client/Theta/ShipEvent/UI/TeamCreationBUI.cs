@@ -46,7 +46,6 @@ public sealed class ShipEventLobbyBoundUserInterface : BoundUserInterface
             var password = _teamCreation.Password != "" ? _teamCreation.Password : null;
             SendMessage(new TeamCreationRequest(
                 _teamCreation.TeamName,
-                _teamCreation.TeamColor,
                 _teamCreation.ShipType,
                 password,
                 _teamCreation.MaxMembers));

@@ -16,6 +16,8 @@ using Content.Server.Shuttles.Components;
 using Content.Server.Theta.DebrisGeneration;
 using Content.Server.Theta.DebrisGeneration.Prototypes;
 using Content.Server.Theta.MobHUD;
+using Content.Server.Theta.NiceColors;
+using Content.Server.Theta.NiceColors.ColorPalettes;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Shared.Actions.ActionTypes;
 using Content.Shared.GameTicking;
@@ -124,6 +126,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     public List<Processor> ShipProcessors = new();
     public List<Processor> LootboxProcessors = new();
+
+    public ColorPalette ColorPalette = new ShipEventPalette();
 
     public override void Initialize()
     {
@@ -485,7 +489,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// <summary>
     /// Does everything needed to create a new team, from faction creation to ship spawning.
     /// </summary>
-    public void CreateTeam(ICommonSession captainSession, string name, Color color, ShipTypePrototype? initialShipType,
+    public void CreateTeam(ICommonSession captainSession, string name, ShipTypePrototype? initialShipType,
         string? password, int maxMembers)
     {
         if (!RuleSelected)
@@ -506,6 +510,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         if (!spawners.Any())
             return;
 
+        var color = ColorPalette.GetNextColor();
         var team = RegisterTeam(captainSession.ConnectedClient.UserName, name, color);
         team.ChosenShipType = shipType;
         team.Ship = newShip;

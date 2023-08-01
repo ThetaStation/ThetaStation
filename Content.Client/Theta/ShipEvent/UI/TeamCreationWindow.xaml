@@ -1,7 +1,7 @@
 ﻿<DefaultWindow xmlns="https://spacestation14.io"
                Title="{Loc 'shipevent-teamcreation-windowtitle'}"
-               MinSize="600 600"
-               SetSize="600 600">
+               MinSize="600 350"
+               SetSize="600 350">
     <BoxContainer Orientation="Vertical" SeparationOverride="4">
         <Label Name="UserMessage" FontColorOverride="Red" Text="" />
         <Control MinSize="0 10" />
@@ -11,11 +11,6 @@
         <Control MinSize="0 10" />
         <LineEdit Name="NameEdit"
                   HorizontalExpand="True" />
-
-        <Label Name="ColorLabel"
-               Text="{Loc 'shipevent-teamcreation-color'}" />
-        <Control MinSize="0 10" />
-        <ColorSelectorSliders Name="ColorEdit" />
 
         <Label Name="ShipLabel"
                Text="{Loc 'shipevent-teamcreation-ship'}" />

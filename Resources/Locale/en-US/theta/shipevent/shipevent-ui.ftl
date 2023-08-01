@@ -37,7 +37,6 @@ shipevent-teamcreation-response-invalidcolor = This color is already taken/unava
 shipevent-teamcreation-response-waitpls = Team creation request was received, PLEASE WAIT.
 
 shipevent-teamcreation-name = Team name:
-shipevent-teamcreation-color = Team color (hex):
 shipevent-teamcreation-ship = Initial ship:
 shipevent-teamcreation-maxmembers = Max. Members (0 is ∞):
 shipevent-teamcreation-password = Password:

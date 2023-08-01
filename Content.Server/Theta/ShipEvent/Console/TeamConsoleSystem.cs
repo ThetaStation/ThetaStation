@@ -76,16 +76,7 @@ public sealed class TeamConsoleSystem : EntitySystem
             return;
         }
 
-        var color = Color.White;
-        if (!_shipSys.IsValidColor(args.Color))
-        {
-            SendResponse(uid, args.UiKey, ResponseTypes.InvalidColor);
-            return;
-        }
-
-        color = args.Color;
-
-        _shipSys.CreateTeam(args.Session, args.Name, color, args.ShipType, args.Password, args.MaxPlayers);
+        _shipSys.CreateTeam(args.Session, args.Name, args.ShipType, args.Password, args.MaxPlayers);
     }
 
     private void SendResponse(EntityUid uid, Enum uiKey, ResponseTypes response)
@@ -96,12 +87,6 @@ public sealed class TeamConsoleSystem : EntitySystem
             case ResponseTypes.InvalidName:
                 text = "shipevent-teamcreation-response-invalidname";
                 break;
-            case ResponseTypes.InvalidColor:
-                text = "shipevent-teamcreation-response-invalidcolor";
-                break;
-            case ResponseTypes.SettingUp:
-                text = "shipevent-teamcreation-response-waitpls";
-                break;
         }
 
         _uiSystem.TrySetUiState(uid, uiKey, new ShipEventCreateTeamBoundUserInterfaceState(Loc.GetString(text)));
@@ -111,7 +96,5 @@ public sealed class TeamConsoleSystem : EntitySystem
     private enum ResponseTypes
     {
         InvalidName,
-        InvalidColor,
-        SettingUp
     }
 }
