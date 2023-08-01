@@ -102,3 +102,11 @@ shipevent-cannonconsole-ammostatus = Боезапас
 
 shipevent-returntolobby-name = Вернутся в лобби
 shipevent-returntolobby-desc = Мгновенно вас респавнит, позволяя снова вернуться в лобби и выбрать команду.
+
+
+## Circular shield console
+
+shipevent-shieldconsole-windowtitle = Управление щитом
+shipevent-shieldconsole-enablebutton = Переключить щит
+shipevent-shieldconsole-powered = [color=green]Есть питание[/color]
+shipevent-shieldconsole-nopower = [color=red]Нет питания[/color]

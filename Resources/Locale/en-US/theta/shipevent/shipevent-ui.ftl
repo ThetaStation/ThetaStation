@@ -102,3 +102,11 @@ shipevent-cannonconsole-ammostatus = Ammo
 
 shipevent-returntolobby-name = Return to lobby
 shipevent-returntolobby-desc = Instantly respawns you, so you can enter lobby and select team again.
+
+
+## Circular shield console
+
+shipevent-shieldconsole-windowtitle = Shield control
+shipevent-shieldconsole-enablebutton = Toggle shield
+shipevent-shieldconsole-powered = [color=green]Powered[/color]
+shipevent-shieldconsole-nopower = [color=red]No power[/color]

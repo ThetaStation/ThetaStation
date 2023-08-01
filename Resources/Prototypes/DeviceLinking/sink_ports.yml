@@ -103,7 +103,7 @@
   name: "Cannon console receiver"
   description: "Cannon console receiver"
   
-- type: sourcePort
+- type: sinkPort
   id: CircularShieldConsoleReceiver
   name: "Circular shield console receiver"
   description: "Circular shield console receiver"

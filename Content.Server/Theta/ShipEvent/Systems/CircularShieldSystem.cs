@@ -1,5 +1,7 @@
+using System.Linq;
 using System.Numerics;
 using Content.Server.Power.Components;
+using Content.Shared.DeviceLinking.Events;
 using Content.Shared.Physics;
 using Content.Shared.Theta.ShipEvent.Components;
 using Content.Shared.Theta.ShipEvent.UI;
@@ -31,6 +33,7 @@ public sealed class CircularShieldSystem : EntitySystem
         SubscribeLocalEvent<CircularShieldComponent, PowerChangedEvent>(OnShieldPowerChanged);
         SubscribeLocalEvent<CircularShieldComponent, StartCollideEvent>(OnShieldFixtureEnter);
         SubscribeLocalEvent<CircularShieldComponent, EndCollideEvent>(OnShieldFixtureExit);
+        SubscribeLocalEvent<CircularShieldComponent, NewLinkEvent>(OnShieldLink);
     }
 
     private void OnConsoleInfoRequest(EntityUid uid, CircularShieldConsoleComponent console, CircularShieldConsoleInfoRequest args)
@@ -71,9 +74,9 @@ public sealed class CircularShieldSystem : EntitySystem
         shield.Angle = args.Angle;
         shield.Width = args.Width;
         shield.Radius = args.Radius;
-        UpdateShieldFixture(uid, shield);
+        UpdateShieldFixture(console.BoundShield.Value, shield);
 
-        if (TryComp<ApcPowerReceiverComponent>(uid, out ApcPowerReceiverComponent? receiver))
+        if (TryComp<ApcPowerReceiverComponent>(console.BoundShield.Value, out var receiver))
         {
             receiver.Load = shield.DesiredDraw;
         }
@@ -82,6 +85,8 @@ public sealed class CircularShieldSystem : EntitySystem
             if(shield.DesiredDraw > 0)
                 shield.Powered = false;
         }
+        
+        Dirty(shield);
     }
 
     private void OnShieldInit(EntityUid uid, CircularShieldComponent shield, ComponentInit args)
@@ -99,6 +104,7 @@ public sealed class CircularShieldSystem : EntitySystem
         if (shield.BoundConsole == null)
             return;
         SendShieldConsoleUpdates(shield.BoundConsole.Value);
+        Dirty(shield);
     }
     
     private void OnShieldFixtureEnter(EntityUid uid, CircularShieldComponent shield, ref StartCollideEvent args)
@@ -122,28 +128,53 @@ public sealed class CircularShieldSystem : EntitySystem
             effect.OnShieldExit(args.OtherEntity, shield);
         }
     }
+    
+    private void OnShieldLink(EntityUid uid, CircularShieldComponent shield, NewLinkEvent args)
+    {
+        if (!TryComp<CircularShieldConsoleComponent>(args.Source, out var console))
+            return;
+
+        shield.BoundConsole = args.Source;
+        console.BoundShield = uid;
+        
+        Dirty(shield);
+        Dirty(console);
+    }
 
     private void UpdateShieldFixture(EntityUid uid, CircularShieldComponent shield, int extraArcPoints = 0)
     {
+        if (shield.Radius < 1 || shield.Width < 0.08)
+            return;
+        
+        Vector2[] cone = GenerateConeVertices(shield.Radius, shield.Angle, shield.Width, 5);
+
         Fixture? shieldFix = fixSys.GetFixtureOrNull(uid, ShieldFixtureId);
         if (shieldFix == null)
         {
-            int layer = (int)(CollisionGroup.Impassable & CollisionGroup.BulletImpassable);
-            fixSys.TryCreateFixture(uid, new PolygonShape(), ShieldFixtureId, hard: false, collisionLayer: layer);
-            shieldFix = fixSys.GetFixtureOrNull(uid, ShieldFixtureId);
+            PolygonShape shape = new PolygonShape();
+            shape.Set(cone, cone.Length);
+
+            fixSys.TryCreateFixture(uid, shape, ShieldFixtureId, hard: false, collisionLayer: (int)CollisionGroup.FullTileLayer);
         }
-        
+        else
+        {
+            physSys.SetVertices(uid, shieldFix, (PolygonShape)shieldFix.Shape, cone);
+        }
+    }
+
+    private Vector2[] GenerateConeVertices(int radius, Angle angle, Angle width, int extraArcPoints = 0)
+    {
         Vector2[] vertices = new Vector2[3 + extraArcPoints];
         vertices[0] = new Vector2(0, 0);
 
-        Angle start = shield.Angle - shield.Width / 2;
-        Angle step = shield.Width / (2 + extraArcPoints);
+        Angle start = angle - width / 2;
+        Angle step = width / (2 + extraArcPoints);
         
         for (int i = 1; i < 3 + extraArcPoints; i++)
         {
-            vertices[i] = (start + step * (i - 1)).ToVec() * shield.Radius;
+            vertices[i] = (start + step * (i - 1)).ToVec() * radius;
         }
 
-        physSys.SetVertices(uid, shieldFix!, new PolygonShape(), vertices);
+        return vertices;
     }
 }

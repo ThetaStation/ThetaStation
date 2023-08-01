@@ -50,6 +50,7 @@
       effects:
         - !type:CircularShieldSlowdownEffect
           speedModifier: 0.5
+    - type: ExtensionCableReceiver
     - type: ApcPowerReceiver
       needsPower: true
     - type: Sprite
