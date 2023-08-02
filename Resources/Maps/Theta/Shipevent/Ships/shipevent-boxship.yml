@@ -218,9 +218,6 @@ entities:
     - linkedPorts:
         29:
         - CannonConsoleSender: CannonConsoleReceiver
-      registeredSinks:
-        CannonConsoleSender:
-        - 29
       type: DeviceLinkSource
 - proto: ChairPilotSeat
   entities:
@@ -230,7 +227,7 @@ entities:
       pos: 2.5,1.5
       parent: 1
       type: Transform
-- proto: ComputerShuttleSyndie
+- proto: ComputerShuttleSyndieShipEvent
   entities:
   - uid: 19
     components:
@@ -273,6 +270,9 @@ entities:
     - pos: -0.5,1.5
       parent: 1
       type: Transform
+    - baseThrust: 1000
+      thrust: 1000
+      type: Thruster
 - proto: HoloFan
   entities:
   - uid: 26

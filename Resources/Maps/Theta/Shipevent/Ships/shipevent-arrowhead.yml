@@ -13,7 +13,7 @@ entities:
     components:
     - type: MetaData
     - pos: -0.859375,0.46874237
-      parent: 77
+      parent: invalid
       type: Transform
     - chunks:
         0,0:
@@ -107,16 +107,6 @@ entities:
       type: GridAtmosphere
     - type: GasTileOverlay
     - type: RadiationGridResistance
-  - uid: 77
-    components:
-    - type: MetaData
-    - type: Transform
-    - type: Map
-    - type: PhysicsMap
-    - type: GridTree
-    - type: MovedGrids
-    - type: Broadphase
-    - type: OccluderTree
 - proto: AirlockExternal
   entities:
   - uid: 2
@@ -129,15 +119,14 @@ entities:
     - pos: 7.5,3.5
       parent: 1
       type: Transform
-- proto: APCHighCapacity
+- proto: APCSuperCapacity
   entities:
   - uid: 4
     components:
-    - pos: 3.5,5.5
+    - rot: 3.141592653589793 rad
+      pos: 3.5,5.5
       parent: 1
       type: Transform
-    - enabled: False
-      type: AccessReader
 - proto: AtmosDeviceFanTiny
   entities:
   - uid: 5
@@ -649,9 +638,9 @@ entities:
       pos: 2.5,8.5
       parent: 1
       type: Transform
-- proto: ComputerShuttleSyndie
+- proto: ComputerShuttleSyndieShipEvent
   entities:
-  - uid: 85
+  - uid: 77
     components:
     - pos: 3.5,9.5
       parent: 1
@@ -794,7 +783,7 @@ entities:
       - 68
       - 142
       type: DeviceLinkSink
-    - provider: 143
+    - provider: 139
       container: storagebase
       type: ContainerAmmoProvider
   - uid: 103
@@ -884,7 +873,7 @@ entities:
       - 68
       - 138
       type: DeviceLinkSink
-    - provider: 139
+    - provider: 143
       container: storagebase
       type: ContainerAmmoProvider
 - proto: ShipEventIonCannon
@@ -1207,6 +1196,8 @@ entities:
     - pos: 6.5,6.5
       parent: 1
       type: Transform
+    - enabled: False
+      type: AccessReader
 - proto: WallShuttle
   entities:
   - uid: 145

@@ -38,6 +38,7 @@
 - type: entity
   parent: ComputerShuttleSyndie
   id: ComputerShuttleSyndieShipEvent
+  suffix: ShipEvent
   components:
     - type: Anchorable
       disabled: true
