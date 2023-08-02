@@ -19,9 +19,7 @@ public partial class ShipEventFactionSystem
         {
             if (team.Captain == msg.Session.ConnectedClient.UserName)
             {
-                System.Console.WriteLine(msg.Password);
                 team.JoinPassword = msg.Password;
-                System.Console.WriteLine(team.JoinPassword);
                 break;
             }
         }
