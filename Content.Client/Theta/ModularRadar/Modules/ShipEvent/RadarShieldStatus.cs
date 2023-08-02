@@ -2,6 +2,8 @@ using System.Numerics;
 using Content.Shared.Theta.ShipEvent.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Collision.Shapes;
 
 namespace Content.Client.Theta.ModularRadar.Modules.ShipEvent;
 
@@ -9,6 +11,8 @@ public sealed class RadarShieldStatus : RadarModule
 {
     [Dependency] private readonly IEntityManager entMan = default!; 
     private readonly TransformSystem formSys = default!;
+    
+    private const string ShieldFixtureId = "ShieldFixture";
     
     public RadarShieldStatus(ModularRadarControl parentRadar) : base(parentRadar)
     {
@@ -18,21 +22,30 @@ public sealed class RadarShieldStatus : RadarModule
     public override void Draw(DrawingHandleScreen handle, Parameters parameters)
     {
         base.Draw(handle, parameters);
-        foreach ((var form, var shield) in entMan.EntityQuery<TransformComponent, CircularShieldComponent>())
+        foreach ((var form, var shield, var fix) in entMan.EntityQuery<TransformComponent, CircularShieldComponent, FixturesComponent>())
         {
+            PolygonShape? shape = (PolygonShape?)fix.Fixtures.GetValueOrDefault(ShieldFixtureId)?.Shape ?? null;
+            if (shape == null)
+                continue;
+            
             Vector2 pos = formSys.GetWorldPosition(form);
             pos = parameters.DrawMatrix.Transform(pos);
             pos.Y *= -1;
             pos = ScalePosition(pos);
             
             handle.DrawCircle(pos, 5f, shield.Color);
-            if (shield.CanWork)
+            
+            Vector2[] verts = new Vector2[shape.VertexCount];
+            for (var i = 0; i < verts.Length; i++)
             {
-                handle.DrawCircle(pos, shield.Radius, Color.Yellow, false);
-                handle.DrawLine(pos, pos + shield.Angle.ToVec() * shield.Radius, Color.Yellow);
-                handle.DrawLine(pos, pos + (shield.Angle - shield.Width / 2).ToVec() * shield.Radius, Color.Red);
-                handle.DrawLine(pos, pos + (shield.Angle + shield.Width / 2).ToVec() * shield.Radius, Color.Blue);
+                Vector2 vert = formSys.GetWorldMatrix(form).Transform(shape.Vertices[i]);
+                vert = parameters.DrawMatrix.Transform(vert);
+                vert.Y = -vert.Y;
+                vert = ScalePosition(vert);
+                verts[i] = vert;
             }
+            
+            handle.DrawPrimitives(DrawPrimitiveTopology.LineStrip, verts, shield.CanWork ? Color.LawnGreen : Color.Red);
         }
     }
 }

@@ -44,6 +44,7 @@ public sealed class CircularShieldOverlay : Overlay
                 verts[i] = formSys.GetWorldMatrix(form).Transform(shape.Vertices[i]);
             }
 
+            //todo: add fancy shader here
             args.DrawingHandle.DrawPrimitives(DrawPrimitiveTopology.TriangleFan, verts, shield.Color.WithAlpha(0.1f));
         }
     }
