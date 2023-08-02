@@ -1,6 +1,7 @@
 ﻿- type: entity
   id: CannonComputerShipEvent
   name: cannon console
+  suffix: ShipEvent
   parent: BaseComputer
   components:
     - type: CannonConsole
@@ -38,6 +39,7 @@
 - type: entity
   parent: ComputerShuttleSyndie
   id: ComputerShuttleSyndieShipEvent
+  suffix: ShipEvent
   components:
     - type: Anchorable
       disabled: true

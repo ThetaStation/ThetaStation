@@ -99,6 +99,11 @@
   id: TurretLoaderSender
   name: "Turret loader"
   description: "Turret loader"
+  
+- type: sourcePort
+  id: CircularShieldConsoleSender
+  name: "Circular shield console"
+  description: "Circular shield console"
 
 - type: sourcePort
   id: OutputHigh

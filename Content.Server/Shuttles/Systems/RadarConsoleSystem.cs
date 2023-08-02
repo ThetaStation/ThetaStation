@@ -165,7 +165,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
     {
         if (TryComp<DeviceLinkSourceComponent>(uid, out var linkSource))
         {
-            //we should store info about controlled cannons in the console component itself, not use this
+            //todo: we should store info about controlled cannons in the console component itself, instead of using THIS
             if(linkSource.Outputs.Keys.Contains(OutputPortName)) //using Keys.Contains() instead of ContainsKeys() because of retarded access restrictions
                 return linkSource.Outputs[OutputPortName].ToList();
         }

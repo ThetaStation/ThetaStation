@@ -1,0 +1,66 @@
+- type: entity
+  id: CircularShieldConsole
+  name: shield control console
+  parent: BaseComputer
+  suffix: ShipEvent
+  components:
+    - type: CircularShieldConsole
+    - type: ActivatableUI
+      key: enum.CircularShieldConsoleUiKey.Key
+    - type: UserInterface
+      interfaces:
+        - key: enum.CircularShieldConsoleUiKey.Key
+          type: CircularShieldConsoleBoundUserInterface
+    - type: RadarConsole
+    - type: PointLight
+      radius: 1.5
+      energy: 1.6
+      color: "#43ccb5"
+    - type: ApcPowerReceiver
+      needsPower: true
+    - type: Sprite
+      layers:
+        - map: ["computerLayerBody"]
+          state: computer
+        - map: ["computerLayerKeyboard"]
+          state: generic_keyboard
+        - map: ["computerLayerScreen"]
+          state: comm_syndie
+        - map: ["computerLayerKeys"]
+          state: syndie_key
+    - type: DeviceNetwork
+      deviceNetId: Wireless
+    - type: WirelessNetworkConnection
+      range: 200
+    - type: DeviceLinkSource
+      ports:
+        - CircularShieldConsoleSender
+
+- type: entity
+  id: CircularShieldBase
+  name: circular shield
+  parent: BaseStructure
+  suffix: ShipEvent
+  components:
+    - type: CircularShield
+      consumptionPerM2: 100
+      maxWidth: 90
+      maxRadius: 10
+      color: blue
+      effects:
+        - !type:CircularShieldTempSpeedChangeEffect
+          speedModifier: 0.1
+    - type: ExtensionCableReceiver
+    - type: ApcPowerReceiver
+      needsPower: true
+    - type: Sprite
+      sprite: /Textures/Theta/ShipEvent/Objects/CircularShield.rsi
+      layers:
+        - state: generator
+    - type: DeviceNetwork
+      deviceNetId: Wireless
+    - type: WirelessNetworkConnection
+      range: 200
+    - type: DeviceLinkSink
+      ports:
+        - CircularShieldConsoleReceiver
