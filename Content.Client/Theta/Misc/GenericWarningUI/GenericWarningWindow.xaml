@@ -1,0 +1,19 @@
+﻿<DefaultWindow
+    xmlns="https://spacestation14.io"
+    MinSize="300 100"
+    Title="Warning!!!">
+    <BoxContainer Orientation="Vertical">
+        <Label Text="ARE YOU SURE? ARE YOU SURE? ARE YOU SURE? ARE YOU SURE? ARE YOU SURE?"
+               HorizontalAlignment="Center"/>
+        <BoxContainer Orientation="Horizontal">
+            <Button Name="YesButton"
+                    Text="YES"
+                    HorizontalExpand="True"
+                    HorizontalAlignment="Left" />
+            <Button Name="NoButton"
+                    Text="NO"
+                    HorizontalExpand="True"
+                    HorizontalAlignment="Right" />
+        </BoxContainer>
+    </BoxContainer>
+</DefaultWindow>

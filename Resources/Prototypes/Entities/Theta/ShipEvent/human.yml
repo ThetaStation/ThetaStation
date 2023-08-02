@@ -12,6 +12,9 @@
       - key: enum.CaptainMenuUiKey.Key
         type: CaptainMenuBoundUserInterface
         requireInputValidation: false
+      - key: enum.GenericWarningUiKey.Key
+        type: GenericWarningWindowBoundUserInterface
+        requireInputValidation: false
     - type: MindContainer
       ghostPrototype: ObserverShipEvent
 
@@ -22,7 +25,7 @@
   suffix: SHIPEVENT
   components:
     - type: Bloodstream #shitton of runtimes without it
-      maxBleedAmount: 0 
+      maxBleedAmount: 0
       bloodlossDamage:
         types:
           Bloodloss:

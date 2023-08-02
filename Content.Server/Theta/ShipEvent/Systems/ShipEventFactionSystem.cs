@@ -26,6 +26,7 @@ using Content.Shared.Projectiles;
 using Content.Shared.Shuttles.Events;
 using Content.Shared.Theta.MobHUD;
 using Content.Shared.Theta.ShipEvent;
+using Content.Shared.Theta.ShipEvent.Misc.GenericWarningUI;
 using Content.Shared.Theta.ShipEvent.UI;
 using Robust.Server.GameObjects;
 using Robust.Server.Player;
@@ -134,6 +135,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, ShipEventTeamViewToggleEvent>(OnViewToggle);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, ShipEventCaptainMenuToggleEvent>(OnCapMenuToggle);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, ShipEventReturnToLobbyEvent>(OnReturnToLobbyAction);
+
+        SubscribeLocalEvent<ShipEventFactionMarkerComponent, GenericWarningYesPressedMessage>(ReturnToLobbyPlayer);
 
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, StartCollideEvent>(OnCollision);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, MobStateChangedEvent>(OnPlayerStateChange);
@@ -403,7 +406,12 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         if (session == null)
             return;
 
-        _ticker.Respawn(session);
+        _uiSys.TryOpen(uid, GenericWarningUiKey.Key, session);
+    }
+
+    private void ReturnToLobbyPlayer(EntityUid uid, ShipEventFactionMarkerComponent component, GenericWarningYesPressedMessage args)
+    {
+        _ticker.Respawn((IPlayerSession) args.Session);
     }
 
     private void OnPlayerStateChange(EntityUid entity, ShipEventFactionMarkerComponent marker, MobStateChangedEvent args)
@@ -640,7 +648,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         team.AddMember(shipEventRole);
 
         SetPlayerCharacterName(spawnedEntity, $"{GetName(spawnedEntity)} ({team.Name})");
-        
+
         SetupActions(spawnedEntity, team, session);
 
         if (EntityManager.TryGetComponent<MobHUDComponent>(spawnedEntity, out var hud))
@@ -658,21 +666,22 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// <param name="uid">player's uid</param>
     /// <param name="team">player's team</param>
     /// <param name="session">player's session</param>
+    /// <param name="isGhost">player is ghost?</param>
     private void SetupActions(EntityUid uid, ShipEventFaction? team, IPlayerSession? session, bool isGhost = false)
     {
-        var teamViewToggle = (InstantAction)_protMan.Index<InstantActionPrototype>("ShipEventTeamViewToggle").Clone();
-        _actSys.AddAction(uid, teamViewToggle, null);
+        var teamViewToggle = _protMan.Index<InstantActionPrototype>("ShipEventTeamViewToggle");
+        _actSys.AddAction(uid, new InstantAction(teamViewToggle), null);
 
         if (team != null && session != null && team.Captain == session.ConnectedClient.UserName)
         {
-            var capMenuToggle = (InstantAction)_protMan.Index<InstantActionPrototype>("ShipEventCaptainMenuToggle").Clone();
-            _actSys.AddAction(uid, capMenuToggle, null);
+            var capMenuToggle = _protMan.Index<InstantActionPrototype>("ShipEventCaptainMenuToggle");
+            _actSys.AddAction(uid, new InstantAction(capMenuToggle), null);
         }
 
         if (isGhost)
         {
-            var retToLobbyAction = (InstantAction)_protMan.Index<InstantActionPrototype>("ShipEventReturnToLobbyAction").Clone();
-            _actSys.AddAction(uid, retToLobbyAction, null);
+            var retToLobbyAction = _protMan.Index<InstantActionPrototype>("ShipEventReturnToLobbyAction");
+            _actSys.AddAction(uid, new InstantAction(retToLobbyAction), null);
         }
     }
 
