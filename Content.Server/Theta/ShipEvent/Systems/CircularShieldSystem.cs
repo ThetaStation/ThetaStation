@@ -70,6 +70,8 @@ public sealed class CircularShieldSystem : EntitySystem
             return;
 
         shield.Enabled = !shield.Enabled;
+        
+        Dirty(shield);
     }
 
     private void OnShieldChangeParams(EntityUid uid, CircularShieldConsoleComponent console, CircularShieldChangeParametersMessage args)
