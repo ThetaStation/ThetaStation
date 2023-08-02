@@ -110,3 +110,6 @@ shipevent-shieldconsole-windowtitle = Shield control
 shipevent-shieldconsole-enablebutton = Toggle shield
 shipevent-shieldconsole-powered = [color=green]Powered[/color]
 shipevent-shieldconsole-nopower = [color=red]No power[/color]
+shipevent-shieldconsole-anglelabel = Angle
+shipevent-shieldconsole-widthlabel = Width
+shipevent-shieldconsole-radiuslabel = Radius

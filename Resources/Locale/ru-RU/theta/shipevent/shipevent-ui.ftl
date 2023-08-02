@@ -110,3 +110,6 @@ shipevent-shieldconsole-windowtitle = Управление щитом
 shipevent-shieldconsole-enablebutton = Переключить щит
 shipevent-shieldconsole-powered = [color=green]Есть питание[/color]
 shipevent-shieldconsole-nopower = [color=red]Нет питания[/color]
+shipevent-shieldconsole-anglelabel = Угол
+shipevent-shieldconsole-widthlabel = Ширина
+shipevent-shieldconsole-radiuslabel = Радиус

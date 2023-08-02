@@ -48,8 +48,8 @@
       maxRadius: 10
       color: blue
       effects:
-        - !type:CircularShieldSlowdownEffect
-          speedModifier: 0.5
+        - !type:CircularShieldTempSpeedChangeEffect
+          speedModifier: 0.1
     - type: ExtensionCableReceiver
     - type: ApcPowerReceiver
       needsPower: true

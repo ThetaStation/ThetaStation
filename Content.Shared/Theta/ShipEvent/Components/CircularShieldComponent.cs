@@ -64,17 +64,18 @@ public sealed partial class CircularShieldConsoleComponent : Component
 }
 
 [Serializable, NetSerializable]
+public sealed class CircularShieldToggleMessage : BoundUserInterfaceMessage { }
+
+[Serializable, NetSerializable]
 public sealed class CircularShieldChangeParametersMessage : BoundUserInterfaceMessage
 {
-    public bool Enabled;
-    
     public Angle Angle;
 
     public Angle Width;
 
     public int Radius;
 
-    public CircularShieldChangeParametersMessage(bool enabled, Angle angle, Angle width, int radius)
+    public CircularShieldChangeParametersMessage(Angle angle, Angle width, int radius)
     {
         Angle = angle;
         Width = width;

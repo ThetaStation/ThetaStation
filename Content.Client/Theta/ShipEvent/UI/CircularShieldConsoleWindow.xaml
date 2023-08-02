@@ -13,8 +13,11 @@
         <BoxContainer Orientation="Vertical">
             <Button Name="ShieldEnableButton" Text="{Loc 'shipevent-shieldconsole-enablebutton'}" />
             <RichTextLabel Name="ShieldPowerStatusLabel"/>
-            <SliderIntInput Name="ShieldAngleSlider" HorizontalExpand="True" />
+            <Label Text="{Loc 'shipevent-shieldconsole-anglelabel'}" />
+            <SliderIntInput Name="ShieldAngleSlider" HorizontalExpand="True" MaxValue="360" />
+            <Label Text="{Loc 'shipevent-shieldconsole-widthlabel'}" />
             <SliderIntInput Name="ShieldWidthSlider" HorizontalExpand="True" />
+            <Label Text="{Loc 'shipevent-shieldconsole-radiuslabel'}" />
             <SliderIntInput Name="ShieldRadiusSlider" HorizontalExpand="True" />
         </BoxContainer>
     </BoxContainer>

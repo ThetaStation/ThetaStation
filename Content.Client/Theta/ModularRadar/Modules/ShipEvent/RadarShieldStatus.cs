@@ -7,13 +7,12 @@ namespace Content.Client.Theta.ModularRadar.Modules.ShipEvent;
 
 public sealed class RadarShieldStatus : RadarModule
 {
-    private readonly IEntityManager entMan = default!; 
+    [Dependency] private readonly IEntityManager entMan = default!; 
     private readonly TransformSystem formSys = default!;
     
     public RadarShieldStatus(ModularRadarControl parentRadar) : base(parentRadar)
     {
-        entMan = IoCManager.Resolve<IEntityManager>();
-        formSys = entMan.System<TransformSystem>(); //no idea why it can't resolve it
+        formSys = entMan.System<TransformSystem>();
     }
 
     public override void Draw(DrawingHandleScreen handle, Parameters parameters)

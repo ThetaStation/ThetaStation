@@ -1,10 +1,12 @@
 using Content.Shared.Theta.ShipEvent.Components;
 using Content.Shared.Theta.ShipEvent.UI;
+using JetBrains.Annotations;
 using Robust.Client.GameObjects;
 
 namespace Content.Client.Theta.ShipEvent.UI;
 
 
+[UsedImplicitly]
 public sealed class CircularShieldConsoleBoundUserInterface : BoundUserInterface
 {
     private CircularShieldConsoleWindow? _window;
@@ -18,6 +20,7 @@ public sealed class CircularShieldConsoleBoundUserInterface : BoundUserInterface
         _window = new CircularShieldConsoleWindow();
         _window.OpenCentered();
         _window.OnClose += Close;
+        _window.OnEnableButtonPressed += () => SendMessage(new CircularShieldToggleMessage());
         _window.OnParametersChanged += () => UpdateShieldParameters();
         
         SendMessage(new CircularShieldConsoleInfoRequest());
@@ -29,7 +32,6 @@ public sealed class CircularShieldConsoleBoundUserInterface : BoundUserInterface
             return;
 
         SendMessage(new CircularShieldChangeParametersMessage(
-            _window.Enabled, 
             Angle.FromDegrees(_window.Angle), 
             Angle.FromDegrees(_window.Width),
             _window.Radius));
