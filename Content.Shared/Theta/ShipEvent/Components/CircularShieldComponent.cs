@@ -29,13 +29,14 @@ public sealed partial class CircularShieldComponent : Component
     [AutoNetworkedField, DataField("color"), ViewVariables(VVAccess.ReadWrite)]
     public Color Color;
 
-    [AutoNetworkedField]
+    //(datafields are for map serialization, so it's possible for mappers to create shield presets)
+    [AutoNetworkedField, DataField("angle"), ViewVariables(VVAccess.ReadWrite)]
     public Angle Angle;
 
-    [AutoNetworkedField]
+    [AutoNetworkedField, DataField("width"), ViewVariables(VVAccess.ReadWrite)]
     public Angle Width;
 
-    [AutoNetworkedField]
+    [AutoNetworkedField, DataField("radius"), ViewVariables(VVAccess.ReadWrite)]
     public int Radius;
 
     [DataField("effects", serverOnly:true)]
