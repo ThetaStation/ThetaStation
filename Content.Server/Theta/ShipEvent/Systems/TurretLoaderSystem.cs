@@ -216,5 +216,4 @@ public sealed class TurretLoaderSystem : EntitySystem
     }
 }
 
-[Serializable, NetSerializable]
 public sealed class TurretLoaderAfterShotMessage : EntityEventArgs { }
