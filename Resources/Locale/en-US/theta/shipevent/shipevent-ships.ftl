@@ -1,7 +1,7 @@
-shipevent-shipclass-lightclass = [color=green]Light[/color]
-shipevent-shipclass-mediumclass = [color=yellow]Medium[/color]
-shipevent-shipclass-heavyclass = [color=red]Heavy[/color]
-shipevent-shipclass-specialclass = [color=pink]Special[/color]
+shipevent-shipclass-light = [color=green]Light[/color]
+shipevent-shipclass-medium = [color=yellow]Medium[/color]
+shipevent-shipclass-heavy = [color=red]Heavy[/color]
+shipevent-shipclass-special = [color=pink]Special[/color]
 
 shipevent-mule-name = Mule
 shipevent-mule-desc =
