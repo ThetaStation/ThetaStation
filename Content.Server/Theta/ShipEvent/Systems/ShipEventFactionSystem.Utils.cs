@@ -45,7 +45,7 @@ public sealed class ShipEventFaction : PlayerFaction
     public string? JoinPassword
     {
         get => _password;
-        set => _password = string.IsNullOrWhiteSpace(_password) ? null : value;
+        set => _password = string.IsNullOrWhiteSpace(value) ? null : value;
     }
 
     private int _maxMembers;
