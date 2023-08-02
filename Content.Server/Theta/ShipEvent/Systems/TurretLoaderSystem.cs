@@ -127,9 +127,9 @@ public sealed class TurretLoaderSystem : EntitySystem
     {
         if (EntityManager.TryGetComponent<DeviceLinkSourceComponent>(uid, out var source))
         {
-            if (source.Outputs.Count > 0)
+            if (source.LinkedPorts.Count > 0)
             {
-                turret = source.Outputs.Values.First().First();
+                turret = source.LinkedPorts.Keys.First();
                 return true;
             }
         }
