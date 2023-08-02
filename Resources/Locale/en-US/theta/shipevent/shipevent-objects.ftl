@@ -12,8 +12,8 @@ ent-TeamCreationConsoleShipEvent = team console
 ent-TurretLoaderShipEvent = weapon loader
     .desc = { "Universal ammo loader for weapons of various types. Uses bluespace teleportation for delivering shells to the chamber." }
     .suffix = { "ShipEvent" }
-    
-    
+
+
 ## Items
 ent-TurretAmmoContainerRegular = ammo container
     .desc = { "Standartised metal container for use in weapon loaders." }
@@ -44,6 +44,10 @@ ent-ShipEventFlakCannon = flak cannon
     .suffix = { "ShipEvent" }
 
 ent-ShipEventSPGCannon = self propelled artillery
+    .desc = { "SPG, fires self propelled projectiles. While they take some time to fully accelerate, their damage is devastating." }
+    .suffix = { "ShipEvent" }
+
+ent-ShipEventSPG = self propeller artillery
     .desc = { "SPG, fires self propelled projectiles. While they take some time to fully accelerate, their damage is devastating." }
     .suffix = { "ShipEvent" }
 

@@ -211,4 +211,5 @@ cmd-options-desc = Открывает меню опций, опциональн�
 cmd-options-help = Использование: options [tab]
 
 ## Theta
+
 ui-options-function-ping-on-radar = Отправить сигнал на радаре
