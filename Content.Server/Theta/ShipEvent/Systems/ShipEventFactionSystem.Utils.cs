@@ -45,10 +45,16 @@ public sealed class ShipEventFaction : PlayerFaction
     public string? JoinPassword
     {
         get => _password;
-        set => _password = _password != "" ? value : null;
+        set => _password = string.IsNullOrWhiteSpace(_password) ? null : value;
     }
 
-    public int MaxMembers { get; set; }
+    private int _maxMembers;
+
+    public int MaxMembers
+    {
+        get => _maxMembers;
+        set => _maxMembers = int.Clamp(value, 0, 100);
+    }
 
     public ShipEventFaction(string name, string iconPath, Color color, string captain,
         int points = 0) : base(name, iconPath)

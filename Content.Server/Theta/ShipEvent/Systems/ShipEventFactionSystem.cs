@@ -564,7 +564,10 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>(shipUid);
         if (!spawners.Any())
+        {
+            _chatSys.SendSimpleMessage(Loc.GetString("shipevent-spawner-destroyed"), player);
             return;
+        }
 
         var spawner = spawners.First();
         var playerMob = SpawnPlayer(player, spawner);
