@@ -1,6 +1,7 @@
 ﻿- type: entity
   id: CannonComputerShipEvent
   name: cannon console
+  suffix: ShipEvent
   parent: BaseComputer
   components:
     - type: CannonConsole
@@ -162,12 +163,6 @@
               acts: [ "Destruction" ]
     - type: ApcPowerReceiver
       needsPower: false
-    - type: ActivatableUI
-      key: enum.TurretLoaderUiKey.Key
-    - type: UserInterface
-      interfaces:
-      - key: enum.TurretLoaderUiKey.Key
-        type: TurretLoaderBoundUserInterface
     - type: ItemSlots
       slots:
         ammoContainer:
