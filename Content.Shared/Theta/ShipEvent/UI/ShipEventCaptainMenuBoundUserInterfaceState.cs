@@ -20,9 +20,6 @@ public sealed class ShipEventCaptainMenuBoundUserInterfaceState : BoundUserInter
 }
 
 [Serializable, NetSerializable]
-public sealed class ShipEventCaptainMenuRequestInfoMessage : BoundUserInterfaceMessage{}
-
-[Serializable, NetSerializable]
 public sealed class ShipEventCaptainMenuChangeShipMessage : BoundUserInterfaceMessage
 {
     public ShipTypePrototype NewShip = default!;

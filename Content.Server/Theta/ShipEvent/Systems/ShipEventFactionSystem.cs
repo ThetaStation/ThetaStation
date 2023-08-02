@@ -208,20 +208,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         }
     }
 
-    private void OnCapMenuInfoRequest(ShipEventCaptainMenuRequestInfoMessage msg)
-    {
-        foreach (var team in Teams)
-        {
-            if (team.Captain == msg.Session.ConnectedClient.UserName)
-            {
-                _uiSys.TrySetUiState(msg.Entity,
-                    msg.UiKey,
-                    new ShipEventCaptainMenuBoundUserInterfaceState(team.GetMemberUserNames(), team.ChosenShipType, team.JoinPassword, team.MaxMembers));
-                return;
-            }
-        }
-    }
-
     private void OnShipPickerInfoRequest(GetShipPickerInfoMessage msg)
     {
         var memberCount = 1;
@@ -390,10 +376,22 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         args.Handled = true;
 
         Enum uiKey = CaptainMenuUiKey.Key;
+
         if (_uiSys.IsUiOpen(uid, uiKey))
             return;
-        if (_uiSys.TryGetUi(uid, uiKey, out var bui))
-            _uiSys.OpenUi(bui, session);
+
+        foreach (var team in Teams)
+        {
+            if (team.Captain != session.ConnectedClient.UserName)
+                continue;
+            _uiSys.TrySetUiState(uid,
+                uiKey,
+                new ShipEventCaptainMenuBoundUserInterfaceState(team.GetMemberUserNames(), team.ChosenShipType, team.JoinPassword, team.MaxMembers)
+                );
+            break;
+        }
+
+        _uiSys.TryOpen(uid, uiKey, session);
     }
 
     private void OnReturnToLobbyAction(EntityUid uid, ShipEventFactionMarkerComponent marker, ShipEventReturnToLobbyEvent args)
