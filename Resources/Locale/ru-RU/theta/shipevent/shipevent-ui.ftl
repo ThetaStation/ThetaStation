@@ -19,18 +19,18 @@ shipevent-lobby-join = Войти
 shipevent-lobby-team = Команда
 shipevent-lobby-captain = Капитан
 shipevent-lobby-crew = Экипаж
+shipevent-lobby-password = Пароль
 
 ## Team console - team creation
 
 shipevent-teamcreation-windowtitle = СОЗДАНИЕ КОМАНДЫ
 shipevent-teamcreation-response-invalidname = Данное название уже занято/слишком длинное/слишком короткое/недоступно по иной причине.
 shipevent-teamcreation-response-invalidcolor = Данный цвет уже занят/недоступен по другой причине.
-shipevent-teamcreation-response-blacklistself = Зачем вы пытаетесь добавить себя же в блеклист?
 shipevent-teamcreation-response-waitpls = Запрос на создание команды получен, ПОЖАЛУЙСТА ОЖИДАЙТЕ.
 shipevent-teamcreation-name = Имя команды:
-shipevent-teamcreation-color = Цвет команды (hex):
 shipevent-teamcreation-ship = Начальный корабль:
-shipevent-teamcreation-blacklist = Блеклист (сикеи через запятую):
+shipevent-teamcreation-maxmembers = Макс. экипажа (0 - это ∞):
+shipevent-teamcreation-password = Пароль:
 shipevent-teamcreation-creationbutton = СОЗДАТЬ КОМАНДУ
 shipevent-teamcreation-shippickerbutton = ВЫБРАТЬ КОРАБЛЬ
 
@@ -52,8 +52,9 @@ shipevent-capmenu-currentship = Текущий корабль:
 shipevent-capmenu-shippickerbutton = ВЫБРАТЬ КОРАБЛЬ
 shipevent-capmenu-membermanagement = Управление членами команды:
 shipevent-capmenu-memberlist = Члены команды:
-shipevent-capmenu-blacklistbutton = ИЗМЕНИТЬ ЧС
 shipevent-capmenu-kickbutton = ВЫГНАТЬ ЧЛЕНА
+shipevent-capmenu-setpassword = УСТАНОВИТЬ ПАРОЛЬ
+shipevent-capmenu-setmaxcrew = УСТАНОВИТЬ МАКСИМУМ
 shipevent-capmenu-toggle-name = Управление командой
 shipevent-capmenu-toggle-desc = Меняйте корабль, кикайте участников, делайте объявления и т.д.
 
@@ -69,7 +70,14 @@ shipevent-turretloader-ammocount = Количество патронов:
 shipevent-turretloader-turret = Турель:
 shipevent-turretloader-ejectcontainerbutton = ИЗВЛЕЧЬ КОНТЕЙНЕР
 shipevent-turretloader-refreshbutton = ОБНОВИТЬ UI
-shipevent-turretloader-ammocount-examine = Количество патронов: { $count }
+shipevent-turretloader-ammocount-examine = Количество патронов: {$count}
+
+## Enter Password Menu
+
+shipevent-enter-password-windowtitle = ПАРОЛЬ
+shipevent-enter-password-enterpass = Введите пароль:
+shipevent-enter-password-enter-button = Войти
+shipevent-enter-password-cancel-button = Отмена
 
 ## Cannon console
 

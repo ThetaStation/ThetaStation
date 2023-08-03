@@ -1,7 +1,7 @@
 ﻿<DefaultWindow xmlns="https://spacestation14.io"
                Title="{Loc 'shipevent-teamcreation-windowtitle'}"
-               MinSize="600 500"
-               SetSize="600 500">
+               MinSize="600 350"
+               SetSize="600 350">
     <BoxContainer Orientation="Vertical" SeparationOverride="4">
         <Label Name="UserMessage" FontColorOverride="Red" Text="" />
         <Control MinSize="0 10" />
@@ -12,21 +12,23 @@
         <LineEdit Name="NameEdit"
                   HorizontalExpand="True" />
 
-        <Label Name="ColorLabel"
-               Text="{Loc 'shipevent-teamcreation-color'}" />
-        <Control MinSize="0 10" />
-        <ColorSelectorSliders Name="ColorEdit" />
-
         <Label Name="ShipLabel"
                Text="{Loc 'shipevent-teamcreation-ship'}" />
         <Control MinSize="0 10" />
         <Button Name="ShipPickerButton"
                 Text="{Loc 'shipevent-teamcreation-shippickerbutton'}" />
 
-        <Label Name="BlacklistLabel"
-               Text="{Loc 'shipevent-teamcreation-blacklist'}" />
-        <Control MinSize="0 10" />
-        <LineEdit Name="BlacklistEdit"
+        <BoxContainer Orientation="Horizontal">
+            <Label Name="MaxMembersLabel"
+                   Text="{Loc 'shipevent-teamcreation-maxmembers'}" />
+            <Control MinSize="10 0" />
+            <SpinBox Name="MaxMembersEdit"
+                     Value="0"/>
+        </BoxContainer>
+
+        <Label Name="PasswordLabel"
+               Text="{Loc 'shipevent-teamcreation-password'}" />
+        <LineEdit Name="PasswordEdit"
                   HorizontalExpand="True" />
 
         <Button Name="CreationButton"

@@ -18,16 +18,10 @@ public sealed class CaptainMenuBoundUserInterface : BoundUserInterface
 
         _window = new CaptainMenuWindow();
         _window.OpenCentered();
-        SendMessage(new ShipEventCaptainMenuRequestInfoMessage());
         _window.OnClose += Close;
         _window.ShipPickerButtonPressed += _ =>
         {
             SendMessage(new GetShipPickerInfoMessage());
-        };
-        _window.BlackListButtonPressed += _ =>
-        {
-            List<string> blacklist = _window.BlacklistText.Split(",").ToList();
-            SendMessage(new ShipEventCaptainMenuChangeBlacklistMessage(blacklist));
         };
         _window.KickButtonPressed += _ =>
         {
@@ -39,6 +33,15 @@ public sealed class CaptainMenuBoundUserInterface : BoundUserInterface
                 return;
 
             SendMessage(new ShipEventCaptainMenuChangeShipMessage(_window.shipPicker.Selection));
+        };
+        _window.SetMaxMembersButtonPressed += _ =>
+        {
+            SendMessage(new ShipEventCaptainMenuSetMaxMembersMessage(_window.MaxMembers));
+        };
+        _window.SetPasswordButtonPressed += _ =>
+        {
+            var password = _window.Password != "" ? _window.Password : null;
+            SendMessage(new ShipEventCaptainMenuSetPasswordMessage(password));
         };
     }
 
