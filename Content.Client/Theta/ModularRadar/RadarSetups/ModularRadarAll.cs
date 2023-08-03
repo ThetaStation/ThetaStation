@@ -19,5 +19,6 @@ public sealed class ModularRadarAll : ModularRadarControl
         Modules.Add(new RadarVelocity(this));
         Modules.Add(new RadarPingsModule(this));
         Modules.Add(new RadarCommon(this));
+        Modules.Add(new RadarShieldStatus(this));
     }
 }

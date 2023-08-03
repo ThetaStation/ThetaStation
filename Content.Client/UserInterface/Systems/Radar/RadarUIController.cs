@@ -22,6 +22,7 @@ public sealed class RadarUIController : UIController
         SubscribeLocalEvent<RadarHudComponentAdded>(OnRadarHudAdded);
         SubscribeLocalEvent<RadarHudComponentRemoved>(OnRadarHudRemoved);
         SubscribeLocalEvent<PlayerAttachedEvent>(OnPlayerAttach);
+        SubscribeLocalEvent<PlayerDetachedEvent>(OnPlayerDetach);
 
         var gameplayStateLoad = UIManager.GetUIController<GameplayStateLoadController>();
         gameplayStateLoad.OnScreenLoad += OnScreenLoad;
@@ -36,6 +37,11 @@ public sealed class RadarUIController : UIController
     private void OnPlayerAttach(PlayerAttachedEvent ev)
     {
         InitializeRadarGui();
+    }
+
+    private void OnPlayerDetach(PlayerDetachedEvent ev)
+    {
+        ClearRadarGui();
     }
 
     private void OnRadarHudAdded(ref RadarHudComponentAdded ev)

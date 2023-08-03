@@ -25,6 +25,7 @@ shipevent-lobby-join = Join
 shipevent-lobby-team = Team
 shipevent-lobby-captain = Captain
 shipevent-lobby-crew = Crew
+shipevent-lobby-password = Password
 
 
 ## Team console - team creation
@@ -33,13 +34,12 @@ shipevent-teamcreation-windowtitle = TEAM CREATION
 
 shipevent-teamcreation-response-invalidname = This name is already taken/too long/too short/unavailable for some other reason.
 shipevent-teamcreation-response-invalidcolor = This color is already taken/unavailable for some other reason.
-shipevent-teamcreation-response-blacklistself = Why are you trying to blacklist yourself?
 shipevent-teamcreation-response-waitpls = Team creation request was received, PLEASE WAIT.
 
 shipevent-teamcreation-name = Team name:
-shipevent-teamcreation-color = Team color (hex):
 shipevent-teamcreation-ship = Initial ship:
-shipevent-teamcreation-blacklist = Blacklist (ckeys separated with commas):
+shipevent-teamcreation-maxmembers = Max. Members (0 is ∞):
+shipevent-teamcreation-password = Password:
 shipevent-teamcreation-creationbutton = CREATE TEAM
 shipevent-teamcreation-shippickerbutton = PICK SHIP
 
@@ -67,12 +67,18 @@ shipevent-capmenu-shippickerbutton = PICK SHIP
 
 shipevent-capmenu-membermanagement = Member management:
 shipevent-capmenu-memberlist = Members:
-shipevent-capmenu-blacklistbutton = CHANGE BLACKLIST
 shipevent-capmenu-kickbutton = KICK MEMBER
+shipevent-capmenu-setpassword = SET PASSWORD
+shipevent-capmenu-setmaxcrew = SET CREW MAX
 
 shipevent-capmenu-toggle-name = Team management
 shipevent-capmenu-toggle-desc = Change your ship, kick team members, make announcements, etc.
 
+## Enter Password Menu
+shipevent-enter-password-windowtitle = PASSWORD
+shipevent-enter-password-enterpass = Enter Password:
+shipevent-enter-password-enter-button = Enter
+shipevent-enter-password-cancel-button = Cancel
 
 ## Turret loader
 
@@ -102,3 +108,14 @@ shipevent-cannonconsole-ammostatus = Ammo
 
 shipevent-returntolobby-name = Return to lobby
 shipevent-returntolobby-desc = Instantly respawns you, so you can enter lobby and select team again.
+
+
+## Circular shield console
+
+shipevent-shieldconsole-windowtitle = Shield control
+shipevent-shieldconsole-enablebutton = Toggle shield
+shipevent-shieldconsole-powered = [color=green]Powered[/color]
+shipevent-shieldconsole-nopower = [color=red]No power[/color]
+shipevent-shieldconsole-anglelabel = Angle
+shipevent-shieldconsole-widthlabel = Width
+shipevent-shieldconsole-radiuslabel = Radius

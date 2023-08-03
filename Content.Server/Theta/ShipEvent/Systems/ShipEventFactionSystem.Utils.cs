@@ -3,21 +3,23 @@
 using System.Linq;
 using Content.Server.Access.Systems;
 using Content.Server.Explosion.Components;
+using Content.Server.Ghost.Components;
 using Content.Server.Mind;
 using Content.Server.Mind.Components;
 using Content.Server.Roles;
+using Content.Server.Theta.ShipEvent.Components;
 using Content.Shared.Chat;
 using Content.Shared.Explosion;
 using Content.Shared.Projectiles;
 using Content.Shared.Theta.ShipEvent;
 using Robust.Server.Maps;
 using Robust.Server.Player;
+using Robust.Shared.Physics;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
 public sealed class ShipEventFaction : PlayerFaction
 {
-    public List<string>? Blacklist; //black list for ckeys
     public string Captain; //ckey
 
     public Color Color;
@@ -39,13 +41,27 @@ public sealed class ShipEventFaction : PlayerFaction
 
     public int LastBonusInterval; //how much times this team has acquired bonus points for surviving bonus interval
 
+    private string? _password;
+    public string? JoinPassword
+    {
+        get => _password;
+        set => _password = string.IsNullOrWhiteSpace(value) ? null : value;
+    }
+
+    private int _maxMembers;
+
+    public int MaxMembers
+    {
+        get => _maxMembers;
+        set => _maxMembers = int.Clamp(value, 0, 100);
+    }
+
     public ShipEventFaction(string name, string iconPath, Color color, string captain,
-        int points = 0, List<string>? blacklist = null) : base(name, iconPath)
+        int points = 0) : base(name, iconPath)
     {
         Color = color;
         Captain = captain;
         Points = points;
-        Blacklist = blacklist;
     }
 }
 
@@ -54,9 +70,11 @@ public sealed partial class ShipEventFactionSystem
     [Dependency] private readonly IdCardSystem _cardSystem = default!;
     [Dependency] private readonly MindTrackerSystem _mindTrack = default!;
 
-    private void Announce(string message)
+    private const int minimalColorDelta = 100;
+
+    private void Announce(string message, bool playSound = true)
     {
-        _chatSys.DispatchGlobalAnnouncement(message, Loc.GetString("shipevent-announcement-title"));
+        _chatSys.DispatchGlobalAnnouncement(message, Loc.GetString("shipevent-announcement-title"), playSound);
     }
 
     /// <summary>
@@ -130,16 +148,35 @@ public sealed partial class ShipEventFactionSystem
         return entities;
     }
 
-    private List<T> GetShipComponents<T>(EntityUid shipEntity) where T : IComponent
+    private void DetachEnemyTeamsFromGrid(EntityUid gridUid, ShipEventFaction? myTeam)
     {
-        List<T> comps = new();
-        foreach (var comp in EntityManager.EntityQuery<T>())
+        DetachEntitiesFromGrid<GhostComponent>(gridUid);
+        var query = EntityQueryEnumerator<ShipEventFactionMarkerComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var marker, out var transform))
         {
-            if (Transform(comp.Owner).GridUid == shipEntity)
-                comps.Add(comp);
-        }
+            if (transform.GridUid != gridUid)
+                continue;
 
-        return comps;
+            if (myTeam == null || myTeam != marker.Team)
+                DetachEntityFromGrid(uid, transform);
+        }
+    }
+
+    private void DetachEntitiesFromGrid<T>(EntityUid gridUid) where T : Component
+    {
+        var query = EntityQueryEnumerator<T, TransformComponent>();
+        while (query.MoveNext(out var uid, out _, out var transform))
+        {
+            if (transform.GridUid != gridUid)
+                continue;
+
+            DetachEntityFromGrid(uid, transform);
+        }
+    }
+
+    private void DetachEntityFromGrid(EntityUid uid, TransformComponent transform)
+    {
+        _formSys.SetParent(uid, _mapMan.GetMapEntityId(transform.MapID));
     }
 
     private int GetProjectileDamage(EntityUid entity)
@@ -220,8 +257,6 @@ public sealed partial class ShipEventFactionSystem
 
     public bool IsValidColor(Color color)
     {
-        var minimalColorDelta = 200; //not based on anything, simply a magic number for comparison
-
         foreach (var team in Teams)
         {
             var otherColor = team.Color;
@@ -285,7 +320,7 @@ public sealed partial class ShipEventFactionSystem
         _mindTrack.ClearMindSet();
         foreach (var mind in EntityManager.EntityQuery<MindContainerComponent>())
         {
-            if(mind.HasMind)
+            if (mind.HasMind)
                 _mindTrack.AddMind(mind.Mind!);
         }
     }

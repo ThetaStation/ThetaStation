@@ -6,6 +6,7 @@ using Robust.Shared.Enums;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 
+
 namespace Content.Client.Theta.ShipEvent.Systems;
 
 public sealed class BoundsOverlay : Overlay
@@ -38,12 +39,12 @@ public sealed class BoundsOverlay : Overlay
 
     protected override void Draw(in OverlayDrawArgs args)
     {
+        if (args.MapId != TargetMap)
+            return;
+        
         if (_entMan.TryGetComponent<TransformComponent>(_playerMan.LocalPlayer?.ControlledEntity, out var form))
         {
             SecondsOutsideBounds += (float) (DateTime.Now - LastTime).TotalSeconds;
-
-            if (form.MapID != TargetMap)
-                return;
 
             if (!Bounds.Contains(_formSys.GetWorldPosition(form)))
             {
@@ -52,6 +53,12 @@ public sealed class BoundsOverlay : Overlay
 
                 _boundsShader.SetParameter("SCREEN_TEXTURE", ScreenTexture);
                 _boundsShader.SetParameter("BRIGHTNESS", Math.Clamp(SecondsOutsideBounds / FadeInTime, 0, 1));
+                _boundsShader.SetParameter("DET_LEVELS", 4);
+                
+                //so much zeros because we actually need mat2, yet RT does not have an overload for them
+                _boundsShader.SetParameter("SCALE_MATRIX", new Matrix3(0, 8.0f, 5.5f, 0, -5.5f, 8.0f, 0, 0, 0));
+                
+                _boundsShader.SetParameter("BASE_COLOR", new Vector3(1, 0, 0));
 
                 args.WorldHandle.UseShader(_boundsShader);
                 args.WorldHandle.DrawRect(args.WorldBounds, Color.White);

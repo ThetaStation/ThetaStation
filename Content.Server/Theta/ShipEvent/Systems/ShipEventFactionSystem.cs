@@ -16,6 +16,8 @@ using Content.Server.Shuttles.Components;
 using Content.Server.Theta.DebrisGeneration;
 using Content.Server.Theta.DebrisGeneration.Prototypes;
 using Content.Server.Theta.MobHUD;
+using Content.Server.Theta.NiceColors;
+using Content.Server.Theta.NiceColors.ColorPalettes;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Shared.Actions.ActionTypes;
 using Content.Shared.GameTicking;
@@ -26,6 +28,7 @@ using Content.Shared.Projectiles;
 using Content.Shared.Shuttles.Events;
 using Content.Shared.Theta.MobHUD;
 using Content.Shared.Theta.ShipEvent;
+using Content.Shared.Theta.ShipEvent.Misc.GenericWarningUI;
 using Content.Shared.Theta.ShipEvent.UI;
 using Robust.Server.GameObjects;
 using Robust.Server.Player;
@@ -41,38 +44,41 @@ namespace Content.Server.Theta.ShipEvent.Systems;
 public sealed partial class ShipEventFactionSystem : EntitySystem
 {
     [Dependency] private readonly GameTicker _ticker = default!;
-    
+
     [Dependency] private readonly ActionsSystem _actSys = default!;
-    
+
     [Dependency] private readonly ChatSystem _chatSys = default!;
-    
+
     [Dependency] private readonly MobHUDSystem _hudSys = default!;
-    
+
     [Dependency] private readonly DebrisGenerationSystem _debrisSys = default!;
-    
+
     [Dependency] private readonly IdentitySystem _idSys = default!;
-    
+
     [Dependency] private readonly MapLoaderSystem _mapSys = default!;
-    
+
     [Dependency] private readonly IMapManager _mapMan = default!;
-    
+
     [Dependency] private readonly IPrototypeManager _protMan = default!;
-    
+
     [Dependency] private readonly IRobustRandom _random = default!;
-    
+
     [Dependency] private readonly UserInterfaceSystem _uiSys = default!;
-    
+
     [Dependency] private readonly IPlayerManager _playerMan = default!;
-    
+
     [Dependency] private readonly TransformSystem _formSys = default!;
-    
+
     [Dependency] private readonly RoundEndSystem _endSys = default!;
-    
+
     [Dependency] private readonly MindSystem _mindSystem = default!;
-    
+
     [Dependency] private readonly HumanoidAppearanceSystem _humanoidAppearanceSystem = default!;
-    
+
     [Dependency] private readonly IServerPreferencesManager _prefsManager = default!;
+
+    //used when setting up buttons for ghosts, in cases when mind from shipevent agent is transferred to null and not to ghost entity directly
+    private Dictionary<IPlayerSession, ShipEventFaction> lastTeamLookup = new();
 
     private readonly Dictionary<string, int> _projectileDamage = new(); //cached damage for projectile prototypes
     private int _lastTeamNumber;
@@ -104,8 +110,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     public int PointsPerKill;
     public int OutOfBoundsPenalty; //deducted every update cycle for teams which left play area
 
-    public int PlayersPerTeamPlace;
-
     public string HUDPrototypeId = "ShipeventHUD";
     public string CaptainHUDPrototypeId = "";
 
@@ -124,6 +128,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     public List<Processor> ShipProcessors = new();
     public List<Processor> LootboxProcessors = new();
 
+    public ColorPalette ColorPalette = new ShipEventPalette();
+
     public override void Initialize()
     {
         base.Initialize();
@@ -131,6 +137,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, ShipEventTeamViewToggleEvent>(OnViewToggle);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, ShipEventCaptainMenuToggleEvent>(OnCapMenuToggle);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, ShipEventReturnToLobbyEvent>(OnReturnToLobbyAction);
+
+        SubscribeLocalEvent<ShipEventFactionMarkerComponent, GenericWarningYesPressedMessage>(ReturnToLobbyPlayer);
 
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, StartCollideEvent>(OnCollision);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, MobStateChangedEvent>(OnPlayerStateChange);
@@ -144,10 +152,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         SubscribeAllEvent<BoundsOverlayInfoRequest>(OnBoundsOverlayInfoRequest);
         SubscribeAllEvent<LootboxInfoRequest>(OnLootboxInfoRequest);
 
-        SubscribeAllEvent<ShipEventCaptainMenuRequestInfoMessage>(OnCapMenuInfoRequest);
-        SubscribeAllEvent<ShipEventCaptainMenuChangeShipMessage>(OnShipChangeRequest);
-        SubscribeAllEvent<ShipEventCaptainMenuChangeBlacklistMessage>(OnBlacklistChangeRequest);
-        SubscribeAllEvent<ShipEventCaptainMenuKickMemberMessage>(OnKickMemberRequest);
+        InitializeCaptainMenu();
 
         SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEnd);
         SubscribeLocalEvent<RoundEndDiscordTextAppendEvent>(OnRoundEndDiscord);
@@ -206,20 +211,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         }
     }
 
-    private void OnCapMenuInfoRequest(ShipEventCaptainMenuRequestInfoMessage msg)
-    {
-        foreach (var team in Teams)
-        {
-            if (team.Captain == msg.Session.ConnectedClient.UserName)
-            {
-                _uiSys.TrySetUiState(msg.Entity,
-                    msg.UiKey,
-                    new ShipEventCaptainMenuBoundUserInterfaceState(team.GetMemberUserNames(), team.ChosenShipType));
-                return;
-            }
-        }
-    }
-
     private void OnShipPickerInfoRequest(GetShipPickerInfoMessage msg)
     {
         var memberCount = 1;
@@ -249,12 +240,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             {
                 var newName = args.NewShipName;
 
-                var message = Loc.GetString(
-                    "shipevent-team-shiprename",
-                    ("teamname", team.Name),
-                    ("oldname", team.ShipName),
-                    ("newname", newName));
-                Announce(message);
                 team.ShipName = newName;
                 break;
             }
@@ -280,6 +265,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         TargetMap = MapId.Nullspace;
 
         Teams.Clear();
+        lastTeamLookup.Clear();
 
         ShipProcessors.Clear();
         LootboxProcessors.Clear();
@@ -387,19 +373,43 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         args.Handled = true;
 
         Enum uiKey = CaptainMenuUiKey.Key;
+
         if (_uiSys.IsUiOpen(uid, uiKey))
             return;
-        if (_uiSys.TryGetUi(uid, uiKey, out var bui))
-            _uiSys.OpenUi(bui, session);
+
+        foreach (var team in Teams)
+        {
+            if (team.Captain != session.ConnectedClient.UserName)
+                continue;
+            _uiSys.TrySetUiState(uid,
+                uiKey,
+                new ShipEventCaptainMenuBoundUserInterfaceState(team.GetMemberUserNames(), team.ChosenShipType, team.JoinPassword, team.MaxMembers)
+                );
+            break;
+        }
+
+        _uiSys.TryOpen(uid, uiKey, session);
     }
-    
+
     private void OnReturnToLobbyAction(EntityUid uid, ShipEventFactionMarkerComponent marker, ShipEventReturnToLobbyEvent args)
     {
         var session = GetSession(args.Performer);
         if (session == null)
             return;
-        
-        _ticker.Respawn(session);
+
+        if(!_uiSys.TryGetUi(uid, GenericWarningUiKey.ShipEventKey, out var bui))
+            return;
+        UserInterfaceSystem.SetUiState(bui, new GenericWarningBoundUserInterfaceState
+            {
+                WarningLoc = "generic-warning-window-warning-to-lobby",
+            }
+        );
+        _uiSys.OpenUi(bui, session);
+    }
+
+    private void ReturnToLobbyPlayer(EntityUid uid, ShipEventFactionMarkerComponent component, GenericWarningYesPressedMessage args)
+    {
+        _ticker.Respawn((IPlayerSession) args.Session);
     }
 
     private void OnPlayerStateChange(EntityUid entity, ShipEventFactionMarkerComponent marker, MobStateChangedEvent args)
@@ -415,7 +425,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         if (session == null)
             return;
 
-        var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>((EntityUid)ship);
+        var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>((EntityUid) ship);
 
         if (!spawners.Any())
         {
@@ -427,11 +437,31 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         var playerMob = SpawnPlayer(session, spawner);
         AfterSpawn(playerMob, spawner);
     }
-    
+
     private void OnPlayerTransfer(EntityUid uid, ShipEventFactionMarkerComponent marker, MindTransferredMessage args)
     {
         if (args.NewEntity == null)
+        {
+            if (args.Mind.Session == null || marker.Team == null)
+                return;
+
+            lastTeamLookup[args.Mind.Session] = marker.Team;
             return;
+        }
+
+        //'null' ghost case
+        if (args.NewEntity == uid)
+        {
+            IPlayerSession? session = GetSession(uid);
+            if (session == null)
+                return;
+
+            if (lastTeamLookup.TryGetValue(session, out ShipEventFaction? team))
+            {
+                marker.Team = team;
+                lastTeamLookup.Remove(session);
+            }
+        }
 
         if (EntityManager.HasComponent<GhostComponent>(args.NewEntity))
         {
@@ -466,8 +496,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// <summary>
     /// Does everything needed to create a new team, from faction creation to ship spawning.
     /// </summary>
-    public void CreateTeam(ICommonSession captainSession, string name, Color color, ShipTypePrototype? initialShipType = null,
-        List<string>? blacklist = null)
+    public void CreateTeam(ICommonSession captainSession, string name, ShipTypePrototype? initialShipType,
+        string? password, int maxMembers)
     {
         if (!RuleSelected)
             return;
@@ -487,9 +517,12 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         if (!spawners.Any())
             return;
 
-        var team = RegisterTeam(captainSession.ConnectedClient.UserName, name, color, blacklist);
+        var color = ColorPalette.GetNextColor();
+        var team = RegisterTeam(captainSession.ConnectedClient.UserName, name, color);
         team.ChosenShipType = shipType;
         team.Ship = newShip;
+        team.JoinPassword = password;
+        team.MaxMembers = maxMembers;
         SetMarkers(newShip, team);
 
         var spawner = spawners.First();
@@ -502,9 +535,10 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// </summary>
     /// <param name="player">player's session</param>
     /// <param name="teamName">name of the team</param>
-    public void JoinTeam(IPlayerSession player, string teamName)
+    /// <param name="password">password of the team</param>
+    public void JoinTeam(IPlayerSession player, string teamName, string? password)
     {
-        EntityUid? shipUid = null;
+        var shipUid = EntityUid.Invalid;
         ShipEventFaction targetTeam = default!;
 
         foreach (var team in Teams)
@@ -517,33 +551,36 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             }
         }
 
-        if (targetTeam.Members.Count >= GetMemberLimit())
+        if (targetTeam.JoinPassword != password)
+        {
+            _chatSys.SendSimpleMessage(Loc.GetString("shipevent-incorrect-password"), player);
+            return;
+        }
+
+        if (targetTeam.MaxMembers != 0 && targetTeam.Members.Count >= targetTeam.MaxMembers)
         {
             _chatSys.SendSimpleMessage(Loc.GetString("shipevent-memberlimit"), player);
             return;
         }
 
-        if (targetTeam.Blacklist != null)
+        if (shipUid == EntityUid.Invalid)
         {
-            if (targetTeam.Blacklist.Contains(player.ConnectedClient.UserName))
-            {
-                _chatSys.SendSimpleMessage(Loc.GetString("shipevent-blacklist"), player);
-                return;
-            }
+            _chatSys.SendSimpleMessage(Loc.GetString("shipevent-ship-destroyed"), player);
+            return;
         }
 
-        if (shipUid == null)
-            return;
-
-        var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>(shipUid.Value);
+        var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>(shipUid);
         if (!spawners.Any())
+        {
+            _chatSys.SendSimpleMessage(Loc.GetString("shipevent-spawner-destroyed"), player);
             return;
+        }
 
         var spawner = spawners.First();
         var playerMob = SpawnPlayer(player, spawner);
         AfterSpawn(playerMob, spawner);
 
-        TeamMessage(targetTeam, Loc.GetString("shipevent-team-newmember", ("name", GetName(playerMob))), color: targetTeam.Color);
+        TeamMessage(targetTeam, Loc.GetString("shipevent-team-newmember", ("name", GetName(playerMob))));
     }
 
     /// <summary>
@@ -559,7 +596,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             if (EntityManager.TryGetComponent<MindContainerComponent>(player.AttachedEntity, out var mind))
                 mind.GhostOnShutdown = false; //to prevent ghost duplication
 
-            EntityManager.DeleteEntity((EntityUid)player.AttachedEntity);
+            EntityManager.QueueDeleteEntity((EntityUid) player.AttachedEntity);
         }
 
         var spawner = EntityManager.GetComponent<ShipEventSpawnerComponent>(spawnerUid);
@@ -569,7 +606,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         playerMob.EnsureComponent<MindContainerComponent>();
 
-        var newMind =  _mindSystem.CreateMind(player.UserId, EntityManager.GetComponent<MetaDataComponent>(playerMob).EntityName);
+        var newMind = _mindSystem.CreateMind(player.UserId, EntityManager.GetComponent<MetaDataComponent>(playerMob).EntityName);
         _mindSystem.TransferTo(newMind, playerMob);
 
         HumanoidCharacterProfile profile;
@@ -634,28 +671,29 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// <param name="uid">player's uid</param>
     /// <param name="team">player's team</param>
     /// <param name="session">player's session</param>
+    /// <param name="isGhost">player is ghost?</param>
     private void SetupActions(EntityUid uid, ShipEventFaction? team, IPlayerSession? session, bool isGhost = false)
     {
-        var teamViewToggle = (InstantAction)_protMan.Index<InstantActionPrototype>("ShipEventTeamViewToggle").Clone();
-        _actSys.AddAction(uid, teamViewToggle, null);
-            
-        if (team != null && session != null && team.Captain == session.ConnectedClient.UserName) 
+        var teamViewToggle = _protMan.Index<InstantActionPrototype>("ShipEventTeamViewToggle");
+        _actSys.AddAction(uid, new InstantAction(teamViewToggle), null);
+
+        if (team != null && session != null && team.Captain == session.ConnectedClient.UserName)
         {
-            var capMenuToggle = (InstantAction)_protMan.Index<InstantActionPrototype>("ShipEventCaptainMenuToggle").Clone();
-            _actSys.AddAction(uid, capMenuToggle, null);
+            var capMenuToggle = _protMan.Index<InstantActionPrototype>("ShipEventCaptainMenuToggle");
+            _actSys.AddAction(uid, new InstantAction(capMenuToggle), null);
         }
 
         if (isGhost)
         {
-            var retToLobbyAction = (InstantAction)_protMan.Index<InstantActionPrototype>("ShipEventReturnToLobbyAction").Clone();
-            _actSys.AddAction(uid, retToLobbyAction, null);
+            var retToLobbyAction = _protMan.Index<InstantActionPrototype>("ShipEventReturnToLobbyAction");
+            _actSys.AddAction(uid, new InstantAction(retToLobbyAction), null);
         }
     }
 
     /// <summary>
     /// Creates new faction with all the specified data. Does not spawn ship, if you want to put new team in game right away use CreateTeam
     /// </summary>
-    private ShipEventFaction RegisterTeam(string captain, string name, Color color, List<string>? blacklist = null, bool announce = true)
+    private ShipEventFaction RegisterTeam(string captain, string name, Color color, bool announce = true)
     {
         var teamName = IsValidName(name) ? name : GenerateTeamName();
         var teamColor = IsValidColor(color) ? color : GenerateTeamColor();
@@ -664,18 +702,10 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             teamName,
             "",
             teamColor,
-            captain,
-            blacklist: blacklist);
+            captain);
 
 
         Teams.Add(team);
-
-        if (announce)
-        {
-            Announce(Loc.GetString(
-                "shipevent-team-add",
-                ("teamname", team.Name)));
-        }
 
         return team;
     }
@@ -719,11 +749,9 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         {
             var message = Loc.GetString(
                 "shipevent-team-respawn",
-                ("teamname", team.Name),
-                ("shipname", GetName(team.Ship)),
                 ("respawnreason", respawnReason == "" ? Loc.GetString("shipevent-respawn-default") : respawnReason),
                 ("respawntime", RespawnDelay / 60));
-            Announce(message);
+            TeamMessage(team, message);
         }
 
         if (killPoints)
@@ -733,24 +761,12 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         foreach (var member in team.Members)
         {
-            EntityManager.DeleteEntity(team.GetMemberEntity(member));
-            if (member.Mind.OwnedEntity != null && member.Mind.Session != null)
-                SetupActions(member.Mind.OwnedEntity.Value, team, member.Mind.Session); //so ghosts have team view & other stuff enabled too
+            EntityManager.QueueDeleteEntity(team.GetMemberEntity(member));
         }
 
-        foreach (var marker in GetShipComponents<ShipEventFactionMarkerComponent>(team.Ship))
-        {
-            if (marker.Team != team)
-            {
-                var transform = Transform(marker.Owner);
-                _formSys.SetParent(transform.Owner, _mapMan.GetMapEntityId(transform.MapID));
-                _formSys.SetGridId(marker.Owner, transform, null);
-                Dirty(transform);
-            }
-        }
+        DetachEnemyTeamsFromGrid(team.Ship, team);
 
-        if (team.Ship != EntityUid.Invalid)
-            EntityManager.DeleteEntity(team.Ship);
+        EntityManager.DeleteEntity(team.Ship);
 
         team.Ship = EntityUid.Invalid;
 
@@ -823,30 +839,19 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// </summary>
     /// <param name="team">Team to remove</param>
     /// <param name="removeReason">Message to show in announcement</param>
-    /// <param name="announce">Whether to announce removal</param>
     /// <param name="killPoints">Whether to add points to other teams for hits on removed one</param>
-    public void RemoveTeam(ShipEventFaction team, string removeReason = "", bool announce = true, bool killPoints = true)
+    public void RemoveTeam(ShipEventFaction team, string removeReason = "", bool killPoints = true)
     {
-        if (announce)
-        {
-            var message = Loc.GetString(
-                "shipevent-team-remove",
-                ("teamname", team.Name),
-                ("shipname", GetName(team.Ship)),
-                ("removereason", removeReason == "" ? Loc.GetString("shipevent-remove-default") : removeReason));
-            Announce(message);
-        }
-
         if (killPoints)
             AddKillPoints(team);
 
         foreach (var member in team.Members)
         {
-            EntityManager.DeleteEntity(team.GetMemberEntity(member));
+            EntityManager.QueueDeleteEntity(team.GetMemberEntity(member));
         }
 
         if (team.Ship != EntityUid.Invalid)
-            EntityManager.DeleteEntity(team.Ship);
+            EntityManager.QueueDeleteEntity(team.Ship);
 
         Teams.Remove(team);
     }
@@ -878,20 +883,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                     break;
             }
         }
-    }
-
-    private int GetMemberLimit()
-    {
-        int totalMembers = 0;
-        int minMembers = 0;
-        foreach (var team in Teams)
-        {
-            totalMembers += team.Members.Count;
-            if (team.Members.Count < minMembers || minMembers == 0)
-                minMembers = team.Members.Count;
-        }
-
-        return minMembers + totalMembers / PlayersPerTeamPlace;
     }
 
     private void CheckTeams(float deltaTime)
@@ -960,8 +951,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                 TeamMessage(team,
                     Loc.GetString("shipevent-team-bonusinterval",
                         ("time", BonusInterval / 60),
-                        ("points", PointsPerInterval)),
-                    color: team.Color);
+                        ("points", PointsPerInterval)));
                 team.Points += PointsPerInterval;
                 team.LastBonusInterval++;
             }

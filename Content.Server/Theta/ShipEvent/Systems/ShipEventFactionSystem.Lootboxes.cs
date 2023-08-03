@@ -12,13 +12,13 @@ namespace Content.Server.Theta.ShipEvent.Systems;
 public sealed partial class ShipEventFactionSystem
 {
     public List<(EntityUid, float)> Lootboxes = new();
-    
+
     private void OnLootboxInfoRequest(LootboxInfoRequest msg, EntitySessionEventArgs args)
     {
         List<EntityUid> ents = new();
         List<Box2> bounds = new();
         List<float> lifetime = new();
-        
+
         foreach ((EntityUid ent, float lt) in Lootboxes)
         {
             ents.Add(ent);
@@ -37,18 +37,19 @@ public sealed partial class ShipEventFactionSystem
                 bounds.Add(new Box2(0, 0, 0, 0));
             }
         }
-        
+
         RaiseNetworkEvent(new LootboxInfo(ents, bounds, lifetime));
     }
-    
-    private void OnLootboxSpawnTriggered(EntityUid uid, ShipEventLootboxSpawnTriggerComponent trigger, UseInHandEvent args)
+
+    private void OnLootboxSpawnTriggered(EntityUid uid, ShipEventLootboxSpawnTriggerComponent trigger,
+        UseInHandEvent args)
     {
         SpawnLootboxes(trigger.LootboxSpawnAmount);
     }
-    
+
     private void OnPointStorageTriggered(EntityUid uid, ShipEventPointStorageComponent storage, UseInHandEvent args)
     {
-        if (EntityManager.TryGetComponent<ShipEventFactionMarkerComponent>(args.User, out ShipEventFactionMarkerComponent? marker))
+        if (EntityManager.TryGetComponent<ShipEventFactionMarkerComponent>(args.User, out var marker))
         {
             if (marker.Team != null)
             {
@@ -66,13 +67,13 @@ public sealed partial class ShipEventFactionSystem
             SpawnLootboxes(LootboxSpawnAmount);
         }
 
-        for(int i = 0; i < Lootboxes.Count; i++)
+        for (int i = 0; i < Lootboxes.Count; i++)
         {
             (EntityUid uid, float timer) = Lootboxes[i];
             timer -= deltaTime;
             if (timer <= 0)
             {
-                EntityManager.DeleteEntity(uid);
+                DeleteLootbox(uid);
                 Lootboxes.RemoveAt(i);
                 i--;
                 continue;
@@ -82,11 +83,14 @@ public sealed partial class ShipEventFactionSystem
         }
     }
 
-    private void SpawnLootboxes(int amount, bool announce = true)
+    private void DeleteLootbox(EntityUid lootboxUid)
     {
-        if(announce)
-            Announce(Loc.GetString("shipevent-lootboxspawned"));
+        DetachEnemyTeamsFromGrid(lootboxUid, null);
+        EntityManager.DeleteEntity(lootboxUid);
+    }
 
+    private void SpawnLootboxes(int amount)
+    {
         for (int i = 0; i < amount; i++)
         {
             EntityUid lootbox = _debrisSys.RandomPosSpawn(TargetMap, Vector2.Zero, MaxSpawnOffset, 50, _random.Pick(LootboxPrototypes), LootboxProcessors);
@@ -95,6 +99,7 @@ public sealed partial class ShipEventFactionSystem
                 Logger.Warning("Ship event faction system, SpawnLootboxes: Failed to spawn lootbox! Continuing.");
                 continue;
             }
+
             Lootboxes.Add((lootbox, LootboxLifetime));
         }
     }

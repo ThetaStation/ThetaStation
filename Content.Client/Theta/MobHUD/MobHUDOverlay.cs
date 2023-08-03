@@ -17,8 +17,8 @@ public sealed class MobHUDOverlay : Overlay
     private readonly MobHUDSystem _hudSys;
 
     private Dictionary<SpriteSpecifier, Texture> cachedTextures = new();
-    
-    public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowFOV;
+
+    public override OverlaySpace Space => OverlaySpace.WorldSpace;
 
     public MobHUDOverlay()
     {

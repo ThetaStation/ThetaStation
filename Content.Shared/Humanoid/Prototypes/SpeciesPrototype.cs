@@ -66,13 +66,13 @@ public sealed class SpeciesPrototype : IPrototype
     /// <summary>
     ///     Humanoid species variant used by this entity.
     /// </summary>
-    [DataField("prototype", required: true, customTypeSerializer:typeof(PrototypeIdSerializer<EntityPrototype>))]
+    [DataField("prototype", required: true, customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
     public string Prototype { get; } = default!;
 
     /// <summary>
     /// Prototype used by the species for the dress-up doll in various menus.
     /// </summary>
-    [DataField("dollPrototype", required: true, customTypeSerializer:typeof(PrototypeIdSerializer<EntityPrototype>))]
+    [DataField("dollPrototype", required: true, customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
     public string DollPrototype { get; } = default!;
 
     /// <summary>
