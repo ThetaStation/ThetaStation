@@ -7,7 +7,6 @@ using Robust.Client.UserInterface.XAML;
 namespace Content.Client.Theta.Misc.GenericWarningUI;
 
 [GenerateTypedNameReferences]
-[Virtual]
 public partial class GenericWarningWindow : DefaultWindow
 {
     public event Action<BaseButton.ButtonEventArgs>? OnYesButtonPressed;
@@ -31,6 +30,13 @@ public partial class GenericWarningWindow : DefaultWindow
 
     public void UpdateText(GenericWarningBoundUserInterfaceState state)
     {
-        return;
+        if(state.TitleLoc != null)
+            Title = Loc.GetString(state.TitleLoc);
+        if(state.WarningLoc != null)
+            Warning.Text = Loc.GetString(state.WarningLoc);
+        if(state.YesButtonLoc != null)
+            YesButton.Text = Loc.GetString(state.YesButtonLoc);
+        if(state.NoButtonLoc != null)
+            NoButton.Text = Loc.GetString(state.NoButtonLoc);
     }
 }

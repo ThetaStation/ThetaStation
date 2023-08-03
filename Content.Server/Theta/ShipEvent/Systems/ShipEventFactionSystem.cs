@@ -406,7 +406,14 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         if (session == null)
             return;
 
-        _uiSys.TryOpen(uid, GenericWarningUiKey.Key, session);
+        if(!_uiSys.TryGetUi(uid, GenericWarningUiKey.ShipEventKey, out var bui))
+            return;
+        _uiSys.TrySetUiState(uid, GenericWarningUiKey.ShipEventKey, new GenericWarningBoundUserInterfaceState
+            {
+                WarningLoc = "generic-warning-window-warning-to-lobby",
+            }
+        );
+        _uiSys.OpenUi(bui, session);
     }
 
     private void ReturnToLobbyPlayer(EntityUid uid, ShipEventFactionMarkerComponent component, GenericWarningYesPressedMessage args)

@@ -12,7 +12,7 @@
       - key: enum.CaptainMenuUiKey.Key
         type: CaptainMenuBoundUserInterface
         requireInputValidation: false
-      - key: enum.GenericWarningUiKey.Key
+      - key: enum.GenericWarningUiKey.ShipEventKey
         type: GenericWarningWindowBoundUserInterface
         requireInputValidation: false
     - type: MindContainer

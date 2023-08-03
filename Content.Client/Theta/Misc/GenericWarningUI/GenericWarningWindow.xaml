@@ -1,17 +1,18 @@
 ﻿<DefaultWindow
     xmlns="https://spacestation14.io"
     MinSize="300 100"
-    Title="Warning!!!">
+    Title="{Loc 'generic-warning-window-title-default'}">
     <BoxContainer Orientation="Vertical">
-        <Label Text="ARE YOU SURE? ARE YOU SURE? ARE YOU SURE? ARE YOU SURE? ARE YOU SURE?"
-               HorizontalAlignment="Center"/>
+        <Label Name="Warning"
+            Text="{Loc 'generic-warning-window-warning-default'}"
+            HorizontalAlignment="Center"/>
         <BoxContainer Orientation="Horizontal">
             <Button Name="YesButton"
-                    Text="YES"
+                    Text="{Loc 'generic-warning-window-yes-default'}"
                     HorizontalExpand="True"
                     HorizontalAlignment="Left" />
             <Button Name="NoButton"
-                    Text="NO"
+                    Text="{Loc 'generic-warning-window-no-default'}"
                     HorizontalExpand="True"
                     HorizontalAlignment="Right" />
         </BoxContainer>
