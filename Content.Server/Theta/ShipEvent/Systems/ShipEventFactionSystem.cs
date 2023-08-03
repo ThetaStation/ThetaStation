@@ -408,7 +408,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         if(!_uiSys.TryGetUi(uid, GenericWarningUiKey.ShipEventKey, out var bui))
             return;
-        _uiSys.TrySetUiState(uid, GenericWarningUiKey.ShipEventKey, new GenericWarningBoundUserInterfaceState
+        UserInterfaceSystem.SetUiState(bui, new GenericWarningBoundUserInterfaceState
             {
                 WarningLoc = "generic-warning-window-warning-to-lobby",
             }
