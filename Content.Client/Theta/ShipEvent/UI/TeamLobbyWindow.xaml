@@ -1,9 +1,9 @@
 ﻿<DefaultWindow xmlns="https://spacestation14.io"
                Title="{Loc 'shipevent-lobby-windowtitle'}"
-               MinSize="500 350">
+               MinSize="650 350">
     <BoxContainer Orientation="Vertical">
         <ScrollContainer VerticalExpand="True">
-            <GridContainer Columns="4" Name="TeamsContainer">
+            <GridContainer Columns="5" Name="TeamsContainer">
 
             </GridContainer>
         </ScrollContainer>

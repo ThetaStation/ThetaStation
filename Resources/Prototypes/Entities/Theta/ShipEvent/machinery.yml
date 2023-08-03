@@ -1,6 +1,7 @@
 ﻿- type: entity
   id: CannonComputerShipEvent
   name: cannon console
+  suffix: ShipEvent
   parent: BaseComputer
   components:
     - type: CannonConsole
@@ -38,6 +39,7 @@
 - type: entity
   parent: ComputerShuttleSyndie
   id: ComputerShuttleSyndieShipEvent
+  suffix: ShipEvent
   components:
     - type: Anchorable
       disabled: true
@@ -61,6 +63,11 @@
       color: "#43ccb5"
     - type: ApcPowerReceiver
       needsPower: false
+    - type: Destructible
+      thresholds:
+        - trigger: # override the parent slot for immortality
+            !type:DamageTrigger
+            damage: 100000
 
 - type: entity
   id: TeamSpawnerShipEvent
@@ -161,12 +168,6 @@
               acts: [ "Destruction" ]
     - type: ApcPowerReceiver
       needsPower: false
-    - type: ActivatableUI
-      key: enum.TurretLoaderUiKey.Key
-    - type: UserInterface
-      interfaces:
-      - key: enum.TurretLoaderUiKey.Key
-        type: TurretLoaderBoundUserInterface
     - type: ItemSlots
       slots:
         ammoContainer:

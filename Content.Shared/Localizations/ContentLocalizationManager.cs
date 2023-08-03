@@ -23,25 +23,26 @@ namespace Content.Shared.Localizations
             @"mm"
         };
 
+        // RT does not allow to get this natively
+        public Dictionary<string, CultureInfo> LoadedCultures = new();
+
         public void Initialize()
         {
-            var Culture = _cfg.GetCVar(CCVars.CultureLocale);
-            var culture = new CultureInfo(Culture);
-            var fallbackCulture = new CultureInfo(Culture == "en-US" ? "ru-RU" : "en-US"); // Corvax-Localization
-
+            var defaultCultureName = _cfg.GetCVar(CCVars.CultureLocale);
+            var culture = new CultureInfo(defaultCultureName);
             _loc.LoadCulture(culture);
-            _loc.LoadCulture(fallbackCulture); // Corvax-Localization
-            _loc.SetFallbackCluture(fallbackCulture); // Corvax-Localization
-            _loc.AddFunction(culture, "PRESSURE", FormatPressure);
-            _loc.AddFunction(culture, "POWERWATTS", FormatPowerWatts);
-            _loc.AddFunction(culture, "POWERJOULES", FormatPowerJoules);
-            _loc.AddFunction(culture, "UNITS", FormatUnits);
-            _loc.AddFunction(culture, "TOSTRING", args => FormatToString(culture, args));
-            _loc.AddFunction(culture, "LOC", FormatLoc);
-            _loc.AddFunction(culture, "NATURALFIXED", FormatNaturalFixed);
-            _loc.AddFunction(culture, "NATURALPERCENT", FormatNaturalPercent);
-            _loc.AddFunction(culture, "MANY", FormatMany); // TODO: Temporary fix for MANY() fluent errors. Remove after resolve errors.
+            _loc.DefaultCulture = culture;
 
+            LoadedCultures.Add(defaultCultureName, culture);
+            LoadCultureFunctions(culture);
+
+            var fallbackCultureName = defaultCultureName == "en-US" ? "ru-RU" : "en-US";
+            var fallbackCulture = new CultureInfo(fallbackCultureName);
+            _loc.LoadCulture(fallbackCulture);
+            _loc.SetFallbackCluture(fallbackCulture);
+
+            LoadedCultures.Add(fallbackCultureName, fallbackCulture);
+            LoadCultureFunctions(fallbackCulture);
 
             /*
              * The following language functions are specific to the english localization. When working on your own
@@ -52,6 +53,27 @@ namespace Content.Shared.Localizations
 
             _loc.AddFunction(cultureEn, "MAKEPLURAL", FormatMakePlural);
             _loc.AddFunction(cultureEn, "MANY", FormatMany);
+
+            _cfg.OnValueChanged(CCVars.CultureLocale, OnChangeLocalization, true);
+        }
+
+        public void OnChangeLocalization(string newLocal)
+        {
+            var culture = LoadedCultures[newLocal];
+            _loc.DefaultCulture = culture;
+        }
+
+        private void LoadCultureFunctions(CultureInfo culture)
+        {
+            _loc.AddFunction(culture, "PRESSURE", FormatPressure);
+            _loc.AddFunction(culture, "POWERWATTS", FormatPowerWatts);
+            _loc.AddFunction(culture, "POWERJOULES", FormatPowerJoules);
+            _loc.AddFunction(culture, "UNITS", FormatUnits);
+            _loc.AddFunction(culture, "TOSTRING", args => FormatToString(culture, args));
+            _loc.AddFunction(culture, "LOC", FormatLoc);
+            _loc.AddFunction(culture, "NATURALFIXED", FormatNaturalFixed);
+            _loc.AddFunction(culture, "NATURALPERCENT", FormatNaturalPercent);
+            _loc.AddFunction(culture, "MANY", FormatMany); // TODO: Temporary fix for MANY() fluent errors. Remove after resolve errors.
         }
 
         private ILocValue FormatMany(LocArgs args)

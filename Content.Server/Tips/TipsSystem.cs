@@ -8,7 +8,6 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
-using SpaceWizards.Sodium.Interop;
 
 namespace Content.Server.Tips;
 
@@ -27,7 +26,6 @@ public sealed class TipsSystem : EntitySystem
     private bool _tipsEnabled;
     private float _tipTimeOutOfRound;
     private float _tipTimeInRound;
-    private string _tipsDataset = "";
 
     [ViewVariables(VVAccess.ReadWrite)]
     private TimeSpan _nextTipTime = TimeSpan.Zero;
@@ -40,7 +38,6 @@ public sealed class TipsSystem : EntitySystem
         _cfg.OnValueChanged(CCVars.TipFrequencyOutOfRound, SetOutOfRound, true);
         _cfg.OnValueChanged(CCVars.TipFrequencyInRound, SetInRound, true);
         _cfg.OnValueChanged(CCVars.TipsEnabled, SetEnabled, true);
-        _cfg.OnValueChanged(CCVars.TipsDataset, SetDataset, true);
 
         RecalculateNextTipTime();
     }
@@ -77,14 +74,11 @@ public sealed class TipsSystem : EntitySystem
             RecalculateNextTipTime();
     }
 
-    private void SetDataset(string value)
-    {
-        _tipsDataset = value;
-    }
-
     private void AnnounceRandomTip()
     {
-        if (!_prototype.TryIndex<DatasetPrototype>(_tipsDataset, out var tips))
+        var tipsDataset = _cfg.GetCVar(CCVars.CultureLocale) == "en-US" ? "Tips_en" : "Tips_ru";
+
+        if (!_prototype.TryIndex<DatasetPrototype>(tipsDataset, out var tips))
             return;
 
         var tip = _random.Pick(tips.Values);
