@@ -126,7 +126,12 @@ public sealed class DebrisGenerationSystem : EntitySystem
         var result = false;
         for (int n = 0; n < tries; n++)
         {
-            mapPos = (Vector2i) Rand.NextVector2Box(bounds.Left, bounds.Bottom, bounds.Right, bounds.Top).Rounded();
+            mapPos = (Vector2i) Rand.NextVector2Box(
+                bounds.Left + gridComp.LocalAABB.Width, 
+                bounds.Bottom + gridComp.LocalAABB.Height, 
+                bounds.Right - gridComp.LocalAABB.Width, 
+                bounds.Top - gridComp.LocalAABB.Height
+                ).Rounded();
             if (!MapMan.FindGridsIntersecting(targetMap,
                     new Box2(mapPos - finalDistance, mapPos + finalDistance)).Any())
             {
