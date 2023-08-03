@@ -237,12 +237,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             {
                 var newName = args.NewShipName;
 
-                var message = Loc.GetString(
-                    "shipevent-team-shiprename",
-                    ("teamname", team.Name),
-                    ("oldname", team.ShipName),
-                    ("newname", newName));
-                Announce(message);
                 team.ShipName = newName;
                 break;
             }
@@ -416,7 +410,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         if (session == null)
             return;
 
-        var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>((EntityUid)ship);
+        var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>((EntityUid) ship);
 
         if (!spawners.Any())
         {
@@ -571,7 +565,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         var playerMob = SpawnPlayer(player, spawner);
         AfterSpawn(playerMob, spawner);
 
-        TeamMessage(targetTeam, Loc.GetString("shipevent-team-newmember", ("name", GetName(playerMob))), color: targetTeam.Color);
+        TeamMessage(targetTeam, Loc.GetString("shipevent-team-newmember", ("name", GetName(playerMob))));
     }
 
     /// <summary>
@@ -587,7 +581,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             if (EntityManager.TryGetComponent<MindContainerComponent>(player.AttachedEntity, out var mind))
                 mind.GhostOnShutdown = false; //to prevent ghost duplication
 
-            EntityManager.QueueDeleteEntity((EntityUid)player.AttachedEntity);
+            EntityManager.QueueDeleteEntity((EntityUid) player.AttachedEntity);
         }
 
         var spawner = EntityManager.GetComponent<ShipEventSpawnerComponent>(spawnerUid);
@@ -597,7 +591,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         playerMob.EnsureComponent<MindContainerComponent>();
 
-        var newMind =  _mindSystem.CreateMind(player.UserId, EntityManager.GetComponent<MetaDataComponent>(playerMob).EntityName);
+        var newMind = _mindSystem.CreateMind(player.UserId, EntityManager.GetComponent<MetaDataComponent>(playerMob).EntityName);
         _mindSystem.TransferTo(newMind, playerMob);
 
         HumanoidCharacterProfile profile;
@@ -664,18 +658,18 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// <param name="session">player's session</param>
     private void SetupActions(EntityUid uid, ShipEventFaction? team, IPlayerSession? session, bool isGhost = false)
     {
-        var teamViewToggle = (InstantAction)_protMan.Index<InstantActionPrototype>("ShipEventTeamViewToggle").Clone();
+        var teamViewToggle = (InstantAction) _protMan.Index<InstantActionPrototype>("ShipEventTeamViewToggle").Clone();
         _actSys.AddAction(uid, teamViewToggle, null);
 
         if (team != null && session != null && team.Captain == session.ConnectedClient.UserName)
         {
-            var capMenuToggle = (InstantAction)_protMan.Index<InstantActionPrototype>("ShipEventCaptainMenuToggle").Clone();
+            var capMenuToggle = (InstantAction) _protMan.Index<InstantActionPrototype>("ShipEventCaptainMenuToggle").Clone();
             _actSys.AddAction(uid, capMenuToggle, null);
         }
 
         if (isGhost)
         {
-            var retToLobbyAction = (InstantAction)_protMan.Index<InstantActionPrototype>("ShipEventReturnToLobbyAction").Clone();
+            var retToLobbyAction = (InstantAction) _protMan.Index<InstantActionPrototype>("ShipEventReturnToLobbyAction").Clone();
             _actSys.AddAction(uid, retToLobbyAction, null);
         }
     }
@@ -696,13 +690,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
 
         Teams.Add(team);
-
-        if (announce)
-        {
-            Announce(Loc.GetString(
-                "shipevent-team-add",
-                ("teamname", team.Name)));
-        }
 
         return team;
     }
@@ -746,11 +733,9 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         {
             var message = Loc.GetString(
                 "shipevent-team-respawn",
-                ("teamname", team.Name),
-                ("shipname", GetName(team.Ship)),
                 ("respawnreason", respawnReason == "" ? Loc.GetString("shipevent-respawn-default") : respawnReason),
                 ("respawntime", RespawnDelay / 60));
-            Announce(message);
+            TeamMessage(team, message);
         }
 
         if (killPoints)
@@ -838,20 +823,9 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// </summary>
     /// <param name="team">Team to remove</param>
     /// <param name="removeReason">Message to show in announcement</param>
-    /// <param name="announce">Whether to announce removal</param>
     /// <param name="killPoints">Whether to add points to other teams for hits on removed one</param>
-    public void RemoveTeam(ShipEventFaction team, string removeReason = "", bool announce = true, bool killPoints = true)
+    public void RemoveTeam(ShipEventFaction team, string removeReason = "", bool killPoints = true)
     {
-        if (announce)
-        {
-            var message = Loc.GetString(
-                "shipevent-team-remove",
-                ("teamname", team.Name),
-                ("shipname", GetName(team.Ship)),
-                ("removereason", removeReason == "" ? Loc.GetString("shipevent-remove-default") : removeReason));
-            Announce(message);
-        }
-
         if (killPoints)
             AddKillPoints(team);
 
@@ -961,8 +935,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                 TeamMessage(team,
                     Loc.GetString("shipevent-team-bonusinterval",
                         ("time", BonusInterval / 60),
-                        ("points", PointsPerInterval)),
-                    color: team.Color);
+                        ("points", PointsPerInterval)));
                 team.Points += PointsPerInterval;
                 team.LastBonusInterval++;
             }

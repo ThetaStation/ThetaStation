@@ -7,10 +7,7 @@ shipevent-desc = Нанотрейзен устроила испытания св
 
 shipevent-announcement-title = Управления флотом Нанотрейзен
 shipevent-eventannouncement = На станции начался полный хаос, после того как НТ устроили поблизости испытания боевой мощи своих кораблей лёгкого класса.
-shipevent-team-add = Новая команда '{ $teamname }' вступила в соревнования!
-shipevent-team-remove = Команда '{ $teamname }' (корабль - '{ $shipname }') покинула соревнования по причине { $removereason }
-shipevent-team-respawn = Команда '{ $teamname }' (корабль - '{ $shipname }') временно покинула соревнования по причине { $respawnreason }. Ожидаемое время до восстановления: { $respawntime } минут(а).
-shipevent-team-shiprename = Команда '{ $teamname }' переименовала свой корабль с '{ $oldname }' на '{ $newname }'
+shipevent-team-respawn = Ваша команда временно покинула соревнования по причине { $respawnreason }. Вы восстановитесь через { $respawntime } минут(а).
 shipevent-team-captainchange = Капитан { $oldcap } был заменён на своём посту { $newcap }. Да здравствует новый капитан!
 shipevent-team-respawnnow = Идёт респавн команды...
 shipevent-team-bonusinterval = Команда прожила без респавна очередные { $time } минут, и получает за это { $points } очков!
@@ -22,11 +19,9 @@ shipevent-respawn-tech = уничтожения жизненно важных к
 shipevent-remove-default = недовольства адмирала
 shipevent-remove-noplayers = отсутствия активности
 shipevent-outofbounds = ВНИМАНИЕ! Ваша команда покинула пределы испытательного полигона. Немедленно вернитесь, в противном случае будут применены дисциплинарные меры.
-shipevent-boundscompressed = Границы полигона были сжаты на { $distance } метров.
 shipevent-roundendtimer-tenmins = До окончания раунда осталось 10 минут! Успейте набрать побольше очков.
 shipevent-roundendtimer-fivemins = До окончания раунда осталось всего 5 минут! Срочно уничтожьте побольше кораблей.
 shipevent-roundendtimer-onemin = Раунд вот-вот закончится...
-shipevent-lootboxspawned = Новая партия схронов уже на поле. Бегите их собирать!
 shipevent-pointsadded = Команде добавлено { $points } очков, возрадуйтесь!
 
 ## Role stuff
