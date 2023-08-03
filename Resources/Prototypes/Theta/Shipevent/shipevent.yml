@@ -18,9 +18,6 @@
       respawnDelay: 60
       bonusInterval: 600
 
-      #teams
-      playersPerTeamPlace: 2
-
       #points
       pointsPerInterval: 5000
       pointsPerHitMultiplier: 0.01
@@ -43,7 +40,7 @@
       #bounds
       boundsCompressionInterval: 0
       boundsCompressionDistance: 0
-        
+
       #lootboxes
       lootboxSpawnInterval: 360
       lootboxSpawnAmount: 2

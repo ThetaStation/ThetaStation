@@ -35,7 +35,7 @@ public sealed class TeamConsoleSystem : EntitySystem
 
     private void TryJoinToShipTeam(EntityUid uid, TeamConsoleComponent component, JoinToShipTeamsEvent args)
     {
-        _shipSys.JoinTeam((IPlayerSession) args.Session, args.Name);
+        _shipSys.JoinTeam((IPlayerSession) args.Session, args.Name, args.Password);
     }
 
     private void OnRefreshTeams(EntityUid uid, TeamConsoleComponent component, RefreshShipTeamsEvent args)
@@ -58,7 +58,8 @@ public sealed class TeamConsoleSystem : EntitySystem
         List<ShipTeamForLobbyState> teamStates = new();
         foreach (var team in _shipSys.Teams)
         {
-            teamStates.Add(new ShipTeamForLobbyState(team.Name, team.Members.Count, team.Captain));
+            var hasPassword = team.JoinPassword != null;
+            teamStates.Add(new ShipTeamForLobbyState(team.Name, team.Members.Count, team.Captain, hasPassword, team.MaxMembers));
         }
 
         return teamStates;
@@ -75,29 +76,7 @@ public sealed class TeamConsoleSystem : EntitySystem
             return;
         }
 
-        var color = Color.White;
-        if (!_shipSys.IsValidColor(args.Color))
-        {
-            SendResponse(uid, args.UiKey, ResponseTypes.InvalidColor);
-            return;
-        }
-
-        color = args.Color;
-
-        List<string> blacklist = new();
-        if (!string.IsNullOrEmpty(args.Blacklist))
-        {
-            blacklist = args.Blacklist.Split(",").ToList();
-            blacklist = blacklist.Select(ckey => ckey.Trim()).ToList();
-        }
-
-        if (blacklist.Contains(args.Session.ConnectedClient.UserName))
-        {
-            SendResponse(uid, args.UiKey, ResponseTypes.BlacklistedSelf);
-            return;
-        }
-
-        _shipSys.CreateTeam(args.Session, args.Name, color, args.ShipType, blacklist);
+        _shipSys.CreateTeam(args.Session, args.Name, args.ShipType, args.Password, args.MaxPlayers);
     }
 
     private void SendResponse(EntityUid uid, Enum uiKey, ResponseTypes response)
@@ -108,15 +87,6 @@ public sealed class TeamConsoleSystem : EntitySystem
             case ResponseTypes.InvalidName:
                 text = "shipevent-teamcreation-response-invalidname";
                 break;
-            case ResponseTypes.InvalidColor:
-                text = "shipevent-teamcreation-response-invalidcolor";
-                break;
-            case ResponseTypes.BlacklistedSelf:
-                text = "shipevent-teamcreation-response-blacklistself";
-                break;
-            case ResponseTypes.SettingUp:
-                text = "shipevent-teamcreation-response-waitpls";
-                break;
         }
 
         _uiSystem.TrySetUiState(uid, uiKey, new ShipEventCreateTeamBoundUserInterfaceState(Loc.GetString(text)));
@@ -126,8 +96,5 @@ public sealed class TeamConsoleSystem : EntitySystem
     private enum ResponseTypes
     {
         InvalidName,
-        InvalidColor,
-        BlacklistedSelf,
-        SettingUp
     }
 }
