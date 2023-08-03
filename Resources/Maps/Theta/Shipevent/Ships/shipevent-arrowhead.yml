@@ -388,6 +388,20 @@ entities:
       type: Transform
     - enabled: True
       type: AmbientSound
+  - uid: 208
+    components:
+    - pos: 3.5,10.5
+      parent: 1
+      type: Transform
+    - enabled: True
+      type: AmbientSound
+  - uid: 209
+    components:
+    - pos: 3.5,11.5
+      parent: 1
+      type: Transform
+    - enabled: True
+      type: AmbientSound
 - proto: CableApcStack
   entities:
   - uid: 46
@@ -638,18 +652,37 @@ entities:
       pos: 2.5,8.5
       parent: 1
       type: Transform
+- proto: CircularShieldBase
+  entities:
+  - uid: 86
+    components:
+    - pos: 3.5,11.5
+      parent: 1
+      type: Transform
+    - radius: 10
+      width: 1.5707963267948966 rad
+      angle: 1.5707963267948966 rad
+      type: CircularShield
+    - links:
+      - 85
+      type: DeviceLinkSink
+- proto: CircularShieldConsole
+  entities:
+  - uid: 85
+    components:
+    - rot: 1.5707963267948966 rad
+      pos: 0.5,6.5
+      parent: 1
+      type: Transform
+    - linkedPorts:
+        86:
+        - CircularShieldConsoleSender: CircularShieldConsoleReceiver
+      type: DeviceLinkSource
 - proto: ComputerShuttleSyndieShipEvent
   entities:
   - uid: 77
     components:
     - pos: 3.5,9.5
-      parent: 1
-      type: Transform
-- proto: CrateFoodMRE
-  entities:
-  - uid: 86
-    components:
-    - pos: 0.5,6.5
       parent: 1
       type: Transform
 - proto: FlakAmmoClosetShipEvent
@@ -666,7 +699,7 @@ entities:
     - pos: 4.5,7.5
       parent: 1
       type: Transform
-    - supplyRate: 30000
+    - supplyRate: 60000
       type: PowerSupplier
 - proto: GravityGeneratorMini
   entities:

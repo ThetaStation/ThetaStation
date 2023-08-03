@@ -31,9 +31,9 @@ public sealed class CircularShieldOverlay : Overlay
         foreach ((var form, var shield, var fix) in 
                  entMan.EntityQuery<TransformComponent, CircularShieldComponent, FixturesComponent>())
         {
-            if (!shield.CanWork)
+            if (!shield.CanWork || form.MapID != args.MapId)
                 continue;
-            
+
             PolygonShape? shape = (PolygonShape?)fix.Fixtures.GetValueOrDefault(ShieldFixtureId)?.Shape ?? null;
             if (shape == null)
                 continue;
