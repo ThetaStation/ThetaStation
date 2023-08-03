@@ -63,6 +63,11 @@
       color: "#43ccb5"
     - type: ApcPowerReceiver
       needsPower: false
+    - type: Destructible
+      thresholds:
+        - trigger: # override the parent slot for immortality
+            !type:DamageTrigger
+            damage: 100000
 
 - type: entity
   id: TeamSpawnerShipEvent
