@@ -561,7 +561,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         var playerMob = SpawnPlayer(player, spawner);
         AfterSpawn(playerMob, spawner);
 
-        TeamMessage(targetTeam, Loc.GetString("shipevent-team-newmember", ("name", GetName(playerMob))), color: targetTeam.Color);
+        TeamMessage(targetTeam, Loc.GetString("shipevent-team-newmember", ("name", GetName(playerMob))));
     }
 
     /// <summary>
@@ -730,11 +730,9 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         {
             var message = Loc.GetString(
                 "shipevent-team-respawn",
-                ("teamname", team.Name),
-                ("shipname", GetName(team.Ship)),
                 ("respawnreason", respawnReason == "" ? Loc.GetString("shipevent-respawn-default") : respawnReason),
                 ("respawntime", RespawnDelay / 60));
-            Announce(message, playSound: false);
+            TeamMessage(team, message);
         }
 
         if (killPoints)
@@ -948,8 +946,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                 TeamMessage(team,
                     Loc.GetString("shipevent-team-bonusinterval",
                         ("time", BonusInterval / 60),
-                        ("points", PointsPerInterval)),
-                    color: team.Color);
+                        ("points", PointsPerInterval)));
                 team.Points += PointsPerInterval;
                 team.LastBonusInterval++;
             }

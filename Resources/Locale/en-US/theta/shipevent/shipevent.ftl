@@ -10,7 +10,7 @@ shipevent-announcement-title = NanoTrasen Fleet Command
 
 shipevent-eventannouncement = Station has plunged into chaos after NT began testing their light battle ships nearby
 
-shipevent-team-respawn = The team '{ $teamname }' (ship name - '{ $shipname }') was temporarily withdrawn from the competition due to { $respawnreason }. Expected time before they return: { $respawntime } minute(s).
+shipevent-team-respawn = Your team was temporarily withdrawn from the competition due to { $respawnreason }. You will respawn in { $respawntime } minute(s).
 shipevent-team-captainchange = Captain { $oldcap } has been replaced by { $newcap }. Long live the new captain!
 shipevent-team-respawnnow = Team respawn is in progress...
 shipevent-team-bonusinterval = The team has survived without respawning for { $time } minutes, thus they receive { $points } points!
