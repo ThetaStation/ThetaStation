@@ -39,12 +39,12 @@ public sealed class BoundsOverlay : Overlay
 
     protected override void Draw(in OverlayDrawArgs args)
     {
+        if (args.MapId != TargetMap)
+            return;
+        
         if (_entMan.TryGetComponent<TransformComponent>(_playerMan.LocalPlayer?.ControlledEntity, out var form))
         {
             SecondsOutsideBounds += (float) (DateTime.Now - LastTime).TotalSeconds;
-
-            if (form.MapID != TargetMap)
-                return;
 
             if (!Bounds.Contains(_formSys.GetWorldPosition(form)))
             {
