@@ -16,6 +16,7 @@ namespace Content.Shared.Humanoid
         [Dependency] private readonly IRobustRandom _random = default!;
         [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
         [Dependency] private readonly IConfigurationManager _cfg = default!;
+
         public string GetName(string species, Gender? gender = null)
         {
             // if they have an old species or whatever just fall back to human I guess?
