@@ -40,12 +40,16 @@ public sealed class ShipTeamForLobbyState
     public readonly string Name;
     public readonly int Members;
     public readonly string Captain;
+    public readonly bool HasPassword;
+    public readonly int MaxMembers;
 
-    public ShipTeamForLobbyState(string name, int members, string captain)
+    public ShipTeamForLobbyState(string name, int members, string captain, bool hasPassword, int maxMembers)
     {
         Name = name;
         Members = members;
         Captain = captain;
+        HasPassword = hasPassword;
+        MaxMembers = maxMembers;
     }
 }
 
@@ -58,10 +62,12 @@ public sealed class RefreshShipTeamsEvent : BoundUserInterfaceMessage
 public sealed class JoinToShipTeamsEvent : BoundUserInterfaceMessage
 {
     public readonly string Name;
+    public readonly string? Password;
 
-    public JoinToShipTeamsEvent(string name)
+    public JoinToShipTeamsEvent(string name, string? password)
     {
         Name = name;
+        Password = password;
     }
 }
 
@@ -82,16 +88,16 @@ public sealed class ShipEventCreateTeamBoundUserInterfaceState : BoundUserInterf
 public sealed class TeamCreationRequest : BoundUserInterfaceMessage
 {
     public readonly string Name;
-    public readonly string Blacklist;
-    public readonly Color Color;
     public readonly ShipTypePrototype? ShipType;
+    public readonly string? Password;
+    public readonly int MaxPlayers;
 
-    public TeamCreationRequest(string name, Color color, string blacklist, ShipTypePrototype? shipType)
+    public TeamCreationRequest(string name, ShipTypePrototype? shipType, string? password, int maxPlayers)
     {
         Name = name;
-        Blacklist = blacklist;
-        Color = color;
         ShipType = shipType;
+        Password = password;
+        MaxPlayers = maxPlayers;
     }
 }
 

@@ -12,3 +12,5 @@ ent-Gyroscope = { ent-['BaseThruster', 'ConstructibleMachine'] }
 ent-DebugGyroscope = { ent-BaseThruster }
     .suffix = DEBUG
     .desc = { ent-BaseThruster.desc }
+ent-SkipjackGyroscope = { ent-Gyroscope }
+    .desc = { ent-Gyroscope }

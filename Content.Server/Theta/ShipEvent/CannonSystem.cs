@@ -6,6 +6,7 @@ using Content.Shared.Theta.ShipEvent.UI;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Shared.Physics.Components;
+using Content.Server.Theta.ShipEvent.Systems;
 
 namespace Content.Server.Theta.ShipEvent;
 
@@ -70,7 +71,7 @@ public sealed class CannonSystem : SharedCannonSystem
         }
 
         double ew = gun.MaxAngle + 0.04;
-        for(int i = 0; i < ranges.Count; i++)
+        for (int i = 0; i < ranges.Count; i++)
         {
             ranges[i] = (ReducedAndPositive(ranges[i].Item1 - ew), ranges[i].Item2 + ew);
         }
@@ -89,11 +90,12 @@ public sealed class CannonSystem : SharedCannonSystem
         {
             switch (dirAngle.Theta)
             {
-                case 0: case Math.Tau:
+                case 0:
+                case Math.Tau:
                     a = dir - Vector2Helpers.Half;
                     b = new Vector2(dir.X - 0.5f, dir.Y + 0.5f);
                     break;
-                case Math.PI*0.5:
+                case Math.PI * 0.5:
                     a = dir - Vector2Helpers.Half;
                     b = new Vector2(dir.X + 0.5f, dir.Y - 0.5f);
                     break;
@@ -101,7 +103,7 @@ public sealed class CannonSystem : SharedCannonSystem
                     a = dir + Vector2Helpers.Half;
                     b = new Vector2(dir.X + 0.5f, dir.Y - 0.5f);
                     break;
-                case Math.PI*1.5:
+                case Math.PI * 1.5:
                     a = dir + Vector2Helpers.Half;
                     b = new Vector2(dir.X - 0.5f, dir.Y + 0.5f);
                     break;
@@ -151,7 +153,7 @@ public sealed class CannonSystem : SharedCannonSystem
 
     private void OnRemoval(EntityUid uid, CannonComponent cannon, ComponentRemove args)
     {
-        if(cannon.BoundLoader != null)
+        if (cannon.BoundLoader != null)
             cannon.BoundLoader.BoundTurret = null;
     }
 
@@ -165,7 +167,7 @@ public sealed class CannonSystem : SharedCannonSystem
 
     private void AfterShot(EntityUid entity, CannonComponent cannon, AmmoShotEvent args)
     {
-        foreach(EntityUid projectile in args.FiredProjectiles)
+        foreach (EntityUid projectile in args.FiredProjectiles)
         {
             var marker = EntityManager.EnsureComponent<ShipEventFactionMarkerComponent>(projectile);
             marker.Team = EntityManager.EnsureComponent<ShipEventFactionMarkerComponent>(entity).Team;

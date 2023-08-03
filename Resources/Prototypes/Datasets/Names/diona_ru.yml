@@ -1,5 +1,5 @@
 - type: dataset
-  id: DionaFirst
+  id: DionaFirst_ru
   values:
   - Мох
   - Гриб
@@ -34,7 +34,7 @@
   - Слуга
 
 - type: dataset
-  id: DionaLast
+  id: DionaLast_ru
   values:
   - Мира
   - Гармонии
