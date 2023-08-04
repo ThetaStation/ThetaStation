@@ -1,6 +1,10 @@
-﻿using Content.Server.Mind.Components;
+﻿using Content.Server.Mind;
+using Content.Server.Mind.Components;
 using Content.Server.Shuttles.Systems;
+using Content.Server.Theta.ShipEvent;
+using Content.Server.Theta.ShipEvent.Components;
 using Content.Server.Theta.ShipEvent.Console;
+using Content.Server.Theta.ShipEvent.Systems;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Projectiles;
@@ -35,18 +39,29 @@ public sealed class RadarRenderableSystem : EntitySystem
         var states = new List<CommonRadarEntityInterfaceState>();
 
         var query = EntityQueryEnumerator<RadarRenderableComponent, MindContainerComponent, MobStateComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out var radarRenderable, out _, out var mobState, out var transform))
+        while (query.MoveNext(out var uid, out var radarRenderable, out var mindContainer, out var mobState, out var transform))
         {
             if (_mobStateSystem.IsIncapacitated(uid, mobState))
                 continue;
             if (!consoleTransform.MapPosition.InRange(transform.MapPosition, radar.MaxRange))
                 continue;
 
+            Color? color = null;
+            if (mindContainer.Mind != null)
+            {
+                foreach (var role in mindContainer.Mind.AllRoles)
+                {
+                    if (role is ShipEventRole && role.Faction is ShipEventFaction shipEventFaction)
+                        color = shipEventFaction.Color;
+                }
+            }
+
             var coords = _transformSystem.GetMoverCoordinates(uid, transform);
             states.Add(new CommonRadarEntityInterfaceState(
                 coords,
                 _transformSystem.GetWorldRotation(transform),
-                radarRenderable.RadarView
+                radarRenderable.RadarView,
+                color
                 )
             );
         }

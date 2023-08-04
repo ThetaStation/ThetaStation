@@ -61,6 +61,8 @@ public sealed class RadarCommon : RadarModule
                     handle.DrawPrimitives(DrawPrimitiveTopology.LineStrip, centeredTriangleVectors, color);
                     break;
                 case OnRadarForms.Line:
+                    var lineVectors = GetVectorsByForm(view, matrix, position, angle);
+                    handle.DrawPrimitives(DrawPrimitiveTopology.LineStrip, lineVectors, color);
                     break;
             }
         }
@@ -72,6 +74,7 @@ public sealed class RadarCommon : RadarModule
         {
             OnRadarForms.FootingTriangle => GetFootingTriangleVectors(view.Size),
             OnRadarForms.CenteredTriangle => GetCenteredTriangleVectors(view.Size),
+            OnRadarForms.Line => GetLineVectors(view.Size),
             _ => throw new ArgumentOutOfRangeException()
         };
         for (var i = 0; i < verts.Length; i++)
@@ -102,6 +105,15 @@ public sealed class RadarCommon : RadarModule
             new Vector2(0, -size / 2 - size / 4),
             new Vector2(size / 2, size / 4),
             new Vector2(-size / 2, size / 4),
+        };
+    }
+
+    private Vector2[] GetLineVectors(float size)
+    {
+        return new[]
+        {
+            new Vector2(0, 0),
+            new Vector2(0, size),
         };
     }
 }

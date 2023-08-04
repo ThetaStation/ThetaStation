@@ -73,25 +73,6 @@ public enum RadarRenderableGroup
 }
 
 /// <summary>
-/// State of each mobs around radar
-/// </summary>
-[Serializable, NetSerializable]
-public sealed class ProjectilesInterfaceState
-{
-    public EntityCoordinates Coordinates;
-    public Angle Angle;
-}
-
-/// <summary>
-/// State of each projectile around radar
-/// </summary>
-[Serializable, NetSerializable]
-public sealed class MobInterfaceState
-{
-    public EntityCoordinates Coordinates;
-}
-
-/// <summary>
 /// State of each cannon on shuttle grid
 /// </summary>
 [Serializable, NetSerializable]

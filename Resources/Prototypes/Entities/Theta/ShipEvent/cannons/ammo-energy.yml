@@ -14,7 +14,9 @@
     - type: EmpOnTrigger
       range: 4
       energyConsumption: 3000
-      
+    - type: RadarRenderable
+      radarView: ionProjectile
+
 # Plasma
 - type: entity
   id: PlasmaCannonShot

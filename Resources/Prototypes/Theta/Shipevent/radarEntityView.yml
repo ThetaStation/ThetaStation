@@ -5,6 +5,18 @@
   size: 1.5
 
 - type: radarEntityView
+  id: ionProjectile
+  defaultColor: "#00ffff55"
+  form: enum.OnRadarForms.Circle
+  size: 3
+
+- type: radarEntityView
+  id: machineGunProjectile
+  defaultColor: "#ffff00"
+  form: enum.OnRadarForms.Line
+  size: 1.5
+
+- type: radarEntityView
   id: genericCannon
   defaultColor: "#00ff00"
   form: enum.OnRadarForms.CenteredTriangle
@@ -14,6 +26,4 @@
   id: genericMob
   defaultColor: "#ff0000"
   form: enum.OnRadarForms.Circle
-  size: 3
-
-
+  size: 2
