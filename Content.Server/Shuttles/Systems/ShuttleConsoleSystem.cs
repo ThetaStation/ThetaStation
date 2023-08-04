@@ -4,6 +4,7 @@ using Content.Server.Shuttle.Components;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Events;
 using Content.Server.Station.Systems;
+using Content.Server.Theta.RadarRenderable;
 using Content.Server.UserInterface;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Alert;
@@ -36,6 +37,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
     [Dependency] private readonly RadarConsoleSystem _radarConsoleSystem = default!;
     [Dependency] private readonly SharedContentEyeSystem _eyeSystem = default!;
+    [Dependency] private readonly RadarRenderableSystem _radarRenderable = default!;
 
     public override void Initialize()
     {
@@ -347,20 +349,12 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         }
 
         docks ??= GetAllDocks();
-        List<MobInterfaceState> mobs;
-        List<ProjectilesInterfaceState> projectiles;
-        List<CannonInformationInterfaceState> cannons;
+        var all = new List<CommonRadarEntityInterfaceState>();;
+        var cannons = new List<CannonInformationInterfaceState>();
         if (radar != null)
         {
-            mobs = _radarConsoleSystem.GetMobsAround(radar);
-            projectiles = _radarConsoleSystem.GetProjectilesAround(radar);
-            cannons = _radarConsoleSystem.GetCannonInfosByMyGrid(radar);
-        }
-        else
-        {
-            mobs = new List<MobInterfaceState>();
-            projectiles = new List<ProjectilesInterfaceState>();
-            cannons = new List<CannonInformationInterfaceState>();
+            all = _radarRenderable.GetObjectsAround(consoleUid, radar);
+            cannons = _radarConsoleSystem.GetCannonInfosByMyGrid(consoleUid, radar);
         }
 
         if (_ui.TryGetUi(consoleUid, ShuttleConsoleUiKey.Key, out var bui))
@@ -372,9 +366,8 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
                 consoleXform?.Coordinates,
                 consoleXform?.LocalRotation,
                 docks,
-                mobs,
-                projectiles,
-                cannons));
+                cannons,
+                all));
     }
 
     public override void Update(float frameTime)

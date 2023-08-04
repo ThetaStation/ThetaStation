@@ -391,6 +391,9 @@
     - type: Damageable
       damageContainer: Biological
     - type: MobState
+    - type: RadarRenderable
+      radarView: genericMob
+      group: enum.RadarRenderableGroup.Mob
     - type: MobThresholds
       thresholds:
         0: Alive

@@ -25,6 +25,7 @@ public sealed class RadarGrids : RadarModule
 
     public override void Draw(DrawingHandleScreen handle, Parameters parameters)
     {
+        return;
         var fixturesQuery = EntManager.GetEntityQuery<FixturesComponent>();
         var xformQuery = EntManager.GetEntityQuery<TransformComponent>();
         var bodyQuery = EntManager.GetEntityQuery<PhysicsComponent>();

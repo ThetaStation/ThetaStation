@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Theta.RadarRenderable;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
@@ -11,5 +11,5 @@ public sealed class RadarRenderableComponent : Component
     public readonly string RadarView = default!;
 
     [DataField("group", required: true)]
-    public readonly RadarRenderableGroup Group = default!;
+    public readonly Enum Group = default!;
 }

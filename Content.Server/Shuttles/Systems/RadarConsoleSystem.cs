@@ -25,8 +25,7 @@ namespace Content.Server.Shuttles.Systems;
 public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 {
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
-    [Dependency] private readonly TransformSystem _transformSystem = default!;
-    [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
+    [Dependency] private readonly RadarRenderableSystem _radarRenderable = default!;
 
     private const string OutputPortName = "CannonConsoleSender";
 
@@ -54,83 +53,13 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
         }
     }
 
-    public List<MobInterfaceState> GetMobsAround(RadarConsoleComponent component)
-    {
-        var list = new List<MobInterfaceState>();
-
-        if (!TryComp<TransformComponent>(component.Owner, out var xform))
-            return list;
-
-        var query = EntityQueryEnumerator<MindContainerComponent, MobStateComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out _, out var mobState, out var transform))
-        {
-            if (_mobStateSystem.IsIncapacitated(uid, mobState))
-                continue;
-            if (!xform.MapPosition.InRange(transform.MapPosition, component.MaxRange))
-                continue;
-
-            var coords = _transformSystem.GetMoverCoordinates(uid, transform);
-            list.Add(new MobInterfaceState
-            {
-                Coordinates = coords,
-            });
-        }
-
-        return list;
-    }
-
-    public List<ProjectilesInterfaceState> GetProjectilesAround(RadarConsoleComponent component)
-    {
-        var list = new List<ProjectilesInterfaceState>();
-
-        if (!TryComp<TransformComponent>(component.Owner, out var xform))
-            return list;
-
-        foreach (var (_, transform) in EntityManager.EntityQuery<ProjectileComponent, TransformComponent>())
-        {
-            if (!xform.MapPosition.InRange(transform.MapPosition, component.MaxRange))
-                continue;
-
-            list.Add(new ProjectilesInterfaceState()
-            {
-                Coordinates = transform.Coordinates,
-                Angle = _transformSystem.GetWorldRotation(xform),
-            });
-        }
-
-        return list;
-    }
-
-    public List<CommonRadarEntityInterfaceState> GetAllAround(RadarConsoleComponent component)
-    {
-        var list = new List<CommonRadarEntityInterfaceState>();
-        if (!TryComp<TransformComponent>(component.Owner, out var xform))
-            return list;
-
-        foreach (var (radarRenderable, transform) in EntityManager.EntityQuery<RadarRenderableComponent, TransformComponent>())
-        {
-            if (!xform.MapPosition.InRange(transform.MapPosition, component.MaxRange))
-                continue;
-
-            list.Add(new CommonRadarEntityInterfaceState(
-                transform.Coordinates,
-                _transformSystem.GetWorldRotation(xform),
-                radarRenderable.RadarView
-                ));
-        }
-
-        return list;
-    }
-
-    public List<CannonInformationInterfaceState> GetCannonInfosByMyGrid(RadarConsoleComponent component)
+    public List<CannonInformationInterfaceState> GetCannonInfosByMyGrid(EntityUid uid, RadarConsoleComponent component)
     {
         var list = new List<CannonInformationInterfaceState>();
 
-        var myGrid = Transform(component.Owner).GridUid;
-        var isCannonConsole = HasComp<CannonConsoleComponent>(component.Owner);
+        var myGrid = Transform(uid).GridUid;
 
-        var controlledCannons = GetControlledCannons(component.Owner);
-
+        var controlledCannons = GetControlledCannons(uid);
         foreach (var (cannon, transform) in EntityQuery<CannonComponent, TransformComponent>())
         {
             if (transform.GridUid != myGrid)
@@ -142,37 +71,14 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
             if (controlledCannons != null)
                 controlled = controlledCannons.Contains(cannon.Owner);
 
-            var color = controlled ? Color.Lime : (isCannonConsole ? Color.LightGreen : Color.YellowGreen);
-
             var ammoCountEv = new GetAmmoCountEvent();
             RaiseLocalEvent(cannon.Owner, ref ammoCountEv);
 
-            int maxCapacity = 0;
-            int usedCapacity = 0;
-
-            if (cannon.AmmoProvider != null)
-            {
-                if (cannon.AmmoProvider is ContainerAmmoProviderComponent cprov)
-                {
-                    if (EntityManager.TryGetComponent(cprov.ProviderUid, out ServerStorageComponent? storage))
-                    {
-                        maxCapacity = storage.StorageCapacityMax;
-                        usedCapacity = storage.StorageUsed;
-                    }
-                }
-                else
-                {
-                    maxCapacity = ammoCountEv.Capacity;
-                    usedCapacity = ammoCountEv.Count;
-                }
-            }
+            var (usedCapacity, maxCapacity) = GetCannonAmmoCount(cannon.Owner, cannon);
 
             list.Add(new CannonInformationInterfaceState
             {
                 Uid = cannon.Owner,
-                Coordinates = transform.Coordinates,
-                Color = color,
-                Angle = _transformSystem.GetWorldRotation(transform),
                 IsControlling = controlled,
                 Ammo = ammoCountEv.Count,
                 UsedCapacity = usedCapacity,
@@ -183,7 +89,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
         return list;
     }
 
-    private List<EntityUid>? GetControlledCannons(EntityUid uid)
+    public List<EntityUid>? GetControlledCannons(EntityUid uid)
     {
         if (TryComp<DeviceLinkSourceComponent>(uid, out var linkSource))
         {
@@ -193,6 +99,39 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
         }
 
         return null;
+    }
+
+    public (int usedCapacity, int maxCapacity) GetCannonAmmoCount(EntityUid consoleUid, CannonComponent? cannon)
+    {
+        if (!Resolve(consoleUid, ref cannon))
+            return (0, 0);
+
+        var ammoCountEv = new GetAmmoCountEvent();
+        RaiseLocalEvent(consoleUid, ref ammoCountEv);
+
+        int maxCapacity;
+        int usedCapacity;
+
+        switch (cannon.AmmoProvider)
+        {
+            case null:
+                return (0, 0);
+            case ContainerAmmoProviderComponent cprov:
+            {
+                if (!EntityManager.TryGetComponent(cprov.ProviderUid, out ServerStorageComponent? storage))
+                    return (0, 0);
+
+                maxCapacity = storage.StorageCapacityMax;
+                usedCapacity = storage.StorageUsed;
+                break;
+            }
+            default:
+                maxCapacity = ammoCountEv.Capacity;
+                usedCapacity = ammoCountEv.Count;
+                break;
+        }
+
+        return (usedCapacity, maxCapacity);
     }
 
     protected override void UpdateState(EntityUid uid, RadarConsoleComponent component)
@@ -224,22 +163,23 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
             }
         }
 
-        var mobs = GetMobsAround(component);
-        var projectiles = GetProjectilesAround(component);
-        var cannons = GetCannonInfosByMyGrid(component);
-        var all = GetAllAround(component);
+        var cannons = GetCannonInfosByMyGrid(uid, component);
+        var all = _radarRenderable.GetObjectsAround(uid, component);
 
         var radarState = new RadarConsoleBoundInterfaceState(
             component.MaxRange,
             coordinates,
             angle,
             new List<DockingInterfaceState>(),
-            mobs,
-            projectiles,
             cannons,
             all
         );
 
         _uiSystem.TrySetUiState(uid, RadarConsoleUiKey.Key, radarState);
+    }
+
+    public bool HasFlag(RadarConsoleComponent radar, RadarRenderableGroup e)
+    {
+        return radar.TrackedGroups.HasFlag(e);
     }
 }

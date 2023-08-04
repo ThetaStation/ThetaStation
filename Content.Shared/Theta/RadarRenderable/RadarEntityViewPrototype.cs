@@ -1,4 +1,5 @@
 ﻿using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared.Theta.RadarRenderable;
 
@@ -12,16 +13,18 @@ public sealed class RadarEntityViewPrototype : IPrototype
     public Color DefaultColor;
 
     [DataField("form")]
-    public Forms Form = Forms.Circle;
+    public Enum OnRadarForm = OnRadarForms.Circle;
 
     [DataField("size")]
     public float Size = 1f;
 
-    public enum Forms
-    {
-        Circle,
-        FootingTriangle,
-        CenteredTriangle,
-        Line,
-    }
+}
+
+[Serializable, NetSerializable]
+public enum OnRadarForms
+{
+    Circle,
+    FootingTriangle,
+    CenteredTriangle,
+    Line,
 }

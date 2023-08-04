@@ -34,6 +34,9 @@
         path: /Audio/Effects/double_beep.ogg
     - type: Damageable
       damageContainer: Inorganic
+    - type: RadarRenderable
+      radarView: genericCannon
+      group: enum.RadarRenderableGroup.Cannon
     - type: DeviceNetwork
       deviceNetId: Wireless
     - type: WirelessNetworkConnection

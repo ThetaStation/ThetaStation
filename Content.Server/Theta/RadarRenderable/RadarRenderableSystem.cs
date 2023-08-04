@@ -1,53 +1,122 @@
-﻿using Content.Shared.Shuttles.BUIStates;
-using Content.Shared.Theta.RadarRenderable;
-using Robust.Shared.Players;
+﻿using Content.Server.Mind.Components;
+using Content.Server.Shuttles.Systems;
+using Content.Server.Theta.ShipEvent.Console;
+using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Systems;
+using Content.Shared.Projectiles;
+using Content.Shared.Shuttles.BUIStates;
+using Content.Shared.Shuttles.Components;
+using Content.Shared.Theta.ShipEvent;
 
 namespace Content.Server.Theta.RadarRenderable;
 
-public sealed class RadarRenderableSystem : SharedRadarRenderableSystem
+public sealed class RadarRenderableSystem : EntitySystem
 {
-    private readonly Dictionary<ICommonSession, float> _subscriberBySession = new();
-    private readonly Dictionary<ICommonSession, RadarRenderableGroup> _subscriberBySubscriptionGroups = new();
+    [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
+    [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
+    [Dependency] private readonly RadarConsoleSystem _radarConsoleSystem = default!;
 
-    public override void Initialize()
+    public List<CommonRadarEntityInterfaceState> GetObjectsAround(EntityUid consoleUid, RadarConsoleComponent radar)
     {
-        SubscribeNetworkEvent<SubscribeToRadarRenderableUpdatesEvent>(OnSubscribeUI);
-        SubscribeNetworkEvent<UnsubscribeRadarRenderableUpdatesEvent>(OnUnsubscribeUI);
-    }
-
-    private void OnSubscribeUI(SubscribeToRadarRenderableUpdatesEvent ev)
-    {
-        if (_subscriberBySession.ContainsKey(ev.Subscriber))
-        {
-            _subscriberBySession[ev.Subscriber] += 1;
-            _subscriberBySubscriptionGroups[ev.Subscriber] |= ev.GroupSubscriptions;
-            return;
-        }
-
-        _subscriberBySession.Add(ev.Subscriber, 1);
-        _subscriberBySubscriptionGroups.Add(ev.Subscriber, ev.GroupSubscriptions);
-    }
-
-    private void OnUnsubscribeUI(UnsubscribeRadarRenderableUpdatesEvent ev)
-    {
-        if (_subscriberBySession.ContainsKey(ev.Subscriber))
-        {
-            _subscriberBySession[ev.Subscriber] -= 1;
-            _subscriberBySubscriptionGroups[ev.Subscriber] ^= ev.GroupSubscriptions;
-        }
-
-        if (_subscriberBySession[ev.Subscriber] == 0)
-        {
-            _subscriberBySession.Remove(ev.Subscriber);
-            _subscriberBySubscriptionGroups.Remove(ev.Subscriber);
-        }
-    }
-
-    public override void Update(float frameTime)
-    {
-        if (_subscriberBySession.Count == 0)
-            return;
         var states = new List<CommonRadarEntityInterfaceState>();
-        // TODO:
+        if (!TryComp<TransformComponent>(consoleUid, out var xform))
+            return states;
+        if(_radarConsoleSystem.HasFlag(radar, RadarRenderableGroup.Mob))
+            states.AddRange(GetMobGroup(radar, xform));
+        if(_radarConsoleSystem.HasFlag(radar, RadarRenderableGroup.Projectiles))
+            states.AddRange(GetProjectileGroup(radar, xform));
+        if(_radarConsoleSystem.HasFlag(radar, RadarRenderableGroup.Cannon))
+            states.AddRange(GetCannonGroup(consoleUid, radar, xform));
+        return states;
+    }
+
+    private List<CommonRadarEntityInterfaceState> GetMobGroup(RadarConsoleComponent radar, TransformComponent consoleTransform)
+    {
+        var states = new List<CommonRadarEntityInterfaceState>();
+
+        var query = EntityQueryEnumerator<RadarRenderableComponent, MindContainerComponent, MobStateComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var radarRenderable, out _, out var mobState, out var transform))
+        {
+            if (_mobStateSystem.IsIncapacitated(uid, mobState))
+                continue;
+            if (!consoleTransform.MapPosition.InRange(transform.MapPosition, radar.MaxRange))
+                continue;
+
+            var coords = _transformSystem.GetMoverCoordinates(uid, transform);
+            states.Add(new CommonRadarEntityInterfaceState(
+                coords,
+                _transformSystem.GetWorldRotation(transform),
+                radarRenderable.RadarView
+                )
+            );
+        }
+
+        return states;
+    }
+
+    private List<CommonRadarEntityInterfaceState> GetProjectileGroup(RadarConsoleComponent radar, TransformComponent consoleTransform)
+    {
+        var states = new List<CommonRadarEntityInterfaceState>();
+        var query = EntityQueryEnumerator<RadarRenderableComponent, ProjectileComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var radarRenderable, out _, out var transform))
+        {
+            if (!consoleTransform.MapPosition.InRange(transform.MapPosition, radar.MaxRange))
+                continue;
+
+            var coords = _transformSystem.GetMoverCoordinates(uid, transform);
+            states.Add(new CommonRadarEntityInterfaceState(
+                    coords,
+                    _transformSystem.GetWorldRotation(transform),
+                    radarRenderable.RadarView
+                )
+            );
+        }
+        return states;
+    }
+
+    private List<CommonRadarEntityInterfaceState> GetCannonGroup(EntityUid consoleUid, RadarConsoleComponent radar,
+        TransformComponent consoleTransform)
+    {
+        var states = new List<CommonRadarEntityInterfaceState>();
+
+        var myGrid = consoleTransform.GridUid;
+        var isCannonConsole = HasComp<CannonConsoleComponent>(consoleUid);
+
+        var controlledCannons = _radarConsoleSystem.GetControlledCannons(consoleUid);
+
+        var query = EntityQueryEnumerator<RadarRenderableComponent, CannonComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var radarRenderable, out var cannon, out var transform))
+        {
+            if (transform.GridUid != myGrid)
+                continue;
+            if (!transform.Anchored)
+                continue;
+
+            var controlled = false;
+            if (controlledCannons != null)
+                controlled = controlledCannons.Contains(uid);
+
+            var (usedCapacity, maxCapacity) = _radarConsoleSystem.GetCannonAmmoCount(uid, cannon);
+            var mainColor = controlled ? Color.Lime : (isCannonConsole ? Color.LightGreen : Color.YellowGreen);
+
+            var hsvColor = Color.ToHsv(mainColor);
+            const float additionalDegreeCoeff = 20f / 360f;
+            // X is hue
+            var hueOffset = hsvColor.X * usedCapacity / Math.Max(1, maxCapacity);
+            hsvColor.X = Math.Max(hueOffset + additionalDegreeCoeff, additionalDegreeCoeff);
+
+            mainColor = Color.FromHsv(hsvColor);
+
+            var coords = _transformSystem.GetMoverCoordinates(uid, transform);
+            states.Add(new CommonRadarEntityInterfaceState(
+                    coords,
+                    _transformSystem.GetWorldRotation(transform),
+                    radarRenderable.RadarView,
+                    mainColor
+                )
+            );
+        }
+
+        return states;
     }
 }

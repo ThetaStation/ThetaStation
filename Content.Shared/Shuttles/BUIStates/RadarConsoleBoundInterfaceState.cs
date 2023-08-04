@@ -22,32 +22,24 @@ public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
 
     public readonly List<DockingInterfaceState> Docks;
 
-    public readonly List<MobInterfaceState> MobsAround;
-
-    public readonly List<ProjectilesInterfaceState> Projectiles;
-
     public readonly List<CannonInformationInterfaceState> Cannons;
 
-    public readonly List<CommonRadarEntityInterfaceState> All;
+    public readonly List<CommonRadarEntityInterfaceState> CommonEntities;
 
     public RadarConsoleBoundInterfaceState(
         float maxRange,
         EntityCoordinates? coordinates,
         Angle? angle,
         List<DockingInterfaceState> docks,
-        List<MobInterfaceState> mobs,
-        List<ProjectilesInterfaceState> projectiles,
         List<CannonInformationInterfaceState> cannons,
-        List<CommonRadarEntityInterfaceState> all)
+        List<CommonRadarEntityInterfaceState> common)
     {
         MaxRange = maxRange;
         Coordinates = coordinates;
         Angle = angle;
         Docks = docks;
-        MobsAround = mobs;
-        Projectiles = projectiles;
         Cannons = cannons;
-        All = all;
+        CommonEntities = common;
     }
 }
 
@@ -57,18 +49,27 @@ public sealed class CommonRadarEntityInterfaceState
     public EntityCoordinates Coordinates;
     public Angle Angle;
     public string RadarViewPrototype;
-    public RadarRenderableGroup Group;
     public Color? OverrideColor;
 
     public CommonRadarEntityInterfaceState(EntityCoordinates coordinates, Angle angle, string radarViewPrototype,
-        RadarRenderableGroup group, Color? color = null)
+        Color? color = null)
     {
         Coordinates = coordinates;
         Angle = angle;
         RadarViewPrototype = radarViewPrototype;
-        Group = group;
         OverrideColor = color;
     }
+}
+
+[Flags]
+[Serializable, NetSerializable]
+public enum RadarRenderableGroup
+{
+    Mob = 0,
+    Projectiles = 1 << 0,
+    Cannon = 1 << 1,
+
+    All = (Mob | Projectiles | Cannon),
 }
 
 /// <summary>
@@ -97,9 +98,6 @@ public sealed class MobInterfaceState
 public sealed class CannonInformationInterfaceState
 {
     public EntityUid Uid;
-    public EntityCoordinates Coordinates;
-    public Color Color;
-    public Angle Angle;
     public bool IsControlling;
     public int Ammo;
     public int MaxCapacity;
