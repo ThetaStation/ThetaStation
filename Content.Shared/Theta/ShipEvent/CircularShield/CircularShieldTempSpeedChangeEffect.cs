@@ -1,3 +1,4 @@
+using System.Numerics;
 using Content.Shared.Projectiles;
 using Content.Shared.Theta.ShipEvent.Components;
 using Robust.Shared.Physics.Systems;
@@ -16,6 +17,8 @@ public sealed class CircularShieldTempSpeedChangeEffect : CircularShieldEffect
     [DataField("projectilesOnly"), ViewVariables(VVAccess.ReadWrite)]
     public bool ProjectilesOnly = true;
 
+    private Dictionary<EntityUid, Vector2> VelocityOnEnter = new();
+
     public override void OnShieldInit(EntityUid uid, CircularShieldComponent shield)
     {
         entMan = IoCManager.Resolve<IEntityManager>();
@@ -29,7 +32,9 @@ public sealed class CircularShieldTempSpeedChangeEffect : CircularShieldEffect
             return;
         
         TransformComponent form = entMan.GetComponent<TransformComponent>(uid);
-        physSys.SetLinearVelocity(uid, physSys.GetLinearVelocity(uid, formSys.GetWorldPosition(form), xform: form) * SpeedModifier);
+        Vector2 velocity = physSys.GetLinearVelocity(uid, formSys.GetWorldPosition(form), xform: form);
+        physSys.SetLinearVelocity(uid, velocity * SpeedModifier);
+        VelocityOnEnter[uid] = velocity;
     }
 
     public override void OnShieldExit(EntityUid uid, CircularShieldComponent shield)
@@ -38,6 +43,18 @@ public sealed class CircularShieldTempSpeedChangeEffect : CircularShieldEffect
             return;
         
         TransformComponent form = entMan.GetComponent<TransformComponent>(uid);
-        physSys.SetLinearVelocity(uid, physSys.GetLinearVelocity(uid, formSys.GetWorldPosition(form), xform: form) / SpeedModifier);
+        
+        Vector2 velocity;
+        if (VelocityOnEnter.TryGetValue(uid, out Vector2 v))
+        {
+            velocity = v;
+            VelocityOnEnter.Remove(uid);
+        }
+        else
+        {
+            velocity = physSys.GetLinearVelocity(uid, formSys.GetWorldPosition(form), xform: form);
+        }
+
+        physSys.SetLinearVelocity(uid, velocity);
     }
 }
