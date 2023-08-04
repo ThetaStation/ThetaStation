@@ -35,8 +35,8 @@ public sealed class RadarShieldStatus : RadarModule
             
             handle.DrawCircle(pos, 5f, shield.Color);
             
-            Vector2[] verts = new Vector2[shape.VertexCount];
-            for (var i = 0; i < verts.Length; i++)
+            Vector2[] verts = new Vector2[shape.VertexCount + 1];
+            for (var i = 0; i < shape.VertexCount; i++)
             {
                 Vector2 vert = formSys.GetWorldMatrix(form).Transform(shape.Vertices[i]);
                 vert = parameters.DrawMatrix.Transform(vert);
@@ -44,6 +44,7 @@ public sealed class RadarShieldStatus : RadarModule
                 vert = ScalePosition(vert);
                 verts[i] = vert;
             }
+            verts[shape.VertexCount] = verts[0];
             
             handle.DrawPrimitives(DrawPrimitiveTopology.LineStrip, verts, shield.CanWork ? Color.LawnGreen : Color.Red);
         }
