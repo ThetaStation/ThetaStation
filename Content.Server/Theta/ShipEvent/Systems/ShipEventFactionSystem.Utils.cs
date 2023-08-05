@@ -90,10 +90,11 @@ public sealed partial class ShipEventFactionSystem
         if (color == null)
             color = team.Color;
 
-        foreach (var mind in team.GetLivingMembersMinds())
+        foreach (var member in team.Members)
         {
-            if (mind.Session != null)
-                _chatSys.SendSimpleMessage(message, mind.Session, chatChannel, color);
+            var session = GetSession(member.Mind);
+            if (session != null)
+                _chatSys.SendSimpleMessage(message, session, chatChannel, color);
         }
     }
 
