@@ -25,11 +25,6 @@ public sealed class RadarCommon : RadarModule
         _all = radarState.CommonEntities;
     }
 
-    public override void OnDispose()
-    {
-        // убирать подписку от системы
-    }
-
     public override void Draw(DrawingHandleScreen handle, Parameters parameters)
     {
         var matrix = parameters.DrawMatrix;

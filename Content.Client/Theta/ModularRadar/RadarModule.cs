@@ -40,7 +40,6 @@ public abstract class RadarModule
     public virtual void UpdateState(BoundUserInterfaceState state) { }
     public virtual void Draw(DrawingHandleScreen handle, Parameters parameters) { }
     public virtual void OnClear() { }
-    public virtual void OnDispose() { }
 
     protected Vector2 RelativePositionToCoordinates(Vector2 pos, Matrix3 matrix)
     {

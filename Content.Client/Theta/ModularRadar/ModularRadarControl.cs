@@ -167,15 +167,6 @@ public abstract class ModularRadarControl : MapGridControl
         }
     }
 
-    protected override void Dispose(bool disposing)
-    {
-        base.Dispose(disposing);
-        foreach (var module in Modules)
-        {
-            module.OnDispose();
-        }
-    }
-
     public Matrix3 GetOffsetMatrix()
     {
         if (_coordinates == null || _rotation == null)
