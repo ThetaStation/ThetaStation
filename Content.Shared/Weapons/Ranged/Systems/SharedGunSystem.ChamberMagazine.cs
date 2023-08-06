@@ -21,20 +21,6 @@ public abstract partial class SharedGunSystem
         SubscribeLocalEvent<ChamberMagazineAmmoProviderComponent, EntRemovedFromContainerMessage>(OnMagazineSlotChange);
         SubscribeLocalEvent<ChamberMagazineAmmoProviderComponent, UseInHandEvent>(OnMagazineUse);
         SubscribeLocalEvent<ChamberMagazineAmmoProviderComponent, ExaminedEvent>(OnChamberMagazineExamine);
-        SubscribeLocalEvent<ChamberMagazineAmmoProviderComponent, GetAmmoCountEvent>(OnChamberMagazineAmmoCount);
-    }
-
-    private void OnChamberMagazineAmmoCount(EntityUid uid, ChamberMagazineAmmoProviderComponent component, ref GetAmmoCountEvent args)
-    {
-        var magEntity = GetMagazineEntity(uid);
-        if (magEntity == null)
-            return;
-
-        var ammoCountEv = new GetAmmoCountEvent();
-        RaiseLocalEvent(magEntity.Value, ref ammoCountEv);
-
-        args.Count = ammoCountEv.Count;
-        args.Capacity = ammoCountEv.Capacity;
     }
 
     private void OnChamberMagazineExamine(EntityUid uid, ChamberMagazineAmmoProviderComponent component, ExaminedEvent args)
