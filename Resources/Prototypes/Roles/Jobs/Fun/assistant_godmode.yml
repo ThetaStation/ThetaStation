@@ -3,7 +3,7 @@
   name: job-name-passenger
   description: job-description-passenger
   startingGear: PassengerGear
-  icon: "Passenger"
+  icon: "JobIconPassenger"
   supervisors: job-supervisors-everyone
   playTimeTracker: JobPassenger
   special:
