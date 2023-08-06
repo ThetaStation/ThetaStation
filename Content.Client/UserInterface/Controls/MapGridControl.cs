@@ -39,8 +39,8 @@ public abstract class MapGridControl : Control
     protected Vector2 MidpointVector => new Vector2(MidPoint, MidPoint);
 
     protected int MidPoint => SizeFull / 2;
-    protected int SizeFull => (int) ((UIDisplayRadius + MinimapMargin) * 2 * UIScale);
-    protected int ScaledMinimapRadius => (int) (UIDisplayRadius * UIScale);
+    protected int SizeFull => (int) ((GetUIDisplayRadius() + GetMinimapMargin()) * 2 * UIScale);
+    protected int ScaledMinimapRadius => (int) (GetUIDisplayRadius() * UIScale);
     protected float MinimapScale => WorldRange != 0 ? ScaledMinimapRadius / WorldRange : 0f;
 
     public event Action<float>? WorldRangeChanged;
@@ -56,6 +56,16 @@ public abstract class MapGridControl : Control
         WorldMaxRange = maxRange;
         WorldRange = range;
         ActualRadarRange = range;
+    }
+
+    public virtual int GetUIDisplayRadius()
+    {
+        return UIDisplayRadius;
+    }
+
+    public virtual int GetMinimapMargin()
+    {
+        return MinimapMargin;
     }
 
     protected override void MouseWheel(GUIMouseWheelEventArgs args)

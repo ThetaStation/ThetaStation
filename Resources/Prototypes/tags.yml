@@ -598,6 +598,9 @@
 
 - type: Tag
   id: NukeOpsUplink
+  
+- type: Tag
+  id: ShipEventUplink
 
 - type: Tag
   id: Ointment

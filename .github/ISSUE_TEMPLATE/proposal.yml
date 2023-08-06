@@ -1,0 +1,11 @@
+name: "Leave feedback"
+description: "Any ideas."
+labels: ["Proposal"]
+body:
+  - type: textarea
+    id: description
+    validations:
+      required: true
+    attributes:
+      label: "Description"
+      description: "Describe your idea"

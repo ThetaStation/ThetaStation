@@ -5,6 +5,7 @@ using Content.Client.Humanoid;
 using Content.Client.Inventory;
 using Content.Client.Preferences;
 using Content.Client.UserInterface.Controls;
+using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
 using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Inventory;
@@ -13,6 +14,7 @@ using Content.Shared.Roles;
 using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using static Robust.Client.UserInterface.Controls.BoxContainer;
@@ -24,6 +26,7 @@ namespace Content.Client.Lobby.UI
         [Dependency] private readonly IEntityManager _entityManager = default!;
         [Dependency] private readonly IClientPreferencesManager _preferencesManager = default!;
         [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+        [Dependency] private readonly IConfigurationManager _cfg = default!;
 
 
         private EntityUid? _previewDummy;
@@ -39,12 +42,14 @@ namespace Content.Client.Lobby.UI
             {
                 Text = Loc.GetString("lobby-character-preview-panel-header")
             };
+            _cfg.OnValueChanged(CCVars.CultureLocale, _ => header.Text = Loc.GetString("lobby-character-preview-panel-header"));
 
             CharacterSetupButton = new Button
             {
                 Text = Loc.GetString("lobby-character-preview-panel-character-setup-button"),
                 HorizontalAlignment = HAlignment.Left
             };
+            _cfg.OnValueChanged(CCVars.CultureLocale, _ => CharacterSetupButton.Text = Loc.GetString("lobby-character-preview-panel-character-setup-button"));
 
             _summaryLabel = new Label();
 
@@ -53,6 +58,8 @@ namespace Content.Client.Lobby.UI
                 Orientation = LayoutOrientation.Vertical
             };
             _unloaded = new Label { Text = Loc.GetString("lobby-character-preview-panel-unloaded-preferences-label") };
+            _cfg.OnValueChanged(CCVars.CultureLocale, _ => _unloaded.Text = Loc.GetString("lobby-character-preview-panel-unloaded-preferences-label"));
+
 
             _loaded = new BoxContainer
             {

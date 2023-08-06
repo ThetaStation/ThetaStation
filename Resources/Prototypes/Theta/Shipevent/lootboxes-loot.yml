@@ -1,0 +1,188 @@
+# --Items--
+# Lootbox caller
+- type: entity
+  parent: BaseItem
+  id: LootboxSpawnTriggerItem
+  name: lootbox caller
+  components:
+    - type: Sprite
+      sprite: Objects/Devices/signaller.rsi
+      state: signaller
+    - type: ShipEventLootboxSpawnTrigger
+    - type: OnUseTimerTrigger
+      delay: 0
+    - type: DeleteOnTrigger
+
+# Point storage
+- type: entity
+  parent: BaseItem
+  id: PointStorageItem
+  name: point storage
+  components:
+    - type: Sprite
+      sprite: Objects/Devices/signaller.rsi
+      state: signaller
+    - type: ShipEventPointStorage
+      points: 20000
+    - type: OnUseTimerTrigger
+      delay: 0
+    - type: DeleteOnTrigger
+
+# Ebic ammo - HE
+- type: entity
+  id: BulletFlakHE
+  name: bullet
+  parent: BaseBulletTrigger
+  noSpawn: true
+  components:
+    - type: Item
+      size: 1
+    - type: Projectile
+      damage:
+        types:
+          Piercing: 100
+          Blunt: 100
+    - type: Sprite
+      sprite: /Textures/Theta/ShipEvent/Objects/AmmoArtillery.rsi
+      layers:
+        - state: bullet
+    - type: ExplodeOnTrigger
+    - type: Explosive
+      explosionType: Default
+      maxIntensity: 20
+      intensitySlope: 5
+      totalIntensity: 60
+    
+- type: entity
+  id: CartridgeFlakHE
+  name: flak cartridge (HE)
+  parent: CartridgeFlak
+  components:
+    - type: CartridgeAmmo
+      proto: BulletFlakHE
+      deleteOnSpawn: true
+
+- type: entity
+  id: TurretAmmoContainerFlakHEFilled
+  name: Flak HE ammo container
+  parent: TurretAmmoContainerRare
+  components:
+    - type: StorageFill
+      contents:
+        - id: CartridgeFlakHE
+          amount: 50
+          
+# Ebic ammo - EMP
+- type: entity
+  id: BulletFlakEMP
+  name: bullet
+  parent: BaseBulletTrigger
+  noSpawn: true
+  components:
+    - type: Item
+      size: 1
+    - type: Projectile
+      damage:
+        types:
+          Piercing: 100
+          Blunt: 100
+    - type: Sprite
+      sprite: /Textures/Theta/ShipEvent/Objects/AmmoArtillery.rsi
+      layers:
+        - state: bullet
+    - type: EmpOnTrigger
+      range: 4
+      energyConsumption: 50000
+  
+- type: entity
+  id: CartridgeFlakEMP
+  name: flak cartridge (EMP)
+  parent: CartridgeFlak
+  components:
+    - type: CartridgeAmmo
+      proto: BulletFlakEMP
+      deleteOnSpawn: true
+
+- type: entity
+  id: TurretAmmoContainerFlakEMPFilled
+  name: Flak EMP ammo container
+  parent: TurretAmmoContainerRare
+  components:
+    - type: StorageFill
+      contents:
+        - id: CartridgeFlakEMP
+          amount: 50
+          
+# Misc
+- type: entity
+  id: ShipEventRCD
+  parent: RCD
+  components:
+    - type: RCD
+      delay: 0
+    - type: LimitedCharges
+      maxCharges: 50
+      charges: 50
+    - type: UseDelay
+      delay: 0
+
+- type: entity
+  id: ShipEventPlasmaGun
+  parent: BaseWeaponHeavyMachineGun
+  components:
+    - type: Sprite
+      sprite: /Textures/Theta/ShipEvent/Objects/PlasmaGun.rsi
+      layers:
+      - state: gun
+    - type: Gun
+      fireRate: 3
+      soundGunshot:
+        path: /Audio/Theta/Shipevent/plasma.ogg
+    - type: Battery
+      maxCharge: 10000
+      startingCharge: 10000
+    - type: ProjectileBatteryAmmoProvider
+      proto: PlasmaBolt
+      fireCost: 200
+
+# --Spawners--
+- type: entity
+  parent: MarkerBase
+  id: ShipeventLootboxLootSpawner
+  name: lootbox loot spawner
+  components:
+    - type: Sprite
+      sprite: Markers/cross.rsi
+      layers:
+      - state: red
+    - type: RandomSpawner
+      offset: 0
+      prototypes:
+        - LootboxSpawnTriggerItem
+        - PointStorageItem
+        - TurretAmmoContainerFlakHEFilled
+        - TurretAmmoContainerFlakEMPFilled
+        - NuclearGrenade
+        - ShipEventRCD
+        - ShipEventPlasmaGun
+
+#every lootbox must have hats
+- type: entity
+  parent: MarkerBase
+  id: ShipeventLootboxHatsSpawner
+  name: lootbox hat spawner
+  components:
+    - type: Sprite
+      sprite: Markers/cross.rsi
+      layers:
+        - state: green
+    - type: RandomSpawner
+      offset: 0
+      prototypes:
+        - ClothingHeadHatCardborg
+        - ClothingHeadHatPirate
+        - ClothingHeadHatUshanka
+        - ClothingHeadPaperSack
+        - ClothingHeadFishCap
+        - ClothingHeadHatWatermelon
+        - ClothingHeadHatBunny

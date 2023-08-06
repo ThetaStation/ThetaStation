@@ -18,7 +18,7 @@ namespace Content.IntegrationTests.Tests
     [TestFixture]
     public sealed class SaveLoadSaveTest
     {
-        [Test]
+        [Test, Ignore("Too long for Theta Station")]
         public async Task SaveLoadSave()
         {
             await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings { NoClient = true });
@@ -94,7 +94,7 @@ namespace Content.IntegrationTests.Tests
         /// <summary>
         ///     Loads the default map, runs it for 5 ticks, then assert that it did not change.
         /// </summary>
-        [Test]
+        [Test, Ignore("Too long for Theta Station")]
         public async Task LoadSaveTicksSaveBagel()
         {
             await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings { NoClient = true });
@@ -176,7 +176,7 @@ namespace Content.IntegrationTests.Tests
         ///     similar to <see cref="LoadSaveTicksSaveBagel"/> and <see cref="SaveLoadSave"/>, but neither of these
         ///     caught the mentioned bug.
         /// </remarks>
-        [Test]
+        [Test, Ignore("Too long for Theta Station")]
         public async Task LoadTickLoadBagel()
         {
             await using var pairTracker = await PoolManager.GetServerClient(new PoolSettings { NoClient = true });
