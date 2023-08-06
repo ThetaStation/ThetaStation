@@ -15,25 +15,12 @@ public abstract partial class SharedGunSystem
     protected virtual void InitializeChamberMagazine()
     {
         SubscribeLocalEvent<ChamberMagazineAmmoProviderComponent, TakeAmmoEvent>(OnChamberMagazineTakeAmmo);
+        SubscribeLocalEvent<ChamberMagazineAmmoProviderComponent, GetAmmoCountEvent>(OnChamberAmmoCount);
         SubscribeLocalEvent<ChamberMagazineAmmoProviderComponent, GetVerbsEvent<AlternativeVerb>>(OnMagazineVerb);
         SubscribeLocalEvent<ChamberMagazineAmmoProviderComponent, EntInsertedIntoContainerMessage>(OnMagazineSlotChange);
         SubscribeLocalEvent<ChamberMagazineAmmoProviderComponent, EntRemovedFromContainerMessage>(OnMagazineSlotChange);
         SubscribeLocalEvent<ChamberMagazineAmmoProviderComponent, UseInHandEvent>(OnMagazineUse);
         SubscribeLocalEvent<ChamberMagazineAmmoProviderComponent, ExaminedEvent>(OnChamberMagazineExamine);
-        SubscribeLocalEvent<ChamberMagazineAmmoProviderComponent, GetAmmoCountEvent>(OnChamberMagazineAmmoCount);
-    }
-
-    private void OnChamberMagazineAmmoCount(EntityUid uid, ChamberMagazineAmmoProviderComponent component, ref GetAmmoCountEvent args)
-    {
-        var magEntity = GetMagazineEntity(uid);
-        if (magEntity == null)
-            return;
-
-        var ammoCountEv = new GetAmmoCountEvent();
-        RaiseLocalEvent(magEntity.Value, ref ammoCountEv);
-
-        args.Count = ammoCountEv.Count;
-        args.Capacity = ammoCountEv.Capacity;
     }
 
     private void OnChamberMagazineExamine(EntityUid uid, ChamberMagazineAmmoProviderComponent component, ExaminedEvent args)
@@ -85,6 +72,18 @@ public abstract partial class SharedGunSystem
         return Containers.TryGetContainer(uid, ChamberSlot, out var container) &&
                container is ContainerSlot slot &&
                slot.Insert(ammo);
+    }
+
+    private void OnChamberAmmoCount(EntityUid uid, ChamberMagazineAmmoProviderComponent component, ref GetAmmoCountEvent args)
+    {
+        OnMagazineAmmoCount(uid, component, ref args);
+        args.Capacity += 1;
+        var chambered = GetChamberEntity(uid);
+
+        if (chambered != null)
+        {
+            args.Count += 1;
+        }
     }
 
     private void OnChamberMagazineTakeAmmo(EntityUid uid, ChamberMagazineAmmoProviderComponent component, TakeAmmoEvent args)
