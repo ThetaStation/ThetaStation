@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Numerics;
 using Content.Server.Power.Components;
-using Content.Server.Shuttles.Systems;
 using Content.Server.UserInterface;
 using Content.Shared.DeviceLinking;
 using Content.Shared.DeviceLinking.Events;
@@ -89,6 +88,7 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
         shield.Enabled = !shield.Enabled;
 
         UpdateConsoleState(uid, console);
+        UpdateShieldFixture(uid, shield);
         Dirty(shield);
     }
 
