@@ -26,8 +26,6 @@ public sealed partial class CircularShieldConsoleWindow : DefaultWindow
 
         ShieldEnableButton.OnPressed += _ => OnEnableButtonPressed?.Invoke();
 
-        // TODO: Заменить это на отправку локального ивента, который будет хендлить и модуль радара, и БУИ, и CircularShieldOverlay.
-        // TODO: тогда будет очень круто!
         ShieldAngleSlider.OnValueChanged += _ => OnParametersChanged?.Invoke(Angle, ShieldWidth, Radius);
         ShieldWidthSlider.OnValueChanged += _ => OnParametersChanged?.Invoke(Angle, ShieldWidth, Radius);
         ShieldRadiusSlider.OnValueChanged += _ => OnParametersChanged?.Invoke(Angle, ShieldWidth, Radius);
