@@ -16,6 +16,8 @@ public sealed partial class CircularShieldConsoleWindow : DefaultWindow
 
     public event Action? OnEnableButtonPressed;
 
+    public event Action<Angle>? OnAngleChanged;
+
     public int Angle => ShieldAngleSlider.Value;
     public int ShieldWidth => ShieldWidthSlider.Value;
     public int Radius => ShieldRadiusSlider.Value;
@@ -30,9 +32,17 @@ public sealed partial class CircularShieldConsoleWindow : DefaultWindow
         ShieldWidthSlider.OnValueChanged += _ => OnParametersChanged?.Invoke(Angle, ShieldWidth, Radius);
         ShieldRadiusSlider.OnValueChanged += _ => OnParametersChanged?.Invoke(Angle, ShieldWidth, Radius);
 
+        OnAngleChanged += angle => ShieldAngleSlider.Value = (int) angle.Degrees;
+
         if (RadarScreen.TryGetModule<RadarShieldStatus>(out var shieldModule))
         {
             OnParametersChanged += shieldModule.UpdateShieldParameters;
+            OnAngleChanged += shieldModule.UpdateShieldParameters;
+        }
+
+        if (RadarScreen.TryGetModule<RadarControlShield>(out var controlShield))
+        {
+            controlShield.UpdateShieldRotation += angle => OnAngleChanged?.Invoke(angle);
         }
     }
 

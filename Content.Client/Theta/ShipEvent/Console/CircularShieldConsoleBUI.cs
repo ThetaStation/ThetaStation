@@ -29,6 +29,16 @@ public sealed class CircularShieldConsoleBoundUserInterface : BoundUserInterface
         _window.OnClose += Close;
         _window.OnEnableButtonPressed += () => SendMessage(new CircularShieldToggleMessage());
         _window.OnParametersChanged += UpdateShieldParameters;
+        _window.OnAngleChanged += UpdateShieldParameters;
+    }
+
+    private void UpdateShieldParameters(Angle angle)
+    {
+        if(_nextCanUpdate > _gameTiming.RealTime)
+            return;
+        _nextCanUpdate = _gameTiming.RealTime + _updateCd;
+
+        SendMessage(new CircularShieldChangeParametersMessage(angle));
     }
 
     private void UpdateShieldParameters(int angle, int shieldWidth, int radius)

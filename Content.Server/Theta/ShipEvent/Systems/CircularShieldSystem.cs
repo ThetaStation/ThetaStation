@@ -100,12 +100,14 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
         if (!TryComp(console.BoundShield, out CircularShieldComponent? shield))
             return;
 
-        if (args.Radius > shield.MaxRadius || args.Width.Degrees > shield.MaxWidth)
+        if ((args.Radius != null && args.Radius > shield.MaxRadius) || args.Width?.Degrees > shield.MaxWidth)
             return;
 
         shield.Angle = args.Angle;
-        shield.Width = args.Width;
-        shield.Radius = args.Radius;
+        if(args.Width != null)
+            shield.Width = args.Width.Value;
+        if(args.Radius != null)
+            shield.Radius = args.Radius.Value;
         UpdateShieldFixture(console.BoundShield.Value, shield);
 
         if (TryComp<ApcPowerReceiverComponent>(console.BoundShield.Value, out var receiver))

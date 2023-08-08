@@ -70,4 +70,12 @@ public sealed class RadarShieldStatus : RadarModule
         state.Width = Angle.FromDegrees(shieldWidth);
         state.Radius = radius;
     }
+
+    public void UpdateShieldParameters(Angle angle)
+    {
+        if(_shields.Count == 0)
+            return;
+        var state = _shields.First();
+        state.Angle = angle;
+    }
 }
