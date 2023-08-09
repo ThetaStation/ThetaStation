@@ -112,7 +112,7 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
 
         if (TryComp<ApcPowerReceiverComponent>(console.BoundShield.Value, out var receiver))
         {
-            //receiver.Load = shield.DesiredDraw;
+            receiver.Load = shield.DesiredDraw;
         }
         else
         {
@@ -120,7 +120,6 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
                 shield.Powered = false;
         }
 
-        //UpdateConsoleState(uid, console);
         Dirty(shield);
     }
 
