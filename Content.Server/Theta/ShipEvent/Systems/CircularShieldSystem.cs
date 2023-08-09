@@ -58,7 +58,7 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
         var shieldState = new ShieldInterfaceState
         {
             Coordinates = _transformSystem.GetMoverCoordinates(uid, transform),
-            WorldRotation = _transformSystem.GetWorldRotation(transform),
+            WorldRotation = _transformSystem.GetWorldRotation(transform) - transform.LocalRotation,
             Powered = shield.Powered,
             Angle = shield.Angle,
             Width = shield.Width,
