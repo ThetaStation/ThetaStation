@@ -12,15 +12,9 @@ namespace Content.Client.Theta.ShipEvent.Console;
 [GenerateTypedNameReferences]
 public sealed partial class CircularShieldConsoleWindow : DefaultWindow
 {
-    public event Action<int, int, int>? OnParametersChanged;
-
     public event Action? OnEnableButtonPressed;
 
     public event Action<Angle>? OnAngleChanged;
-
-    public int Angle => ShieldAngleSlider.Value;
-    public int ShieldWidth => ShieldWidthSlider.Value;
-    public int Radius => ShieldRadiusSlider.Value;
 
     public CircularShieldConsoleWindow()
     {
@@ -28,15 +22,8 @@ public sealed partial class CircularShieldConsoleWindow : DefaultWindow
 
         ShieldEnableButton.OnPressed += _ => OnEnableButtonPressed?.Invoke();
 
-        ShieldAngleSlider.OnValueChanged += _ => OnParametersChanged?.Invoke(Angle, ShieldWidth, Radius);
-        ShieldWidthSlider.OnValueChanged += _ => OnParametersChanged?.Invoke(Angle, ShieldWidth, Radius);
-        ShieldRadiusSlider.OnValueChanged += _ => OnParametersChanged?.Invoke(Angle, ShieldWidth, Radius);
-
-        OnAngleChanged += angle => ShieldAngleSlider.Value = (int) angle.Degrees;
-
         if (RadarScreen.TryGetModule<RadarShieldStatus>(out var shieldModule))
         {
-            OnParametersChanged += shieldModule.UpdateShieldParameters;
             OnAngleChanged += shieldModule.UpdateShieldParameters;
         }
 
@@ -63,14 +50,6 @@ public sealed partial class CircularShieldConsoleWindow : DefaultWindow
         RadarScreen.UpdateState(shieldState);
 
         var state = shieldState.Shield;
-        ShieldAngleSlider.Value = (int) state.Angle.Degrees;
-
-        ShieldWidthSlider.Value = (int) state.Width.Degrees;
-        ShieldWidthSlider.MaxValue = state.MaxWidth;
-
-        ShieldRadiusSlider.Value = state.Radius;
-        ShieldRadiusSlider.MaxValue = state.MaxRadius;
-
         ShieldPowerStatusLabel.SetMarkup(Loc.GetString(state.Powered ? "shipevent-shieldconsole-powered" : "shipevent-shieldconsole-nopower"));
     }
 }

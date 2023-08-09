@@ -61,16 +61,6 @@ public sealed class RadarShieldStatus : RadarModule
     }
 
     // Only for shield console
-    public void UpdateShieldParameters(int angle, int shieldWidth, int radius)
-    {
-        if(_shields.Count == 0)
-            return;
-        var state = _shields.First();
-        state.Angle = Angle.FromDegrees(angle);
-        state.Width = Angle.FromDegrees(shieldWidth);
-        state.Radius = radius;
-    }
-
     public void UpdateShieldParameters(Angle angle)
     {
         if(_shields.Count == 0)

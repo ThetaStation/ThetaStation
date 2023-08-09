@@ -28,7 +28,6 @@ public sealed class CircularShieldConsoleBoundUserInterface : BoundUserInterface
         _window.OpenCentered();
         _window.OnClose += Close;
         _window.OnEnableButtonPressed += () => SendMessage(new CircularShieldToggleMessage());
-        _window.OnParametersChanged += UpdateShieldParameters;
         _window.OnAngleChanged += UpdateShieldParameters;
     }
 
@@ -39,17 +38,6 @@ public sealed class CircularShieldConsoleBoundUserInterface : BoundUserInterface
         _nextCanUpdate = _gameTiming.RealTime + _updateCd;
 
         SendMessage(new CircularShieldChangeParametersMessage(angle));
-    }
-
-    private void UpdateShieldParameters(int angle, int shieldWidth, int radius)
-    {
-        if(_nextCanUpdate > _gameTiming.RealTime)
-            return;
-        _nextCanUpdate = _gameTiming.RealTime + _updateCd;
-        SendMessage(new CircularShieldChangeParametersMessage(
-            Angle.FromDegrees(angle),
-            Angle.FromDegrees(shieldWidth),
-            radius));
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)
