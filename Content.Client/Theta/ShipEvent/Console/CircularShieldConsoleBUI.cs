@@ -14,7 +14,7 @@ public sealed class CircularShieldConsoleBoundUserInterface : BoundUserInterface
 
     private CircularShieldConsoleWindow? _window;
 
-    // Smooth movement of the parameters sliders causes a spam to server
+    // Smooth changing the shield parameters causes a spam to server
     private TimeSpan _updateCd = TimeSpan.FromMilliseconds(1);
     private TimeSpan _nextCanUpdate;
 
