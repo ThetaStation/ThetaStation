@@ -13,7 +13,7 @@ public sealed partial class ShipPickerWindow : DefaultWindow
 {
     public ShipTypePrototype? Selection;
 
-    public Action<ShipTypePrototype?>? OnSelectionMade;
+    public Action<ShipTypePrototype>? OnSelectionMade;
 
     public ShipPickerWindow()
     {

@@ -26,19 +26,23 @@ public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
 
     public readonly List<CommonRadarEntityInterfaceState> CommonEntities;
 
+    public readonly List<ShieldInterfaceState> Shields;
+
     public RadarConsoleBoundInterfaceState(
         float maxRange,
         EntityCoordinates? coordinates,
         Angle? angle,
         List<DockingInterfaceState> docks,
         List<CannonInformationInterfaceState> cannons,
-        List<CommonRadarEntityInterfaceState> common)
+        List<CommonRadarEntityInterfaceState> common,
+        List<ShieldInterfaceState> shields)
     {
         MaxRange = maxRange;
         Coordinates = coordinates;
         Angle = angle;
         Docks = docks;
         Cannons = cannons;
+        Shields = shields;
         CommonEntities = common;
     }
 }
@@ -83,6 +87,25 @@ public sealed class CannonInformationInterfaceState
     public int Ammo;
     public int MaxCapacity;
     public int UsedCapacity;
+}
+
+[Serializable, NetSerializable]
+public sealed class ShieldInterfaceState
+{
+    public EntityCoordinates Coordinates;
+    public Angle WorldRotation;
+
+    public bool Powered;
+
+    public Angle Angle;
+
+    public Angle Width;
+    public int MaxWidth;
+
+    public int Radius;
+    public int MaxRadius;
+
+    public bool IsControlling;
 }
 
 /// <summary>

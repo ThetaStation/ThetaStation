@@ -351,10 +351,12 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         docks ??= GetAllDocks();
         var all = new List<CommonRadarEntityInterfaceState>();;
         var cannons = new List<CannonInformationInterfaceState>();
+        var shield = new List<ShieldInterfaceState>();
         if (radar != null)
         {
             all = _radarRenderable.GetObjectsAround(consoleUid, radar);
             cannons = _radarConsoleSystem.GetCannonInfosByMyGrid(consoleUid, radar);
+			shield = _radarConsoleSystem.GetShieldsAround(radar);
         }
 
         if (_ui.TryGetUi(consoleUid, ShuttleConsoleUiKey.Key, out var bui))
@@ -367,7 +369,8 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
                 consoleXform?.LocalRotation,
                 docks,
                 cannons,
-                all));
+                all,
+                shield));
     }
 
     public override void Update(float frameTime)

@@ -13,6 +13,7 @@ using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
 using Content.Shared.Theta.ShipEvent;
+using Content.Shared.Theta.ShipEvent.Components;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Server.GameObjects;
@@ -51,6 +52,38 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
                 continue;
             UpdateState(uid, radar);
         }
+    }
+    public List<ShieldInterfaceState> GetShieldsAround(RadarConsoleComponent component)
+    {
+        var list = new List<ShieldInterfaceState>();
+
+        if (!TryComp<TransformComponent>(component.Owner, out var xform))
+            return list;
+
+        var query = EntityQueryEnumerator<CircularShieldComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var shield, out var transform))
+        {
+            if (!shield.Enabled)
+                continue;
+            if (!xform.MapPosition.InRange(transform.MapPosition, component.MaxRange))
+                continue;
+
+            var coords = _transformSystem.GetMoverCoordinates(uid, transform);
+            list.Add(new ShieldInterfaceState
+            {
+                Coordinates =  coords,
+                WorldRotation = _transformSystem.GetWorldRotation(transform),
+                Powered = shield.Powered,
+                Angle = shield.Angle.Degrees,
+                Width = shield.Width.Degrees,
+                MaxWidth = shield.MaxWidth,
+                Radius = shield.Radius,
+                MaxRadius = shield.MaxRadius,
+                IsControlling = false,
+            });
+        }
+
+        return list;
     }
 
     public List<CannonInformationInterfaceState> GetCannonInfosByMyGrid(EntityUid uid, RadarConsoleComponent component)
@@ -163,16 +196,14 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
             }
         }
 
-        var cannons = GetCannonInfosByMyGrid(uid, component);
-        var all = _radarRenderable.GetObjectsAround(uid, component);
-
         var radarState = new RadarConsoleBoundInterfaceState(
             component.MaxRange,
             coordinates,
             angle,
             new List<DockingInterfaceState>(),
-            cannons,
-            all
+            GetCannonInfosByMyGrid(uid, component),
+            _radarRenderable.GetObjectsAround(uid, component),
+            GetShieldsAround(component)
         );
 
         _uiSystem.TrySetUiState(uid, RadarConsoleUiKey.Key, radarState);

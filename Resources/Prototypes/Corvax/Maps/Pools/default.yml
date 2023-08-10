@@ -2,8 +2,6 @@
   id: CorvaxDefaultMapPool
   maps:
   - CorvaxDelta
-  - CorvaxBox
-  - CorvaxIshimura
   - CorvaxAvrite
   - Aspid
   - Bagel

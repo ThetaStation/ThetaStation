@@ -34,7 +34,6 @@
       shipTypes:
         - "shiptype_arrowhead"
         - "shiptype_mule"
-        - "shiptype_boxship"
         - "shiptype_skipjack"
 
       #bounds

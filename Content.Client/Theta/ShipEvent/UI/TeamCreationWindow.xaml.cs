@@ -33,17 +33,22 @@ public sealed partial class TeamCreationWindow : DefaultWindow
             ShipPicker.OpenCentered();
             ShipPickerButtonPressed?.Invoke(_);
         };
-        ShipPicker.OnSelectionMade += SetChosenShipLabel;
-        SetChosenShipLabel();
+        ShipPicker.OnSelectionMade += UpdateShipLabel;
+        SetChosenShipLabel("N/A");
 
         MaxMembersEdit.IsValid = value => value >= 0 && value <= 100;
         MaxMembersEdit.InitDefaultButtons();
     }
 
-    private void SetChosenShipLabel(ShipTypePrototype? _ = null)
+    private void UpdateShipLabel(ShipTypePrototype selection)
+    {
+        SetChosenShipLabel(selection.Name);
+    }
+
+    private void SetChosenShipLabel(string name)
     {
         var desc = Loc.GetString("shipevent-teamcreation-ship");
-        var ship = Loc.GetString(ShipPicker.Selection?.Name ?? "N/A");
+        var ship = Loc.GetString(name);
         ShipLabel.Text = $"{desc} {ship}";
     }
 

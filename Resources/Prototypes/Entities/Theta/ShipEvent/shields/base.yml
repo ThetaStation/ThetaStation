@@ -43,9 +43,11 @@
   suffix: ShipEvent
   components:
     - type: CircularShield
-      consumptionPerM2: 100
+      consumptionPerM2: 0
       maxWidth: 90
+      width: 90
       maxRadius: 10
+      radius: 10
       color: blue
       effects:
         - !type:CircularShieldTempSpeedChangeEffect

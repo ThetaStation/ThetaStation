@@ -14,9 +14,9 @@ public sealed class CircularShieldOverlay : Overlay
     private IEntityManager entMan = default!;
     private TransformSystem formSys = default!;
     private FixtureSystem fixSys = default!;
-    
+
     private const string ShieldFixtureId = "ShieldFixture";
-    
+
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
 
     public CircularShieldOverlay(IEntityManager _entMan)
@@ -28,7 +28,7 @@ public sealed class CircularShieldOverlay : Overlay
 
     protected override void Draw(in OverlayDrawArgs args)
     {
-        foreach ((var form, var shield, var fix) in 
+        foreach ((var form, var shield, var fix) in
                  entMan.EntityQuery<TransformComponent, CircularShieldComponent, FixturesComponent>())
         {
             if (!shield.CanWork || form.MapID != args.MapId)
@@ -38,14 +38,17 @@ public sealed class CircularShieldOverlay : Overlay
             if (shape == null)
                 continue;
 
-            Vector2[] verts = new Vector2[shape.VertexCount];
-            for (var i = 0; i < verts.Length; i++)
+            Vector2[] verts = new Vector2[shape.VertexCount + 1];
+            for (var i = 0; i < shape.VertexCount; i++)
             {
                 verts[i] = formSys.GetWorldMatrix(form).Transform(shape.Vertices[i]);
             }
 
+            verts[shape.VertexCount] = verts[0];
+
             //todo: add fancy shader here
-            args.DrawingHandle.DrawPrimitives(DrawPrimitiveTopology.TriangleFan, verts, shield.Color.WithAlpha(0.1f));
+            args.DrawingHandle.DrawPrimitives(DrawPrimitiveTopology.TriangleFan, verts, shield.Color.WithAlpha(0.01f));
+            args.DrawingHandle.DrawPrimitives(DrawPrimitiveTopology.LineStrip, verts, shield.Color.WithAlpha(0.1f));
         }
     }
 }
