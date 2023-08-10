@@ -865,15 +865,11 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// <param name="team">Team which is destroyed</param>
     private void AddKillPoints(ShipEventFaction team)
     {
-        var totalHits = 0;
-        foreach ((var killerTeam, var hits) in team.Hits)
-        {
-            totalHits += hits;
-        }
+        var totalHits = team.Hits.Sum(obj => obj.Value);
 
-        foreach ((var killerTeam, var hits) in team.Hits)
+        foreach (var (killerTeam, hits) in team.Hits)
         {
-            double ratio = hits / totalHits;
+            double ratio = hits / (double) totalHits;
             switch (ratio)
             {
                 case >= 0.5:
