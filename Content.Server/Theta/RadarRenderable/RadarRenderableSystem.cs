@@ -25,22 +25,21 @@ public sealed class RadarRenderableSystem : EntitySystem
         var states = new List<CommonRadarEntityInterfaceState>();
         if (!TryComp<TransformComponent>(consoleUid, out var xform))
             return states;
-        if(_radarConsoleSystem.HasFlag(radar, RadarRenderableGroup.ShipEventTeammateGroup))
-            states.AddRange(GetShipEventTeammateGroup(radar, xform));
-        if(_radarConsoleSystem.HasFlag(radar, RadarRenderableGroup.Projectiles))
-            states.AddRange(GetProjectileGroup(radar, xform));
-        if(_radarConsoleSystem.HasFlag(radar, RadarRenderableGroup.Cannon))
-            states.AddRange(GetCannonGroup(consoleUid, radar, xform));
+        states.AddRange(GetShipEventTeammate(radar, xform));
+        states.AddRange(GetProjectileGroup(radar, xform));
+        states.AddRange(GetCannonGroup(consoleUid, radar, xform));
         return states;
     }
 
-    private List<CommonRadarEntityInterfaceState> GetShipEventTeammateGroup(RadarConsoleComponent radar, TransformComponent consoleTransform)
+    private List<CommonRadarEntityInterfaceState> GetShipEventTeammate(RadarConsoleComponent radar, TransformComponent consoleTransform)
     {
         var states = new List<CommonRadarEntityInterfaceState>();
 
         var query = EntityQueryEnumerator<RadarRenderableComponent, MindContainerComponent, MobStateComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var radarRenderable, out var mindContainer, out var mobState, out var transform))
         {
+            if(!_radarConsoleSystem.HasFlag(radar, (RadarRenderableGroup) radarRenderable.Group))
+                continue;
             if (_mobStateSystem.IsIncapacitated(uid, mobState))
                 continue;
             if (!consoleTransform.MapPosition.InRange(transform.MapPosition, radar.MaxRange))
@@ -75,6 +74,8 @@ public sealed class RadarRenderableSystem : EntitySystem
         var query = EntityQueryEnumerator<RadarRenderableComponent, ProjectileComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var radarRenderable, out _, out var transform))
         {
+            if(!_radarConsoleSystem.HasFlag(radar, (RadarRenderableGroup) radarRenderable.Group))
+                continue;
             if (!consoleTransform.MapPosition.InRange(transform.MapPosition, radar.MaxRange))
                 continue;
 
@@ -102,6 +103,8 @@ public sealed class RadarRenderableSystem : EntitySystem
         var query = EntityQueryEnumerator<RadarRenderableComponent, CannonComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var radarRenderable, out var cannon, out var transform))
         {
+            if(!_radarConsoleSystem.HasFlag(radar, (RadarRenderableGroup) radarRenderable.Group))
+                continue;
             if (transform.GridUid != myGrid)
                 continue;
             if (!transform.Anchored)
