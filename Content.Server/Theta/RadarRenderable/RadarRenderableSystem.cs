@@ -25,8 +25,8 @@ public sealed class RadarRenderableSystem : EntitySystem
         var states = new List<CommonRadarEntityInterfaceState>();
         if (!TryComp<TransformComponent>(consoleUid, out var xform))
             return states;
-        if(_radarConsoleSystem.HasFlag(radar, RadarRenderableGroup.Mob))
-            states.AddRange(GetMobGroup(radar, xform));
+        if(_radarConsoleSystem.HasFlag(radar, RadarRenderableGroup.ShipEventTeammateGroup))
+            states.AddRange(GetShipEventTeammateGroup(radar, xform));
         if(_radarConsoleSystem.HasFlag(radar, RadarRenderableGroup.Projectiles))
             states.AddRange(GetProjectileGroup(radar, xform));
         if(_radarConsoleSystem.HasFlag(radar, RadarRenderableGroup.Cannon))
@@ -34,7 +34,7 @@ public sealed class RadarRenderableSystem : EntitySystem
         return states;
     }
 
-    private List<CommonRadarEntityInterfaceState> GetMobGroup(RadarConsoleComponent radar, TransformComponent consoleTransform)
+    private List<CommonRadarEntityInterfaceState> GetShipEventTeammateGroup(RadarConsoleComponent radar, TransformComponent consoleTransform)
     {
         var states = new List<CommonRadarEntityInterfaceState>();
 
