@@ -38,6 +38,7 @@ using Robust.Shared.Physics.Events;
 using Robust.Shared.Players;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using Robust.Shared.Utility;
 
 
 namespace Content.Server.Theta.ShipEvent.Systems;
@@ -279,13 +280,12 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         ClearMindTracker();
 
-        var winner = Teams.First();
-        args.AddLine(Loc.GetString("shipevent-roundend-heading"));
-        foreach (var team in Teams)
-        {
-            if (team.Points > winner.Points)
-                winner = team;
+        var sortedTeams = Teams.ShallowClone().OrderByDescending(t => t.Points).ToList();
 
+        var winner = sortedTeams.First();
+        args.AddLine(Loc.GetString("shipevent-roundend-heading"));
+        foreach (var team in sortedTeams)
+        {
             args.AddLine(Loc.GetString("shipevent-roundend-team",
                 ("name", team.Name),
                 ("color", team.Color),
