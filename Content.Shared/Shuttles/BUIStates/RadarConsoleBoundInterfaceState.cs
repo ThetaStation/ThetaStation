@@ -1,4 +1,3 @@
-using Content.Shared.Theta.RadarRenderable;
 using Robust.Shared.Map;
 using Robust.Shared.Serialization;
 
@@ -69,9 +68,11 @@ public sealed class CommonRadarEntityInterfaceState
 [Serializable, NetSerializable]
 public enum RadarRenderableGroup
 {
-    ShipEventTeammateGroup = 0,
-    Projectiles = 1 << 0,
-    Cannon = 1 << 1,
+    // Add flag handling to RadarRenderableSystem.GetObjectsAround()
+    None                   =      0,
+    ShipEventTeammateGroup = 1 << 0,
+    Projectiles            = 1 << 1,
+    Cannon                 = 1 << 2,
 
     All = (ShipEventTeammateGroup | Projectiles | Cannon),
 }
