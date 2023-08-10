@@ -1,52 +1,71 @@
+using System.Linq;
 using System.Numerics;
-using Content.Shared.Theta.ShipEvent.Components;
-using Robust.Client.GameObjects;
+using Content.Client.Theta.ShipEvent.Systems;
+using Content.Shared.Shuttles.BUIStates;
+using Content.Shared.Theta.ShipEvent.UI;
 using Robust.Client.Graphics;
-using Robust.Shared.Physics;
-using Robust.Shared.Physics.Collision.Shapes;
 
 namespace Content.Client.Theta.ModularRadar.Modules.ShipEvent;
 
 public sealed class RadarShieldStatus : RadarModule
 {
-    [Dependency] private readonly IEntityManager entMan = default!; 
-    private readonly TransformSystem formSys = default!;
-    
-    private const string ShieldFixtureId = "ShieldFixture";
-    
+    private readonly CircularShieldSystem _shieldSystem;
+
+    private List<ShieldInterfaceState> _shields = new();
+
     public RadarShieldStatus(ModularRadarControl parentRadar) : base(parentRadar)
     {
-        formSys = entMan.System<TransformSystem>();
+        _shieldSystem = EntManager.System<CircularShieldSystem>();
+    }
+
+    public override void UpdateState(BoundUserInterfaceState state)
+    {
+        switch (state)
+        {
+            case RadarConsoleBoundInterfaceState radarState:
+                _shields = radarState.Shields;
+                break;
+            case ShieldConsoleBoundsUserInterfaceState shieldState:
+                _shields.Clear();
+                _shields.Add(shieldState.Shield);
+                break;
+        }
     }
 
     public override void Draw(DrawingHandleScreen handle, Parameters parameters)
     {
         base.Draw(handle, parameters);
-        foreach ((var form, var shield, var fix) in entMan.EntityQuery<TransformComponent, CircularShieldComponent, FixturesComponent>())
+
+        foreach (var state in _shields)
         {
-            PolygonShape? shape = (PolygonShape?)fix.Fixtures.GetValueOrDefault(ShieldFixtureId)?.Shape ?? null;
-            if (shape == null)
+            if(!state.Powered)
                 continue;
-            
-            Vector2 pos = formSys.GetWorldPosition(form);
-            pos = parameters.DrawMatrix.Transform(pos);
-            pos.Y *= -1;
-            pos = ScalePosition(pos);
-            
-            handle.DrawCircle(pos, 5f, shield.Color);
-            
-            Vector2[] verts = new Vector2[shape.VertexCount + 1];
-            for (var i = 0; i < shape.VertexCount; i++)
+            var position = state.Coordinates.ToMapPos(EntManager);
+            var color = Color.Blue;
+
+            var cone = _shieldSystem.GenerateConeVertices(state.Radius, state.Angle, state.Width, 5);
+            var verts = new Vector2[cone.Length + 1];
+            for (var i = 0; i < cone.Length; i++)
             {
-                Vector2 vert = formSys.GetWorldMatrix(form).Transform(shape.Vertices[i]);
-                vert = parameters.DrawMatrix.Transform(vert);
-                vert.Y = -vert.Y;
-                vert = ScalePosition(vert);
-                verts[i] = vert;
+                verts[i] = cone[i];
+                verts[i] = parameters.DrawMatrix.Transform(position + state.WorldRotation.RotateVec(verts[i]));
+                verts[i].Y = -verts[i].Y;
+                verts[i] = ScalePosition(verts[i]);
             }
-            verts[shape.VertexCount] = verts[0];
-            
-            handle.DrawPrimitives(DrawPrimitiveTopology.LineStrip, verts, shield.CanWork ? Color.LawnGreen : Color.Red);
+
+            verts[cone.Length] = verts[0];
+
+            handle.DrawPrimitives(DrawPrimitiveTopology.TriangleFan, verts, color.WithAlpha(0.1f));
+            handle.DrawPrimitives(DrawPrimitiveTopology.LineStrip, verts, color);
         }
+    }
+
+    // Only for shield console
+    public void UpdateShieldParameters(Angle angle)
+    {
+        if(_shields.Count == 0)
+            return;
+        var state = _shields.First();
+        state.Angle = angle;
     }
 }

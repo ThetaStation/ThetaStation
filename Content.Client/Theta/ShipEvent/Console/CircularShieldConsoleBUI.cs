@@ -2,15 +2,22 @@ using Content.Shared.Theta.ShipEvent.Components;
 using Content.Shared.Theta.ShipEvent.UI;
 using JetBrains.Annotations;
 using Robust.Client.GameObjects;
+using Robust.Shared.Timing;
 
-namespace Content.Client.Theta.ShipEvent.UI;
+namespace Content.Client.Theta.ShipEvent.Console;
 
 
 [UsedImplicitly]
 public sealed class CircularShieldConsoleBoundUserInterface : BoundUserInterface
 {
+    [Dependency] private readonly IGameTiming _gameTiming = default!;
+
     private CircularShieldConsoleWindow? _window;
-    
+
+    // Smooth changing the shield parameters causes a spam to server
+    private TimeSpan _updateCd = TimeSpan.FromMilliseconds(1);
+    private TimeSpan _nextCanUpdate;
+
     public CircularShieldConsoleBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey) { }
 
     protected override void Open()
@@ -21,28 +28,25 @@ public sealed class CircularShieldConsoleBoundUserInterface : BoundUserInterface
         _window.OpenCentered();
         _window.OnClose += Close;
         _window.OnEnableButtonPressed += () => SendMessage(new CircularShieldToggleMessage());
-        _window.OnParametersChanged += () => UpdateShieldParameters();
-        
-        SendMessage(new CircularShieldConsoleInfoRequest());
+        _window.OnAngleChanged += UpdateShieldParameters;
     }
 
-    private void UpdateShieldParameters()
+    private void UpdateShieldParameters(Angle angle)
     {
-        if (_window == null)
+        if(_nextCanUpdate > _gameTiming.RealTime)
             return;
+        _nextCanUpdate = _gameTiming.RealTime + _updateCd;
 
-        SendMessage(new CircularShieldChangeParametersMessage(
-            Angle.FromDegrees(_window.Angle), 
-            Angle.FromDegrees(_window.Width),
-            _window.Radius));
+        SendMessage(new CircularShieldChangeParametersMessage(angle));
     }
-    
+
     protected override void UpdateState(BoundUserInterfaceState state)
     {
-        if (!(state is CircularShieldConsoleWindowBoundsUserInterfaceState shieldSt))
+        if (state is not ShieldConsoleBoundsUserInterfaceState shieldSt)
             return;
-        
-        base.UpdateState(state);
+
+        _window?.SetMatrix(shieldSt.Coordinates, shieldSt.Angle);
+        _window?.SetOwner(Owner);
         _window?.UpdateState(shieldSt);
     }
 

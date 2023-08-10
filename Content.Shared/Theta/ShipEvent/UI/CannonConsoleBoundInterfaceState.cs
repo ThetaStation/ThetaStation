@@ -2,7 +2,7 @@ using Content.Shared.Shuttles.BUIStates;
 using Robust.Shared.Map;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.Theta.ShipEvent.Console;
+namespace Content.Shared.Theta.ShipEvent.UI;
 
 [Serializable, NetSerializable]
 public sealed class CannonConsoleBoundInterfaceState : RadarConsoleBoundInterfaceState
@@ -14,7 +14,8 @@ public sealed class CannonConsoleBoundInterfaceState : RadarConsoleBoundInterfac
         List<DockingInterfaceState> docks,
         List<MobInterfaceState> mobs,
         List<ProjectilesInterfaceState> projectiles,
-        List<CannonInformationInterfaceState> cannons) : base(maxRange, coordinates, angle, docks, mobs, projectiles, cannons)
+        List<CannonInformationInterfaceState> cannons,
+        List<ShieldInterfaceState> shields) : base(maxRange, coordinates, angle, docks, mobs, projectiles, cannons, shields)
     {
     }
 }
