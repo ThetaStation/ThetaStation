@@ -11,5 +11,5 @@ public sealed class RadarRenderableComponent : Component
     public readonly string RadarView = default!;
 
     [DataField("group", required: true)]
-    public readonly Enum Group = RadarRenderableGroup.None;
+    public readonly Enum Group = default!;
 }
