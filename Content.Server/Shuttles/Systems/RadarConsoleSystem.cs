@@ -27,6 +27,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 {
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
     [Dependency] private readonly RadarRenderableSystem _radarRenderable = default!;
+    [Dependency] private readonly TransformSystem _transformSystem = default!;
 
     private const string OutputPortName = "CannonConsoleSender";
 
