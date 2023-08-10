@@ -184,6 +184,13 @@ public abstract partial class SharedGunSystem : EntitySystem
         return false;
     }
 
+    // 1 level of deep
+    public EntityUid GetGunOwner(EntityUid gun)
+    {
+        var transform = Transform(gun);
+        return transform.GridUid == transform.ParentUid ? gun : transform.ParentUid;
+    }
+
     private void StopShooting(EntityUid uid, GunComponent gun)
     {
         if (gun.ShotCounter == 0)
@@ -281,7 +288,8 @@ public abstract partial class SharedGunSystem : EntitySystem
             return;
         }
 
-        var fromCoordinates = Transform(user).Coordinates;
+        var fromCoordinates = Transform(gun.Owner).Coordinates;
+
         // Remove ammo
         var ev = new TakeAmmoEvent(shots, new List<(EntityUid? Entity, IShootable Shootable)>(), fromCoordinates, user);
 
@@ -322,10 +330,10 @@ public abstract partial class SharedGunSystem : EntitySystem
         var shotEv = new GunShotEvent(user, ev.Ammo);
         RaiseLocalEvent(gunUid, ref shotEv);
 
-        if (userImpulse && TryComp<PhysicsComponent>(user, out var userPhysics))
+        if (userImpulse && TryComp<PhysicsComponent>(gun.Owner, out var userPhysics))
         {
-            if (_gravity.IsWeightless(user, userPhysics))
-                CauseImpulse(fromCoordinates, toCoordinates.Value, user, userPhysics);
+            if (_gravity.IsWeightless(gun.Owner, userPhysics))
+                CauseImpulse(fromCoordinates, toCoordinates.Value, gun.Owner, userPhysics);
         }
 
         Dirty(gunUid, gun);
@@ -409,7 +417,7 @@ public abstract partial class SharedGunSystem : EntitySystem
         if (sprite == null)
             return;
 
-        var ev = new MuzzleFlashEvent(gun, sprite, user == gun);
+        var ev = new MuzzleFlashEvent(gun, sprite, user == gun || GetGunOwner(gun) != user);
         CreateEffect(gun, ev, user);
     }
 

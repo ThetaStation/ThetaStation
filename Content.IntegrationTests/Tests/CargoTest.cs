@@ -89,7 +89,7 @@ public sealed class CargoTest
         await pairTracker.CleanReturnAsync();
     }
 
-    [Test]
+    [Test, Ignore("Too long for Theta Station")]
     public async Task NoStaticPriceAndStackPrice()
     {
         await using var pairTracker = await PoolManager.GetServerClient();

@@ -1,33 +1,30 @@
-<p align="center"> <img alt="Space Station 14" width="880" height="300" src="https://raw.githubusercontent.com/space-wizards/asset-dump/de329a7898bb716b9d5ba9a0cd07f38e61f1ed05/github-logo.svg" /></p>
+<p align="center"><img alt="Space Station 14" width="880" height="300" src="https://raw.githubusercontent.com/space-wizards/asset-dump/de329a7898bb716b9d5ba9a0cd07f38e61f1ed05/github-logo.svg" /></p>
 
-Space Station 14 это ремейк SS13, который работает на собственном движке [Robust Toolbox](https://github.com/space-wizards/RobustToolbox), написанном на C#.
+ThetaStation is SS14 fork, based on ship-to-ship combat and PvP. Билд также имеет русскую локализацию и [русскоязычный Discord](https://discord.gg/mmEprDu7RW), присоединяйтесь!
 
-Это репозиторий первого русскоязычного сервера по Space Station 14, целью которого является полный перевод игры на русский язык, поддержка актуальных изменений из основного репозитория, а так же добавление собственных изменений по необходимости.
+This is a downstream of the https://github.com/space-syndicate/space-station-14
 
-## Ссылки
 
-[Наш Discord](https://discord.station14.ru) | [Наша Вики](https://wiki.station14.ru) | [Steam](https://store.steampowered.com/app/1255460/Space_Station_14/) | [Клиент без Steam](https://spacestation14.io/about/nightlies/) | [Основной репозиторий](https://github.com/space-wizards/space-station-14)
+## Links
 
-## Документация
+[Our Discord](https://discord.gg/mmEprDu7RW) | [Our wiki: TODO](None) | [Steam](https://store.steampowered.com/app/1255460/Space_Station_14/) | [Client without Steam](https://spacestation14.io/about/nightlies/) | [Main repository](https://github.com/space-wizards/space-station-14)
 
-На официальном сайте с [документацией](https://docs.spacestation14.io/) имеется вся необходимая информация о контенте SS14, движке, дизайне игры и многом другом. Также имеется много информации для начинающих разработчиков.
+## Documentation
 
-## Контрибьют
+Official site with the [documentation](https://docs.spacestation14.io/) has a lot of useful information about game's content, design and engine. Were also glad to help you with any coding questions in our [Discord](https://discord.gg/mmEprDu7RW) (#how-to-code). 
 
-В случае если вы хотите добавить новый контент будет лучше, если сначала вы предложите его в [основной репозиторий](https://github.com/space-wizards/space-station-14) или обсудите его необходимость на нашем сервере [Discord](https://discord.station14.ru).
+## Build
 
-## Сборка
+1. Clone this repository on your machine.
+2. Run `RUN_THIS.py` to initialize git submodules & download the engine.
+3. Build the project (dotnet build <assembly name>).
 
-1. Склонируйте этот репозиторий локально
-2. Запустите `RUN_THIS.py` для инициализации подмодулей и скачивания движка.
-3. Скомпилируйте проект.
+[More detailed guide on how to setup the project.](https://docs.spacestation14.io/getting-started/dev-setup)
 
-[Более подробная инструкция по запуску проекта.](https://docs.spacestation14.io/getting-started/dev-setup)
+## License
+All the repo's code after unix timestamp `1668875136` is licensed under [a proprietary license](https://github.com/ThetaStation/ThetaStation/blob/master/LICENSE.TXT).
+All the repo's code before unix timestamp `1668875136` is licensed under MIT or any other license specified in LICENSE.TXT for the appropriate version's state.
 
-## Лицензия
+Most of the assets are licensed under [CC-BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/), unless stated otherwise. Assets have their license and author written in metadata file.
 
-Весь код репозитория лицензирован под [MIT](https://github.com/space-syndicate/space-station-14/blob/master/LICENSE.TXT).
-
-Большинство ассетов лицензированы под [CC-BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/), если не указано иное. Ассеты имеют свою лицензию и авторские права в файле метаданных. [Пример](https://github.com/space-syndicate/space-station-14/blob/master/Resources/Textures/Objects/Tools/crowbar.rsi/meta.json). 
-
-Обратите внимание, что некоторые ассеты лицензированы на некоммерческой основе [CC-BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/) или аналогичной некоммерческой лицензией, и их необходимо удалить, если вы хотите использовать этот проект в коммерческих целях.
+Note that some of the assets are licensed under non-commercial license [(CC-BY-NC-SA 3.0 or similar)](https://creativecommons.org/licenses/by-nc-sa/3.0/), and they need to be removed if you intend on using this project commercially.

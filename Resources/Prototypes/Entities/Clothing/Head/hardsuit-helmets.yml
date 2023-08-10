@@ -315,6 +315,8 @@
     sprite: Clothing/Head/Hardsuits/syndicate.rsi
   - type: PointLight
     color: green
+    radius: 5
+    energy: 3
   - type: PressureProtection
     highPressureMultiplier: 0.08
     lowPressureMultiplier: 1000
