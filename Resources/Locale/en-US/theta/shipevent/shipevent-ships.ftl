@@ -22,4 +22,4 @@ shipevent-skipjack-desc = A reshaped space pirate support ship that was once sto
     NO SIDE ENGINES AND VERY DIFFICULT TO CONTROL! Owns heavy armor and many types of weapons in large quantities.
     
 shipevent-tikvyak-name = Tikvyak
-shipevent-tikvyak-desc = PUMPKIN IS NOT GOURD!!!
+shipevent-tikvyak-desc = A PUMPKIN IS NOT A GOURD!!!
