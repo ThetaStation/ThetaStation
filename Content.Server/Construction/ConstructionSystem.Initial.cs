@@ -206,22 +206,25 @@ namespace Content.Server.Construction
                             if (used.Contains(entity))
                                 continue;
 
-                            // Dump out any stored entities in used entity
-                            if (TryComp<ServerStorageComponent>(entity, out var storage) && storage.StoredEntities != null)
+                            if (arbitraryStep.Consume)
                             {
-                                foreach (var storedEntity in storage.StoredEntities.ToList())
+                                // Dump out any stored entities in used entity
+                                if (TryComp<ServerStorageComponent>(entity, out var storage) && storage.StoredEntities != null)
                                 {
-                                    _storageSystem.RemoveAndDrop(entity, storedEntity, storage);
+                                    foreach (var storedEntity in storage.StoredEntities.ToList())
+                                    {
+                                        _storageSystem.RemoveAndDrop(entity, storedEntity, storage);
+                                    }
                                 }
-                            }
 
-                            if (string.IsNullOrEmpty(arbitraryStep.Store))
-                            {
-                                if (!container.Insert(entity))
+                                if (string.IsNullOrEmpty(arbitraryStep.Store))
+                                {
+                                    if (!container.Insert(entity))
+                                        continue;
+                                }
+                                else if (!GetContainer(arbitraryStep.Store).Insert(entity))
                                     continue;
                             }
-                            else if (!GetContainer(arbitraryStep.Store).Insert(entity))
-                                continue;
 
                             handled = true;
                             used.Add(entity);
