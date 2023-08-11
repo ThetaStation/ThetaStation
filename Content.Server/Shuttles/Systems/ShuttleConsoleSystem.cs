@@ -350,17 +350,20 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         List<MobInterfaceState> mobs;
         List<ProjectilesInterfaceState> projectiles;
         List<CannonInformationInterfaceState> cannons;
+        List<ShieldInterfaceState> shield;
         if (radar != null)
         {
             mobs = _radarConsoleSystem.GetMobsAround(radar);
             projectiles = _radarConsoleSystem.GetProjectilesAround(radar);
             cannons = _radarConsoleSystem.GetCannonInfosByMyGrid(radar);
+            shield = _radarConsoleSystem.GetShieldsAround(radar);
         }
         else
         {
             mobs = new List<MobInterfaceState>();
             projectiles = new List<ProjectilesInterfaceState>();
             cannons = new List<CannonInformationInterfaceState>();
+            shield = new List<ShieldInterfaceState>();
         }
 
         if (_ui.TryGetUi(consoleUid, ShuttleConsoleUiKey.Key, out var bui))
@@ -374,7 +377,8 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
                 docks,
                 mobs,
                 projectiles,
-                cannons));
+                cannons,
+                shield));
     }
 
     public override void Update(float frameTime)

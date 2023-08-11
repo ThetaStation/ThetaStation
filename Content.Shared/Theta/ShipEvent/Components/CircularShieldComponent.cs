@@ -9,7 +9,7 @@ public sealed partial class CircularShieldComponent : Component
 {
     [AutoNetworkedField, ViewVariables(VVAccess.ReadWrite)]
     public EntityUid? BoundConsole;
-    
+
     [AutoNetworkedField, ViewVariables(VVAccess.ReadWrite)]
     public bool Enabled;
 
@@ -22,7 +22,7 @@ public sealed partial class CircularShieldComponent : Component
     //specified in degrees, for prototypes
     [DataField("maxWidth"), ViewVariables(VVAccess.ReadWrite)]
     public int MaxWidth = 360;
-    
+
     [DataField("maxRadius"), ViewVariables(VVAccess.ReadWrite)]
     public int MaxRadius;
 
@@ -43,7 +43,7 @@ public sealed partial class CircularShieldComponent : Component
     public List<CircularShieldEffect> Effects = new();
 
     public bool CanWork => Enabled && Powered;
-    
+
     public int DesiredDraw => Enabled ? (int)(Radius * Radius * Width * 0.5 * ConsumptionPerSquareMeter) : 0;
 }
 
@@ -51,9 +51,9 @@ public sealed partial class CircularShieldComponent : Component
 public abstract class CircularShieldEffect
 {
     public abstract void OnShieldInit(EntityUid uid, CircularShieldComponent shield);
-    
+
     public abstract void OnShieldEnter(EntityUid uid, CircularShieldComponent shield);
-    
+
     public abstract void OnShieldExit(EntityUid uid, CircularShieldComponent shield);
 }
 
@@ -72,9 +72,14 @@ public sealed class CircularShieldChangeParametersMessage : BoundUserInterfaceMe
 {
     public Angle Angle;
 
-    public Angle Width;
+    public Angle? Width;
 
-    public int Radius;
+    public int? Radius;
+
+    public CircularShieldChangeParametersMessage(Angle angle)
+    {
+        Angle = angle;
+    }
 
     public CircularShieldChangeParametersMessage(Angle angle, Angle width, int radius)
     {

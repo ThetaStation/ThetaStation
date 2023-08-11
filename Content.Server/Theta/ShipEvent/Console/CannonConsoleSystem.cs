@@ -1,7 +1,7 @@
 ﻿using Content.Server.Shuttles.Systems;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
-using Content.Shared.Theta.ShipEvent.Console;
+using Content.Shared.Theta.ShipEvent.UI;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
 
@@ -33,6 +33,7 @@ public sealed class CannonConsoleSystem : EntitySystem
         var mobs = _radarConsoleSystem.GetMobsAround(radarConsole);
         var projectiles = _radarConsoleSystem.GetProjectilesAround(radarConsole);
         var cannonsInformation = _radarConsoleSystem.GetCannonInfosByMyGrid(radarConsole);
+        var shield =_radarConsoleSystem.GetShieldsAround(radarConsole);
 
         var radarState = new CannonConsoleBoundInterfaceState(
             radarConsole.MaxRange,
@@ -41,7 +42,8 @@ public sealed class CannonConsoleSystem : EntitySystem
             new List<DockingInterfaceState>(),
             mobs,
             projectiles,
-            cannonsInformation
+            cannonsInformation,
+            shield
         );
 
         _uiSystem.TrySetUiState(cannonConsole.Owner, CannonConsoleUiKey.Key, radarState);
