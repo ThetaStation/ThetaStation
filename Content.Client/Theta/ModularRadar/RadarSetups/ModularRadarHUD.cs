@@ -11,8 +11,8 @@ public sealed class ModularRadarHUD : ModularRadarControl
         Modules.Add(new RadarGrids(this));
         Modules.Add(new RadarLootboxTimer(this));
         Modules.Add(new RadarPlayAreaBounds(this));
-        Modules.Add(new RadarMobs(this));
         Modules.Add(new RadarPingsModule(this));
+        Modules.Add(new RadarCommon(this));
     }
 
     public override int GetUIDisplayRadius()

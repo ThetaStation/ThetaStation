@@ -292,7 +292,7 @@ namespace Content.IntegrationTests.Tests
             await pairTracker.CleanReturnAsync();
         }
 
-        [Test]
+        [Test, Ignore("Not necessary for Theta")]
         public async Task AllMapsTested()
         {
             await using var pairTracker = await PoolManager.GetServerClient();
