@@ -8,6 +8,12 @@
   suffix: SHIPEVENT
   abstract: true
   components:
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape:
+            !type:PhysShapeAabb
+            bounds: "-0.35,-0.35,0.35,0.35"
     - type: Anchorable
       delay: 7
     - type: CombatMode
