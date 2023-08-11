@@ -27,6 +27,8 @@ public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
 
     public readonly List<CannonInformationInterfaceState> Cannons;
 
+    public readonly List<ShieldInterfaceState> Shields;
+
     public RadarConsoleBoundInterfaceState(
         float maxRange,
         EntityCoordinates? coordinates,
@@ -34,7 +36,8 @@ public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
         List<DockingInterfaceState> docks,
         List<MobInterfaceState> mobs,
         List<ProjectilesInterfaceState> projectiles,
-        List<CannonInformationInterfaceState> cannons)
+        List<CannonInformationInterfaceState> cannons,
+        List<ShieldInterfaceState> shields)
     {
         MaxRange = maxRange;
         Coordinates = coordinates;
@@ -43,6 +46,7 @@ public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
         MobsAround = mobs;
         Projectiles = projectiles;
         Cannons = cannons;
+        Shields = shields;
     }
 }
 
@@ -79,6 +83,25 @@ public sealed class CannonInformationInterfaceState
     public int Ammo;
     public int MaxCapacity;
     public int UsedCapacity;
+}
+
+[Serializable, NetSerializable]
+public sealed class ShieldInterfaceState
+{
+    public EntityCoordinates Coordinates;
+    public Angle WorldRotation;
+
+    public bool Powered;
+
+    public Angle Angle;
+
+    public Angle Width;
+    public int MaxWidth;
+
+    public int Radius;
+    public int MaxRadius;
+
+    public bool IsControlling;
 }
 
 /// <summary>

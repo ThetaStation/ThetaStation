@@ -30,7 +30,8 @@ public sealed class ShuttleConsoleBoundInterfaceState : RadarConsoleBoundInterfa
         List<DockingInterfaceState> docks,
         List<MobInterfaceState> mobs,
         List<ProjectilesInterfaceState> projectiles,
-        List<CannonInformationInterfaceState> cannons) : base(maxRange, coordinates, angle, docks, mobs, projectiles, cannons)
+        List<CannonInformationInterfaceState> cannons,
+        List<ShieldInterfaceState> shields) : base(maxRange, coordinates, angle, docks, mobs, projectiles, cannons, shields)
     {
         FTLState = ftlState;
         FTLTime = ftlTime;
