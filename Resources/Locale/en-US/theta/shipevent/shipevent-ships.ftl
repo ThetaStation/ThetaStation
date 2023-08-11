@@ -20,3 +20,6 @@ shipevent-boxship-desc =
 shipevent-skipjack-name = Skipjack
 shipevent-skipjack-desc = A reshaped space pirate support ship that was once stolen from a landfill in the Solar System.
     NO SIDE ENGINES AND VERY DIFFICULT TO CONTROL! Owns heavy armor and many types of weapons in large quantities.
+    
+shipevent-tikvyak-name = Tikvyak
+shipevent-tikvyak-desc = PUMPKIN IS NOT GOURD!!!

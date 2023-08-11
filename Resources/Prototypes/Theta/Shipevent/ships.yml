@@ -59,3 +59,19 @@
   previewImage: /Textures/Theta/ShipEvent/ShipPreviews/skipjack-preview.png
   structurePrototype: "shipevent_skipjack"
   minCrewAmount: 3
+  
+- type: structure
+  id: shipevent_tikvyak
+  generator: !type:MapLoaderGenerator
+    mapPath: "/Maps/Theta/Shipevent/Ships/shipevent-tikvyak.yml"
+  spawnWeight: 0
+  minDistance: 20
+
+- type: shiptype
+  id: shiptype_tikvyak
+  name: shipevent-tikvyak-name
+  description: shipevent-tikvyak-desc
+  class: shipevent-shipclass-specialclass
+  previewImage: /Textures/Theta/ShipEvent/ShipPreviews/tikvyak-preview.png
+  structurePrototype: "shipevent_tikvyak"
+  minCrewAmount: 2
