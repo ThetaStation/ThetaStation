@@ -1,0 +1,162 @@
+- type: seed
+  id: gourd
+  name: seeds-gourd-name
+  noun: seeds-noun-seeds
+  displayName: seeds-gourd-display-name
+  plantRsi: Theta/Objects/tikvyak.rsi
+  packetPrototype: GourdSeeds
+  productPrototypes:
+    - Gourd
+  harvestRepeat: NoRepeat
+  lifespan: 25
+  yield: 2
+  potency: 2
+  maturation: 3
+  production: 3
+  idealLight: 9
+  idealHeat: 298
+  growthStages: 3
+  chemicals:
+    Nutriment:
+      Min: 1
+      Max: 10
+      PotencyDivisor: 10
+    Vitamin:
+      Min: 1
+      Max: 4
+      PotencyDivisor: 25
+      
+- type: entity
+  parent: SeedBase
+  name: packet of gourd seeds
+  id: GourdSeeds
+  components:
+    - type: Seed
+      seedId: gourd
+    - type: Sprite
+      sprite: Theta/Objects/tikvyak.rsi
+
+- type: entity
+  name: gourd
+  parent: FoodProduceBase
+  id: Gourd
+  components:
+    - type: Tag
+      tags:
+        - Gourd
+    - type: SolutionContainerManager
+      solutions:
+        food:
+          maxVol: 16
+          reagents:
+            - ReagentId: Water
+              Quantity: 6
+            - ReagentId: Nutriment
+              Quantity: 4
+            - ReagentId: Vitamin
+              Quantity: 4
+            - ReagentId: Ipecac
+              Quantity: 2
+    - type: Sprite
+      sprite: Theta/Objects/tikvyak.rsi
+    - type: Produce
+      seedId: gourd
+    - type: EmitSoundOnCollide
+      sound:
+        path: /Audio/Theta/tikvyak_hit.ogg
+        params:
+          volume: 2
+    - type: EmitSoundOnLand
+      sound:
+        path: /Audio/Theta/tikvyak_hit.ogg
+        params:
+          volume: 2
+      
+# Bottle
+- type: construction
+  name: gourd bottle
+  id: gourd_bottle
+  graph: GourdBottle
+  startNode: start
+  targetNode: bottle
+  category: construction-category-misc
+  description: Awesome bottle made from gourd.
+  icon:
+    sprite: Theta/Objects/tikvyak.rsi
+    state: produce
+  objectType: Item
+  
+- type: constructionGraph
+  id: GourdBottle
+  start: start
+  graph:
+    - node: start
+      edges:
+        - to: bottle
+          steps:
+          - tag: Gourd
+            name: gourd
+            icon:
+              sprite: "Theta/Objects/tikvyak.rsi"
+              state: "produce"
+          - tag: Knife
+            name: knife
+            consume: false
+            doAfter: 4
+    - node: bottle
+      entity: GourdBottle
+
+- type: entity
+  name: gourd bottle
+  parent: BaseItem
+  id: GourdBottle
+  components:
+    - type: Sprite
+      sprite: Theta/Objects/tikvyak.rsi
+      state: produce
+    - type: SolutionContainerManager
+      solutions:
+        drink:
+          maxVol: 50
+    - type: SolutionTransfer
+      canChangeTransferAmount: true
+      maxTransferAmount: 5
+    - type: Drink
+      isOpen: true
+    - type: MeleeWeapon
+      soundNoDamage:
+        path: "/Audio/Effects/Fluids/splat.ogg"
+      damage:
+        types:
+          Blunt: 0
+    - type: Spillable
+      solution: drink
+    - type: FitsInDispenser
+      solution: drink
+    - type: DrawableSolution
+      solution: drink
+    - type: RefillableSolution
+      solution: drink
+    - type: DrainableSolution
+      solution: drink
+    - type: UserInterface
+      interfaces:
+        - key: enum.TransferAmountUiKey.Key
+          type: TransferAmountBoundUserInterface
+    - type: DamageOtherOnHit
+      damage:
+        types:
+          Blunt: 2
+    - type: EmitSoundOnCollide
+      sound:
+        path: /Audio/Theta/tikvyak_hit.ogg
+        params:
+          volume: 4
+    - type: EmitSoundOnLand
+      sound:
+        path: /Audio/Theta/tikvyak_hit.ogg
+        params:
+          volume: 4
+    - type: Construction
+      graph: GourdBottle
+      node: bottle
