@@ -12,10 +12,10 @@ public sealed class JetpackSystem : SharedJetpackSystem
     [Dependency] private readonly GasTankSystem _gasTank = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
 
-    protected override bool CanEnable(EntityUid uid, JetpackComponent component)
+    protected override bool CanEnable(JetpackComponent component)
     {
-        return base.CanEnable(uid, component) &&
-               TryComp<GasTankComponent>(uid, out var gasTank) &&
+        return base.CanEnable(component) &&
+               TryComp<GasTankComponent>(component.Owner, out var gasTank) &&
                !(gasTank.Air.TotalMoles < component.MoleUsage);
     }
 
@@ -45,7 +45,7 @@ public sealed class JetpackSystem : SharedJetpackSystem
 
         foreach (var (uid, comp) in toDisable)
         {
-            SetEnabled(uid, comp, false);
+            SetEnabled(comp, false);
         }
     }
 }
