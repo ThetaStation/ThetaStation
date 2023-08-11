@@ -4,17 +4,12 @@
 #base
 - type: entity
   id: ShipEventCannonBase
+  parent: BaseStructure
   suffix: SHIPEVENT
   abstract: true
   components:
-    - type: Transform
-      anchored: true
     - type: Anchorable
       delay: 7
-    - type: Clickable
-    - type: Physics
-      bodyType: Static
-    - type: Pullable
     - type: CombatMode
       combatToggleAction:
         enabled: false
