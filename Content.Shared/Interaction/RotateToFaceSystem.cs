@@ -78,14 +78,11 @@ namespace Content.Shared.Interaction
             return TryFaceAngle(user, diffAngle);
         }
 
-        public bool TryFaceAngle(EntityUid user, Angle diffAngle, TransformComponent? xform = null)
+        public bool TryFaceAngle(EntityUid user, Angle diffAngle)
         {
             if (_actionBlockerSystem.CanChangeDirection(user))
             {
-                if (!Resolve(user, ref xform))
-                    return false;
-
-                xform.WorldRotation = diffAngle;
+                _transform.SetWorldRotation(user, diffAngle);
                 return true;
             }
 
@@ -101,7 +98,7 @@ namespace Content.Shared.Interaction
                         // (Since the user being buckled to it holds it down with their weight.)
                         // This is logically equivalent to RotateWhileAnchored.
                         // Barstools and office chairs have independent wheels, while regular chairs don't.
-                        Transform(rotatable.Owner).WorldRotation = diffAngle;
+                        _transform.SetWorldRotation(suid.Value, diffAngle);
                         return true;
                     }
                 }
