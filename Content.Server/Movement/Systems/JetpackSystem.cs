@@ -11,9 +11,7 @@ public sealed class JetpackSystem : SharedJetpackSystem
 {
     [Dependency] private readonly GasTankSystem _gasTank = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
-
-    private const float UpdateCooldown = 0.5f;
-
+    
     protected override bool CanEnable(JetpackComponent component)
     {
         return base.CanEnable(component) &&  TryComp<GasTankComponent>(component.Owner, out var gasTank) && !(gasTank.Air.TotalMoles < component.MoleUsage);

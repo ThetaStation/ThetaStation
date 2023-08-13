@@ -5,21 +5,19 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Events;
 using Content.Shared.Popups;
-using Content.Shared.Theta.RadarHUD;
+using JetBrains.Annotations;
 using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
-using Robust.Shared.Map.Components;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.Movement.Systems;
 
 public abstract class SharedJetpackSystem : EntitySystem
 {
-    [Dependency] protected readonly MovementSpeedModifierSystem MovementSpeedModifier = default!;
-    [Dependency] protected readonly SharedAppearanceSystem Appearance = default!;
+    [Dependency] private readonly MovementSpeedModifierSystem _movementSpeedModifier = default!;
+    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] protected readonly SharedContainerSystem Container = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedTransformSystem _formSys = default!;
     [Dependency] private readonly SharedMoverController _mover = default!;
 
     public override void Initialize()
@@ -101,9 +99,9 @@ public abstract class SharedJetpackSystem : EntitySystem
             //For some reason mover relay prevents player's mover from updating it's relative entity (jetpack mover has correct entity btw)
             //which leads to undesirable effects, like player's eye thinking it's still attached to the grid you've just left, causing it to rotate with it
             //so yeah, doing this manually
-            if (TryComp<InputMoverComponent>(uid, out var umover))
+            if (TryComp<InputMoverComponent>(uid, out var userMover))
             {
-                _mover.TryUpdateRelative(umover, args.Transform);
+                _mover.TryUpdateRelative(userMover, args.Transform);
             }
 
             if(!canEnable)
@@ -152,6 +150,7 @@ public abstract class SharedJetpackSystem : EntitySystem
         return HasComp<ActiveJetpackComponent>(uid);
     }
 
+    [UsedImplicitly]
     public void SetEnabled(JetpackComponent component, bool enabled, EntityUid? user = null)
     {
         if (IsEnabled(component.Owner) == enabled || enabled && !CanEnable(component)) 
@@ -177,7 +176,7 @@ public abstract class SharedJetpackSystem : EntitySystem
             if (enabled)
             {
                 _mover.SetRelay(user.Value, component.Owner);
-                MovementSpeedModifier.RefreshMovementSpeedModifiers(user.Value);
+                _movementSpeedModifier.RefreshMovementSpeedModifiers(user.Value);
             }
             else
             {
@@ -185,7 +184,7 @@ public abstract class SharedJetpackSystem : EntitySystem
             }
         }
 
-        Appearance.SetData(component.Owner, JetpackVisuals.Enabled, enabled);
+        _appearance.SetData(component.Owner, JetpackVisuals.Enabled, enabled);
         Dirty(component);
     }
 

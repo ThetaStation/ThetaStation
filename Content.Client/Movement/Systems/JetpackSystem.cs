@@ -15,6 +15,7 @@ public sealed class JetpackSystem : SharedJetpackSystem
     [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly ClothingSystem _clothing = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+    [Dependency] private readonly TransformSystem _formSys = default!;
 
     public override void Initialize()
     {
@@ -70,11 +71,11 @@ public sealed class JetpackSystem : SharedJetpackSystem
 
         if (_mapManager.TryGetGrid(gridUid, out var grid))
         {
-            coordinates = new EntityCoordinates(grid.Owner, grid.WorldToLocal(coordinates.ToMapPos(EntityManager)));
+            coordinates = new EntityCoordinates(grid.Owner, grid.WorldToLocal(coordinates.ToMapPos(EntityManager, _formSys)));
         }
         else if (uidXform.MapUid != null)
         {
-            coordinates = new EntityCoordinates(uidXform.MapUid.Value, uidXform.WorldPosition);
+            coordinates = new EntityCoordinates(uidXform.MapUid.Value, _formSys.GetWorldPosition(uidXform));
         }
         else
         {
