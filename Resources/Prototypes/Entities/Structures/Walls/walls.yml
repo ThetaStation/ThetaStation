@@ -644,8 +644,6 @@
     damageModifierSet: Metallic
   - type: Physics
     bodyType: Static
-  - type: Reflect
-    reflectProb: 1
   - type: Pullable
   - type: Airtight
     noAirWhenFullyAirBlocked: false
@@ -716,8 +714,6 @@
         acts: ["Destruction"]
     destroySound:
       path: /Audio/Effects/metalbreak.ogg
-  - type: Reflect
-    reflectProb: 1
   - type: IconSmooth
     key: walls
     base: state

@@ -17,8 +17,6 @@ public sealed class CircularShieldTempSpeedChangeEffect : CircularShieldEffect
     [DataField("projectilesOnly"), ViewVariables(VVAccess.ReadWrite)]
     public bool ProjectilesOnly = true;
 
-    private Dictionary<EntityUid, Vector2> VelocityOnEnter = new();
-
     public override void OnShieldInit(EntityUid uid, CircularShieldComponent shield)
     {
         entMan = IoCManager.Resolve<IEntityManager>();
@@ -30,31 +28,17 @@ public sealed class CircularShieldTempSpeedChangeEffect : CircularShieldEffect
     {
         if (ProjectilesOnly && !entMan.HasComponent<ProjectileComponent>(uid))
             return;
-        
+
         TransformComponent form = entMan.GetComponent<TransformComponent>(uid);
-        Vector2 velocity = physSys.GetLinearVelocity(uid, formSys.GetWorldPosition(form), xform: form);
-        physSys.SetLinearVelocity(uid, velocity * SpeedModifier);
-        VelocityOnEnter[uid] = velocity;
+        physSys.SetLinearVelocity(uid, physSys.GetLinearVelocity(uid, formSys.GetWorldPosition(form), xform: form) * SpeedModifier);
     }
 
     public override void OnShieldExit(EntityUid uid, CircularShieldComponent shield)
     {
         if (ProjectilesOnly && !entMan.HasComponent<ProjectileComponent>(uid))
             return;
-        
-        TransformComponent form = entMan.GetComponent<TransformComponent>(uid);
-        
-        Vector2 velocity;
-        if (VelocityOnEnter.TryGetValue(uid, out Vector2 v))
-        {
-            velocity = v;
-            VelocityOnEnter.Remove(uid);
-        }
-        else
-        {
-            velocity = physSys.GetLinearVelocity(uid, formSys.GetWorldPosition(form), xform: form);
-        }
 
-        physSys.SetLinearVelocity(uid, velocity);
+        TransformComponent form = entMan.GetComponent<TransformComponent>(uid);
+        physSys.SetLinearVelocity(uid, physSys.GetLinearVelocity(uid, formSys.GetWorldPosition(form), xform: form) / SpeedModifier);
     }
 }

@@ -35,6 +35,7 @@
         - "shiptype_arrowhead"
         - "shiptype_mule"
         - "shiptype_skipjack"
+        - "shiptype_tikvyak"
 
       #bounds
       boundsCompressionInterval: 0

@@ -33,6 +33,9 @@
   - type: Flashable
   - type: Polymorphable
   - type: Identity
+  - type: RadarRenderable
+    radarView: genericMob
+    group: enum.RadarRenderableGroup.ShipEventTeammate
   - type: Hands
   - type: MovementSpeedModifier
   - type: MovedByPressure
