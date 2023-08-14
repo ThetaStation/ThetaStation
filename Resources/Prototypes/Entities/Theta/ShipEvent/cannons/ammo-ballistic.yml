@@ -6,7 +6,7 @@
   - type: CartridgeAmmo
     proto: BulletMachineGun
     deleteOnSpawn: true
-    
+
 - type: entity
   id: BulletMachineGun
   name: bullet
@@ -19,6 +19,8 @@
     damage:
       types:
         Piercing: 50
+  - type: RadarRenderable
+    radarView: machineGunProjectile
 
 # Flak Cannon round
 - type: entity

@@ -36,7 +36,6 @@
             -1
     - type: RandomHumanoidAppearance
     - type: Loadout
-      prototype: ShipEventStandard
       prototypes: [ShipEventStandard]
     - type: UsePlayerNameForEntityName
     - type: ShipEventFactionMarker
