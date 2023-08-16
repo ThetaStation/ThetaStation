@@ -138,9 +138,9 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, ShipEventTeamViewToggleEvent>(OnViewToggle);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, ShipEventCaptainMenuToggleEvent>(OnCapMenuToggle);
-        SubscribeLocalEvent<ShipEventFactionMarkerComponent, ShipEventReturnToLobbyEvent>(OnReturnToLobbyAction);
 
-        SubscribeLocalEvent<ShipEventFactionMarkerComponent, GenericWarningYesPressedMessage>(ReturnToLobbyPlayer);
+        SubscribeLocalEvent<ShipEventReturnToLobbyEvent>(OnReturnToLobbyAction);
+        SubscribeLocalEvent<GenericWarningYesPressedMessage>(ReturnToLobbyPlayer);
 
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, StartCollideEvent>(OnCollision);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, MobStateChangedEvent>(OnPlayerStateChange);
@@ -392,25 +392,25 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         _uiSys.TryOpen(uid, uiKey, session);
     }
 
-    private void OnReturnToLobbyAction(EntityUid uid, ShipEventFactionMarkerComponent marker, ShipEventReturnToLobbyEvent args)
+    private void OnReturnToLobbyAction(ShipEventReturnToLobbyEvent args)
     {
-        var session = GetSession(args.Performer);
-        if (session == null)
+        if(!_playerMan.TryGetSessionByEntity(args.Performer, out var session))
             return;
 
-        if(!_uiSys.TryGetUi(uid, GenericWarningUiKey.ShipEventKey, out var bui))
+        if(!_uiSys.TryGetUi(args.Performer, GenericWarningUiKey.ShipEventKey, out var bui))
             return;
         UserInterfaceSystem.SetUiState(bui, new GenericWarningBoundUserInterfaceState
             {
                 WarningLoc = "generic-warning-window-warning-to-lobby",
             }
         );
-        _uiSys.OpenUi(bui, session);
+        _uiSys.OpenUi(bui, (IPlayerSession) session);
     }
 
-    private void ReturnToLobbyPlayer(EntityUid uid, ShipEventFactionMarkerComponent component, GenericWarningYesPressedMessage args)
+    private void ReturnToLobbyPlayer(GenericWarningYesPressedMessage args)
     {
-        _ticker.Respawn((IPlayerSession) args.Session);
+        if(Equals(args.UiKey, GenericWarningUiKey.ShipEventKey))
+            _ticker.Respawn((IPlayerSession) args.Session);
     }
 
     private void OnPlayerStateChange(EntityUid entity, ShipEventFactionMarkerComponent marker, MobStateChangedEvent args)
@@ -462,13 +462,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                 marker.Team = team;
                 lastTeamLookup.Remove(session);
             }
-        }
-
-        if (EntityManager.HasComponent<GhostComponent>(args.NewEntity))
-        {
-            var newMarker = EntityManager.EnsureComponent<ShipEventFactionMarkerComponent>(args.NewEntity.Value);
-            newMarker.Team = marker.Team;
-            SetupActions(args.NewEntity.Value, newMarker.Team, GetSession(args.NewEntity.Value), true);
         }
     }
 
@@ -684,12 +677,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         {
             var capMenuToggle = _protMan.Index<InstantActionPrototype>("ShipEventCaptainMenuToggle");
             _actSys.AddAction(uid, new InstantAction(capMenuToggle), null);
-        }
-
-        if (isGhost)
-        {
-            var retToLobbyAction = _protMan.Index<InstantActionPrototype>("ShipEventReturnToLobbyAction");
-            _actSys.AddAction(uid, new InstantAction(retToLobbyAction), null);
         }
     }
 
