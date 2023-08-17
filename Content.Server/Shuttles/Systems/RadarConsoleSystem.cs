@@ -69,14 +69,13 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
             if (!xform.MapPosition.InRange(transform.MapPosition, component.MaxRange))
                 continue;
 
-            var coords = _transformSystem.GetMoverCoordinates(uid, transform);
             list.Add(new ShieldInterfaceState
             {
-                Coordinates =  coords,
+                Coordinates =  _transformSystem.GetMoverCoordinates(uid, transform),
                 WorldRotation = _transformSystem.GetWorldRotation(transform),
                 Powered = shield.Powered,
-                Angle = shield.Angle.Degrees,
-                Width = shield.Width.Degrees,
+                Angle = shield.Angle,
+                Width = shield.Width,
                 MaxWidth = shield.MaxWidth,
                 Radius = shield.Radius,
                 MaxRadius = shield.MaxRadius,
