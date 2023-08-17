@@ -1,5 +1,6 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Numerics;
+using System.Threading.Channels;
 using Content.Server.Actions;
 using Content.Server.Chat.Systems;
 using Content.Server.Corvax.RoundNotifications;
@@ -10,6 +11,9 @@ using Content.Server.IdentityManagement;
 using Content.Server.Mind;
 using Content.Server.Mind.Components;
 using Content.Server.Preferences.Managers;
+using Content.Server.Radio;
+using Content.Server.Radio.Components;
+using Content.Server.VoiceMask;
 using Content.Server.Roles;
 using Content.Server.RoundEnd;
 using Content.Server.Shuttles.Components;
@@ -22,10 +26,12 @@ using Content.Server.Theta.ShipEvent.Components;
 using Content.Shared.Actions.ActionTypes;
 using Content.Shared.GameTicking;
 using Content.Shared.Interaction.Events;
+using Content.Shared.Chat;
 using Content.Shared.Mobs;
 using Content.Shared.Movement.Components;
 using Content.Shared.Preferences;
 using Content.Shared.Projectiles;
+using Content.Shared.Radio;
 using Content.Shared.Shuttles.Events;
 using Content.Shared.Theta.MobHUD;
 using Content.Shared.Theta.ShipEvent;
@@ -38,6 +44,9 @@ using Robust.Shared.Physics.Events;
 using Robust.Shared.Players;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using Robust.Shared.Utility;
+using Robust.Shared.Network;
+using TerraFX.Interop.Windows;
 
 
 namespace Content.Server.Theta.ShipEvent.Systems;
@@ -77,6 +86,10 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     [Dependency] private readonly HumanoidAppearanceSystem _humanoidAppearanceSystem = default!;
 
     [Dependency] private readonly IServerPreferencesManager _prefsManager = default!;
+
+    [Dependency] private readonly ShipEventFactionSystem _shipEventSystem = default!;
+
+    [Dependency] private readonly INetManager _netMan = default!;
 
     //used when setting up buttons for ghosts, in cases when mind from shipevent agent is transferred to null and not to ghost entity directly
     private Dictionary<IPlayerSession, ShipEventFaction> lastTeamLookup = new();
@@ -144,6 +157,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, StartCollideEvent>(OnCollision);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, MobStateChangedEvent>(OnPlayerStateChange);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, MindTransferredMessage>(OnPlayerTransfer);
+        SubscribeLocalEvent<ShipEventFactionMarkerComponent, EntitySpokeEvent>(OnTeammateSpeak);
 
         SubscribeLocalEvent<ShipEventLootboxSpawnTriggerComponent, UseInHandEvent>(OnLootboxSpawnTriggered);
         SubscribeLocalEvent<ShipEventPointStorageComponent, UseInHandEvent>(OnPointStorageTriggered);
@@ -158,6 +172,45 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEnd);
         SubscribeLocalEvent<RoundEndDiscordTextAppendEvent>(OnRoundEndDiscord);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
+    }
+
+    private void OnTeammateSpeak(EntityUid uid, ShipEventFactionMarkerComponent component, EntitySpokeEvent args)
+    {
+        // throw new NotImplementedException();
+
+        var channel = args.Channel;
+        if (channel == null) return;
+
+        if (!EntityManager.HasComponent<WearingHeadsetComponent>(uid) && channel.ID != "Common")
+            return;
+
+        var name = TryComp(args.Source, out VoiceMaskComponent? mask) && mask.Enabled
+        ? mask.VoiceName
+        : MetaData(args.Source).EntityName;
+
+        name = FormattedMessage.EscapeText(name);
+
+        var chat = new ChatMessage(
+        ChatChannel.Radio,
+        args.Message,
+        Loc.GetString("chat-radio-message-wrap", ("color", channel.Color), ("channel", $"\\[{channel.LocalizedName}\\]"), ("name", name), ("message", FormattedMessage.EscapeText(args.Message))),
+        EntityUid.Invalid);
+        var chatMsg = new MsgChatMessage { Message = chat };
+        var ev = new RadioReceiveEvent(args.Message, args.Source, channel, chatMsg);
+
+        var team = _shipEventSystem.TryGetTeamByMember(uid);
+        if (team == null) return;
+
+        var list = team.Members;
+        foreach ( var member in list )
+        {
+            var MemberEntity = team.GetMemberEntity(member);
+            //RaiseLocalEvent(MemberEntity, ref ev);
+            if (TryComp(MemberEntity, out ActorComponent? actor))
+                _netMan.ServerSendMessage(chatMsg, actor.PlayerSession.ConnectedClient);
+        }
+
+        args.Channel = null;
     }
 
     public override void Update(float frametime)
