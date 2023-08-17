@@ -86,9 +86,12 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
             return;
 
         shield.Enabled = !shield.Enabled;
-
         UpdateConsoleState(uid, console);
-        UpdateShieldFixture(uid, shield);
+
+        if (shield.Enabled)
+        {
+            UpdateShieldFixture(console.BoundShield.Value, shield);
+        }
         Dirty(shield);
     }
 
