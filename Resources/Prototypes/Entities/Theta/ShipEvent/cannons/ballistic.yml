@@ -8,6 +8,12 @@
   suffix: SHIPEVENT
   abstract: true
   components:
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape:
+            !type:PhysShapeAabb
+            bounds: "-0.35,-0.35,0.35,0.35"
     - type: Anchorable
       delay: 7
     - type: CombatMode
@@ -34,6 +40,9 @@
         path: /Audio/Effects/double_beep.ogg
     - type: Damageable
       damageContainer: Inorganic
+    - type: RadarRenderable
+      radarView: genericCannon
+      group: enum.RadarRenderableGroup.Cannon
     - type: DeviceNetwork
       deviceNetId: Wireless
     - type: WirelessNetworkConnection

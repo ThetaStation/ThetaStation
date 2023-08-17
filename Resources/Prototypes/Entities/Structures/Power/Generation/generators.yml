@@ -237,6 +237,18 @@
         type: SolidFuelGeneratorBoundUserInterface
 
 - type: entity
+  parent: GeneratorUranium
+  id: GeneratorUraniumShipEvent
+  suffix: Uranium, 150kW
+  components:
+    - type: FuelGenerator
+      remainingFuel: 30
+      targetPower: 150000
+      optimalPower: 150000
+      maxTargetPower: 150000
+      optimalBurnRate: 0.003333333
+
+- type: entity
   parent: BaseGeneratorWallmount
   id: GeneratorWallmountBasic
   suffix: Basic, 3kW

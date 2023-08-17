@@ -2,6 +2,7 @@
 using System.Numerics;
 using Content.Client.UserInterface.Controls;
 using Content.Shared.Shuttles.BUIStates;
+using Content.Shared.Theta.ShipEvent.UI;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Shared.Map;
@@ -91,25 +92,35 @@ public abstract class ModularRadarControl : MapGridControl
 
     public void UpdateState(BoundUserInterfaceState ls)
     {
-        if (ls is RadarConsoleBoundInterfaceState state)
+        switch (ls)
         {
-            WorldMaxRange = state.MaxRange;
-
-            if (WorldMaxRange < WorldRange)
-            {
-                ActualRadarRange = WorldMaxRange;
-            }
-
-            if (WorldMaxRange < WorldMinRange)
-                WorldMinRange = WorldMaxRange;
-
-            ActualRadarRange = Math.Clamp(ActualRadarRange, WorldMinRange, WorldMaxRange);
+            case RadarConsoleBoundInterfaceState state:
+                UpdateMaxRange(state.MaxRange);
+                break;
+            case ShieldConsoleBoundsUserInterfaceState shieldState:
+                UpdateMaxRange(shieldState.MaxRange);
+                break;
         }
 
         foreach (var module in Modules)
         {
             module.UpdateState(ls);
         }
+    }
+
+    private void UpdateMaxRange(float maxRange)
+    {
+        WorldMaxRange = maxRange;
+
+        if (WorldMaxRange < WorldRange)
+        {
+            ActualRadarRange = WorldMaxRange;
+        }
+
+        if (WorldMaxRange < WorldMinRange)
+            WorldMinRange = WorldMaxRange;
+
+        ActualRadarRange = Math.Clamp(ActualRadarRange, WorldMinRange, WorldMaxRange);
     }
 
     protected override void Draw(DrawingHandleScreen handle)

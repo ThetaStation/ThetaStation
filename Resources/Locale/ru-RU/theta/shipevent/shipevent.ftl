@@ -45,7 +45,7 @@ shipevent-roundend-discord-teamstats = Набрала { $points } очков, { 
 
 department-Unsorted = Прочее
 shipevent-memberlimit = В этой команде нет места! Подождите пока из неё кто-то уйдёт/повысится общий лимит на кол-во членов.
-shipevent-ship-destroyed = Корабль команды уничтожен! Подождите пока он заного не восстановится.
+shipevent-ship-destroyed = Корабль команды уничтожен! Подождите пока он заново не восстановится.
 shipevent-spawner-destroyed = Клонер команды уничтожен! Подождите пока он не восстановится.
 shipevent-incorrect-password = Неверный пароль.
 shipevent-kicked = Вас выгнали из команды! Используйте меню команд чтоб найти новое пристанище.

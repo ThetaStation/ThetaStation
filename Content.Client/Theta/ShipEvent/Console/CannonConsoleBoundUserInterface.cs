@@ -1,4 +1,4 @@
-﻿using Content.Shared.Theta.ShipEvent.Console;
+﻿using Content.Shared.Theta.ShipEvent.UI;
 using JetBrains.Annotations;
 using Robust.Client.GameObjects;
 
