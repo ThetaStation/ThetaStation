@@ -47,18 +47,18 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
         UpdateConsoleState(uid, component);
     }
 
-    private void UpdateConsoleState(EntityUid uid, CircularShieldConsoleComponent? console = null, RadarConsoleComponent? radar = null,
-        TransformComponent? transform = null)
+    private void UpdateConsoleState(EntityUid uid, CircularShieldConsoleComponent? console = null, RadarConsoleComponent? radar = null)
     {
-        if (!Resolve(uid, ref console, ref radar, ref transform) || console.BoundShield == null)
+        if (!Resolve(uid, ref console, ref radar) || console.BoundShield == null)
             return;
-        if (!TryComp(console.BoundShield, out CircularShieldComponent? shield))
+        if (!TryComp<CircularShieldComponent>(console.BoundShield, out var shield) ||
+            !TryComp<TransformComponent>(console.BoundShield, out var transform))
             return;
 
         var shieldState = new ShieldInterfaceState
         {
-            Coordinates = _transformSystem.GetMoverCoordinates(uid, transform),
-            WorldRotation = _transformSystem.GetWorldRotation(transform) - transform.LocalRotation,
+            Coordinates = _transformSystem.GetMoverCoordinates(console.BoundShield.Value, transform),
+            WorldRotation = _transformSystem.GetWorldRotation(transform),
             Powered = shield.Powered,
             Angle = shield.Angle,
             Width = shield.Width,
