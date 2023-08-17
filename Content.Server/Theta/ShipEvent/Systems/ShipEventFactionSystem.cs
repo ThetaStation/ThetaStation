@@ -176,8 +176,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     private void OnTeammateSpeak(EntityUid uid, ShipEventFactionMarkerComponent component, EntitySpokeEvent args)
     {
-        // throw new NotImplementedException();
-
         var channel = args.Channel;
         if (channel == null) return;
 
@@ -205,7 +203,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         foreach ( var member in list )
         {
             var MemberEntity = team.GetMemberEntity(member);
-            //RaiseLocalEvent(MemberEntity, ref ev);
             if (TryComp(MemberEntity, out ActorComponent? actor))
                 _netMan.ServerSendMessage(chatMsg, actor.PlayerSession.ConnectedClient);
         }
