@@ -1493,6 +1493,21 @@
     - UplinkPointless
 
 - type: listing
+  id: UplinkGrapplingHook
+  name: uplink-headset-name
+  description: uplink-headset-desc
+  productEntity: WeaponGrapplingGun
+  cost:
+    Telecrystal: 8
+  categories:
+    - UplinkUtility
+  conditions:
+    - !type:StoreWhitelistCondition
+      whitelist:
+        tags:
+          - ShipEventUplink
+
+- type: listing
   id: UplinkSyndicatePersonalAI
   name: uplink-syndicate-pai-name
   description: uplink-syndicate-pai-desc
@@ -1505,3 +1520,7 @@
   conditions:
   - !type:ListingLimitedStockCondition
     stock: 1
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+        - ShipEventUplink
