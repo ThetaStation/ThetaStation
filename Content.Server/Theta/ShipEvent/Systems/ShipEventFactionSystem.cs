@@ -87,8 +87,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     [Dependency] private readonly IServerPreferencesManager _prefsManager = default!;
 
-    [Dependency] private readonly ShipEventFactionSystem _shipEventSystem = default!;
-
     [Dependency] private readonly INetManager _netMan = default!;
 
     //used when setting up buttons for ghosts, in cases when mind from shipevent agent is transferred to null and not to ghost entity directly
@@ -176,37 +174,14 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     private void OnTeammateSpeak(EntityUid uid, ShipEventFactionMarkerComponent component, EntitySpokeEvent args)
     {
-        var channel = args.Channel;
-        if (channel == null) return;
-
-        if (!EntityManager.HasComponent<WearingHeadsetComponent>(uid) && channel.ID != "Common")
+        if (args.Channel == null) return;
+        if (!EntityManager.HasComponent<WearingHeadsetComponent>(uid) && args.Channel.ID != "Common")
             return;
+        if (component.Team == null) return;
 
-        var name = TryComp(args.Source, out VoiceMaskComponent? mask) && mask.Enabled
-        ? mask.VoiceName
-        : MetaData(args.Source).EntityName;
+        var chatMsg = MetaData(args.Source).EntityName + " --->| " + args.Message;
 
-        name = FormattedMessage.EscapeText(name);
-
-        var chat = new ChatMessage(
-        ChatChannel.Radio,
-        args.Message,
-        Loc.GetString("chat-radio-message-wrap", ("color", channel.Color), ("channel", $"\\[{channel.LocalizedName}\\]"), ("name", name), ("message", FormattedMessage.EscapeText(args.Message))),
-        EntityUid.Invalid);
-        var chatMsg = new MsgChatMessage { Message = chat };
-        var ev = new RadioReceiveEvent(args.Message, args.Source, channel, chatMsg);
-
-        var team = _shipEventSystem.TryGetTeamByMember(uid);
-        if (team == null) return;
-
-        var list = team.Members;
-        foreach ( var member in list )
-        {
-            var MemberEntity = team.GetMemberEntity(member);
-            if (TryComp(MemberEntity, out ActorComponent? actor))
-                _netMan.ServerSendMessage(chatMsg, actor.PlayerSession.ConnectedClient);
-        }
-
+        TeamMessage(component.Team, chatMsg);
         args.Channel = null;
     }
 

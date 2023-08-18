@@ -34,5 +34,5 @@ public sealed class RadioChannelPrototype : IPrototype
     /// and messages can be sent across different stations
     /// </summary>
     [DataField("longRange"), ViewVariables]
-    public bool LongRange { get; } = false;
+    public bool LongRange = false;
 }
