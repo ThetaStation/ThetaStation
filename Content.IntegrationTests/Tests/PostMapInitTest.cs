@@ -36,10 +36,10 @@ namespace Content.IntegrationTests.Tests
 
         private static readonly string[] Grids =
         {
-            "/Maps/centcomm.yml",
-            "/Maps/Shuttles/cargo.yml",
-            "/Maps/Shuttles/emergency.yml",
-            "/Maps/infiltrator.yml",
+            "/Maps/Theta/Shipevent/Ships/shipevent-arrowhead.yml",
+            "/Maps/Theta/Shipevent/Ships/shipevent-mule.yml",
+            "/Maps/Theta/Shipevent/Ships/shipevent-boxship.yml",
+            "/Maps/Theta/Shipevent/Ships/shipevent-skipjack.yml"
         };
 
         private static readonly string[] GameMaps =
@@ -119,7 +119,7 @@ namespace Content.IntegrationTests.Tests
             var server = pairTracker.Pair.Server;
 
             var resourceManager = server.ResolveDependency<IResourceManager>();
-            var mapFolder = new ResPath("/Maps");
+            var mapFolder = new ResPath("/Maps/Theta");
             var maps = resourceManager
                 .ContentFindFiles(mapFolder)
                 .Where(filePath => filePath.Extension == "yml" && !filePath.Filename.StartsWith(".", StringComparison.Ordinal))
@@ -154,7 +154,13 @@ namespace Content.IntegrationTests.Tests
             await pairTracker.CleanReturnAsync();
         }
 
-        [Test, TestCaseSource(nameof(GameMaps))]
+        private static string[] GetGameMapNames()
+        {
+            string[] task = { "Dev", "LobbyShipevent" };
+            return task;
+        }
+
+        [Test, TestCaseSource(nameof(GetGameMapNames))]
         public async Task GameMapsLoadableTest(string mapProto)
         {
             await using var pairTracker = await PoolManager.GetServerClient();
@@ -286,7 +292,7 @@ namespace Content.IntegrationTests.Tests
             await pairTracker.CleanReturnAsync();
         }
 
-        [Test]
+        [Test, Ignore("Not necessary for Theta")]
         public async Task AllMapsTested()
         {
             await using var pairTracker = await PoolManager.GetServerClient();

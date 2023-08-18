@@ -19,6 +19,7 @@
             <BoxContainer Name="VoteMenu" Access="Public" Orientation="Vertical"/>
             <widgets:GhostGui Name="Ghost" Access="Protected" />
             <hotbar:HotbarGui Name="Hotbar" Access="Protected" />
+            <Control Name="Radar" Access="Public" />
             <actions:ActionsBar Name="Actions" Access="Protected" />
             <alerts:AlertsUI Name="Alerts" Access="Protected" />
         </LayoutContainer>
