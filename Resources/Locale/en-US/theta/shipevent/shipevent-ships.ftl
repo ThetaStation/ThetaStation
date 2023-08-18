@@ -1,7 +1,7 @@
 shipevent-shipclass-light = [color=green]Light[/color]
 shipevent-shipclass-medium = [color=yellow]Medium[/color]
 shipevent-shipclass-heavy = [color=red]Heavy[/color]
-shipevent-shipclass-special = [color=pink]Special[/color]
+shipevent-shipclass-special = [color=purple]Special[/color]
 
 shipevent-mule-name = Mule
 shipevent-mule-desc =
@@ -20,6 +20,6 @@ shipevent-boxship-desc =
 shipevent-skipjack-name = Skipjack
 shipevent-skipjack-desc = A reshaped space pirate support ship that was once stolen from a landfill in the Solar System.
     NO SIDE ENGINES AND VERY DIFFICULT TO CONTROL! Owns heavy armor and many types of weapons in large quantities.
-    
-shipevent-tikvyak-name = Tikvyak
-shipevent-tikvyak-desc = A PUMPKIN IS NOT A GOURD!!!
+
+shipevent-tikvyak-name = Gourd
+shipevent-tikvyak-desc = A GOURD IS NOT A PUMPKIN!!!
