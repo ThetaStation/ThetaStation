@@ -1,5 +1,3 @@
-﻿using System.Linq;
-using System.Numerics;
 using Content.Server.Actions;
 using Content.Server.Chat.Systems;
 using Content.Server.Corvax.RoundNotifications;
@@ -10,6 +8,7 @@ using Content.Server.IdentityManagement;
 using Content.Server.Mind;
 using Content.Server.Mind.Components;
 using Content.Server.Preferences.Managers;
+using Content.Server.Radio.Components;
 using Content.Server.Roles;
 using Content.Server.RoundEnd;
 using Content.Server.Shuttles.Components;
@@ -38,6 +37,8 @@ using Robust.Shared.Physics.Events;
 using Robust.Shared.Players;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using System.Linq;
+using System.Numerics;
 using Robust.Shared.Utility;
 
 
@@ -145,6 +146,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, StartCollideEvent>(OnCollision);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, MobStateChangedEvent>(OnPlayerStateChange);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, MindTransferredMessage>(OnPlayerTransfer);
+        SubscribeLocalEvent<ShipEventFactionMarkerComponent, EntitySpokeEvent>(OnTeammateSpeak);
 
         SubscribeLocalEvent<ShipEventLootboxSpawnTriggerComponent, UseInHandEvent>(OnLootboxSpawnTriggered);
         SubscribeLocalEvent<ShipEventPointStorageComponent, UseInHandEvent>(OnPointStorageTriggered);
@@ -159,6 +161,25 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEnd);
         SubscribeLocalEvent<RoundEndDiscordTextAppendEvent>(OnRoundEndDiscord);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
+    }
+
+    private void OnTeammateSpeak(EntityUid uid, ShipEventFactionMarkerComponent component, EntitySpokeEvent args)
+    {
+        if (args.Channel == null)
+            return;
+        if (!EntityManager.HasComponent<WearingHeadsetComponent>(uid) && args.Channel.ID != "Common")
+            return;
+        if (component.Team == null)
+            return;
+
+        var session = GetSession(args.Source);
+        if (session == null)
+            return;
+
+        var chatMsg = session.ConnectedClient.UserName + " : " + args.Message;
+
+        TeamMessage(component.Team, chatMsg);
+        args.Channel = null;
     }
 
     public override void Update(float frametime)
