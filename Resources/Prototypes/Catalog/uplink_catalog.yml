@@ -1539,8 +1539,8 @@
 
 - type: listing
   id: UplinkGrapplingHook
-  name: uplink-headset-name
-  description: uplink-headset-desc
+  name: uplink-grappling-hook-name
+  description: uplink-grappling-hook-desc
   productEntity: WeaponGrapplingGun
   cost:
     Telecrystal: 8
