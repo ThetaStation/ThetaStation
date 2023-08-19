@@ -1,7 +1,7 @@
 # Rules
 
-ui-rules-header = Правила сервера Corvax
-ui-rules-header-rp = Правила сервера Corvax
+ui-rules-header = Правила сервера
+ui-rules-header-rp = Правила сервера
 ui-rules-accept = Я ознакомился и согласен следовать правилам
 ui-rules-wait = Кнопка принятия будет разблокирована через { $time } секунд.
 ui-rules-header-theta = Правила сервера Theta

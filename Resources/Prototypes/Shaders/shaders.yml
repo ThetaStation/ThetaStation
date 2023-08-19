@@ -76,3 +76,8 @@
   id: BoundsOverlay
   kind: source
   path: "/Textures/Theta/ShipEvent/Shaders/bounds_overlay.swsl"
+
+- type: shader
+  id: PaperStamp
+  kind: source
+  path: "/Textures/Shaders/paperstamp.swsl"

@@ -23,6 +23,9 @@ public sealed class ShipEventPalette : ColorPalette
         {
             if(color.AByte != 0xFF)
                 continue;
+            const double lightLuminosity = 255f / 2f;
+            if(color.RByte * 0.2126 + color.GByte * 0.7152 + color.BByte * 0.0722 < lightLuminosity)
+                continue;
             colors.Add(color);
         }
 

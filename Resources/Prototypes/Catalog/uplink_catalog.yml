@@ -174,6 +174,26 @@
     - UplinkExplosives
 
 - type: listing
+  id: UplinkSupermatterGrenade
+  name: uplink-supermatter-grenade-name
+  description: uplink-supermatter-grenade-desc
+  productEntity: SupermatterGrenade
+  cost:
+    Telecrystal: 6
+  categories:
+    - UplinkExplosives
+
+- type: listing
+  id: UplinkWhiteholeGrenade
+  name: uplink-whitehole-grenade-name
+  description: uplink-whitehole-grenade-desc
+  productEntity: WhiteholeGrenade
+  cost:
+    Telecrystal: 3
+  categories:
+    - UplinkExplosives
+
+- type: listing
   id: UplinkGrenadePenguin
   name: uplink-penguin-grenade-name
   description: uplink-penguin-grenade-desc
@@ -233,7 +253,7 @@
   description: uplink-emp-grenade-desc
   productEntity: EmpGrenade
   cost:
-    Telecrystal: 3
+    Telecrystal: 2
   categories:
   - UplinkExplosives
 
@@ -634,7 +654,7 @@
   icon: { sprite: /Textures/Objects/Magic/magicactions.rsi, state: shield }
   productEntity: EmpImplanter
   cost:
-    Telecrystal: 5
+    Telecrystal: 3
   categories:
     - UplinkImplants
 
@@ -696,6 +716,16 @@
           - SurplusBundle
 
 # Bundles
+
+- type: listing
+  id: UplinkEmpKit
+  name: uplink-emp-kit-name
+  description: uplink-emp-kit-desc
+  productEntity: ElectricalDisruptionKit
+  cost:
+    Telecrystal: 6
+  categories:
+    - UplinkBundles
 
 - type: listing
   id: UplinkAmmoBundle
@@ -1010,6 +1040,21 @@
     - Clown
 
 - type: listing
+  id: UplinkHoloclownKit
+  name: uplink-holoclown-kit-name
+  description: uplink-holoclown-kit-desc
+  icon: { sprite: /Textures/Objects/Fun/figurines.rsi, state: holoclown }
+  productEntity: BoxHoloclown
+  cost:
+    Telecrystal: 12
+  categories:
+  - UplinkJob
+  conditions:
+  - !type:BuyerJobCondition
+    whitelist:
+    - Clown
+
+- type: listing
   id: uplinkHotPotato
   name: uplink-hot-potato-name
   description: uplink-hot-potato-desc
@@ -1157,7 +1202,7 @@
   description: uplink-clothing-shoes-boots-mag-syndie-desc
   productEntity: ClothingShoesBootsMagSyndie
   cost:
-    Telecrystal: 2
+    Telecrystal: 4
   categories:
   - UplinkArmor
 
@@ -1493,6 +1538,21 @@
     - UplinkPointless
 
 - type: listing
+  id: UplinkGrapplingHook
+  name: uplink-headset-name
+  description: uplink-headset-desc
+  productEntity: WeaponGrapplingGun
+  cost:
+    Telecrystal: 8
+  categories:
+    - UplinkUtility
+  conditions:
+    - !type:StoreWhitelistCondition
+      whitelist:
+        tags:
+          - ShipEventUplink
+
+- type: listing
   id: UplinkSyndicatePersonalAI
   name: uplink-syndicate-pai-name
   description: uplink-syndicate-pai-desc
@@ -1505,3 +1565,7 @@
   conditions:
   - !type:ListingLimitedStockCondition
     stock: 1
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+        - ShipEventUplink
