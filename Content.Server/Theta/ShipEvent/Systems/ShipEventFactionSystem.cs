@@ -171,7 +171,11 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         if (component.Team == null)
             return;
 
-        var chatMsg = MetaData(args.Source).EntityName + " : " + args.Message;
+        var session = GetSession(args.Source);
+        if (session == null)
+            return;
+
+        var chatMsg = session.ConnectedClient.UserName + " : " + args.Message;
 
         TeamMessage(component.Team, chatMsg);
         args.Channel = null;
