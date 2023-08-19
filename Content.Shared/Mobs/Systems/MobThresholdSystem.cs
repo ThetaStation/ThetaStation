@@ -322,11 +322,12 @@ public sealed class MobThresholdSystem : EntitySystem
         }
 
         if (mobState.CurrentState != MobState.Dead || thresholds.AllowRevives)
+        {
             thresholds.CurrentThresholdState = newState;
-        _mobStateSystem.UpdateMobState(target, mobState);
+            Dirty(target, thresholds);
+        }
 
-        if(EntityManager.EntityExists(target))
-            Dirty(target);
+        _mobStateSystem.UpdateMobState(target, mobState);
     }
 
     private void UpdateAlerts(EntityUid target, MobState currentMobState, MobThresholdsComponent? threshold = null,
