@@ -1,6 +1,3 @@
-using System.Linq;
-using System.Numerics;
-using System.Threading.Channels;
 using Content.Server.Actions;
 using Content.Server.Chat.Systems;
 using Content.Server.Corvax.RoundNotifications;
@@ -11,9 +8,7 @@ using Content.Server.IdentityManagement;
 using Content.Server.Mind;
 using Content.Server.Mind.Components;
 using Content.Server.Preferences.Managers;
-using Content.Server.Radio;
 using Content.Server.Radio.Components;
-using Content.Server.VoiceMask;
 using Content.Server.Roles;
 using Content.Server.RoundEnd;
 using Content.Server.Shuttles.Components;
@@ -26,12 +21,10 @@ using Content.Server.Theta.ShipEvent.Components;
 using Content.Shared.Actions.ActionTypes;
 using Content.Shared.GameTicking;
 using Content.Shared.Interaction.Events;
-using Content.Shared.Chat;
 using Content.Shared.Mobs;
 using Content.Shared.Movement.Components;
 using Content.Shared.Preferences;
 using Content.Shared.Projectiles;
-using Content.Shared.Radio;
 using Content.Shared.Shuttles.Events;
 using Content.Shared.Theta.MobHUD;
 using Content.Shared.Theta.ShipEvent;
@@ -44,9 +37,8 @@ using Robust.Shared.Physics.Events;
 using Robust.Shared.Players;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
-using Robust.Shared.Utility;
-using Robust.Shared.Network;
-using TerraFX.Interop.Windows;
+using System.Linq;
+using System.Numerics;
 
 
 namespace Content.Server.Theta.ShipEvent.Systems;
@@ -86,8 +78,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     [Dependency] private readonly HumanoidAppearanceSystem _humanoidAppearanceSystem = default!;
 
     [Dependency] private readonly IServerPreferencesManager _prefsManager = default!;
-
-    [Dependency] private readonly INetManager _netMan = default!;
 
     //used when setting up buttons for ghosts, in cases when mind from shipevent agent is transferred to null and not to ghost entity directly
     private Dictionary<IPlayerSession, ShipEventFaction> lastTeamLookup = new();
@@ -174,12 +164,14 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     private void OnTeammateSpeak(EntityUid uid, ShipEventFactionMarkerComponent component, EntitySpokeEvent args)
     {
-        if (args.Channel == null) return;
+        if (args.Channel == null)
+            return;
         if (!EntityManager.HasComponent<WearingHeadsetComponent>(uid) && args.Channel.ID != "Common")
             return;
-        if (component.Team == null) return;
+        if (component.Team == null)
+            return;
 
-        var chatMsg = MetaData(args.Source).EntityName + " --->| " + args.Message;
+        var chatMsg = MetaData(args.Source).EntityName + " : " + args.Message;
 
         TeamMessage(component.Team, chatMsg);
         args.Channel = null;
