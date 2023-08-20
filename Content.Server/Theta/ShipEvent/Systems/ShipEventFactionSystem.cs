@@ -2,7 +2,6 @@ using Content.Server.Actions;
 using Content.Server.Chat.Systems;
 using Content.Server.Corvax.RoundNotifications;
 using Content.Server.GameTicking;
-using Content.Server.Ghost.Components;
 using Content.Server.Humanoid;
 using Content.Server.IdentityManagement;
 using Content.Server.Mind;
@@ -37,10 +36,9 @@ using Robust.Shared.Physics.Events;
 using Robust.Shared.Players;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using Robust.Shared.Utility;
 using System.Linq;
 using System.Numerics;
-using Robust.Shared.Utility;
-
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
@@ -176,7 +174,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         if (session == null)
             return;
 
-        var chatMsg = session.ConnectedClient.UserName + " : " + args.Message;
+        var chatMsg = "\\[Team\\] " + session.ConnectedClient.UserName + ": " + args.Message;
 
         TeamMessage(component.Team, chatMsg);
         args.Channel = null;
