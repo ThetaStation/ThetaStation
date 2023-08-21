@@ -28,17 +28,6 @@ public sealed class RadarRenderableSystem : EntitySystem
         states.AddRange(GetRadarRenderableStates(consoleUid, radar, xform));
         return states;
     }
-/*
-    private IEnumerable<CommonRadarEntityInterfaceState> GetPickups(RadarConsoleComponent radar, TransformComponent xform)
-    {
-        var states = new List<CommonRadarEntityInterfaceState>();
-        var query = EntityQueryEnumerator<RadarRenderableComponent, TriggerOnCollideShuttle, TransformComponent>();
-        while (query.MoveNext(out var uid, out var radarRenderable, out var transform))
-        {
-            if(!_radarConsoleSystem.HasFlag(radar, (RadarRenderableGroup) radarRenderable.Group))
-                continue;
-            if (!xform.MapPosition.InRange(transform.MapPosition, radar.MaxRange))
-                continue;
 
     private List<CommonRadarEntityInterfaceState> GetRadarRenderableStates(EntityUid consoleUid,
         RadarConsoleComponent radar,
