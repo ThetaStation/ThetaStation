@@ -5,7 +5,7 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Events;
 using Content.Shared.Popups;
-using JetBrains.Annotations;
+using Content.Shared.Theta.RadarHUD;
 using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
@@ -14,17 +14,16 @@ namespace Content.Shared.Movement.Systems;
 
 public abstract class SharedJetpackSystem : EntitySystem
 {
-    [Dependency] private readonly MovementSpeedModifierSystem _movementSpeedModifier = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+    [Dependency] private   readonly MovementSpeedModifierSystem _movementSpeedModifier = default!;
+    [Dependency] protected  readonly SharedAppearanceSystem Appearance = default!;
     [Dependency] protected readonly SharedContainerSystem Container = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedMoverController _mover = default!;
+    [Dependency] private   readonly SharedMoverController _mover = default!;
+    [Dependency] private   readonly SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<JetpackComponent, GetItemActionsEvent>(OnJetpackGetAction);
-        SubscribeLocalEvent<JetpackComponent, GotEquippedHandEvent>(OnJetpackPickedUp);
         SubscribeLocalEvent<JetpackComponent, DroppedEvent>(OnJetpackDropped);
         SubscribeLocalEvent<JetpackComponent, ToggleJetpackEvent>(OnJetpackToggle);
         SubscribeLocalEvent<JetpackComponent, CanWeightlessMoveEvent>(OnJetpackCanWeightlessMove);
@@ -50,18 +49,21 @@ public abstract class SharedJetpackSystem : EntitySystem
         var query = EntityQueryEnumerator<JetpackUserComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var user, out var transform))
         {
-            if (transform.GridUid == gridUid && jetpackQuery.TryGetComponent(user.Jetpack, out var jetpack))
+            if (transform.GridUid == gridUid && ev.HasGravity &&
+                jetpackQuery.TryGetComponent(user.Jetpack, out var jetpack))
             {
-                SetEnabled(jetpack, !ev.HasGravity, uid);
-                if(ev.HasGravity)
-                    _popup.PopupClient(Loc.GetString("jetpack-to-grid"), uid, uid);
+                _popup.PopupClient(Loc.GetString("jetpack-to-grid"), uid, uid);
+
+                SetEnabled(user.Jetpack, jetpack, false, uid);
             }
         }
     }
 
     private void OnJetpackUserHandleState(EntityUid uid, JetpackUserComponent component, ref ComponentHandleState args)
     {
-        if (args.Current is not JetpackUserComponentState state) return;
+        if (args.Current is not JetpackUserComponentState state)
+            return;
+
         component.Jetpack = state.Jetpack;
     }
 
@@ -73,51 +75,39 @@ public abstract class SharedJetpackSystem : EntitySystem
         };
     }
 
-    private void OnJetpackPickedUp(EntityUid uid, JetpackComponent component, GotEquippedHandEvent args)
-    {
-        SetupUser(args.User, component);
-    }
-    
     private void OnJetpackDropped(EntityUid uid, JetpackComponent component, DroppedEvent args)
     {
-        SetEnabled(component, false, args.User);
-        RemoveUser(args.User);
+        SetEnabled(uid, component, false, args.User);
     }
 
     private void OnJetpackUserCanWeightless(EntityUid uid, JetpackUserComponent component, ref CanWeightlessMoveEvent args)
     {
-        args.CanMove = IsUserFlying(uid);
+        args.CanMove = true;
     }
 
     private void OnJetpackUserEntParentChanged(EntityUid uid, JetpackUserComponent component, ref EntParentChangedMessage args)
     {
-        if (TryComp<JetpackComponent>(component.Jetpack, out var jetpack))
+        if (TryComp<JetpackComponent>(component.Jetpack, out var jetpack) &&
+            !CanEnableOnGrid(args.Transform.GridUid))
         {
-            bool canEnable = CanEnableOnGrid(args.Transform.GridUid);
-            SetEnabled(jetpack, canEnable, uid);
+            SetEnabled(component.Jetpack, jetpack, false, uid);
 
-            //For some reason mover relay prevents player's mover from updating it's relative entity (jetpack mover has correct entity btw)
-            //which leads to undesirable effects, like player's eye thinking it's still attached to the grid you've just left, causing it to rotate with it
-            //so yeah, doing this manually
-            if (TryComp<InputMoverComponent>(uid, out var userMover))
-            {
-                _mover.TryUpdateRelative(userMover, args.Transform);
-            }
-
-            if(!canEnable)
-                _popup.PopupClient(Loc.GetString("jetpack-to-grid"), uid, uid);
+            _popup.PopupClient(Loc.GetString("jetpack-to-grid"), uid, uid);
         }
     }
 
-    private void SetupUser(EntityUid uid, JetpackComponent component)
+    private void SetupUser(EntityUid user, EntityUid jetpackUid)
     {
-        var user = EnsureComp<JetpackUserComponent>(uid);
-        user.Jetpack = component.Owner;
+        var userComp = EnsureComp<JetpackUserComponent>(user);
+        _mover.SetRelay(user, jetpackUid);
+        userComp.Jetpack = jetpackUid;
     }
 
     private void RemoveUser(EntityUid uid)
     {
-        if (!RemComp<JetpackUserComponent>(uid)) return;
+        if (!RemComp<JetpackUserComponent>(uid))
+            return;
+
         RemComp<RelayInputMoverComponent>(uid);
     }
 
@@ -132,12 +122,13 @@ public abstract class SharedJetpackSystem : EntitySystem
             return;
         }
 
-        SetEnabled(component, !IsEnabled(uid));
+        SetEnabled(uid, component, !IsEnabled(uid));
     }
 
     private bool CanEnableOnGrid(EntityUid? gridUid)
     {
-        return gridUid == null || !HasComp<GravityComponent>(gridUid);
+        return gridUid == null ||
+               (!HasComp<GravityComponent>(gridUid));
     }
 
     private void OnJetpackGetAction(EntityUid uid, JetpackComponent component, GetItemActionsEvent args)
@@ -150,52 +141,57 @@ public abstract class SharedJetpackSystem : EntitySystem
         return HasComp<ActiveJetpackComponent>(uid);
     }
 
-    [UsedImplicitly]
-    public void SetEnabled(JetpackComponent component, bool enabled, EntityUid? user = null)
+    public void SetEnabled(EntityUid uid, JetpackComponent component, bool enabled, EntityUid? user = null)
     {
-        if (IsEnabled(component.Owner) == enabled || enabled && !CanEnable(component)) 
+        if (IsEnabled(uid) == enabled ||
+            enabled && !CanEnable(uid, component))
+        {
             return;
+        }
 
         if (enabled)
         {
-            EnsureComp<ActiveJetpackComponent>(component.Owner);
+            EnsureComp<ActiveJetpackComponent>(uid);
         }
         else
         {
-            RemComp<ActiveJetpackComponent>(component.Owner);
+            RemComp<ActiveJetpackComponent>(uid);
         }
 
         if (user == null)
         {
-            Container.TryGetContainingContainer(component.Owner, out var container);
+            Container.TryGetContainingContainer(uid, out var container);
             user = container?.Owner;
         }
+
+        // Can't activate if no one's using.
+        if (user == null && enabled)
+            return;
 
         if (user != null)
         {
             if (enabled)
             {
-                _mover.SetRelay(user.Value, component.Owner);
-                _movementSpeedModifier.RefreshMovementSpeedModifiers(user.Value);
+                SetupUser(user.Value, uid);
             }
             else
             {
-                RemComp<RelayInputMoverComponent>(user.Value);
+                RemoveUser(user.Value);
             }
+
+            _movementSpeedModifier.RefreshMovementSpeedModifiers(user.Value);
         }
 
-        _appearance.SetData(component.Owner, JetpackVisuals.Enabled, enabled);
+        Appearance.SetData(uid, JetpackVisuals.Enabled, enabled);
         Dirty(component);
     }
 
     public bool IsUserFlying(EntityUid uid)
     {
-        if (TryComp(uid, out JetpackUserComponent? user))
-            return IsEnabled(user.Jetpack);
-        return false;
+        return HasComp<JetpackUserComponent>(uid);
     }
 
-    protected virtual bool CanEnable(JetpackComponent component)
+    protected virtual bool CanEnable(EntityUid uid, JetpackComponent component)
     {
         return true;
     }
@@ -210,5 +206,5 @@ public abstract class SharedJetpackSystem : EntitySystem
 [Serializable, NetSerializable]
 public enum JetpackVisuals : byte
 {
-    Enabled
+    Enabled,
 }
