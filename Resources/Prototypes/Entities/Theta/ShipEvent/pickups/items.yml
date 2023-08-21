@@ -1,0 +1,28 @@
+﻿- type: entity
+  parent: BaseItem
+  id: ShuttlePickup
+  suffix: ShipEvent
+  abstract: true
+  components:
+    - type: TriggerOnCollideShuttle
+      fixtureID: fix1
+    - type: TriggerOnChangedParent
+    - type: Sprite
+      sprite: Objects/Fun/toys.rsi
+      state: football
+    - type: Item
+      size: 12
+      sprite: Objects/Fun/toys.rsi
+      heldPrefix: singularitytoy
+
+- type: entity
+  id: ShuttlePickupAmmo
+  name: ammo shuttle pickup
+  parent: ShuttlePickup
+  components:
+    - type: DeleteOnTrigger
+    - type: OnShuttleSpawnOnTrigger
+      proto: SheetUranium
+    - type: RadarRenderable
+      radarView: machineGunProjectile
+      group: enum.RadarRenderableGroup.Pickup

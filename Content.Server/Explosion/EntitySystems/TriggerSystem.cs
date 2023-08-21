@@ -5,8 +5,11 @@ using Content.Server.Chemistry.Components.SolutionManager;
 using Content.Server.Explosion.Components;
 using Content.Server.Flash;
 using Content.Server.Flash.Components;
+using Content.Server.Mind.Components;
 using Content.Server.Radio.EntitySystems;
+using Content.Server.Shuttles.Components;
 using Content.Shared.Database;
+using Content.Shared.Humanoid;
 using Content.Shared.Implants.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Payload.Components;
@@ -23,6 +26,10 @@ using Robust.Shared.Physics.Systems;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Weapons.Ranged.Events;
+using Robust.Shared.Map;
+using Robust.Shared.Physics.Components;
+using Robust.Shared.Player;
+using Robust.Shared.Random;
 
 namespace Content.Server.Explosion.EntitySystems
 {
@@ -61,6 +68,7 @@ namespace Content.Server.Explosion.EntitySystems
         [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
         [Dependency] private readonly RadioSystem _radioSystem = default!;
         [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+        [Dependency] private readonly IRobustRandom _random = default!;
 
         public override void Initialize()
         {
@@ -80,6 +88,10 @@ namespace Content.Server.Explosion.EntitySystems
             SubscribeLocalEvent<TriggerOnSlipComponent, SlipEvent>(OnSlipTriggered);
             SubscribeLocalEvent<TriggerWhenEmptyComponent, OnEmptyGunShotEvent>(OnEmptyTriggered);
 
+            SubscribeLocalEvent<TriggerOnChangedParentComponent, EntParentChangedMessage>(OnEntParentChanged);
+            SubscribeLocalEvent<TriggerOnCollideShuttleComponent, StartCollideEvent>(OnTriggerCollideShuttle);
+            SubscribeLocalEvent<OnShuttleSpawnOnTriggerComponent, TriggerEvent>(OnShuttleSpawnTrigger);
+
             SubscribeLocalEvent<SpawnOnTriggerComponent, TriggerEvent>(OnSpawnTrigger);
             SubscribeLocalEvent<DeleteOnTriggerComponent, TriggerEvent>(HandleDeleteTrigger);
             SubscribeLocalEvent<ExplodeOnTriggerComponent, TriggerEvent>(HandleExplodeTrigger);
@@ -89,6 +101,33 @@ namespace Content.Server.Explosion.EntitySystems
             SubscribeLocalEvent<AnchorOnTriggerComponent, TriggerEvent>(OnAnchorTrigger);
             SubscribeLocalEvent<SoundOnTriggerComponent, TriggerEvent>(OnSoundTrigger);
             SubscribeLocalEvent<RattleComponent, TriggerEvent>(HandleRattleTrigger);
+        }
+
+        private void OnTriggerCollideShuttle(EntityUid uid, TriggerOnCollideShuttleComponent component, ref StartCollideEvent args)
+        {
+            var grid = Transform(args.OtherEntity).GridUid;
+            if(!HasComp<ShuttleComponent>(grid))
+                return;
+            if (args.OurFixture.ID == component.FixtureID)
+                Trigger(uid, grid);
+        }
+
+        private void OnShuttleSpawnTrigger(EntityUid uid, OnShuttleSpawnOnTriggerComponent component, TriggerEvent args)
+        {
+            if (args.User == null || !HasComp<ShuttleComponent>(args.User))
+                return;
+
+            var coords = new List<EntityCoordinates>();
+            foreach (var (_, _, transform) in EntityQuery<MindContainerComponent, HumanoidAppearanceComponent, TransformComponent>())
+            {
+                if (transform.GridUid == args.User)
+                    coords.Add(transform.Coordinates);
+            }
+
+            if (coords.Count == 0)
+                return;
+
+            Spawn(component.Proto, _random.Pick(coords));
         }
 
         private void OnSoundTrigger(EntityUid uid, SoundOnTriggerComponent component, TriggerEvent args)
@@ -107,7 +146,7 @@ namespace Content.Server.Explosion.EntitySystems
 
             _transformSystem.AnchorEntity(uid, xform);
 
-            if(component.RemoveOnTrigger)
+            if (component.RemoveOnTrigger)
                 RemCompDeferred<AnchorOnTriggerComponent>(uid);
         }
 
@@ -167,17 +206,21 @@ namespace Content.Server.Explosion.EntitySystems
             var y = (int) pos.Y;
             var posText = $"({x}, {y})";
 
-            var critMessage = Loc.GetString(component.CritMessage, ("user", implanted.ImplantedEntity.Value), ("position", posText));
-            var deathMessage = Loc.GetString(component.DeathMessage, ("user", implanted.ImplantedEntity.Value), ("position", posText));
+            var critMessage = Loc.GetString(component.CritMessage, ("user", implanted.ImplantedEntity.Value),
+                ("position", posText));
+            var deathMessage = Loc.GetString(component.DeathMessage, ("user", implanted.ImplantedEntity.Value),
+                ("position", posText));
 
             if (!TryComp<MobStateComponent>(implanted.ImplantedEntity, out var mobstate))
                 return;
 
             // Sends a message to the radio channel specified by the implant
             if (mobstate.CurrentState == MobState.Critical)
-                _radioSystem.SendRadioMessage(uid, critMessage, _prototypeManager.Index<RadioChannelPrototype>(component.RadioChannel), uid);
+                _radioSystem.SendRadioMessage(uid, critMessage,
+                    _prototypeManager.Index<RadioChannelPrototype>(component.RadioChannel), uid);
             if (mobstate.CurrentState == MobState.Dead)
-                _radioSystem.SendRadioMessage(uid, deathMessage, _prototypeManager.Index<RadioChannelPrototype>(component.RadioChannel), uid);
+                _radioSystem.SendRadioMessage(uid, deathMessage,
+                    _prototypeManager.Index<RadioChannelPrototype>(component.RadioChannel), uid);
 
             args.Handled = true;
         }
@@ -186,6 +229,14 @@ namespace Content.Server.Explosion.EntitySystems
         {
             if (args.OurFixture.ID == component.FixtureID && (!component.IgnoreOtherNonHard || args.OtherFixture.Hard))
                 Trigger(component.Owner);
+        }
+
+        private void OnEntParentChanged(EntityUid uid, TriggerOnChangedParentComponent component,
+            ref EntParentChangedMessage args)
+        {
+            if (args.OldMapId == MapId.Nullspace)
+                return;
+            Trigger(uid, args.Transform.GridUid);
         }
 
         private void OnActivate(EntityUid uid, TriggerOnActivateComponent component, ActivateInWorldEvent args)
@@ -199,7 +250,8 @@ namespace Content.Server.Explosion.EntitySystems
             args.Handled = Trigger(uid);
         }
 
-        private void OnStepTriggered(EntityUid uid, TriggerOnStepTriggerComponent component, ref StepTriggeredEvent args)
+        private void OnStepTriggered(EntityUid uid, TriggerOnStepTriggerComponent component,
+            ref StepTriggeredEvent args)
         {
             Trigger(uid, args.Tripper);
         }
@@ -221,7 +273,8 @@ namespace Content.Server.Explosion.EntitySystems
             return triggerEvent.Handled;
         }
 
-        public void HandleTimerTrigger(EntityUid uid, EntityUid? user, float delay , float beepInterval, float? initialBeepDelay, SoundSpecifier? beepSound)
+        public void HandleTimerTrigger(EntityUid uid, EntityUid? user, float delay, float beepInterval,
+            float? initialBeepDelay, SoundSpecifier? beepSound)
         {
             if (delay <= 0)
             {
@@ -241,8 +294,10 @@ namespace Content.Server.Explosion.EntitySystems
                     TryComp(container.ContainedEntities[0], out ChemicalPayloadComponent? chemicalPayloadComponent))
                 {
                     // If a beaker is missing, the entity won't explode, so no reason to log it
-                    if (!TryComp(chemicalPayloadComponent?.BeakerSlotA.Item, out SolutionContainerManagerComponent? beakerA) ||
-                        !TryComp(chemicalPayloadComponent?.BeakerSlotB.Item, out SolutionContainerManagerComponent? beakerB))
+                    if (!TryComp(chemicalPayloadComponent?.BeakerSlotA.Item,
+                            out SolutionContainerManagerComponent? beakerA) ||
+                        !TryComp(chemicalPayloadComponent?.BeakerSlotB.Item,
+                            out SolutionContainerManagerComponent? beakerB))
                         return;
 
                     _adminLogger.Add(LogType.Trigger,
@@ -253,7 +308,6 @@ namespace Content.Server.Explosion.EntitySystems
                     _adminLogger.Add(LogType.Trigger,
                         $"{ToPrettyString(user.Value):user} started a {delay} second timer trigger on entity {ToPrettyString(uid):timer}");
                 }
-
             }
             else
             {
