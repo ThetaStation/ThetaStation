@@ -14,7 +14,6 @@ using Content.Shared.Projectiles;
 using Content.Shared.Theta.ShipEvent;
 using Robust.Server.Maps;
 using Robust.Server.Player;
-using Robust.Shared.Physics;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
@@ -24,7 +23,7 @@ public sealed class ShipEventFaction : PlayerFaction
 
     public Color Color;
 
-    public Dictionary<ShipEventFaction, int> Hits = new(); //hits from other teams, not vice-versa
+    public Dictionary<ShipEventFaction, int> Hits = new(); //hits (damage) from other teams, not vice-versa
     public int Kills;
     public int Assists;
     public int Points;
@@ -41,6 +40,9 @@ public sealed class ShipEventFaction : PlayerFaction
 
     public int LastBonusInterval; //how much times this team has acquired bonus points for surviving bonus interval
 
+    public byte DespairLevel; //raised when ship is taking damage/crew is dying/enemy ships are near/other bad stuff is happening. currently used only for adjusting music
+    public ShipEventMusicConfiguration? ActiveMusicConfiguration;
+    
     private string? _password;
     public string? JoinPassword
     {

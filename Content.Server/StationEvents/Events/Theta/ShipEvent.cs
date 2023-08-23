@@ -73,6 +73,10 @@ public sealed class ShipEventRuleComponent : Component
     [DataField("lootboxLifetime")] public float LootboxLifetime;
 
     [DataField("lootboxTypes")] public List<string> LootboxTypes = new();
+
+    [DataField("damagePerDespairLevel")] public int DamagePerDespairLevel;
+
+    [DataField("musicTypes")] public List<string> MusicTypes = new();
 }
 
 public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
@@ -120,6 +124,7 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         _shipSys.PointsPerAssist = component.PointsPerAssist;
         _shipSys.PointsPerKill = component.PointsPerKill;
         _shipSys.OutOfBoundsPenalty = component.OutOfBoundsPenalty;
+        _shipSys.DamagePerDespairLevel = component.DamagePerDespairLevel;
 
         _shipSys.HUDPrototypeId = component.HUDPrototypeId;
         _shipSys.CaptainHUDPrototypeId = component.CaptainHUDPrototypeId;
@@ -145,6 +150,11 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         foreach (var structProtId in component.LootboxTypes)
         {
             _shipSys.LootboxPrototypes.Add(_protMan.Index<StructurePrototype>(structProtId));
+        }
+        
+        foreach (var musicConfId in component.MusicTypes)
+        {
+            _shipSys.MusicConfigurationPrototypes.Add(_protMan.Index<ShipEventMusicConfigurationPrototype>(musicConfId));
         }
 
         List<StructurePrototype> obstacleStructProts = new();

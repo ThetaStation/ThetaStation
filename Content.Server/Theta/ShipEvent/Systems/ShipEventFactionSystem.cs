@@ -46,6 +46,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 {
     [Dependency] private readonly GameTicker _ticker = default!;
 
+    [Dependency] private readonly AudioSystem _audioSys = default!;
+
     [Dependency] private readonly ActionsSystem _actSys = default!;
 
     [Dependency] private readonly ChatSystem _chatSys = default!;
@@ -118,6 +120,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     public float BoundsCompressionInterval;
     public int BoundsCompressionDistance; //how much play area bounds are compressed every BoundCompressionInterval
     public int CurrentBoundsOffset; //inward offset of bounds
+    public int DamagePerDespairLevel;
 
     public bool RuleSelected;
 
@@ -179,6 +182,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         CheckBoundsCompressionTimer();
         CheckLootboxTimer(frametime);
         CheckRoundendTimer();
+        UpdateMusic();
     }
 
     private void CheckRoundendTimer()
@@ -428,6 +432,9 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>((EntityUid) ship);
 
+        if (marker.Team != null)
+            marker.Team.DespairLevel += 20;
+        
         if (!spawners.Any())
         {
             _chatSys.SendSimpleMessage(Loc.GetString("shipevent-respawnfailed"), session);
@@ -485,11 +492,13 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                 if (marker.Team == null || marker.Team == component.Team)
                     return;
 
-                component.Team.Points += (int) Math.Ceiling(GetProjectileDamage(entity) * PointsPerHitMultiplier);
+                int damage = (int) Math.Ceiling(GetProjectileDamage(entity) * PointsPerHitMultiplier);
+                component.Team.Points += damage;
                 if (!marker.Team.Hits.Keys.Contains(component.Team))
                     marker.Team.Hits[component.Team] = 0;
 
-                marker.Team.Hits[component.Team]++;
+                marker.Team.Hits[component.Team] += damage;
+                marker.Team.DespairLevel += (byte)(damage / DamagePerDespairLevel);
             }
         }
     }
@@ -905,6 +914,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                     team,
                     Loc.GetString("shipevent-respawn-dead"));
                 team.TimeSinceRemoval = 0;
+                team.DespairLevel = 0;
                 continue;
             }
 
@@ -914,6 +924,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                     team,
                     Loc.GetString("shipevent-respawn-tech"));
                 team.TimeSinceRemoval = 0;
+                team.DespairLevel = 0;
                 continue;
             }
 
@@ -923,7 +934,10 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                 {
                     TeamMessage(team, Loc.GetString("shipevent-outofbounds"), color: Color.DarkRed);
                     team.OutOfBoundsWarningReceived = true;
+                    team.DespairLevel += 50;
+                    continue;
                 }
+                
                 PunishOutOfBoundsTeam(team);
             }
             else

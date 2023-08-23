@@ -57,3 +57,8 @@
       #randomisation
       obstacleAmountAmplitude: 0
       obstacleSizeAmplitude: 0
+      
+      #music
+      musicTypes:
+        - "test_linear"
+      damagePerDespairLevel: 100

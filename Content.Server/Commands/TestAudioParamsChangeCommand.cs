@@ -21,14 +21,14 @@ public sealed class TestAudioParamsChange : IConsoleCommand
         var audioSys = IoCManager.Resolve<EntityManager>().System<AudioSystem>();
         var parameters = AudioParams.Default;
         parameters.Loop = true;
-        parameters.Volume = -1f;
+        parameters.Volume = -10f;
         
         var stream = audioSys.PlayGlobal("/Audio/Machines/alarm.ogg", Filter.Broadcast(), false, parameters);
         if (stream == null)
             return;
         shell.WriteLine("Started.");
 
-        parameters.Volume = 5f;
+        parameters.Volume = -1f;
         parameters.Loop = false;
         Timer.Spawn(3000, () =>
         {

@@ -27,6 +27,8 @@ public class PlayerFaction
     /// </summary>
     public List<Role> ActiveMembers => Members.Where(r => r.Mind.Session != null).ToList();
 
+    public List<IPlayerSession> ActivePlayersSessions => ActiveMembers.Select(r => r.Mind.Session!).ToList();
+    
     public List<string> ActiveMemberUsernames => ActiveMembers.Select(r => r.Mind.Session!.ConnectedClient.UserName).ToList();
 
     public PlayerFaction(string name, string iconPath = "")

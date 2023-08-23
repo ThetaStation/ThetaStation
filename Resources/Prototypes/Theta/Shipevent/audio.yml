@@ -1,3 +1,4 @@
+# Ambience
 - type: ambientMusic
   id: ShipEventOnShip
   sound:
@@ -7,7 +8,6 @@
   interruptable: true
   priority: 10
 
-# Sound collections
 - type: soundCollection
   id: AmbienceShipEventOnShip
   files:
@@ -23,3 +23,10 @@
         - type: CannonConsole
         - type: TurretLoader
         - type: ShipEventFactionMarker
+          
+
+# Music configurations
+- type: shipEventMusicConfig
+  id: test_linear
+  config: !type:ShipEventSimpleMusicConfiguration
+    track: /Audio/Theta/Shi
