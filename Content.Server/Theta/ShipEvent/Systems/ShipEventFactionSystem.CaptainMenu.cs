@@ -56,22 +56,22 @@ public partial class ShipEventFactionSystem
     {
         foreach (var team in Teams)
         {
-            if (team.Captain == msg.Session.ConnectedClient.UserName)
-            {
-                var members = team.GetMembersByUserNames();
-                if (members.ContainsKey(msg.CKey))
-                {
-                    var member = members[msg.CKey];
-                    var memberEntity = team.GetMemberEntity(member);
-                    team.RemoveMember(member);
-                    EntityManager.DeleteEntity(memberEntity);
-
-                    var session = team.GetMemberSession(member);
-                    if(session != null)
-                        _chatSys.SendSimpleMessage(Loc.GetString("shipevent-kicked"), session, ChatChannel.Local, Color.DarkRed);
-                }
+            if (team.Captain != msg.Session.ConnectedClient.UserName)
+                continue;
+            if (msg.CKey == team.Captain)
                 break;
+            var members = team.GetMembersByUserNames();
+            if (members.TryGetValue(msg.CKey, out var member))
+            {
+                var memberEntity = team.GetMemberEntity(member);
+                team.RemoveMember(member);
+                EntityManager.DeleteEntity(memberEntity);
+
+                var session = team.GetMemberSession(member);
+                if(session != null)
+                    _chatSys.SendSimpleMessage(Loc.GetString("shipevent-kicked"), session, ChatChannel.Local, Color.DarkRed);
             }
+            break;
         }
     }
 }

@@ -85,6 +85,20 @@ public partial class SharedBodySystem
         return true;
     }
 
+    public void DirtyAllComponents(EntityUid uid)
+    {
+        // TODO just use containers. Please
+        if (TryComp(uid, out BodyPartComponent? part))
+            Dirty(uid, part);
+
+        if (TryComp(uid, out OrganComponent? organ))
+            Dirty(uid, organ);
+
+        if (TryComp(uid, out BodyComponent? body))
+            Dirty(uid, body);
+    }
+
+
     public bool AddOrganToFirstValidSlot(
         EntityUid? childId,
         EntityUid? parentId,
