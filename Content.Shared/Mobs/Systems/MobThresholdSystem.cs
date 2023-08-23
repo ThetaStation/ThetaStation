@@ -326,7 +326,7 @@ public sealed class MobThresholdSystem : EntitySystem
         _mobStateSystem.UpdateMobState(target, mobState);
 
         if(EntityManager.EntityExists(target))
-            Dirty(target);
+            DirtyEntity(target);
     }
 
     private void UpdateAlerts(EntityUid target, MobState currentMobState, MobThresholdsComponent? threshold = null,

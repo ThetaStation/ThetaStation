@@ -70,8 +70,8 @@ public partial class SharedBodySystem
         organ.ParentSlot = slot;
         organ.Body = CompOrNull<BodyPartComponent>(slot.Parent)?.Body;
 
-        Dirty(slot.Parent);
-        Dirty(organId.Value);
+        DirtyEntity(slot.Parent);
+        DirtyEntity(organId.Value);
 
         if (organ.Body == null)
         {

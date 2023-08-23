@@ -55,7 +55,7 @@ public partial class SharedBodySystem
         if (part.ParentSlot is { } slot)
         {
             slot.Child = null;
-            Dirty(slot.Parent);
+            DirtyEntity(slot.Parent);
         }
 
         foreach (var childSlot in part.Children.Values.ToArray())
@@ -207,8 +207,8 @@ public partial class SharedBodySystem
             part.Body = null;
         }
 
-        Dirty(slot.Parent);
-        Dirty(partId.Value);
+        DirtyEntity(slot.Parent);
+        DirtyEntity(partId.Value);
 
         if (part.Body is { } newBody)
         {
@@ -226,7 +226,7 @@ public partial class SharedBodySystem
                 RaiseLocalEvent(organ.Id, new AddedToBodyEvent(newBody), true);
             }
 
-            Dirty(newBody);
+            DirtyEntity(newBody);
         }
 
         return true;
@@ -281,8 +281,8 @@ public partial class SharedBodySystem
             }
         }
 
-        Dirty(slot.Parent);
-        Dirty(partId.Value);
+        DirtyEntity(slot.Parent);
+        DirtyEntity(partId.Value);
 
         return true;
     }
