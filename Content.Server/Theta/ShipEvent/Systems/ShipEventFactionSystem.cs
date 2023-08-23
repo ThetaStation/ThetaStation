@@ -39,6 +39,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using System.Linq;
 using System.Numerics;
+using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
 
@@ -79,6 +80,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     [Dependency] private readonly HumanoidAppearanceSystem _humanoidAppearanceSystem = default!;
 
     [Dependency] private readonly IServerPreferencesManager _prefsManager = default!;
+
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     //used when setting up buttons for ghosts, in cases when mind from shipevent agent is transferred to null and not to ghost entity directly
     private Dictionary<IPlayerSession, ShipEventFaction> lastTeamLookup = new();
@@ -201,6 +204,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         CheckBoundsCompressionTimer();
         CheckLootboxTimer(frametime);
         CheckRoundendTimer();
+        CheckPickupsTimer();
     }
 
     private void CheckRoundendTimer()
@@ -292,6 +296,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         ShipProcessors.Clear();
         LootboxProcessors.Clear();
+
+        PickupPositions.Clear();
     }
 
     private void OnRoundEnd(RoundEndTextAppendEvent args)

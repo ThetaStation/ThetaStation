@@ -6,6 +6,7 @@ using Content.Server.Theta.DebrisGeneration.Prototypes;
 using Content.Shared.Theta.ShipEvent;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Server.Theta.ShipEvent.Systems;
+using Content.Shared.Dataset;
 using Content.Shared.Shuttles.Components;
 using Robust.Server.Player;
 using Robust.Shared.Map;
@@ -14,6 +15,7 @@ using Robust.Shared.Random;
 using Robust.Shared.Serialization.Markdown;
 using Robust.Shared.Serialization.Markdown.Mapping;
 using Robust.Shared.Serialization.Markdown.Value;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Server.StationEvents.Events.Theta;
 
@@ -73,6 +75,14 @@ public sealed class ShipEventRuleComponent : Component
     [DataField("lootboxLifetime")] public float LootboxLifetime;
 
     [DataField("lootboxTypes")] public List<string> LootboxTypes = new();
+
+    [DataField("pickupsPositions")] public int PickupsPositionsCount;
+
+    // in seconds
+    [DataField("pickupsSpawnInterval")] public float PickupsSpawnInterval;
+
+    [DataField("pickupsPrototypes", customTypeSerializer: typeof(PrototypeIdSerializer<DatasetPrototype>))]
+    public string PickupsPrototypes = default!;
 }
 
 public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
@@ -120,6 +130,10 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         _shipSys.PointsPerAssist = component.PointsPerAssist;
         _shipSys.PointsPerKill = component.PointsPerKill;
         _shipSys.OutOfBoundsPenalty = component.OutOfBoundsPenalty;
+
+        _shipSys.PickupsPositionsCount = component.PickupsPositionsCount;
+        _shipSys.PickupsSpawnInterval = component.PickupsSpawnInterval;
+        _shipSys.PickupsDatasetPrototype = component.PickupsPrototypes;
 
         _shipSys.HUDPrototypeId = component.HUDPrototypeId;
         _shipSys.CaptainHUDPrototypeId = component.CaptainHUDPrototypeId;

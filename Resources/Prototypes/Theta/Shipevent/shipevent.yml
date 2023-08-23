@@ -57,3 +57,16 @@
       #randomisation
       obstacleAmountAmplitude: 0
       obstacleSizeAmplitude: 0
+
+      #pickups
+      pickupsPositions: 20
+      # in seconds
+      pickupsSpawnInterval: 10
+      pickupsPrototypes: ShipEventPickupsPrototypes
+
+- type: dataset
+  id: ShipEventPickupsPrototypes
+  values:
+    - ShuttlePickupAmmoSPG
+    - ShuttlePickupAmmoFlak
+    - ShuttlePickupAmmoMachineGun

@@ -27,3 +27,9 @@
   defaultColor: "#ff0000"
   form: enum.OnRadarForms.Circle
   size: 2
+
+- type: radarEntityView
+  id: ammoContainer
+  defaultColor: "#ffff00"
+  form: enum.OnRadarForms.Circle
+  size: 3

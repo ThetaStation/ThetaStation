@@ -19,10 +19,32 @@
   id: ShuttlePickupAmmo
   name: ammo shuttle pickup
   parent: ShuttlePickup
+  abstract: true
   components:
     - type: DeleteOnTrigger
     - type: OnShuttleSpawnOnTrigger
-      proto: SheetUranium
+      proto: MachineGunAmmoClosetShipEvent
     - type: RadarRenderable
-      radarView: machineGunProjectile
+      radarView: ammoContainer
       group: enum.RadarRenderableGroup.Pickup
+
+- type: entity
+  id: ShuttlePickupAmmoMachineGun
+  parent: ShuttlePickupAmmo
+  components:
+    - type: OnShuttleSpawnOnTrigger
+      proto: TurretAmmoContainerMachineGunFilled
+
+- type: entity
+  id: ShuttlePickupAmmoFlak
+  parent: ShuttlePickupAmmo
+  components:
+    - type: OnShuttleSpawnOnTrigger
+      proto: TurretAmmoContainerFlakFilled
+
+- type: entity
+  id: ShuttlePickupAmmoSPG
+  parent: ShuttlePickupAmmo
+  components:
+    - type: OnShuttleSpawnOnTrigger
+      proto: TurretAmmoContainerSPGFilled
