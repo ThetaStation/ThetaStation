@@ -126,7 +126,7 @@ public sealed class BackgroundAudioSystem : EntitySystem
         }
 
         _lobbyStream = _audio.PlayGlobal(file, Filter.Local(), false,
-            _lobbyParams.WithVolume(_lobbyParams.Volume + _configManager.GetCVar(CCVars.LobbyMusicVolume)));
+            _lobbyParams.WithVolume(_lobbyParams.Volume!.Value + _configManager.GetCVar(CCVars.LobbyMusicVolume)));
     }
 
     private void EndLobbyMusic()

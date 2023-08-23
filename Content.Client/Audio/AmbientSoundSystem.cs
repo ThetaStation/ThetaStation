@@ -12,6 +12,7 @@ using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using System.Linq;
 using System.Numerics;
+using FastAccessors;
 using Robust.Client.GameObjects;
 
 namespace Content.Client.Audio;
@@ -119,7 +120,7 @@ public sealed class AmbientSoundSystem : SharedAmbientSoundSystem
                 continue;
 
             var stream = (AudioSystem.PlayingStream) values.Stream;
-            stream.Volume = _params.Volume + comp.Volume + _ambienceVolume;
+            stream.Volume = _params.Volume!.Value + comp.Volume + _ambienceVolume;
         }
     }
     private void SetCooldown(float value) => _cooldown = value;

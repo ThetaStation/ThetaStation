@@ -239,7 +239,7 @@ namespace Content.Shared.Movement.Systems
                     var soundModifier = mover.Sprinting ? 3.5f : 1.5f;
 
                     var audioParams = sound.Params
-                        .WithVolume(sound.Params.Volume + soundModifier)
+                        .WithVolume(sound.Params.Volume!.Value + soundModifier)
                         .WithVariation(sound.Params.Variation ?? FootstepVariation);
 
                     // If we're a relay target then predict the sound for all relays.
