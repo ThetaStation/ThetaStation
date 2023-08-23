@@ -15,34 +15,32 @@ public sealed partial class ShipEventFactionSystem
     {
         foreach (ShipEventFaction team in Teams)
         {
-            Log.Debug("UpdateMusic: Team {} has {} despair points");
+            Log.Info($"UpdateMusic: Team {team.Name} has {team.DespairLevel} despair points");
 
             if (team.ActiveMusicConfiguration != null)
             {
                 if (team.DespairLevel == 0)
                 {
-                    Log.Debug("Disposing configuration");
+                    Log.Info("Disposing configuration");
                     team.ActiveMusicConfiguration.Dispose();
                     team.ActiveMusicConfiguration = null;
                 }
                 else
                 {
-                    Log.Debug("Changing intensity");
-                    team.ActiveMusicConfiguration.Intensity = team.DespairLevel;
+                    Log.Info("Changing intensity");
+                    team.ActiveMusicConfiguration.SetIntensity(team.DespairLevel);
                 }
             }
             else
             {
                 if (team.DespairLevel > 0)
                 {
-                    Log.Debug("Binding new configuration");
+                    Log.Info("Binding new configuration");
                     ShipEventMusicConfiguration configuration = _random.Pick(MusicConfigurationPrototypes).Configuration.ShallowCopy();
                     configuration.Bind(team, _audioSys);
                     team.ActiveMusicConfiguration = configuration;
                 }
             }
-
-            team.DespairLevel -= 5;
         }
     }
 }
@@ -63,19 +61,21 @@ public abstract class ShipEventMusicConfiguration
 {
     protected ShipEventFaction Team = default!;
     protected AudioSystem AudioSystem = default!;
-
+    
+    /*
+     todo: this solution is nicer, yet for some reason it also causes IoC to explode
     public byte Intensity
     {
         set
         {
-            if (_lastIntensity == value)
+            if (value == _lastIntensity)
                 return;
             _lastIntensity = value;
+
             OnIntensityChange(value);
         }
     }
-    
-    private byte _lastIntensity;
+    */
 
     public void Bind(ShipEventFaction team, AudioSystem audioSys)
     {
@@ -93,7 +93,7 @@ public abstract class ShipEventMusicConfiguration
 
     public abstract void Dispose();
 
-    public abstract void OnIntensityChange(byte intensity);
+    public abstract void SetIntensity(byte intensity);
 }
 
 /// <summary>
@@ -117,11 +117,11 @@ public sealed class ShipEventSimpleMusicConfiguration : ShipEventMusicConfigurat
         if (MaxVolume < MinVolume)
             throw new Exception("Maximum volume is lower than minimum volume.");
 
-        Filter teamFilter = Filter.BroadcastGrid(Team.Ship);
-
         AudioParams parameters = AudioParams.Default;
         parameters.Loop = true;
         parameters.Volume = 1;
+        
+        Filter teamFilter = Filter.BroadcastGrid(Team.Ship);
         
         _audioStream = AudioSystem.PlayGlobal(Track, teamFilter, false, parameters);
     }
@@ -131,15 +131,14 @@ public sealed class ShipEventSimpleMusicConfiguration : ShipEventMusicConfigurat
         _audioStream?.Stop();
     }
 
-    public override void OnIntensityChange(byte intensity)
+    public override void SetIntensity(byte intensity)
     {
         if (_audioStream == null)
         {
-            Logger.Error("ShipEventSimpleMusicConfiguration: Audio stream is null but configuration is still in use!");
             return;
         }
         
-        AudioParams parameters = AudioParams.Default;
+        AudioParams parameters = AudioParams.AllNull;
         parameters.Volume = MinVolume + intensity / byte.MaxValue * (MaxVolume - MinVolume);
         
         AudioSystem.SetAudioParams(_audioStream, parameters);
@@ -161,9 +160,8 @@ public sealed class ShipEventLayeredMusicConfiguration : ShipEventMusicConfigura
         
     }
 
-    public override void OnIntensityChange(byte intensity)
+    public override void SetIntensity(byte intensity)
     {
         
     }
 }
-

@@ -338,5 +338,11 @@ public sealed partial class ShipEventFactionSystem
         }
         return null;
     }
+    
+    //to avoid overflows
+    public void AddDespair(ShipEventFaction team, int value)
+    {
+        team.DespairLevel = (byte)Math.Clamp(team.DespairLevel + value, byte.MinValue, byte.MaxValue);
+    }
 }
 

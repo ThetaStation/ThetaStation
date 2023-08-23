@@ -177,12 +177,11 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         {
             _teamCheckTimer -= TeamCheckInterval;
             CheckTeams(TeamCheckInterval);
+            CheckBoundsCompressionTimer();
+            CheckLootboxTimer(frametime);
+            CheckRoundendTimer();
+            UpdateMusic();
         }
-
-        CheckBoundsCompressionTimer();
-        CheckLootboxTimer(frametime);
-        CheckRoundendTimer();
-        UpdateMusic();
     }
 
     private void CheckRoundendTimer()
@@ -433,7 +432,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>((EntityUid) ship);
 
         if (marker.Team != null)
-            marker.Team.DespairLevel += 20;
+            AddDespair(marker.Team, 20);
         
         if (!spawners.Any())
         {
@@ -902,6 +901,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         List<ShipEventFaction> toRemove = new();
         foreach (var team in Teams)
         {
+            AddDespair(team, -5);
+            
             if (team.ActiveMembers.Count == 0)
             {
                 toRemove.Add(team);
@@ -934,7 +935,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                 {
                     TeamMessage(team, Loc.GetString("shipevent-outofbounds"), color: Color.DarkRed);
                     team.OutOfBoundsWarningReceived = true;
-                    team.DespairLevel += 50;
+                    AddDespair(team, 50);
                     continue;
                 }
                 
