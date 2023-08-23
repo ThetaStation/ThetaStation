@@ -39,76 +39,28 @@ public sealed class RadarCommon : RadarModule
 
             switch (view.OnRadarForm)
             {
-                case OnRadarForms.Circle:
+                case CircleRadarForm circleRadarForm:
                     var uiPosition = parameters.DrawMatrix.Transform(position);
                     uiPosition.Y = -uiPosition.Y;
                     uiPosition = ScalePosition(uiPosition);
-                    handle.DrawCircle(uiPosition, view.Size, color);
+                    handle.DrawCircle(uiPosition, circleRadarForm.Radius, color);
                     break;
-
-                case OnRadarForms.FootingTriangle:
-                    var footingTriangleVectors = GetVectorsByForm(view, matrix, position, angle);
-                    handle.DrawPrimitives(DrawPrimitiveTopology.LineStrip, footingTriangleVectors, color);
+                case ShapeRadarForm shapeRadarForm:
+                    var verts = new Vector2[shapeRadarForm.Vertices.Length];
+                    shapeRadarForm.Vertices.CopyTo(verts, 0);
+                    for (var i = 0; i < verts.Length; i++)
+                    {
+                        verts[i] *= shapeRadarForm.Size;
+                        verts[i] = matrix.Transform(position + angle.RotateVec(verts[i]));
+                        verts[i].Y = -verts[i].Y;
+                        verts[i] = ScalePosition(verts[i]);
+                    }
+                    handle.DrawPrimitives(DrawPrimitiveTopology.LineStrip, verts, color);
                     break;
-
-                case OnRadarForms.CenteredTriangle:
-                    var centeredTriangleVectors = GetVectorsByForm(view, matrix, position, angle);
-                    handle.DrawPrimitives(DrawPrimitiveTopology.LineStrip, centeredTriangleVectors, color);
-                    break;
-                case OnRadarForms.Line:
-                    var lineVectors = GetVectorsByForm(view, matrix, position, angle);
-                    handle.DrawPrimitives(DrawPrimitiveTopology.LineStrip, lineVectors, color);
-                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
 
-    private Vector2[] GetVectorsByForm(RadarEntityViewPrototype view, Matrix3 matrix, Vector2 position, Angle angle)
-    {
-        var verts = view.OnRadarForm switch
-        {
-            OnRadarForms.FootingTriangle => GetFootingTriangleVectors(view.Size),
-            OnRadarForms.CenteredTriangle => GetCenteredTriangleVectors(view.Size),
-            OnRadarForms.Line => GetLineVectors(view.Size),
-            _ => throw new ArgumentOutOfRangeException()
-        };
-        for (var i = 0; i < verts.Length; i++)
-        {
-            verts[i] = matrix.Transform(position + angle.RotateVec(verts[i]));
-            verts[i].Y = -verts[i].Y;
-            verts[i] = ScalePosition(verts[i]);
-        }
-        return verts;
-    }
-
-    private Vector2[] GetFootingTriangleVectors(float size)
-    {
-        return new[]
-        {
-            new Vector2(-size / 2, 0),
-            new Vector2(size  / 2, 0),
-            new Vector2(0, -size ),
-            new Vector2(-size  / 2, 0),
-        };
-    }
-
-    private Vector2[] GetCenteredTriangleVectors(float size)
-    {
-        return new[]
-        {
-            new Vector2(-size / 2, size / 4),
-            new Vector2(0, -size / 2 - size / 4),
-            new Vector2(size / 2, size / 4),
-            new Vector2(-size / 2, size / 4),
-        };
-    }
-
-    private Vector2[] GetLineVectors(float size)
-    {
-        return new[]
-        {
-            new Vector2(0, 0),
-            new Vector2(0, size),
-        };
-    }
 }
