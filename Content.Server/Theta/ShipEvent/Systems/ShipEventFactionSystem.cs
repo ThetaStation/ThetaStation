@@ -39,7 +39,6 @@ using Robust.Shared.Random;
 using Robust.Shared.Utility;
 using System.Linq;
 using System.Numerics;
-using System.Threading.Channels;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
@@ -175,7 +174,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         if (session == null)
             return;
 
-        var chatMsg = $"\\[{Loc.GetString("hud-team-message-base")}\\]" + session.ConnectedClient.UserName + ": " + args.Message;
+        var chatMsg = Loc.GetString("shipevent-team-msg-base", ("name", session.ConnectedClient.UserName), ("message", args.Message));
 
         TeamMessage(component.Team, chatMsg);
         args.Channel = null;

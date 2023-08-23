@@ -97,3 +97,7 @@ shipevent-shieldconsole-nopower = [color=red]Нет питания[/color]
 shipevent-shieldconsole-anglelabel = Угол
 shipevent-shieldconsole-widthlabel = Ширина
 shipevent-shieldconsole-radiuslabel = Радиус
+
+## Team Messages
+
+shipevent-team-msg-base = \[Команда\] [bold]{$name}[/bold]: {$message}
