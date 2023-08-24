@@ -295,6 +295,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         ShipProcessors.Clear();
         LootboxProcessors.Clear();
+        
+        MusicConfigurationPrototypes.Clear();
     }
 
     private void OnRoundEnd(RoundEndTextAppendEvent args)

@@ -30,7 +30,11 @@
   id: tanc_a_lelek
   config: !type:ShipEventSimpleMusicConfiguration
     track: /Audio/Theta/Shipevent/Music/tanc_a_lelek.ogg
-    minVolume: -15
+    
+- type: shipEventMusicConfig
+  id: sector11
+  config: !type:ShipEventSimpleMusicConfiguration
+    track: /Audio/Theta/Shipevent/Music/sector11.ogg
     
 - type: shipEventMusicConfig
   id: test_layered

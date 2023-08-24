@@ -105,10 +105,10 @@ public sealed class ShipEventSimpleMusicConfiguration : ShipEventMusicConfigurat
     public SoundSpecifier Track = default!;
 
     [DataField("maxVolume")]
-    public float MaxVolume = 0;
+    public float MaxVolume;
     
     [DataField("minVolume")]
-    public float MinVolume = -10;
+    public float MinVolume = -20;
 
     [DataField("volumeChangeSpeed")] 
     public float VolumeChangeSpeed = 1;
@@ -175,10 +175,10 @@ public sealed class ShipEventLayeredMusicConfiguration : ShipEventMusicConfigura
     private Filter _teamFilter = default!;
 
     [DataField("volume")] 
-    public float Volume = 0;
+    public float Volume;
     
     [DataField("minVolume")] 
-    public float MinVolume = -10;
+    public float MinVolume = -20;
 
     public override void AfterBind()
     {
