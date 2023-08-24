@@ -60,5 +60,6 @@
       
       #music
       musicTypes:
-        - "test_linear"
+        - "tanc_a_lelek"
+        #- "test_layered"
       damagePerDespairLevel: 50

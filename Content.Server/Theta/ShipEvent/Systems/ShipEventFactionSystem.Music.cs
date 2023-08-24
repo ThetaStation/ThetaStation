@@ -1,3 +1,4 @@
+using Content.Shared.Movement.Components;
 using Content.Shared.Theta.Misc;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
@@ -101,7 +102,7 @@ public sealed class ShipEventSimpleMusicConfiguration : ShipEventMusicConfigurat
     private IEntityNetworkManager entNetMan = default!;
     
     [DataField("track", required: true)] 
-    public SoundSpecifier? Track;
+    public SoundSpecifier Track = default!;
 
     [DataField("maxVolume")]
     public float MaxVolume = 0;
@@ -114,7 +115,7 @@ public sealed class ShipEventSimpleMusicConfiguration : ShipEventMusicConfigurat
 
     private float _currentVolume;
 
-    private IPlayingAudioStream? _audioStream;
+    private IPlayingAudioStream _audioStream = default!;
 
     public override void AfterBind()
     {
@@ -127,18 +128,14 @@ public sealed class ShipEventSimpleMusicConfiguration : ShipEventMusicConfigurat
         parameters.Loop = true;
         parameters.Volume = MinVolume;
         _currentVolume = MinVolume;
-        
-        Filter teamFilter = Filter.BroadcastGrid(Team.Ship);
-        
-        _audioStream = AudioSystem.PlayGlobal(Track, teamFilter, false, parameters);
+
+        IPlayingAudioStream? stream = AudioSystem.PlayGlobal(Track, Filter.BroadcastGrid(Team.Ship), false, parameters);
+        _audioStream = stream ?? throw new Exception("Could not create new audio stream.");
     }
 
     public override void Dispose()
     {
-        if (_audioStream == null)
-            return;
-
-        entNetMan.SendSystemNetworkMessage(new SmoothVolumeChangeMessage( //same as RaiseNetworkEvent() from ent system
+        entNetMan.SendSystemNetworkMessage(new SmoothVolumeChangeMessage(
             _audioStream, 
             0, 
             0,
@@ -150,9 +147,6 @@ public sealed class ShipEventSimpleMusicConfiguration : ShipEventMusicConfigurat
 
     public override void SetIntensity(byte intensity)
     {
-        if (_audioStream == null) 
-            return;
-
         float newVolume = MinVolume + (float)intensity / byte.MaxValue * (MaxVolume - MinVolume);
         
         entNetMan.SendSystemNetworkMessage(new SmoothVolumeChangeMessage( //same as RaiseNetworkEvent() from ent system
@@ -171,18 +165,69 @@ public sealed class ShipEventSimpleMusicConfiguration : ShipEventMusicConfigurat
 /// </summary>
 public sealed class ShipEventLayeredMusicConfiguration : ShipEventMusicConfiguration
 {
+    private IEntityNetworkManager entNetMan = default!;
+    
+    [DataField("tracks", required: true)]
+    public Dictionary<byte, SoundSpecifier> Tracks = default!;
+
+    private List<IPlayingAudioStream> _streams = new();
+
+    private Filter _teamFilter = default!;
+
+    [DataField("volume")] 
+    public float Volume = 0;
+    
+    [DataField("minVolume")] 
+    public float MinVolume = -10;
+
     public override void AfterBind()
     {
-        
+        entNetMan = IoCManager.Resolve<IEntityNetworkManager>();
+        _teamFilter = Filter.BroadcastGrid(Team.Ship);
     }
 
     public override void Dispose()
     {
+        foreach (IPlayingAudioStream stream in _streams)
+        {
+            entNetMan.SendSystemNetworkMessage(new SmoothVolumeChangeMessage(
+                stream, 
+                0, 
+                0,
+                0,
+                true));
         
+            stream.Stop();
+        }
     }
 
     public override void SetIntensity(byte intensity)
     {
-        
+        int count = 0;
+        foreach (byte trackIntensity in Tracks.Keys)
+        {
+            count++;
+            if (trackIntensity <= intensity)
+            {
+                if (_streams.Count < count)
+                {
+                    AudioParams parameters = AudioParams.Default;
+                    parameters.Loop = true;
+                    parameters.Volume = MinVolume;
+                    
+                    IPlayingAudioStream? stream = AudioSystem.PlayGlobal(Tracks[trackIntensity], _teamFilter, false, parameters);
+                    if (stream == null)
+                        throw new Exception("Could not create new audio stream.");
+                    
+                    _streams.Add(stream);
+                }
+            }
+            else
+            {
+                if (_streams.Count >= count)
+                    _streams.RemoveRange(count - 1, _streams.Count - count + 1); //remove all tracks with higher min intensity
+                return;
+            }
+        }
     }
 }
