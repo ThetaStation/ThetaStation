@@ -30,6 +30,9 @@ public sealed class ShapeRadarForm : IRadarRenderableForm
 
     [DataField("size")]
     public float Size = 1f;
+
+    [DataField("primitiveTopology")]
+    public Enum PrimitiveTopology = SharedDrawPrimitiveTopology.LineStrip;
 }
 
 [Serializable]
@@ -49,4 +52,28 @@ public sealed class CharRadarForm : IRadarRenderableForm
 
     [DataField("scale")]
     public float Scale = 1f;
+}
+
+[Serializable]
+[DataDefinition]
+public sealed class TextureRadarForm : IRadarRenderableForm
+{
+    [DataField("sprite", required: true)]
+    public SpriteSpecifier Sprite = default!;
+
+    [DataField("scale")]
+    public float Scale = 1f;
+}
+
+
+// Full copy of Robust.Client.DrawPrimitiveTopology
+public enum SharedDrawPrimitiveTopology : byte
+{
+    PointList,
+    TriangleList,
+    TriangleFan,
+    TriangleStrip,
+    LineList,
+    LineStrip,
+    LineLoop
 }
