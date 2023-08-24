@@ -33,18 +33,18 @@
   parent: ShuttlePickupAmmo
   components:
     - type: OnShuttleSpawnOnTrigger
-      proto: TurretAmmoContainerMachineGunFilled
+      proto: CartridgeMachineGun
 
 - type: entity
   id: ShuttlePickupAmmoFlak
   parent: ShuttlePickupAmmo
   components:
     - type: OnShuttleSpawnOnTrigger
-      proto: TurretAmmoContainerFlakFilled
+      proto: CartridgeFlak
 
 - type: entity
   id: ShuttlePickupAmmoSPG
   parent: ShuttlePickupAmmo
   components:
     - type: OnShuttleSpawnOnTrigger
-      proto: TurretAmmoContainerSPGFilled
+      proto: CartridgeSPG
