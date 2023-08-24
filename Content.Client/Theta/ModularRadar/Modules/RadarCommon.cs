@@ -1,7 +1,9 @@
 ﻿using System.Numerics;
+using System.Text;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Theta.RadarRenderable;
 using Robust.Client.Graphics;
+using Robust.Client.ResourceManagement;
 using Robust.Shared.Prototypes;
 
 namespace Content.Client.Theta.ModularRadar.Modules;
@@ -9,13 +11,16 @@ namespace Content.Client.Theta.ModularRadar.Modules;
 public sealed class RadarCommon : RadarModule
 {
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private readonly IResourceCache _resourceCache = default!;
     private readonly SharedTransformSystem _transformSystem;
+    private readonly Font _font;
 
     private List<CommonRadarEntityInterfaceState> _all = new();
 
     public RadarCommon(ModularRadarControl parentRadar) : base(parentRadar)
     {
         _transformSystem = EntManager.System<SharedTransformSystem>();
+        _font = new VectorFont(_resourceCache.GetResource<FontResource>("/Fonts/NotoSans/NotoSans-Regular.ttf"), 10);
     }
 
     public override void UpdateState(BoundUserInterfaceState state)
@@ -57,10 +62,15 @@ public sealed class RadarCommon : RadarModule
                     }
                     handle.DrawPrimitives(DrawPrimitiveTopology.LineStrip, verts, color);
                     break;
+                case CharRadarForm charRadarForm:
+                    var uiPositionChar = parameters.DrawMatrix.Transform(position);
+                    uiPositionChar.Y = -uiPositionChar.Y;
+                    uiPositionChar = ScalePosition(uiPositionChar);
+                    _font.DrawChar(handle, new Rune(charRadarForm.Char), uiPositionChar, charRadarForm.Scale, color);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
     }
-
 }
