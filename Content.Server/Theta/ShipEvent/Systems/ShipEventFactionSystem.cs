@@ -935,11 +935,12 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
             if (IsTeamOutOfBounds(team))
             {
+                AddDespair(team, 20);
+                
                 if (!team.OutOfBoundsWarningReceived)
                 {
                     TeamMessage(team, Loc.GetString("shipevent-outofbounds"), color: Color.DarkRed);
                     team.OutOfBoundsWarningReceived = true;
-                    AddDespair(team, 50);
                     continue;
                 }
                 

@@ -1,5 +1,7 @@
+using Content.Shared.Theta.Misc;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
+using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -15,19 +17,15 @@ public sealed partial class ShipEventFactionSystem
     {
         foreach (ShipEventFaction team in Teams)
         {
-            Log.Info($"UpdateMusic: Team {team.Name} has {team.DespairLevel} despair points");
-
             if (team.ActiveMusicConfiguration != null)
             {
                 if (team.DespairLevel == 0)
                 {
-                    Log.Info("Disposing configuration");
                     team.ActiveMusicConfiguration.Dispose();
                     team.ActiveMusicConfiguration = null;
                 }
                 else
                 {
-                    Log.Info("Changing intensity");
                     team.ActiveMusicConfiguration.SetIntensity(team.DespairLevel);
                 }
             }
@@ -35,7 +33,6 @@ public sealed partial class ShipEventFactionSystem
             {
                 if (team.DespairLevel > 0)
                 {
-                    Log.Info("Binding new configuration");
                     ShipEventMusicConfiguration configuration = _random.Pick(MusicConfigurationPrototypes).Configuration.ShallowCopy();
                     configuration.Bind(team, _audioSys);
                     team.ActiveMusicConfiguration = configuration;
@@ -101,25 +98,34 @@ public abstract class ShipEventMusicConfiguration
 /// </summary>
 public sealed class ShipEventSimpleMusicConfiguration : ShipEventMusicConfiguration
 {
+    private IEntityNetworkManager entNetMan = default!;
+    
     [DataField("track", required: true)] 
     public SoundSpecifier? Track;
 
     [DataField("maxVolume")]
-    public int MaxVolume = -1;
+    public float MaxVolume = -1;
     
     [DataField("minVolume")]
-    public int MinVolume = -10;
+    public float MinVolume = -10;
+
+    [DataField("volumeChangeSpeed")] 
+    public float VolumeChangeSpeed = 2;
+
+    private float _currentVolume;
 
     private IPlayingAudioStream? _audioStream;
 
     public override void AfterBind()
     {
+        entNetMan = IoCManager.Resolve<IEntityNetworkManager>();
+
         if (MaxVolume < MinVolume)
             throw new Exception("Maximum volume is lower than minimum volume.");
 
         AudioParams parameters = AudioParams.Default;
         parameters.Loop = true;
-        parameters.Volume = 1;
+        parameters.Volume = MinVolume;
         
         Filter teamFilter = Filter.BroadcastGrid(Team.Ship);
         
@@ -128,20 +134,34 @@ public sealed class ShipEventSimpleMusicConfiguration : ShipEventMusicConfigurat
 
     public override void Dispose()
     {
-        _audioStream?.Stop();
+        if (_audioStream == null)
+            return;
+
+        entNetMan.SendSystemNetworkMessage(new SmoothVolumeChangeMessage( //same as RaiseNetworkEvent() from ent system
+            _audioStream, 
+            0, 
+            0,
+            0,
+            true));
+        
+        _audioStream.Stop();
     }
 
     public override void SetIntensity(byte intensity)
     {
-        if (_audioStream == null)
-        {
+        if (_audioStream == null) 
             return;
-        }
+
+        float newVolume = MinVolume + (float)intensity / byte.MaxValue * (MaxVolume - MinVolume);
         
-        AudioParams parameters = AudioParams.AllNull;
-        parameters.Volume = MinVolume + intensity / byte.MaxValue * (MaxVolume - MinVolume);
-        
-        AudioSystem.SetAudioParams(_audioStream, parameters);
+        entNetMan.SendSystemNetworkMessage(new SmoothVolumeChangeMessage( //same as RaiseNetworkEvent() from ent system
+            _audioStream, 
+            _currentVolume, 
+            newVolume,
+            VolumeChangeSpeed,
+            false));
+
+        _currentVolume = newVolume;
     }
 }
 

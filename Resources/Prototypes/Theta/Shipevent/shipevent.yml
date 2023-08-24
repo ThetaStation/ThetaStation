@@ -61,4 +61,4 @@
       #music
       musicTypes:
         - "test_linear"
-      damagePerDespairLevel: 100
+      damagePerDespairLevel: 50
