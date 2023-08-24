@@ -104,13 +104,13 @@ public sealed class ShipEventSimpleMusicConfiguration : ShipEventMusicConfigurat
     public SoundSpecifier? Track;
 
     [DataField("maxVolume")]
-    public float MaxVolume = -1;
+    public float MaxVolume = 0;
     
     [DataField("minVolume")]
     public float MinVolume = -10;
 
     [DataField("volumeChangeSpeed")] 
-    public float VolumeChangeSpeed = 2;
+    public float VolumeChangeSpeed = 1;
 
     private float _currentVolume;
 
@@ -126,6 +126,7 @@ public sealed class ShipEventSimpleMusicConfiguration : ShipEventMusicConfigurat
         AudioParams parameters = AudioParams.Default;
         parameters.Loop = true;
         parameters.Volume = MinVolume;
+        _currentVolume = MinVolume;
         
         Filter teamFilter = Filter.BroadcastGrid(Team.Ship);
         

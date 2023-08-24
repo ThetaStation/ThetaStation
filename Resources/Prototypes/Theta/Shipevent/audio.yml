@@ -30,3 +30,4 @@
   id: test_linear
   config: !type:ShipEventSimpleMusicConfiguration
     track: /Audio/Theta/Shipevent/Music/tanc_a_lelek.ogg
+    minVolume: -15
