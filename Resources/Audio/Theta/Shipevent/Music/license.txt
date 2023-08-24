@@ -1,3 +1,8 @@
 tanc_a_lelek.ogg: 
 Tanc a lelek by Turjan Aylahn, taken from https://www.jamendo.com/track/868613/tanc-a-lelek
-License: http://creativecommons.org/licenses/by-sa/3.0/
+License: CC BY-SA 3.0
+
+sector11.ogg:
+Sector 11 by MashedByMachines, taken from
+https://www.newgrounds.com/audio/listen/312622
+License: CC BY-NC-SA 3.0

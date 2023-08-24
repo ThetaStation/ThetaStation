@@ -61,5 +61,6 @@
       #music
       musicTypes:
         - "tanc_a_lelek"
+        - "sector11"
         #- "test_layered"
       damagePerDespairLevel: 50
