@@ -122,4 +122,14 @@ public sealed class CCCVars
     /// </summary>
     public static readonly CVarDef<string> DiscordAuthApiKey =
         CVarDef.Create("discord_auth.api_key", "", CVar.SERVERONLY | CVar.CONFIDENTIAL);
+
+    /*
+     * Theta
+     */
+
+    /// <summary>
+    /// Name of the game server in lobby.
+    /// </summary>
+    public static readonly CVarDef<string> ServerNameLobby =
+        CVarDef.Create("game.servername_lobby", "", CVar.ARCHIVE | CVar.REPLICATED | CVar.SERVER);
 }

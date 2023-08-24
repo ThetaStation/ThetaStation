@@ -1,0 +1,7 @@
+artillery.ogg taken from https://freesound.org/people/qubodup/sounds/239137/
+rocket.ogg taken from https://freesound.org/people/MATRIXXX_/sounds/444855/
+plasma.ogg taken from https://freesound.org/people/MountLava/sounds/581176/
+loop_armory.ogg taken from https://github.com/TauCetiStation/TauCetiClassic/commit/51674f012ad8d2ed84fee9e3ca5956a9e971219c used under CC-BY-3.0
+loop_nuke_ops.ogg taken from https://github.com/TauCetiStation/TauCetiClassic/commit/db8a2b7ec910770f7e5148582aea5b89f1cffb06 used under CC-BY-SA-3.0
+syndicate_station.ogg taken from https://github.com/TauCetiStation/TauCetiClassic/commit/710da79e73d654e41cefa489d8d6b9146fc5eac9 used under CC-BY-SA-3.0
+radar_ping.ogg under CC0 1.0 from https://freesound.org/people/BloodPixelHero/sounds/607943/
