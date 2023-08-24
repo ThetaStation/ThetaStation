@@ -124,3 +124,4 @@
     stealthy: true
   - type: Stripping
   - type: SolutionScanner
+  - type: IgnoreUIRange
