@@ -62,6 +62,7 @@
       pickupsPositions: 20
       # in seconds
       pickupsSpawnInterval: 10
+      pickupMinDistance: 100
       pickupsPrototypes: ShipEventPickupsPrototypes
 
 - type: dataset
