@@ -39,6 +39,7 @@ using Robust.Shared.Random;
 using Robust.Shared.Utility;
 using System.Linq;
 using System.Numerics;
+using Content.Server.Maps;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
@@ -131,13 +132,15 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     public ColorPalette ColorPalette = new ShipEventPalette();
 
+    public const string LobbyMapId = "LobbyShipEvent";
+
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, ShipEventTeamViewToggleEvent>(OnViewToggle);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, ShipEventCaptainMenuToggleEvent>(OnCapMenuToggle);
-
+        
         SubscribeLocalEvent<ShipEventReturnToLobbyEvent>(OnReturnToLobbyAction);
         SubscribeLocalEvent<GenericWarningYesPressedMessage>(ReturnToLobbyPlayer);
 
@@ -156,9 +159,27 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         InitializeCaptainMenu();
 
+        SubscribeLocalEvent<LoadingMapsEvent>(OnMapLoad);
         SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEnd);
         SubscribeLocalEvent<RoundEndDiscordTextAppendEvent>(OnRoundEndDiscord);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
+    }
+
+    private void OnMapLoad(LoadingMapsEvent ev)
+    {
+        //this will force lobby map even if it wasn't selected
+        //(since in case if selected map is outside of preset's pool it will just show a warning and continue...)
+        if (!RuleSelected)
+            return;
+        
+        foreach (GameMapPrototype map in ev.Maps)
+        {
+            if (map.ID == LobbyMapId)
+                return;
+        }
+
+        ev.Maps.Clear();
+        ev.Maps.Add(_protMan.Index<GameMapPrototype>(LobbyMapId));
     }
 
     private void OnTeammateSpeak(EntityUid uid, ShipEventFactionMarkerComponent component, EntitySpokeEvent args)
