@@ -146,7 +146,7 @@ namespace Content.Server.Explosion.EntitySystems
 
             _transformSystem.AnchorEntity(uid, xform);
 
-            if (component.RemoveOnTrigger)
+            if(component.RemoveOnTrigger)
                 RemCompDeferred<AnchorOnTriggerComponent>(uid);
         }
 
@@ -206,21 +206,17 @@ namespace Content.Server.Explosion.EntitySystems
             var y = (int) pos.Y;
             var posText = $"({x}, {y})";
 
-            var critMessage = Loc.GetString(component.CritMessage, ("user", implanted.ImplantedEntity.Value),
-                ("position", posText));
-            var deathMessage = Loc.GetString(component.DeathMessage, ("user", implanted.ImplantedEntity.Value),
-                ("position", posText));
+            var critMessage = Loc.GetString(component.CritMessage, ("user", implanted.ImplantedEntity.Value), ("position", posText));
+            var deathMessage = Loc.GetString(component.DeathMessage, ("user", implanted.ImplantedEntity.Value), ("position", posText));
 
             if (!TryComp<MobStateComponent>(implanted.ImplantedEntity, out var mobstate))
                 return;
 
             // Sends a message to the radio channel specified by the implant
             if (mobstate.CurrentState == MobState.Critical)
-                _radioSystem.SendRadioMessage(uid, critMessage,
-                    _prototypeManager.Index<RadioChannelPrototype>(component.RadioChannel), uid);
+                _radioSystem.SendRadioMessage(uid, critMessage, _prototypeManager.Index<RadioChannelPrototype>(component.RadioChannel), uid);
             if (mobstate.CurrentState == MobState.Dead)
-                _radioSystem.SendRadioMessage(uid, deathMessage,
-                    _prototypeManager.Index<RadioChannelPrototype>(component.RadioChannel), uid);
+                _radioSystem.SendRadioMessage(uid, deathMessage, _prototypeManager.Index<RadioChannelPrototype>(component.RadioChannel), uid);
 
             args.Handled = true;
         }
@@ -250,8 +246,7 @@ namespace Content.Server.Explosion.EntitySystems
             args.Handled = Trigger(uid);
         }
 
-        private void OnStepTriggered(EntityUid uid, TriggerOnStepTriggerComponent component,
-            ref StepTriggeredEvent args)
+        private void OnStepTriggered(EntityUid uid, TriggerOnStepTriggerComponent component, ref StepTriggeredEvent args)
         {
             Trigger(uid, args.Tripper);
         }
@@ -273,8 +268,7 @@ namespace Content.Server.Explosion.EntitySystems
             return triggerEvent.Handled;
         }
 
-        public void HandleTimerTrigger(EntityUid uid, EntityUid? user, float delay, float beepInterval,
-            float? initialBeepDelay, SoundSpecifier? beepSound)
+        public void HandleTimerTrigger(EntityUid uid, EntityUid? user, float delay, float beepInterval, float? initialBeepDelay, SoundSpecifier? beepSound)
         {
             if (delay <= 0)
             {
@@ -294,10 +288,8 @@ namespace Content.Server.Explosion.EntitySystems
                     TryComp(container.ContainedEntities[0], out ChemicalPayloadComponent? chemicalPayloadComponent))
                 {
                     // If a beaker is missing, the entity won't explode, so no reason to log it
-                    if (!TryComp(chemicalPayloadComponent?.BeakerSlotA.Item,
-                            out SolutionContainerManagerComponent? beakerA) ||
-                        !TryComp(chemicalPayloadComponent?.BeakerSlotB.Item,
-                            out SolutionContainerManagerComponent? beakerB))
+                    if (!TryComp(chemicalPayloadComponent?.BeakerSlotA.Item, out SolutionContainerManagerComponent? beakerA) ||
+                        !TryComp(chemicalPayloadComponent?.BeakerSlotB.Item, out SolutionContainerManagerComponent? beakerB))
                         return;
 
                     _adminLogger.Add(LogType.Trigger,
