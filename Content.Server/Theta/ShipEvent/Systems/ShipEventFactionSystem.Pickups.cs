@@ -48,7 +48,7 @@ public sealed partial class ShipEventFactionSystem
             var randomY = _random.Next((int) areaBounds.Bottom, (int) areaBounds.Top);
 
             var mapPos = new MapCoordinates(randomX, randomY, TargetMap);
-            if(_mapMan.TryFindGridAt(mapPos, out _, out _) || !CanPlacePickupPosition(mapPos))
+            if(!CanPlacePickupPosition(mapPos))
             {
                 attempts++;
                 continue;
@@ -61,6 +61,9 @@ public sealed partial class ShipEventFactionSystem
 
     private bool CanPlacePickupPosition(MapCoordinates coordinates)
     {
+        if (_mapMan.TryFindGridAt(coordinates, out _, out _))
+            return false;
+        
         foreach (var otherPos in PickupPositions)
         {
             if (coordinates.InRange(otherPos, PickupMinDistance))
