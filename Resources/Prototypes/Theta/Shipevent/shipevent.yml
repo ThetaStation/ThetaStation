@@ -60,8 +60,7 @@
 
       #pickups
       pickupsPositions: 20
-      # in seconds
-      pickupsSpawnInterval: 10
+      pickupsSpawnInterval: 60 # in seconds
       pickupMinDistance: 100
       pickupsPrototypes: ShipEventPickupsPrototypes
 
