@@ -16,6 +16,18 @@
       heldPrefix: singularitytoy
 
 - type: entity
+  id: ShuttlePickupHeal
+  name: heal shuttle pickup
+  parent: ShuttlePickup
+  components:
+    - type: DeleteOnTrigger
+    - type: HealGrid
+      healths: 5000
+    - type: RadarRenderable
+      radarView: healContainer
+      group: enum.RadarRenderableGroup.Pickup
+
+- type: entity
   id: ShuttlePickupAmmo
   name: ammo shuttle pickup
   parent: ShuttlePickup

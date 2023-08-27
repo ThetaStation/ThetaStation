@@ -33,3 +33,9 @@
   defaultColor: "#ffff00"
   form: enum.OnRadarForms.Circle
   size: 3
+
+- type: radarEntityView
+  id: healContainer
+  defaultColor: "#00ff00"
+  form: enum.OnRadarForms.Circle
+  size: 3
