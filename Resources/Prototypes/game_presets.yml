@@ -110,4 +110,4 @@
   showInVote: true
   rules:
     - ShipEvent
-  supportedMaps: ShipeventMapPool
+  supportedMaps: ShipEventMapPool
