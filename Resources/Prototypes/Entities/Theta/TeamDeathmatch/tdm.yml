@@ -1,31 +1,95 @@
 - type: entity
   id: TDMObeliskRed
+  name: red obelisk
   parent: BaseStructure
   placement:
     mode: SnapgridCenter
-    components:
-      - type: Transform
-        anchored: true
-      - type: Sprite
-        drawdepth: Mobs
-        sprite: /Textures/Theta/TDM/Obelisk.rsi
-        state: red
-      - type: TeamDeathmatchObelisk
-      - type: TeamDeathmatchMarker
-        team: true
-
+  components:
+    - type: Transform
+      anchored: true
+    - type: Sprite
+      drawdepth: Objects
+      sprite: Theta/TDM/Obelisk.rsi
+      state: red
+    - type: InteractionOutline
+    - type: Physics
+      bodyType: Static
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape:
+            !type:PhysShapeAabb {}
+          mask:
+            - FullTileMask
+          layer:
+            - WallLayer
+    - type: Damageable
+      damageContainer: Inorganic
+      damageModifierSet: Metallic
+    - type: Destructible
+      thresholds:
+        - trigger:
+            !type:DamageTrigger
+            damage: 500
+          behaviors:
+            - !type:PlaySoundBehavior
+              sound: !type:SoundPathSpecifier
+                path: "/Audio/Effects/metalbreak.ogg"
+            - !type:SpawnEntitiesBehavior
+              spawn:
+                SheetSteel:
+                  min: 3
+                  max: 5
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+    - type: TeamDeathmatchObelisk
+    - type: TeamDeathmatchMarker
+      team: true
+      
 - type: entity
   id: TDMObeliskBlue
+  name: blue obelisk
   parent: BaseStructure
   placement:
     mode: SnapgridCenter
-    components:
-      - type: Transform
-        anchored: true
-      - type: Sprite
-        drawdepth: Mobs
-        sprite: /Textures/Theta/TDM/Obelisk.rsi
-        state: blue
-      - type: TeamDeathmatchObelisk
-      - type: TeamDeathmatchMarker
-        team: false
+  components:
+    - type: Transform
+      anchored: true
+    - type: Sprite
+      drawdepth: Objects
+      sprite: Theta/TDM/Obelisk.rsi
+      state: blue
+    - type: InteractionOutline
+    - type: Physics
+      bodyType: Static
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape:
+            !type:PhysShapeAabb {}
+          mask:
+            - FullTileMask
+          layer:
+            - WallLayer
+    - type: Damageable
+      damageContainer: Inorganic
+      damageModifierSet: Metallic
+    - type: Destructible
+      thresholds:
+        - trigger:
+            !type:DamageTrigger
+            damage: 500
+          behaviors:
+            - !type:PlaySoundBehavior
+              sound: !type:SoundPathSpecifier
+                path: "/Audio/Effects/metalbreak.ogg"
+            - !type:SpawnEntitiesBehavior
+              spawn:
+                SheetSteel:
+                  min: 3
+                  max: 5
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+    - type: TeamDeathmatchObelisk
+    - type: TeamDeathmatchMarker
+      team: false

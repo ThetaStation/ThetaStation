@@ -20,10 +20,11 @@ public sealed class TeamDeathmatchRule : GameRuleSystem<TeamDeathmatchRuleCompon
 
     protected override void Started(EntityUid uid, TeamDeathmatchRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
-        _tdmSys.RuleSelected = true;
         base.Started(uid, component, gameRule, args);
+        _tdmSys.RuleSelected = true;
         _tdmSys.RespawnDelay = component.RespawnDelay;
         _tdmSys.BonusKillsForObelisk = component.BonusKillsForObelisk;
         _tdmSys.GunPrototypes = component.GunPrototypes;
+        _tdmSys.UpdateSpawnPositions();
     }
 }

@@ -11,7 +11,9 @@
       respawnDelay: 10
       bonusKillsForObelisk: 10
       gunPrototypes:
-        - "WeaponRevolverPythonAP"
+        - "WeaponRevolverPython"
+        - "WeaponSniperMosin"
         - "WeaponLaserCannon"
         - "WeaponShotgunKammerer"
-        - "WeaponRifleAk"
+        - "WeaponSubMachineGunWt550"
+        - "WeaponSubMachineGunC20r"
