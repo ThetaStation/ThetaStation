@@ -42,5 +42,11 @@ namespace Content.Server.GameTicking.Presets
         /// </summary>
         [DataField("supportedMaps", customTypeSerializer: typeof(PrototypeIdSerializer<GameMapPoolPrototype>))]
         public readonly string? MapPool;
+
+        /// <summary>
+        /// If set, will forcefully select map from supported maps if non eligible map was previously selected
+        /// </summary>
+        [DataField("forceMap")] 
+        public readonly bool ForceMap;
     }
 }

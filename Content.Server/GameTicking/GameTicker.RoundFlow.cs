@@ -89,7 +89,7 @@ namespace Content.Server.GameTicking
 
             DefaultMap = _mapManager.CreateMap();
             _mapManager.AddUninitializedMap(DefaultMap);
-
+            
             var maps = new List<GameMapPrototype>();
 
             // the map might have been force-set by something
@@ -122,6 +122,13 @@ namespace Content.Server.GameTicking
                     ("mode", Loc.GetString(CurrentPreset.ModeTitle)));
                 Log.Debug(msg);
                 SendServerMessage(msg);
+
+                if (CurrentPreset.ForceMap)
+                {
+                    Log.Debug("Preset has 'ForceMap' set; Forcing (first) map from supported map pool.");
+                    maps.Clear();
+                    maps.Add(_prototypeManager.Index<GameMapPrototype>(pool.Maps.First()));
+                }
             }
 
             // Let game rules dictate what maps we should load.
