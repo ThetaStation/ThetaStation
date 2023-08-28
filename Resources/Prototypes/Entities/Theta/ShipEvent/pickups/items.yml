@@ -36,6 +36,7 @@
     - type: DeleteOnTrigger
     - type: OnShuttleSpawnOnTrigger
       proto: MachineGunAmmoClosetShipEvent
+      targetTeleportId: ShipEventLoot
     - type: RadarRenderable
       radarView: ammoContainer
       group: enum.RadarRenderableGroup.Pickup
@@ -70,6 +71,7 @@
     - type: DeleteOnTrigger
     - type: OnShuttleSpawnOnTrigger
       proto: LootboxSpawnTriggerItem
+      targetTeleportId: ShipEventLoot
     - type: RadarRenderable
       radarView: randomPower
       group: enum.RadarRenderableGroup.Pickup

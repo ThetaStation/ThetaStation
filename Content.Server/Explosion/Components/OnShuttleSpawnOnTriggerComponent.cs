@@ -8,4 +8,7 @@ public sealed class OnShuttleSpawnOnTriggerComponent : Component
 {
     [ViewVariables(VVAccess.ReadWrite), DataField("proto", required: true, customTypeSerializer:typeof(PrototypeIdSerializer<EntityPrototype>))]
     public string Proto = string.Empty;
+
+    [ViewVariables(VVAccess.ReadWrite), DataField("targetTeleportId", required: true)]
+    public string TargetTeleportId = string.Empty;
 }

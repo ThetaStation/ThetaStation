@@ -118,9 +118,9 @@ namespace Content.Server.Explosion.EntitySystems
                 return;
 
             var coords = new List<EntityCoordinates>();
-            foreach (var (_, _, transform) in EntityQuery<MindContainerComponent, HumanoidAppearanceComponent, TransformComponent>())
+            foreach (var (teleportPoint, transform) in EntityQuery<TeleportPointComponent, TransformComponent>())
             {
-                if (transform.GridUid == args.User)
+                if (transform.GridUid == args.User && component.TargetTeleportId == teleportPoint.TeleportId)
                     coords.Add(transform.Coordinates);
             }
 
