@@ -1,0 +1,4 @@
+- type: gameMapPool
+  id: TeamDeathmatchMapPool
+  maps:
+    - Arena1

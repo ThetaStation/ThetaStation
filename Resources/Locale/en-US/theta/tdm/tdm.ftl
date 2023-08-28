@@ -1,0 +1,9 @@
+tdm-title = Team deathmatch
+tdm-desc = Battle between two teams; Objective - score more frags than the enemy team.
+tdm-dead = DO NOT LEAVE THE BODY! You will be returned to the game in { $seconds } seconds.
+tdm-obelisk-damaged = Your obelisk is under attack!
+tdm-obelisk-destroyed-red = Red obelisk is destroyed! { $bonus } kills have been added to the blue team.
+tdm-obelisk-destroyed-blue = Blue obelisk is destroyed! { $bonus } kills have been added to the red team.
+tdm-win-red = Red team won!
+tdm-win-blue = Blue team won!
+tdm-kills = Red team scored { $redkills } kills, and blue one got { $bluekills }.

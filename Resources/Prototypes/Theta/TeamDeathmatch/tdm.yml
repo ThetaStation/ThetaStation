@@ -1,0 +1,17 @@
+- type: entity
+  noSpawn: true
+  id: TeamDeathmatch
+  parent: BaseGameRule
+  components:
+    - type: TeamDeathmatchRule
+      id: TeamDeathmatch
+      maxOccurrences: 0
+      endAfter: 1
+
+      respawnDelay: 10
+      bonusKillsForObelisk: 10
+      gunPrototypes:
+        - "WeaponRevolverPythonAP"
+        - "WeaponLaserCannon"
+        - "WeaponShotgunKammerer"
+        - "WeaponRifleAk"

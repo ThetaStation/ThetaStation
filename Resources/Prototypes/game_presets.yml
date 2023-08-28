@@ -59,7 +59,7 @@
     - dm
   name: death-match-title
   description: death-match-description
-  showInVote: true
+  showInVote: false #it sucks
   rules:
     - DeathMatch
 
@@ -100,6 +100,7 @@
     - Pirates
     - BasicStationEventScheduler
 
+#Theta game modes!!!
 - type: gamePreset
   id: ShipBattle
   alias:
@@ -111,3 +112,17 @@
   rules:
     - ShipEvent
   supportedMaps: ShipEventMapPool
+  forceMap: true
+  
+- type: gamePreset
+  id: TeamDeathmatch
+  alias:
+    - tdm
+    - teamfortress
+  name: tdm-title
+  description: tdm-desc
+  showInVote: true
+  rules:
+    - TeamDeathmatch
+  supportedMaps: TeamDeathmatchMapPool
+  forceMap: true

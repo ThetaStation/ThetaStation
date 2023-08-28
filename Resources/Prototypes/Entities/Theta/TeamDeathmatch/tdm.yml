@@ -1,0 +1,31 @@
+- type: entity
+  id: TDMObeliskRed
+  parent: BaseStructure
+  placement:
+    mode: SnapgridCenter
+    components:
+      - type: Transform
+        anchored: true
+      - type: Sprite
+        drawdepth: Mobs
+        sprite: /Textures/Theta/TDM/Obelisk.rsi
+        state: red
+      - type: TeamDeathmatchObelisk
+      - type: TeamDeathmatchMarker
+        team: true
+
+- type: entity
+  id: TDMObeliskBlue
+  parent: BaseStructure
+  placement:
+    mode: SnapgridCenter
+    components:
+      - type: Transform
+        anchored: true
+      - type: Sprite
+        drawdepth: Mobs
+        sprite: /Textures/Theta/TDM/Obelisk.rsi
+        state: blue
+      - type: TeamDeathmatchObelisk
+      - type: TeamDeathmatchMarker
+        team: false
