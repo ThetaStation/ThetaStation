@@ -55,6 +55,13 @@
     char: 'A'
 
 - type: radarEntityView
+  id: randomPower
+  defaultColor: "#ffffff"
+  form:
+    !type:CharRadarForm
+    char: '?'
+
+- type: radarEntityView
   id: healContainer
   defaultColor: "#00ff00"
   form:

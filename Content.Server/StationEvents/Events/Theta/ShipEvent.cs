@@ -7,6 +7,7 @@ using Content.Shared.Theta.ShipEvent;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Server.Theta.ShipEvent.Systems;
 using Content.Shared.Dataset;
+using Content.Shared.Random;
 using Content.Shared.Shuttles.Components;
 using Robust.Server.Player;
 using Robust.Shared.Map;
@@ -70,6 +71,8 @@ public sealed class ShipEventRuleComponent : Component
 
     [DataField("lootboxSpawnInterval")] public int LootboxSpawnInterval;
 
+    [DataField("lootboxEnabled")] public bool LootboxEnabled;
+
     [DataField("lootboxSpawnAmount")] public int LootboxSpawnAmount;
 
     [DataField("lootboxLifetime")] public float LootboxLifetime;
@@ -83,7 +86,7 @@ public sealed class ShipEventRuleComponent : Component
 
     [DataField("pickupMinDistance")] public float PickupMinDistance;
 
-    [DataField("pickupsPrototypes", customTypeSerializer: typeof(PrototypeIdSerializer<DatasetPrototype>))]
+    [DataField("pickupsPrototypes", customTypeSerializer: typeof(PrototypeIdSerializer<WeightedRandomEntityPrototype>))]
     public string PickupsPrototypes = default!;
 }
 
@@ -153,6 +156,7 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         _shipSys.LootboxSpawnInterval = component.LootboxSpawnInterval;
         _shipSys.LootboxSpawnAmount = component.LootboxSpawnAmount;
         _shipSys.LootboxLifetime = component.LootboxLifetime;
+        _shipSys.LootboxEnabled = component.LootboxEnabled;
 
         foreach (var shipTypeProtId in component.ShipTypes)
         {

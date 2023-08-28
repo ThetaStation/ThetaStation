@@ -45,18 +45,73 @@
   parent: ShuttlePickupAmmo
   components:
     - type: OnShuttleSpawnOnTrigger
-      proto: CartridgeMachineGun
+      proto: TurretAmmoContainerMachineGunFilled
 
 - type: entity
   id: ShuttlePickupAmmoFlak
   parent: ShuttlePickupAmmo
   components:
     - type: OnShuttleSpawnOnTrigger
-      proto: CartridgeFlak
+      proto: TurretAmmoContainerFlakFilled
 
 - type: entity
   id: ShuttlePickupAmmoSPG
   parent: ShuttlePickupAmmo
   components:
     - type: OnShuttleSpawnOnTrigger
-      proto: CartridgeSPG
+      proto: TurretAmmoContainerSPGFilled
+
+- type: entity
+  id: ShuttlePickupPower
+  name: powers shuttle pickup
+  parent: ShuttlePickup
+  abstract: true
+  components:
+    - type: DeleteOnTrigger
+    - type: OnShuttleSpawnOnTrigger
+      proto: LootboxSpawnTriggerItem
+    - type: RadarRenderable
+      radarView: randomPower
+      group: enum.RadarRenderableGroup.Pickup
+
+- type: entity
+  id: ShuttlePickupPowerCaller
+  parent: ShuttlePickupPower
+  components:
+    - type: OnShuttleSpawnOnTrigger
+      proto: LootboxSpawnTriggerItem
+
+- type: entity
+  id: ShuttlePickupPowerPoints
+  parent: ShuttlePickupPower
+  components:
+    - type: OnShuttleSpawnOnTrigger
+      proto: PointStorageItem
+
+- type: entity
+  id: ShuttlePickupPowerFlakHE
+  parent: ShuttlePickupPower
+  components:
+    - type: OnShuttleSpawnOnTrigger
+      proto: TurretAmmoContainerFlakHEFilled
+
+- type: entity
+  id: ShuttlePickupPowerFlakEMP
+  parent: ShuttlePickupPower
+  components:
+    - type: OnShuttleSpawnOnTrigger
+      proto: TurretAmmoContainerFlakEMPFilled
+
+- type: entity
+  id: ShuttlePickupPowerRCD
+  parent: ShuttlePickupPower
+  components:
+    - type: OnShuttleSpawnOnTrigger
+      proto: ShipEventRCD
+
+- type: entity
+  id: ShuttlePickupPowerPlasmaGun
+  parent: ShuttlePickupPower
+  components:
+    - type: OnShuttleSpawnOnTrigger
+      proto: ShipEventPlasmaGun

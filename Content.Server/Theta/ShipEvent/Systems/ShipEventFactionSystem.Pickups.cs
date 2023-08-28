@@ -1,4 +1,5 @@
 ﻿using Content.Shared.Dataset;
+using Content.Shared.Random;
 using Content.Shared.Random.Helpers;
 using Robust.Shared.Map;
 
@@ -63,7 +64,7 @@ public sealed partial class ShipEventFactionSystem
     {
         if (_mapMan.TryFindGridAt(coordinates, out _, out _))
             return false;
-        
+
         foreach (var otherPos in PickupPositions)
         {
             if (coordinates.InRange(otherPos, PickupMinDistance))
@@ -77,8 +78,8 @@ public sealed partial class ShipEventFactionSystem
     {
         foreach (var mapPos in PickupPositions)
         {
-            var pickupPrototype = _random.Pick(_protMan.Index<DatasetPrototype>(PickupsDatasetPrototype));
-            var entityUid = Spawn(pickupPrototype, mapPos);
+            var weight = _protMan.Index<WeightedRandomEntityPrototype>(PickupsDatasetPrototype);
+            var entityUid = Spawn(weight.Pick(_random), mapPos);
             Pickups.Add(entityUid);
         }
     }

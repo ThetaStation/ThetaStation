@@ -101,11 +101,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     public float TeamCheckInterval;
     public float RespawnDelay;
 
-    public float LootboxSpawnInterval;
-    public int LootboxSpawnAmount;
-    public float LootboxLifetime;
-    public List<StructurePrototype> LootboxPrototypes = new();
-
     public int MaxSpawnOffset;
 
     public int BonusInterval;
@@ -151,14 +146,11 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, MindTransferredMessage>(OnPlayerTransfer);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, EntitySpokeEvent>(OnTeammateSpeak);
 
-        SubscribeLocalEvent<ShipEventLootboxSpawnTriggerComponent, UseInHandEvent>(OnLootboxSpawnTriggered);
-        SubscribeLocalEvent<ShipEventPointStorageComponent, UseInHandEvent>(OnPointStorageTriggered);
-
         SubscribeAllEvent<ShuttleConsoleChangeShipNameMessage>(OnShipNameChange); //un-directed event since we will have duplicate subscriptions otherwise
         SubscribeAllEvent<GetShipPickerInfoMessage>(OnShipPickerInfoRequest);
         SubscribeAllEvent<BoundsOverlayInfoRequest>(OnBoundsOverlayInfoRequest);
-        SubscribeAllEvent<LootboxInfoRequest>(OnLootboxInfoRequest);
 
+        InitializeLootboxPart();
         InitializeCaptainMenu();
 
         SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEnd);

@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Server.Theta.DebrisGeneration.Prototypes;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Theta.ShipEvent;
@@ -11,7 +12,20 @@ namespace Content.Server.Theta.ShipEvent.Systems;
 
 public sealed partial class ShipEventFactionSystem
 {
+    public bool LootboxEnabled;
+    public float LootboxSpawnInterval;
+    public int LootboxSpawnAmount;
+    public float LootboxLifetime;
+    public List<StructurePrototype> LootboxPrototypes = new();
+
     public List<(EntityUid, float)> Lootboxes = new();
+
+    private void InitializeLootboxPart()
+    {
+        SubscribeLocalEvent<ShipEventLootboxSpawnTriggerComponent, UseInHandEvent>(OnLootboxSpawnTriggered);
+        SubscribeLocalEvent<ShipEventPointStorageComponent, UseInHandEvent>(OnPointStorageTriggered);
+        SubscribeAllEvent<LootboxInfoRequest>(OnLootboxInfoRequest);
+    }
 
     private void OnLootboxInfoRequest(LootboxInfoRequest msg, EntitySessionEventArgs args)
     {
@@ -61,6 +75,9 @@ public sealed partial class ShipEventFactionSystem
 
     private void CheckLootboxTimer(float deltaTime)
     {
+        if(!LootboxEnabled)
+            return;
+
         if (_lootboxTimer > LootboxSpawnInterval)
         {
             _lootboxTimer -= LootboxSpawnInterval;
