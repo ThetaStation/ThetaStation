@@ -23,6 +23,11 @@
     - type: DeleteOnTrigger
     - type: HealGrid
       healths: 5000
+    - type: EmitSoundOnTrigger
+      sound:
+        collection: BikeHorn
+        params:
+          variation: 0.125
     - type: RadarRenderable
       radarView: healContainer
       group: enum.RadarRenderableGroup.Pickup
@@ -37,6 +42,11 @@
     - type: OnShuttleSpawnOnTrigger
       proto: MachineGunAmmoClosetShipEvent
       targetTeleportId: ShipEventLoot
+    - type: EmitSoundOnTrigger
+      sound:
+        collection: BikeHorn
+        params:
+          variation: 0.125
     - type: RadarRenderable
       radarView: ammoContainer
       group: enum.RadarRenderableGroup.Pickup
@@ -72,6 +82,11 @@
     - type: OnShuttleSpawnOnTrigger
       proto: LootboxSpawnTriggerItem
       targetTeleportId: ShipEventLoot
+    - type: EmitSoundOnTrigger
+      sound:
+        collection: BikeHorn
+        params:
+          variation: 0.125
     - type: RadarRenderable
       radarView: randomPower
       group: enum.RadarRenderableGroup.Pickup
