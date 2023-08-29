@@ -1,4 +1,4 @@
-using System.Numerics;
+﻿using System.Numerics;
 using Content.Client.Weapons.Ranged.Systems;
 using Content.Shared.Theta.ShipEvent;
 using Robust.Shared.Timing;
@@ -75,8 +75,6 @@ public sealed class CannonSystem : SharedCannonSystem
         if (!_timing.IsFirstTimePredicted)
             return;
 
-        Firing();
-
         var aggregateByVector = new Dictionary<Vector2, List<EntityUid>>();
         foreach (var (uid, vector2) in _toUpdateRotation)
         {
@@ -94,6 +92,8 @@ public sealed class CannonSystem : SharedCannonSystem
         {
             RaiseNetworkEvent(new RotateCannonsEvent(coordinates, list));
         }
+
+        Firing();
 
         _toUpdateRotation.Clear();
     }

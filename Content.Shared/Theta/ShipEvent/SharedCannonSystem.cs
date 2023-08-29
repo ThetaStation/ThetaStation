@@ -5,6 +5,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Serialization;
 using System.Numerics;
+using Content.Shared.Interaction.Events;
 
 namespace Content.Shared.Theta.ShipEvent;
 
@@ -22,6 +23,13 @@ public abstract class SharedCannonSystem : EntitySystem
         SubscribeAllEvent<RequestStopCannonShootEvent>(OnStopShootRequest);
         SubscribeLocalEvent<CannonComponent, AnchorStateChangedEvent>(OnAnchorChanged);
         SubscribeLocalEvent<CannonComponent, ComponentInit>(OnInit);
+        SubscribeLocalEvent<CannonComponent, ChangeDirectionAttemptEvent>(OnAttemptRotate);
+    }
+
+    private void OnAttemptRotate(EntityUid uid, CannonComponent component, ChangeDirectionAttemptEvent args)
+    {
+        if(!component.Rotatable)
+            args.Cancel();
     }
 
     private void OnInit(EntityUid uid, CannonComponent cannon, ComponentInit args)
@@ -46,18 +54,16 @@ public abstract class SharedCannonSystem : EntitySystem
             return;
         }
 
-        var mapCoords = new MapCoordinates(ev.Coordinates, Transform(ev.CannonUid).MapID);
-        var relCoords = EntityCoordinates.FromMap(ev.CannonUid, mapCoords, _transform);
+        var cannonTransform = Transform(ev.CannonUid);
+        if (cannonTransform.GridUid == null)
+        {
+            StopShoot(ev.CannonUid);
+            return;
+        }
 
-        if (cannon.Rotatable)
-        {
-            _gunSystem.AttemptShoot(ev.PilotUid, ev.CannonUid, gun, relCoords);
-        }
-        else
-        {
-            Vector2 vec = Transform(ev.CannonUid).LocalRotation.ToVec() * 10;
-            _gunSystem.AttemptShoot(ev.PilotUid, ev.CannonUid, gun, new EntityCoordinates(ev.CannonUid, vec));
-        }
+        var angleVector = cannonTransform.LocalRotation.ToWorldVec();
+        var angleCoords = new EntityCoordinates(cannonTransform.GridUid.Value, angleVector);
+        _gunSystem.AttemptShoot(ev.PilotUid, ev.CannonUid, gun, angleCoords + cannonTransform.Coordinates);
     }
 
     public Angle Max(params Angle[] args)

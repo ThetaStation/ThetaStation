@@ -23,6 +23,7 @@
         name: action-name-combat
     - type: Actions
     - type: Cannon
+      rotatable: false
     - type: Gun
     - type: Sprite
       netsync: false
@@ -105,7 +106,6 @@
         - "CartridgeFlak"
         - "CartridgeFlakHE"
         - "CartridgeFlakEMP"
-      rotatable: false
     - type: Sprite
       layers:
         - state: syndie_lethal
