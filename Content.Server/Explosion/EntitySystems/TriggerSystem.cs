@@ -8,6 +8,7 @@ using Content.Server.Flash.Components;
 using Content.Server.Mind.Components;
 using Content.Server.Radio.EntitySystems;
 using Content.Server.Shuttles.Components;
+using Content.Server.Theta.TeleportationBeacon;
 using Content.Shared.Database;
 using Content.Shared.Humanoid;
 using Content.Shared.Implants.Components;
@@ -90,7 +91,7 @@ namespace Content.Server.Explosion.EntitySystems
 
             SubscribeLocalEvent<TriggerOnChangedParentComponent, EntParentChangedMessage>(OnEntParentChanged);
             SubscribeLocalEvent<TriggerOnCollideShuttleComponent, StartCollideEvent>(OnTriggerCollideShuttle);
-            SubscribeLocalEvent<OnShuttleSpawnOnTriggerComponent, TriggerEvent>(OnShuttleSpawnTrigger);
+            SubscribeLocalEvent<ShuttlePickableComponent, TriggerEvent>(OnShuttleSpawnTrigger);
 
             SubscribeLocalEvent<SpawnOnTriggerComponent, TriggerEvent>(OnSpawnTrigger);
             SubscribeLocalEvent<DeleteOnTriggerComponent, TriggerEvent>(HandleDeleteTrigger);
@@ -112,13 +113,13 @@ namespace Content.Server.Explosion.EntitySystems
                 Trigger(uid, grid);
         }
 
-        private void OnShuttleSpawnTrigger(EntityUid uid, OnShuttleSpawnOnTriggerComponent component, TriggerEvent args)
+        private void OnShuttleSpawnTrigger(EntityUid uid, ShuttlePickableComponent component, TriggerEvent args)
         {
             if (args.User == null || !HasComp<ShuttleComponent>(args.User))
                 return;
 
             var coords = new List<EntityCoordinates>();
-            foreach (var (teleportPoint, transform) in EntityQuery<TeleportPointComponent, TransformComponent>())
+            foreach (var (teleportPoint, transform) in EntityQuery<TeleportationBeaconComponent, TransformComponent>())
             {
                 if (transform.GridUid == args.User && component.TargetTeleportId == teleportPoint.TeleportId)
                     coords.Add(transform.Coordinates);

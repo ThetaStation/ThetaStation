@@ -22,7 +22,7 @@
   components:
     - type: DeleteOnTrigger
     - type: HealGrid
-      healths: 5000
+      health: 5000
     - type: EmitSoundOnTrigger
       sound:
         collection: BikeHorn
@@ -39,7 +39,7 @@
   abstract: true
   components:
     - type: DeleteOnTrigger
-    - type: OnShuttleSpawnOnTrigger
+    - type: ShuttlePickable
       proto: MachineGunAmmoClosetShipEvent
       targetTeleportId: ShipEventLoot
     - type: EmitSoundOnTrigger
@@ -55,21 +55,21 @@
   id: ShuttlePickupAmmoMachineGun
   parent: ShuttlePickupAmmo
   components:
-    - type: OnShuttleSpawnOnTrigger
+    - type: ShuttlePickable
       proto: TurretAmmoContainerMachineGunFilled
 
 - type: entity
   id: ShuttlePickupAmmoFlak
   parent: ShuttlePickupAmmo
   components:
-    - type: OnShuttleSpawnOnTrigger
+    - type: ShuttlePickable
       proto: TurretAmmoContainerFlakFilled
 
 - type: entity
   id: ShuttlePickupAmmoSPG
   parent: ShuttlePickupAmmo
   components:
-    - type: OnShuttleSpawnOnTrigger
+    - type: ShuttlePickable
       proto: TurretAmmoContainerSPGFilled
 
 - type: entity
@@ -79,7 +79,7 @@
   abstract: true
   components:
     - type: DeleteOnTrigger
-    - type: OnShuttleSpawnOnTrigger
+    - type: ShuttlePickable
       proto: LootboxSpawnTriggerItem
       targetTeleportId: ShipEventLoot
     - type: EmitSoundOnTrigger
@@ -95,40 +95,40 @@
   id: ShuttlePickupPowerCaller
   parent: ShuttlePickupPower
   components:
-    - type: OnShuttleSpawnOnTrigger
+    - type: ShuttlePickable
       proto: LootboxSpawnTriggerItem
 
 - type: entity
   id: ShuttlePickupPowerPoints
   parent: ShuttlePickupPower
   components:
-    - type: OnShuttleSpawnOnTrigger
+    - type: ShuttlePickable
       proto: PointStorageItem
 
 - type: entity
   id: ShuttlePickupPowerFlakHE
   parent: ShuttlePickupPower
   components:
-    - type: OnShuttleSpawnOnTrigger
+    - type: ShuttlePickable
       proto: TurretAmmoContainerFlakHEFilled
 
 - type: entity
   id: ShuttlePickupPowerFlakEMP
   parent: ShuttlePickupPower
   components:
-    - type: OnShuttleSpawnOnTrigger
+    - type: ShuttlePickable
       proto: TurretAmmoContainerFlakEMPFilled
 
 - type: entity
   id: ShuttlePickupPowerRCD
   parent: ShuttlePickupPower
   components:
-    - type: OnShuttleSpawnOnTrigger
+    - type: ShuttlePickable
       proto: ShipEventRCD
 
 - type: entity
   id: ShuttlePickupPowerPlasmaGun
   parent: ShuttlePickupPower
   components:
-    - type: OnShuttleSpawnOnTrigger
+    - type: ShuttlePickable
       proto: ShipEventPlasmaGun

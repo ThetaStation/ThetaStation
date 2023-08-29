@@ -36,6 +36,6 @@
       powerLoad: 1000
     - type: Appearance
     - type: CollideOnAnchor
-    - type: TeleportPoint
+    - type: TeleportationBeacon
       teleportId: ShipEventLoot
 
