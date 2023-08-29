@@ -1,4 +1,4 @@
-﻿using Content.Shared.Theta.ShipEvent.Components;
+using Content.Shared.Theta.ShipEvent.Components;
 using Content.Shared.Weapons.Ranged.Components;
 using Robust.Shared.GameStates;
 
@@ -36,4 +36,7 @@ public sealed partial class CannonComponent : Component
     //which creates awkward situations when ranges are generated only for the 2 random walls.
     //todo: fix map loader to avoid this (or if it's intended behaviour to init components on half-loaded map, add some event after map was fully loaded to build ranges after it)
     public bool FirstAnchor = true;
+
+    [DataField("rotatable")]
+    public bool Rotatable = true;
 }

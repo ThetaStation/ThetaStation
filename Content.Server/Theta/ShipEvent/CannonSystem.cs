@@ -1,12 +1,11 @@
-﻿using System.Numerics;
 using Content.Server.Theta.ShipEvent.Components;
+using Content.Server.Theta.ShipEvent.Systems;
 using Content.Shared.Interaction;
 using Content.Shared.Theta.ShipEvent;
-using Content.Shared.Theta.ShipEvent.UI;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Shared.Physics.Components;
-using Content.Server.Theta.ShipEvent.Systems;
+using System.Numerics;
 
 namespace Content.Server.Theta.ShipEvent;
 
@@ -161,6 +160,10 @@ public sealed class CannonSystem : SharedCannonSystem
     {
         foreach (var uid in ev.Cannons)
         {
+            var cannon = EntityManager.GetComponent<CannonComponent>(uid);
+            if (!cannon.Rotatable)
+                continue;
+
             _rotateToFaceSystem.TryFaceCoordinates(uid, ev.Coordinates);
         }
     }

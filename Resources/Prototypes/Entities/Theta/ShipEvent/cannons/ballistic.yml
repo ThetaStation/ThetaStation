@@ -105,6 +105,7 @@
         - "CartridgeFlak"
         - "CartridgeFlakHE"
         - "CartridgeFlakEMP"
+      rotatable: false
     - type: Sprite
       layers:
         - state: syndie_lethal
