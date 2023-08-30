@@ -23,7 +23,6 @@
         name: action-name-combat
     - type: Actions
     - type: Cannon
-      rotatable: false
     - type: Gun
     - type: Sprite
       netsync: false
@@ -106,6 +105,51 @@
         - "CartridgeFlak"
         - "CartridgeFlakHE"
         - "CartridgeFlakEMP"
+    - type: Sprite
+      layers:
+        - state: syndie_lethal
+    - type: Destructible
+      thresholds:
+        - trigger:
+            !type:DamageTrigger
+            damage: 300
+          behaviors:
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+            - !type:PlaySoundBehavior
+              sound:
+                path: /Audio/Effects/metalbreak.ogg
+            - !type:SpawnEntitiesBehavior
+              spawn:
+                SheetSteel1:
+                  min: 3
+                  max: 5
+    - type: Gun
+      minAngle: 0
+      maxAngle: 10
+      angleIncrease: 2
+      angleDecay: 1
+      fireRate: 2
+      projectileSpeed: 100
+      selectedMode: FullAuto
+      availableModes:
+        - FullAuto
+      soundGunshot:
+        path: /Audio/Theta/Shipevent/artillery.ogg
+        params:
+          volume: 10
+
+- type: entity
+  id: ShipEventStaticFlakCannon
+  parent: ShipEventCannonBase
+  name: static flak cannon
+  components:
+    - type: Cannon
+      ammoPrototypes:
+        - "CartridgeFlak"
+        - "CartridgeFlakHE"
+        - "CartridgeFlakEMP"
+      rotatable: false
     - type: Sprite
       layers:
         - state: syndie_lethal
