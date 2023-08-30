@@ -156,7 +156,7 @@ namespace Content.IntegrationTests.Tests
 
         private static string[] GetGameMapNames()
         {
-            string[] task = { "Dev", "LobbyShipevent" };
+            string[] task = { "Dev", "LobbyShipEvent" };
             return task;
         }
 
