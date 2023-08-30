@@ -51,7 +51,7 @@ public sealed class HealGridSystem : EntitySystem
         var query = EntityManager.EntityQueryEnumerator<TransformComponent, DamageableComponent>();
         while(query.MoveNext(out var uid, out var transform, out var damageable))
         {
-            if(transform.GridUid != gridUid)
+            if(transform.GridUid != gridUid || damageable.TotalDamage == FixedPoint2.Zero)
                 continue;
             entityUids.Add((uid, damageable));
         }
