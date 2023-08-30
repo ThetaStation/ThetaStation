@@ -1,4 +1,4 @@
 - type: gameMapPool
-  id: ShipeventMapPool
+  id: ShipEventMapPool
   maps:
-    - LobbyShipevent
+    - LobbyShipEvent

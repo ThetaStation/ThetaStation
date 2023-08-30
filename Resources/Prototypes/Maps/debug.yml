@@ -22,7 +22,7 @@
   minPlayers: 0
   stations:
     DevStation:
-      stationProto: LobbyShipeventStation
+      stationProto: LobbyShipEventStation
       components:
         - type: StationNameSetup
           mapNameTemplate: "Dev"

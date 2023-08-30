@@ -172,7 +172,7 @@ entities:
       type: GridAtmosphere
     - type: GasTileOverlay
     - type: RadiationGridResistance
-    - id: LobbyShipevent
+    - id: LobbyShipEvent
       type: BecomesStation
   - uid: 149
     components:
