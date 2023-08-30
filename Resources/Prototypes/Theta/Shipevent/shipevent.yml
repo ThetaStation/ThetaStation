@@ -58,12 +58,6 @@
 - type: weightedRandomEntity
   id: ShipEventPickupsPrototypes
   weights:
-    ShuttlePickupAmmoSPG: 1.0
-    ShuttlePickupAmmoFlak: 1.0
-    ShuttlePickupAmmoMachineGun: 1.0
+    ShuttlePickupAmmo: 1.0
     ShuttlePickupHeal: 1.0
-    ShuttlePickupPowerPoints: 0.4
-    ShuttlePickupPowerFlakHE: 0.4
-    ShuttlePickupPowerFlakEMP: 0.4
-    ShuttlePickupPowerRCD: 0.4
-    ShuttlePickupPowerPlasmaGun: 0.4
+    ShuttlePickupPower: 0.4

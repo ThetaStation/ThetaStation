@@ -36,12 +36,14 @@
   id: ShuttlePickupAmmo
   name: ammo shuttle pickup
   parent: ShuttlePickup
-  abstract: true
   components:
     - type: DeleteOnTrigger
     - type: ShuttlePickable
-      proto: MachineGunAmmoClosetShipEvent
       targetTeleportId: ShipEventLoot
+      randomPrototypes:
+        - TurretAmmoContainerMachineGunFilled
+        - TurretAmmoContainerFlakFilled
+        - TurretAmmoContainerSPGFilled
     - type: EmitSoundOnTrigger
       sound:
         collection: BikeHorn
@@ -52,36 +54,19 @@
       group: enum.RadarRenderableGroup.Pickup
 
 - type: entity
-  id: ShuttlePickupAmmoMachineGun
-  parent: ShuttlePickupAmmo
-  components:
-    - type: ShuttlePickable
-      proto: TurretAmmoContainerMachineGunFilled
-
-- type: entity
-  id: ShuttlePickupAmmoFlak
-  parent: ShuttlePickupAmmo
-  components:
-    - type: ShuttlePickable
-      proto: TurretAmmoContainerFlakFilled
-
-- type: entity
-  id: ShuttlePickupAmmoSPG
-  parent: ShuttlePickupAmmo
-  components:
-    - type: ShuttlePickable
-      proto: TurretAmmoContainerSPGFilled
-
-- type: entity
   id: ShuttlePickupPower
   name: powers shuttle pickup
   parent: ShuttlePickup
-  abstract: true
   components:
     - type: DeleteOnTrigger
     - type: ShuttlePickable
-      proto: PointStorageItem
       targetTeleportId: ShipEventLoot
+      randomPrototypes:
+        - PointStorageItem
+        - TurretAmmoContainerFlakHEFilled
+        - TurretAmmoContainerFlakEMPFilled
+        - ShipEventRCD
+        - ShipEventPlasmaGun
     - type: EmitSoundOnTrigger
       sound:
         collection: BikeHorn
@@ -90,38 +75,3 @@
     - type: RadarRenderable
       radarView: randomPower
       group: enum.RadarRenderableGroup.Pickup
-
-- type: entity
-  id: ShuttlePickupPowerPoints
-  parent: ShuttlePickupPower
-  components:
-    - type: ShuttlePickable
-      proto: PointStorageItem
-
-- type: entity
-  id: ShuttlePickupPowerFlakHE
-  parent: ShuttlePickupPower
-  components:
-    - type: ShuttlePickable
-      proto: TurretAmmoContainerFlakHEFilled
-
-- type: entity
-  id: ShuttlePickupPowerFlakEMP
-  parent: ShuttlePickupPower
-  components:
-    - type: ShuttlePickable
-      proto: TurretAmmoContainerFlakEMPFilled
-
-- type: entity
-  id: ShuttlePickupPowerRCD
-  parent: ShuttlePickupPower
-  components:
-    - type: ShuttlePickable
-      proto: ShipEventRCD
-
-- type: entity
-  id: ShuttlePickupPowerPlasmaGun
-  parent: ShuttlePickupPower
-  components:
-    - type: ShuttlePickable
-      proto: ShipEventPlasmaGun

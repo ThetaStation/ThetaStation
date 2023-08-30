@@ -128,7 +128,7 @@ namespace Content.Server.Explosion.EntitySystems
             if (coords.Count == 0)
                 return;
 
-            Spawn(component.Proto, _random.Pick(coords));
+            Spawn(_random.Pick(component.Prototypes), _random.Pick(coords));
         }
 
         private void OnSoundTrigger(EntityUid uid, SoundOnTriggerComponent component, TriggerEvent args)
