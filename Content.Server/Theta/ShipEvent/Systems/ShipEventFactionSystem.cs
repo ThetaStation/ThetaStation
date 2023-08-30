@@ -40,8 +40,6 @@ using Robust.Shared.Utility;
 using System.Linq;
 using System.Numerics;
 using Content.Server.Maps;
-using Content.Shared.Mobs.Components;
-using Content.Shared.Mobs.Systems;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
@@ -76,8 +74,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     [Dependency] private readonly RoundEndSystem _endSys = default!;
 
     [Dependency] private readonly MindSystem _mindSystem = default!;
-
-    [Dependency] private readonly MobStateSystem _mobStateSys = default!;
 
     [Dependency] private readonly HumanoidAppearanceSystem _humanoidAppearanceSystem = default!;
 
@@ -149,7 +145,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         SubscribeLocalEvent<GenericWarningYesPressedMessage>(ReturnToLobbyPlayer);
 
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, StartCollideEvent>(OnCollision);
-        SubscribeLocalEvent<ShipEventFactionMarkerComponent, SuicideEvent>(OnSuicideAttempt);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, MobStateChangedEvent>(OnPlayerStateChange);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, MindTransferredMessage>(OnPlayerTransfer);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, EntitySpokeEvent>(OnTeammateSpeak);
@@ -464,13 +459,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         var spawner = spawners.First();
         var playerMob = SpawnPlayer(session, spawner);
         AfterSpawn(playerMob, spawner);
-    }
-    
-    private void OnSuicideAttempt(EntityUid uid, ShipEventFactionMarkerComponent marker, SuicideEvent args)
-    {
-        args.BlockSuicideAttempt(true);
-        if (EntityManager.TryGetComponent<MobStateComponent>(uid, out var mobState))
-            _mobStateSys.ChangeMobState(uid, MobState.Dead, mobState);
     }
 
     private void OnPlayerTransfer(EntityUid uid, ShipEventFactionMarkerComponent marker, MindTransferredMessage args)

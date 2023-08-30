@@ -6,12 +6,8 @@ using Content.Server.GameTicking;
 using Content.Server.Maps;
 using Content.Server.Mind.Components;
 using Content.Server.Spawners.Components;
-using Content.Server.Xenoarchaeology.XenoArtifacts.Triggers.Systems;
 using Content.Shared.Hands.Components;
-using Content.Shared.Interaction.Events;
 using Content.Shared.Mobs;
-using Content.Shared.Mobs.Components;
-using Content.Shared.Mobs.Systems;
 using Robust.Server.GameObjects;
 using Robust.Server.Player;
 using Robust.Shared.Containers;
@@ -40,7 +36,6 @@ public sealed class TeamDeathmatchSystem : EntitySystem
     [Dependency] private readonly IMapManager _mapMan = default!;
     [Dependency] private readonly MapSystem _mapSys = default!;
     [Dependency] private readonly IPrototypeManager _protMan = default!;
-    [Dependency] private readonly MobStateSystem _mobStateSys = default!;
 
     public bool RuleSelected;
 
@@ -61,17 +56,10 @@ public sealed class TeamDeathmatchSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
+        GetSpawnPositions();
         SubscribeLocalEvent<TeamDeathmatchMarkerComponent, MobStateChangedEvent>(OnPlayerStateChange);
-        SubscribeLocalEvent<TeamDeathmatchMarkerComponent, SuicideEvent>(OnSuicideAttempt);
         SubscribeLocalEvent<TeamDeathmatchObeliskComponent, ComponentRemove>(OnObeliskDestroyed);
         //SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEnd);
-    }
-
-    private void OnSuicideAttempt(EntityUid uid, TeamDeathmatchMarkerComponent marker, SuicideEvent args)
-    {
-        args.BlockSuicideAttempt(true);
-        if (EntityManager.TryGetComponent<MobStateComponent>(uid, out var mobState))
-            _mobStateSys.ChangeMobState(uid, MobState.Dead, mobState);
     }
 
     private void OnObeliskDestroyed(EntityUid uid, TeamDeathmatchObeliskComponent obelisk, ComponentRemove args)
@@ -84,7 +72,7 @@ public sealed class TeamDeathmatchSystem : EntitySystem
         }
     }
 
-    public void UpdateSpawnPositions()
+    public void GetSpawnPositions()
     {
         while (EntityQueryEnumerator<SpawnPointComponent>().MoveNext(out var uid, out var spawn))
         {
@@ -113,8 +101,8 @@ public sealed class TeamDeathmatchSystem : EntitySystem
         
         if (args.NewMobState == MobState.Dead)
         {
-            _chatSys.SendSimpleMessage(Loc.GetString("tdm-dead", ("seconds", RespawnDelay)), session, color: marker.Team ? Color.Red : Color.Blue);
-            Timer.Spawn(RespawnDelay * 1000, () => Respawn(uid, marker));
+            _chatSys.SendSimpleMessage(Loc.GetString("tdm-dead"), session, color: marker.Team ? Color.Red : Color.Blue);
+            Timer.Spawn(RespawnDelay, () => Respawn(uid, marker));
         }
     }
 
