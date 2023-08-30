@@ -158,7 +158,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         SubscribeAllEvent<LootboxInfoRequest>(OnLootboxInfoRequest);
 
         InitializeCaptainMenu();
-        
         SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEnd);
         SubscribeLocalEvent<RoundEndDiscordTextAppendEvent>(OnRoundEndDiscord);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
