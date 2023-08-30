@@ -25,19 +25,19 @@ public sealed class HealGridSystem : EntitySystem
         _random.Shuffle(list);
         foreach (var (entityOnGrid, damageable) in list)
         {
-            if(healComponent.AvailableHealths == 0)
+            if(healComponent.AvailableHealth == 0)
                 break;
             var heal = new DamageSpecifier(damageable.Damage);
             foreach (var (group, damage) in heal.DamageDict)
             {
-                if(healComponent.AvailableHealths == 0)
+                if(healComponent.AvailableHealth == 0)
                     break;
 
-                var healingValue = healComponent.AvailableHealths - damage > 0
+                var healingValue = healComponent.AvailableHealth - damage > 0
                     ? damage
-                    : healComponent.AvailableHealths;
+                    : healComponent.AvailableHealth;
                 heal.DamageDict[group] = healingValue;
-                healComponent.AvailableHealths -= healingValue.Int();
+                healComponent.AvailableHealth -= healingValue.Int();
             }
 
             heal = -heal;

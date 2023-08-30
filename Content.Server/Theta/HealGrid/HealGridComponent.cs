@@ -3,7 +3,7 @@
 [RegisterComponent]
 public sealed class HealGridComponent : Component
 {
-    [DataField("healths")]
+    [DataField("health")]
     [ViewVariables(VVAccess.ReadWrite)]
-    public int AvailableHealths;
+    public int AvailableHealth;
 }
