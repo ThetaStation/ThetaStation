@@ -111,3 +111,4 @@
   rules:
     - ShipEvent
   supportedMaps: ShipEventMapPool
+  forceMap: true
