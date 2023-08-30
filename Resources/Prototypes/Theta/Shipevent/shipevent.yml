@@ -41,16 +41,6 @@
       boundsCompressionInterval: 0
       boundsCompressionDistance: 0
 
-      #lootboxes
-      lootboxEnabled: false
-      lootboxSpawnInterval: 360
-      lootboxSpawnAmount: 2
-      lootboxLifetime: 240
-      lootboxTypes:
-        - "lootbox_box"
-        - "lootbox_abandonedship"
-        - "lootbox_asteroid"
-
       obstacleTypes:
         - "asteroid_small"
         - "asteroid_large"
@@ -72,7 +62,6 @@
     ShuttlePickupAmmoFlak: 1.0
     ShuttlePickupAmmoMachineGun: 1.0
     ShuttlePickupHeal: 1.0
-    ShuttlePickupPowerCaller: 0.4
     ShuttlePickupPowerPoints: 0.4
     ShuttlePickupPowerFlakHE: 0.4
     ShuttlePickupPowerFlakEMP: 0.4

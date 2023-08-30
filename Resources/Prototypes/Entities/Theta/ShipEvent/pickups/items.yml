@@ -80,7 +80,7 @@
   components:
     - type: DeleteOnTrigger
     - type: ShuttlePickable
-      proto: LootboxSpawnTriggerItem
+      proto: PointStorageItem
       targetTeleportId: ShipEventLoot
     - type: EmitSoundOnTrigger
       sound:
@@ -90,13 +90,6 @@
     - type: RadarRenderable
       radarView: randomPower
       group: enum.RadarRenderableGroup.Pickup
-
-- type: entity
-  id: ShuttlePickupPowerCaller
-  parent: ShuttlePickupPower
-  components:
-    - type: ShuttlePickable
-      proto: LootboxSpawnTriggerItem
 
 - type: entity
   id: ShuttlePickupPowerPoints
