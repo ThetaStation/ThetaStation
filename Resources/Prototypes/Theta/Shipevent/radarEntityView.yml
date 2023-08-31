@@ -27,3 +27,9 @@
   defaultColor: "#ff0000"
   form: enum.OnRadarForms.Circle
   size: 2
+
+- type: radarEntityView
+  id: genericDoor
+  defaultColor: "#ff0000"
+  form: enum.OnRadarForms.Circle
+  size: 5

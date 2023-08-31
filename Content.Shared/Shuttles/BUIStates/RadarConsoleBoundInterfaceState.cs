@@ -73,8 +73,9 @@ public enum RadarRenderableGroup
     ShipEventTeammate      = 1 << 0,
     Projectiles            = 1 << 1,
     Cannon                 = 1 << 2,
+    Door                   = 1 << 3,
 
-    All = (ShipEventTeammate | Projectiles | Cannon),
+    All = (ShipEventTeammate | Projectiles | Cannon | Door),
 }
 
 /// <summary>

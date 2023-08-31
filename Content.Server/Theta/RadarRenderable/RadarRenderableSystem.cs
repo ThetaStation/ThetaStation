@@ -1,10 +1,12 @@
-﻿using Content.Server.Mind;
+using Content.Server.Mind;
 using Content.Server.Mind.Components;
 using Content.Server.Shuttles.Systems;
 using Content.Server.Theta.ShipEvent;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Server.Theta.ShipEvent.Console;
 using Content.Server.Theta.ShipEvent.Systems;
+using Content.Shared.DeviceLinking;
+using Content.Shared.Doors.Components;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Projectiles;
@@ -50,6 +52,9 @@ public sealed class RadarRenderableSystem : EntitySystem
                     break;
                 case RadarRenderableGroup.Cannon:
                     state = GetCannonState(uid, consoleUid, radarRenderable, xform, transform);
+                    break;
+                case RadarRenderableGroup.Door:
+                    state = GetDoorState(uid, radarRenderable, transform);
                     break;
                 default:
                     state = GetDefaultState(uid, radarRenderable, transform);
@@ -128,6 +133,34 @@ public sealed class RadarRenderableSystem : EntitySystem
                 if (role is ShipEventRole && role.Faction is ShipEventFaction shipEventFaction)
                     color = shipEventFaction.Color;
             }
+        }
+
+        return new CommonRadarEntityInterfaceState(
+            _transformSystem.GetMoverCoordinates(uid, xform),
+            _transformSystem.GetWorldRotation(xform),
+            renderable.RadarView,
+            color
+        );
+    }
+
+    private CommonRadarEntityInterfaceState? GetDoorState(EntityUid uid, RadarRenderableComponent renderable, TransformComponent xform)
+    {
+        if (!TryComp<DoorComponent>(uid, out var door))
+            return null;
+
+        Color? color = Color.White;
+
+        if (door.State == DoorState.Closed)
+        {
+            color = Color.Red;
+        }
+        else if (door.State == DoorState.Opening | door.State == DoorState.Closing)
+        {
+            color = Color.Yellow;
+        }
+        else
+        {
+            color = Color.LimeGreen;
         }
 
         return new CommonRadarEntityInterfaceState(
