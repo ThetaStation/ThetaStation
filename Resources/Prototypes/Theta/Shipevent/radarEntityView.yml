@@ -43,14 +43,19 @@
 - type: radarEntityView
   id: genericMob
   defaultColor: "#ff0000"
-  form: enum.OnRadarForms.Circle
-  size: 2
+  form:
+    !type:CircleRadarForm
+    radius: 2
 
 - type: radarEntityView
   id: genericDoor
   defaultColor: "#ff0000"
-  form: enum.OnRadarForms.Circle
-  size: 5
   form:
-    !type:CircleRadarForm
-    radius: 2
+    !type:ShapeRadarForm
+    size: 1
+    vertices:
+      - -0.5, 0.5
+      - 0.5, 0.5
+      - 0.5, -0.5
+      - -0.5, -0.5
+      - -0.5, 0.5
