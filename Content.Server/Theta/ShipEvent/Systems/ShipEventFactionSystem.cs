@@ -39,6 +39,7 @@ using Robust.Shared.Random;
 using Robust.Shared.Utility;
 using System.Linq;
 using System.Numerics;
+using Content.Server.Maps;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
@@ -131,13 +132,15 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     public ColorPalette ColorPalette = new ShipEventPalette();
 
+    public const string LobbyMapId = "LobbyShipEvent";
+
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, ShipEventTeamViewToggleEvent>(OnViewToggle);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, ShipEventCaptainMenuToggleEvent>(OnCapMenuToggle);
-
+        
         SubscribeLocalEvent<ShipEventReturnToLobbyEvent>(OnReturnToLobbyAction);
         SubscribeLocalEvent<GenericWarningYesPressedMessage>(ReturnToLobbyPlayer);
 
@@ -155,7 +158,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         SubscribeAllEvent<LootboxInfoRequest>(OnLootboxInfoRequest);
 
         InitializeCaptainMenu();
-
         SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEnd);
         SubscribeLocalEvent<RoundEndDiscordTextAppendEvent>(OnRoundEndDiscord);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);

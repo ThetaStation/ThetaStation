@@ -18,19 +18,10 @@ public sealed class TeamConsoleSystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<TeamConsoleComponent, ComponentInit>(OnInit);
         SubscribeLocalEvent<TeamConsoleComponent, TeamCreationRequest>(OnTeamCreationRequest);
         SubscribeLocalEvent<TeamConsoleComponent, RefreshShipTeamsEvent>(OnRefreshTeams);
         SubscribeLocalEvent<TeamConsoleComponent, JoinToShipTeamsEvent>(TryJoinToShipTeam);
         SubscribeLocalEvent<TeamConsoleComponent, BeforeActivatableUIOpenEvent>(UpdateLobbyState);
-    }
-
-    private void OnInit(EntityUid uid, TeamConsoleComponent component, ComponentInit args)
-    {
-        if (!_shipSys.RuleSelected)
-        {
-            _ticker.StartGameRule("ShipEvent");
-        }
     }
 
     private void TryJoinToShipTeam(EntityUid uid, TeamConsoleComponent component, JoinToShipTeamsEvent args)
