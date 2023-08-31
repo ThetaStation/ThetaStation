@@ -39,6 +39,8 @@ using Robust.Shared.Random;
 using Robust.Shared.Utility;
 using System.Linq;
 using System.Numerics;
+using Robust.Shared.Timing;
+using Robust.Shared.Utility;
 using Content.Server.Maps;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
@@ -79,6 +81,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     [Dependency] private readonly IServerPreferencesManager _prefsManager = default!;
 
+    [Dependency] private readonly IGameTiming _timing = default!;
+
     //used when setting up buttons for ghosts, in cases when mind from shipevent agent is transferred to null and not to ghost entity directly
     private Dictionary<IPlayerSession, ShipEventFaction> lastTeamLookup = new();
 
@@ -87,7 +91,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     private float _teamCheckTimer;
     public float RoundendTimer;
     private float _boundsCompressionTimer;
-    private float _lootboxTimer;
     private int _lastAnnoucementMinute;
 
     //all time-related fields are specified in seconds
@@ -96,11 +99,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     public float TeamCheckInterval;
     public float RespawnDelay;
-
-    public float LootboxSpawnInterval;
-    public int LootboxSpawnAmount;
-    public float LootboxLifetime;
-    public List<StructurePrototype> LootboxPrototypes = new();
 
     public int MaxSpawnOffset;
 
@@ -128,7 +126,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     public List<ShipEventFaction> Teams { get; } = new();
 
     public List<Processor> ShipProcessors = new();
-    public List<Processor> LootboxProcessors = new();
 
     public ColorPalette ColorPalette = new ShipEventPalette();
 
@@ -149,13 +146,11 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, MindTransferredMessage>(OnPlayerTransfer);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, EntitySpokeEvent>(OnTeammateSpeak);
 
-        SubscribeLocalEvent<ShipEventLootboxSpawnTriggerComponent, UseInHandEvent>(OnLootboxSpawnTriggered);
         SubscribeLocalEvent<ShipEventPointStorageComponent, UseInHandEvent>(OnPointStorageTriggered);
 
         SubscribeAllEvent<ShuttleConsoleChangeShipNameMessage>(OnShipNameChange); //un-directed event since we will have duplicate subscriptions otherwise
         SubscribeAllEvent<GetShipPickerInfoMessage>(OnShipPickerInfoRequest);
         SubscribeAllEvent<BoundsOverlayInfoRequest>(OnBoundsOverlayInfoRequest);
-        SubscribeAllEvent<LootboxInfoRequest>(OnLootboxInfoRequest);
 
         InitializeCaptainMenu();
         SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEnd);
@@ -190,7 +185,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         _teamCheckTimer += frametime;
         RoundendTimer += frametime;
         _boundsCompressionTimer += frametime;
-        _lootboxTimer += frametime;
 
         if (_teamCheckTimer > TeamCheckInterval)
         {
@@ -199,8 +193,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         }
 
         CheckBoundsCompressionTimer();
-        CheckLootboxTimer(frametime);
         CheckRoundendTimer();
+        CheckPickupsTimer();
     }
 
     private void CheckRoundendTimer()
@@ -275,10 +269,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         _teamCheckTimer = 0;
         RoundendTimer = 0;
         _boundsCompressionTimer = 0;
-        _lootboxTimer = 0;
         _lastAnnoucementMinute = 0;
-
-        LootboxPrototypes.Clear();
 
         CurrentBoundsOffset = 0;
 
@@ -291,7 +282,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         lastTeamLookup.Clear();
 
         ShipProcessors.Clear();
-        LootboxProcessors.Clear();
+
+        PickupPositions.Clear();
     }
 
     private void OnRoundEnd(RoundEndTextAppendEvent args)
@@ -971,4 +963,17 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             RemoveTeam(team, Loc.GetString("shipevent-remove-noplayers"));
         }
     }
+
+    private void OnPointStorageTriggered(EntityUid uid, ShipEventPointStorageComponent storage, UseInHandEvent args)
+    {
+        if (EntityManager.TryGetComponent<ShipEventFactionMarkerComponent>(args.User, out var marker))
+        {
+            if (marker.Team != null)
+            {
+                TeamMessage(marker.Team, Loc.GetString("shipevent-pointsadded", ("points", storage.Points)));
+                marker.Team.Points += storage.Points;
+            }
+        }
+    }
+
 }

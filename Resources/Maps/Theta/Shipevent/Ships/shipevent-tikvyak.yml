@@ -984,6 +984,13 @@ entities:
     - links:
       - 61
       type: DeviceLinkSink
+- proto: ShipEventTeleporter
+  entities:
+  - uid: 154
+    components:
+    - pos: 4.5,6.5
+      parent: 1
+      type: Transform
 - proto: SMESBasic
   entities:
   - uid: 125

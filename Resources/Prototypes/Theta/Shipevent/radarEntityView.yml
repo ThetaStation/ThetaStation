@@ -46,3 +46,25 @@
   form:
     !type:CircleRadarForm
     radius: 2
+
+- type: radarEntityView
+  id: ammoContainer
+  defaultColor: "#ffff00"
+  form:
+    !type:CharRadarForm
+    char: 'A'
+
+- type: radarEntityView
+  id: randomPower
+  defaultColor: "#ffffff"
+  form:
+    !type:CharRadarForm
+    char: '?'
+
+- type: radarEntityView
+  id: healContainer
+  defaultColor: "#00ff00"
+  form:
+    !type:CharRadarForm
+    char: '+'
+    scale: 1.5

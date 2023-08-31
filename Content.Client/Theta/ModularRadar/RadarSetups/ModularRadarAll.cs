@@ -11,7 +11,6 @@ public sealed class ModularRadarAll : ModularRadarControl
         Modules.Add(new RadarGrids(this));
         Modules.Add(new RadarDocks(this));
         Modules.Add(new RadarPlayAreaBounds(this));
-        Modules.Add(new RadarLootboxTimer(this));
         Modules.Add(new RadarControlCannons(this));
         Modules.Add(new RadarVelocity(this));
         Modules.Add(new RadarPingsModule(this));

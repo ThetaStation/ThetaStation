@@ -6,6 +6,8 @@ using Content.Server.Theta.DebrisGeneration.Prototypes;
 using Content.Shared.Theta.ShipEvent;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Server.Theta.ShipEvent.Systems;
+using Content.Shared.Dataset;
+using Content.Shared.Random;
 using Content.Shared.Shuttles.Components;
 using Robust.Server.Player;
 using Robust.Shared.Map;
@@ -14,6 +16,7 @@ using Robust.Shared.Random;
 using Robust.Shared.Serialization.Markdown;
 using Robust.Shared.Serialization.Markdown.Mapping;
 using Robust.Shared.Serialization.Markdown.Value;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Server.StationEvents.Events.Theta;
 
@@ -66,13 +69,15 @@ public sealed class ShipEventRuleComponent : Component
 
     [DataField("boundsCompressionDistance")] public int BoundsCompressionDistance;
 
-    [DataField("lootboxSpawnInterval")] public int LootboxSpawnInterval;
+    [DataField("pickupsPositions")] public int PickupsPositionsCount;
 
-    [DataField("lootboxSpawnAmount")] public int LootboxSpawnAmount;
+    // in seconds
+    [DataField("pickupsSpawnInterval")] public float PickupsSpawnInterval;
 
-    [DataField("lootboxLifetime")] public float LootboxLifetime;
+    [DataField("pickupMinDistance")] public float PickupMinDistance;
 
-    [DataField("lootboxTypes")] public List<string> LootboxTypes = new();
+    [DataField("pickupsPrototypes", customTypeSerializer: typeof(PrototypeIdSerializer<WeightedRandomEntityPrototype>))]
+    public string PickupsPrototypes = default!;
 }
 
 public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
@@ -121,6 +126,11 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         _shipSys.PointsPerKill = component.PointsPerKill;
         _shipSys.OutOfBoundsPenalty = component.OutOfBoundsPenalty;
 
+        _shipSys.PickupsPositionsCount = component.PickupsPositionsCount;
+        _shipSys.PickupsSpawnInterval = component.PickupsSpawnInterval;
+        _shipSys.PickupMinDistance = component.PickupMinDistance;
+        _shipSys.PickupsDatasetPrototype = component.PickupsPrototypes;
+
         _shipSys.HUDPrototypeId = component.HUDPrototypeId;
         _shipSys.CaptainHUDPrototypeId = component.CaptainHUDPrototypeId;
 
@@ -133,18 +143,9 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         _shipSys.BoundsCompression = component.BoundsCompressionInterval > 0;
         _shipSys.BoundsCompressionDistance = component.BoundsCompressionDistance;
 
-        _shipSys.LootboxSpawnInterval = component.LootboxSpawnInterval;
-        _shipSys.LootboxSpawnAmount = component.LootboxSpawnAmount;
-        _shipSys.LootboxLifetime = component.LootboxLifetime;
-
         foreach (var shipTypeProtId in component.ShipTypes)
         {
             _shipSys.ShipTypes.Add(_protMan.Index<ShipTypePrototype>(shipTypeProtId));
-        }
-
-        foreach (var structProtId in component.LootboxTypes)
-        {
-            _shipSys.LootboxPrototypes.Add(_protMan.Index<StructurePrototype>(structProtId));
         }
 
         List<StructurePrototype> obstacleStructProts = new();
@@ -178,10 +179,6 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         iffFlagProc.Flags = new() { IFFFlags.HideLabel };
         iffFlagProc.ColorOverride = Color.Gold;
 
-        FlagIFFProcessor iffFlagProcLootbox = new();
-        iffFlagProcLootbox.NameOverride = Loc.GetString("shipevent-lootboxname");
-        iffFlagProcLootbox.ColorOverride = Color.Magenta;
-
         List<Processor> globalProcessors = new() { iffSplitProc, iffFlagProc };
 
         _debrisSys.SpawnStructures(map,
@@ -192,7 +189,5 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
             globalProcessors);
 
         _shipSys.ShipProcessors.Add(iffSplitProc);
-        _shipSys.LootboxProcessors.Add(iffSplitProc);
-        _shipSys.LootboxProcessors.Add(iffFlagProcLootbox);
     }
 }
