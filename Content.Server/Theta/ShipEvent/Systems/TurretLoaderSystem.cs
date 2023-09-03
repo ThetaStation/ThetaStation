@@ -46,14 +46,14 @@ public sealed class TurretLoaderSystem : EntitySystem
 
     public void SetupLoader(EntityUid uid, TurretLoaderComponent loader, EntityUid? turretUid = null)
     {
-        if (!EntityManager.EntityExists(loader.BoundTurret) && turretUid != null)
+        if (turretUid != null)
         {
-            loader.BoundTurret = turretUid.Value;
+            loader.BoundTurret.Add(turretUid.Value);
         }
         else
         {
             if (CheckNetwork(uid, out EntityUid turret))
-                loader.BoundTurret = turret;
+                loader.BoundTurret.Add(turret);
         }
 
         if (EntityManager.TryGetComponent<ItemSlotsComponent>(uid, out var slots))
@@ -62,11 +62,14 @@ public sealed class TurretLoaderSystem : EntitySystem
 
             if (loader.BoundTurret != null)
             {
-                if (EntityManager.TryGetComponent<CannonComponent>(loader.BoundTurret, out var cannon))
+                foreach (var turret in loader.BoundTurret)
                 {
-                    cannon.BoundLoader = loader;
-                    cannon.BoundLoaderEntity = uid;
-                    Dirty(cannon);
+                    if (EntityManager.TryGetComponent<CannonComponent>(turret, out var cannon))
+                    {
+                        cannon.BoundLoader = loader;
+                        cannon.BoundLoaderEntity = uid;
+                        Dirty(cannon);
+                    }
                 }
             }
         }
@@ -79,12 +82,15 @@ public sealed class TurretLoaderSystem : EntitySystem
         ContainerAmmoProviderComponent? turretContainer = null;
         List<string>? turretAmmoProts = null;
 
-        if (loader.BoundTurret != null && EntityManager.EntityExists(loader.BoundTurret))
+        foreach (var turret in loader.BoundTurret)
         {
-            turretContainer = EntityManager.EnsureComponent<ContainerAmmoProviderComponent>(loader.BoundTurret.Value);
-            turretContainer.ProviderUid = null;
-            turretContainer.Container = "";
-            turretAmmoProts = EntityManager.GetComponent<CannonComponent>(loader.BoundTurret.Value).AmmoPrototypes;
+            if (EntityManager.EntityExists(turret))
+            {
+                turretContainer = EntityManager.EnsureComponent<ContainerAmmoProviderComponent>(turret);
+                turretContainer.ProviderUid = null;
+                turretContainer.Container = "";
+                turretAmmoProts = EntityManager.GetComponent<CannonComponent>(turret).AmmoPrototypes;
+            }
         }
 
         loader.AmmoContainer = null;
@@ -146,14 +152,17 @@ public sealed class TurretLoaderSystem : EntitySystem
 
     private void OnRemoval(EntityUid uid, TurretLoaderComponent loader, ComponentRemove args)
     {
-        if (EntityManager.EntityExists(loader.BoundTurret))
+        foreach (var turret in loader.BoundTurret)
         {
-            if (EntityManager.TryGetComponent<CannonComponent>(loader.BoundTurret, out var cannon))
-                cannon.BoundLoader = null;
-            if (EntityManager.TryGetComponent<ContainerAmmoProviderComponent>(loader.BoundTurret, out var container))
+            if (EntityManager.EntityExists(turret))
             {
-                container.ProviderUid = null;
-                container.Container = "";
+                if (EntityManager.TryGetComponent<CannonComponent>(turret, out var cannon))
+                    cannon.BoundLoader = null;
+                if (EntityManager.TryGetComponent<ContainerAmmoProviderComponent>(turret, out var container))
+                {
+                    container.ProviderUid = null;
+                    container.Container = "";
+                }
             }
         }
     }

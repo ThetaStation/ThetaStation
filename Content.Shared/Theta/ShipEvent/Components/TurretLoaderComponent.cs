@@ -10,7 +10,7 @@ namespace Content.Shared.Theta.ShipEvent.Components;
 public sealed class TurretLoaderComponent : Component
 {
     [ViewVariables(VVAccess.ReadWrite)] 
-    public EntityUid? BoundTurret;
+    public List<EntityUid> BoundTurret = new();
     
     /// <summary>
     /// Slot containing ammo container
@@ -37,7 +37,7 @@ public sealed class TurretLoaderComponent : Component
 [Serializable, NetSerializable]
 public sealed class TurretLoaderState : ComponentState
 {
-    public EntityUid? BoundTurret;
+    public List<EntityUid> BoundTurret = new();
 
     public int MaxContainerCapacity;
 
@@ -47,7 +47,9 @@ public sealed class TurretLoaderState : ComponentState
 
     public TurretLoaderState(TurretLoaderComponent loader)
     {
-        BoundTurret = loader.BoundTurret;
+        foreach(var turret in loader.BoundTurret)
+            BoundTurret.Add(turret);
+
         ContainerSlotID = loader.ContainerSlot?.ID;
         MaxContainerCapacity = loader.MaxContainerCapacity;
         ContainerID = loader.AmmoContainer?.ID;
