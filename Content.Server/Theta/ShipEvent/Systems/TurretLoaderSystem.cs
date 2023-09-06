@@ -12,6 +12,7 @@ using Content.Shared.Throwing;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Interaction;
 using Robust.Shared.Serialization;
+using FastAccessors;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
@@ -44,18 +45,25 @@ public sealed class TurretLoaderSystem : EntitySystem
         args.State = new TurretLoaderState(loader);
     }
 
-    public void SetupLoader(EntityUid uid, TurretLoaderComponent loader, EntityUid? turretUid = null)
+    public void BindTurret(EntityUid uid, TurretLoaderComponent loader)
     {
-        if (turretUid != null)
-        {
-            loader.BoundTurret.Add(turretUid.Value);
-        }
-        else
-        {
-            if (CheckNetwork(uid, out EntityUid turret))
-                loader.BoundTurret.Add(turret);
-        }
+        CheckNetwork(uid, out List<EntityUid>? turretList);
 
+        if (turretList != null)
+            loader.BoundTurret = turretList.ToList();
+
+        LibkLoaderToTurret(uid, loader);
+    }
+
+    public void SetupLoader(EntityUid uid, TurretLoaderComponent loader, EntityUid turretUid)
+    {
+        loader.BoundTurret.Add(turretUid);
+
+        LibkLoaderToTurret(uid, loader);
+    }
+
+    public void LibkLoaderToTurret(EntityUid uid, TurretLoaderComponent loader)
+    {
         if (EntityManager.TryGetComponent<ItemSlotsComponent>(uid, out var slots))
         {
             loader.ContainerSlot = slots.Slots["ammoContainer"];
@@ -129,24 +137,24 @@ public sealed class TurretLoaderSystem : EntitySystem
             Dirty(turretContainer);
     }
 
-    private bool CheckNetwork(EntityUid uid, out EntityUid turret)
+    private bool CheckNetwork(EntityUid uid, out List<EntityUid>? turretList)
     {
         if (EntityManager.TryGetComponent<DeviceLinkSourceComponent>(uid, out var source))
         {
             if (source.LinkedPorts.Count > 0)
             {
-                turret = source.LinkedPorts.Keys.First();
+                turretList = source.LinkedPorts.Keys.ToList();
                 return true;
             }
         }
 
-        turret = EntityUid.Invalid;
+        turretList = null;
         return false;
     }
 
     private void OnInit(EntityUid uid, TurretLoaderComponent loader, ComponentInit args)
     {
-        SetupLoader(uid, loader);
+        BindTurret(uid, loader);
         UpdateAmmoContainer(loader);
     }
 
