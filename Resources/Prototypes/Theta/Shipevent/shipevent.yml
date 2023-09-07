@@ -41,15 +41,6 @@
       boundsCompressionInterval: 0
       boundsCompressionDistance: 0
 
-      #lootboxes
-      lootboxSpawnInterval: 360
-      lootboxSpawnAmount: 2
-      lootboxLifetime: 240
-      lootboxTypes:
-        - "lootbox_box"
-        - "lootbox_abandonedship"
-        - "lootbox_asteroid"
-
       obstacleTypes:
         - "asteroid_small"
         - "asteroid_large"
@@ -57,3 +48,16 @@
       #randomisation
       obstacleAmountAmplitude: 0
       obstacleSizeAmplitude: 0
+
+      #pickups
+      pickupsPositions: 25
+      pickupsSpawnInterval: 60 # in seconds
+      pickupMinDistance: 100
+      pickupsPrototypes: ShipEventPickupsPrototypes
+
+- type: weightedRandomEntity
+  id: ShipEventPickupsPrototypes
+  weights:
+    ShuttlePickupAmmo: 1.0
+    ShuttlePickupHeal: 1.0
+    ShuttlePickupPower: 0.4
