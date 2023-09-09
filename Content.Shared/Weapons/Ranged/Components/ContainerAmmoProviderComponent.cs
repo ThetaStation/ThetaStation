@@ -9,10 +9,12 @@ namespace Content.Shared.Weapons.Ranged.Components;
 public sealed partial class ContainerAmmoProviderComponent : AmmoProviderComponent
 {
     [DataField("container", required: true)]
+    [AutoNetworkedField]
     [ViewVariables]
-    public string Container = default!;
+    public string Container = "storagebase";
 
     [DataField("provider")]
+    [AutoNetworkedField]
     [ViewVariables]
     public EntityUid? ProviderUid;
 }

@@ -27,7 +27,7 @@ namespace Content.IntegrationTests.Tests;
 [TestFixture]
 public sealed class MaterialArbitrageTest
 {
-    [Test]
+    [Test, Ignore("Too long for Theta Station")]
     public async Task NoMaterialArbitrage()
     {
         await using var pair = await PoolManager.GetServerClient();

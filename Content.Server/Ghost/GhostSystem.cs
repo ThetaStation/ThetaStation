@@ -123,10 +123,16 @@ namespace Content.Server.Ghost
             var time = _gameTiming.CurTime;
             component.TimeOfDeath = time;
 
-            // TODO ghost: remove once ghosts are persistent and aren't deleted when returning to body
-            if (component.Action.UseDelay != null)
-                component.Action.Cooldown = (time, time + component.Action.UseDelay.Value);
-            _actions.AddAction(uid, component.Action, null);
+            if (component.Actions != null)
+            {
+                foreach (var action in component.Actions)
+                {
+                    // TODO ghost: remove once ghosts are persistent and aren't deleted when returning to body
+                    if (action.UseDelay != null)
+                        action.Cooldown = (time, time + action.UseDelay.Value);
+                    _actions.AddAction(uid, action, null);
+                }
+            }
         }
 
         private void OnGhostShutdown(EntityUid uid, GhostComponent component, ComponentShutdown args)
@@ -148,7 +154,13 @@ namespace Content.Server.Ghost
                     eye.VisibilityMask &= ~(uint) VisibilityFlags.Ghost;
                 }
 
-                _actions.RemoveAction(uid, component.Action);
+                if (component.Actions != null)
+                {
+                    foreach (var action in component.Actions)
+                    {
+                        _actions.RemoveAction(uid, action);
+                    }
+                }
             }
         }
 

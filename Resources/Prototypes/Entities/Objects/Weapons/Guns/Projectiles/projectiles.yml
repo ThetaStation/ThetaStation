@@ -63,6 +63,9 @@
         Piercing: 14
     soundHit:
       path: /Audio/Weapons/Guns/Hits/bullet_hit.ogg
+  - type: RadarRenderable
+    radarView: genericProjectile
+    group: enum.RadarRenderableGroup.Projectiles
   - type: TimedDespawn
     lifetime: 10
 

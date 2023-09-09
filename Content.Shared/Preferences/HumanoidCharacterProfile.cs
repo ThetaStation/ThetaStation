@@ -307,16 +307,16 @@ namespace Content.Shared.Preferences
         public HumanoidCharacterProfile WithAntagPreference(string antagId, bool pref)
         {
             var list = new List<string>(_antagPreferences);
-            if(pref)
+            if (pref)
             {
-                if(!list.Contains(antagId))
+                if (!list.Contains(antagId))
                 {
                     list.Add(antagId);
                 }
             }
             else
             {
-                if(list.Contains(antagId))
+                if (list.Contains(antagId))
                 {
                     list.Remove(antagId);
                 }
@@ -329,16 +329,16 @@ namespace Content.Shared.Preferences
             var list = new List<string>(_traitPreferences);
 
             // TODO: Maybe just refactor this to HashSet? Same with _antagPreferences
-            if(pref)
+            if (pref)
             {
-                if(!list.Contains(traitId))
+                if (!list.Contains(traitId))
                 {
                     list.Add(traitId);
                 }
             }
             else
             {
-                if(list.Contains(traitId))
+                if (list.Contains(traitId))
                 {
                     list.Remove(traitId);
                 }
@@ -427,7 +427,7 @@ namespace Content.Shared.Preferences
             var configManager = IoCManager.Resolve<IConfigurationManager>();
             if (configManager.GetCVar(CCVars.RestrictedNames))
             {
-                name = Regex.Replace(name, @"[^А-Я,а-я,0-9, -]", string.Empty); // Corvax: Only cyrillic names
+                name = Regex.Replace(name, @"[^А-Я,а-я,A-Z,a-z,0-9, -]", string.Empty); // Theta: All the names pew-pew!
             }
 
             if (configManager.GetCVar(CCVars.ICNameCase))
@@ -518,14 +518,14 @@ namespace Content.Shared.Preferences
 
             _traitPreferences.Clear();
             _traitPreferences.AddRange(traits);
-            
+
             // Corvax-TTS-Start
             prototypeManager.TryIndex<TTSVoicePrototype>(Voice, out var voice);
             if (voice is null || !CanHaveVoice(voice, Sex))
                 Voice = SharedHumanoidAppearanceSystem.DefaultSexVoice[sex];
             // Corvax-TTS-End
         }
-        
+
         // Corvax-TTS-Start
         // MUST NOT BE PUBLIC, BUT....
         public static bool CanHaveVoice(TTSVoicePrototype voice, Sex sex)
