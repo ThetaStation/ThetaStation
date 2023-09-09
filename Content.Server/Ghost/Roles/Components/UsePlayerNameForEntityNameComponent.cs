@@ -4,7 +4,7 @@
 /// This is used for...
 /// </summary>
 [RegisterComponent]
-public sealed class UsePlayerNameForEntityNameComponent : Component
+public sealed partial class UsePlayerNameForEntityNameComponent : Component
 {
     public bool Applied = false;
 }

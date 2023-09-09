@@ -11,7 +11,7 @@ namespace Content.Server.Theta.DebrisGeneration.Processors;
 /// Processor which adds specified components onto processed grid (not grid entities)
 /// </summary>
 [UsedImplicitly]
-public sealed class AddComponentsProcessor : Processor
+public sealed partial class AddComponentsProcessor : Processor
 {
     [DataField("components", required: true)]
     [AlwaysPushInheritance]
@@ -46,7 +46,7 @@ public sealed class AddComponentsProcessor : Processor
                 Logger.Warning($"Add components processor, AddComponents: Tried to add {name} to {gridUid.ToString()}, which already possesses it.");
                 continue;
             }
-            
+
             var component = (Component) factory.GetComponent(name);
             component.Owner = gridUid;
 

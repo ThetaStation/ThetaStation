@@ -13,7 +13,7 @@ jobs:
     if: github.actor != 'IanComradeBot' && github.event.pull_request.draft == false && github.event.review.state == 'approved' && github.event.label.name == 'Approved'
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3.6.0
 
       - name: Get changed files
         id: files

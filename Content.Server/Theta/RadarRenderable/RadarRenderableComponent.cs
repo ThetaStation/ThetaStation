@@ -5,11 +5,11 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototy
 namespace Content.Server.Theta.RadarRenderable;
 
 [RegisterComponent]
-public sealed class RadarRenderableComponent : Component
+public sealed partial class RadarRenderableComponent : Component
 {
     [DataField("radarView", required: true, customTypeSerializer: typeof(PrototypeIdSerializer<RadarEntityViewPrototype>))]
-    public readonly string RadarView = default!;
+    public string RadarView = default!;
 
     [DataField("group", required: true)]
-    public readonly Enum Group = RadarRenderableGroup.None;
+    public Enum Group = RadarRenderableGroup.None;
 }

@@ -4,7 +4,7 @@ namespace Content.Shared.Theta.RadarHUD;
 
 [RegisterComponent]
 [NetworkedComponent]
-public sealed class RadarHUDComponent : Component
+public sealed partial class RadarHUDComponent : Component
 {
 
 }
