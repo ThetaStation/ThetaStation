@@ -127,9 +127,9 @@ public sealed class DebrisGenerationSystem : EntitySystem
         for (int n = 0; n < tries; n++)
         {
             mapPos = (Vector2i) Rand.NextVector2Box(
-                bounds.Left + gridComp.LocalAABB.Width, 
-                bounds.Bottom + gridComp.LocalAABB.Height, 
-                bounds.Right - gridComp.LocalAABB.Width, 
+                bounds.Left + gridComp.LocalAABB.Width,
+                bounds.Bottom + gridComp.LocalAABB.Height,
+                bounds.Right - gridComp.LocalAABB.Width,
                 bounds.Top - gridComp.LocalAABB.Height
                 ).Rounded();
             if (!MapMan.FindGridsIntersecting(targetMap,
@@ -479,7 +479,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
 /// Generator is a base class for generating debris
 /// </summary>
 [ImplicitDataDefinitionForInheritors]
-public abstract class Generator
+public abstract partial class Generator
 {
     public abstract EntityUid Generate(DebrisGenerationSystem sys, MapId targetMap);
 }
@@ -488,7 +488,7 @@ public abstract class Generator
 /// Processor is a base class for post-processing debris
 /// </summary>
 [ImplicitDataDefinitionForInheritors]
-public abstract class Processor
+public abstract partial class Processor
 {
     public abstract void Process(DebrisGenerationSystem sys, MapId targetMap, EntityUid gridUid, bool isGlobal);
 }

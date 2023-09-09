@@ -1285,7 +1285,7 @@ entities:
           - 238
           - 239
       type: ContainerContainer
-- proto: GeneratorUraniumMachineCircuitboard
+- proto: PortableGeneratorSuperPacmanMachineCircuitboard
   entities:
   - uid: 232
     components:

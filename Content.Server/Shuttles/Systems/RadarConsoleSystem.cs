@@ -1,14 +1,9 @@
 using System.Linq;
-using Content.Server.Mind.Components;
-using Content.Server.Storage.Components;
-using Content.Server.Theta.ShipEvent.Console;
 using System.Numerics;
+using Content.Server.Storage.Components;
 using Content.Server.Theta.RadarRenderable;
 using Content.Server.UserInterface;
 using Content.Shared.DeviceLinking;
-using Content.Shared.Mobs.Components;
-using Content.Shared.Mobs.Systems;
-using Content.Shared.Projectiles;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;

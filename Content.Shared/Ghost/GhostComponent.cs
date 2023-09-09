@@ -54,16 +54,8 @@ public sealed partial class GhostComponent : Component
     [DataField("booMaxTargets")]
     public int BooMaxTargets = 3;
 
-    [DataField("action")]
-    public InstantAction Action = new()
-    {
-        UseDelay = TimeSpan.FromSeconds(120),
-        Icon = new SpriteSpecifier.Texture(new ("Interface/Actions/scream.png")),
-        DisplayName = "action-name-boo",
-        Description = "action-description-boo",
-        CheckCanInteract = false,
-        Event = new BooActionEvent(),
-    };
+    [DataField("actions")]
+    public List<InstantAction>? Actions;
 
     // TODO: instead of this funny stuff just give it access and update in system dirtying when needed
     [ViewVariables(VVAccess.ReadWrite)]

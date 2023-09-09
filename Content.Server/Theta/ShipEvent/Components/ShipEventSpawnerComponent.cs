@@ -8,7 +8,7 @@ namespace Content.Server.Theta.ShipEvent.Components;
 /// Marker for shipevent spawners
 /// </summary>
 [RegisterComponent]
-public sealed class ShipEventSpawnerComponent : Component
+public sealed partial class ShipEventSpawnerComponent : Component
 {
     [CanBeNull]
     [ViewVariables(VVAccess.ReadWrite)]

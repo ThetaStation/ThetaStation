@@ -1,7 +1,7 @@
 ﻿namespace Content.Server.Theta.ShipEvent.Console;
 
 [RegisterComponent]
-public sealed class TeamConsoleComponent : Component
+public sealed partial class TeamConsoleComponent : Component
 {
 
 }

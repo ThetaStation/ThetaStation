@@ -92,7 +92,7 @@ namespace Content.Server.GameTicking
 
         private void InitializeGamePreset()
         {
-            SetGamePreset(LobbyEnabled ? _configurationManager.GetCVar(CCVars.GameLobbyDefaultPreset) : "sandbox");
+            SetGamePreset(_configurationManager.GetCVar(CCVars.GameLobbyDefaultPreset));
         }
 
         public void SetGamePreset(GamePresetPrototype preset, bool force = false)

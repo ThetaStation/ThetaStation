@@ -3,72 +3,21 @@
 using System.Linq;
 using Content.Server.Access.Systems;
 using Content.Server.Explosion.Components;
-using Content.Server.Ghost.Components;
-using Content.Server.Mind;
-using Content.Server.Mind.Components;
-using Content.Server.Roles;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Shared.Chat;
 using Content.Shared.Explosion;
+using Content.Shared.Ghost;
+using Content.Shared.Mind.Components;
 using Content.Shared.Projectiles;
-using Content.Shared.Theta.ShipEvent;
+using Content.Shared.Roles.Theta;
 using Robust.Server.Maps;
 using Robust.Server.Player;
-using Robust.Shared.Physics;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
-
-public sealed class ShipEventFaction : PlayerFaction
-{
-    public string Captain; //ckey
-
-    public Color Color;
-
-    public Dictionary<ShipEventFaction, int> Hits = new(); //hits from other teams, not vice-versa
-    public int Kills;
-    public int Assists;
-    public int Points;
-    public int Respawns;
-
-    public ShipTypePrototype? ChosenShipType;
-    public EntityUid Ship;
-    public string ShipName = "";
-
-    public bool ShouldRespawn; //whether this team is currently waiting for respawn
-    public float TimeSinceRemoval; //time since last removal
-
-    public bool OutOfBoundsWarningReceived; //whether this team has already received warning about going out of play area
-
-    public int LastBonusInterval; //how much times this team has acquired bonus points for surviving bonus interval
-
-    private string? _password;
-    public string? JoinPassword
-    {
-        get => _password;
-        set => _password = string.IsNullOrWhiteSpace(value) ? null : value;
-    }
-
-    private int _maxMembers;
-
-    public int MaxMembers
-    {
-        get => _maxMembers;
-        set => _maxMembers = int.Clamp(value, 0, 100);
-    }
-
-    public ShipEventFaction(string name, string iconPath, Color color, string captain,
-        int points = 0) : base(name, iconPath)
-    {
-        Color = color;
-        Captain = captain;
-        Points = points;
-    }
-}
 
 public sealed partial class ShipEventFactionSystem
 {
     [Dependency] private readonly IdCardSystem _cardSystem = default!;
-    [Dependency] private readonly MindTrackerSystem _mindTrack = default!;
 
     private const int minimalColorDelta = 100;
 
@@ -92,8 +41,7 @@ public sealed partial class ShipEventFactionSystem
 
         foreach (var member in team.Members)
         {
-            var session = GetSession(member.Mind);
-            if (session != null)
+            if(_mindSystem.TryGetSession(member.Owner, out var session))
                 _chatSys.SendSimpleMessage(message, session, chatChannel, color);
         }
     }
@@ -210,30 +158,6 @@ public sealed partial class ShipEventFactionSystem
         return 0;
     }
 
-    private IPlayerSession? GetSession(EntityUid entity)
-    {
-        if (EntityManager.TryGetComponent<MindContainerComponent>(entity, out var mindComp))
-        {
-            if (mindComp.HasMind)
-            {
-                var session = mindComp.Mind!.Session;
-                if (session != null)
-                    return session;
-            }
-        }
-
-        return null;
-    }
-
-    private IPlayerSession? GetSession(Mind.Mind mind)
-    {
-        var session = mind.Session;
-        if (session != null)
-            return session;
-
-        return null;
-    }
-
     public bool IsValidName(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
@@ -315,22 +239,11 @@ public sealed partial class ShipEventFactionSystem
         return EntityUid.Invalid;
     }
 
-    //to avoid cluttering roundend statistics
-    private void ClearMindTracker()
-    {
-        _mindTrack.ClearMindSet();
-        foreach (var mind in EntityManager.EntityQuery<MindContainerComponent>())
-        {
-            if (mind.HasMind)
-                _mindTrack.AddMind(mind.Mind!);
-        }
-    }
-
     public PlayerFaction? TryGetTeamByMember(EntityUid member)
     {
         foreach (var team in Teams)
         {
-            var memberRole = team.TryGetRoleByEntity(member);
+            var memberRole = _factionSystem.TryGetRoleByEntity(team, member);
             if (memberRole != null)
                 return team;
         }

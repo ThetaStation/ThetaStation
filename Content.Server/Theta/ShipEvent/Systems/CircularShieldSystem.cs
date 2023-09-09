@@ -159,7 +159,7 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
 
     private void OnShieldFixtureEnter(EntityUid uid, CircularShieldComponent shield, ref StartCollideEvent args)
     {
-        if (!shield.CanWork || args.OurFixture.ID != ShieldFixtureId)
+        if (!shield.CanWork || args.OurFixtureId != ShieldFixtureId)
             return;
 
         foreach (CircularShieldEffect effect in shield.Effects)
@@ -170,7 +170,7 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
 
     private void OnShieldFixtureExit(EntityUid uid, CircularShieldComponent shield, ref EndCollideEvent args)
     {
-        if (!shield.CanWork || args.OurFixture.ID != ShieldFixtureId)
+        if (!shield.CanWork || args.OurFixtureId != ShieldFixtureId)
             return;
 
         foreach (CircularShieldEffect effect in shield.Effects)
@@ -210,7 +210,7 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
         }
         else
         {
-            _physSys.SetVertices(uid, shieldFix, (PolygonShape)shieldFix.Shape, cone);
+            _physSys.SetVertices(uid, ShieldFixtureId, shieldFix, (PolygonShape)shieldFix.Shape, cone);
         }
     }
 }

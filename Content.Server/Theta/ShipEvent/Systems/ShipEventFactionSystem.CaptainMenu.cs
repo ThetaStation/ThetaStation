@@ -60,15 +60,13 @@ public partial class ShipEventFactionSystem
                 continue;
             if (msg.CKey == team.Captain)
                 break;
-            var members = team.GetMembersByUserNames();
+            var members = _factionSystem.GetMembersByUserNames(team);
             if (members.TryGetValue(msg.CKey, out var member))
             {
-                var memberEntity = team.GetMemberEntity(member);
+                var memberEntity = member.Owner;
                 team.RemoveMember(member);
                 EntityManager.DeleteEntity(memberEntity);
-
-                var session = team.GetMemberSession(member);
-                if(session != null)
+                if(_mindSystem.TryGetSession(member.Owner, out var session))
                     _chatSys.SendSimpleMessage(Loc.GetString("shipevent-kicked"), session, ChatChannel.Local, Color.DarkRed);
             }
             break;

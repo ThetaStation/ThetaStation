@@ -1,6 +1,9 @@
-﻿namespace Content.Server.Roles;
+﻿using Content.Shared.Roles;
+using Content.Shared.Roles.Theta;
 
-public sealed class ShipEventRoleComponent
+namespace Content.Server.Roles;
+
+[RegisterComponent]
+public sealed partial class ShipEventRoleComponent : AntagonistRoleComponent
 {
-    
 }

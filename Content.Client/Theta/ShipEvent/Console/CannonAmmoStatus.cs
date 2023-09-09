@@ -28,6 +28,7 @@ public sealed class CannonAmmoStatus : Control
                 new Control
                 {
                     HorizontalExpand = true,
+                    MaxHeight = 18,
                     Children =
                     {
                         (_ammoBar = new ProgressBar

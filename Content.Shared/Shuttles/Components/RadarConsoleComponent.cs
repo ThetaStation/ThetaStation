@@ -21,5 +21,5 @@ public sealed partial class RadarConsoleComponent : Component
     public float MaxRange = 256f;
 
     [DataField("trackedGroups")]
-    public readonly Enum TrackedGroups = RadarRenderableGroup.All;
+    public Enum TrackedGroups = RadarRenderableGroup.All;
 }
