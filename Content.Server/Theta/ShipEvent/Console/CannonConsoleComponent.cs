@@ -4,7 +4,7 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototy
 namespace Content.Server.Theta.ShipEvent.Console;
 
 [RegisterComponent, Access(typeof(CannonConsoleSystem))]
-public sealed class CannonConsoleComponent : Component
+public sealed partial class CannonConsoleComponent : Component
 {
 
 }

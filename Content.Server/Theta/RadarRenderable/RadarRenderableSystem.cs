@@ -1,13 +1,14 @@
 using Content.Server.Mind;
-using Content.Server.Mind.Components;
+﻿using Content.Server.Roles;
 using Content.Server.Shuttles.Systems;
-using Content.Server.Theta.ShipEvent;
 using Content.Server.Theta.ShipEvent.Console;
 using Content.Server.Theta.ShipEvent.Systems;
 using Content.Shared.DeviceLinking;
 using Content.Shared.Doors.Components;
+using Content.Shared.Mind.Components;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Roles.Theta;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Theta.ShipEvent;
@@ -19,6 +20,7 @@ public sealed class RadarRenderableSystem : EntitySystem
     [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
     [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
     [Dependency] private readonly RadarConsoleSystem _radarConsoleSystem = default!;
+    [Dependency] private readonly RoleSystem _roleSystem = default!;
 
     public List<CommonRadarEntityInterfaceState> GetObjectsAround(EntityUid consoleUid, RadarConsoleComponent radar)
     {
@@ -126,11 +128,10 @@ public sealed class RadarRenderableSystem : EntitySystem
         Color? color = null;
         if (mindContainer.Mind != null)
         {
-            foreach (var role in mindContainer.Mind.AllRoles)
-            {
-                if (role is ShipEventRole && role.Faction is ShipEventFaction shipEventFaction)
-                    color = shipEventFaction.Color;
-            }
+            if (EntityManager.TryGetComponent<ShipEventRoleComponent>(mindContainer.Mind.Value,
+                    out var roleComponent) &&
+                roleComponent.Faction is ShipEventFaction shipEventFaction)
+                color = shipEventFaction.Color;
         }
 
         return new CommonRadarEntityInterfaceState(

@@ -1,7 +1,7 @@
 ﻿namespace Content.Server.Theta.HealGrid;
 
 [RegisterComponent]
-public sealed class HealGridComponent : Component
+public sealed partial class HealGridComponent : Component
 {
     [DataField("health")]
     [ViewVariables(VVAccess.ReadWrite)]

@@ -5,7 +5,6 @@ using Content.Server.Chemistry.Components.SolutionManager;
 using Content.Server.Explosion.Components;
 using Content.Server.Flash;
 using Content.Server.Flash.Components;
-using Content.Server.Mind.Components;
 using Content.Server.Radio.EntitySystems;
 using Content.Server.Shuttles.Components;
 using Content.Server.Theta.TeleportationBeacon;
@@ -109,7 +108,7 @@ namespace Content.Server.Explosion.EntitySystems
             var grid = Transform(args.OtherEntity).GridUid;
             if(!HasComp<ShuttleComponent>(grid))
                 return;
-            if (args.OurFixture.ID == component.FixtureID)
+            if (args.OurFixtureId == component.FixtureID)
                 Trigger(uid, grid);
         }
 
@@ -224,8 +223,8 @@ namespace Content.Server.Explosion.EntitySystems
 
         private void OnTriggerCollide(EntityUid uid, TriggerOnCollideComponent component, ref StartCollideEvent args)
         {
-            if (args.OurFixture.ID == component.FixtureID && (!component.IgnoreOtherNonHard || args.OtherFixture.Hard))
-                Trigger(component.Owner);
+            if (args.OurFixtureId == component.FixtureID && (!component.IgnoreOtherNonHard || args.OtherFixture.Hard))
+                Trigger(uid);
         }
 
         private void OnEntParentChanged(EntityUid uid, TriggerOnChangedParentComponent component,
@@ -238,7 +237,7 @@ namespace Content.Server.Explosion.EntitySystems
 
         private void OnActivate(EntityUid uid, TriggerOnActivateComponent component, ActivateInWorldEvent args)
         {
-            Trigger(component.Owner, args.User);
+            Trigger(uid, args.User);
             args.Handled = true;
         }
 

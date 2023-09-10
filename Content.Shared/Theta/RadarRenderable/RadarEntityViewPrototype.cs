@@ -23,7 +23,7 @@ public interface IRadarRenderableForm
 
 [Serializable]
 [DataDefinition]
-public sealed class ShapeRadarForm : IRadarRenderableForm
+public sealed partial class ShapeRadarForm : IRadarRenderableForm
 {
     [DataField("vertices", required: true)]
     public Vector2[] Vertices = Array.Empty<Vector2>();
@@ -37,7 +37,7 @@ public sealed class ShapeRadarForm : IRadarRenderableForm
 
 [Serializable]
 [DataDefinition]
-public sealed class CircleRadarForm : IRadarRenderableForm
+public sealed partial class CircleRadarForm : IRadarRenderableForm
 {
     [DataField("radius", required: true)]
     public float Radius = 1f;
@@ -45,7 +45,7 @@ public sealed class CircleRadarForm : IRadarRenderableForm
 
 [Serializable]
 [DataDefinition]
-public sealed class CharRadarForm : IRadarRenderableForm
+public sealed partial class CharRadarForm : IRadarRenderableForm
 {
     [DataField("char", required: true)]
     public char Char = '\0';
@@ -56,7 +56,7 @@ public sealed class CharRadarForm : IRadarRenderableForm
 
 [Serializable]
 [DataDefinition]
-public sealed class TextureRadarForm : IRadarRenderableForm
+public sealed partial class TextureRadarForm : IRadarRenderableForm
 {
     [DataField("sprite", required: true)]
     public SpriteSpecifier Sprite = default!;

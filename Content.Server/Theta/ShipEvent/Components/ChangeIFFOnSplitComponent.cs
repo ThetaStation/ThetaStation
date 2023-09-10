@@ -6,7 +6,7 @@ namespace Content.Server.Theta.ShipEvent.Components;
 /// Changes flags & color on child grid IFF after parent grid was split
 /// </summary>
 [RegisterComponent]
-public sealed class ChangeIFFOnSplitComponent : Component
+public sealed partial class ChangeIFFOnSplitComponent : Component
 {
     /// <summary>
     /// Will set new flags for children IFF, if not null, otherwise will inherit them from parent grid if possible

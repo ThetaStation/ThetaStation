@@ -21,7 +21,7 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototy
 namespace Content.Server.StationEvents.Events.Theta;
 
 [RegisterComponent, Access(typeof(ShipEventRule))]
-public sealed class ShipEventRuleComponent : Component
+public sealed partial class ShipEventRuleComponent : Component
 {
     //all time related fields are in seconds
 

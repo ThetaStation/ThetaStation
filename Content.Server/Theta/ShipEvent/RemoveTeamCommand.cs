@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Server.Administration;
 using Content.Server.Theta.ShipEvent.Systems;
 using Content.Shared.Administration;
+using Content.Shared.Roles.Theta;
 using Robust.Shared.Console;
 
 namespace Content.Server.Theta.ShipEvent;
@@ -13,14 +14,14 @@ public sealed class RemoveTeamCommand : LocalizedCommands
     public override string Description => "Removes team with specified name. Additionally, removal reason can be specified";
     public override string Help => "First arg - team name, second arg (optional) - removal reason. " +
                                    "Name and removal reason should be separated by comma (as an argument itself), ex: 'se_remteam Team 1 , Assholes'";
-    
+
     private ShipEventFactionSystem? seSys;
-    
+
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         if(seSys == null)
             seSys = IoCManager.Resolve<IEntityManager>().System<ShipEventFactionSystem>();
-        
+
         if (args.Length == 0)
         {
             shell.WriteError("Please specify team name.");
@@ -47,9 +48,9 @@ public sealed class RemoveTeamCommand : LocalizedCommands
         }
 
         seSys = IoCManager.Resolve<IEntityManager>().System<ShipEventFactionSystem>();
-        
+
         ShipEventFaction? teamToRemove = null;
-        foreach (ShipEventFaction team in seSys.Teams)
+        foreach (var team in seSys.Teams)
         {
             if (team.Name == teamName)
             {

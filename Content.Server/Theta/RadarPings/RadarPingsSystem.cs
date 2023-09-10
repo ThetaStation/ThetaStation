@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Numerics;
+using Content.Server.Mind;
 using Content.Server.Shuttles.Components;
 using Content.Server.Theta.ShipEvent.Systems;
 using Content.Shared.Mobs.Components;
@@ -12,9 +13,9 @@ namespace Content.Server.Theta.RadarPings;
 
 public sealed class RadarPingsSystem : SharedRadarPingsSystem
 {
-    [Dependency] private readonly ISharedPlayerManager _playerManager = default!;
     [Dependency] private readonly ShipEventFactionSystem _shipEventSystem = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
+    [Dependency] private readonly MindSystem _mindSystem = default!;
 
     private Dictionary<ICommonSession, TimeSpan> _playersPingCd = new();
 
@@ -37,7 +38,9 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
 
     private bool IsValidPing(EntityUid sender)
     {
-        if (!_playerManager.TryGetSessionByEntity(sender, out var session))
+        if (!_mindSystem.TryGetMind(sender, out _, out var mind))
+            return false;
+        if (!_mindSystem.TryGetSession(mind, out var session))
             return false;
 
         if (_playersPingCd.TryGetValue(session, out var nextPing) && _gameTiming.CurTime < nextPing)
@@ -72,7 +75,13 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
             var team = _shipEventSystem.TryGetTeamByMember(ev.Sender);
             if (team != null)
             {
-                var list = team.Members.Where(r => r.Mind.Session != null).Select(r => team.GetMemberSession(r)!);
+                var list = new List<ICommonSession>();
+                foreach (var member in team.Members)
+                {
+                    if(_mindSystem.TryGetMind(member.Owner, out _, out var mind) &&
+                       _mindSystem.TryGetSession(mind, out var session))
+                        list.Add(session);
+                }
                 filter.AddPlayers(list);
             }
         }
@@ -81,8 +90,9 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
             filter = Filter.BroadcastGrid(ev.Sender);
         }
 
-        if (_playerManager.TryGetSessionByEntity(ev.Sender, out var session))
-            filter.RemovePlayer(session);
+        if (_mindSystem.TryGetMind(ev.Sender, out _, out var ownerMind) &&
+            _mindSystem.TryGetSession(ownerMind, out var ownerSession))
+            filter.RemovePlayer(ownerSession);
 
         return filter;
     }

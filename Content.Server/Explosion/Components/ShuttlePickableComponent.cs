@@ -4,7 +4,7 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototy
 namespace Content.Server.Explosion.Components;
 
 [RegisterComponent]
-public sealed class ShuttlePickableComponent : Component
+public sealed partial class ShuttlePickableComponent : Component
 {
     [ViewVariables(VVAccess.ReadWrite)]
     [DataField("randomPrototypes", required: true, customTypeSerializer:typeof(PrototypeIdListSerializer<EntityPrototype>))]

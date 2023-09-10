@@ -5,14 +5,14 @@ namespace Content.Shared.Theta.MobHUD;
 
 [RegisterComponent]
 [NetworkedComponent]
-public sealed class MobHUDComponent : Component
+public sealed partial class MobHUDComponent : Component
 {
     [ViewVariables(VVAccess.ReadWrite)]
     public List<MobHUDPrototype> ActiveHUDs = new();
 }
 
 [Serializable, NetSerializable]
-public sealed class MobHUDState : ComponentState
+public sealed partial class MobHUDState : ComponentState
 {
     public List<MobHUDPrototype> ActiveHUDs = default!;
 }

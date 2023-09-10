@@ -5,7 +5,7 @@ using Robust.Shared.Physics.Systems;
 
 namespace Content.Shared.Theta.ShipEvent.CircularShield;
 
-public sealed class CircularShieldTempSpeedChangeEffect : CircularShieldEffect
+public sealed partial class CircularShieldTempSpeedChangeEffect : CircularShieldEffect
 {
     private IEntityManager entMan = default!;
     private SharedTransformSystem formSys = default!;

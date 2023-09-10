@@ -81,3 +81,9 @@
   id: PaperStamp
   kind: source
   path: "/Textures/Shaders/paperstamp.swsl"
+  
+# Simple horizontal cut
+- type: shader
+  id: HorizontalCut
+  kind: source
+  path: "/Textures/Shaders/hcut.swsl"
