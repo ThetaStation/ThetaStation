@@ -147,6 +147,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, StartCollideEvent>(OnCollision);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, MobStateChangedEvent>(OnPlayerStateChange);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, MindTransferredMessage>(OnPlayerTransfer);
+        SubscribeLocalEvent<ShipEventFactionMarkerComponent, MindAddedMessage>(OnMindAdded);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, EntitySpokeEvent>(OnTeammateSpeak);
 
         SubscribeLocalEvent<ShipEventPointStorageComponent, UseInHandEvent>(OnPointStorageTriggered);
@@ -610,6 +611,13 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         var xform = EntityManager.GetComponent<TransformComponent>(playerMob);
         xform.AttachToGridOrMap();
 
+        if (EntityManager.TryGetComponent<ShipEventFactionMarkerComponent>(spawnerUid, out var spawnerMarker) &&
+            spawnerMarker.Team != null)
+        {
+            var playerMarker = EntityManager.EnsureComponent<ShipEventFactionMarkerComponent>(playerMob);
+            playerMarker.Team = spawnerMarker.Team;
+        }
+
         EntityUid mind;
         if (player.AttachedEntity != null && _mindSystem.TryGetMind(player.AttachedEntity.Value, out var mindId, out _))
             mind = mindId;
@@ -653,9 +661,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             if (spawnerMarker.Team == null)
                 return;
             team = spawnerMarker.Team;
-
-            var playerMarker = EntityManager.EnsureComponent<ShipEventFactionMarkerComponent>(spawnedEntity);
-            playerMarker.Team = team;
         }
 
         if(!_roleSystem.MindHasRole<ShipEventRoleComponent>(mindId))
@@ -667,8 +672,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         SetPlayerCharacterName(spawnedEntity, $"{GetName(spawnedEntity)} ({team.Name})");
 
-        SetupActions(spawnedEntity, team, session);
-
         if (EntityManager.TryGetComponent<MobHUDComponent>(spawnedEntity, out var hud))
         {
             var hudProt = _protMan.Index<MobHUDPrototype>(
@@ -679,19 +682,29 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         _chatManager.DispatchServerMessage(session, Loc.GetString("shipevent-role-greet"));
     }
 
+    private void OnMindAdded(EntityUid uid, ShipEventFactionMarkerComponent component, MindAddedMessage args)
+    {
+        if(component.Team == null)
+            return;
+        if (!_mindSystem.TryGetMind(uid, out _, out var mind))
+            return;
+        if (!_mindSystem.TryGetSession(mind, out var session))
+            return;
+        SetupActions(uid, component.Team, session);
+    }
+
     /// <summary>
     /// Sets up action buttons for specified player
     /// </summary>
     /// <param name="uid">player's uid</param>
     /// <param name="team">player's team</param>
     /// <param name="session">player's session</param>
-    /// <param name="isGhost">player is ghost?</param>
-    private void SetupActions(EntityUid uid, ShipEventFaction? team, IPlayerSession? session, bool isGhost = false)
+    private void SetupActions(EntityUid uid, ShipEventFaction team, IPlayerSession session)
     {
         var teamViewToggle = _protMan.Index<InstantActionPrototype>("ShipEventTeamViewToggle");
         _actSys.AddAction(uid, new InstantAction(teamViewToggle), null);
 
-        if (team != null && session != null && team.Captain == session.ConnectedClient.UserName)
+        if (team.Captain == session.ConnectedClient.UserName)
         {
             var capMenuToggle = _protMan.Index<InstantActionPrototype>("ShipEventCaptainMenuToggle");
             _actSys.AddAction(uid, new InstantAction(capMenuToggle), null);
