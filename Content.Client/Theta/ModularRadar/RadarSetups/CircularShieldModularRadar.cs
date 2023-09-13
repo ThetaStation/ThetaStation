@@ -14,5 +14,6 @@ public sealed class CircularShieldModularRadar : ModularRadarControl
         Modules.Add(new RadarPingsModule(this));
         Modules.Add(new RadarShieldStatus(this));
         Modules.Add(new RadarControlShield(this));
+        Modules.Add(new RadarCommon(this));
     }
 }
