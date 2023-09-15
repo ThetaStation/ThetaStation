@@ -38,6 +38,7 @@
   - type: Ghost
     actions:
       - !type:InstantAction
+        id: ShipEventReturnToLobbyAction
         icon: { sprite: "/Textures/Theta/ShipEvent/Actions.rsi", state: lobby }
         iconOn: "/Textures/Theta/ShipEvent/Actions.rsi"
         name: shipevent-returntolobby-name
