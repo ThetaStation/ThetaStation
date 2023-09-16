@@ -253,6 +253,7 @@ namespace Content.Client.Lobby
         private void HandleLocalization()
         {
             _configurationManager.OnValueChanged(CCVars.CultureLocale, _ => _lobby!.ReadyButton.Text = Loc.GetString("ui-lobby-ready-up-button"));
+            _configurationManager.OnValueChanged(CCVars.CultureLocale, _ => _lobby!.LootboxButton.Text = Loc.GetString("shipevent-ui-lobby-lootbox-button"));
             _configurationManager.OnValueChanged(CCVars.CultureLocale, _ => _lobby!.AHelpButton.Text = Loc.GetString("ui-lobby-ahelp-button"));
             _configurationManager.OnValueChanged(CCVars.CultureLocale, _ => _lobby!.OptionsButton.Text = Loc.GetString("ui-lobby-options-button"));
             _configurationManager.OnValueChanged(CCVars.CultureLocale, _ => _lobby!.LeaveButton.Text = Loc.GetString("ui-lobby-leave-button"));

@@ -1,0 +1,9 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+            xmlns:tabs="clr-namespace:Content.Client.Theta.ShipeventLobbyUI.Tabs"
+            Title="{Loc 'shipevent-ui-lootbox-title'}"
+            MinSize="800 450">
+    <TabContainer Name="Tabs" Access="Public">
+        <tabs:LootboxShopTab />
+        <tabs:LootboxInventoryTab />
+    </TabContainer>
+</DefaultWindow>

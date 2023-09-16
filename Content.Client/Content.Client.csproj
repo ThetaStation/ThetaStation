@@ -25,4 +25,31 @@
   </ItemGroup>
   <Import Project="..\RobustToolbox\MSBuild\Robust.Properties.targets" />
   <Import Project="..\RobustToolbox\MSBuild\XamlIL.targets" />
+  <ItemGroup>
+    <EmbeddedResource Remove="Theta\ShipeventLobbyUI\LootboxMenu.xaml" />
+    <EmbeddedResource Remove="Theta\ShipeventLobbyUI\Tabs\LootboxInventoryTab.xaml" />
+    <EmbeddedResource Remove="Theta\ShipeventLobbyUI\Tabs\LootboxShopTab.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Update="Theta\ShipeventLobbyUI\LootboxMenu.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AdditionalFiles>
+    <AdditionalFiles Update="Theta\ShipeventLobbyUI\Tabs\LootboxShopTab.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AdditionalFiles>
+    <AdditionalFiles Update="Theta\ShipeventLobbyUI\Tabs\LootboxInventoryTab.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AdditionalFiles>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Theta\ShipeventLobbyUI\LootboxMenu.xaml.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+    <Compile Update="Theta\ShipeventLobbyUI\Tabs\LootboxShopTab.xaml.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+    <Compile Update="Theta\ShipeventLobbyUI\Tabs\LootboxInventoryTab.xaml.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+  </ItemGroup>
 </Project>

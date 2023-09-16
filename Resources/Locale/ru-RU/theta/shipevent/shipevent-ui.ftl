@@ -101,3 +101,12 @@ shipevent-shieldconsole-radiuslabel = Радиус
 ## Team Messages
 
 shipevent-team-msg-base = \[Команда\] [bold]{$name}[/bold]: {$message}
+
+## Lootboxes UI
+
+shipevent-ui-lobby-lootbox-button = Лутбоксы
+shipevent-cmd-lootbox-desc = Opens lootboxes menu
+shipevent-cmd-lootbox-help = Usage: lootboxes [tab]
+shipevent-ui-lootbox-tab-shop = Магазин
+shipevent-ui-lootbox-tab-inventory = Инвентарь
+shipevent-ui-lootbox-title = Lootboxes
