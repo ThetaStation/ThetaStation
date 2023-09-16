@@ -9,7 +9,7 @@ shipevent-teamview-heading-shipname = Ship name
 shipevent-teamview-heading-crew = Living crew
 shipevent-teamview-heading-points = Score
 
-shipevent-teamview-toggle-name = Active teams
+shipevent-teamview-toggle-name = View active teams
 shipevent-teamview-toggle-desc = View team list
 
 
