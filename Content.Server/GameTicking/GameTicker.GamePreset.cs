@@ -92,7 +92,7 @@ namespace Content.Server.GameTicking
 
         private void InitializeGamePreset()
         {
-            SetGamePreset(LobbyEnabled ? _configurationManager.GetCVar(CCVars.GameLobbyDefaultPreset) : "sandbox");
+            SetGamePreset(_configurationManager.GetCVar(CCVars.GameLobbyDefaultPreset));
         }
 
         public void SetGamePreset(GamePresetPrototype preset, bool force = false)
@@ -262,7 +262,7 @@ namespace Content.Server.GameTicking
             var xformQuery = GetEntityQuery<TransformComponent>();
             var coords = _transform.GetMoverCoordinates(position, xformQuery);
 
-            var ghost = Spawn("MobObserver", coords);
+            var ghost = Spawn(mind.OwnedComponent?.GhostPrototype ?? "MobObserver", coords);
 
             // Try setting the ghost entity name to either the character name or the player name.
             // If all else fails, it'll default to the default entity prototype name, "observer".

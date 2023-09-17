@@ -124,6 +124,13 @@ namespace Content.Server.GameTicking
                     ("mode", Loc.GetString(CurrentPreset.ModeTitle)));
                 Log.Debug(msg);
                 SendServerMessage(msg);
+
+                if (CurrentPreset.ForceMap)
+                {
+                    Log.Debug("Preset has 'ForceMap' set; Forcing (first) map from supported map pool.");
+                    maps.Clear();
+                    maps.Add(_prototypeManager.Index<GameMapPrototype>(pool.Maps.First()));
+                }
             }
 
             // Let game rules dictate what maps we should load.
@@ -407,6 +414,13 @@ namespace Content.Server.GameTicking
                     ("hours", Math.Truncate(duration.TotalHours)),
                     ("minutes", duration.Minutes),
                     ("seconds", duration.Seconds));
+
+                var ev = new RoundEndDiscordTextAppendEvent();
+                RaiseLocalEvent(ref ev);
+
+                content += "\n";
+                content += ev.Text;
+
                 var payload = new WebhookPayload { Content = content };
 
                 await _discord.CreateMessage(_webhookIdentifier.Value, payload);
@@ -815,4 +829,24 @@ namespace Content.Server.GameTicking
             _doNewLine = true;
         }
     }
+
+    /// <summary>
+    ///     Event raised to allow subscribers to add text to the round end discord webhook.
+    /// </summary>
+    [ByRefEvent]
+    public record struct RoundEndDiscordTextAppendEvent()
+    {
+        private bool _doNewLine;
+
+        public string Text = string.Empty;
+
+        public void AddLine(string text)
+        {
+            if (_doNewLine)
+                Text += "\n";
+
+            Text += text;
+            _doNewLine = true;
+        }
+    };
 }

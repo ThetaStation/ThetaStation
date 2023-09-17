@@ -327,6 +327,9 @@ uplink-operative-suit-desc = A suit given to our nuclear operatives with fine fa
 uplink-operative-skirt-name = Operative Jumpskirt
 uplink-operative-skirt-desc = A skirt given to our nuclear operatives with fine fabric to make sure you stand out, no other benefits aside from looking cool.
 
+uplink-grappling-hook-name = Grappling Hook
+uplink-grappling-hook-desc = Just a grappling hook.
+
 uplink-balloon-name = Syndie Balloon
 uplink-balloon-desc = Handed out to the bravest souls who survived the "atomic twister" ride at Syndieland.
 

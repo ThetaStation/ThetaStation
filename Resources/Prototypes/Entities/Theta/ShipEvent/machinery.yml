@@ -1,0 +1,193 @@
+﻿- type: entity
+  id: CannonComputerShipEvent
+  name: cannon console
+  suffix: ShipEvent
+  parent: BaseComputer
+  components:
+    - type: CannonConsole
+    - type: ActivatableUI
+      key: enum.CannonConsoleUiKey.Key
+    - type: UserInterface
+      interfaces:
+        - key: enum.CannonConsoleUiKey.Key
+          type: CannonConsoleBoundUserInterface
+    - type: RadarConsole
+    - type: PointLight
+      radius: 1.5
+      energy: 1.6
+      color: "#43ccb5"
+    - type: ApcPowerReceiver
+      needsPower: false
+    - type: Sprite
+      layers:
+        - map: ["computerLayerBody"]
+          state: computer
+        - map: ["computerLayerKeyboard"]
+          state: generic_keyboard
+        - map: ["computerLayerScreen"]
+          state: comm_syndie
+        - map: ["computerLayerKeys"]
+          state: syndie_key
+    - type: DeviceNetwork
+      deviceNetId: Wireless
+    - type: WirelessNetworkConnection
+      range: 200
+    - type: DeviceLinkSource
+      ports:
+      - CannonConsoleSender
+
+- type: entity
+  parent: ComputerShuttleSyndie
+  id: ComputerShuttleSyndieShipEvent
+  suffix: ShipEvent
+  components:
+    - type: Anchorable
+      disabled: true
+
+- type: entity
+  id: TeamCreationConsoleShipEvent
+  name: team console
+  parent: BaseComputer
+  components:
+    - type: ShipEventFactionMarker
+    - type: TeamConsole
+    - type: ActivatableUI
+      key: enum.TeamCreationUiKey.Key
+    - type: UserInterface
+      interfaces:
+        - key: enum.TeamCreationUiKey.Key
+          type: ShipEventLobbyBoundUserInterface
+    - type: PointLight
+      radius: 1.5
+      energy: 1.6
+      color: "#43ccb5"
+    - type: ApcPowerReceiver
+      needsPower: false
+    - type: Destructible
+      thresholds:
+        - trigger: # override the parent slot for immortality
+            !type:DamageTrigger
+            damage: 100000
+
+- type: entity
+  id: TeamSpawnerShipEvent
+  name: team spawner
+  parent: BaseStructure
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: /Textures/Structures/Machines/cloning.rsi
+    state: pod_1
+  - type: ShipEventSpawner
+    prototype: MobHumanShipEvent
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb {}
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: Glass
+  - type: Repairable
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 150
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: GlassBreak
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          ShardGlass:
+            min: 1
+            max: 2
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: MeleeSound
+    soundGroups:
+      Brute:
+        path:
+          "/Audio/Effects/glass_hit.ogg"
+
+- type: entity
+  id: TurretLoaderShipEvent
+  name: turret loader
+  parent: BaseStructure
+  placement:
+    mode: SnapgridCenter
+  components:
+    - type: Transform
+      anchored: true
+    - type: Sprite
+      drawdepth: Objects
+      sprite: Theta/ShipEvent/Structures/Machines/TurretLoader.rsi
+      state: loader
+    - type: InteractionOutline
+    - type: Physics
+      bodyType: Static
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape:
+            !type:PhysShapeAabb {}
+          mask:
+            - FullTileMask
+          layer:
+            - WallLayer
+    - type: Damageable
+      damageContainer: Inorganic
+      damageModifierSet: Metallic
+    - type: Repairable
+    - type: Destructible
+      thresholds:
+        - trigger:
+            !type:DamageTrigger
+            damage: 300
+          behaviors:
+            - !type:PlaySoundBehavior
+              sound: !type:SoundPathSpecifier
+                path: "/Audio/Effects/metalbreak.ogg"
+            - !type:SpawnEntitiesBehavior
+              spawn:
+                SheetSteel:
+                  min: 3
+                  max: 5
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+    - type: ApcPowerReceiver
+      needsPower: false
+    - type: ItemSlots
+      slots:
+        ammoContainer:
+          name: AmmoContainer
+          insertSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
+          ejectSound: /Audio/Weapons/Guns/MagOut/batrifle_magout.ogg
+          priority: 2
+          whitelist:
+            tags:
+            - TurretAmmoContainer
+    - type: ContainerContainer
+      containers:
+        ammoContainer: !type:ContainerSlot
+    - type: TurretLoader
+      invalidAmmoSound:
+        path: /Audio/Effects/zzzt.ogg
+    - type: DeviceNetwork
+      deviceNetId: Wireless
+    - type: WirelessNetworkConnection
+      range: 200
+    - type: DeviceLinkSource
+      ports:
+      - TurretLoaderSender

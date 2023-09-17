@@ -16,7 +16,7 @@ public sealed partial class AccessReaderComponent : Component
     /// Whether or not the accessreader is enabled.
     /// If not, it will always let people through.
     /// </summary>
-    [DataField("enabled")]
+    [ViewVariables(VVAccess.ReadWrite), DataField("enabled")]
     public bool Enabled = true;
 
     /// <summary>

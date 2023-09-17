@@ -1,3 +1,4 @@
+using Content.Shared.Theta.RadarRenderable;
 using Robust.Shared.Map;
 using Robust.Shared.Serialization;
 
@@ -21,17 +22,92 @@ public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
 
     public readonly List<DockingInterfaceState> Docks;
 
+    public readonly List<CannonInformationInterfaceState> Cannons;
+
+    public readonly List<CommonRadarEntityInterfaceState> CommonEntities;
+
+    public readonly List<ShieldInterfaceState> Shields;
+
     public RadarConsoleBoundInterfaceState(
         float maxRange,
         NetCoordinates? coordinates,
         Angle? angle,
-        List<DockingInterfaceState> docks)
+        List<DockingInterfaceState> docks,
+        List<CannonInformationInterfaceState> cannons,
+        List<CommonRadarEntityInterfaceState> common,
+        List<ShieldInterfaceState> shields)
     {
         MaxRange = maxRange;
         Coordinates = coordinates;
         Angle = angle;
         Docks = docks;
+        Cannons = cannons;
+        Shields = shields;
+        CommonEntities = common;
     }
+}
+
+[Serializable, NetSerializable]
+public sealed class CommonRadarEntityInterfaceState
+{
+    public NetCoordinates Coordinates;
+    public Angle Angle;
+    public string RadarViewPrototype;
+    public Color? OverrideColor;
+
+    public CommonRadarEntityInterfaceState(NetCoordinates coordinates, Angle angle, string radarViewPrototype,
+        Color? color = null)
+    {
+        Coordinates = coordinates;
+        Angle = angle;
+        RadarViewPrototype = radarViewPrototype;
+        OverrideColor = color;
+    }
+}
+
+[Flags]
+[Serializable, NetSerializable]
+public enum RadarRenderableGroup
+{
+    None                   =      0,
+    ShipEventTeammate      = 1 << 0,
+    Projectiles            = 1 << 1,
+    Cannon                 = 1 << 2,
+    Pickup                 = 1 << 3,
+
+    All = (ShipEventTeammate | Projectiles | Cannon | Pickup),
+}
+
+/// <summary>
+/// State of each cannon on shuttle grid
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class CannonInformationInterfaceState
+{
+    public NetEntity Uid;
+    public bool IsControlling;
+    public int Ammo;
+    public int MaxCapacity;
+    public int UsedCapacity;
+}
+
+[Serializable, NetSerializable]
+public sealed class ShieldInterfaceState
+{
+    public NetCoordinates Coordinates;
+    public Angle WorldRotation;
+
+    public bool Powered;
+
+    public Angle Angle;
+
+    public Angle Width;
+    public int MaxWidth;
+
+    public int Radius;
+    public int MaxRadius;
+
+    public bool IsControlling;
 }
 
 /// <summary>

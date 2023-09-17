@@ -98,5 +98,8 @@ namespace Content.Shared.Roles
 
         [DataField("extendedAccessGroups", customTypeSerializer: typeof(PrototypeIdListSerializer<AccessGroupPrototype>))]
         public IReadOnlyCollection<string> ExtendedAccessGroups { get; private set; } = Array.Empty<string>();
+
+        [DataField("alwaysShowInLatejoin")]
+        public bool AlwaysShowInLatejoin = false;
     }
 }

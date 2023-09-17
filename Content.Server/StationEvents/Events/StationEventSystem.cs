@@ -140,7 +140,15 @@ public abstract partial class StationEventSystem<T> : GameRuleSystem<T> where T 
 
         if (filter == null)
         {
-            stations.EnsureCapacity(Count<StationEventEligibleComponent>());
+            int stationCount = Count<StationEventEligibleComponent>();
+            
+            if (stationCount == 0)
+            {
+                station = null;
+                return false;
+            }
+
+            stations.EnsureCapacity(stationCount);
         }
 
         filter ??= _ => true;

@@ -27,7 +27,15 @@
     context: "ghost"
   - type: Examiner
     skipChecks: true
+  - type: UserInterface
+    interfaces:
+      - key: enum.GenericWarningUiKey.ShipEventKey
+        type: GenericWarningWindowBoundUserInterface
+        requireInputValidation: false
   - type: Ghost
+    actions:
+    - ShipEventReturnToLobbyAction
+    - ActionGhostBoo
   - type: IntrinsicRadioReceiver
   - type: ActiveRadio
     channels:

@@ -124,14 +124,15 @@ namespace Content.Server.Ghost
             var time = _gameTiming.CurTime;
             component.TimeOfDeath = time;
 
-            // TODO ghost: remove once ghosts are persistent and aren't deleted when returning to body
-            var action = _actions.AddAction(uid, ref component.ActionEntity, component.Action);
-            if (action?.UseDelay != null)
+            foreach (var action in component.Actions)
             {
-                action.Cooldown = (time, time + action.UseDelay.Value);
-                Dirty(component.ActionEntity!.Value, action);
+                EntityUid? actionEnt = null;
+                var createdAction = _actions.AddAction(uid, ref actionEnt, action);
+                // TODO ghost: remove once ghosts are persistent and aren't deleted when returning to body
+                if (createdAction?.UseDelay != null)
+                    createdAction.Cooldown = (time, time + createdAction.UseDelay.Value);
+                component.ActionsEntities.Add(actionEnt);
             }
-
             _actions.AddAction(uid, ref component.ToggleLightingActionEntity, component.ToggleLightingAction);
             _actions.AddAction(uid, ref component.ToggleFoVActionEntity, component.ToggleFoVAction);
             _actions.AddAction(uid, ref component.ToggleGhostsActionEntity, component.ToggleGhostsAction);
@@ -156,7 +157,10 @@ namespace Content.Server.Ghost
                     _eye.SetVisibilityMask(uid, eye.VisibilityMask & ~(int) VisibilityFlags.Ghost, eye);
                 }
 
-                _actions.RemoveAction(uid, component.ActionEntity);
+                foreach (var action in component.ActionsEntities)
+                {
+                    _actions.RemoveAction(uid, action);
+                }
             }
         }
 

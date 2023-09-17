@@ -1,0 +1,13 @@
+- type: job
+  id: PassengerGodmode
+  name: job-name-passenger
+  description: job-description-passenger
+  startingGear: PassengerGear
+  icon: "JobIconPassenger"
+  supervisors: job-supervisors-everyone
+  playTimeTracker: JobImmortalAssistant
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Godmode
+  alwaysShowInLatejoin: true

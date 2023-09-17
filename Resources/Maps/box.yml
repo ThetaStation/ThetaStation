@@ -123033,7 +123033,7 @@ entities:
     - pos: 34.5,-92.5
       parent: 8364
       type: Transform
-- proto: GeneratorUraniumMachineCircuitboard
+- proto: PortableGeneratorSuperPacmanMachineCircuitboard
   entities:
   - uid: 19880
     components:

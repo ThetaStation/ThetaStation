@@ -109,4 +109,5 @@ tiles-snow-floor = snow floor
 tiles-wood3 = wood broken floor
 tiles-hull = exterior hull plating
 tiles-hull-reinforced = exterior reinforced hull plating
+tiles-shuttle-floor = shuttle floor
 tiles-web = web tile
