@@ -153,7 +153,7 @@ public sealed class CannonSystem : SharedCannonSystem
     private void OnRemoval(EntityUid uid, CannonComponent cannon, ComponentRemove args)
     {
         if (cannon.BoundLoader != null)
-            cannon.BoundLoader.BoundTurret.Clear();
+            cannon.BoundLoader.BoundTurret = null;
     }
 
     private void OnRotateCannons(RotateCannonsEvent ev)
