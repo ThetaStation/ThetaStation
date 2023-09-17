@@ -52,17 +52,17 @@ public sealed class TurretLoaderSystem : EntitySystem
         if (turretList != null)
             loader.BoundTurret = turretList.ToList();
 
-        LinkLoaderToTurret(uid, loader);
+        LibkLoaderToTurret(uid, loader);
     }
 
     public void SetupLoader(EntityUid uid, TurretLoaderComponent loader, EntityUid turretUid)
     {
         loader.BoundTurret.Add(turretUid);
 
-        LinkLoaderToTurret(uid, loader);
+        LibkLoaderToTurret(uid, loader);
     }
 
-    public void LinkLoaderToTurret(EntityUid uid, TurretLoaderComponent loader)
+    public void LibkLoaderToTurret(EntityUid uid, TurretLoaderComponent loader)
     {
         if (EntityManager.TryGetComponent<ItemSlotsComponent>(uid, out var slots))
         {
