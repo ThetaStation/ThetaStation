@@ -37,7 +37,7 @@ public sealed partial class TurretLoaderComponent : Component
 [Serializable, NetSerializable]
 public sealed class TurretLoaderState : ComponentState
 {
-    public EntityUid? BoundTurret;
+    public NetEntity? BoundTurret;
 
     public int MaxContainerCapacity;
 
@@ -45,11 +45,11 @@ public sealed class TurretLoaderState : ComponentState
 
     public string? ContainerID;
 
-    public TurretLoaderState(TurretLoaderComponent loader)
+    public TurretLoaderState(NetEntity? boundTurret, int maxContainerCapacity, string? containerSlotId, string? containerId)
     {
-        BoundTurret = loader.BoundTurret;
-        ContainerSlotID = loader.ContainerSlot?.ID;
-        MaxContainerCapacity = loader.MaxContainerCapacity;
-        ContainerID = loader.AmmoContainer?.ID;
+        BoundTurret = boundTurret;
+        MaxContainerCapacity = maxContainerCapacity;
+        ContainerSlotID = containerSlotId;
+        ContainerID = containerId;
     }
 }

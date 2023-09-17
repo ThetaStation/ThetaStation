@@ -17,10 +17,7 @@
     - type: Anchorable
       delay: 7
     - type: CombatMode
-      combatToggleAction:
-        enabled: false
-        autoPopulate: false
-        name: action-name-combat
+      combatToggleAction: ActionCombatModeToggleOff
     - type: Actions
     - type: Cannon
     - type: Gun

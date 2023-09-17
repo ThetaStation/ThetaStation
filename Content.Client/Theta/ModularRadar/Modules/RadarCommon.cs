@@ -40,7 +40,7 @@ public sealed class RadarCommon : RadarModule
         {
             var view = _prototypeManager.Index<RadarEntityViewPrototype>(state.RadarViewPrototype);
 
-            var position = state.Coordinates.ToMapPos(EntManager, _transformSystem);
+            var position = EntManager.GetCoordinates(state.Coordinates).ToMapPos(EntManager, _transformSystem);
             var angle = state.Angle;
 
             var color = state.OverrideColor ?? view.DefaultColor;

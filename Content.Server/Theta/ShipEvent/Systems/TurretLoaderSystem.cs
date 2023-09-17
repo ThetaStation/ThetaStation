@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Server.Storage.Components;
+using Content.Server.Storage.EntitySystems;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.DeviceLinking;
 using Content.Shared.DeviceLinking.Events;
@@ -11,6 +12,7 @@ using Robust.Shared.GameStates;
 using Content.Shared.Throwing;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Interaction;
+using Content.Shared.Storage;
 using Robust.Shared.Serialization;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
@@ -41,7 +43,12 @@ public sealed class TurretLoaderSystem : EntitySystem
     private void GetLoaderState(EntityUid uid, TurretLoaderComponent loader, ref ComponentGetState args)
     {
         UpdateAmmoContainer(loader);
-        args.State = new TurretLoaderState(loader);
+        args.State = new TurretLoaderState(
+            GetNetEntity(loader.BoundTurret),
+            loader.MaxContainerCapacity,
+            loader.ContainerSlot?.ID,
+            loader.AmmoContainer?.ID
+            );
     }
 
     public void SetupLoader(EntityUid uid, TurretLoaderComponent loader, EntityUid? turretUid = null)
@@ -91,30 +98,28 @@ public sealed class TurretLoaderSystem : EntitySystem
         loader.MaxContainerCapacity = 0;
 
         var container = loader.ContainerSlot?.Item;
-        if (EntityManager.TryGetComponent<ServerStorageComponent>(container, out var storage))
+        if (EntityManager.TryGetComponent<StorageComponent>(container, out var storage))
         {
-            if (storage.Storage != null)
+            // ТУТ КАКОЙ-ТО БАГ ЗАПУСТИ СЕРВЕР
+            if (turretAmmoProts != null && storage.Container?.ContainedEntities.Count > 0 &&
+                !turretAmmoProts.Contains(EntityManager
+                                              .GetComponent<MetaDataComponent>(storage.Container.ContainedEntities[0])
+                                              .EntityPrototype?.ID ?? ""))
             {
-                if (turretAmmoProts != null && storage.Storage.ContainedEntities.Count > 0 &&
-                    !turretAmmoProts.Contains(EntityManager
-                                                  .GetComponent<MetaDataComponent>(storage.Storage.ContainedEntities[0])
-                                                  .EntityPrototype?.ID ?? ""))
-                {
-                    _audioSys.PlayPredicted(loader.InvalidAmmoTypeSound, loader.Owner, loader.Owner);
+                _audioSys.PlayPredicted(loader.InvalidAmmoTypeSound, loader.Owner, loader.Owner);
 
-                    if (loader.ContainerSlot == null)
-                        return;
-                    _slotSys.TryEject(loader.Owner, loader.ContainerSlot, loader.Owner, out _);
-                }
+                if (loader.ContainerSlot == null)
+                    return;
+                _slotSys.TryEject(loader.Owner, loader.ContainerSlot, loader.Owner, out _);
+            }
 
-                loader.AmmoContainer = storage.Storage;
-                loader.MaxContainerCapacity = storage.StorageCapacityMax;
+            loader.AmmoContainer = storage.Container;
+            loader.MaxContainerCapacity = storage.StorageCapacityMax;
 
-                if (turretContainer != null)
-                {
-                    turretContainer.ProviderUid = container;
-                    turretContainer.Container = storage.Storage.ID;
-                }
+            if (turretContainer != null && storage.Container != null)
+            {
+                turretContainer.ProviderUid = container;
+                turretContainer.Container = storage.Container.ID;
             }
         }
 

@@ -38,17 +38,18 @@ public abstract class SharedCannonSystem : EntitySystem
 
     private void OnShootRequest(RequestCannonShootEvent ev, EntitySessionEventArgs args)
     {
-        var gun = GetCannonGun(ev.CannonUid);
-        var cannon = EntityManager.GetComponent<CannonComponent>(ev.CannonUid);
+        var evCannonUid = GetEntity(ev.CannonUid);
+        var gun = GetCannonGun(evCannonUid);
+        var cannon = EntityManager.GetComponent<CannonComponent>(evCannonUid);
         if (gun == null || !CanShoot(ev, gun, cannon))
         {
-            StopShoot(ev.CannonUid);
+            StopShoot(evCannonUid);
             return;
         }
 
-        var mapCoords = new MapCoordinates(ev.Coordinates, Transform(ev.CannonUid).MapID);
-        var coords = EntityCoordinates.FromMap(ev.CannonUid, mapCoords, _transform);
-        _gunSystem.AttemptShoot(ev.PilotUid, ev.CannonUid, gun, coords);
+        var mapCoords = new MapCoordinates(ev.Coordinates, Transform(evCannonUid).MapID);
+        var coords = EntityCoordinates.FromMap(evCannonUid, mapCoords, _transform);
+        _gunSystem.AttemptShoot(GetEntity(ev.PilotUid), evCannonUid, gun, coords);
     }
 
     public Angle Max(params Angle[] args)
@@ -110,13 +111,13 @@ public abstract class SharedCannonSystem : EntitySystem
         if (!_gunSystem.CanShoot(gun))
             return false;
 
-        TransformComponent cannonTransform = Transform(args.CannonUid);
-        TransformComponent pilotTransform = Transform(args.PilotUid);
+        TransformComponent cannonTransform = Transform(GetEntity(args.CannonUid));
+        TransformComponent pilotTransform = Transform(GetEntity(args.PilotUid));
         if (!pilotTransform.GridUid.Equals(cannonTransform.GridUid))
             return false;
 
         Angle firingAngle = ReducedAndPositive(new Angle(args.Coordinates - _transform.GetWorldPosition(cannonTransform)) -
-                                               _transform.GetWorldRotation(Transform(cannonTransform.GridUid ?? args.CannonUid)));
+                                               _transform.GetWorldRotation(Transform(cannonTransform.GridUid ?? GetEntity(args.CannonUid))));
         foreach ((Angle start, Angle w) in cannon.ObstructedRanges)
         {
             if (IsInsideSector(firingAngle, start, w))
@@ -139,7 +140,7 @@ public abstract class SharedCannonSystem : EntitySystem
 
     private void OnStopShootRequest(RequestStopCannonShootEvent ev)
     {
-        StopShoot(ev.CannonUid);
+        StopShoot(GetEntity(ev.CannonUid));
     }
 
     private void StopShoot(EntityUid cannonUid)
@@ -159,9 +160,9 @@ public sealed class RotateCannonsEvent : EntityEventArgs
 {
     public readonly Vector2 Coordinates;
 
-    public readonly List<EntityUid> Cannons;
+    public readonly List<NetEntity> Cannons;
 
-    public RotateCannonsEvent(Vector2 coordinates, List<EntityUid> cannons)
+    public RotateCannonsEvent(Vector2 coordinates, List<NetEntity> cannons)
     {
         Coordinates = coordinates;
         Cannons = cannons;
@@ -174,8 +175,8 @@ public sealed class RotateCannonsEvent : EntityEventArgs
 [Serializable, NetSerializable]
 public sealed class RequestCannonShootEvent : EntityEventArgs
 {
-    public EntityUid CannonUid;
-    public EntityUid PilotUid;
+    public NetEntity CannonUid;
+    public NetEntity PilotUid;
     public Vector2 Coordinates;
 }
 
@@ -185,5 +186,5 @@ public sealed class RequestCannonShootEvent : EntityEventArgs
 [Serializable, NetSerializable]
 public sealed class RequestStopCannonShootEvent : EntityEventArgs
 {
-    public EntityUid CannonUid;
+    public NetEntity CannonUid;
 }

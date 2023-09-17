@@ -26,13 +26,14 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
 
     private void ReceivePing(SpreadPingEvent ev)
     {
-        if (!IsValidPing(ev.Sender))
+        if (!IsValidPing(GetEntity(ev.Sender)))
             return;
 
         var filter = GetPlayersFilter(ev);
-        PlaySignalSound(filter, ev.PingOwner);
+        var evPingOwner = GetEntity(ev.PingOwner);
+        PlaySignalSound(filter, evPingOwner);
 
-        var ping = GetPing(ev.PingOwner, ev.Coordinates);
+        var ping = GetPing(evPingOwner, ev.Coordinates);
         RaiseNetworkEvent(new SendPingEvent(ping), filter);
     }
 
@@ -72,7 +73,7 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
         // Fallback for non-shipevent rounds
         if (_shipEventSystem.RuleSelected)
         {
-            var team = _shipEventSystem.TryGetTeamByMember(ev.Sender);
+            var team = _shipEventSystem.TryGetTeamByMember(GetEntity(ev.Sender));
             if (team != null)
             {
                 var list = new List<ICommonSession>();
@@ -87,10 +88,10 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
         }
         else
         {
-            filter = Filter.BroadcastGrid(ev.Sender);
+            filter = Filter.BroadcastGrid(GetEntity(ev.Sender));
         }
 
-        if (_mindSystem.TryGetMind(ev.Sender, out _, out var ownerMind) &&
+        if (_mindSystem.TryGetMind(GetEntity(ev.Sender), out _, out var ownerMind) &&
             _mindSystem.TryGetSession(ownerMind, out var ownerSession))
             filter.RemovePlayer(ownerSession);
 

@@ -18,7 +18,6 @@ using Content.Server.Theta.MobHUD;
 using Content.Server.Theta.NiceColors;
 using Content.Server.Theta.NiceColors.ColorPalettes;
 using Content.Server.Theta.ShipEvent.Components;
-using Content.Shared.Actions.ActionTypes;
 using Content.Shared.GameTicking;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Mind;
@@ -245,14 +244,14 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             }
         }
 
-        _uiSys.TrySetUiState(msg.Entity,
+        _uiSys.TrySetUiState(GetEntity(msg.Entity),
             msg.UiKey,
             new ShipPickerBoundUserInterfaceState(ShipTypes, memberCount));
     }
 
     private void OnShipNameChange(ShuttleConsoleChangeShipNameMessage args)
     {
-        var shipGrid = Transform(args.Entity).GridUid;
+        var shipGrid = Transform(GetEntity(args.Entity)).GridUid;
         if (shipGrid == null)
             return;
 
@@ -375,7 +374,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         if (_uiSys.TryGetUi(entity, uiKey, out var bui))
         {
             _uiSys.OpenUi(bui, session);
-            UserInterfaceSystem.SetUiState(bui, new TeamViewBoundUserInterfaceState(teamsInfo));
+            _uiSys.SetUiState(bui, new TeamViewBoundUserInterfaceState(teamsInfo));
         }
     }
 
@@ -418,7 +417,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         if(!_uiSys.TryGetUi(args.Performer, GenericWarningUiKey.ShipEventKey, out var bui))
             return;
-        UserInterfaceSystem.SetUiState(bui, new GenericWarningBoundUserInterfaceState
+        _uiSys.SetUiState(bui, new GenericWarningBoundUserInterfaceState
             {
                 WarningLoc = "generic-warning-window-warning-to-lobby",
             }
@@ -701,13 +700,10 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// <param name="session">player's session</param>
     private void SetupActions(EntityUid uid, ShipEventFaction team, IPlayerSession session)
     {
-        var teamViewToggle = _protMan.Index<InstantActionPrototype>("ShipEventTeamViewToggle");
-        _actSys.AddAction(uid, new InstantAction(teamViewToggle), null);
-
+        _actSys.AddAction(uid, Spawn("ShipEventTeamViewToggle"), null);
         if (team.Captain == session.ConnectedClient.UserName)
         {
-            var capMenuToggle = _protMan.Index<InstantActionPrototype>("ShipEventCaptainMenuToggle");
-            _actSys.AddAction(uid, new InstantAction(capMenuToggle), null);
+            _actSys.AddAction(uid, Spawn("ShipEventCaptainMenuToggle"), null);
         }
     }
 

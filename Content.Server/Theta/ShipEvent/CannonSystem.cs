@@ -161,7 +161,7 @@ public sealed class CannonSystem : SharedCannonSystem
     {
         foreach (var uid in ev.Cannons)
         {
-            _rotateToFaceSystem.TryFaceCoordinates(uid, ev.Coordinates);
+            _rotateToFaceSystem.TryFaceCoordinates(GetEntity(uid), ev.Coordinates);
         }
     }
 

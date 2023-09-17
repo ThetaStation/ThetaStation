@@ -131,18 +131,20 @@ public abstract partial class SharedGunSystem : EntitySystem
             return;
         }
 
-        if (ent != msg.Gun)
+        if (ent != GetEntity(msg.Gun))
             return;
 
-        gun.ShootCoordinates = msg.Coordinates;
+        gun.ShootCoordinates = GetCoordinates(msg.Coordinates);
         Log.Debug($"Set shoot coordinates to {gun.ShootCoordinates}");
         AttemptShoot(user.Value, ent, gun);
     }
 
     private void OnStopShootRequest(RequestStopShootEvent ev, EntitySessionEventArgs args)
     {
+        var gunUid = GetEntity(ev.Gun);
+
         if (args.SenderSession.AttachedEntity == null ||
-            !TryComp<GunComponent>(ev.Gun, out var gun) ||
+            !TryComp<GunComponent>(gunUid, out var gun) ||
             !TryGetGun(args.SenderSession.AttachedEntity.Value, out _, out var userGun))
         {
             return;
@@ -151,7 +153,7 @@ public abstract partial class SharedGunSystem : EntitySystem
         if (userGun != gun)
             return;
 
-        StopShooting(ev.Gun, gun);
+        StopShooting(gunUid, gun);
     }
 
     public bool CanShoot(GunComponent component)
@@ -358,7 +360,7 @@ public abstract partial class SharedGunSystem : EntitySystem
         EntityUid? user = null,
         bool throwItems = false)
     {
-        var shootable = EnsureComp<AmmoComponent>(ammo);
+        var shootable = EnsureShootable(ammo);
         Shoot(gunUid, gun, new List<(EntityUid? Entity, IShootable Shootable)>(1) { (ammo, shootable) }, fromCoordinates, toCoordinates, out userImpulse, user, throwItems);
     }
 
@@ -419,6 +421,20 @@ public abstract partial class SharedGunSystem : EntitySystem
         }
     }
 
+    protected IShootable EnsureShootable(EntityUid uid)
+    {
+        if (TryComp<CartridgeAmmoComponent>(uid, out var cartridge))
+            return cartridge;
+
+        return EnsureComp<AmmoComponent>(uid);
+    }
+
+    protected void RemoveShootable(EntityUid uid)
+    {
+        RemCompDeferred<CartridgeAmmoComponent>(uid);
+        RemCompDeferred<AmmoComponent>(uid);
+    }
+
     protected void MuzzleFlash(EntityUid gun, AmmoComponent component, EntityUid? user = null)
     {
         var sprite = component.MuzzleFlash;
@@ -426,7 +442,7 @@ public abstract partial class SharedGunSystem : EntitySystem
         if (sprite == null)
             return;
 
-        var ev = new MuzzleFlashEvent(gun, sprite, user == gun || GetGunOwner(gun) != user);
+        var ev = new MuzzleFlashEvent(GetNetEntity(gun), sprite, user == gun || GetGunOwner(gun) != user);
         CreateEffect(gun, ev, user);
     }
 
@@ -448,7 +464,7 @@ public abstract partial class SharedGunSystem : EntitySystem
     [Serializable, NetSerializable]
     public sealed class HitscanEvent : EntityEventArgs
     {
-        public List<(EntityCoordinates coordinates, Angle angle, SpriteSpecifier Sprite, float Distance)> Sprites = new();
+        public List<(NetCoordinates coordinates, Angle angle, SpriteSpecifier Sprite, float Distance)> Sprites = new();
     }
 }
 

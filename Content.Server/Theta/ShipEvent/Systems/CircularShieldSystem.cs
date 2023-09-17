@@ -57,7 +57,7 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
 
         var shieldState = new ShieldInterfaceState
         {
-            Coordinates = _transformSystem.GetMoverCoordinates(console.BoundShield.Value, transform),
+            Coordinates = GetNetCoordinates(_transformSystem.GetMoverCoordinates(console.BoundShield.Value, transform)),
             WorldRotation = _transformSystem.GetWorldRotation(transform),
             Powered = shield.Powered,
             Angle = shield.Angle,
@@ -71,7 +71,7 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
         var angle = Angle.Zero;
         _uiSys.TrySetUiState(uid, CircularShieldConsoleUiKey.Key, new ShieldConsoleBoundsUserInterfaceState(
             radar.MaxRange,
-            transform.Coordinates,
+            GetNetCoordinates(transform.Coordinates),
             angle,
             shieldState
             ));

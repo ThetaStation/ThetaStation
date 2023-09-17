@@ -34,7 +34,7 @@ public sealed class RadarDocks : RadarModule
         foreach (var dockState in radarState.Docks)
         {
             var coordinates = dockState.Coordinates;
-            var grid = _docks.GetOrNew(coordinates.EntityId);
+            var grid = _docks.GetOrNew(EntManager.GetEntity(coordinates.NetEntity));
             grid.Add(dockState);
         }
     }
@@ -88,7 +88,7 @@ public sealed class RadarDocks : RadarModule
         {
             foreach (var state in docks)
             {
-                var ent = state.Entity;
+                var ent = EntManager.GetEntity(state.Entity);
                 var position = state.Coordinates.Position;
                 var uiPosition = parameters.DrawMatrix.Transform(position);
 
