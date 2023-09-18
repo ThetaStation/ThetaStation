@@ -1,9 +1,6 @@
-using Content.Server.Mind;
-﻿using Content.Server.Roles;
+using Content.Server.Roles;
 using Content.Server.Shuttles.Systems;
 using Content.Server.Theta.ShipEvent.Console;
-using Content.Server.Theta.ShipEvent.Systems;
-using Content.Shared.DeviceLinking;
 using Content.Shared.Doors.Components;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs.Components;
@@ -20,7 +17,6 @@ public sealed class RadarRenderableSystem : EntitySystem
     [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
     [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
     [Dependency] private readonly RadarConsoleSystem _radarConsoleSystem = default!;
-    [Dependency] private readonly RoleSystem _roleSystem = default!;
 
     public List<CommonRadarEntityInterfaceState> GetObjectsAround(EntityUid consoleUid, RadarConsoleComponent radar)
     {
