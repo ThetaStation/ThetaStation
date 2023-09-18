@@ -100,7 +100,6 @@ public sealed class TurretLoaderSystem : EntitySystem
         var container = loader.ContainerSlot?.Item;
         if (EntityManager.TryGetComponent<StorageComponent>(container, out var storage))
         {
-            // ТУТ КАКОЙ-ТО БАГ ЗАПУСТИ СЕРВЕР
             if (turretAmmoProts != null && storage.Container?.ContainedEntities.Count > 0 &&
                 !turretAmmoProts.Contains(EntityManager
                                               .GetComponent<MetaDataComponent>(storage.Container.ContainedEntities[0])
