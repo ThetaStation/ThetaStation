@@ -191,3 +191,34 @@
     - type: DeviceLinkSource
       ports:
       - TurretLoaderSender
+
+- type: entity
+  parent: ComputerIFF
+  id: WallmountComputerIFF
+  name: Wallmount Computer IFF
+  suffix: ShipEvent
+  description: Allows you to control the IFF characteristics of this vessel.
+  placement:
+    mode: SnapgridCenter
+  components:
+    - type: IFFConsole
+      allowedFlags:
+      - Hide
+      - HideLabel
+    - type: Physics
+      bodyType: Static
+      canCollide: false
+    - type: Sprite
+      drawdepth: WallMountedItems
+      sprite: Theta/ShipEvent/Structures/Wallmount/wallmount_iff_console.rsi
+      layers:
+      - state: panel
+      - state: on
+        shader: unshaded
+    - type: ActivatableUI
+      key: enum.ShipeventIFFConsoleUiKey.Key
+    - type: UserInterface
+      interfaces:
+        - key: enum.ShipeventIFFConsoleUiKey.Key
+          type: ShipeventIFFConsoleBoundUserInterface
+    - type: WallMount
