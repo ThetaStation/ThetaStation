@@ -1395,10 +1395,10 @@ entities:
       parent: 1
       type: Transform
     - containers:
-        ammoContainer: !type:ContainerSlot
-          showEnts: False
-          occludes: True
-          ent: invalid
+        #ammoContainer: !type:ContainerSlot
+        #  showEnts: False
+        #  occludes: True
+        #  ent: invalid
         entity_storage: !type:Container
           showEnts: False
           occludes: True

@@ -1,5 +1,7 @@
+using Content.Server.Administration.Logs.Converters;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Server.Theta.ShipEvent.Systems;
+using Content.Shared.Clothing.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Theta.ShipEvent;
 using Content.Shared.Weapons.Ranged.Components;
@@ -160,7 +162,7 @@ public sealed class CannonSystem : SharedCannonSystem
     {
         foreach (var uid in ev.Cannons)
         {
-            var cannon = EntityManager.GetComponent<CannonComponent>(uid);
+            var cannon = EntityManager.GetComponent<CannonComponent>(GetEntity(uid));
             if (!cannon.Rotatable)
                 continue;
 

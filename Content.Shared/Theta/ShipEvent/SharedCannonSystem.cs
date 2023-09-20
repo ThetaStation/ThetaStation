@@ -55,10 +55,10 @@ public abstract class SharedCannonSystem : EntitySystem
             return;
         }
 
-        var cannonTransform = Transform(ev.CannonUid);
+        var cannonTransform = Transform(GetEntity(ev.CannonUid));
         if (cannonTransform.GridUid == null)
         {
-            StopShoot(ev.CannonUid);
+            StopShoot(GetEntity(ev.CannonUid));
             return;
         }
 
@@ -166,7 +166,7 @@ public abstract class SharedCannonSystem : EntitySystem
 
         gun.ShotCounter = 0;
         gun.ShootCoordinates = null;
-        Dirty(gun);
+        Dirty(cannonUid, gun);
     }
 }
 

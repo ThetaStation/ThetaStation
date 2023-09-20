@@ -130,7 +130,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
             if (door.GridUid != myGrid)
                 continue;
 
-            list.Add(new DoorInterfaceState { Uid = door.Owner });
+            list.Add(new DoorInterfaceState { Uid = GetNetEntity(door.Owner) });
         }
 
         return list;

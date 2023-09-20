@@ -135,7 +135,7 @@ public sealed class DockingInterfaceState
 [Serializable, NetSerializable]
 public sealed class DoorInterfaceState
 {
-    public EntityUid Uid;
+    public NetEntity Uid;
 }
 
 [Serializable, NetSerializable]
