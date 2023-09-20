@@ -13,7 +13,7 @@ public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
     /// <summary>
     /// The relevant coordinates to base the radar around.
     /// </summary>
-    public EntityCoordinates? Coordinates;
+    public NetCoordinates? Coordinates;
 
     /// <summary>
     /// The relevant rotation to rotate the angle around.
@@ -32,7 +32,7 @@ public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
 
     public RadarConsoleBoundInterfaceState(
         float maxRange,
-        EntityCoordinates? coordinates,
+        NetCoordinates? coordinates,
         Angle? angle,
         List<DockingInterfaceState> docks,
         List<CannonInformationInterfaceState> cannons,
@@ -54,12 +54,12 @@ public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
 [Serializable, NetSerializable]
 public sealed class CommonRadarEntityInterfaceState
 {
-    public EntityCoordinates Coordinates;
+    public NetCoordinates Coordinates;
     public Angle Angle;
     public string RadarViewPrototype;
     public Color? OverrideColor;
 
-    public CommonRadarEntityInterfaceState(EntityCoordinates coordinates, Angle angle, string radarViewPrototype,
+    public CommonRadarEntityInterfaceState(NetCoordinates coordinates, Angle angle, string radarViewPrototype,
         Color? color = null)
     {
         Coordinates = coordinates;
@@ -89,7 +89,7 @@ public enum RadarRenderableGroup
 [Serializable, NetSerializable]
 public sealed class CannonInformationInterfaceState
 {
-    public EntityUid Uid;
+    public NetEntity Uid;
     public bool IsControlling;
     public int Ammo;
     public int MaxCapacity;
@@ -99,7 +99,7 @@ public sealed class CannonInformationInterfaceState
 [Serializable, NetSerializable]
 public sealed class ShieldInterfaceState
 {
-    public EntityCoordinates Coordinates;
+    public NetCoordinates Coordinates;
     public Angle WorldRotation;
 
     public bool Powered;
@@ -121,9 +121,9 @@ public sealed class ShieldInterfaceState
 [Serializable, NetSerializable]
 public sealed class DockingInterfaceState
 {
-    public EntityCoordinates Coordinates;
+    public NetCoordinates Coordinates;
     public Angle Angle;
-    public EntityUid Entity;
+    public NetEntity Entity;
     public bool Connected;
     public Color Color;
     public Color HighlightedColor;

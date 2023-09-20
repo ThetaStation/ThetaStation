@@ -21,9 +21,8 @@ public sealed partial class ShuttleConsoleWindow : FancyWindow,
 {
     private readonly IEntityManager _entManager;
     private readonly IGameTiming _timing;
-    private readonly SharedTransformSystem _transform;
 
-    private EntityUid? _shuttleUid;
+    private EntityUid? _shuttleEntity;
 
     /// <summary>
     /// Currently selected dock button for camera.
@@ -33,27 +32,26 @@ public sealed partial class ShuttleConsoleWindow : FancyWindow,
     /// <summary>
     /// Stored by grid entityid then by states
     /// </summary>
-    private readonly Dictionary<EntityUid, List<DockingInterfaceState>> _docks = new();
+    private readonly Dictionary<NetEntity, List<DockingInterfaceState>> _docks = new();
 
-    private readonly Dictionary<BaseButton, EntityUid> _destinations = new();
+    private readonly Dictionary<BaseButton, NetEntity> _destinations = new();
 
     /// <summary>
     /// Next FTL state change.
     /// </summary>
     public TimeSpan FTLTime;
 
-    public Action<EntityUid>? UndockPressed;
-    public Action<EntityUid>? StartAutodockPressed;
-    public Action<EntityUid>? StopAutodockPressed;
-    public Action<EntityUid>? DestinationPressed;
-    public Action<string>? ChangeNamePressed;
+    public Action<NetEntity>? UndockPressed;
+    public Action<NetEntity>? StartAutodockPressed;
+    public Action<NetEntity>? StopAutodockPressed;
+    public Action<NetEntity>? DestinationPressed;
+	public Action<string>? ChangeNamePressed;
 
     public ShuttleConsoleWindow()
     {
         RobustXamlLoader.Load(this);
         _entManager = IoCManager.Resolve<IEntityManager>();
         _timing = IoCManager.Resolve<IGameTiming>();
-        _transform = _entManager.System<SharedTransformSystem>();
 
         WorldRangeChange(RadarScreen.WorldRange);
         RadarScreen.WorldRangeChanged += WorldRangeChange;
@@ -111,16 +109,14 @@ public sealed partial class ShuttleConsoleWindow : FancyWindow,
 
     public void SetMatrix(EntityCoordinates? coordinates, Angle? angle)
     {
-        _shuttleUid = coordinates?.EntityId;
+        _shuttleEntity = coordinates?.EntityId;
         RadarScreen.SetMatrix(coordinates, angle);
     }
 
     public void UpdateState(ShuttleConsoleBoundInterfaceState scc)
     {
-        if(scc.Docks.DistinctBy(i => i.Coordinates.EntityId).Count() != _docks.Count)
-            UpdateDocks(scc.Docks);
-        if(scc.Destinations. Count != _destinations.Count)
-            UpdateFTL(scc.Destinations, scc.FTLState, scc.FTLTime);
+        UpdateDocks(scc.Docks);
+        UpdateFTL(scc.Destinations, scc.FTLState, scc.FTLTime);
         RadarScreen.UpdateState(scc);
         MaxRadarRange.Text = $"{scc.MaxRange:0}";
         UpdateNameInputPlaceholder();
@@ -129,16 +125,16 @@ public sealed partial class ShuttleConsoleWindow : FancyWindow,
     public void UpdateNameInputPlaceholder()
     {
         var metaQuery = _entManager.GetEntityQuery<MetaDataComponent>();
-        if (_shuttleUid != null)
+        if (_shuttleEntity != null)
         {
-            var name = metaQuery.GetComponent(_shuttleUid.Value).EntityName;
+            var name = metaQuery.GetComponent(_shuttleEntity.Value).EntityName;
             if (name == string.Empty)
                 name = Loc.GetString("shuttle-console-unknown");
             ShipName.PlaceHolder = name;
         }
     }
 
-    private void UpdateFTL(List<(EntityUid Entity, string Destination, bool Enabled)> destinations, FTLState state, TimeSpan time)
+    private void UpdateFTL(List<(NetEntity Entity, string Destination, bool Enabled)> destinations, FTLState state, TimeSpan time)
     {
         HyperspaceDestinations.DisposeAllChildren();
         _destinations.Clear();
@@ -220,14 +216,15 @@ public sealed partial class ShuttleConsoleWindow : FancyWindow,
 
         foreach (var dock in docks)
         {
-            var grid = _docks.GetOrNew(dock.Coordinates.EntityId);
+            var grid = _docks.GetOrNew(dock.Coordinates.NetEntity);
             grid.Add(dock);
         }
 
         DockPorts.DisposeAllChildren();
         DockingScreen.Docks = _docks;
+        var shuttleNetEntity = _entManager.GetNetEntity(_shuttleEntity);
 
-        if (_shuttleUid != null && _docks.TryGetValue(_shuttleUid.Value, out var gridDocks))
+        if (shuttleNetEntity != null && _docks.TryGetValue(shuttleNetEntity.Value, out var gridDocks))
         {
             var index = 1;
 
@@ -270,7 +267,7 @@ public sealed partial class ShuttleConsoleWindow : FancyWindow,
 
     private void OnDockMouseEntered(GUIMouseHoverEventArgs obj, DockingInterfaceState state)
     {
-        RadarScreen.HighlightedDock = state.Entity;
+        RadarScreen.HighlightedDock = _entManager.GetEntity(state.Entity);
     }
 
     private void OnDockMouseExited(GUIMouseHoverEventArgs obj, DockingInterfaceState state)
@@ -283,8 +280,6 @@ public sealed partial class ShuttleConsoleWindow : FancyWindow,
     /// </summary>
     private void OnDockToggled(BaseButton.ButtonEventArgs obj, DockingInterfaceState state)
     {
-        var ent = state.Entity;
-
         if (_selectedDock != null)
         {
             // If it got untoggled via other means then we'll stop viewing the old dock.
@@ -311,9 +306,9 @@ public sealed partial class ShuttleConsoleWindow : FancyWindow,
         }
         else
         {
-            if (_shuttleUid != null)
+            if (_shuttleEntity != null)
             {
-                DockingScreen.Coordinates = state.Coordinates;
+                DockingScreen.Coordinates = _entManager.GetCoordinates(state.Coordinates);
                 DockingScreen.Angle = state.Angle;
             }
             else
@@ -325,9 +320,9 @@ public sealed partial class ShuttleConsoleWindow : FancyWindow,
             UndockButton.Disabled = false;
             RadarScreen.Visible = false;
             DockingScreen.Visible = true;
-            DockingScreen.ViewedDock = ent;
-            StartAutodockPressed?.Invoke(ent);
-            DockingScreen.GridEntity = _shuttleUid;
+            DockingScreen.ViewedDock = state.Entity;
+            StartAutodockPressed?.Invoke(state.Entity);
+            DockingScreen.GridEntity = _shuttleEntity;
             _selectedDock = obj.Button;
         }
     }
@@ -347,20 +342,20 @@ public sealed partial class ShuttleConsoleWindow : FancyWindow,
     {
         base.Draw(handle);
 
-        if (!_entManager.TryGetComponent<PhysicsComponent>(_shuttleUid, out var gridBody) ||
-            !_entManager.TryGetComponent<TransformComponent>(_shuttleUid, out var gridXform))
+        if (!_entManager.TryGetComponent<PhysicsComponent>(_shuttleEntity, out var gridBody) ||
+            !_entManager.TryGetComponent<TransformComponent>(_shuttleEntity, out var gridXform))
         {
             return;
         }
 
-        if (_entManager.TryGetComponent<MetaDataComponent>(_shuttleUid, out var metadata) && metadata.EntityPaused)
+        if (_entManager.TryGetComponent<MetaDataComponent>(_shuttleEntity, out var metadata) && metadata.EntityPaused)
         {
             FTLTime += _timing.FrameTime;
         }
 
         FTLTimer.Text = GetFTLText();
 
-        var (_, worldRot, worldMatrix) = _transform.GetWorldPositionRotationMatrix(gridXform);
+        var (_, worldRot, worldMatrix) = gridXform.GetWorldPositionRotationMatrix();
         var worldPos = worldMatrix.Transform(gridBody.LocalCenter);
 
         // Get the positive reduced angle.

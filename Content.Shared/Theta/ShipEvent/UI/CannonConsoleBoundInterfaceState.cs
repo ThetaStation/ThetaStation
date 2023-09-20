@@ -9,7 +9,7 @@ public sealed class CannonConsoleBoundInterfaceState : RadarConsoleBoundInterfac
 {
     public CannonConsoleBoundInterfaceState(
         float maxRange,
-        EntityCoordinates? coordinates,
+        NetCoordinates? coordinates,
         Angle? angle,
         List<DockingInterfaceState> docks,
         List<CannonInformationInterfaceState> cannons,

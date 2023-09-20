@@ -41,7 +41,7 @@ public sealed class CannonSystem : SharedCannonSystem
         {
             RaisePredictiveEvent(new RequestStopCannonShootEvent
             {
-                CannonUid = uid,
+                CannonUid = GetNetEntity(uid),
             });
         }
     }
@@ -75,7 +75,9 @@ public sealed class CannonSystem : SharedCannonSystem
         if (!_timing.IsFirstTimePredicted)
             return;
 
-        var aggregateByVector = new Dictionary<Vector2, List<EntityUid>>();
+        Firing();
+
+        var aggregateByVector = new Dictionary<Vector2, List<NetEntity>>();
         foreach (var (uid, vector2) in _toUpdateRotation)
         {
             // https://github.com/space-wizards/space-station-14/issues/11446
@@ -85,7 +87,7 @@ public sealed class CannonSystem : SharedCannonSystem
             //    RotateToFaceSystem.TryFaceCoordinates(uid, coordinates);
             //}
             var list = aggregateByVector.GetOrNew(vector2);
-            list.Add(uid);
+            list.Add(GetNetEntity(uid));
         }
 
         foreach (var (coordinates, list) in aggregateByVector)
@@ -107,9 +109,9 @@ public sealed class CannonSystem : SharedCannonSystem
 
             RaisePredictiveEvent(new RequestCannonShootEvent
             {
-                CannonUid = uid,
+                CannonUid = GetNetEntity(uid),
                 Coordinates = vector2,
-                PilotUid = pilot
+                PilotUid = GetNetEntity(pilot)
             });
         }
     }

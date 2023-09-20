@@ -5,6 +5,7 @@ using Content.Shared.DeviceLinking;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
+using Content.Shared.Storage;
 using Content.Shared.Theta.ShipEvent;
 using Content.Shared.Theta.ShipEvent.Components;
 using Content.Shared.Weapons.Ranged.Components;
@@ -67,7 +68,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 
             list.Add(new ShieldInterfaceState
             {
-                Coordinates =  _transformSystem.GetMoverCoordinates(uid, transform),
+                Coordinates =  GetNetCoordinates(_transformSystem.GetMoverCoordinates(uid, transform)),
                 WorldRotation = _transformSystem.GetWorldRotation(transform),
                 Powered = shield.Powered,
                 Angle = shield.Angle,
@@ -107,7 +108,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 
             list.Add(new CannonInformationInterfaceState
             {
-                Uid = cannon.Owner,
+                Uid = GetNetEntity(cannon.Owner),
                 IsControlling = controlled,
                 Ammo = ammoCountEv.Count,
                 UsedCapacity = usedCapacity,
@@ -164,7 +165,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
                 return (0, 0);
             case ContainerAmmoProviderComponent cprov:
             {
-                if (!EntityManager.TryGetComponent(cprov.ProviderUid, out ServerStorageComponent? storage))
+                if (!EntityManager.TryGetComponent(cprov.ProviderUid, out StorageComponent? storage))
                     return (0, 0);
 
                 maxCapacity = storage.StorageCapacityMax;
@@ -211,7 +212,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 
         var radarState = new RadarConsoleBoundInterfaceState(
             component.MaxRange,
-            coordinates,
+            GetNetCoordinates(coordinates),
             angle,
             new List<DockingInterfaceState>(),
             GetCannonInfosByMyGrid(uid, component),

@@ -1,19 +1,53 @@
-- type: instantAction
+- type: entity
+  id: ShipEventReturnToLobbyAction
+  name: shipevent-returntolobby-name
+  description: shipevent-returntolobby-desc
+  noSpawn: true
+  components:
+    - type: InstantAction
+      itemIconStyle: NoItem
+      icon:
+        sprite: Theta/ShipEvent/Actions.rsi
+        state: lobby
+      iconOn:
+        sprite: Theta/ShipEvent/Actions.rsi
+        state: lobby
+      event: !type:ShipEventReturnToLobbyEvent
+      checkCanInteract: false
+      useDelay: 0.5
+
+- type: entity
   id: ShipEventTeamViewToggle
-  icon: { sprite: "/Textures/Theta/ShipEvent/Actions.rsi", state: team }
-  iconOn: { sprite: "/Textures/Theta/ShipEvent/Actions.rsi", state: team }
   name: shipevent-teamview-toggle-name
   description: shipevent-teamview-toggle-desc
-  itemIconStyle: NoItem
-  event: !type:ShipEventTeamViewToggleEvent
-  checkCanInteract: false
+  noSpawn: true
+  components:
+    - type: InstantAction
+      itemIconStyle: NoItem
+      icon:
+        sprite: Theta/ShipEvent/Actions.rsi
+        state: team
+      iconOn:
+        sprite: Theta/ShipEvent/Actions.rsi
+        state: team
+      event: !type:ShipEventTeamViewToggleEvent
+      checkCanInteract: false
+      useDelay: 0.5
 
-- type: instantAction
+- type: entity
   id: ShipEventCaptainMenuToggle
-  icon: { sprite: "/Textures/Theta/ShipEvent/Actions.rsi", state: cap }
-  iconOn: { sprite: "/Textures/Theta/ShipEvent/Actions.rsi", state: cap }
   name: shipevent-capmenu-toggle-name
   description: shipevent-capmenu-toggle-desc
-  itemIconStyle: NoItem
-  event: !type:ShipEventCaptainMenuToggleEvent
-  checkCanInteract: false
+  noSpawn: true
+  components:
+    - type: InstantAction
+      itemIconStyle: NoItem
+      icon:
+        sprite: Theta/ShipEvent/Actions.rsi
+        state: cap
+      iconOn:
+        sprite: Theta/ShipEvent/Actions.rsi
+        state: cap
+      event: !type:ShipEventCaptainMenuToggleEvent
+      checkCanInteract: false
+      useDelay: 0.5

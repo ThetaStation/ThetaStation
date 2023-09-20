@@ -164,7 +164,7 @@ public sealed class CannonSystem : SharedCannonSystem
             if (!cannon.Rotatable)
                 continue;
 
-            _rotateToFaceSystem.TryFaceCoordinates(uid, ev.Coordinates);
+            _rotateToFaceSystem.TryFaceCoordinates(GetEntity(uid), ev.Coordinates);
         }
     }
 

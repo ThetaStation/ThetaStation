@@ -45,7 +45,7 @@ public sealed class CircularShieldConsoleBoundUserInterface : BoundUserInterface
         if (state is not ShieldConsoleBoundsUserInterfaceState shieldSt)
             return;
 
-        _window?.SetMatrix(shieldSt.Coordinates, shieldSt.Angle);
+        _window?.SetMatrix(EntMan.GetCoordinates(shieldSt.Coordinates), shieldSt.Angle);
         _window?.SetOwner(Owner);
         _window?.UpdateState(shieldSt);
     }

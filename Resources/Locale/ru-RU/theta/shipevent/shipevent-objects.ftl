@@ -26,7 +26,7 @@ ent-PointStorageItem = хранилище очков
     .suffix = { "ShipEvent" }
 ent-ShipEventPlasmaGun = плазмолив
     .desc = {"Невероятно мощное энергооружие, способное в мгновение ока превратить ваших противников в кучку золы."}
-    .suffix - { "ShipEvent" }
+    .suffix = { "ShipEvent" }
 
 
 

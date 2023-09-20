@@ -39,14 +39,14 @@ public sealed class CannonConsoleSystem : EntitySystem
 
         var radarState = new CannonConsoleBoundInterfaceState(
             radarConsole.MaxRange,
-            coordinates,
+            GetNetCoordinates(coordinates),
             angle,
             new List<DockingInterfaceState>(),
             cannonsInformation,
             doors,
             all,
             shield
-        ); 
+        );
 
         _uiSystem.TrySetUiState(uid, CannonConsoleUiKey.Key, radarState);
     }

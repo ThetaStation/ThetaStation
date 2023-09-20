@@ -180,7 +180,7 @@
             - TurretAmmoContainer
     - type: ContainerContainer
       containers:
-        ammoContainer: !type:ContainerSlot { }
+        ammoContainer: !type:ContainerSlot
     - type: TurretLoader
       invalidAmmoSound:
         path: /Audio/Effects/zzzt.ogg

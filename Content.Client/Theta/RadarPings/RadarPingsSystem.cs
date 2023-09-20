@@ -31,7 +31,7 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
         var sender = _playerManager.LocalPlayer!.ControlledEntity!.Value;
         if (_canNetworkPing)
         {
-            RaiseNetworkEvent(new SpreadPingEvent(sender, pingOwner, coordinates));
+            RaiseNetworkEvent(new SpreadPingEvent(GetNetEntity(sender), GetNetEntity(pingOwner), coordinates));
             _canNetworkPing = false;
             Timer.Spawn(NetworkPingCd, () => _canNetworkPing = true);
         }

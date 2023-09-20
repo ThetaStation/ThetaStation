@@ -45,7 +45,7 @@ public sealed class RadarShieldStatus : RadarModule
         {
             if(!state.Powered)
                 continue;
-            var position = state.Coordinates.ToMapPos(EntManager);
+            var position = EntManager.GetCoordinates(state.Coordinates).ToMapPos(EntManager);
             var color = Color.Blue;
 
             var cone = _shieldSystem.GenerateConeVertices(state.Radius, state.Angle, state.Width, 5);
