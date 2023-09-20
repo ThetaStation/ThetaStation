@@ -1,5 +1,3 @@
-using System.Linq;
-using System.Numerics;
 using Content.Server.Storage.Components;
 using Content.Server.Theta.RadarRenderable;
 using Content.Server.UserInterface;
@@ -13,6 +11,9 @@ using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
+using Robust.Shared.Physics;
+using System.Linq;
+using System.Numerics;
 
 namespace Content.Server.Shuttles.Systems;
 
@@ -117,6 +118,23 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
         return list;
     }
 
+    public List<DoorInterfaceState> GetDoorInfoByMyGrid(EntityUid uid, RadarConsoleComponent component)
+    {
+        var list = new List<DoorInterfaceState>();
+
+        var myGrid = Transform(uid).GridUid;
+
+        foreach (var door in EntityQuery<TransformComponent>())
+        {
+            if (door.GridUid != myGrid)
+                continue;
+
+            list.Add(new DoorInterfaceState { Uid = door.Owner });
+        }
+
+        return list;
+    }
+
     public List<EntityUid>? GetControlledCannons(EntityUid uid)
     {
         if (TryComp<DeviceLinkSourceComponent>(uid, out var linkSource))
@@ -197,6 +215,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
             angle,
             new List<DockingInterfaceState>(),
             GetCannonInfosByMyGrid(uid, component),
+            GetDoorInfoByMyGrid(uid, component),
             _radarRenderable.GetObjectsAround(uid, component),
             GetShieldsAround(component)
         );

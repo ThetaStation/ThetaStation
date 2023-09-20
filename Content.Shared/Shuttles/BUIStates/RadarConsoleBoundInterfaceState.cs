@@ -24,6 +24,8 @@ public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
 
     public readonly List<CannonInformationInterfaceState> Cannons;
 
+    public readonly List<DoorInterfaceState> Doors;
+
     public readonly List<CommonRadarEntityInterfaceState> CommonEntities;
 
     public readonly List<ShieldInterfaceState> Shields;
@@ -34,6 +36,7 @@ public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
         Angle? angle,
         List<DockingInterfaceState> docks,
         List<CannonInformationInterfaceState> cannons,
+        List<DoorInterfaceState> doors,
         List<CommonRadarEntityInterfaceState> common,
         List<ShieldInterfaceState> shields)
     {
@@ -42,6 +45,7 @@ public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
         Angle = angle;
         Docks = docks;
         Cannons = cannons;
+        Doors = doors;
         Shields = shields;
         CommonEntities = common;
     }
@@ -123,6 +127,15 @@ public sealed class DockingInterfaceState
     public bool Connected;
     public Color Color;
     public Color HighlightedColor;
+}
+
+/// <summary>
+/// State of each door on shuttle grid
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class DoorInterfaceState
+{
+    public EntityUid Uid;
 }
 
 [Serializable, NetSerializable]

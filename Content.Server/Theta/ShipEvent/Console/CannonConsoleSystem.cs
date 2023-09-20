@@ -1,10 +1,11 @@
-﻿using Content.Server.Shuttles.Systems;
+using Content.Server.Shuttles.Systems;
 using Content.Server.Theta.RadarRenderable;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Theta.ShipEvent.UI;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
+using SQLitePCL;
 
 namespace Content.Server.Theta.ShipEvent.Console;
 
@@ -33,6 +34,7 @@ public sealed class CannonConsoleSystem : EntitySystem
 
         var all = _radarRenderable.GetObjectsAround(uid, radarConsole);
         var cannonsInformation = _radarConsoleSystem.GetCannonInfosByMyGrid(uid, radarConsole);
+        var doors = _radarConsoleSystem.GetDoorInfoByMyGrid(uid, radarConsole);
 		var shield =_radarConsoleSystem.GetShieldsAround(radarConsole);
 
         var radarState = new CannonConsoleBoundInterfaceState(
@@ -41,6 +43,7 @@ public sealed class CannonConsoleSystem : EntitySystem
             angle,
             new List<DockingInterfaceState>(),
             cannonsInformation,
+            doors,
             all,
             shield
         ); 

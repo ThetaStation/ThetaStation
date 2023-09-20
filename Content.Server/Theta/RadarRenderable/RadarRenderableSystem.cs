@@ -50,7 +50,7 @@ public sealed class RadarRenderableSystem : EntitySystem
                     state = GetCannonState(uid, consoleUid, radarRenderable, xform, transform);
                     break;
                 case RadarRenderableGroup.Door:
-                    state = GetDoorState(uid, radarRenderable, transform);
+                    state = GetDoorState(uid, radarRenderable, transform, xform);
                     break;
                 default:
                     state = GetDefaultState(uid, radarRenderable, transform);
@@ -138,8 +138,15 @@ public sealed class RadarRenderableSystem : EntitySystem
         );
     }
 
-    private CommonRadarEntityInterfaceState? GetDoorState(EntityUid uid, RadarRenderableComponent renderable, TransformComponent xform)
+    private CommonRadarEntityInterfaceState? GetDoorState(EntityUid uid, RadarRenderableComponent renderable,
+        TransformComponent xform, TransformComponent consoleTransform)
     {
+        var myGrid = consoleTransform.GridUid;
+
+        if (Transform(uid).GridUid != myGrid)
+            return null;
+        if (!Transform(uid).Anchored)
+            return null;
         if (!TryComp<DoorComponent>(uid, out var door))
             return null;
 

@@ -13,8 +13,9 @@ public sealed class CannonConsoleBoundInterfaceState : RadarConsoleBoundInterfac
         Angle? angle,
         List<DockingInterfaceState> docks,
         List<CannonInformationInterfaceState> cannons,
+        List<DoorInterfaceState> doors,
         List<CommonRadarEntityInterfaceState> common,
-        List<ShieldInterfaceState> shields) : base(maxRange, coordinates, angle, docks, cannons, common, shields)
+        List<ShieldInterfaceState> shields) : base(maxRange, coordinates, angle, docks, cannons, doors, common, shields)
     {
     }
 }
