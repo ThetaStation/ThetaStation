@@ -92,6 +92,9 @@
   id: JobPassenger
 
 - type: playTimeTracker
+  id: JobImmortalAssistant
+
+- type: playTimeTracker
   id: JobParamedic
 
 - type: playTimeTracker

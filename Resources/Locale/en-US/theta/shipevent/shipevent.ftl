@@ -59,4 +59,3 @@ shipevent-spawner-destroyed = The crew's cloner has been destroyed! Wait until i
 shipevent-incorrect-password = Incorrect password.
 shipevent-kicked = You've got kicked from the team! Use team menu to find a new one.
 shipevent-respawnfailed = Couldn't respawn you, quite possibly your ship's spawner is destroyed. Wait until someone builds new spawner/ship respawns.
-shipevent-lootboxname = Stash

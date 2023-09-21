@@ -102,7 +102,7 @@ public sealed class RadarControlCannons : RadarModule
         _cannons = radarState.Cannons;
         _controlledCannons = _cannons
             .Where(i => i.IsControlling)
-            .Select(i => i.Uid)
+            .Select(i => EntManager.GetEntity(i.Uid))
             .ToList();
     }
 }

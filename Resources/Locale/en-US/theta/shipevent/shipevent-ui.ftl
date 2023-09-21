@@ -9,7 +9,7 @@ shipevent-teamview-heading-shipname = Ship name
 shipevent-teamview-heading-crew = Living crew
 shipevent-teamview-heading-points = Score
 
-shipevent-teamview-toggle-name = Active teams
+shipevent-teamview-toggle-name = View active teams
 shipevent-teamview-toggle-desc = View team list
 
 
@@ -119,3 +119,7 @@ shipevent-shieldconsole-nopower = [color=red]No power[/color]
 shipevent-shieldconsole-anglelabel = Angle
 shipevent-shieldconsole-widthlabel = Width
 shipevent-shieldconsole-radiuslabel = Radius
+
+## Team Messages
+
+shipevent-team-msg-base = \[Team\] [bold]{$name}[/bold]: {$message}

@@ -6,7 +6,7 @@ shipevent-teamview-heading-name = Название команды
 shipevent-teamview-heading-shipname = Название корабля
 shipevent-teamview-heading-crew = Живой экипаж
 shipevent-teamview-heading-points = Очки
-shipevent-teamview-toggle-name = Активные команды
+shipevent-teamview-toggle-name = Посмотреть активные команды
 shipevent-teamview-toggle-desc = Просмотр списка команд
 
 ## Team console
@@ -97,3 +97,7 @@ shipevent-shieldconsole-nopower = [color=red]Нет питания[/color]
 shipevent-shieldconsole-anglelabel = Угол
 shipevent-shieldconsole-widthlabel = Ширина
 shipevent-shieldconsole-radiuslabel = Радиус
+
+## Team Messages
+
+shipevent-team-msg-base = \[Команда\] [bold]{$name}[/bold]: {$message}

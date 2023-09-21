@@ -27,11 +27,11 @@ public abstract class SharedRadarPingsSystem : EntitySystem
 [Serializable, NetSerializable]
 public sealed class SpreadPingEvent : EntityEventArgs
 {
-    public EntityUid Sender;
-    public EntityUid PingOwner;
+    public NetEntity Sender;
+    public NetEntity PingOwner;
     public Vector2 Coordinates;
 
-    public SpreadPingEvent(EntityUid sender, EntityUid pingOwner, Vector2 coordinates)
+    public SpreadPingEvent(NetEntity sender, NetEntity pingOwner, Vector2 coordinates)
     {
         Sender = sender;
         PingOwner = pingOwner;

@@ -23,7 +23,7 @@ namespace Content.Shared.Preferences
     /// </summary>
     [DataDefinition]
     [Serializable, NetSerializable]
-    public sealed class HumanoidCharacterProfile : ICharacterProfile
+    public sealed partial class HumanoidCharacterProfile : ICharacterProfile
     {
         public const int MaxNameLength = 32;
         public const int MaxDescLength = 512;
@@ -427,7 +427,7 @@ namespace Content.Shared.Preferences
             var configManager = IoCManager.Resolve<IConfigurationManager>();
             if (configManager.GetCVar(CCVars.RestrictedNames))
             {
-                name = Regex.Replace(name, @"[^А-Я,а-я,A-Z,a-z,0-9, -]", string.Empty); // Theta: All the names pew-pew!
+                name = Regex.Replace(name, @"[^А-Яа-яёЁA-Za-z0-9' -]", string.Empty); // Corvax: names
             }
 
             if (configManager.GetCVar(CCVars.ICNameCase))

@@ -3,6 +3,7 @@ using System.Numerics;
 using Content.Client.Theta.ShipEvent.Systems;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Theta.ShipEvent.UI;
+using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 
 namespace Content.Client.Theta.ModularRadar.Modules.ShipEvent;
@@ -10,12 +11,14 @@ namespace Content.Client.Theta.ModularRadar.Modules.ShipEvent;
 public sealed class RadarShieldStatus : RadarModule
 {
     private readonly CircularShieldSystem _shieldSystem;
+    private readonly TransformSystem _transformSystem;
 
     private List<ShieldInterfaceState> _shields = new();
 
     public RadarShieldStatus(ModularRadarControl parentRadar) : base(parentRadar)
     {
         _shieldSystem = EntManager.System<CircularShieldSystem>();
+        _transformSystem = EntManager.System<TransformSystem>();
     }
 
     public override void UpdateState(BoundUserInterfaceState state)
@@ -36,11 +39,13 @@ public sealed class RadarShieldStatus : RadarModule
     {
         base.Draw(handle, parameters);
 
+        var ourGridId = ParentCoordinates!.Value.GetGridUid(EntManager);
+        var rot = _transformSystem.GetWorldRotation(ourGridId!.Value);
         foreach (var state in _shields)
         {
             if(!state.Powered)
                 continue;
-            var position = state.Coordinates.ToMapPos(EntManager);
+            var position = EntManager.GetCoordinates(state.Coordinates).ToMapPos(EntManager);
             var color = Color.Blue;
 
             var cone = _shieldSystem.GenerateConeVertices(state.Radius, state.Angle, state.Width, 5);
@@ -48,7 +53,7 @@ public sealed class RadarShieldStatus : RadarModule
             for (var i = 0; i < cone.Length; i++)
             {
                 verts[i] = cone[i];
-                verts[i] = parameters.DrawMatrix.Transform(position + state.WorldRotation.RotateVec(verts[i]));
+                verts[i] = parameters.DrawMatrix.Transform(position + rot.RotateVec(verts[i]));
                 verts[i].Y = -verts[i].Y;
                 verts[i] = ScalePosition(verts[i]);
             }

@@ -10,7 +10,7 @@ namespace Content.Server.Theta.DebrisGeneration.Generators;
 /// <summary>
 /// Procedural asteroid generator. Resulting shape is basically just a bunch of circles slapped onto each other
 /// </summary>
-public sealed class AsteroidGenerator : Generator
+public sealed partial class AsteroidGenerator : Generator
 {
     [DataField("size", required: true)]
     public int Size;

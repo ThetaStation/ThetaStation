@@ -1,7 +1,10 @@
 ﻿using System.Numerics;
+using System.Text;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Theta.RadarRenderable;
+using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Client.ResourceManagement;
 using Robust.Shared.Prototypes;
 
 namespace Content.Client.Theta.ModularRadar.Modules;
@@ -9,13 +12,18 @@ namespace Content.Client.Theta.ModularRadar.Modules;
 public sealed class RadarCommon : RadarModule
 {
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private readonly IResourceCache _resourceCache = default!;
     private readonly SharedTransformSystem _transformSystem;
+    private readonly SpriteSystem _spriteSystem;
+    private readonly Font _font;
 
     private List<CommonRadarEntityInterfaceState> _all = new();
 
     public RadarCommon(ModularRadarControl parentRadar) : base(parentRadar)
     {
         _transformSystem = EntManager.System<SharedTransformSystem>();
+        _spriteSystem = EntManager.System<SpriteSystem>();
+        _font = new VectorFont(_resourceCache.GetResource<FontResource>("/Fonts/NotoSans/NotoSans-Regular.ttf"), 10);
     }
 
     public override void UpdateState(BoundUserInterfaceState state)
@@ -32,83 +40,66 @@ public sealed class RadarCommon : RadarModule
         {
             var view = _prototypeManager.Index<RadarEntityViewPrototype>(state.RadarViewPrototype);
 
-            var position = state.Coordinates.ToMapPos(EntManager, _transformSystem);
+            var position = EntManager.GetCoordinates(state.Coordinates).ToMapPos(EntManager, _transformSystem);
             var angle = state.Angle;
 
             var color = state.OverrideColor ?? view.DefaultColor;
 
             switch (view.OnRadarForm)
             {
-                case OnRadarForms.Circle:
-                    var uiPosition = parameters.DrawMatrix.Transform(position);
+                case CircleRadarForm circleRadarForm:
+                    var uiPosition = matrix.Transform(position);
                     uiPosition.Y = -uiPosition.Y;
                     uiPosition = ScalePosition(uiPosition);
-                    handle.DrawCircle(uiPosition, view.Size, color);
+                    handle.DrawCircle(uiPosition, circleRadarForm.Radius, color);
                     break;
+                case ShapeRadarForm shapeRadarForm:
+                    var verts = new Vector2[shapeRadarForm.Vertices.Length];
+                    shapeRadarForm.Vertices.CopyTo(verts, 0);
+                    for (var i = 0; i < verts.Length; i++)
+                    {
+                        verts[i] *= shapeRadarForm.Size;
+                        verts[i] = matrix.Transform(position + angle.RotateVec(verts[i]));
+                        verts[i].Y = -verts[i].Y;
+                        verts[i] = ScalePosition(verts[i]);
+                    }
+                    handle.DrawPrimitives(GetTopology((SharedDrawPrimitiveTopology) shapeRadarForm.PrimitiveTopology), verts, color);
+                    break;
+                case CharRadarForm charRadarForm:
+                    var uiPositionChar = matrix.Transform(position);
+                    uiPositionChar.Y = -uiPositionChar.Y;
+                    uiPositionChar = ScalePosition(uiPositionChar);
+                    _font.DrawChar(handle, new Rune(charRadarForm.Char), uiPositionChar, charRadarForm.Scale, color);
+                    break;
+                case TextureRadarForm textureRadarForm:
+                    var uiPositionTexture = matrix.Transform(position);
+                    uiPositionTexture.Y = -uiPositionTexture.Y;
+                    uiPositionTexture = ScalePosition(uiPositionTexture);
 
-                case OnRadarForms.FootingTriangle:
-                    var footingTriangleVectors = GetVectorsByForm(view, matrix, position, angle);
-                    handle.DrawPrimitives(DrawPrimitiveTopology.LineStrip, footingTriangleVectors, color);
-                    break;
+                    var texture = _spriteSystem.Frame0(textureRadarForm.Sprite);
+                    var textureSize = texture.Size * textureRadarForm.Scale;
+                    var box = UIBox2.FromDimensions(uiPositionTexture - (textureSize * 0.5f), textureSize);
 
-                case OnRadarForms.CenteredTriangle:
-                    var centeredTriangleVectors = GetVectorsByForm(view, matrix, position, angle);
-                    handle.DrawPrimitives(DrawPrimitiveTopology.LineStrip, centeredTriangleVectors, color);
+                    handle.DrawTextureRect(texture, box);
                     break;
-                case OnRadarForms.Line:
-                    var lineVectors = GetVectorsByForm(view, matrix, position, angle);
-                    handle.DrawPrimitives(DrawPrimitiveTopology.LineStrip, lineVectors, color);
-                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
 
-    private Vector2[] GetVectorsByForm(RadarEntityViewPrototype view, Matrix3 matrix, Vector2 position, Angle angle)
+    private DrawPrimitiveTopology GetTopology(SharedDrawPrimitiveTopology topology)
     {
-        var verts = view.OnRadarForm switch
+        return topology switch
         {
-            OnRadarForms.FootingTriangle => GetFootingTriangleVectors(view.Size),
-            OnRadarForms.CenteredTriangle => GetCenteredTriangleVectors(view.Size),
-            OnRadarForms.Line => GetLineVectors(view.Size),
-            _ => throw new ArgumentOutOfRangeException()
-        };
-        for (var i = 0; i < verts.Length; i++)
-        {
-            verts[i] = matrix.Transform(position + angle.RotateVec(verts[i]));
-            verts[i].Y = -verts[i].Y;
-            verts[i] = ScalePosition(verts[i]);
-        }
-        return verts;
-    }
-
-    private Vector2[] GetFootingTriangleVectors(float size)
-    {
-        return new[]
-        {
-            new Vector2(-size / 2, 0),
-            new Vector2(size  / 2, 0),
-            new Vector2(0, -size ),
-            new Vector2(-size  / 2, 0),
-        };
-    }
-
-    private Vector2[] GetCenteredTriangleVectors(float size)
-    {
-        return new[]
-        {
-            new Vector2(-size / 2, size / 4),
-            new Vector2(0, -size / 2 - size / 4),
-            new Vector2(size / 2, size / 4),
-            new Vector2(-size / 2, size / 4),
-        };
-    }
-
-    private Vector2[] GetLineVectors(float size)
-    {
-        return new[]
-        {
-            new Vector2(0, 0),
-            new Vector2(0, size),
+            SharedDrawPrimitiveTopology.TriangleList => DrawPrimitiveTopology.TriangleList,
+            SharedDrawPrimitiveTopology.TriangleFan => DrawPrimitiveTopology.TriangleFan,
+            SharedDrawPrimitiveTopology.TriangleStrip => DrawPrimitiveTopology.TriangleStrip,
+            SharedDrawPrimitiveTopology.LineList => DrawPrimitiveTopology.LineList,
+            SharedDrawPrimitiveTopology.LineStrip => DrawPrimitiveTopology.LineStrip,
+            SharedDrawPrimitiveTopology.LineLoop => DrawPrimitiveTopology.LineLoop,
+            SharedDrawPrimitiveTopology.PointList => DrawPrimitiveTopology.PointList,
+            _ => DrawPrimitiveTopology.TriangleList
         };
     }
 }

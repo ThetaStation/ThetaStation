@@ -82,6 +82,7 @@ JobMime = Mime
 JobMusician = Musician
 JobParamedic = Paramedic
 JobPassenger = Passenger
+JobImmortalAssistant = Passenger
 JobPsychologist = Psychologist
 JobQuartermaster = Quartermaster
 JobReporter = Reporter

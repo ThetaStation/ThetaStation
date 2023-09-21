@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Server.Explosion.EntitySystems;
+using Content.Shared.Roles.Theta;
 using Content.Shared.Theta.ShipEvent;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;

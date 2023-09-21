@@ -37,11 +37,10 @@
       areaInsert: true
       whitelist:
         components:
-        - Ammo
+        - CartridgeAmmo
     - type: ContainerContainer
       containers:
         storagebase: !type:Container
-          ents: [ ]
     - type: Dumpable
     - type: UserInterface
       interfaces:
@@ -61,7 +60,7 @@
       capacity: 500
       whitelist:
         components:
-        - Ammo
+        - CartridgeAmmo
 
 - type: entity
   id: TurretAmmoContainerRare

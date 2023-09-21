@@ -25,7 +25,7 @@ public sealed class CannonConsoleBoundUserInterface : BoundUserInterface
         if (state is not CannonConsoleBoundInterfaceState cState)
             return;
 
-        _window?.SetMatrix(cState.Coordinates, cState.Angle);
+        _window?.SetMatrix(EntMan.GetCoordinates(cState.Coordinates), cState.Angle);
         _window?.SetOwner(Owner);
         _window?.UpdateState(cState);
     }

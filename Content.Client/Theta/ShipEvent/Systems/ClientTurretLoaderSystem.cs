@@ -39,11 +39,11 @@ public sealed class ClientTurretLoaderSystem : EntitySystem
             queuedStateUpdates[loader] = args;
             return;
         }
-        
-        if (args.Current is not TurretLoaderState loaderState) 
+
+        if (args.Current is not TurretLoaderState loaderState)
             return;
 
-        loader.BoundTurret = loaderState.BoundTurret;
+        loader.BoundTurret = GetEntity(loaderState.BoundTurret);
         loader.MaxContainerCapacity = loaderState.MaxContainerCapacity;
 
         if (loaderState.ContainerSlotID != null)
@@ -59,12 +59,12 @@ public sealed class ClientTurretLoaderSystem : EntitySystem
 
             if (ammoContainer == null)
                 return;
-            
+
             if (_contSys.TryGetContainer((EntityUid)ammoContainer, loaderState.ContainerID, out var cont))
                 loader.AmmoContainer = (Container)cont;
         }
-        
-        if (!EntityManager.TryGetComponent(uid, out SpriteComponent? sprite)) 
+
+        if (!EntityManager.TryGetComponent(uid, out SpriteComponent? sprite))
             return;
 
         bool loaded = loader.AmmoContainer != null && loader.ContainerSlot?.Item != null; //this may seem redundant, but ammo container isn't always updated correctly

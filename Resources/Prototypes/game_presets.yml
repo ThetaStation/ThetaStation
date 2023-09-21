@@ -14,7 +14,7 @@
   - extended
   - shittersafari
   name: extended-title
-  showInVote: false #2boring2vote
+  showInVote: true
   description: extended-description
   rules:
   - BasicStationEventScheduler
@@ -59,8 +59,11 @@
     - dm
   name: death-match-title
   description: death-match-description
+  maxPlayers: 15
+  showInVote: true
+  supportedMaps: DeathMatchMapPool
   rules:
-    - DeathMatch
+    - DeathMatch31
 
 - type: gamePreset
   id: Nukeops
@@ -106,5 +109,8 @@
     - shiptest
   name: shipevent-title
   description: shipevent-desc
+  showInVote: true
   rules:
     - ShipEvent
+  supportedMaps: ShipEventMapPool
+  forceMap: true

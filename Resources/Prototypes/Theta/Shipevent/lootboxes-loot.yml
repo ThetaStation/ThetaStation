@@ -1,18 +1,4 @@
 # --Items--
-# Lootbox caller
-- type: entity
-  parent: BaseItem
-  id: LootboxSpawnTriggerItem
-  name: lootbox caller
-  components:
-    - type: Sprite
-      sprite: Objects/Devices/signaller.rsi
-      state: signaller
-    - type: ShipEventLootboxSpawnTrigger
-    - type: OnUseTimerTrigger
-      delay: 0
-    - type: DeleteOnTrigger
-
 # Point storage
 - type: entity
   parent: BaseItem
@@ -52,7 +38,7 @@
       maxIntensity: 20
       intensitySlope: 5
       totalIntensity: 60
-    
+
 - type: entity
   id: CartridgeFlakHE
   name: flak cartridge (HE)
@@ -71,7 +57,7 @@
       contents:
         - id: CartridgeFlakHE
           amount: 50
-          
+
 # Ebic ammo - EMP
 - type: entity
   id: BulletFlakEMP
@@ -93,7 +79,7 @@
     - type: EmpOnTrigger
       range: 4
       energyConsumption: 50000
-  
+
 - type: entity
   id: CartridgeFlakEMP
   name: flak cartridge (EMP)
@@ -112,7 +98,7 @@
       contents:
         - id: CartridgeFlakEMP
           amount: 50
-          
+
 # Misc
 - type: entity
   id: ShipEventRCD
@@ -144,45 +130,3 @@
     - type: ProjectileBatteryAmmoProvider
       proto: PlasmaBolt
       fireCost: 200
-
-# --Spawners--
-- type: entity
-  parent: MarkerBase
-  id: ShipeventLootboxLootSpawner
-  name: lootbox loot spawner
-  components:
-    - type: Sprite
-      sprite: Markers/cross.rsi
-      layers:
-      - state: red
-    - type: RandomSpawner
-      offset: 0
-      prototypes:
-        - LootboxSpawnTriggerItem
-        - PointStorageItem
-        - TurretAmmoContainerFlakHEFilled
-        - TurretAmmoContainerFlakEMPFilled
-        - NuclearGrenade
-        - ShipEventRCD
-        - ShipEventPlasmaGun
-
-#every lootbox must have hats
-- type: entity
-  parent: MarkerBase
-  id: ShipeventLootboxHatsSpawner
-  name: lootbox hat spawner
-  components:
-    - type: Sprite
-      sprite: Markers/cross.rsi
-      layers:
-        - state: green
-    - type: RandomSpawner
-      offset: 0
-      prototypes:
-        - ClothingHeadHatCardborg
-        - ClothingHeadHatPirate
-        - ClothingHeadHatUshanka
-        - ClothingHeadPaperSack
-        - ClothingHeadFishCap
-        - ClothingHeadHatWatermelon
-        - ClothingHeadHatBunny

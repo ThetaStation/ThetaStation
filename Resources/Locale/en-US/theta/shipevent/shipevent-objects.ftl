@@ -13,7 +13,6 @@ ent-TurretLoaderShipEvent = weapon loader
     .desc = { "Universal ammo loader for weapons of various types. Uses bluespace teleportation for delivering shells to the chamber." }
     .suffix = { "ShipEvent" }
 
-
 ## Items
 ent-TurretAmmoContainerRegular = ammo container
     .desc = { "Standartised metal container for use in weapon loaders." }
@@ -21,17 +20,13 @@ ent-TurretAmmoContainerRegular = ammo container
 ent-TurretAmmoContainerBluespace = ammo container (bluespace)
     .desc = { "Extended version of standard ammo container." }
     .suffix = { "ShipEvent" }
-ent-LootboxSpawnTriggerItem = lootbox caller
-    .desc = { "God bless NT." }
-    .suffix = { "ShipEvent" }
 ent-PointStorageItem = point storage
     .desc = { "God bless NT." }
     .suffix = { "ShipEvent" }
     .suffix = { "ShipEvent" }
 ent-ShipEventPlasmaGun = plasma caster
     .desc = {"Incredibly powerful energy gun, capable of turning your enemies into pile of ash in a blink of an eye."}
-    .suffix - { "ShipEvent" }
-
+    .suffix = { "ShipEvent" }
 
 ## Cannons
 

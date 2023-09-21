@@ -1,5 +1,5 @@
 - type: entity
-  id: LobbyShipeventStation
+  id: LobbyShipEventStation
   parent:
     - BaseStation
     - BaseStationJobsSpawning
@@ -9,13 +9,13 @@
     - type: Transform
 
 - type: gameMap
-  id: LobbyShipevent
-  mapName: 'Lobby-Shipevent'
+  id: LobbyShipEvent
+  mapName: 'Lobby-ShipEvent'
   mapPath: /Maps/Theta/Shipevent/shipevent-lobby.yml
   minPlayers: 1
   stations:
-    LobbyShipevent:
-      stationProto: LobbyShipeventStation
+    LobbyShipEvent:
+      stationProto: LobbyShipEventStation
       components:
         - type: StationNameSetup
           mapNameTemplate: 'Lobby'
