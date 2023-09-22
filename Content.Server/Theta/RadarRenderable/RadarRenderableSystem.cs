@@ -44,7 +44,7 @@ public sealed class RadarRenderableSystem : EntitySystem
             switch ((RadarRenderableGroup) radarRenderable.Group)
             {
                 case RadarRenderableGroup.ShipEventTeammate:
-                    state = GetMobState(uid, radarRenderable, transform);
+                    state = GetMobState(consoleUid, uid, radarRenderable, transform);
                     break;
                 case RadarRenderableGroup.Cannon:
                     state = GetCannonState(uid, consoleUid, radarRenderable, xform, transform);
@@ -113,7 +113,7 @@ public sealed class RadarRenderableSystem : EntitySystem
         );
     }
 
-    private CommonRadarEntityInterfaceState? GetMobState(EntityUid uid, RadarRenderableComponent renderable,
+    private CommonRadarEntityInterfaceState? GetMobState(EntityUid consoleUid, EntityUid uid, RadarRenderableComponent renderable,
         TransformComponent xform)
     {
         if (!TryComp<MindContainerComponent>(uid, out var mindContainer) ||
@@ -122,7 +122,15 @@ public sealed class RadarRenderableSystem : EntitySystem
         if (_mobStateSystem.IsIncapacitated(uid, mobState))
             return null;
         Color? color = null;
-        if (mindContainer.Mind != null)
+
+        var consoleGrid = Transform(consoleUid).GridUid;
+
+        if (Transform(uid).GridUid == consoleGrid && TryComp<IFFComponent>(consoleGrid, out var iffComp) && iffComp.Flags == IFFFlags.Hide)
+        {
+            color = new Color(0.08f, 0.08f, 0.08f);
+            Log.Debug("БубубубубубубубуБубубубубубубубуБубубубубубубубу");
+        }
+        else if (mindContainer.Mind != null)
         {
             if (EntityManager.TryGetComponent<ShipEventRoleComponent>(mindContainer.Mind.Value,
                     out var roleComponent) &&
