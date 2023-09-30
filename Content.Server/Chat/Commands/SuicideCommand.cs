@@ -1,4 +1,3 @@
-using Content.Server.GameTicking;
 using Content.Shared.Administration;
 using Content.Shared.Mind;
 using Robust.Server.Player;
@@ -35,21 +34,9 @@ namespace Content.Server.Chat.Commands
                 shell.WriteLine("You don't have a mind!");
                 return;
             }
-
-            var gameTicker = EntitySystem.Get<GameTicker>();
+            
             var suicideSystem = EntitySystem.Get<SuicideSystem>();
-            if (suicideSystem.Suicide(victim))
-            {
-                // Prevent the player from returning to the body.
-                // Note that mind cannot be null because otherwise victim would be null.
-                gameTicker.OnGhostAttempt(mindId, false, mind: mind);
-                return;
-            }
-
-            if (gameTicker.OnGhostAttempt(mindId, true, mind: mind))
-                return;
-
-            shell.WriteLine("You can't ghost right now.");
+            suicideSystem.Suicide(victim);
         }
     }
 }
