@@ -538,7 +538,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         SetMarkers(newShip, team);
         SetShipName(newShip, name);
-        team.ShipName = name;
 
         var spawner = spawners.First();
         var playerMob = SpawnPlayer((IPlayerSession) captainSession, spawner);
@@ -722,6 +721,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             teamColor,
             captain);
 
+        team.ShipName = teamName;
 
         Teams.Add(team);
 
