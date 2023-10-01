@@ -147,6 +147,19 @@ namespace Content.Server.Ghost
 
             var time = _gameTiming.CurTime;
             component.TimeOfDeath = time;
+
+            foreach (var action in component.Actions)
+            {
+                EntityUid? actionEnt = null;
+                _actions.AddAction(uid, ref actionEnt, out var createdAction, action);
+                // TODO ghost: remove once ghosts are persistent and aren't deleted when returning to body
+                if (createdAction?.UseDelay != null)
+                    createdAction.Cooldown = (time, time + createdAction.UseDelay.Value);
+                component.ActionsEntities.Add(actionEnt);
+            }
+            _actions.AddAction(uid, ref component.ToggleLightingActionEntity, component.ToggleLightingAction);
+            _actions.AddAction(uid, ref component.ToggleFoVActionEntity, component.ToggleFoVAction);
+            _actions.AddAction(uid, ref component.ToggleGhostsActionEntity, component.ToggleGhostsAction);
         }
 
         private void OnGhostShutdown(EntityUid uid, GhostComponent component, ComponentShutdown args)
@@ -161,6 +174,11 @@ namespace Content.Server.Ghost
                 _visibilitySystem.RemoveLayer(uid, visibility, (int) VisibilityFlags.Ghost, false);
                 _visibilitySystem.AddLayer(uid, visibility, (int) VisibilityFlags.Normal, false);
                 _visibilitySystem.RefreshVisibility(uid, visibilityComponent: visibility);
+            }
+
+            foreach (var action in component.ActionsEntities)
+            {
+                _actions.RemoveAction(uid, action);
             }
 
             // Entity can't see ghosts anymore.

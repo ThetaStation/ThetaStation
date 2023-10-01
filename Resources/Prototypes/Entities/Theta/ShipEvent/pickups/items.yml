@@ -1,0 +1,77 @@
+﻿- type: entity
+  parent: BaseItem
+  id: ShuttlePickup
+  suffix: ShipEvent
+  abstract: true
+  components:
+    - type: TriggerOnCollideShuttle
+      fixtureID: fix1
+    - type: TriggerOnChangedParent
+    - type: Sprite
+      sprite: Objects/Fun/toys.rsi
+      state: football
+    - type: Item
+      size: 12
+      sprite: Objects/Fun/toys.rsi
+      heldPrefix: singularitytoy
+
+- type: entity
+  id: ShuttlePickupHeal
+  name: heal shuttle pickup
+  parent: ShuttlePickup
+  components:
+    - type: DeleteOnTrigger
+    - type: HealGrid
+      health: 5000
+    - type: EmitSoundOnTrigger
+      sound:
+        collection: BikeHorn
+        params:
+          variation: 0.125
+    - type: RadarRenderable
+      radarView: healContainer
+      group: enum.RadarRenderableGroup.Pickup
+
+- type: entity
+  id: ShuttlePickupAmmo
+  name: ammo shuttle pickup
+  parent: ShuttlePickup
+  components:
+    - type: DeleteOnTrigger
+    - type: ShuttlePickable
+      targetTeleportId: ShipEventLoot
+      randomPrototypes:
+        - TurretAmmoContainerMachineGunFilled
+        - TurretAmmoContainerFlakFilled
+        - TurretAmmoContainerSPGFilled
+    - type: EmitSoundOnTrigger
+      sound:
+        collection: BikeHorn
+        params:
+          variation: 0.125
+    - type: RadarRenderable
+      radarView: ammoContainer
+      group: enum.RadarRenderableGroup.Pickup
+
+- type: entity
+  id: ShuttlePickupPower
+  name: powers shuttle pickup
+  parent: ShuttlePickup
+  components:
+    - type: DeleteOnTrigger
+    - type: ShuttlePickable
+      targetTeleportId: ShipEventLoot
+      randomPrototypes:
+        - PointStorageItem
+        - TurretAmmoContainerFlakHEFilled
+        - TurretAmmoContainerFlakEMPFilled
+        - ShipEventRCD
+        - ShipEventPlasmaGun
+    - type: EmitSoundOnTrigger
+      sound:
+        collection: BikeHorn
+        params:
+          variation: 0.125
+    - type: RadarRenderable
+      radarView: randomPower
+      group: enum.RadarRenderableGroup.Pickup

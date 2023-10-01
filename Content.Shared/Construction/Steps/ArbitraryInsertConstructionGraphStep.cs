@@ -9,6 +9,8 @@ namespace Content.Shared.Construction.Steps
 
         [DataField("icon")] public SpriteSpecifier? Icon { get; private set; }
 
+        [DataField("consume")] public bool Consume = true;
+
         public override void DoExamine(ExaminedEvent examinedEvent)
         {
             if (string.IsNullOrEmpty(Name))

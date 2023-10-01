@@ -206,19 +206,22 @@ namespace Content.Server.Construction
                             if (used.Contains(entity))
                                 continue;
 
-                            // Dump out any stored entities in used entity
-                            if (TryComp<StorageComponent>(entity, out var storage))
+                            if (arbitraryStep.Consume)
                             {
-                                _container.EmptyContainer(storage.Container);
-                            }
+                                // Dump out any stored entities in used entity
+                                if (TryComp<StorageComponent>(entity, out var storage))
+                                {
+                                    _container.EmptyContainer(storage.Container);
+                                }
 
-                            if (string.IsNullOrEmpty(arbitraryStep.Store))
-                            {
-                                if (!container.Insert(entity))
+                                if (string.IsNullOrEmpty(arbitraryStep.Store))
+                                {
+                                    if (!container.Insert(entity))
+                                        continue;
+                                }
+                                else if (!GetContainer(arbitraryStep.Store).Insert(entity))
                                     continue;
                             }
-                            else if (!GetContainer(arbitraryStep.Store).Insert(entity))
-                                continue;
 
                             handled = true;
                             used.Add(entity);

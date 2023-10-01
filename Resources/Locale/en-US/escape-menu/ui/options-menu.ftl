@@ -77,6 +77,7 @@ ui-options-header-ui = User Interface
 ui-options-header-misc = Miscellaneous
 ui-options-header-hotbar = Hotbar
 ui-options-header-shuttle = Shuttle
+ui-options-header-theta = Theta
 ui-options-header-map-editor = Map Editor
 ui-options-header-dev = Development
 ui-options-header-general = General
@@ -190,6 +191,9 @@ ui-options-function-shuttle-strafe-down = Strafe down
 ui-options-function-shuttle-rotate-left = Rotate left
 ui-options-function-shuttle-rotate-right = Rotate right
 ui-options-function-shuttle-brake = Brake
+
+## Theta
+ui-options-function-ping-on-radar = Send ping in radar
 
 ## Network menu
 

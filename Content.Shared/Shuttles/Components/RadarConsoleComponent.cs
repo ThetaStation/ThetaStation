@@ -1,3 +1,4 @@
+using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Systems;
 using Robust.Shared.GameStates;
 
@@ -18,4 +19,7 @@ public sealed partial class RadarConsoleComponent : Component
 
     [DataField("maxRange")]
     public float MaxRange = 256f;
+
+    [DataField("trackedGroups")]
+    public Enum TrackedGroups = RadarRenderableGroup.All;
 }

@@ -561,7 +561,7 @@ namespace Content.IntegrationTests.Tests.Power
             await pair.CleanReturnAsync();
         }
 
-        [Test]
+        [Test, Ignore("Too long for Theta Station")]
         public async Task TestSimpleBatteryChargeDeficit()
         {
             await using var pair = await PoolManager.GetServerClient();

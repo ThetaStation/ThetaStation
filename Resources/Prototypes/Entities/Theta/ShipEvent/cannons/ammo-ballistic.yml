@@ -1,0 +1,178 @@
+# Machine Gun rounds
+- type: entity
+  id: CartridgeMachineGun
+  parent: CartridgeLightRifle
+  components:
+  - type: CartridgeAmmo
+    proto: BulletMachineGun
+    deleteOnSpawn: true
+
+- type: entity
+  id: BulletMachineGun
+  name: bullet
+  parent: BaseBullet
+  noSpawn: true
+  components:
+  - type: TimedDespawn
+    lifetime: 5
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 50
+  - type: RadarRenderable
+    radarView: machineGunProjectile
+
+# Flak Cannon round
+- type: entity
+  id: BulletFlak
+  name: bullet
+  parent: BaseBullet
+  noSpawn: true
+  components:
+  - type: Item
+    size: 1
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 150
+        Blunt: 150
+  - type: Sprite
+    sprite: /Textures/Theta/ShipEvent/Objects/AmmoArtillery.rsi
+    layers:
+    - state: bullet
+
+- type: entity
+  id: CartridgeFlak
+  name: flak cartridge
+  parent: BaseCartridge
+  components:
+  - type: Item
+    size: 2
+  - type: Tag
+    tags:
+    - Cartridge
+  - type: CartridgeAmmo
+    proto: BulletFlak
+    deleteOnSpawn: true
+  - type: Sprite
+    netsync: false
+    sprite: /Textures/Theta/ShipEvent/Objects/AmmoArtillery.rsi
+    layers:
+    - state: cartridge
+
+# SPG round
+- type: entity
+  id: BulletSPG
+  name: bullet
+  parent: BaseBulletTrigger
+  noSpawn: true
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Blunt: 10
+  - type: Sprite
+    sprite: /Textures/Theta/ShipEvent/Objects/AmmoArtillery.rsi
+    layers:
+    - state: bullet
+  - type: TimedDespawn
+    lifetime: 21
+  - type: ActiveTimerTrigger
+    timeRemaining: 20
+  - type: VelocityExplosionTrigger
+    minVelocity: 10
+    intensityMultiplier: 4
+    maxIntensity: 200
+  - type: Explosive
+    explosionType: Default
+    maxIntensity: 20
+    intensitySlope: 5
+    totalIntensity: 1 #gets overriden by VelocityExplosionTrigger
+  - type: MovementAcceleration
+    acceleration: 10
+    maxVelocity: 100
+
+- type: entity
+  id: CartridgeSPG
+  name: SPG cartridge
+  parent: CartridgeFlak
+  components:
+  - type: Item
+    size: 5
+  - type: CartridgeAmmo
+    proto: BulletSPG
+    deleteOnSpawn: true
+
+# Ammo containers
+- type: entity
+  id: TurretAmmoContainerMachineGunFilled
+  name: Machine gun ammo container
+  parent: TurretAmmoContainerRegular
+  components:
+    - type: StorageFill
+      contents:
+        - id: CartridgeMachineGun
+          amount: 100
+
+- type: entity
+  id: TurretAmmoContainerFlakFilled
+  name: Flak ammo container
+  parent: TurretAmmoContainerRegular
+  components:
+    - type: StorageFill
+      contents:
+        - id: CartridgeFlak
+          amount: 50
+
+- type: entity
+  id: TurretAmmoContainerSPGFilled
+  name: SPG ammo container
+  parent: TurretAmmoContainerRegular
+  components:
+    - type: StorageFill
+      contents:
+        - id: CartridgeSPG
+          amount: 20
+
+# Closets
+- type: entity
+  id: ShipEventCloset
+  name: closet
+  parent: ClosetBase
+  suffix: SHIPEVENT
+  components:
+    - type: Appearance
+    - type: EntityStorageVisuals
+      stateBaseClosed: bomb
+      stateDoorClosed: bomb_door
+      stateDoorOpen: bomb_open
+
+- type: entity
+  id: MachineGunAmmoClosetShipEvent
+  name: Machine gun Ammo Closet
+  parent: ShipEventCloset
+  components:
+    - type: StorageFill
+      contents:
+        - id: TurretAmmoContainerMachineGunFilled
+          amount: 10
+
+- type: entity
+  id: FlakAmmoClosetShipEvent
+  name: Flak Ammo Closet
+  parent: ShipEventCloset
+  components:
+    - type: StorageFill
+      contents:
+        - id: TurretAmmoContainerFlakFilled
+          amount: 10
+
+- type: entity
+  id: SPGAmmoClosetShipEvent
+  name: SPG Ammo Closet
+  parent: ShipEventCloset
+  components:
+    - type: StorageFill
+      contents:
+        - id: TurretAmmoContainerSPGFilled
+          amount: 10
