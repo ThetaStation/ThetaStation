@@ -1285,7 +1285,7 @@ entities:
           - 238
           - 239
       type: ContainerContainer
-- proto: PortableGeneratorSuperPacmanMachineCircuitboard
+- proto: GeneratorUraniumMachineCircuitboard
   entities:
   - uid: 232
     components:
@@ -1374,8 +1374,6 @@ entities:
       pos: 0.5,-8.5
       parent: 325
       type: Transform
-    - enabled: False
-      type: Thruster
     - containers:
         machine_board: !type:Container
           showEnts: False
