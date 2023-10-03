@@ -35,19 +35,44 @@ public sealed partial class ShuttleSystem
     private void OnIFFShowVessel(EntityUid uid, IFFConsoleComponent component, IFFShowVesselMessage args)
     {
         if (!TryComp<TransformComponent>(uid, out var xform) || xform.GridUid == null ||
-            (component.AllowedFlags & IFFFlags.Hide) == 0x0)
+        (component.AllowedFlags & IFFFlags.Hide) == 0x0)
         {
             return;
         }
 
-        if (!args.Show)
+        if (hideTimer > 10 && !startHideCooldownTimer && !args.Show) //если время нахождения в инвизе истекло И не идёт кулдаун И корабль не видно
+        {
+            Log.Info("Кулдаун: " + hideCooldownTimer.ToString() + " Заряд скрытия: " + hideTimer.ToString() + " Идёт ли таймер куладуна?: " + startHideCooldownTimer.ToString());
+            startHideCooldownTimer = true; //Запускаем кулдаун
+            startHideTimer = false; //Выключаем таймер нахождения в инвизе
+            hideTimer = 0; //Сбрасываем таймер нахождения в инвизе
+            RemoveIFFFlag(xform.GridUid.Value, IFFFlags.Hide); //вырубаем инвиз
+            Log.Info("Закончился заряд скрытия");
+        }
+        else if (hideCooldownTimer > 10 || (hideCooldownTimer == 0 && !startHideCooldownTimer)) //иначе если кулдаун прошел ИЛИ кулдаун равен нулю и не был запущен
+        {
+            Log.Info("1_Кулдаун: " + hideCooldownTimer.ToString() + " Заряд скрытия: " + hideTimer.ToString() + " Идёт ли таймер куладуна?: " + startHideCooldownTimer.ToString());
+            startHideCooldownTimer = false; //выключаем кулдаун
+            hideCooldownTimer = 0; //сбрасываем кулдаун
+            startHideTimer = true; //включаем таймер инвиза
+            AddIFFFlag(xform.GridUid.Value, IFFFlags.Hide); //устанавливаем инвиз
+        }
+
+
+
+
+        /*f (!args.Show && canHide)
         {
             AddIFFFlag(xform.GridUid.Value, IFFFlags.Hide);
+            startHideTimer = true;
         }
         else
         {
             RemoveIFFFlag(xform.GridUid.Value, IFFFlags.Hide);
-        }
+            startHideTimer = false;
+            startHideCooldownTimer = true;
+            hideTimer = 0;
+        }*/
     }
 
     private void OnIFFConsoleAnchor(EntityUid uid, IFFConsoleComponent component, ref AnchorStateChangedEvent args)
