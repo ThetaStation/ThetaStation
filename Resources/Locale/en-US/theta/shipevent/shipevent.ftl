@@ -37,7 +37,7 @@ shipevent-pointsadded = Team received { $points } points, rejoice!
 
 shipevent-role-name = Pilot
 shipevent-role-greet = You are a member of the light battle cruiser testing group, created by NanoTrasen to entertain the public. Destroy your enemies at any cost!
-
+roles-antag-shiptester = Become a pilot or gunner of a combat space shuttle..
 
 ## Roundend messages
 

@@ -701,10 +701,10 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// <param name="session">player's session</param>
     private void SetupActions(EntityUid uid, ShipEventFaction team, IPlayerSession session)
     {
-        _actSys.AddAction(uid, Spawn("ShipEventTeamViewToggle"), null);
+        _actSys.AddAction(uid,"ShipEventTeamViewToggle");
         if (team.Captain == session.ConnectedClient.UserName)
         {
-            _actSys.AddAction(uid, Spawn("ShipEventCaptainMenuToggle"), null);
+            _actSys.AddAction(uid, "ShipEventCaptainMenuToggle");
         }
     }
 
