@@ -5,7 +5,6 @@ using Content.Server.Station.Systems;
 using Content.Server.Stunnable;
 using Content.Shared.GameTicking;
 using Content.Shared.Mobs.Systems;
-using Content.Shared.Shuttles.Events;
 using Content.Shared.Shuttles.Systems;
 using Content.Shared.Throwing;
 using JetBrains.Annotations;
@@ -46,10 +45,6 @@ public sealed partial class ShuttleSystem : SharedShuttleSystem
     private ISawmill _sawmill = default!;
 
     public const float TileMassMultiplier = 0.5f;
-    private float hideTimer;
-    private float hideCooldownTimer;
-    private bool startHideTimer;
-    private bool startHideCooldownTimer;
 
     public override void Initialize()
     {
@@ -79,23 +74,6 @@ public sealed partial class ShuttleSystem : SharedShuttleSystem
 
     public override void Update(float frameTime)
     {
-        if (startHideTimer && hideTimer <= 10)
-        {
-            hideTimer += frameTime;
-            //Log.Info("заряд скрытия " + hideTimer.ToString());
-        }
-        else if (hideTimer > 10)
-        {
-            RaiseLocalEvent(new IFFShowVesselMessage());
-            Log.Info("Запрос к ифф системе");
-        }
-        else if (startHideCooldownTimer && hideCooldownTimer <= 10)
-        {
-            hideCooldownTimer += frameTime;
-            //Log.Info("Кулдаун " + hideCooldownTimer.ToString());
-        }
-        
-
         base.Update(frameTime);
         UpdateHyperspace(frameTime);
     }
