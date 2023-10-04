@@ -151,6 +151,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         SubscribeLocalEvent<ShipEventPointStorageComponent, UseInHandEvent>(OnPointStorageTriggered);
 
+        SubscribeLocalEvent<GhostAttemptHandleEvent>(OnPlayerGhostAttempt);
+
         SubscribeAllEvent<ShuttleConsoleChangeShipNameMessage>(OnShipNameChange); //un-directed event since we will have duplicate subscriptions otherwise
         SubscribeAllEvent<GetShipPickerInfoMessage>(OnShipPickerInfoRequest);
         SubscribeAllEvent<BoundsOverlayInfoRequest>(OnBoundsOverlayInfoRequest);
@@ -993,4 +995,34 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         }
     }
 
+    private void OnPlayerGhostAttempt(GhostAttemptHandleEvent args)
+    {
+        var mindUid = args.Mind.Owner;
+        if(!TryComp<MindComponent>(mindUid, out var mindComponent))
+            return;
+        if(mindComponent.CurrentEntity == null ||
+           !TryComp<ShipEventFactionMarkerComponent>(mindComponent.CurrentEntity, out var marker))
+            return;
+
+        var ship = marker.Team?.Ship;
+        if (ship == null)
+            return;
+
+        if (!_mindSystem.TryGetSession(mindUid, out var session))
+            return;
+
+        var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>(ship.Value);
+        if (!spawners.Any())
+        {
+            _chatSys.SendSimpleMessage(Loc.GetString("shipevent-respawnfailed"), session);
+            return;
+        }
+
+        var spawner = spawners.First();
+        var playerMob = SpawnPlayer(session, spawner);
+        AfterSpawn(playerMob, spawner);
+
+        args.Handled = true;
+        args.Result = true;
+    }
 }
