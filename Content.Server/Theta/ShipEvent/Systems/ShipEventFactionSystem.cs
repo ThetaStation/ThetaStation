@@ -533,12 +533,12 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         var team = RegisterTeam(captainSession.ConnectedClient.UserName, name, color);
         team.ChosenShipType = shipType;
         team.Ship = newShip;
+        team.ShipName = name;
         team.JoinPassword = password;
         team.MaxMembers = maxMembers;
 
         SetMarkers(newShip, team);
-        SetShipName(newShip, name);
-        team.ShipName = name;
+        SetShipName(newShip, team.ShipName);
 
         var spawner = spawners.First();
         var playerMob = SpawnPlayer((IPlayerSession) captainSession, spawner);
