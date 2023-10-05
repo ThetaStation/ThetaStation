@@ -144,8 +144,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         SubscribeLocalEvent<GenericWarningYesPressedMessage>(ReturnToLobbyPlayer);
 
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, StartCollideEvent>(OnCollision);
-        SubscribeLocalEvent<ShipEventFactionMarkerComponent, MobStateChangedEvent>(OnPlayerStateChange);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, MindTransferredMessage>(OnPlayerTransfer);
+        SubscribeLocalEvent<GhostAttemptHandleEvent>(OnPlayerGhostAttempt);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, MindAddedMessage>(OnMindAdded);
         SubscribeLocalEvent<ShipEventFactionMarkerComponent, EntitySpokeEvent>(OnTeammateSpeak);
 
@@ -161,13 +161,44 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
     }
 
-    private void OnTeammateSpeak(EntityUid uid, ShipEventFactionMarkerComponent component, EntitySpokeEvent args)
+    private void OnPlayerGhostAttempt(GhostAttemptHandleEvent args)
+    { 
+        var mindUid = args.Mind.Owner;
+        if(!TryComp<MindComponent>(mindUid, out var mindComponent))
+            return;
+        if(mindComponent.CurrentEntity == null ||
+           !TryComp<ShipEventFactionMarkerComponent>(mindComponent.CurrentEntity, out var marker))
+            return;
+
+        var ship = marker.Team?.Ship;
+        if (ship == null)
+            return;
+
+        if (!_mindSystem.TryGetSession(mindUid, out var session))
+            return;
+
+        var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>(ship.Value);
+        if (!spawners.Any())
+        {
+            _chatSys.SendSimpleMessage(Loc.GetString("shipevent-respawnfailed"), session);
+            return;
+        }
+
+        var spawner = spawners.First();
+        var playerMob = SpawnPlayer(session, spawner);
+        AfterSpawn(playerMob, spawner);
+
+        args.Handled = true;
+        args.Result = true;
+    }
+
+    private void OnTeammateSpeak(EntityUid uid, ShipEventFactionMarkerComponent marker, EntitySpokeEvent args)
     {
         if (args.Channel == null)
             return;
         if (!EntityManager.HasComponent<WearingHeadsetComponent>(uid) && args.Channel.ID != "Common")
             return;
-        if (component.Team == null)
+        if (marker.Team == null)
             return;
 
         if(!_mindSystem.TryGetMind(args.Source, out _, out var mind))
@@ -177,7 +208,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         var chatMsg = Loc.GetString("shipevent-team-msg-base", ("name", session.ConnectedClient.UserName), ("message", args.Message));
 
-        TeamMessage(component.Team, chatMsg);
+        TeamMessage(marker.Team, chatMsg);
         args.Channel = null;
     }
 
@@ -234,19 +265,9 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     private void OnShipPickerInfoRequest(GetShipPickerInfoMessage msg)
     {
-        var memberCount = 1;
-        foreach (var team in Teams)
-        {
-            if (team.Captain == msg.Session.ConnectedClient.UserName)
-            {
-                memberCount = team.Members.Count;
-                break;
-            }
-        }
-
         _uiSys.TrySetUiState(GetEntity(msg.Entity),
             msg.UiKey,
-            new ShipPickerBoundUserInterfaceState(ShipTypes, memberCount));
+            new ShipPickerBoundUserInterfaceState(ShipTypes));
     }
 
     private void OnShipNameChange(ShuttleConsoleChangeShipNameMessage args)
@@ -429,33 +450,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     {
         if(Equals(args.UiKey, GenericWarningUiKey.ShipEventKey))
             _ticker.Respawn((IPlayerSession) args.Session);
-    }
-
-    private void OnPlayerStateChange(EntityUid entity, ShipEventFactionMarkerComponent marker, MobStateChangedEvent args)
-    {
-        if (args.NewMobState != MobState.Dead)
-            return;
-
-        var ship = marker.Team?.Ship;
-        if (ship == null)
-            return;
-
-        if(!_mindSystem.TryGetMind(entity, out _, out var mind))
-            return;
-        if (!_mindSystem.TryGetSession(mind, out var session))
-            return;
-
-        var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>(ship.Value);
-
-        if (!spawners.Any())
-        {
-            _chatSys.SendSimpleMessage(Loc.GetString("shipevent-respawnfailed"), session);
-            return;
-        }
-
-        var spawner = spawners.First();
-        var playerMob = SpawnPlayer(session, spawner);
-        AfterSpawn(playerMob, spawner);
     }
 
     private void OnPlayerTransfer(EntityUid uid, ShipEventFactionMarkerComponent marker, MindTransferredMessage args)
