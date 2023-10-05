@@ -482,7 +482,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         if (component.Team == null)
             return;
 
-        if (EntityManager.TryGetComponent(entity, out ProjectileComponent? projComp))
+        if (EntityManager.HasComponent<ProjectileComponent>(entity))
         {
             if (EntityManager.TryGetComponent<ShipEventFactionMarkerComponent>(
                     Transform(args.OtherEntity).GridUid, out var marker))
@@ -846,8 +846,13 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// </summary>
     /// <param name="team">Team to remove</param>
     /// <param name="killPoints">Whether to add points to other teams for hits on removed one</param>
-    public void RemoveTeam(ShipEventFaction team, bool killPoints = true)
+    public void RemoveTeam(ShipEventFaction team, string removalReason = "", bool killPoints = true)
     {
+        var message = Loc.GetString(
+            "shipevent-team-remove",
+            ("removereason", removalReason == "" ? Loc.GetString("shipevent-remove-default") : removalReason));
+        TeamMessage(team, message);
+        
         if (killPoints)
             AddKillPoints(team);
 
@@ -965,8 +970,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         foreach (var team in toRemove)
         {
-            //RemoveTeam(team, Loc.GetString("shipevent-remove-noplayers"));
-            RemoveTeam(team);
+            RemoveTeam(team, Loc.GetString("shipevent-remove-noplayers"));
         }
     }
 
