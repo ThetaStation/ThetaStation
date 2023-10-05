@@ -527,6 +527,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         var team = RegisterTeam(captainSession.ConnectedClient.UserName, name, color);
         team.ChosenShipType = shipType;
         team.Ship = newShip;
+        team.ShipName = name;
         team.JoinPassword = password;
         team.MaxMembers = maxMembers;
 
@@ -694,17 +695,17 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// <param name="session">player's session</param>
     private void SetupActions(EntityUid uid, ShipEventFaction team, IPlayerSession session)
     {
-        _actSys.AddAction(uid, Spawn("ShipEventTeamViewToggle"), null);
+        _actSys.AddAction(uid,"ShipEventTeamViewToggle");
         if (team.Captain == session.ConnectedClient.UserName)
         {
-            _actSys.AddAction(uid, Spawn("ShipEventCaptainMenuToggle"), null);
+            _actSys.AddAction(uid, "ShipEventCaptainMenuToggle");
         }
     }
 
     /// <summary>
     /// Creates new faction with all the specified data. Does not spawn ship, if you want to put new team in game right away use CreateTeam
     /// </summary>
-    private ShipEventFaction RegisterTeam(string captain, string name, Color color, bool announce = true)
+    private ShipEventFaction RegisterTeam(string captain, string name, Color color)
     {
         var teamName = IsValidName(name) ? name : GenerateTeamName();
         var teamColor = IsValidColor(color) ? color : GenerateTeamColor();
@@ -714,8 +715,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             "",
             teamColor,
             captain);
-
-        team.ShipName = teamName;
 
         Teams.Add(team);
 
@@ -751,20 +750,16 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     ///     Deletes current team ship & members, and marks it for respawn
     /// </summary>
     /// <param name="team">Team to respawn</param>
-    /// <param name="respawnReason">Message to show in announcement</param>
-    /// <param name="announce">Whether to announce respawn</param>
+    /// <param name="respawnReason">Message to show in team message</param>
     /// <param name="immediate">If this team should be respawned without delay</param>
     /// <param name="killPoints">Whether to add points to other teams for hits on respawned one</param>
-    private void RespawnTeam(ShipEventFaction team, string respawnReason = "", bool announce = true, bool immediate = false, bool killPoints = true)
+    private void RespawnTeam(ShipEventFaction team, string respawnReason = "", bool immediate = false, bool killPoints = true)
     {
-        if (announce)
-        {
-            var message = Loc.GetString(
+        var message = Loc.GetString(
                 "shipevent-team-respawn",
                 ("respawnreason", respawnReason == "" ? Loc.GetString("shipevent-respawn-default") : respawnReason),
                 ("respawntime", RespawnDelay / 60));
             TeamMessage(team, message);
-        }
 
         if (killPoints)
             AddKillPoints(team);
@@ -850,9 +845,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// Removes team entirely
     /// </summary>
     /// <param name="team">Team to remove</param>
-    /// <param name="removeReason">Message to show in announcement</param>
     /// <param name="killPoints">Whether to add points to other teams for hits on removed one</param>
-    public void RemoveTeam(ShipEventFaction team, string removeReason = "", bool killPoints = true)
+    public void RemoveTeam(ShipEventFaction team, bool killPoints = true)
     {
         if (killPoints)
             AddKillPoints(team);
@@ -971,7 +965,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         foreach (var team in toRemove)
         {
-            RemoveTeam(team, Loc.GetString("shipevent-remove-noplayers"));
+            //RemoveTeam(team, Loc.GetString("shipevent-remove-noplayers"));
+            RemoveTeam(team);
         }
     }
 
@@ -986,5 +981,4 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             }
         }
     }
-
 }
