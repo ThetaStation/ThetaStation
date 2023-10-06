@@ -66,13 +66,15 @@ namespace Content.Shared.Mind.Components
     {
         public EntityUid? OldEntity;
         public EntityUid? NewEntity;
+        public EntityUid MindUid;
         public MindComponent Mind;
         public MindContainerComponent? NewComponent;
 
-        public MindTransferredMessage(EntityUid? oldEnt, EntityUid? newEnt, MindComponent mind, MindContainerComponent? newComp)
+        public MindTransferredMessage(EntityUid? oldEnt, EntityUid? newEnt, EntityUid mindUid, MindComponent mind, MindContainerComponent? newComp)
         {
             NewEntity = newEnt;
             OldEntity = oldEnt;
+            MindUid = mindUid;
             Mind = mind;
             NewComponent = newComp;
         }
