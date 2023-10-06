@@ -199,6 +199,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         CheckBoundsCompressionTimer();
         CheckRoundendTimer();
         CheckPickupsTimer();
+        StealthTimer();
     }
 
     private void CheckRoundendTimer()

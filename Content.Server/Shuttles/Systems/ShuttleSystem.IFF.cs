@@ -1,4 +1,5 @@
 using Content.Server.Shuttles.Components;
+using Content.Server.Theta.ShipEvent.Systems;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Events;
@@ -7,6 +8,8 @@ namespace Content.Server.Shuttles.Systems;
 
 public sealed partial class ShuttleSystem
 {
+    [Dependency] private ShipEventFactionSystem _shipEventFactionSystem = default!;
+
     private void InitializeIFF()
     {
         SubscribeLocalEvent<IFFConsoleComponent, AnchorStateChangedEvent>(OnIFFConsoleAnchor);
@@ -42,11 +45,16 @@ public sealed partial class ShuttleSystem
 
         if (!args.Show)
         {
-            AddIFFFlag(xform.GridUid.Value, IFFFlags.Hide);
+            if (_shipEventFactionSystem.CheckStealthTimer())
+            {
+                AddIFFFlag(xform.GridUid.Value, IFFFlags.Hide);
+                _shipEventFactionSystem.SetStealthState(true, xform.GridUid.Value);
+            }
         }
         else
         {
             RemoveIFFFlag(xform.GridUid.Value, IFFFlags.Hide);
+            _shipEventFactionSystem.SetStealthState(false, xform.GridUid.Value);
         }
     }
 

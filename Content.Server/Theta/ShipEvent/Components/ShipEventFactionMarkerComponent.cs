@@ -1,4 +1,4 @@
-﻿using Content.Server.Theta.ShipEvent.Systems;
+using Content.Server.Theta.ShipEvent.Systems;
 using Content.Shared.Roles.Theta;
 
 namespace Content.Server.Theta.ShipEvent.Components;
