@@ -1,0 +1,27 @@
+- type: entity
+  id: SEFCFlag
+  name: flag
+  parent: BaseStructure
+  placement:
+    mode: SnapgridCenter
+  components:
+    - type: Transform
+      noRot: true
+      anchored: false
+    - type: Sprite
+      drawdepth: Mobs
+      sprite: /Textures/Theta/ShipEvent/Objects/Flag.rsi
+      state: flag
+    - type: SEFCFlag
+    - type: ShipEventFactionMarker #to detach it from deleted ship
+    - type: Physics
+      bodyType: Dynamic
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape:
+            !type:PhysShapeAabb {}
+          mask:
+            - FullTileMask
+          layer:
+            - WallLayer

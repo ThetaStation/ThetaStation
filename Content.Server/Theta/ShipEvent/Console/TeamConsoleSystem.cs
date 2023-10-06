@@ -65,6 +65,11 @@ public sealed class TeamConsoleSystem : EntitySystem
         if (args.Session.AttachedEntity == null)
             return;
 
+        if (!_shipSys.AllowTeamRegistration)
+        {
+            SendResponse(uid, args.UiKey, ResponseTypes.InvalidName);
+        }
+
         if (!_shipSys.IsValidName(args.Name))
         {
             SendResponse(uid, args.UiKey, ResponseTypes.InvalidName);
@@ -91,5 +96,6 @@ public sealed class TeamConsoleSystem : EntitySystem
     private enum ResponseTypes
     {
         InvalidName,
+        TeamRegistrationDisabled
     }
 }

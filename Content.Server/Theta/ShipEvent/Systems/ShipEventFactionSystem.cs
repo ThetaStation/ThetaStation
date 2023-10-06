@@ -498,8 +498,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// <summary>
     /// Does everything needed to create a new team, from faction creation to ship spawning.
     /// </summary>
-    public void CreateTeam(ICommonSession session, string name, ShipTypePrototype? initialShipType,
-        string? password, int maxMembers)
+    public void CreateTeam(ICommonSession session, string name, ShipTypePrototype? initialShipType, 
+        string? password, int maxMembers, bool noCaptain = false)
     {
         if (!RuleSelected || !AllowTeamRegistration)
             return;
@@ -516,7 +516,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             true);
 
         var color = ColorPalette.GetNextColor();
-        var team = RegisterTeam(session.ConnectedClient.UserName, name, color);
+        var team = RegisterTeam(noCaptain ? "N/A" : session.ConnectedClient.UserName, name, color);
         team.ChosenShipType = shipType;
         team.Ship = ship;
         team.ShipName = name;
@@ -525,11 +525,14 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         SetMarkers(ship, team);
         SetShipName(ship, name);
-        
+
+        if (noCaptain)
+            return;
         var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>(ship);
         if (!spawners.Any())
         {
             _chatSys.SendSimpleMessage(Loc.GetString("shipevent-respawnfailed"), (IPlayerSession)session);
+            return;
         }
         
         AfterSpawn(SpawnPlayer((IPlayerSession)session, spawners.First()));
