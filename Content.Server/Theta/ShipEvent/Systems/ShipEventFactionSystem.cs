@@ -133,6 +133,10 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     public List<Processor> ShipProcessors = new();
 
     public ColorPalette ColorPalette = new ShipEventPalette();
+    
+    //used by flag capture
+    public bool AllowTeamRegistration = true;
+    public bool RemoveEmptyTeams = true;
 
     public override void Initialize()
     {
@@ -497,7 +501,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     public void CreateTeam(ICommonSession session, string name, ShipTypePrototype? initialShipType,
         string? password, int maxMembers)
     {
-        if (!RuleSelected)
+        if (!RuleSelected || !AllowTeamRegistration)
             return;
 
         ShipTypePrototype shipType = initialShipType ?? _random.Pick(ShipTypes.Where(t => t.MinCrewAmount == 1).ToList());
@@ -907,12 +911,12 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     private void CheckTeams(float deltaTime)
     {
-        List<ShipEventFaction> toRemove = new();
+        List<ShipEventFaction> emptyTeams = new();
         foreach (var team in Teams)
         {
             if(_factionSystem.GetActiveMembers(team).Count == 0)
             {
-                toRemove.Add(team);
+                emptyTeams.Add(team);
                 continue;
             }
 
@@ -980,7 +984,9 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             team.TimeSinceRemoval += deltaTime;
         }
 
-        foreach (var team in toRemove)
+        if (!RemoveEmptyTeams)
+            return;
+        foreach (var team in emptyTeams)
         {
             RemoveTeam(team, Loc.GetString("shipevent-remove-noplayers"));
         }
