@@ -41,6 +41,10 @@
   id: ComputerShuttleSyndieShipEvent
   suffix: ShipEvent
   components:
+    - type: IFFConsole
+      allowedFlags:
+      - Hide
+      - HideLabel
     - type: Anchorable
       disabled: true
 

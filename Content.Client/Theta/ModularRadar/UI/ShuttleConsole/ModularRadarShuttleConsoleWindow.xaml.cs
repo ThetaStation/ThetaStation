@@ -47,6 +47,7 @@ public sealed partial class ModularRadarShuttleConsoleWindow : FancyWindow,
     public Action<NetEntity>? StopAutodockPressed;
     public Action<NetEntity>? DestinationPressed;
     public Action<string>? ChangeNamePressed;
+    public event Action<bool>? ShowVessel;
 
     public ModularRadarShuttleConsoleWindow()
     {
@@ -56,6 +57,7 @@ public sealed partial class ModularRadarShuttleConsoleWindow : FancyWindow,
 
         WorldRangeChange(RadarScreen.WorldRange);
         RadarScreen.WorldRangeChanged += WorldRangeChange;
+        HideButton.OnPressed += args => OnHideButtonPressed(true);
 
         if (RadarScreen.TryGetModule<RadarGrids>(out var gridModule))
         {
@@ -77,6 +79,11 @@ public sealed partial class ModularRadarShuttleConsoleWindow : FancyWindow,
     private void WorldRangeChange(float value)
     {
         RadarRange.Text = $"{value:0}";
+    }
+
+    private void OnHideButtonPressed(bool pressed)
+    {
+        ShowVessel?.Invoke(pressed);
     }
 
     private void OnIFFTogglePressed(BaseButton.ButtonEventArgs args)
@@ -144,7 +151,7 @@ public sealed partial class ModularRadarShuttleConsoleWindow : FancyWindow,
 
         UpdateNameInputPlaceholder();
         RadarScreen.UpdateState(scc);
-        }
+    }
 
     public void UpdateNameInputPlaceholder()
     {

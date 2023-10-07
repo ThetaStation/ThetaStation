@@ -123,3 +123,7 @@ shipevent-shieldconsole-radiuslabel = Radius
 ## Team Messages
 
 shipevent-team-msg-base = \[Team\] [bold]{$name}[/bold]: {$message}
+
+## Shuttle Console
+
+shipevent-shuttle-console-hide-button = Hide Shuttle

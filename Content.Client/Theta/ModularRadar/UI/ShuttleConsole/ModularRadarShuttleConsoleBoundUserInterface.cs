@@ -23,6 +23,7 @@ public sealed class ModularRadarShuttleConsoleBoundUserInterface : BoundUserInte
         _window.StopAutodockPressed += OnStopAutodockPressed;
         _window.DestinationPressed += OnDestinationPressed;
         _window.ChangeNamePressed += OnChangeNamePressed;
+        _window.ShowVessel += SendVesselMessage;
         _window.OpenCentered();
         _window.OnClose += OnClose;
     }
@@ -33,6 +34,11 @@ public sealed class ModularRadarShuttleConsoleBoundUserInterface : BoundUserInte
         {
             Destination = obj,
         });
+    }
+
+    private void SendVesselMessage(bool obj)
+    {
+        SendMessage(new IFFShowVesselMessage() { Show = obj });
     }
 
     private void OnChangeNamePressed(string name)

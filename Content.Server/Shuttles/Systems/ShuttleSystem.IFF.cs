@@ -8,7 +8,7 @@ namespace Content.Server.Shuttles.Systems;
 
 public sealed partial class ShuttleSystem
 {
-    [Dependency] private ShipEventFactionSystem _shipEventFactionSystem = default!;
+    [Dependency] private ShipEventFactionSystem _shipEventFactionSys = default!;
 
     private void InitializeIFF()
     {
@@ -39,23 +39,18 @@ public sealed partial class ShuttleSystem
     {
         if (!TryComp<TransformComponent>(uid, out var xform) || xform.GridUid == null ||
             (component.AllowedFlags & IFFFlags.Hide) == 0x0)
-        {
             return;
-        }
 
-        if (!args.Show)
+        _shipEventFactionSys.OnStealthActivated(xform.GridUid.Value);
+
+        /*if (!args.Show) 
         {
-            if (_shipEventFactionSystem.CheckStealthTimer())
-            {
-                AddIFFFlag(xform.GridUid.Value, IFFFlags.Hide);
-                _shipEventFactionSystem.SetStealthState(true, xform.GridUid.Value);
-            }
+            AddIFFFlag(xform.GridUid.Value, IFFFlags.Hide);
         }
         else
         {
             RemoveIFFFlag(xform.GridUid.Value, IFFFlags.Hide);
-            _shipEventFactionSystem.SetStealthState(false, xform.GridUid.Value);
-        }
+        }*/
     }
 
     private void OnIFFConsoleAnchor(EntityUid uid, IFFConsoleComponent component, ref AnchorStateChangedEvent args)
