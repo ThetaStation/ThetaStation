@@ -12,7 +12,7 @@ public sealed partial class ShipEventFactionSystem
 {
     [Dependency] private readonly ExplosionSystem _expSys = default!;
 
-    Box2 GetPlayAreaBounds()
+    public Box2 GetPlayAreaBounds()
     {
         return new Box2i(
             CurrentBoundsOffset,

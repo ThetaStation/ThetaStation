@@ -1,8 +1,14 @@
+using System.Threading;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules.Components;
+using Content.Server.Theta.DebrisGeneration;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Server.Theta.ShipEvent.Systems;
 using Content.Shared.Roles.Theta;
+using Robust.Server.GameObjects;
+using Robust.Shared.Map;
+using Robust.Shared.Prototypes;
+using Timer = Robust.Shared.Timing.Timer;
 
 namespace Content.Server.StationEvents.Events.Theta;
 
@@ -22,29 +28,40 @@ public sealed partial class SEFCFlagComponent : Component
 //Ship event flag capture
 public sealed class SEFCRule : StationEventSystem<SEFCRuleComponent>
 {
+    [Dependency] private TransformSystem _formSys = default!;
+    [Dependency] private DebrisGenerationSystem _debrisSys = default!;
     [Dependency] private ShipEventFactionSystem _shipSys = default!;
+
+    private const string FlagPrototypeId = "SEFCFlag";
     private const int PointsPerFlag = (int)10E6;
+    private const int UpdateInterval = 10;
 
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<SEFCFlagComponent, EntParentChangedMessage>(OnFlagParentChanged);
+        SubscribeLocalEvent<SEFCFlagComponent, ComponentShutdown>(OnFlagShutdown);
         _shipSys.RoundEndEvent += OnRoundEnd;
     }
-
-    private void OnRoundEnd(RoundEndTextAppendEvent args)
+    
+    protected override void Started(EntityUid uid, SEFCRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
-        foreach (SEFCFlagComponent flag in EntityManager.EntityQuery<SEFCFlagComponent>())
-        {
-            if (flag.LastTeam == null)
-            {
-                Log.Error($"SEFC: Flag's last team is null ({flag.Owner}). Either none of the teams have ever captured it, or something went wrong.");
-                continue;
-            }
-            
-            flag.LastTeam.Points += PointsPerFlag;
-            args.AddLine(Loc.GetString("sefc-teamwin", ("team", flag.LastTeam.Name)));
-        }
+        base.Started(uid, component, gameRule, args);
+        
+        Box2 fieldBounds = _shipSys.GetPlayAreaBounds();
+        _debrisSys.ClearArea(_shipSys.TargetMap, (Box2i)new Box2(fieldBounds.BottomLeft, fieldBounds.TopRight).Scale(0.1f));
+        Spawn(FlagPrototypeId, new MapCoordinates(fieldBounds.Center, _shipSys.TargetMap));
+
+        _shipSys.CreateTeam(default!, "RED", null, null, 0, true);
+        _shipSys.Teams[0].Color = Color.Red;
+        
+        _shipSys.CreateTeam(default!, "BLU", null, null, 0, true);
+        _shipSys.Teams[1].Color = Color.Blue;
+        
+        _shipSys.AllowTeamRegistration = false;
+        _shipSys.RemoveEmptyTeams = false;
+        
+        Timer.SpawnRepeating(UpdateInterval, CheckFlagPositions, CancellationToken.None);
     }
 
     private void OnFlagParentChanged(EntityUid uid, SEFCFlagComponent flag, ref EntParentChangedMessage args)
@@ -59,18 +76,47 @@ public sealed class SEFCRule : StationEventSystem<SEFCRuleComponent>
             flag.LastTeam = newTeam;
         }
     }
-
-    protected override void Started(EntityUid uid, SEFCRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
+    
+    private void OnFlagShutdown(EntityUid uid, SEFCFlagComponent flag, ComponentShutdown args)
     {
-        base.Started(uid, component, gameRule, args);
+        Box2 fieldBounds = _shipSys.GetPlayAreaBounds();
+
+        _debrisSys.ClearArea(_shipSys.TargetMap, (Box2i)new Box2(fieldBounds.BottomLeft, fieldBounds.TopRight).Scale(0.1f));
+        EntityUid newFlag = Spawn(FlagPrototypeId, new MapCoordinates(fieldBounds.Center, _shipSys.TargetMap));
+        Comp<SEFCFlagComponent>(newFlag).LastTeam = flag.LastTeam;
+    }
+
+    private void CheckFlagPositions()
+    {
+        Box2 fieldBounds = _shipSys.GetPlayAreaBounds();
+        bool centerClear = false;
         
-        _shipSys.CreateTeam(default!, "RED", null, null, 0, true);
-        _shipSys.Teams[0].Color = Color.Red;
-        
-        _shipSys.CreateTeam(default!, "BLU", null, null, 0, true);
-        _shipSys.Teams[1].Color = Color.Blue;
-        
-        _shipSys.AllowTeamRegistration = false;
-        _shipSys.RemoveEmptyTeams = false;
+        foreach ((SEFCFlagComponent _, TransformComponent form) in EntityManager.EntityQuery<SEFCFlagComponent, TransformComponent>())
+        {
+            if (!fieldBounds.Contains(_formSys.GetWorldPosition(form)))
+            {
+                if (!centerClear)
+                {
+                    _debrisSys.ClearArea(_shipSys.TargetMap, (Box2i)new Box2(fieldBounds.BottomLeft, fieldBounds.TopRight).Scale(0.1f));
+                    centerClear = true;
+                }
+                _formSys.SetWorldPosition(form, fieldBounds.Center);
+            }
+        }
+    }
+
+    private void OnRoundEnd(RoundEndTextAppendEvent args)
+    {
+        foreach (SEFCFlagComponent flag in EntityManager.EntityQuery<SEFCFlagComponent>())
+        {
+            if (flag.LastTeam == null)
+            {
+                Log.Error($"SEFC, OnRoundEnd: Flag's last team is null ({flag.Owner}). Either none of the teams have ever captured it, or something went wrong.");
+                continue;
+            }
+            
+            flag.LastTeam.Points += PointsPerFlag;
+            args.AddLine(Loc.GetString("sefc-teamwin", ("team", flag.LastTeam.Name)));
+        }
     }
 }
