@@ -23,3 +23,8 @@ shipevent-skipjack-desc = A reshaped space pirate support ship that was once sto
 
 shipevent-tikvyak-name = Gourd
 shipevent-tikvyak-desc = A GOURD IS NOT A PUMPKIN!!!
+
+shipevent-asteroid-ship-name = Asteroid
+shipevent-asteroid-ship-desc = 
+    It is poorly protected and has only 4 static cannons on the 3rd side, but instead it looks like an asteroid. 
+    The cannons are hidden behind doors that look like a full-fledged asteroid stone and are controlled from the inside.

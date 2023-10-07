@@ -19,3 +19,8 @@ shipevent-skipjack-desc =
 
 shipevent-tikvyak-name = Тыквяк
 shipevent-tikvyak-desc = ТЫКВА НЕ ТЫКВЯК!!!
+
+shipevent-asteroid-ship-name = Астеройд
+shipevent-asteroid-ship-desc = 
+    Плохо защищён и имеет всего 4 статичные пушки по 3-м бортам, но взамен выглядит как астеройд. 
+    Пушки скрыты за дверьми, выглядищами как полноценный камень астеройда и управляются изнутри.
