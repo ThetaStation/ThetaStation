@@ -7,7 +7,8 @@ shipevent-desc = Нанотрейзен устроила испытания св
 
 shipevent-announcement-title = Управления флотом Нанотрейзен
 shipevent-eventannouncement = На станции начался полный хаос, после того как НТ устроили поблизости испытания боевой мощи своих кораблей лёгкого класса.
-shipevent-team-respawn = Ваша команда временно покинула соревнования по причине { $respawnreason }. Вы восстановитесь через { $respawntime } минут(а).
+shipevent-team-respawn = Ваша команда временно покинула соревнования из-за { $respawnreason }. Вы восстановитесь через { $respawntime } минут.
+shipevent-team-remove = Ваша команда покинула соревнования из-за { $removereason }.
 shipevent-team-captainchange = Капитан { $oldcap } был заменён на своём посту { $newcap }. Да здравствует новый капитан!
 shipevent-team-respawnnow = Идёт респавн команды...
 shipevent-team-bonusinterval = Команда прожила без респавна очередные { $time } минут, и получает за это { $points } очков!
@@ -28,6 +29,7 @@ shipevent-pointsadded = Команде добавлено { $points } очков
 
 shipevent-role-name = Пилот
 shipevent-role-greet = Вы - член испытательной группы, созданной Нанотрейзен для тестирования кораблей лёгкого класса и развлечения её начальства. Уничтожьте своих врагов любой ценой!
+roles-antag-shiptester = Стань пилотом или наводчиком орудий боевого космического шаттла.
 
 ## Roundend messages
 

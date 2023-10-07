@@ -12,12 +12,10 @@ public sealed class GetShipPickerInfoMessage : BoundUserInterfaceMessage
 public sealed class ShipPickerBoundUserInterfaceState : BoundUserInterfaceState
 {
     public readonly List<ShipTypePrototype> ShipTypes;
-    public int MemberCount;
 
-    public ShipPickerBoundUserInterfaceState(List<ShipTypePrototype> shipTypes, int memberCount)
+    public ShipPickerBoundUserInterfaceState(List<ShipTypePrototype> shipTypes)
     {
         ShipTypes = shipTypes;
-        MemberCount = memberCount;
     }
 }
 

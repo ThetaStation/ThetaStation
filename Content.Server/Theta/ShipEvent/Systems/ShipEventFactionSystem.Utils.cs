@@ -7,11 +7,9 @@ using Content.Server.Theta.ShipEvent.Components;
 using Content.Shared.Chat;
 using Content.Shared.Explosion;
 using Content.Shared.Ghost;
-using Content.Shared.Mind.Components;
 using Content.Shared.Projectiles;
 using Content.Shared.Roles.Theta;
 using Robust.Server.Maps;
-using Robust.Server.Player;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 

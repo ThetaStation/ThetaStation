@@ -269,7 +269,7 @@ public sealed class MindSystem : SharedMindSystem
             Log.Info($"Session {session.Name} transferred to entity {entity}.");
         }
 
-        var msg = new MindTransferredMessage(oldEntity, entity, mind, component);
+        var msg = new MindTransferredMessage(oldEntity, entity, mindId, mind, component);
         if(oldEntity != null)
             RaiseLocalEvent(oldEntity.Value, msg);
         if(entity != null)
