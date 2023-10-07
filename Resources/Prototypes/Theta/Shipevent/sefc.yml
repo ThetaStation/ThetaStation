@@ -1,3 +1,11 @@
+- type: radarEntityView
+  id: flagView
+  defaultColor: "#ff00ff"
+  form:
+    !type:TextureRadarForm
+    sprite: /Textures/Theta/ShipEvent/Objects/Flag.rsi/flag-icon.png
+    scale: 2
+
 - type: entity
   id: SEFCFlag
   name: flag
@@ -25,3 +33,16 @@
             - FullTileMask
           layer:
             - WallLayer
+    - type: RadarRenderable
+      radarView: flagView
+      group: enum.RadarRenderableGroup.Pickup
+
+- type: entity
+  noSpawn: true
+  id: SEFC
+  parent: BaseGameRule
+  components:
+    - type: SEFCRule
+      id: SEFC
+      maxOccurrences: 0
+      endAfter: 1

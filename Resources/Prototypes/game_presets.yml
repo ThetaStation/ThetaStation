@@ -114,3 +114,17 @@
     - ShipEvent
   supportedMaps: ShipEventMapPool
   forceMap: true
+  
+- type: gamePreset
+  id: FlagCapture
+  alias:
+    - sefc
+    - ship-event-flag-capture
+  name: sefc-title
+  description: sefc-desc
+  showInVote: true
+  rules:
+    - ShipEvent
+    - SEFC
+  supportedMaps: ShipEventMapPool
+  forceMap: true

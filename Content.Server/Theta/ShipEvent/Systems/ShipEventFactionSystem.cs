@@ -137,6 +137,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     //used by flag capture
     public bool AllowTeamRegistration = true;
     public bool RemoveEmptyTeams = true;
+    public Action<RoundEndTextAppendEvent>? RoundEndEvent;
 
     public override void Initialize()
     {
@@ -269,7 +270,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         }
     }
 
-    public void OnRoundRestart(RoundRestartCleanupEvent ev)
+    private void OnRoundRestart(RoundRestartCleanupEvent ev)
     {
         _lastTeamNumber = 0;
         _teamCheckTimer = 0;
@@ -296,6 +297,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     {
         if (!RuleSelected || !Teams.Any())
             return;
+        
+        RoundEndEvent?.Invoke(args);
 
         var sortedTeams = Teams.ShallowClone().OrderByDescending(t => t.Points).ToList();
 
