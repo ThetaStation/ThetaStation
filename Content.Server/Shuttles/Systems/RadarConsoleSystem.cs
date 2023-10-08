@@ -1,3 +1,4 @@
+using Content.Server.DeviceLinking.Components;
 using Content.Server.Storage.Components;
 using Content.Server.Theta.RadarRenderable;
 using Content.Server.UserInterface;
@@ -125,9 +126,9 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 
         var myGrid = Transform(uid).GridUid;
 
-        foreach (var door in EntityQuery<TransformComponent>())
+        foreach (var door in EntityQuery<DoorSignalControlComponent>())
         {
-            if (door.GridUid != myGrid)
+            if (Transform(door.Owner).GridUid != myGrid)
                 continue;
 
             list.Add(new DoorInterfaceState { Uid = GetNetEntity(door.Owner) });

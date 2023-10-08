@@ -5,7 +5,6 @@ using Content.Shared.Shuttles.Components;
 using Content.Shared.Theta.ShipEvent.UI;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
-using SQLitePCL;
 
 namespace Content.Server.Theta.ShipEvent.Console;
 
