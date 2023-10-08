@@ -19,3 +19,8 @@ public sealed class BoundsOverlayInfo : EntityEventArgs
     }
 }
 
+[Serializable, NetSerializable]
+public sealed class ShipEventToggleStealthMessage : BoundUserInterfaceMessage
+{
+    public bool Show;
+}

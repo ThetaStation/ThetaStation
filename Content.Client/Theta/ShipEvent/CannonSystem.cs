@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Content.Client.Weapons.Ranged.Systems;
 using Content.Shared.Theta.ShipEvent;
 using Robust.Shared.Timing;
@@ -56,8 +56,8 @@ public sealed class CannonSystem : SharedCannonSystem
 
     private void RotateCannons(EntityUid uid, CannonComponent cannon, ref RotateCannonEvent args)
     {
-        /*if (!cannon.Rotatable)
-            return;*/
+        if (!cannon.Rotatable)
+            return;
 
         _toUpdateRotation[uid] = args.Coordinates;
         UpdateCoordinates(uid, args.Coordinates, args.Pilot, cannon);

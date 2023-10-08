@@ -1,7 +1,7 @@
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Events;
+using Content.Shared.Theta.ShipEvent;
 using JetBrains.Annotations;
-using Robust.Client.GameObjects;
 
 namespace Content.Client.Theta.ModularRadar.UI.ShuttleConsole;
 
@@ -23,7 +23,7 @@ public sealed class ModularRadarShuttleConsoleBoundUserInterface : BoundUserInte
         _window.StopAutodockPressed += OnStopAutodockPressed;
         _window.DestinationPressed += OnDestinationPressed;
         _window.ChangeNamePressed += OnChangeNamePressed;
-        _window.ShowVessel += SendVesselMessage;
+        _window.ShowVessel += SendShowVesselMessage;
         _window.OpenCentered();
         _window.OnClose += OnClose;
     }
@@ -36,9 +36,9 @@ public sealed class ModularRadarShuttleConsoleBoundUserInterface : BoundUserInte
         });
     }
 
-    private void SendVesselMessage(bool obj)
+    private void SendShowVesselMessage(bool visibility)
     {
-        SendMessage(new IFFShowVesselMessage() { Show = obj });
+        SendMessage(new ShipEventToggleStealthMessage() { Show = visibility });
     }
 
     private void OnChangeNamePressed(string name)
