@@ -23,7 +23,7 @@ public sealed partial class SEFCFlagComponent : Component
     /// <summary>
     /// Last team which has captured this flag
     /// </summary>
-    public ShipEventFaction LastTeam = default!;
+    public ShipEventFaction? LastTeam;
 }
 
 //Ship event flag capture
