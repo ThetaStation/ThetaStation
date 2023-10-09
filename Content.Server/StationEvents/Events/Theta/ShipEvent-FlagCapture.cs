@@ -1,3 +1,4 @@
+using System.Numerics;
 using System.Threading;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules.Components;
@@ -36,6 +37,8 @@ public sealed class SEFCRule : StationEventSystem<SEFCRuleComponent>
     private const int PointsPerFlag = (int)1E6;
     private const int UpdateInterval = 10;
 
+    private Box2 FieldBounds => _shipSys.GetPlayAreaBounds(); //fetching it multiple times since on start it's a single point + it might compress
+
     public override void Initialize()
     {
         base.Initialize();
@@ -64,6 +67,12 @@ public sealed class SEFCRule : StationEventSystem<SEFCRuleComponent>
         Timer.SpawnRepeating(UpdateInterval, CheckFlagPositions, CancellationToken.None);
     }
 
+    //to ensure that flags will not become stuck inside some asteroid
+    private void ClearCenterOfTheField()
+    {
+        _debrisSys.ClearArea(_shipSys.TargetMap, (Box2i)new Box2(FieldBounds.BottomLeft, FieldBounds.TopRight).Scale(0.1f));
+    }
+
     private void OnFlagParentChanged(EntityUid uid, SEFCFlagComponent flag, ref EntParentChangedMessage args)
     {
         ShipEventFaction? oldTeam = CompOrNull<ShipEventFactionMarkerComponent>(args.OldParent)?.Team;
@@ -79,28 +88,25 @@ public sealed class SEFCRule : StationEventSystem<SEFCRuleComponent>
     
     private void OnFlagShutdown(EntityUid uid, SEFCFlagComponent flag, ComponentShutdown args)
     {
-        Box2 fieldBounds = _shipSys.GetPlayAreaBounds();
-
-        _debrisSys.ClearArea(_shipSys.TargetMap, (Box2i)new Box2(fieldBounds.BottomLeft, fieldBounds.TopRight).Scale(0.1f));
-        EntityUid newFlag = Spawn(FlagPrototypeId, new MapCoordinates(fieldBounds.Center, _shipSys.TargetMap));
+        ClearCenterOfTheField();
+        EntityUid newFlag = Spawn(FlagPrototypeId, new MapCoordinates(FieldBounds.Center, _shipSys.TargetMap));
         Comp<SEFCFlagComponent>(newFlag).LastTeam = flag.LastTeam;
     }
 
     private void CheckFlagPositions()
     {
-        Box2 fieldBounds = _shipSys.GetPlayAreaBounds();
         bool centerClear = false;
         
         foreach ((SEFCFlagComponent _, TransformComponent form) in EntityManager.EntityQuery<SEFCFlagComponent, TransformComponent>())
         {
-            if (!fieldBounds.Contains(_formSys.GetWorldPosition(form)))
+            if (!FieldBounds.Contains(_formSys.GetWorldPosition(form)))
             {
                 if (!centerClear)
                 {
-                    _debrisSys.ClearArea(_shipSys.TargetMap, (Box2i)new Box2(fieldBounds.BottomLeft, fieldBounds.TopRight).Scale(0.1f));
+                    ClearCenterOfTheField();
                     centerClear = true;
                 }
-                _formSys.SetWorldPosition(form, fieldBounds.Center);
+                _formSys.SetWorldPosition(form, FieldBounds.Center);
             }
         }
     }
