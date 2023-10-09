@@ -33,7 +33,7 @@ public sealed class SEFCRule : StationEventSystem<SEFCRuleComponent>
     [Dependency] private ShipEventFactionSystem _shipSys = default!;
 
     private const string FlagPrototypeId = "SEFCFlag";
-    private const int PointsPerFlag = (int)10E6;
+    private const int PointsPerFlag = (int)1E6;
     private const int UpdateInterval = 10;
 
     public override void Initialize()
