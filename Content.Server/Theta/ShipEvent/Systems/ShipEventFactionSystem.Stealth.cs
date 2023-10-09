@@ -11,8 +11,8 @@ public partial class ShipEventFactionSystem
     [Dependency] private ShuttleSystem _iffSys = default!;
 
     private HashSet<EntityUid> OnCooldown = new ();
-    private int StealthDuration = 60000; //milliseconds | 1 minute
-    private int StealthCooldown = 180000; //milliseconds | 3 minutes
+    public int StealthDuration;
+    public int StealthCooldown;
 
     private void InitializeStealth()
     {

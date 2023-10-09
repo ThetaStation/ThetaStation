@@ -55,6 +55,10 @@
       pickupMinDistance: 100
       pickupsPrototypes: ShipEventPickupsPrototypes
 
+      #stealth timers
+      stealthDuration: 60000
+      stealthCooldown: 180000
+
 - type: weightedRandomEntity
   id: ShipEventPickupsPrototypes
   weights:
