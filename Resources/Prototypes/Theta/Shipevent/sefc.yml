@@ -44,5 +44,6 @@
   components:
     - type: SEFCRule
       id: SEFC
+      startAnnouncement: sefc-eventannouncement
       maxOccurrences: 0
       endAfter: 1
