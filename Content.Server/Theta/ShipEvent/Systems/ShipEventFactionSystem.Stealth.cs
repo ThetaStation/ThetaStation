@@ -1,5 +1,6 @@
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Systems;
+using Content.Server.Theta.ShipEvent.Components;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Theta.ShipEvent;
 using Robust.Shared.Timing;
@@ -11,28 +12,44 @@ public partial class ShipEventFactionSystem
     [Dependency] private ShuttleSystem _iffSys = default!;
 
     private HashSet<EntityUid> OnCooldown = new ();
-    public int StealthDuration;
-    public int StealthCooldown;
 
     private void InitializeStealth()
     {
-        SubscribeLocalEvent<IFFConsoleComponent, ShipEventToggleStealthMessage>(OnStealthActivated);
+        SubscribeLocalEvent<ShuttleConsoleComponent, ShipEventToggleStealthMessage>(OnStealthActivated);
+        SubscribeLocalEvent<ShuttleConsoleComponent, ShipEventRequestStealthStatusMessage>(OnStealthStatusRequest);
     }
 
-    public void OnStealthActivated(EntityUid uid, IFFConsoleComponent component, ShipEventToggleStealthMessage args)
+    public void OnStealthActivated(EntityUid uid, ShuttleConsoleComponent _, ShipEventToggleStealthMessage args)
     {
-        if (!TryComp<TransformComponent>(uid, out var xform) || xform.GridUid == null ||
-            (component.AllowedFlags & IFFFlags.HideLabel) == 0x0)
+        if (!TryComp<TransformComponent>(uid, out var xform) || xform.GridUid == null)
             return;
 
         var shuttle = xform.GridUid.Value;
-
         if (OnCooldown.Contains(shuttle)) return;
+        
+        if (!TryComp<ShipStealthComponent>(uid, out var stealth))
+            return;
 
+        //multiplying by thousand since component fields are in seconds
         _iffSys.AddIFFFlag(shuttle, IFFFlags.Hide);
-        Timer.Spawn(StealthDuration, () => { _iffSys.RemoveIFFFlag(shuttle, IFFFlags.Hide); });
+        Timer.Spawn(stealth.StealthDuration * 1000, () => { _iffSys.RemoveIFFFlag(shuttle, IFFFlags.Hide); });
 
         OnCooldown.Add(shuttle);
-        Timer.Spawn(StealthDuration + StealthCooldown, () => { OnCooldown.Remove(shuttle); });
+        Timer.Spawn((stealth.StealthDuration + stealth.StealthCooldown) * 1000, () =>
+        {
+            OnCooldown.Remove(shuttle); 
+            if (_uiSys.TryGetUi(uid, ShuttleConsoleUiKey.Key, out var bui))
+                _uiSys.SetUiState(bui, new ShipEventStealthStatusMessage(true));
+        });
+    }
+    
+    private void OnStealthStatusRequest(EntityUid uid, ShuttleConsoleComponent _, ShipEventRequestStealthStatusMessage args)
+    {
+        if (!TryComp<TransformComponent>(uid, out var xform) || xform.GridUid == null)
+            return;
+
+        var shuttle = xform.GridUid.Value;
+        if (_uiSys.TryGetUi(uid, args.UiKey, out var bui))
+            _uiSys.SetUiState(bui, new ShipEventStealthStatusMessage(!OnCooldown.Contains(shuttle)), args.Session);
     }
 }

@@ -99,10 +99,14 @@
                     <Label Name="GridAngularVelocity"
                            Text="0.0"
                            Align="Right"/>
+                    <Label Text="{Loc 'shipevent-shuttleconsole-stealth-label'}"/>
+                    <Label Name="StealthStatus"
+                           Text="N/A"
+                           Align="Right"/>
                 </GridContainer>
             </BoxContainer>
-            <Button Name="HideButton"
-                    Text="{Loc 'shipevent-shuttle-console-hide-button'}"
+            <Button Name="StealthButton"
+                    Text="{Loc 'shipevent-shuttleconsole-stealth-button'}"
                     TextAlign="Center"/>
             <Button Name="IFFToggle"
                     Text="{Loc 'shuttle-console-iff-toggle'}"
