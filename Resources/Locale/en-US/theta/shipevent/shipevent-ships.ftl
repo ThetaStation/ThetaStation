@@ -26,5 +26,6 @@ shipevent-tikvyak-desc = A GOURD IS NOT A PUMPKIN!!!
 
 shipevent-asteroid-ship-name = Asteroid
 shipevent-asteroid-ship-desc = 
-    It is poorly protected and has only 4 static cannons on the 3 sides, but instead it looks like an asteroid. 
+    It is poorly protected, has 6 static cannons on the 3 sides and looks like an asteroid. 
     The cannons are hidden behind doors that look like a asteroid rock and are controlled from the inside.
+    The perfect stealth shuttle.
