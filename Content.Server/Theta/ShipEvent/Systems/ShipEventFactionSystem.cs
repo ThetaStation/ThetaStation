@@ -166,7 +166,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     //for handling intentional ghosting (suicide)
     private void OnPlayerGhostAttempt(GhostAttemptHandleEvent args)
     {
-        AfterSpawn(SpawnPlayer(args.MindUid));
+        SpawnPlayer(args.MindUid);
         args.Handled = true;
         args.Result = true;
     }
@@ -443,7 +443,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             lastTeamLookup[(IPlayerSession)args.Mind.Session] = marker.Team;
             return;
         }
-        
+
         //null -> valid entity case
         if (args.NewEntity == uid)
         {
@@ -462,11 +462,11 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         {
             if (marker.Team == null)
                 return;
-            
+
             if (marker.Team.ShouldRespawn)
                 return;
-            
-            AfterSpawn(SpawnPlayer(args.MindUid));
+
+            SpawnPlayer(args.MindUid);
         }
     }
 
@@ -522,14 +522,14 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         SetMarkers(ship, team);
         SetShipName(ship, name);
-        
+
         var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>(ship);
         if (!spawners.Any())
         {
             _chatSys.SendSimpleMessage(Loc.GetString("shipevent-respawnfailed"), (IPlayerSession)session);
         }
-        
-        AfterSpawn(SpawnPlayer((IPlayerSession)session, spawners.First()));
+
+        SpawnPlayer((IPlayerSession)session, spawners.First());
     }
 
     /// <summary>
@@ -564,11 +564,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             _chatSys.SendSimpleMessage(Loc.GetString("shipevent-spawner-destroyed"), player);
             return;
         }
-        
-        var spawner = spawners.First();
-        var playerMob = SpawnPlayer(player, spawner);
-        AfterSpawn(playerMob);
 
+        var playerMob = SpawnPlayer(player, spawners.First());
         TeamMessage(team, Loc.GetString("shipevent-team-newmember", ("name", GetName(playerMob))));
     }
 
@@ -612,6 +609,28 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         _humanoidAppearanceSystem.LoadProfile(playerMob, profile);
 
+        var team = Comp<ShipEventFactionMarkerComponent>(Transform(playerMob).GridUid!.Value).Team;
+        if (team == null)
+            return EntityUid.Invalid;
+
+        if(!_roleSystem.MindHasRole<ShipEventRoleComponent>(mind))
+        {
+            var shipEventRoleComponent = new ShipEventRoleComponent { PrototypeId = "ShipTester" };
+            _roleSystem.MindAddRole(mind, shipEventRoleComponent);
+            team.AddMember(shipEventRoleComponent);
+        }
+
+        SetPlayerCharacterName(playerMob, $"{GetName(playerMob)} ({team.Name})");
+
+        if (EntityManager.TryGetComponent<MobHUDComponent>(playerMob, out var hud))
+        {
+            var hudProt = _protMan.Index<MobHUDPrototype>(
+                player.ConnectedClient.UserName == team.Captain ? CaptainHUDPrototypeId : HUDPrototypeId).ShallowCopy();
+            hudProt.Color = team.Color;
+            _hudSys.SetActiveHUDs(hud, new List<MobHUDPrototype> { hudProt });
+        }
+        _chatManager.DispatchServerMessage(player, Loc.GetString("shipevent-role-greet"));
+
         return playerMob;
     }
 
@@ -634,7 +653,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         if (!_mindSystem.TryGetSession(uid, out var session))
             return EntityUid.Invalid;
-        
+
         var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>(ship.Value);
         if (!spawners.Any())
         {
@@ -645,7 +664,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         var spawner = spawners.First();
         return SpawnPlayer(session, spawner);
     }
-    
+
     /// <summary>
     /// Spawns player using specified session
     /// </summary>
@@ -657,42 +676,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         if(mind == null)
             return EntityUid.Invalid;
         return SpawnPlayer(mind.Value);
-    }
-
-    /// <summary>
-    /// Sets up roles, HUD, action buttons, team marker & other stuff after spawn
-    /// </summary>
-    private void AfterSpawn(EntityUid spawnedEntity)
-    {
-        if (!spawnedEntity.IsValid())
-            return;
-
-        if(!_mindSystem.TryGetMind(spawnedEntity, out var mindId, out _))
-            return;
-        if(!_mindSystem.TryGetSession(mindId, out var session))
-            return;
-
-        var team = Comp<ShipEventFactionMarkerComponent>(Transform(spawnedEntity).GridUid!.Value).Team;
-        if (team == null)
-            return;
-
-        if(!_roleSystem.MindHasRole<ShipEventRoleComponent>(mindId))
-        {
-            var shipEventRoleComponent = new ShipEventRoleComponent { PrototypeId = "ShipTester" };
-            _roleSystem.MindAddRole(mindId, shipEventRoleComponent);
-            team.AddMember(shipEventRoleComponent);
-        }
-
-        SetPlayerCharacterName(spawnedEntity, $"{GetName(spawnedEntity)} ({team.Name})");
-
-        if (EntityManager.TryGetComponent<MobHUDComponent>(spawnedEntity, out var hud))
-        {
-            var hudProt = _protMan.Index<MobHUDPrototype>(
-                session.ConnectedClient.UserName == team.Captain ? CaptainHUDPrototypeId : HUDPrototypeId).ShallowCopy();
-            hudProt.Color = team.Color;
-            _hudSys.SetActiveHUDs(hud, new List<MobHUDPrototype> { hudProt });
-        }
-        _chatManager.DispatchServerMessage(session, Loc.GetString("shipevent-role-greet"));
     }
 
     private void OnMindAdded(EntityUid uid, ShipEventFactionMarkerComponent component, MindAddedMessage args)
@@ -844,10 +827,10 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                 continue;
             sessions.Add(session);
         }
-        
+
         foreach (var session in sessions)
         {
-            AfterSpawn(SpawnPlayer(session));
+            SpawnPlayer(session);
         }
 
         team.Respawns++;
@@ -865,7 +848,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             "shipevent-team-remove",
             ("removereason", removalReason == "" ? Loc.GetString("shipevent-remove-default") : removalReason));
         TeamMessage(team, message);
-        
+
         if (killPoints)
             AddKillPoints(team);
 
