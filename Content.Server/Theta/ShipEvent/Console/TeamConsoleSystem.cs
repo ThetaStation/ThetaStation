@@ -65,6 +65,11 @@ public sealed class TeamConsoleSystem : EntitySystem
         if (args.Session.AttachedEntity == null)
             return;
 
+        if (!_shipSys.AllowTeamRegistration)
+        {
+            SendResponse(uid, args.UiKey, ResponseTypes.TeamRegistrationDisabled);
+        }
+
         if (!_shipSys.IsValidName(args.Name))
         {
             SendResponse(uid, args.UiKey, ResponseTypes.InvalidName);
@@ -82,6 +87,9 @@ public sealed class TeamConsoleSystem : EntitySystem
             case ResponseTypes.InvalidName:
                 text = "shipevent-teamcreation-response-invalidname";
                 break;
+            case ResponseTypes.TeamRegistrationDisabled:
+                text = "shipevent-teamcreation-response-regdisabled";
+                break;
         }
 
         _uiSystem.TrySetUiState(uid, uiKey, new ShipEventCreateTeamBoundUserInterfaceState(Loc.GetString(text)));
@@ -91,5 +99,6 @@ public sealed class TeamConsoleSystem : EntitySystem
     private enum ResponseTypes
     {
         InvalidName,
+        TeamRegistrationDisabled
     }
 }

@@ -6,7 +6,6 @@ using Content.Server.Theta.DebrisGeneration.Prototypes;
 using Content.Shared.Theta.ShipEvent;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Server.Theta.ShipEvent.Systems;
-using Content.Shared.Dataset;
 using Content.Shared.Random;
 using Content.Shared.Shuttles.Components;
 using Robust.Server.Player;

@@ -35,12 +35,12 @@ public sealed class DebrisGenerationSystem : EntitySystem
     /// <summary>
     /// Randomly places specified structures onto map
     /// </summary>
-    /// <param name="targetMap">selected map</param>
-    /// <param name="startPos">starting position from which to spawn structures</param>
-    /// <param name="structures">list of structure prototypes to spawn</param>
-    /// <param name="globalProcessors">list of processors which should run after all structures were spawned</param>
-    /// <param name="debrisAmount">amount of structures to spawn</param>
-    /// <param name="maxDebrisOffset">max offset from startPos. startPos is being the left-lower corner of the square in which spawning positions are chosen</param>
+    /// <param name="targetMap">Selected map</param>
+    /// <param name="startPos">Bottom-left corner of spawning square</param>
+    /// <param name="structures">List of structure prototypes to spawn</param>
+    /// <param name="globalProcessors">List of processors which should run after all structures were spawned</param>
+    /// <param name="structureAmount">Amount of structures to spawn</param>
+    /// <param name="maxOffset">Spawning square size</param>
     public void SpawnStructures(
         MapId targetMap,
         Vector2i startPos,
@@ -174,7 +174,22 @@ public sealed class DebrisGenerationSystem : EntitySystem
         return EntityUid.Invalid;
     }
 
-    //Set's up collision grid
+    /// <summary>
+    /// Deletes every grid in given area
+    /// </summary>
+    public void ClearArea(MapId targetMap, Box2i bounds)
+    {
+        foreach(MapGridComponent grid in MapMan.FindGridsIntersecting(targetMap, bounds))
+        {
+            EntMan.DeleteEntity(grid.Owner);
+        }
+    }
+
+    /// <summary>
+    /// Sets up collision grid
+    /// </summary>
+    /// <param name="startPos">Bottom-left corner of grid's square</param>
+    /// <param name="maxDebrisOffset">Size of grid's square</param>
     private void SetupGrid(Vector2i startPos, int maxDebrisOffset)
     {
         for (int y = 0; y < maxDebrisOffset; y += spawnSectorSize)
@@ -192,7 +207,9 @@ public sealed class DebrisGenerationSystem : EntitySystem
         }
     }
 
-    // Randomly picks structure from structure list, accounting for their weight
+    /// <summary>
+    /// Randomly picks structures from structure list, accounting for their weight
+    /// </summary>
     // todo: maybe it's worth to PR this to RT (weighted random selection)
     private StructurePrototype? PickStructure(List<StructurePrototype> structures)
     {
@@ -213,8 +230,10 @@ public sealed class DebrisGenerationSystem : EntitySystem
 
         return picked;
     }
-
-    //Generates spawn position in random sector of the grid
+    
+    /// <summary>
+    /// Generates spawn position in random sector of the grid
+    /// </summary>
     private Vector2? GenerateSpawnPosition(Box2i bounds)
     {
         var volume = bounds.Height * bounds.Width;
@@ -236,10 +255,10 @@ public sealed class DebrisGenerationSystem : EntitySystem
     /// <summary>
     /// Tries to find spot with enough space to fit given bounding box
     /// </summary>
-    /// <param name="sectorPos">position of sector for search</param>
-    /// <param name="bounds">bounding box</param>
-    /// <param name="resultPos">resulting position</param>
-    /// <returns></returns>
+    /// <param name="sectorPos">Position of sector for search</param>
+    /// <param name="bounds">Bounds</param>
+    /// <param name="resultPos">Result</param>
+    /// <returns>Bool signifying whether position was found or not</returns>
     private bool TryPlaceInSector(Vector2i sectorPos, Box2i bounds, out Vector2i resultPos)
     {
         bool result = false;
@@ -298,12 +317,17 @@ public sealed class DebrisGenerationSystem : EntitySystem
         return result;
     }
 
+    /// <summary>
+    /// Converts Box2i to SectorRange (area inside the box is considered free)
+    /// </summary>
     private SectorRange RangeFromBox(Box2i box)
     {
         return new SectorRange(box.Bottom, box.Top, new List<(int, int)> {(box.Left, box.Right)});
     }
-
-    //Subtracts range from existing ranges
+    
+    /// <summary>
+    /// Subtracts range from existing ranges
+    /// </summary>
     private HashSet<SectorRange> SubtractRange(HashSet<SectorRange> ranges, SectorRange range)
     {
         HashSet<SectorRange> rangesNew = new();
@@ -342,8 +366,10 @@ public sealed class DebrisGenerationSystem : EntitySystem
         return rangesNew;
     }
 
-    //Combines all ranges lying between endX & start X, and above/below height into a single range (with single X range)
-    //with width above minWidth and combined height of included ranges
+    /// <summary>
+    /// Combines all ranges lying between end X & start X, and above/below height into a single range (with single X range)
+    /// with width above minWidth and combined height of included ranges
+    /// </summary>
     private SectorRange CombineRangesVertically(HashSet<SectorRange> ranges, int start, int end, int heightBottom, int heightTop, int minWidth)
     {
         int startn, endn, bottomn, topn;
@@ -397,7 +423,9 @@ public sealed class DebrisGenerationSystem : EntitySystem
         return new SectorRange(bottomn, topn, new List<(int, int)> {(startn, endn)});
     }
 
-    //Returns true if at least one x-range overlaps another
+    /// <summary>
+    /// Returns true if atleast one x-range overlaps another
+    /// </summary>
     private bool XRangesOverlap(List<(int, int)> ranges1, List<(int, int)> ranges2)
     {
         foreach ((int start1, int end1) in ranges1)
@@ -412,7 +440,9 @@ public sealed class DebrisGenerationSystem : EntitySystem
         return false;
     }
 
-    //Returns list of inverted (occupied) ranges
+    /// <summary>
+    /// Returns list of inverted (occupied) ranges
+    /// </summary>
     private List<(int, int)> InvertedXRanges(List<(int, int)> ranges)
     {
         List<(int, int)> results = new();
@@ -427,7 +457,9 @@ public sealed class DebrisGenerationSystem : EntitySystem
         return results;
     }
 
-    //Subtracts ranges2 from ranges1
+    /// <summary>
+    /// Subtracts ranges1 from ranges2
+    /// </summary>
     private List<(int, int)> SubtractXRanges(List<(int, int)> ranges1, List<(int, int)> ranges2)
     {
         List<(int, int)> SubtractOne(List<(int, int)> ranges, (int, int) range)
@@ -459,8 +491,10 @@ public sealed class DebrisGenerationSystem : EntitySystem
 
         return newRanges;
     }
-
-    //SectorRange represents single 'line' of sector space. It contains info about it's height (Bottom, Top) & free spaces on that height level (XRanges)
+    
+    /// <summary>
+    /// SectorRange represents single 'line' of sector space. It contains info about it's height (Bottom, Top) & free spaces on that height level (XRanges)
+    /// </summary>
     private struct SectorRange
     {
         public int Bottom, Top;

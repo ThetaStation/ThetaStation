@@ -31,7 +31,7 @@ public sealed partial class ShipEventFactionSystem
     /// <param name="message">message text</param>
     /// <param name="chatChannel">chat channel (local by default)</param>
     /// <param name="color">color of message (team's color by default)</param>
-    private void TeamMessage(ShipEventFaction team, string message, ChatChannel chatChannel = ChatChannel.Local,
+    public void TeamMessage(ShipEventFaction team, string message, ChatChannel chatChannel = ChatChannel.Local,
         Color? color = null)
     {
         if (color == null)

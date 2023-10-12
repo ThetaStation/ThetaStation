@@ -133,6 +133,11 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     public List<Processor> ShipProcessors = new();
 
     public ColorPalette ColorPalette = new ShipEventPalette();
+    
+    //used by flag capture
+    public bool AllowTeamRegistration = true;
+    public bool RemoveEmptyTeams = true;
+    public Action<RoundEndTextAppendEvent>? RoundEndEvent;
 
     public override void Initialize()
     {
@@ -265,7 +270,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         }
     }
 
-    public void OnRoundRestart(RoundRestartCleanupEvent ev)
+    private void OnRoundRestart(RoundRestartCleanupEvent ev)
     {
         _lastTeamNumber = 0;
         _teamCheckTimer = 0;
@@ -292,6 +297,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     {
         if (!RuleSelected || !Teams.Any())
             return;
+        
+        RoundEndEvent?.Invoke(args);
 
         var sortedTeams = Teams.ShallowClone().OrderByDescending(t => t.Points).ToList();
 
@@ -494,10 +501,10 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// <summary>
     /// Does everything needed to create a new team, from faction creation to ship spawning.
     /// </summary>
-    public void CreateTeam(ICommonSession session, string name, ShipTypePrototype? initialShipType,
-        string? password, int maxMembers)
+    public void CreateTeam(ICommonSession session, string name, ShipTypePrototype? initialShipType, 
+        string? password, int maxMembers, bool noCaptain = false)
     {
-        if (!RuleSelected)
+        if (!RuleSelected || !AllowTeamRegistration)
             return;
 
         ShipTypePrototype shipType = initialShipType ?? _random.Pick(ShipTypes.Where(t => t.MinCrewAmount == 1).ToList());
@@ -512,7 +519,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             true);
 
         var color = ColorPalette.GetNextColor();
-        var team = RegisterTeam(session.ConnectedClient.UserName, name, color);
+        var team = RegisterTeam(noCaptain ? "N/A" : session.ConnectedClient.UserName, name, color);
         team.ChosenShipType = shipType;
         team.Ship = ship;
         team.ShipName = name;
@@ -522,10 +529,14 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         SetMarkers(ship, team);
         SetShipName(ship, name);
 
+        if (noCaptain)
+            return;
+
         var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>(ship);
         if (!spawners.Any())
         {
             _chatSys.SendSimpleMessage(Loc.GetString("shipevent-respawnfailed"), (IPlayerSession)session);
+            return;
         }
 
         SpawnPlayer((IPlayerSession)session, spawners.First());
@@ -890,12 +901,12 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     private void CheckTeams(float deltaTime)
     {
-        List<ShipEventFaction> toRemove = new();
+        List<ShipEventFaction> emptyTeams = new();
         foreach (var team in Teams)
         {
             if(_factionSystem.GetActiveMembers(team).Count == 0)
             {
-                toRemove.Add(team);
+                emptyTeams.Add(team);
                 continue;
             }
 
@@ -963,7 +974,9 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             team.TimeSinceRemoval += deltaTime;
         }
 
-        foreach (var team in toRemove)
+        if (!RemoveEmptyTeams)
+            return;
+        foreach (var team in emptyTeams)
         {
             RemoveTeam(team, Loc.GetString("shipevent-remove-noplayers"));
         }
