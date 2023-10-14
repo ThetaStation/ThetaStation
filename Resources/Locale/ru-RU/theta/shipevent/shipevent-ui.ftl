@@ -26,6 +26,7 @@ shipevent-lobby-password = Пароль
 shipevent-teamcreation-windowtitle = СОЗДАНИЕ КОМАНДЫ
 shipevent-teamcreation-response-invalidname = Данное название уже занято/слишком длинное/слишком короткое/недоступно по иной причине.
 shipevent-teamcreation-response-invalidcolor = Данный цвет уже занят/недоступен по другой причине.
+shipevent-teamcreation-response-regdisabled = Регистрация новых команд отключена.
 shipevent-teamcreation-response-waitpls = Запрос на создание команды получен, ПОЖАЛУЙСТА ОЖИДАЙТЕ.
 shipevent-teamcreation-name = Имя команды:
 shipevent-teamcreation-ship = Начальный корабль:
