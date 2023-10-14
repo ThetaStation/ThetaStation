@@ -45,6 +45,9 @@
       allowedFlags:
       - Hide
       - HideLabel
+    - type: ShipStealth
+      stealthDuration: 30
+      stealthCooldown: 120
     - type: Anchorable
       disabled: true
 

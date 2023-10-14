@@ -5,6 +5,7 @@ using JetBrains.Annotations;
 
 namespace Content.Client.Theta.ModularRadar.UI.ShuttleConsole;
 
+//todo: separate stealth controls from radar
 [UsedImplicitly]
 public sealed class ModularRadarShuttleConsoleBoundUserInterface : BoundUserInterface
 {
@@ -23,8 +24,9 @@ public sealed class ModularRadarShuttleConsoleBoundUserInterface : BoundUserInte
         _window.StopAutodockPressed += OnStopAutodockPressed;
         _window.DestinationPressed += OnDestinationPressed;
         _window.ChangeNamePressed += OnChangeNamePressed;
-        _window.ShowVessel += SendShowVesselMessage;
+        _window.StealthButtonPressed += OnStealthButtonPressed;
         _window.OpenCentered();
+        SendMessage(new ShipEventRequestStealthStatusMessage());
         _window.OnClose += OnClose;
     }
 
@@ -36,9 +38,9 @@ public sealed class ModularRadarShuttleConsoleBoundUserInterface : BoundUserInte
         });
     }
 
-    private void SendShowVesselMessage(bool visibility)
+    private void OnStealthButtonPressed()
     {
-        SendMessage(new ShipEventToggleStealthMessage() { Show = visibility });
+        SendMessage(new ShipEventToggleStealthMessage());
     }
 
     private void OnChangeNamePressed(string name)

@@ -105,4 +105,7 @@ shipevent-team-msg-base = \[Команда\] [bold]{$name}[/bold]: {$message}
 
 ## Shuttle Console
 
-shipevent-shuttle-console-hide-button = Скрыть шаттл
+shipevent-shuttleconsole-stealth-button = Стелс режим
+shipevent-shuttleconsole-stealth-label = Стелс режим: 
+shipevent-shuttleconsole-stealth-ready = [color=green]ГОТОВ[/color]
+shipevent-shuttleconsole-stealth-recharging = [color=red]ЗАРЯДКА[/color]

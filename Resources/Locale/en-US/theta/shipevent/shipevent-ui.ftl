@@ -106,4 +106,7 @@ shipevent-team-msg-base = \[Team\] [bold]{$name}[/bold]: {$message}
 
 ## Shuttle Console
 
-shipevent-shuttle-console-hide-button = Hide Shuttle
+shipevent-shuttleconsole-stealth-button = Stealth mode
+shipevent-shuttleconsole-stealth-label = Stealth mode:  
+shipevent-shuttleconsole-stealth-ready = [color=green]READY[/color]
+shipevent-shuttleconsole-stealth-recharging = [color=red]RECHARGING[/color]

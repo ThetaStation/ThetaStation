@@ -77,10 +77,6 @@ public sealed partial class ShipEventRuleComponent : Component
 
     [DataField("pickupsPrototypes", customTypeSerializer: typeof(PrototypeIdSerializer<WeightedRandomEntityPrototype>))]
     public string PickupsPrototypes = default!;
-
-    //in miliseconds
-    [DataField("stealthDuration")] public int StealthDuration;
-    [DataField("stealthCooldown")] public int StealthCooldown;
 }
 
 public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
@@ -133,9 +129,6 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         _shipSys.PickupsSpawnInterval = component.PickupsSpawnInterval;
         _shipSys.PickupMinDistance = component.PickupMinDistance;
         _shipSys.PickupsDatasetPrototype = component.PickupsPrototypes;
-
-        _shipSys.StealthDuration = component.StealthDuration;
-        _shipSys.StealthCooldown = component.StealthCooldown;
 
         _shipSys.HUDPrototypeId = component.HUDPrototypeId;
         _shipSys.CaptainHUDPrototypeId = component.CaptainHUDPrototypeId;

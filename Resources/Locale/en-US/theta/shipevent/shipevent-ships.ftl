@@ -15,7 +15,7 @@ shipevent-arrowhead-desc =
 
 shipevent-boxship-name = Boxship
 shipevent-boxship-desc =
-    Five by five meters steel box, housing all the machinery you'd expect to see inside regular battleship. Great option for suicide bombings.
+    Five by five meters steel box, housing all the machinery you'd expect to see inside regular battleship. Great option for farming points and annoying everyone else.
 
 shipevent-skipjack-name = Skipjack
 shipevent-skipjack-desc = A reshaped space pirate support ship that was once stolen from a landfill in the Solar System.
@@ -27,5 +27,5 @@ shipevent-tikvyak-desc = A GOURD IS NOT A PUMPKIN!!!
 shipevent-asteroid-ship-name = Asteroid
 shipevent-asteroid-ship-desc = 
     It is poorly protected, has 6 static cannons on the 3 sides and looks like an asteroid. 
-    The cannons are hidden behind doors that look like a asteroid rock and are controlled from the inside.
-    The perfect stealth shuttle.
+    The cannons are hidden behind doors which look like an asteroid rock and are controlled from the inside.
+    Has extended stealth mode duration.
