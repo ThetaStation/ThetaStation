@@ -27,13 +27,16 @@ public sealed class ShipEventToggleStealthMessage : BoundUserInterfaceMessage { 
 public sealed class ShipEventRequestStealthStatusMessage : BoundUserInterfaceMessage { }
 
 //sent to shuttle console in response to stealth status request
+//see ShipEventFactionSystem.Stealth.cs line 53
 [Serializable, NetSerializable]
-public sealed class ShipEventStealthStatusMessage : BoundUserInterfaceState
+public sealed class ShipEventStealthStatusMessage : EntityEventArgs
 {
     public bool StealthReady;
+    public NetEntity Console;
 
-    public ShipEventStealthStatusMessage(bool ready)
+    public ShipEventStealthStatusMessage(bool ready, NetEntity console)
     {
         StealthReady = ready;
+        Console = console;
     }
 }

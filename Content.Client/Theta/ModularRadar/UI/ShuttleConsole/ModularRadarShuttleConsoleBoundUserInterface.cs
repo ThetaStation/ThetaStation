@@ -87,4 +87,9 @@ public sealed class ModularRadarShuttleConsoleBoundUserInterface : BoundUserInte
         _window?.UpdateState(state);
         _window?.SetOwner(Owner);
     }
+    
+    public void SetStealthStatus(bool ready)
+    {
+        _window?.SetStealthStatus(ready);
+    }
 }

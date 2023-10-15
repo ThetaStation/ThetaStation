@@ -37,9 +37,8 @@ public partial class ShipEventFactionSystem
         OnCooldown.Add(shuttle);
         Timer.Spawn((stealth.StealthDuration + stealth.StealthCooldown) * 1000, () =>
         {
-            OnCooldown.Remove(shuttle); 
-            if (_uiSys.TryGetUi(uid, ShuttleConsoleUiKey.Key, out var bui))
-                _uiSys.SetUiState(bui, new ShipEventStealthStatusMessage(true));
+            OnCooldown.Remove(shuttle);
+            RaiseNetworkEvent(new ShipEventStealthStatusMessage(true, EntityManager.GetNetEntity(uid)), args.Session);
         });
     }
     
@@ -49,7 +48,10 @@ public partial class ShipEventFactionSystem
             return;
 
         var shuttle = xform.GridUid.Value;
-        if (_uiSys.TryGetUi(uid, args.UiKey, out var bui))
-            _uiSys.SetUiState(bui, new ShipEventStealthStatusMessage(!OnCooldown.Contains(shuttle)), args.Session);
+        RaiseNetworkEvent(new ShipEventStealthStatusMessage(!OnCooldown.Contains(shuttle), EntityManager.GetNetEntity(uid)), args.Session);
+        
+        //todo: no idea why this doesn't work
+        /*if (_uiSys.TryGetUi(uid, args.UiKey, out var bui))
+            _uiSys.SetUiState(bui, new ShipEventStealthStatusMessage(!OnCooldown.Contains(shuttle)), args.Session);*/
     }
 }

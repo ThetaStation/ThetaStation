@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Client.Computer;
+using Content.Client.Message;
 using Content.Client.Theta.ModularRadar.Modules;
 using Content.Client.UserInterface.Controls;
 using Content.Shared.Shuttles.BUIStates;
@@ -141,12 +142,6 @@ public sealed partial class ModularRadarShuttleConsoleWindow : FancyWindow,
 
     public void UpdateState(BoundUserInterfaceState scc)
     {
-        if (scc is ShipEventStealthStatusMessage msg)
-        {
-            SetStealthStatus(msg.StealthReady);
-            return;
-        }
-        
         if (scc is ShuttleConsoleBoundInterfaceState cState)
         {
             if (cState.Docks.DistinctBy(i => i.Coordinates.NetEntity).Count() != _docks.Count)
@@ -417,16 +412,16 @@ public sealed partial class ModularRadarShuttleConsoleWindow : FancyWindow,
         GridAngularVelocity.Text = $"{-gridBody.AngularVelocity:0.0}";
     }
 
-    private void SetStealthStatus(bool ready)
+    public void SetStealthStatus(bool ready)
     {
         if (ready)
         {
-            StealthStatus.SetMessage(Loc.GetString("shipevent-shuttleconsole-stealth-ready"));
+            StealthStatus.SetMarkup(Loc.GetString("shipevent-shuttleconsole-stealth-ready"));
             StealthButton.Disabled = false;
         }
         else
         {
-            StealthStatus.SetMessage(Loc.GetString("shipevent-shuttleconsole-stealth-recharging"));
+            StealthStatus.SetMarkup(Loc.GetString("shipevent-shuttleconsole-stealth-recharging"));
             StealthButton.Disabled = true;
         }
     }
