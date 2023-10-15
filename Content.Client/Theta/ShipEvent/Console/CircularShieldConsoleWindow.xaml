@@ -12,6 +12,10 @@
                       Orientation="Vertical">
             <Button Name="ShieldEnableButton" Text="{Loc 'shipevent-shieldconsole-enablebutton'}" />
             <RichTextLabel Name="ShieldPowerStatusLabel" />
+            <Label Text="{Loc 'shipevent-shieldconsole-radiuslabel'}"/>
+            <Slider Name="ShieldRadiusSlider" />
+            <Label Text="{Loc 'shipevent-shieldconsole-widthlabel'}"/>
+            <Slider Name="ShieldWidthSlider" />
         </BoxContainer>
         <BoxContainer Orientation="Vertical">
             <radarSetups:CircularShieldModularRadar

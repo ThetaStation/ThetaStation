@@ -68,13 +68,10 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
             list.Add(new ShieldInterfaceState
             {
                 Coordinates =  GetNetCoordinates(_transformSystem.GetMoverCoordinates(uid, transform)),
-                WorldRotation = _transformSystem.GetWorldRotation(transform),
                 Powered = shield.Powered,
                 Angle = shield.Angle,
                 Width = shield.Width,
-                MaxWidth = shield.MaxWidth,
                 Radius = shield.Radius,
-                MaxRadius = shield.MaxRadius,
                 IsControlling = false,
             });
         }
