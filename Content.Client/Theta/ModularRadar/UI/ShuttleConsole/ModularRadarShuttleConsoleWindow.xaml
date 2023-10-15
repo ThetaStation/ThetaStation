@@ -100,9 +100,7 @@
                            Text="0.0"
                            Align="Right"/>
                     <Label Text="{Loc 'shipevent-shuttleconsole-stealth-label'}"/>
-                    <Label Name="StealthStatus"
-                           Text="N/A"
-                           Align="Right"/>
+                    <RichTextLabel Name="StealthStatus"/>
                 </GridContainer>
             </BoxContainer>
             <Button Name="StealthButton"

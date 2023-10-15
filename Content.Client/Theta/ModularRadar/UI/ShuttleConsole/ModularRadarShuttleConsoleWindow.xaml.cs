@@ -421,12 +421,12 @@ public sealed partial class ModularRadarShuttleConsoleWindow : FancyWindow,
     {
         if (ready)
         {
-            StealthStatus.Text = Loc.GetString("shipevent-shuttleconsole-stealth-ready");
+            StealthStatus.SetMessage(Loc.GetString("shipevent-shuttleconsole-stealth-ready"));
             StealthButton.Disabled = false;
         }
         else
         {
-            StealthStatus.Text = Loc.GetString("shipevent-shuttleconsole-stealth-recharging");
+            StealthStatus.SetMessage(Loc.GetString("shipevent-shuttleconsole-stealth-recharging"));
             StealthButton.Disabled = true;
         }
     }
