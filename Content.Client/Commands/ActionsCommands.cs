@@ -54,14 +54,7 @@ public sealed class LoadActionsCommand : IConsoleCommand
             return;
         }
 
-        try
-        {
-            EntitySystem.Get<ActionsSystem>().LoadActionAssignments(args[0], true);
-        }
-        catch
-        {
-            shell.WriteLine("Failed to load action assignments");
-        }
+        EntitySystem.Get<ActionsSystem>().LoadActionAssignments(args[0], true);
     }
 }
 
@@ -76,13 +69,6 @@ public sealed class LoadMappingActionsCommand : IConsoleCommand
 
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
-        try
-        {
-            EntitySystem.Get<MappingSystem>().LoadMappingActions();
-        }
-        catch
-        {
-            shell.WriteLine("Failed to load action assignments");
-        }
+        EntitySystem.Get<MappingSystem>().LoadMappingActions();
     }
 }
