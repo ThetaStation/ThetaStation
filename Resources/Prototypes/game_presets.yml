@@ -62,6 +62,7 @@
   maxPlayers: 15
   showInVote: true
   supportedMaps: DeathMatchMapPool
+  forceMap: true
   rules:
     - DeathMatch31
 
