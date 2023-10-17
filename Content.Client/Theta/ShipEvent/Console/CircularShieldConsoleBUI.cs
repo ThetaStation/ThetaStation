@@ -1,7 +1,6 @@
 using Content.Shared.Theta.ShipEvent.Components;
 using Content.Shared.Theta.ShipEvent.UI;
 using JetBrains.Annotations;
-using Robust.Client.GameObjects;
 using Robust.Shared.Timing;
 
 namespace Content.Client.Theta.ShipEvent.Console;
@@ -16,7 +15,7 @@ public sealed class CircularShieldConsoleBoundUserInterface : BoundUserInterface
 
     // Smooth changing the shield parameters causes a spam to server
     private TimeSpan _updateCd = TimeSpan.FromMilliseconds(1);
-    private TimeSpan _nextCanUpdate;
+    private TimeSpan _nextUpdate;
 
     public CircularShieldConsoleBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey) { }
 
@@ -28,26 +27,26 @@ public sealed class CircularShieldConsoleBoundUserInterface : BoundUserInterface
         _window.OpenCentered();
         _window.OnClose += Close;
         _window.OnEnableButtonPressed += () => SendMessage(new CircularShieldToggleMessage());
-        _window.OnAngleChanged += UpdateShieldParameters;
+        _window.OnShieldParametersChanged += UpdateShieldParameters;
     }
 
-    private void UpdateShieldParameters(Angle angle)
+    private void UpdateShieldParameters(Angle? angle, Angle? width, int? radius)
     {
-        if(_nextCanUpdate > _gameTiming.RealTime)
+        if(_nextUpdate > _gameTiming.RealTime)
             return;
-        _nextCanUpdate = _gameTiming.RealTime + _updateCd;
+        _nextUpdate = _gameTiming.RealTime + _updateCd;
 
-        SendMessage(new CircularShieldChangeParametersMessage(angle));
+        SendMessage(new CircularShieldChangeParametersMessage(angle, width, radius));
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)
     {
-        if (state is not ShieldConsoleBoundsUserInterfaceState shieldSt)
+        if (state is not ShieldConsoleBoundsUserInterfaceState shieldState)
             return;
 
-        _window?.SetMatrix(EntMan.GetCoordinates(shieldSt.Coordinates), shieldSt.Angle);
+        _window?.SetMatrix(EntMan.GetCoordinates(shieldState.Coordinates), shieldState.Angle);
         _window?.SetOwner(Owner);
-        _window?.UpdateState(shieldSt);
+        _window?.UpdateState(shieldState);
     }
 
     protected override void Dispose(bool disposing)

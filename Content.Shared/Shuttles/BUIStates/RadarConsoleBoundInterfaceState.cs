@@ -95,16 +95,17 @@ public sealed class CannonInformationInterfaceState
 public sealed class ShieldInterfaceState
 {
     public NetCoordinates Coordinates;
-    public Angle WorldRotation;
 
     public bool Powered;
 
     public Angle Angle;
 
     public Angle Width;
-    public int MaxWidth;
+
+    public Angle MaxWidth;
 
     public int Radius;
+
     public int MaxRadius;
 
     public bool IsControlling;
