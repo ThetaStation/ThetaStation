@@ -1,10 +1,11 @@
-﻿using System.Numerics;
+using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Map;
-using Content.Shared.Containers.ItemSlots;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Serialization;
+using System.Numerics;
+using Content.Shared.Interaction.Events;
 
 namespace Content.Shared.Theta.ShipEvent;
 
@@ -22,6 +23,13 @@ public abstract class SharedCannonSystem : EntitySystem
         SubscribeAllEvent<RequestStopCannonShootEvent>(OnStopShootRequest);
         SubscribeLocalEvent<CannonComponent, AnchorStateChangedEvent>(OnAnchorChanged);
         SubscribeLocalEvent<CannonComponent, ComponentInit>(OnInit);
+        SubscribeLocalEvent<CannonComponent, ChangeDirectionAttemptEvent>(OnAttemptRotate);
+    }
+
+    private void OnAttemptRotate(EntityUid uid, CannonComponent component, ChangeDirectionAttemptEvent args)
+    {
+        if(!component.Rotatable)
+            args.Cancel();
     }
 
     private void OnInit(EntityUid uid, CannonComponent cannon, ComponentInit args)
@@ -44,6 +52,13 @@ public abstract class SharedCannonSystem : EntitySystem
         if (gun == null || !CanShoot(ev, gun, cannon))
         {
             StopShoot(evCannonUid);
+            return;
+        }
+
+        var cannonTransform = Transform(GetEntity(ev.CannonUid));
+        if (cannonTransform.GridUid == null)
+        {
+            StopShoot(GetEntity(ev.CannonUid));
             return;
         }
 
@@ -151,7 +166,7 @@ public abstract class SharedCannonSystem : EntitySystem
 
         gun.ShotCounter = 0;
         gun.ShootCoordinates = null;
-        Dirty(gun);
+        Dirty(cannonUid, gun);
     }
 }
 

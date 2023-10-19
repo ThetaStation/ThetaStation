@@ -75,3 +75,19 @@
   previewImage: /Textures/Theta/ShipEvent/ShipPreviews/tikvyak-preview.png
   structurePrototype: "shipevent_tikvyak"
   minCrewAmount: 2
+
+- type: structure
+  id: shipevent_asteroid_ship
+  generator: !type:MapLoaderGenerator
+    mapPath: "/Maps/Theta/Shipevent/Ships/shipevent-asteroid-ship.yml"
+  spawnWeight: 0
+  minDistance: 20
+
+- type: shiptype
+  id: shiptype_asteroid_ship
+  name: shipevent-asteroid-ship-name
+  description: shipevent-asteroid-ship-desc
+  class: shipevent-shipclass-special
+  previewImage: /Textures/Theta/ShipEvent/ShipPreviews/asteroid-ship-preview.png
+  structurePrototype: "shipevent_asteroid_ship"
+  minCrewAmount: 2

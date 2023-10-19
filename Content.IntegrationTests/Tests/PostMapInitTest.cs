@@ -39,7 +39,8 @@ namespace Content.IntegrationTests.Tests
             "/Maps/Theta/Shipevent/Ships/shipevent-arrowhead.yml",
             "/Maps/Theta/Shipevent/Ships/shipevent-mule.yml",
             "/Maps/Theta/Shipevent/Ships/shipevent-boxship.yml",
-            "/Maps/Theta/Shipevent/Ships/shipevent-skipjack.yml"
+            "/Maps/Theta/Shipevent/Ships/shipevent-skipjack.yml",
+            "/Maps/Theta/Shipevent/Ships/shipevent-asteroid-ship.yml"
         };
 
         private static readonly string[] GameMaps =

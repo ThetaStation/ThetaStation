@@ -1,6 +1,7 @@
-﻿using Content.Server.Roles;
+using Content.Server.Roles;
 using Content.Server.Shuttles.Systems;
 using Content.Server.Theta.ShipEvent.Console;
+using Content.Shared.Doors.Components;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
@@ -16,7 +17,6 @@ public sealed class RadarRenderableSystem : EntitySystem
     [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
     [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
     [Dependency] private readonly RadarConsoleSystem _radarConsoleSystem = default!;
-    [Dependency] private readonly RoleSystem _roleSystem = default!;
 
     public List<CommonRadarEntityInterfaceState> GetObjectsAround(EntityUid consoleUid, RadarConsoleComponent radar)
     {
@@ -48,6 +48,9 @@ public sealed class RadarRenderableSystem : EntitySystem
                     break;
                 case RadarRenderableGroup.Cannon:
                     state = GetCannonState(uid, consoleUid, radarRenderable, xform, transform);
+                    break;
+                case RadarRenderableGroup.Door:
+                    state = GetDoorState(uid, radarRenderable, transform, xform);
                     break;
                 default:
                     state = GetDefaultState(uid, radarRenderable, transform);
@@ -110,21 +113,59 @@ public sealed class RadarRenderableSystem : EntitySystem
         );
     }
 
-    private CommonRadarEntityInterfaceState? GetMobState(EntityUid uid, RadarRenderableComponent renderable,
-        TransformComponent xform)
+    private CommonRadarEntityInterfaceState? GetMobState(EntityUid uid, RadarRenderableComponent renderable, TransformComponent xform)
     {
         if (!TryComp<MindContainerComponent>(uid, out var mindContainer) ||
             !TryComp<MobStateComponent>(uid, out var mobState))
             return null;
         if (_mobStateSystem.IsIncapacitated(uid, mobState))
             return null;
-        Color? color = null;
-        if (mindContainer.Mind != null)
+
+        if (TryComp<IFFComponent>(Transform(uid).GridUid, out var iff) && iff.Flags == IFFFlags.Hide)
+            return null;
+
+        Color ? color = null;
+
+         if (mindContainer.Mind != null)
+         {
+             if (EntityManager.TryGetComponent<ShipEventRoleComponent>(mindContainer.Mind.Value, out var roleComponent) &&
+                 roleComponent.Faction is ShipEventFaction shipEventFaction)
+                 color = shipEventFaction.Color;
+         }
+
+        return new CommonRadarEntityInterfaceState(
+            GetNetCoordinates(_transformSystem.GetMoverCoordinates(uid, xform)),
+            _transformSystem.GetWorldRotation(xform),
+            renderable.RadarView,
+            color
+        );
+    }
+
+    private CommonRadarEntityInterfaceState? GetDoorState(EntityUid uid, RadarRenderableComponent renderable,
+        TransformComponent xform, TransformComponent consoleTransform)
+    {
+        var myGrid = consoleTransform.GridUid;
+
+        if (Transform(uid).GridUid != myGrid)
+            return null;
+        if (!Transform(uid).Anchored)
+            return null;
+        if (!TryComp<DoorComponent>(uid, out var door))
+            return null;
+
+        Color? color = Color.White;
+
+        if (door.State == DoorState.Closed)
         {
-            if (EntityManager.TryGetComponent<ShipEventRoleComponent>(mindContainer.Mind.Value,
-                    out var roleComponent) &&
-                roleComponent.Faction is ShipEventFaction shipEventFaction)
-                color = shipEventFaction.Color;
+            color = Color.Red;
+        }
+        else if (door.State == DoorState.Opening | door.State == DoorState.Closing)
+        {
+            color = Color.Yellow;
+        }
+        else
+        {
+            color = Color.LimeGreen;
         }
 
         return new CommonRadarEntityInterfaceState(

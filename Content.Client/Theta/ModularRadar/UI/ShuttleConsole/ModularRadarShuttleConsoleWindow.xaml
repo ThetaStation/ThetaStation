@@ -1,4 +1,4 @@
-﻿<controls:FancyWindow xmlns="https://spacestation14.io"
+<controls:FancyWindow xmlns="https://spacestation14.io"
                       xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
                       xmlns:ui="clr-namespace:Content.Client.Shuttles.UI"
                       xmlns:radarSetups="clr-namespace:Content.Client.Theta.ModularRadar.RadarSetups"
@@ -99,8 +99,13 @@
                     <Label Name="GridAngularVelocity"
                            Text="0.0"
                            Align="Right"/>
+                    <Label Text="{Loc 'shipevent-shuttleconsole-stealth-label'}"/>
+                    <RichTextLabel Name="StealthStatus"/>
                 </GridContainer>
             </BoxContainer>
+            <Button Name="StealthButton"
+                    Text="{Loc 'shipevent-shuttleconsole-stealth-button'}"
+                    TextAlign="Center"/>
             <Button Name="IFFToggle"
                     Text="{Loc 'shuttle-console-iff-toggle'}"
                     TextAlign="Center"

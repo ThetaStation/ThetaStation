@@ -48,6 +48,19 @@
     radius: 2
 
 - type: radarEntityView
+  id: genericDoor
+  defaultColor: "#ff0000"
+  form:
+    !type:ShapeRadarForm
+    size: 1
+    vertices:
+      - -0.5, 0.5
+      - 0.5, 0.5
+      - 0.5, -0.5
+      - -0.5, -0.5
+      - -0.5, 0.5
+
+- type: radarEntityView      
   id: ammoContainer
   defaultColor: "#ffff00"
   form:

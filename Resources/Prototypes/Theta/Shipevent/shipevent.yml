@@ -36,6 +36,7 @@
         - "shiptype_mule"
         - "shiptype_skipjack"
         - "shiptype_tikvyak"
+        - "shiptype_asteroid_ship"
 
       #bounds
       boundsCompressionInterval: 0
@@ -54,6 +55,10 @@
       pickupsSpawnInterval: 60 # in seconds
       pickupMinDistance: 100
       pickupsPrototypes: ShipEventPickupsPrototypes
+
+      #stealth timers
+      stealthDuration: 60000
+      stealthCooldown: 180000
 
 - type: weightedRandomEntity
   id: ShipEventPickupsPrototypes

@@ -19,3 +19,24 @@ public sealed class BoundsOverlayInfo : EntityEventArgs
     }
 }
 
+//sent from shuttle console when user presses stealth activation button
+[Serializable, NetSerializable]
+public sealed class ShipEventToggleStealthMessage : BoundUserInterfaceMessage { }
+
+[Serializable, NetSerializable]
+public sealed class ShipEventRequestStealthStatusMessage : BoundUserInterfaceMessage { }
+
+//sent to shuttle console in response to stealth status request
+//see ShipEventFactionSystem.Stealth.cs line 53
+[Serializable, NetSerializable]
+public sealed class ShipEventStealthStatusMessage : EntityEventArgs
+{
+    public bool StealthReady;
+    public NetEntity Console;
+
+    public ShipEventStealthStatusMessage(bool ready, NetEntity console)
+    {
+        StealthReady = ready;
+        Console = console;
+    }
+}

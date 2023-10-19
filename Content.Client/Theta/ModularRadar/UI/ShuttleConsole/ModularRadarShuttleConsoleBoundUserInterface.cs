@@ -1,10 +1,11 @@
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Events;
+using Content.Shared.Theta.ShipEvent;
 using JetBrains.Annotations;
-using Robust.Client.GameObjects;
 
 namespace Content.Client.Theta.ModularRadar.UI.ShuttleConsole;
 
+//todo: separate stealth controls from radar
 [UsedImplicitly]
 public sealed class ModularRadarShuttleConsoleBoundUserInterface : BoundUserInterface
 {
@@ -23,7 +24,9 @@ public sealed class ModularRadarShuttleConsoleBoundUserInterface : BoundUserInte
         _window.StopAutodockPressed += OnStopAutodockPressed;
         _window.DestinationPressed += OnDestinationPressed;
         _window.ChangeNamePressed += OnChangeNamePressed;
+        _window.StealthButtonPressed += OnStealthButtonPressed;
         _window.OpenCentered();
+        SendMessage(new ShipEventRequestStealthStatusMessage());
         _window.OnClose += OnClose;
     }
 
@@ -33,6 +36,11 @@ public sealed class ModularRadarShuttleConsoleBoundUserInterface : BoundUserInte
         {
             Destination = obj,
         });
+    }
+
+    private void OnStealthButtonPressed()
+    {
+        SendMessage(new ShipEventToggleStealthMessage());
     }
 
     private void OnChangeNamePressed(string name)
@@ -78,5 +86,10 @@ public sealed class ModularRadarShuttleConsoleBoundUserInterface : BoundUserInte
 
         _window?.UpdateState(state);
         _window?.SetOwner(Owner);
+    }
+    
+    public void SetStealthStatus(bool ready)
+    {
+        _window?.SetStealthStatus(ready);
     }
 }
