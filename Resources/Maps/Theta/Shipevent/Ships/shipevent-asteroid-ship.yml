@@ -137,6 +137,18 @@ entities:
     - pos: 2.5,-9.5
       parent: 1
       type: Transform
+- proto: APCElectronics
+  entities:
+  - uid: 270
+    components:
+    - pos: 1.5,-7.5
+      parent: 1
+      type: Transform
+  - uid: 271
+    components:
+    - pos: 1.5,-7.5
+      parent: 1
+      type: Transform
 - proto: APCHighCapacity
   entities:
   - uid: 3
@@ -706,19 +718,9 @@ entities:
     - pos: 6.5,-3.5
       parent: 1
       type: Transform
-  - uid: 115
-    components:
-    - pos: 6.5,-4.5
-      parent: 1
-      type: Transform
   - uid: 116
     components:
     - pos: -1.5,-3.5
-      parent: 1
-      type: Transform
-  - uid: 117
-    components:
-    - pos: -1.5,-4.5
       parent: 1
       type: Transform
   - uid: 118
@@ -756,6 +758,23 @@ entities:
     - pos: 5.5,-10.5
       parent: 1
       type: Transform
+  - uid: 263
+    components:
+    - pos: -1.5,2.5
+      parent: 1
+      type: Transform
+  - uid: 264
+    components:
+    - pos: 6.5,2.5
+      parent: 1
+      type: Transform
+- proto: CableApcStack
+  entities:
+  - uid: 267
+    components:
+    - pos: 1.5,-7.5
+      parent: 1
+      type: Transform
 - proto: CableHV
   entities:
   - uid: 125
@@ -788,6 +807,13 @@ entities:
   - uid: 130
     components:
     - pos: -0.5,-3.5
+      parent: 1
+      type: Transform
+- proto: CableMVStack
+  entities:
+  - uid: 268
+    components:
+    - pos: 1.5,-7.5
       parent: 1
       type: Transform
 - proto: CableTerminal
@@ -824,17 +850,6 @@ entities:
         163:
         - CannonConsoleSender: CannonConsoleReceiver
       type: DeviceLinkSource
-  - uid: 134
-    components:
-    - pos: 3.5,2.5
-      parent: 1
-      type: Transform
-    - enabled: True
-      type: PointLight
-    - linkedPorts:
-        164:
-        - CannonConsoleSender: CannonConsoleReceiver
-      type: DeviceLinkSource
   - uid: 135
     components:
     - pos: 1.5,2.5
@@ -844,6 +859,8 @@ entities:
       type: PointLight
     - linkedPorts:
         161:
+        - CannonConsoleSender: CannonConsoleReceiver
+        164:
         - CannonConsoleSender: CannonConsoleReceiver
       type: DeviceLinkSource
   - uid: 136
@@ -860,11 +877,59 @@ entities:
         166:
         - CannonConsoleSender: CannonConsoleReceiver
       type: DeviceLinkSource
+- proto: Chair
+  entities:
+  - uid: 260
+    components:
+    - rot: -1.5707963267948966 rad
+      pos: 0.5,-2.5
+      parent: 1
+      type: Transform
+- proto: ChairPilotSeat
+  entities:
+  - uid: 256
+    components:
+    - rot: 3.141592653589793 rad
+      pos: 2.5,1.5
+      parent: 1
+      type: Transform
+  - uid: 257
+    components:
+    - rot: 1.5707963267948966 rad
+      pos: 3.5,-6.5
+      parent: 1
+      type: Transform
+  - uid: 258
+    components:
+    - rot: 1.5707963267948966 rad
+      pos: 4.5,-0.5
+      parent: 1
+      type: Transform
+  - uid: 259
+    components:
+    - rot: -1.5707963267948966 rad
+      pos: 0.5,-0.5
+      parent: 1
+      type: Transform
+- proto: ComputerRadar
+  entities:
+  - uid: 117
+    components:
+    - pos: 3.5,2.5
+      parent: 1
+      type: Transform
 - proto: ComputerShuttleSyndieShipEvent
   entities:
   - uid: 137
     components:
     - pos: 2.5,2.5
+      parent: 1
+      type: Transform
+- proto: CrowbarRed
+  entities:
+  - uid: 272
+    components:
+    - pos: 2.501484,-0.42707014
       parent: 1
       type: Transform
 - proto: FlakAmmoClosetShipEvent
@@ -889,16 +954,6 @@ entities:
     - pos: 5.5,0.5
       parent: 1
       type: Transform
-  - uid: 142
-    components:
-    - pos: 5.5,-2.5
-      parent: 1
-      type: Transform
-  - uid: 143
-    components:
-    - pos: -0.5,-2.5
-      parent: 1
-      type: Transform
 - proto: GeneratorUraniumShipEvent
   entities:
   - uid: 144
@@ -906,6 +961,8 @@ entities:
     - pos: 0.5,-6.5
       parent: 1
       type: Transform
+    - supplyRate: 30000
+      type: PowerSupplier
 - proto: Grille
   entities:
   - uid: 145
@@ -964,6 +1021,20 @@ entities:
       pos: 0.5,-7.5
       parent: 1
       type: Transform
+- proto: NetworkConfigurator
+  entities:
+  - uid: 261
+    components:
+    - pos: 1.5,-7.5
+      parent: 1
+      type: Transform
+- proto: OxygenCanister
+  entities:
+  - uid: 273
+    components:
+    - pos: 3.5,-7.5
+      parent: 1
+      type: Transform
 - proto: PoweredlightLED
   entities:
   - uid: 155
@@ -1002,6 +1073,21 @@ entities:
     components:
     - rot: 1.5707963267948966 rad
       pos: 0.5,-6.5
+      parent: 1
+      type: Transform
+- proto: Rack
+  entities:
+  - uid: 255
+    components:
+    - pos: 1.5,-7.5
+      parent: 1
+      type: Transform
+- proto: RandomArcade
+  entities:
+  - uid: 134
+    components:
+    - rot: 1.5707963267948966 rad
+      pos: -0.5,-2.5
       parent: 1
       type: Transform
 - proto: RockSecretDoor
@@ -1063,6 +1149,13 @@ entities:
     - links:
       - 178
       type: DeviceLinkSink
+- proto: SheetSteel
+  entities:
+  - uid: 269
+    components:
+    - pos: 1.5,-7.5
+      parent: 1
+      type: Transform
 - proto: ShipEventStaticFlakCannon
   entities:
   - uid: 161
@@ -1080,7 +1173,8 @@ entities:
       - 191
       - 135
       type: DeviceLinkSink
-    - container: ""
+    - provider: 190
+      container: storagebase
       type: ContainerAmmoProvider
   - uid: 162
     components:
@@ -1098,7 +1192,8 @@ entities:
       - 194
       - 132
       type: DeviceLinkSink
-    - container: ""
+    - provider: 251
+      container: storagebase
       type: ContainerAmmoProvider
   - uid: 163
     components:
@@ -1116,7 +1211,8 @@ entities:
       - 193
       - 133
       type: DeviceLinkSink
-    - container: ""
+    - provider: 250
+      container: storagebase
       type: ContainerAmmoProvider
   - uid: 164
     components:
@@ -1131,9 +1227,10 @@ entities:
       type: Cannon
     - links:
       - 192
-      - 134
+      - 135
       type: DeviceLinkSink
-    - container: ""
+    - provider: 249
+      container: storagebase
       type: ContainerAmmoProvider
   - uid: 165
     components:
@@ -1148,7 +1245,8 @@ entities:
       - 195
       - 136
       type: DeviceLinkSink
-    - container: ""
+    - provider: 252
+      container: storagebase
       type: ContainerAmmoProvider
   - uid: 166
     components:
@@ -1163,7 +1261,8 @@ entities:
       - 196
       - 136
       type: DeviceLinkSink
-    - container: ""
+    - provider: 253
+      container: storagebase
       type: ContainerAmmoProvider
 - proto: ShipEventTeleporter
   entities:
@@ -1301,37 +1400,118 @@ entities:
     - pos: -1.5,3.5
       parent: 1
       type: Transform
-  - uid: 186
-    components:
-    - rot: 1.5707963267948966 rad
-      pos: -1.5,-4.5
-      parent: 1
-      type: Transform
   - uid: 187
     components:
     - pos: 6.5,3.5
       parent: 1
       type: Transform
+- proto: ThrusterUnanchored
+  entities:
+  - uid: 115
+    components:
+    - rot: 3.141592653589793 rad
+      pos: 0.5,-9.5
+      parent: 1
+      type: Transform
+  - uid: 143
+    components:
+    - rot: 3.141592653589793 rad
+      pos: -1.5,-4.5
+      parent: 1
+      type: Transform
+  - uid: 186
+    components:
+    - rot: 1.5707963267948966 rad
+      pos: -2.5,2.5
+      parent: 1
+      type: Transform
   - uid: 188
     components:
-    - rot: -1.5707963267948966 rad
+    - rot: 3.141592653589793 rad
       pos: 6.5,-4.5
       parent: 1
       type: Transform
   - uid: 189
     components:
-    - rot: 3.141592653589793 rad
-      pos: -1.5,-5.5
+    - rot: -1.5707963267948966 rad
+      pos: 7.5,2.5
       parent: 1
       type: Transform
-  - uid: 190
+  - uid: 254
     components:
     - rot: 3.141592653589793 rad
-      pos: 6.5,-5.5
+      pos: 4.5,-9.5
       parent: 1
       type: Transform
-    - enabled: False
-      type: Thruster
+  - uid: 265
+    components:
+    - rot: -1.5707963267948966 rad
+      pos: 7.5,-3.5
+      parent: 1
+      type: Transform
+  - uid: 266
+    components:
+    - rot: 1.5707963267948966 rad
+      pos: -2.5,-3.5
+      parent: 1
+      type: Transform
+- proto: ToolboxSyndicateFilled
+  entities:
+  - uid: 262
+    components:
+    - pos: 1.5,-7.5
+      parent: 1
+      type: Transform
+- proto: TurretAmmoContainerFlakFilled
+  entities:
+  - uid: 190
+    components:
+    - flags: InContainer
+      type: MetaData
+    - parent: 191
+      type: Transform
+    - canCollide: False
+      type: Physics
+  - uid: 249
+    components:
+    - flags: InContainer
+      type: MetaData
+    - parent: 192
+      type: Transform
+    - canCollide: False
+      type: Physics
+  - uid: 250
+    components:
+    - flags: InContainer
+      type: MetaData
+    - parent: 193
+      type: Transform
+    - canCollide: False
+      type: Physics
+  - uid: 251
+    components:
+    - flags: InContainer
+      type: MetaData
+    - parent: 194
+      type: Transform
+    - canCollide: False
+      type: Physics
+  - uid: 252
+    components:
+    - flags: InContainer
+      type: MetaData
+    - parent: 195
+      type: Transform
+    - canCollide: False
+      type: Physics
+  - uid: 253
+    components:
+    - flags: InContainer
+      type: MetaData
+    - parent: 196
+      type: Transform
+    - canCollide: False
+      type: Physics
 - proto: TurretLoaderShipEvent
   entities:
   - uid: 191
@@ -1339,6 +1519,12 @@ entities:
     - pos: 0.5,2.5
       parent: 1
       type: Transform
+    - containers:
+        ammoContainer: !type:ContainerSlot
+          showEnts: False
+          occludes: True
+          ent: 190
+      type: ContainerContainer
     - linkedPorts:
         161:
         - TurretLoaderSender: CannonConsoleReceiver
@@ -1348,6 +1534,12 @@ entities:
     - pos: 4.5,2.5
       parent: 1
       type: Transform
+    - containers:
+        ammoContainer: !type:ContainerSlot
+          showEnts: False
+          occludes: True
+          ent: 249
+      type: ContainerContainer
     - linkedPorts:
         164:
         - TurretLoaderSender: CannonConsoleReceiver
@@ -1357,6 +1549,12 @@ entities:
     - pos: 5.5,1.5
       parent: 1
       type: Transform
+    - containers:
+        ammoContainer: !type:ContainerSlot
+          showEnts: False
+          occludes: True
+          ent: 250
+      type: ContainerContainer
     - linkedPorts:
         163:
         - TurretLoaderSender: CannonConsoleReceiver
@@ -1366,6 +1564,12 @@ entities:
     - pos: -0.5,1.5
       parent: 1
       type: Transform
+    - containers:
+        ammoContainer: !type:ContainerSlot
+          showEnts: False
+          occludes: True
+          ent: 251
+      type: ContainerContainer
     - linkedPorts:
         162:
         - TurretLoaderSender: CannonConsoleReceiver
@@ -1375,6 +1579,12 @@ entities:
     - pos: 4.5,-7.5
       parent: 1
       type: Transform
+    - containers:
+        ammoContainer: !type:ContainerSlot
+          showEnts: False
+          occludes: True
+          ent: 252
+      type: ContainerContainer
     - linkedPorts:
         165:
         - TurretLoaderSender: CannonConsoleReceiver
@@ -1384,10 +1594,23 @@ entities:
     - pos: 4.5,-5.5
       parent: 1
       type: Transform
+    - containers:
+        ammoContainer: !type:ContainerSlot
+          showEnts: False
+          occludes: True
+          ent: 253
+      type: ContainerContainer
     - linkedPorts:
         166:
         - TurretLoaderSender: CannonConsoleReceiver
       type: DeviceLinkSource
+- proto: VendingMachineSpaceUp
+  entities:
+  - uid: 142
+    components:
+    - pos: 5.5,-2.5
+      parent: 1
+      type: Transform
 - proto: WallShuttle
   entities:
   - uid: 197
