@@ -58,7 +58,6 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
         var shieldState = new ShieldInterfaceState
         {
             Coordinates = GetNetCoordinates(_transformSystem.GetMoverCoordinates(console.BoundShield.Value, transform)),
-            WorldRotation = _transformSystem.GetWorldRotation(transform),
             Powered = shield.Powered,
             Angle = shield.Angle,
             Width = shield.Width,
@@ -103,14 +102,12 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
         if (!TryComp(console.BoundShield, out CircularShieldComponent? shield))
             return;
 
-        if ((args.Radius != null && args.Radius > shield.MaxRadius) || args.Width?.Degrees > shield.MaxWidth)
+        if (args.Radius > shield.MaxRadius || args.Width?.Degrees > shield.MaxWidth)
             return;
 
-        shield.Angle = args.Angle;
-        if(args.Width != null)
-            shield.Width = args.Width.Value;
-        if(args.Radius != null)
-            shield.Radius = args.Radius.Value;
+        shield.Angle = args.Angle ?? shield.Angle;
+        shield.Width = args.Width ?? shield.Width;
+        shield.Radius = args.Radius ?? shield.Radius;
         UpdateShieldFixture(console.BoundShield.Value, shield);
 
         if (TryComp<ApcPowerReceiverComponent>(console.BoundShield.Value, out var receiver))

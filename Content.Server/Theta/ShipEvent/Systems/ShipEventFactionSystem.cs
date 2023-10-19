@@ -282,6 +282,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         CurrentBoundsOffset = 0;
 
         RuleSelected = false;
+        AllowTeamRegistration = true;
+        RemoveEmptyTeams = true;
 
         ShipTypes.Clear();
         TargetMap = MapId.Nullspace;

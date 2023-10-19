@@ -62,8 +62,8 @@ public sealed class ToggleTeamRegistrationCommand : IConsoleCommand
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         ShipEventFactionSystem seSys = IoCManager.Resolve<IEntityManager>().System<ShipEventFactionSystem>();
-        seSys.RemoveEmptyTeams = !seSys.RemoveEmptyTeams;
-        shell.WriteLine("Empty team removal is now " + (seSys.RemoveEmptyTeams ? "enabled" : "disabled"));
+        seSys.AllowTeamRegistration = !seSys.AllowTeamRegistration;
+        shell.WriteLine("Team registration is now " + (seSys.AllowTeamRegistration ? "enabled" : "disabled"));
     }
 }
 
@@ -79,8 +79,8 @@ public sealed class ToggleEmptyTeamRemovalCommand : IConsoleCommand
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         ShipEventFactionSystem seSys = IoCManager.Resolve<IEntityManager>().System<ShipEventFactionSystem>();
-        seSys.AllowTeamRegistration = !seSys.AllowTeamRegistration;
-        shell.WriteLine("Team registration is now " + (seSys.AllowTeamRegistration ? "enabled" : "disabled"));
+        seSys.RemoveEmptyTeams = !seSys.RemoveEmptyTeams;
+        shell.WriteLine("Empty team removal is now " + (seSys.RemoveEmptyTeams ? "enabled" : "disabled"));
     }
 }
 
