@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Server.Chat.Managers;
+using Content.Server.Chat.Systems;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules.Components;
 using Content.Server.Mind;
@@ -34,7 +35,7 @@ public sealed class ImpostorRuleSystem : StationEventSystem<ImpostorRuleComponen
     [Dependency] private JobSystem _jobSys = default!;
     [Dependency] private RoleSystem _roleSys = default!;
     [Dependency] private ObjectivesSystem _objectiveSys = default!;
-    [Dependency] private IChatManager _chatMan = default!;
+    [Dependency] private ChatSystem _chatSys = default!;
     [Dependency] private AudioSystem _audioSys = default!;
     [Dependency] private IRobustRandom _rand = default!;
     
@@ -43,7 +44,7 @@ public sealed class ImpostorRuleSystem : StationEventSystem<ImpostorRuleComponen
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<RulePlayerSpawningEvent>(OnPlayerSpawning);
+        SubscribeLocalEvent<RulePlayerJobsAssignedEvent>(OnPlayerSpawning);
     }
     
     protected override void Started(EntityUid uid, ImpostorRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
@@ -52,9 +53,11 @@ public sealed class ImpostorRuleSystem : StationEventSystem<ImpostorRuleComponen
         ruleComp = component;
     }
 
-    private void OnPlayerSpawning(RulePlayerSpawningEvent ev)
+    private void OnPlayerSpawning(RulePlayerJobsAssignedEvent ev)
     {
-        List<IPlayerSession> candidates = GetPotentialImpostors(ev.PlayerPool, ev.Profiles);
+        if (ruleComp == null) return;
+        
+        List<IPlayerSession> candidates = GetPotentialImpostors(ev.Players, ev.Profiles);
         for (int i = 0; i < ruleComp.ImpostorAmount; i++)
         {
             MakeImpostor(_rand.Pick(candidates));
@@ -63,18 +66,16 @@ public sealed class ImpostorRuleSystem : StationEventSystem<ImpostorRuleComponen
 
     private void MakeImpostor(IPlayerSession player)
     {
-        if (TryComp<MindContainerComponent>(player.AttachedEntity, out var mindContainer) && mindContainer.HasMind)
+        if (_mindSys.TryGetMind(player.UserId, out var mindUid, out var mind))
         {
-            EntityUid mindUid = mindContainer.Mind.Value;
-            MindComponent mind = Comp<MindComponent>(mindUid);
-            _roleSys.MindAddRole(mindUid, new ImpostorRoleComponent());
-            _mindSys.AddObjective(mindContainer.Mind.Value, mind, _objectiveSys.GetRandomObjective(mindUid, mind, ruleComp.ImpostorObjectiveGroupId) ?? EntityUid.Invalid);
-            _chatMan.DispatchServerMessage(player, Loc.GetString("impostor-greeting"));
+            _roleSys.MindAddRole(mindUid.Value, new ImpostorRoleComponent());
+            //_mindSys.AddObjective(mindUid.Value, mind, _objectiveSys.GetRandomObjective(mindUid.Value, mind, ruleComp.ImpostorObjectiveGroupId) ?? EntityUid.Invalid);
+            _chatSys.SendSimpleMessage(Loc.GetString("impostor-greeting"), player);
             _audioSys.PlayGlobal(ruleComp.ImpostorGreetingSound, player);
         }
     }
 
-    private List<IPlayerSession> GetPotentialImpostors(List<IPlayerSession> playerPool, IReadOnlyDictionary<NetUserId, HumanoidCharacterProfile> profiles)
+    private List<IPlayerSession> GetPotentialImpostors(IPlayerSession[] playerPool, IReadOnlyDictionary<NetUserId, HumanoidCharacterProfile> profiles)
     {
         List<IPlayerSession> validPlayers = new();
         EntityQuery<PendingClockInComponent> pendingPlayers = GetEntityQuery<PendingClockInComponent>();
@@ -92,7 +93,7 @@ public sealed class ImpostorRuleSystem : StationEventSystem<ImpostorRuleComponen
         List<IPlayerSession> playersWithPref = new();
         foreach (IPlayerSession player in validPlayers)
         {
-            if (profiles.ContainsKey(player.UserId))
+            if (!profiles.ContainsKey(player.UserId))
                 continue;
             
             if (profiles[player.UserId].AntagPreferences.Contains(ruleComp.ImpostorAntagId))
@@ -101,7 +102,7 @@ public sealed class ImpostorRuleSystem : StationEventSystem<ImpostorRuleComponen
         if (playersWithPref.Count < ruleComp.ImpostorAmount)
         {
             Log.Info("Insufficient preferred impostors, picking at random.");
-            playersWithPref = validPlayers;
+            return validPlayers;
         }
         
         return playersWithPref;

@@ -16,4 +16,6 @@
       maxOccurrences: 0
       impostorAmount: 1
       impostorAntagId: "Impostor"
-      impostorGreetingSound: /Resources/Audio/Ambience/ambidanger2.ogg
+      impostorObjectiveGroupId: "ImpostorObjectives"
+      impostorGreetingSound: !type:SoundPathSpecifier
+        path: /Audio/Ambience/ambidanger2.ogg
