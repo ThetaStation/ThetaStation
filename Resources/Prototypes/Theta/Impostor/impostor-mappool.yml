@@ -1,4 +1,5 @@
 - type: gameMapPool
-  id: ShipEventMapPool
+  id: ImpostorMapPool
   maps:
-    - DeepSpaceStation
+    - Saltern
+    #- DeepSpaceStation todo: map it
