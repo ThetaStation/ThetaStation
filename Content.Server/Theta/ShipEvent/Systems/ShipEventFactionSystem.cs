@@ -168,6 +168,27 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
     }
 
+    //todo: use Robust.Timing.Timer
+    public override void Update(float frametime)
+    {
+        if (!RuleSelected)
+            return;
+
+        _teamCheckTimer += frametime;
+        RoundendTimer += frametime;
+        _boundsCompressionTimer += frametime;
+
+        if (_teamCheckTimer > TeamCheckInterval)
+        {
+            _teamCheckTimer -= TeamCheckInterval;
+            CheckTeams(TeamCheckInterval);
+        }
+
+        CheckBoundsCompressionTimer();
+        CheckRoundendTimer();
+        CheckPickupsTimer();
+    }
+    
     //for handling intentional ghosting (suicide)
     private void OnPlayerGhostAttempt(GhostAttemptHandleEvent args)
     {
@@ -194,26 +215,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         TeamMessage(marker.Team, chatMsg);
         args.Channel = null;
-    }
-
-    public override void Update(float frametime)
-    {
-        if (!RuleSelected)
-            return;
-
-        _teamCheckTimer += frametime;
-        RoundendTimer += frametime;
-        _boundsCompressionTimer += frametime;
-
-        if (_teamCheckTimer > TeamCheckInterval)
-        {
-            _teamCheckTimer -= TeamCheckInterval;
-            CheckTeams(TeamCheckInterval);
-        }
-
-        CheckBoundsCompressionTimer();
-        CheckRoundendTimer();
-        CheckPickupsTimer();
     }
 
     private void CheckRoundendTimer()

@@ -106,6 +106,7 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         return new EntityPrototype.ComponentRegistryEntry(iffSplitComp, mapping);
     }
 
+    //todo: merge this with ShipEventFactionSystem?
     protected override void Started(EntityUid uid, ShipEventRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
         base.Started(uid, component, gameRule, args);

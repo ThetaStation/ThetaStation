@@ -1,0 +1,39 @@
+- type: gamePreset
+  id: ShipBattle
+  alias:
+    - shipevent
+    - shiptest
+  name: shipevent-title
+  description: shipevent-desc
+  showInVote: true
+  rules:
+    - ShipEvent
+  supportedMaps: ShipEventMapPool
+  forceMap: true
+
+- type: gamePreset
+  id: FlagCapture
+  alias:
+    - sefc
+    - ship-event-flag-capture
+  name: sefc-title
+  description: sefc-desc
+  showInVote: true
+  rules:
+    - ShipEvent
+    - SEFC
+  supportedMaps: ShipEventMapPool
+  forceMap: true
+  
+- type: gamePreset
+  id: Impostor
+  alias:
+    - mogus
+  name: impostor-title
+  description: impostor-desc
+  showInVote: true
+  rules:
+    - Impostor
+    - RampingStationEventScheduler
+  supportedMaps: ImpostorMapPool
+  forceMap: true

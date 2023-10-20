@@ -1,0 +1,19 @@
+- type: antag
+  id: Impostor
+  name: impostor-name
+  antagonist: true
+  setPreference: true
+  objective: impostor-objectives
+
+- type: entity
+  noSpawn: true
+  id: Impostor
+  parent: BaseGameRule
+  components:
+    - type: ImpostorRule
+      id: Impostor
+      startAnnouncement: impostor-eventannouncement
+      maxOccurrences: 0
+      impostorAmount: 1
+      impostorAntagId: "Impostor"
+      impostorGreetingSound: /Resources/Audio/Ambience/ambidanger2.ogg
