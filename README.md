@@ -22,9 +22,9 @@ Official site with the [documentation](https://docs.spacestation14.io/) has a lo
 [More detailed guide on how to setup the project.](https://docs.spacestation14.io/getting-started/dev-setup)
 
 ## License
-All the repo's code, except code which was pulled from [upstream repository](https://github.com/space-syndicate/space-station-14) is licensed under [СС-BY-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/).
+All the repo's code before unix timestamp `1668875136` is licensed under MIT or any other license specified in LICENSE.TXT for the appropriate version's state.
 
-Rest of the commits are licensed under MIT or any other license used by upstream repository.
+All the repo's code after unix timestamp `1668875136`, (except code which was pulled from [upstream repository](https://github.com/space-syndicate/space-station-14), which is licensed under MIT or any other license used by upstream repository), is licensed under [СС-BY-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/).
 
 Most of the assets are licensed under [CC-BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/), unless stated otherwise. Assets have their license and author written in metadata file.
 
