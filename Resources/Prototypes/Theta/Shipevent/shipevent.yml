@@ -66,3 +66,9 @@
     ShuttlePickupAmmo: 1.0
     ShuttlePickupHeal: 1.0
     ShuttlePickupPower: 0.4
+    
+- type: antag
+  id: ShipTester
+  name: shipevent-role-name
+  antagonist: true
+  objective: roles-antag-shiptester

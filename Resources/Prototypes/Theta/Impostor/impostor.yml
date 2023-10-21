@@ -4,7 +4,7 @@
   antagonist: true
   setPreference: true
   objective: impostor-objectives
-
+  
 - type: entity
   noSpawn: true
   id: Impostor
@@ -19,3 +19,30 @@
       impostorObjectiveGroupId: "ImpostorObjectives"
       impostorGreetingSound: !type:SoundPathSpecifier
         path: /Audio/Ambience/ambidanger2.ogg
+  
+# Objectives
+- type: weightedRandom
+  id: ImpostorObjectives
+  weights:
+    ImpostorObjectiveGroupSteal: 1
+    ImpostorObjectiveGroupSabotage: 1
+    
+- type: weightedRandom
+  id: ImpostorObjectiveGroupSteal
+  weights:
+    ImpostorObjectiveStealWaterChip: 1
+    ImpostorObjectiveSteal: 1
+    
+- type: weightedRandom
+  id: ImpostorObjectiveGroupSabotage
+  weights:
+    ImpostorObjectiveSabotage: 1
+    ImpostorObjectiveSabotage: 1
+
+- type: entity
+  noSpawn: true
+  parent: BaseObjective
+  id: ImpostorObjectiveSteal
+  components:
+    - type: StealCondition
+      prototype: WaterChip
