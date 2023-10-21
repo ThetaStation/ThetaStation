@@ -1,8 +1,0 @@
-- type: entity
-  name: water chip
-  parent: BaseItem
-  id: ImpostorWaterChip
-  components:
-    - type: Sprite
-      sprite: 
-      state: icon
