@@ -63,12 +63,12 @@
       seedId: gourd
     - type: EmitSoundOnCollide
       sound:
-        path: /Audio/Theta/tikvyak_hit.ogg
+        path: /Audio/Theta/Shipevent/tikvyak_hit.ogg
         params:
           volume: 2
     - type: EmitSoundOnLand
       sound:
-        path: /Audio/Theta/tikvyak_hit.ogg
+        path: /Audio/Theta/Shipevent/tikvyak_hit.ogg
         params:
           volume: 2
       
@@ -149,12 +149,12 @@
           Blunt: 2
     - type: EmitSoundOnCollide
       sound:
-        path: /Audio/Theta/tikvyak_hit.ogg
+        path: /Audio/Theta/Shipevent/tikvyak_hit.ogg
         params:
           volume: 4
     - type: EmitSoundOnLand
       sound:
-        path: /Audio/Theta/tikvyak_hit.ogg
+        path: /Audio/Theta/Shipevent/tikvyak_hit.ogg
         params:
           volume: 4
     - type: Construction
