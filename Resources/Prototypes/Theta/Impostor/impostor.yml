@@ -15,34 +15,20 @@
       startAnnouncement: impostor-eventannouncement
       maxOccurrences: 0
       impostorAmount: 1
+      evacTriggerDeathCount: 3
+      evacLaunchDelay: 2
       impostorAntagId: "Impostor"
-      impostorObjectiveGroupId: "ImpostorObjectives"
+      #impostorRandomObjectivesGroupId: "ImpostorRandomObjectives"
+      impostorMandatoryObjectives:
+        - "ImpostorEscapeObjective"
       impostorGreetingSound: !type:SoundPathSpecifier
         path: /Audio/Ambience/ambidanger2.ogg
-  
-# Objectives
-- type: weightedRandom
-  id: ImpostorObjectives
-  weights:
-    ImpostorObjectiveGroupSteal: 1
-    ImpostorObjectiveGroupSabotage: 1
-    
-- type: weightedRandom
-  id: ImpostorObjectiveGroupSteal
-  weights:
-    ImpostorObjectiveStealWaterChip: 1
-    ImpostorObjectiveSteal: 1
-    
-- type: weightedRandom
-  id: ImpostorObjectiveGroupSabotage
-  weights:
-    ImpostorObjectiveSabotage: 1
-    ImpostorObjectiveSabotage: 1
 
-- type: entity
+- type: Entity
   noSpawn: true
+  id: ImpostorEscapeObjective
   parent: BaseObjective
-  id: ImpostorObjectiveSteal
   components:
-    - type: StealCondition
-      prototype: WaterChip
+    - type: Objective
+      issuer: "NanoTrasen"
+    - type: ImpostorEscapeCondition
