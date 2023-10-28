@@ -107,7 +107,7 @@
 - type: entity
   id: TurretAmmoContainerMachineGunFilled
   name: Machine gun ammo container
-  parent: TurretAmmoContainerRegular
+  parent: TurretAmmoContainer
   components:
     - type: StorageFill
       contents:
@@ -117,7 +117,7 @@
 - type: entity
   id: TurretAmmoContainerFlakFilled
   name: Flak ammo container
-  parent: TurretAmmoContainerRegular
+  parent: TurretAmmoContainer
   components:
     - type: StorageFill
       contents:
@@ -127,7 +127,7 @@
 - type: entity
   id: TurretAmmoContainerSPGFilled
   name: SPG ammo container
-  parent: TurretAmmoContainerRegular
+  parent: TurretAmmoContainer
   components:
     - type: StorageFill
       contents:

@@ -15,11 +15,8 @@ ent-TurretLoaderShipEvent = зарядник орудий
 
 ## Items
 
-ent-TurretAmmoContainerRegular = контейнер для боеприпасов
+ent-TurretAmmoContainer = контейнер для боеприпасов
     .desc = { "Металлический контейнер стандартизированного размера для использования в зарядниках орудий." }
-    .suffix = { "ShipEvent" }
-ent-TurretAmmoContainerBluespace = контейнер для боеприпасов (блюспейс)
-    .desc = { "Увеличенная версия стандартного контейнера для боеприпасов." }
     .suffix = { "ShipEvent" }
 ent-PointStorageItem = хранилище очков
     .desc = { "Боже, НТ храни." }
