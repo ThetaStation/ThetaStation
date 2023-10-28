@@ -1,13 +1,13 @@
 namespace Content.Server.Theta.Impostor.Components;
 
-[Serializable]
-public enum ImpostorLandmarkType
+//todo: this should be an enum, but vv is broken and instead of showing a dropdown list like it should, it displays it as a readonly string
+//since mappers need to edit it thru vv, it was remade into static class
+public static class ImpostorLandmarkType
 {
-    Unspecified,
-    ImpostorLootStash,
-    ImpostorBombLocation,
-    EvacPod,
-    Bridge
+    public const string Unspecified = "unspec";
+    public const string ImpostorLootStash = "loot";
+    public const string ImpostorBombLocation = "bomb";
+    public const string EvacPod = "pod";
 }
 
 /// <summary>
@@ -16,6 +16,6 @@ public enum ImpostorLandmarkType
 [RegisterComponent]
 public sealed partial class ImpostorLandmarkComponent : Component
 {
-    [DataField, ViewVariables(VVAccess.ReadWrite)] 
-    public ImpostorLandmarkType Type = ImpostorLandmarkType.Unspecified;
+    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    public string Type = ImpostorLandmarkType.Unspecified;
 }
