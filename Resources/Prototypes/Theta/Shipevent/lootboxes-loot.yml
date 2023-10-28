@@ -51,8 +51,12 @@
 - type: entity
   id: TurretAmmoContainerFlakHEFilled
   name: Flak HE ammo container
-  parent: TurretAmmoContainerRare
+  parent: TurretAmmoContainer
   components:
+    - type: Sprite
+      drawdepth: Items
+      sprite: Theta/ShipEvent/Objects/AmmoContainer.rsi
+      state: container-he
     - type: StorageFill
       contents:
         - id: CartridgeFlakHE
@@ -92,8 +96,12 @@
 - type: entity
   id: TurretAmmoContainerFlakEMPFilled
   name: Flak EMP ammo container
-  parent: TurretAmmoContainerRare
+  parent: TurretAmmoContainer
   components:
+    - type: Sprite
+      drawdepth: Items
+      sprite: Theta/ShipEvent/Objects/AmmoContainer.rsi
+      state: container-emp
     - type: StorageFill
       contents:
         - id: CartridgeFlakEMP
