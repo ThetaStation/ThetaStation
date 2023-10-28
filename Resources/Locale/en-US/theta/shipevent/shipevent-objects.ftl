@@ -14,11 +14,8 @@ ent-TurretLoaderShipEvent = weapon loader
     .suffix = { "ShipEvent" }
 
 ## Items
-ent-TurretAmmoContainerRegular = ammo container
+ent-TurretAmmoContainer = ammo container
     .desc = { "Standartised metal container for use in weapon loaders." }
-    .suffix = { "ShipEvent" }
-ent-TurretAmmoContainerBluespace = ammo container (bluespace)
-    .desc = { "Extended version of standard ammo container." }
     .suffix = { "ShipEvent" }
 ent-PointStorageItem = point storage
     .desc = { "God bless NT." }

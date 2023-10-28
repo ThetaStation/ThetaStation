@@ -17,7 +17,7 @@
   id: TurretAmmoContainer
 
 - type: entity
-  id: TurretAmmoContainerRegular
+  id: TurretAmmoContainer
   name: ammo container
   parent: BaseItem
   components:
@@ -46,28 +46,3 @@
       interfaces:
       - key: enum.StorageUiKey.Key
         type: StorageBoundUserInterface
-
-- type: entity
-  id: TurretAmmoContainerBluespace
-  name: bluespace ammo container
-  parent: TurretAmmoContainerRegular
-  components:
-    - type: Sprite
-      drawdepth: Items
-      sprite: Theta/ShipEvent/Objects/AmmoContainer.rsi
-      state: container-bluespace
-    - type: Storage
-      capacity: 500
-      whitelist:
-        components:
-        - CartridgeAmmo
-
-- type: entity
-  id: TurretAmmoContainerRare
-  name: strange ammo container
-  parent: TurretAmmoContainerRegular
-  components:
-    - type: Sprite
-      drawdepth: Items
-      sprite: Theta/ShipEvent/Objects/AmmoContainer.rsi
-      state: container-rare
