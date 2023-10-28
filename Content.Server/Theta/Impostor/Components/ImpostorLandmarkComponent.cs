@@ -14,7 +14,8 @@ public enum ImpostorLandmarkType
 /// Used for marking various locations on the station
 /// </summary>
 [RegisterComponent]
-public sealed partial class ImpostorLocationMarkerComponent : Component
+public sealed partial class ImpostorLandmarkComponent : Component
 {
-    [DataField] public ImpostorLandmarkType Type = ImpostorLandmarkType.Unspecified;
+    [DataField, ViewVariables(VVAccess.ReadWrite)] 
+    public ImpostorLandmarkType Type = ImpostorLandmarkType.Unspecified;
 }

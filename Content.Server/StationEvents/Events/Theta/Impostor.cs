@@ -7,7 +7,9 @@ using Content.Server.Objectives;
 using Content.Server.Roles;
 using Content.Server.Roles.Jobs;
 using Content.Server.Shuttles.Components;
+using Content.Server.Theta.Impostor.Components;
 using Content.Server.Theta.Impostor.Systems;
+using Content.Shared.Objectives.Components;
 using Content.Shared.Preferences;
 using Content.Shared.Theta.Impostor.Components;
 using Robust.Server.GameObjects;
@@ -54,6 +56,7 @@ public sealed partial class ImpostorRuleSystem : StationEventSystem<ImpostorRule
     {
         base.Started(uid, component, gameRule, args);
         ruleComp = component;
+        _specEvacSys.RuleSelected = true;
         _specEvacSys.TriggerDeathCount = component.EvacTriggerDeathCount;
         _specEvacSys.LaunchDelay = component.EvacLaunchDelay;
     }

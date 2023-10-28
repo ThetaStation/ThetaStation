@@ -531,7 +531,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         team.MaxMembers = maxMembers;
 
         SetMarkers(ship, team);
-        SetShipName(ship, name);
+        SetName(ship, name);
 
         if (noCaptain)
             return;
@@ -830,7 +830,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             true);
 
         SetMarkers(newShip, team);
-        SetShipName(newShip, team.ShipName);
+        SetName(newShip, team.ShipName);
 
         team.Ship = newShip;
 

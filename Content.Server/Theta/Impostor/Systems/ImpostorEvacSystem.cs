@@ -6,7 +6,6 @@ using Content.Server.Theta.Impostor.Components;
 using Content.Shared.GameTicking;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
-using Content.Shared.Mobs.Components;
 using Content.Shared.Objectives.Components;
 using Content.Shared.Theta.Impostor.Components;
 using Robust.Server.GameObjects;
@@ -19,6 +18,8 @@ namespace Content.Server.Theta.Impostor.Systems;
 //tldr: default evac system is shit
 public sealed class ImpostorEvacSystem : EntitySystem
 {
+    public bool RuleSelected;
+    
     /// <summary>
     /// True if evacuation is happening right now
     /// </summary>
@@ -38,7 +39,7 @@ public sealed class ImpostorEvacSystem : EntitySystem
     /// </summary>
     public int LaunchDelay;
 
-    private CancellationTokenSource evacTimerTokenSource = new CancellationTokenSource();
+    private CancellationTokenSource evacTimerTokenSource = new();
     private CancellationToken evacTimerToken;
 
     [Dependency] private AudioSystem _audioSys = default!;
@@ -51,28 +52,31 @@ public sealed class ImpostorEvacSystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<ImpostorEscapeConditionComponent, ObjectiveGetProgressEvent>(OnObjectiveProgressRequest);
-        SubscribeLocalEvent<MobStateComponent, MobStateChangedEvent>(OnPlayerDeath);
+        SubscribeLocalEvent<MindContainerComponent, MobStateChangedEvent>(OnPlayerDeath);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
         evacTimerToken = evacTimerTokenSource.Token;
     }
 
     private void OnRoundRestart(RoundRestartCleanupEvent ev)
     {
-        EvacActive = EvacFinished = false;
+        RuleSelected = EvacActive = EvacFinished = false;
         TriggerDeathCount = CurrentDeathCount = 0;
     }
 
-    private void OnPlayerDeath(EntityUid uid, MobStateComponent component, MobStateChangedEvent args)
+    private void OnPlayerDeath(EntityUid uid, MindContainerComponent component, MobStateChangedEvent args)
     {
-        if (args.NewMobState != MobState.Dead || !HasComp<MindContainerComponent>(uid))
+        if (!RuleSelected)
+            return;
+        
+        if (args.NewMobState != MobState.Dead)
             return;
 
-        CurrentDeathCount++;
-        _audioSys.PlayGlobal("/Audio/Theta/Impostor/flatline.ogg", Filter.Broadcast(), true);
-
-        if (TryComp<MindContainerComponent>(uid, out var mindContainer) && mindContainer.HasMind)
+        if (component.HasMind)
         {
-            if (HasComp<ImpostorRoleComponent>(mindContainer.Mind))
+            CurrentDeathCount++;
+            _audioSys.PlayGlobal("/Audio/Theta/Impostor/flatline.ogg", Filter.Broadcast(), true);
+            
+            if (HasComp<ImpostorRoleComponent>(component.Mind))
             {
                 if (EvacActive && !evacTimerToken.IsCancellationRequested)
                 {
@@ -86,17 +90,20 @@ public sealed class ImpostorEvacSystem : EntitySystem
         {
             Announce(Loc.GetString("impostor-announcement-beginevac"));
             EvacActive = true;
-            Timer.Spawn(LaunchDelay, LaunchPods, evacTimerToken);
+            Timer.Spawn((int)TimeSpan.FromMinutes(LaunchDelay).TotalMilliseconds, LaunchPods, evacTimerToken);
         }
     }
 
     private void LaunchPods()
     {
+        if (!RuleSelected)
+            return;
+        
         Announce(Loc.GetString("impostor-announcement-endevac"));
         EvacActive = false;
         EvacFinished = true;
         
-        foreach ((TransformComponent form, ImpostorLocationMarkerComponent marker) in EntityQuery<TransformComponent, ImpostorLocationMarkerComponent>())
+        foreach ((TransformComponent form, ImpostorLandmarkComponent marker) in EntityQuery<TransformComponent, ImpostorLandmarkComponent>())
         {
             if (marker.Type == ImpostorLandmarkType.EvacPod)
             {
@@ -134,7 +141,7 @@ public sealed class ImpostorEvacSystem : EntitySystem
         if (args.Mind.OwnedEntity == null || args.Mind.TimeOfDeath != null)
             return;
 
-        foreach ((TransformComponent form, ImpostorLocationMarkerComponent marker) in EntityQuery<TransformComponent, ImpostorLocationMarkerComponent>())
+        foreach ((TransformComponent form, ImpostorLandmarkComponent marker) in EntityQuery<TransformComponent, ImpostorLandmarkComponent>())
         {
             if (marker.Type == ImpostorLandmarkType.EvacPod)
             {
