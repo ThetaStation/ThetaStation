@@ -15,8 +15,8 @@
       startAnnouncement: impostor-eventannouncement
       maxOccurrences: 0
       impostorAmount: 1
-      evacTriggerDeathCount: 3
-      evacLaunchDelay: 2
+      evacTriggerDeathCount: 1
+      evacLaunchDelay: 1
       impostorAntagId: "Impostor"
       #impostorRandomObjectivesGroupId: "ImpostorRandomObjectives"
       impostorMandatoryObjectives:
@@ -52,3 +52,13 @@
         sprite: Theta/Impostor/nt.rsi
         state: nt
     - type: ImpostorBombCondition
+
+- type: entity
+  id: ImpostorLandmark
+  parent: MarkerBase
+  name: impostor landmark
+  components:
+    - type: ImpostorLandmark
+    - type: Sprite
+      sprite: Markers/cross.rsi
+      state: red

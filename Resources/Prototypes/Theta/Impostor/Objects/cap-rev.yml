@@ -1,0 +1,44 @@
+- type: entity
+  name: captain's revolver
+  parent: WeaponRevolverMateba
+  id: ImpostorMagicRevolver
+  components:
+    - type: RevolverAmmoProvider
+      whitelist:
+        tags:
+          - CartridgeMagnum
+          - SpeedLoaderMagnum
+    - type: ImpostorMagicRevolver
+
+- type: entity
+  id: ImpostorMagicCartridge
+  parent: BaseCartridgeMagnum
+  components:
+    - type: Sprite
+      sprite: /Theta/Impostor/magic-bullet.rsi
+      state: casing
+    - type: CartridgeAmmo
+      proto: ImpostorMagicBullet
+    - type: ImpostorMagicBullet
+      
+- type: entity
+  id: ImpostorMagicBullet
+  name: bullet
+  parent: BaseBullet
+  noSpawn: true
+  components:
+    - type: Projectile
+      spread: 0
+      damage:
+        types:
+          Piercing: 200
+    - type: ImpostorMagicBullet
+      
+- type: entity
+  id: ImpostorMagicBulletMarked
+  name: bullet
+  parent: ImpostorMagicBullet
+  noSpawn: true
+  components:
+    - type: ImpostorMagicBullet
+      marked: true

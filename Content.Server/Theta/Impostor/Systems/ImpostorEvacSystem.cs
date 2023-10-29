@@ -1,6 +1,7 @@
 using System.Numerics;
 using System.Threading;
 using Content.Server.Chat.Systems;
+using Content.Server.Nuke;
 using Content.Server.RoundEnd;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Systems;
@@ -50,6 +51,7 @@ public sealed class ImpostorEvacSystem : EntitySystem
     [Dependency] private ThrusterSystem _thrustSys = default!;
     [Dependency] private DockingSystem _dockSys = default!;
     [Dependency] private SharedPhysicsSystem _physSys = default!;
+    [Dependency] private NukeSystem _nukeSys = default!;
     [Dependency] private RoundEndSystem _roundEndSys = default!;
 
     public override void Initialize()
@@ -94,11 +96,11 @@ public sealed class ImpostorEvacSystem : EntitySystem
         {
             Announce(Loc.GetString("impostor-announcement-beginevac"), "/Audio/Misc/delta.ogg");
             EvacActive = true;
-            Timer.Spawn((int)TimeSpan.FromMinutes(LaunchDelay).TotalMilliseconds, LaunchPods, evacTimerToken);
+            Timer.Spawn((int)TimeSpan.FromMinutes(LaunchDelay).TotalMilliseconds, DestroyStation, evacTimerToken);
         }
     }
 
-    private void LaunchPods()
+    private void DestroyStation()
     {
         if (!RuleSelected)
             return;
@@ -107,6 +109,7 @@ public sealed class ImpostorEvacSystem : EntitySystem
         EvacActive = false;
         EvacFinished = true;
         
+        //launch escape pods first
         foreach ((TransformComponent form, ImpostorLandmarkComponent marker) in EntityQuery<TransformComponent, ImpostorLandmarkComponent>())
         {
             if (marker.Type == ImpostorLandmarkType.EvacPod)
@@ -139,6 +142,14 @@ public sealed class ImpostorEvacSystem : EntitySystem
                 _physSys.ApplyLinearImpulse(form.GridUid.Value, DirectionExtensions.AsDir(dir).ToVec()*thrust*100); //give it a good kick
             }
         }
+
+        //now nuke the station
+        EntityQueryEnumerator<NukeComponent> nukeQuery = EntityQueryEnumerator<NukeComponent>();
+        while (nukeQuery.MoveNext(out EntityUid uid, out NukeComponent? nuke))
+        {
+            _nukeSys.ActivateBomb(uid, nuke);
+        }
+        _roundEndSys.EndRound();
     }
 
     private void Announce(string message, string? sound = null)
