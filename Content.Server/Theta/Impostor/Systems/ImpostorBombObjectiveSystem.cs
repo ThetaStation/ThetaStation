@@ -10,7 +10,7 @@ public sealed class ImpostorBombObjectiveSystem : EntitySystem
     [Dependency] private MetaDataSystem _metaSys = default!;
     [Dependency] private IRobustRandom _rand = default!;
     
-    private HashSet<EntityUid> BlownUpLandmarks = new();
+    private HashSet<string> BlownUpLandmarkNames = new();
     
     public override void Initialize()
     {
@@ -22,41 +22,42 @@ public sealed class ImpostorBombObjectiveSystem : EntitySystem
 
     private void OnRoundRestart(RoundRestartCleanupEvent ev)
     {
-        BlownUpLandmarks.Clear();
+        BlownUpLandmarkNames.Clear();
     }
     
     private void OnParentChanged(EntityUid uid, ImpostorLandmarkComponent component, ref EntParentChangedMessage args)
     {
         if (Transform(uid).GridUid == null)
         {
-            BlownUpLandmarks.Add(uid);
-            Del(uid);
+            BlownUpLandmarkNames.Add(Comp<MetaDataComponent>(uid).EntityName);
+            QueueDel(uid);
         }
     }
     
     private void OnObjectiveAssign(EntityUid uid, ImpostorBombConditionComponent component, ref ObjectiveAfterAssignEvent args)
     {
         List<EntityUid> bombMarks = new();
-        while (EntityQueryEnumerator<ImpostorLandmarkComponent>().MoveNext(out EntityUid markUid, out ImpostorLandmarkComponent? mark))
+        EntityQueryEnumerator<ImpostorLandmarkComponent> query = EntityQueryEnumerator<ImpostorLandmarkComponent>();
+        while (query.MoveNext(out EntityUid markUid, out ImpostorLandmarkComponent? mark))
         {
             if(mark.Type == ImpostorLandmarkType.ImpostorBombLocation)
                 bombMarks.Add(markUid);
         }
-        component.TargetLandmark = _rand.Pick(bombMarks);
+        component.TargetLandmarkName = Comp<MetaDataComponent>(_rand.Pick(bombMarks)).EntityName;
 
         _metaSys.SetEntityDescription(uid, Loc.GetString("impostor-objectives-bombdesc", 
-            ("name", Comp<MetaDataComponent>(component.TargetLandmark.Value).EntityName)));
+            ("name", component.TargetLandmarkName)));
     }
     
     private void OnObjectiveProgressRequest(EntityUid uid, ImpostorBombConditionComponent component, ref ObjectiveGetProgressEvent args)
     {
-        if (component.TargetLandmark == null)
+        if (component.TargetLandmarkName == null)
         {
             Log.Error($"Tried to request progress for bomb objective without target landmark. Objective holder: {args.Mind.OwnedEntity}.");
             args.Progress = 0;
             return;
         }
 
-        args.Progress = BlownUpLandmarks.Contains(component.TargetLandmark.Value) ? 1 : 0;
+        args.Progress = BlownUpLandmarkNames.Contains(component.TargetLandmarkName) ? 1 : 0;
     }
 }

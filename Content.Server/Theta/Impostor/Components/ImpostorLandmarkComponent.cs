@@ -16,6 +16,6 @@ public static class ImpostorLandmarkType
 [RegisterComponent]
 public sealed partial class ImpostorLandmarkComponent : Component
 {
-    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    [DataField("markType"), ViewVariables(VVAccess.ReadWrite)]
     public string Type = ImpostorLandmarkType.Unspecified;
 }

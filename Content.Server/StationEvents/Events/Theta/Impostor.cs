@@ -80,7 +80,9 @@ public sealed partial class ImpostorRuleSystem : StationEventSystem<ImpostorRule
 
             foreach (string mandatoryObjective in ruleComp.ImpostorMandatoryObjectives)
             {
-                _mindSys.AddObjective(mindUid.Value, mind, Spawn(mandatoryObjective));
+                EntityUid? objectiveUid = _objectiveSys.TryCreateObjective(mindUid.Value, mind, mandatoryObjective);
+                if(objectiveUid != null)
+                    _mindSys.AddObjective(mindUid.Value, mind, objectiveUid.Value);
             }
 
             if (ruleComp.ImpostorRandomObjectivesGroupId != null)
