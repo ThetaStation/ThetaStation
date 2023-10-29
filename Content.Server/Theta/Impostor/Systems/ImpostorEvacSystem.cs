@@ -1,5 +1,7 @@
+using System.Numerics;
 using System.Threading;
 using Content.Server.Chat.Systems;
+using Content.Server.RoundEnd;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Systems;
 using Content.Server.Theta.Impostor.Components;
@@ -10,6 +12,7 @@ using Content.Shared.Objectives.Components;
 using Content.Shared.Theta.Impostor.Components;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
+using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
 using Timer = Robust.Shared.Timing.Timer;
 
@@ -44,9 +47,10 @@ public sealed class ImpostorEvacSystem : EntitySystem
 
     [Dependency] private AudioSystem _audioSys = default!;
     [Dependency] private ChatSystem _chatSys = default!;
-    [Dependency] private ShuttleSystem _shuttleSys = default!;
     [Dependency] private ThrusterSystem _thrustSys = default!;
     [Dependency] private DockingSystem _dockSys = default!;
+    [Dependency] private SharedPhysicsSystem _physSys = default!;
+    [Dependency] private RoundEndSystem _roundEndSys = default!;
 
     public override void Initialize()
     {
@@ -80,7 +84,7 @@ public sealed class ImpostorEvacSystem : EntitySystem
             {
                 if (EvacActive && !evacTimerToken.IsCancellationRequested)
                 {
-                    Announce(Loc.GetString("impostor-announcement-cancelevac"));
+                    Announce(Loc.GetString("impostor-announcement-cancelevac"), "/Audio/Announcements/announce.ogg");
                     evacTimerTokenSource.Cancel();
                 }
             }
@@ -88,7 +92,7 @@ public sealed class ImpostorEvacSystem : EntitySystem
 
         if (!(EvacActive || EvacFinished) && CurrentDeathCount >= TriggerDeathCount)
         {
-            Announce(Loc.GetString("impostor-announcement-beginevac"));
+            Announce(Loc.GetString("impostor-announcement-beginevac"), "/Audio/Misc/delta.ogg");
             EvacActive = true;
             Timer.Spawn((int)TimeSpan.FromMinutes(LaunchDelay).TotalMilliseconds, LaunchPods, evacTimerToken);
         }
@@ -107,31 +111,40 @@ public sealed class ImpostorEvacSystem : EntitySystem
         {
             if (marker.Type == ImpostorLandmarkType.EvacPod)
             {
-                if (!TryComp<ShuttleComponent>(form.GridUid, out var shuttle))
+                if (!TryComp(form.GridUid, out ShuttleComponent? shuttle))
                     return;
-
-                while(EntityQueryEnumerator<DockingComponent>().MoveNext(out EntityUid uid, out DockingComponent? dock))
+                
+                EntityQueryEnumerator<DockingComponent> dockQuery = EntityQueryEnumerator<DockingComponent>();
+                while(dockQuery.MoveNext(out EntityUid uid, out DockingComponent? dock))
                 {
                     if (Transform(uid).GridUid != form.GridUid)
                         continue;
                     _dockSys.Undock(uid, dock);
                 }
                 
-                foreach (List<EntityUid> thrustersByDir in shuttle.LinearThrusters)
+                //assuming all the thrusters are located on the same side of the pod
+                int index = 0;
+                int thrust = 0;
+                foreach (double linThrust in shuttle.LinearThrust)
                 {
-                    foreach (EntityUid uid in thrustersByDir)
+                    if (linThrust > 0)
                     {
-                        ThrusterComponent thruster = Comp<ThrusterComponent>(uid);
-                        _thrustSys.EnableThruster(uid, thruster);
+                        thrust = (int)linThrust;
+                        break;
                     }
+                    index++;
                 }
+                DirectionFlag dir = (DirectionFlag)(int)Math.Pow(2, index); //converting shuttle thrust index to direction
+                _thrustSys.EnableLinearThrustDirection(shuttle, dir); //enabling thrusters (purely cosmetic)
+                _physSys.ApplyLinearImpulse(form.GridUid.Value, DirectionExtensions.AsDir(dir).ToVec()*thrust*100); //give it a good kick
             }
         }
     }
 
-    private void Announce(string message)
+    private void Announce(string message, string? sound = null)
     {
-        _chatSys.DispatchGlobalAnnouncement(message, Loc.GetString("impostor-announcement-sender"), true, new SoundPathSpecifier("delta.ogg"), Color.DarkRed);
+        _chatSys.DispatchGlobalAnnouncement(message, Loc.GetString("impostor-announcement-sender"), sound != null, 
+            sound != null ? new SoundPathSpecifier(sound) : null, Color.DarkRed);
     }
 
     private void OnObjectiveProgressRequest(EntityUid uid, ImpostorEscapeConditionComponent component, ref ObjectiveGetProgressEvent args)
