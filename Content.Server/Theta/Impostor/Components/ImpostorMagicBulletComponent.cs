@@ -1,5 +1,3 @@
-using Content.Shared.DoAfter;
-
 namespace Content.Server.Theta.Impostor.Components;
 
 /// <summary>
@@ -14,5 +12,3 @@ public sealed partial class ImpostorMagicBulletComponent : Component
 
 [RegisterComponent]
 public sealed partial class ImpostorMagicRevolverComponent : Component { }
-
-public sealed partial class ImpostorMagicBulletLoadedEvent : SimpleDoAfterEvent { }

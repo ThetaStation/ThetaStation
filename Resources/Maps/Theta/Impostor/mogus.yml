@@ -881,7 +881,7 @@ entities:
     - pos: -1.5,4.5
       parent: 2
       type: Transform
-- proto: ImpostorCaptainRevolver
+- proto: ImpostorMagicRevolver
   entities:
   - uid: 137
     components:

@@ -1,6 +1,5 @@
 using System.Numerics;
 using Content.Server.Administration.Managers;
-using Content.Server.Database;
 using Content.Server.DoAfter;
 using Content.Server.Mind;
 using Content.Server.Popups;
@@ -21,6 +20,7 @@ using Content.Shared.Roles.Jobs;
 using Content.Shared.Theta.Impostor.Components;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
+using Content.Shared.Theta.Impostor.Events;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 
