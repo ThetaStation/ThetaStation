@@ -1,6 +1,6 @@
 ent-ImpostorCommRelay = bluespace comm relay
-    .desc = { "Insert it into the captain's console to send a distress signal." }
-    .suffix = { "Impostor" }
+    .desc = Insert it into the captain's console to send a distress signal.
+    .suffix = Impostor
 
 ent-ImpostorMagicCartridge = silver cartridge
     .desc = Cartridge made from pure silver.

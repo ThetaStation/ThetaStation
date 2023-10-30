@@ -48,7 +48,7 @@ public sealed class ImpostorMagicRevolverSystem : EntitySystem
         SubscribeLocalEvent<ImpostorMagicBulletComponent, ExaminedEvent>(OnExamine);
         SubscribeLocalEvent<ImpostorMagicBulletComponent, UseInHandEvent>(OnBulletUseInHand);
         SubscribeLocalEvent<ImpostorMagicBulletComponent, ProjectileHitEvent>(OnBulletHit);
-        SubscribeLocalEvent<ImpostorMagicRevolverComponent, InteractUsingEvent>(OnRevolverUse);
+        SubscribeLocalEvent<ImpostorMagicRevolverComponent, InteractUsingEvent>(OnRevolverUse, before: new[] { typeof(SharedGunSystem) });
         SubscribeLocalEvent<ImpostorMagicRevolverComponent, ImpostorMagicBulletLoadedEvent>(OnBulletDoAfterFinish);
         SubscribeLocalEvent<ImpostorMagicRevolverComponent, AttemptShootEvent>(OnRevolverShoot);
     }
@@ -120,8 +120,12 @@ public sealed class ImpostorMagicRevolverSystem : EntitySystem
     
     private void OnRevolverUse(EntityUid uid, ImpostorMagicRevolverComponent revolver, InteractUsingEvent args)
     {
+        if (args.Handled)
+            return;
+
         if (TryComp(args.Used, out ImpostorMagicBulletComponent? bullet))
         {
+            args.Handled = true;
             string userName = MetaData(args.User).EntityName;
             _popupSys.PopupCoordinates(Loc.GetString("impostor-magicbullet-tryload", ("name", userName)),
                 new EntityCoordinates(args.User, Vector2.Zero), PopupType.MediumCaution);
