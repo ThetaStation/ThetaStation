@@ -70,7 +70,7 @@ public sealed partial class ShipEventFactionSystem
         }
 
         if (_cardSystem.TryFindIdCard(uid, out var idCard))
-            _cardSystem.TryChangeFullName(uid, name, idCard);
+            _cardSystem.TryChangeFullName(idCard.Owner, name, idCard);
 
         _idSys.QueueIdentityUpdate(uid);
     }
