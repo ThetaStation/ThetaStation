@@ -3,7 +3,7 @@
   name: seeds-gourd-name
   noun: seeds-noun-seeds
   displayName: seeds-gourd-display-name
-  plantRsi: Theta/Objects/tikvyak.rsi
+  plantRsi: Theta/ShipEvent/Objects/tikvyak.rsi
   packetPrototype: GourdSeeds
   productPrototypes:
     - Gourd
@@ -34,7 +34,7 @@
     - type: Seed
       seedId: gourd
     - type: Sprite
-      sprite: Theta/Objects/tikvyak.rsi
+      sprite: Theta/ShipEvent/Objects/tikvyak.rsi
 
 - type: entity
   name: gourd
@@ -58,17 +58,17 @@
             - ReagentId: Ipecac
               Quantity: 2
     - type: Sprite
-      sprite: Theta/Objects/tikvyak.rsi
+      sprite: Theta/ShipEvent/Objects/tikvyak.rsi
     - type: Produce
       seedId: gourd
     - type: EmitSoundOnCollide
       sound:
-        path: /Audio/Theta/tikvyak_hit.ogg
+        path: /Audio/Theta/Shipevent/tikvyak_hit.ogg
         params:
           volume: 2
     - type: EmitSoundOnLand
       sound:
-        path: /Audio/Theta/tikvyak_hit.ogg
+        path: /Audio/Theta/Shipevent/tikvyak_hit.ogg
         params:
           volume: 2
       
@@ -82,7 +82,7 @@
   category: construction-category-misc
   description: Awesome bottle made from gourd.
   icon:
-    sprite: Theta/Objects/tikvyak.rsi
+    sprite: Theta/ShipEvent/Objects/tikvyak.rsi
     state: produce
   objectType: Item
   
@@ -97,7 +97,7 @@
           - tag: Gourd
             name: gourd
             icon:
-              sprite: "Theta/Objects/tikvyak.rsi"
+              sprite: "Theta/ShipEvent/Objects/tikvyak.rsi"
               state: "produce"
           - tag: Knife
             name: knife
@@ -112,7 +112,7 @@
   id: GourdBottle
   components:
     - type: Sprite
-      sprite: Theta/Objects/tikvyak.rsi
+      sprite: Theta/ShipEvent/Objects/tikvyak.rsi
       state: produce
     - type: SolutionContainerManager
       solutions:
@@ -149,12 +149,12 @@
           Blunt: 2
     - type: EmitSoundOnCollide
       sound:
-        path: /Audio/Theta/tikvyak_hit.ogg
+        path: /Audio/Theta/Shipevent/tikvyak_hit.ogg
         params:
           volume: 4
     - type: EmitSoundOnLand
       sound:
-        path: /Audio/Theta/tikvyak_hit.ogg
+        path: /Audio/Theta/Shipevent/tikvyak_hit.ogg
         params:
           volume: 4
     - type: Construction
@@ -172,10 +172,10 @@
         - Wall
         - RCDDeconstructWhitelist
     - type: Sprite
-      sprite: Theta/Objects/tikvyak.rsi
+      sprite: Theta/ShipEvent/Objects/tikvyak.rsi
       state: wall
     - type: Icon
-      sprite: Theta/Objects/tikvyak.rsi
+      sprite: Theta/ShipEvent/Objects/tikvyak.rsi
       state: wall
     - type: Fixtures
       fixtures:

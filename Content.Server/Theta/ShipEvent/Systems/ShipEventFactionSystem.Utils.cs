@@ -58,29 +58,29 @@ public sealed partial class ShipEventFactionSystem
         return string.Empty;
     }
 
-    private void SetPlayerCharacterName(EntityUid entity, string name)
+    /// <summary>
+    /// Sets character's entity name & id card name
+    /// </summary>
+    private void SetPlayerCharacterName(EntityUid uid, string name)
     {
-        if (EntityManager.TryGetComponent(entity, out MetaDataComponent? metaComp))
-            metaComp.EntityName = name;
-
-        if (_cardSystem.TryFindIdCard(entity, out var idCard))
+        if (EntityManager.TryGetComponent(uid, out MetaDataComponent? meta))
         {
-            _cardSystem.TryChangeFullName(idCard.Owner, name, idCard);
+            meta.EntityName = name;
+            Dirty(uid, meta);
         }
 
-        _idSys.QueueIdentityUpdate(entity);
-    }
+        if (_cardSystem.TryFindIdCard(uid, out var idCard))
+            _cardSystem.TryChangeFullName(uid, name, idCard);
 
-    /// <summary>
-    ///     Sets ship name.
-    /// </summary>
-    /// <param name="shipUid">Ship grid uid</param>
-    /// <param name="shipName">Name of ship</param>
-    private void SetShipName(EntityUid shipUid, string shipName)
+        _idSys.QueueIdentityUpdate(uid);
+    }
+    
+    private void SetName(EntityUid uid, string name)
     {
-        if (!TryComp<MetaDataComponent>(shipUid, out var meta))
+        if (!TryComp<MetaDataComponent>(uid, out var meta))
             return;
-        meta.EntityName = shipName;
+        meta.EntityName = name;
+        Dirty(uid, meta);
     }
 
     private List<EntityUid> GetShipComponentHolders<T>(EntityUid shipEntity) where T : IComponent

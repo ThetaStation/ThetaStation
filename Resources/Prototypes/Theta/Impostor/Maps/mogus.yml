@@ -1,0 +1,27 @@
+- type: entity
+  id: MogusStation
+  parent:
+    - BaseStation
+    - BaseStationJobsSpawning
+    - BaseStationNanotrasen
+  noSpawn: true
+  components:
+    - type: Transform
+
+- type: gameMap
+  id: Mogus
+  mapName: 'Mogus'
+  mapPath: /Maps/Theta/Impostor/mogus.yml
+  minPlayers: 1
+  stations:
+    Mogus:
+      stationProto: MogusStation
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'SSV Mogus'
+        - type: StationJobs
+          availableJobs:
+            Passenger: [ -1, -1 ]
+            Engineer: [ 2, 2 ]
+            MedicalDoctor: [ 2, 2 ]
+            Captain: [ 1, 1 ]
