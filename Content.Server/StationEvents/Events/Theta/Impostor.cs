@@ -7,10 +7,8 @@ using Content.Server.Objectives;
 using Content.Server.Roles;
 using Content.Server.Roles.Jobs;
 using Content.Server.Shuttles.Components;
-using Content.Server.Theta.Impostor.Components;
 using Content.Server.Theta.Impostor.Systems;
 using Content.Shared.Mind;
-using Content.Shared.Objectives.Components;
 using Content.Shared.Preferences;
 using Content.Shared.Theta.Impostor.Components;
 using Robust.Server.GameObjects;
@@ -38,6 +36,7 @@ public sealed partial class ImpostorRuleComponent : Component
 
 public sealed partial class ImpostorRuleSystem : StationEventSystem<ImpostorRuleComponent>
 {
+    [Dependency] private GameTicker _ticker = default!;
     [Dependency] private MindSystem _mindSys = default!;
     [Dependency] private JobSystem _jobSys = default!;
     [Dependency] private RoleSystem _roleSys = default!;
@@ -58,6 +57,10 @@ public sealed partial class ImpostorRuleSystem : StationEventSystem<ImpostorRule
 
     private void OnRoundEnd(RoundEndTextAppendEvent ev)
     {
+        ImpostorRuleComponent? rule = EntityQuery<ImpostorRuleComponent>().FirstOrDefault();
+        if (rule == null)
+            return;
+        
         EntityQueryEnumerator<ImpostorRoleComponent> query = EntityQueryEnumerator<ImpostorRoleComponent>();
         while(query.MoveNext(out EntityUid uid, out ImpostorRoleComponent? _))
         {
@@ -65,12 +68,12 @@ public sealed partial class ImpostorRuleSystem : StationEventSystem<ImpostorRule
             {
                 if (mind.OwnedEntity == null || mind.TimeOfDeath != null)
                 {
-                    ev.AddLine("impostor-roundend-impostoralive");
+                    ev.AddLine(Loc.GetString("impostor-roundend-impostoralive"));
                 }
             }
         }
         
-        ev.AddLine("impostor-roundend-impostordead");
+        ev.AddLine(Loc.GetString("impostor-roundend-impostordead"));
     }
 
     protected override void Started(EntityUid uid, ImpostorRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
@@ -84,19 +87,19 @@ public sealed partial class ImpostorRuleSystem : StationEventSystem<ImpostorRule
 
     private void OnPlayerSpawning(RulePlayerJobsAssignedEvent ev)
     {
-        ImpostorRuleComponent rule = EntityQuery<ImpostorRuleComponent>().First();
+        ImpostorRuleComponent? rule = EntityQuery<ImpostorRuleComponent>().FirstOrDefault();
+        if (rule == null)
+            return;
         
-        List<IPlayerSession> candidates = GetPotentialImpostors(ev.Players, ev.Profiles);
+        List<IPlayerSession> candidates = GetPotentialImpostors(ev.Players, ev.Profiles, rule);
         for (int i = 0; i < rule.ImpostorAmount; i++)
         {
-            MakeImpostor(_rand.Pick(candidates));
+            MakeImpostor(_rand.Pick(candidates), rule);
         }
     }
 
-    private void MakeImpostor(IPlayerSession player)
+    private void MakeImpostor(IPlayerSession player, ImpostorRuleComponent rule)
     {
-        ImpostorRuleComponent rule = EntityQuery<ImpostorRuleComponent>().First();
-        
         if (_mindSys.TryGetMind(player.UserId, out var mindUid, out var mind))
         {
             _roleSys.MindAddRole(mindUid.Value, new ImpostorRoleComponent {PrototypeId = ImpostorAntagId});
@@ -124,10 +127,9 @@ public sealed partial class ImpostorRuleSystem : StationEventSystem<ImpostorRule
         }
     }
 
-    private List<IPlayerSession> GetPotentialImpostors(IPlayerSession[] playerPool, IReadOnlyDictionary<NetUserId, HumanoidCharacterProfile> profiles)
+    private List<IPlayerSession> GetPotentialImpostors(IPlayerSession[] playerPool, 
+        IReadOnlyDictionary<NetUserId, HumanoidCharacterProfile> profiles, ImpostorRuleComponent rule)
     {
-        ImpostorRuleComponent rule = EntityQuery<ImpostorRuleComponent>().First();
-        
         List<IPlayerSession> validPlayers = new();
         EntityQuery<PendingClockInComponent> pendingPlayers = GetEntityQuery<PendingClockInComponent>();
         foreach (IPlayerSession player in playerPool)

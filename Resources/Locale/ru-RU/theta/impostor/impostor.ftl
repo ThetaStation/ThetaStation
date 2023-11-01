@@ -11,6 +11,9 @@ impostor-announcement-endevac = Эвакуационные шлюпки поки
 impostor-announcement-murderbone = Смертность превысила критическую отметку. Стоимость спасательной операции оценивается выше ценности возвращённого экипажа. Запущена процедура самоуничтожения.
 impostor-announcement-relay = Сигнал бедствия отправлен и будет обработан ЦК в течении рабочей недели. Ложная тревога карается уничтожением всего экипажа.
 
+impostor-roundend-impostoralive = Предатель всё ещё среди нас...
+impostor-roundend-impostordead = Экипаж убил предателя!
+
 ent-ImpostorEscapeObjective = Бегите со станции
     .desc = Бегите со станции при помощи спасательной шлюпки на мостике.
 ent-ImpostorBombObjective = Заложите бомбу
