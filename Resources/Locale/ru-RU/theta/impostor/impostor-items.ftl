@@ -1,5 +1,5 @@
 ent-ImpostorCommRelay = реле блюспейс связи
-    .desc = Вставьте её в консоль капитана чтобы послать сигнал бедствия.
+    .desc = Сбоку красная кнопка с надписью 'SOS'.
     .suffix = Impostor
     
 ent-ImpostorMagicCartridge = серебрянный патрон
@@ -11,5 +11,5 @@ impostor-magicbullet-unmark = Вы стёрли крестик на гильзе
 impostor-magicbullet-tryload = { $name } заряжает в револьвер серебрянную пулю.
 
 ent-ImpostorMagicRevolver = револьвер капитана
-    .desc = Трофейная матеба капитана.
+    .desc = Матеба капитана, врученная ему за доблестную службу НТ.
     .suffix = Impostor

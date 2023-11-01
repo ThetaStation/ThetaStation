@@ -16,7 +16,6 @@
   components:
     - type: Sprite
       sprite: Theta/Impostor/Objects/magic-bullet.rsi
-      #state: casing
     - type: CartridgeAmmo
       proto: ImpostorMagicBullet
     - type: ImpostorMagicBullet

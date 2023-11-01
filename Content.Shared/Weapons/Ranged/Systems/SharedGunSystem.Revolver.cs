@@ -173,6 +173,55 @@ public partial class SharedGunSystem
         return false;
     }
 
+    /// <summary>
+    /// Copypaster from TryRevolverInsert but without insertion logic
+    /// </summary>
+    /// <returns></returns>
+    public bool CanRevolverInsert(EntityUid revolverUid, RevolverAmmoProviderComponent component, EntityUid uid, EntityUid? user)
+    {
+        if (component.Whitelist?.IsValid(uid, EntityManager) == false)
+            return false;
+        
+        if (EntityManager.HasComponent<SpeedLoaderComponent>(uid))
+        {
+            var freeSlots = 0;
+
+            for (var i = 0; i < component.Capacity; i++)
+            {
+                if (component.AmmoSlots[i] != null || component.Chambers[i] != null)
+                    continue;
+
+                freeSlots++;
+            }
+
+            if (freeSlots == 0) 
+                return false;
+            
+            var xformQuery = GetEntityQuery<TransformComponent>();
+            var xform = xformQuery.GetComponent(uid);
+            var ammo = new List<(EntityUid? Entity, IShootable Shootable)>(freeSlots);
+            var ev = new TakeAmmoEvent(freeSlots, ammo, xform.Coordinates, user);
+            RaiseLocalEvent(uid, ev);
+
+            if (ev.Ammo.Count == 0)
+                return false;
+
+            return true;
+        }
+        
+        for (var i = 0; i < component.Capacity; i++)
+        {
+            var index = (component.CurrentIndex + i) % component.Capacity;
+
+            if (component.AmmoSlots[index] != null || component.Chambers[index] != null)
+                continue;
+
+            return true;
+        }
+        
+        return false;
+    }
+
     private void OnRevolverVerbs(EntityUid uid, RevolverAmmoProviderComponent component, GetVerbsEvent<AlternativeVerb> args)
     {
         if (!args.CanAccess || !args.CanInteract || args.Hands == null)

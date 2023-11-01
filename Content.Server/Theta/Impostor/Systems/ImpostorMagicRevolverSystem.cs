@@ -4,7 +4,6 @@ using Content.Server.DoAfter;
 using Content.Server.Mind;
 using Content.Server.Popups;
 using Content.Server.Roles.Jobs;
-using Content.Server.Theta.Impostor.Components;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
@@ -116,13 +115,16 @@ public sealed class ImpostorMagicRevolverSystem : EntitySystem
         if (args.Handled)
             return;
 
-        if (TryComp(args.Used, out ImpostorMagicBulletComponent? bullet))
+        if (!_gunSys.CanRevolverInsert(uid, Comp<RevolverAmmoProviderComponent>(uid), args.Used, args.User))
+            return;
+
+        if (TryComp(args.Used, out ImpostorMagicBulletComponent? _))
         {
             args.Handled = true;
             string userName = MetaData(args.User).EntityName;
             _popupSys.PopupCoordinates(Loc.GetString("impostor-magicbullet-tryload", ("name", userName)),
-                new EntityCoordinates(args.User, Vector2.Zero), PopupType.MediumCaution);
-            _doAfterSys.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, TimeSpan.FromSeconds(3),
+                new EntityCoordinates(args.User, Vector2.Zero), PopupType.LargeCaution);
+            _doAfterSys.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, TimeSpan.FromSeconds(7),
                 new ImpostorMagicBulletLoadedEvent(), uid, uid, args.Used));
         }
     }

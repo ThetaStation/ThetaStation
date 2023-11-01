@@ -15,7 +15,8 @@
       startAnnouncement: impostor-eventannouncement
       maxOccurrences: 0
       impostorAmount: 1
-      evacTriggerDeathCount: 1
+      evacMinDeathCount: 3
+      evacMaxDeathCount: 6
       evacLaunchDelay: 1
       impostorAntagId: "Impostor"
       #impostorRandomObjectivesGroupId: "ImpostorRandomObjectives"

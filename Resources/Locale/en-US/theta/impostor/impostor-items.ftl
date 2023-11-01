@@ -1,5 +1,5 @@
 ent-ImpostorCommRelay = bluespace comm relay
-    .desc = Insert it into the captain's console to send a distress signal.
+    .desc = There's red button with text 'SOS' on the side. 
     .suffix = Impostor
 
 ent-ImpostorMagicCartridge = silver cartridge
@@ -11,5 +11,5 @@ impostor-magicbullet-unmark = You erased cross on the casing.
 impostor-magicbullet-tryload = { $name } is loading a silver bullet into the revolver.
 
 ent-ImpostorMagicRevolver = captain's revolver
-    .desc = Captain's trophy matheba.
+    .desc = Captain's mateba, given to him for his excellent service for NT.
     .suffix = Impostor

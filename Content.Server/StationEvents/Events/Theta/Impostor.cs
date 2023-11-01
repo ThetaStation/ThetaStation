@@ -9,6 +9,7 @@ using Content.Server.Roles.Jobs;
 using Content.Server.Shuttles.Components;
 using Content.Server.Theta.Impostor.Components;
 using Content.Server.Theta.Impostor.Systems;
+using Content.Shared.Mind;
 using Content.Shared.Objectives.Components;
 using Content.Shared.Preferences;
 using Content.Shared.Theta.Impostor.Components;
@@ -57,7 +58,19 @@ public sealed partial class ImpostorRuleSystem : StationEventSystem<ImpostorRule
 
     private void OnRoundEnd(RoundEndTextAppendEvent ev)
     {
-        ev.AddLine("");
+        EntityQueryEnumerator<ImpostorRoleComponent> query = EntityQueryEnumerator<ImpostorRoleComponent>();
+        while(query.MoveNext(out EntityUid uid, out ImpostorRoleComponent? _))
+        {
+            if (TryComp(uid, out MindComponent? mind))
+            {
+                if (mind.OwnedEntity == null || mind.TimeOfDeath != null)
+                {
+                    ev.AddLine("impostor-roundend-impostoralive");
+                }
+            }
+        }
+        
+        ev.AddLine("impostor-roundend-impostordead");
     }
 
     protected override void Started(EntityUid uid, ImpostorRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)

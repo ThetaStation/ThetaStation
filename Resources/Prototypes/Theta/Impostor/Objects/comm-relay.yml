@@ -5,3 +5,4 @@
     - type: Sprite
       sprite: Theta/Impostor/Objects/relay.rsi
       state: relay
+    - type: ImpostorCommRelay
