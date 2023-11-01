@@ -28,7 +28,9 @@ public sealed partial class ImpostorRuleComponent : Component
     [DataField("impostorRandomObjectivesGroupId")] public string? ImpostorRandomObjectivesGroupId;
     [DataField("impostorAmount")] public int ImpostorAmount = 1;
     [DataField("randomObjectiveAmount")] public int RandomObjectiveAmount;
-    [DataField("evacTriggerDeathCount", required: true)] public int EvacTriggerDeathCount;
+    [DataField("evacMinDeathCount", required: true)] public int EvacMinDeathCount;
+    //to prevent impostor from using gay tactics, like plasmaflooding or sitting in the bunker alone during radstorm
+    [DataField("evacMaxDeathCount", required: true)] public int EvacMaxDeathCount;
     [DataField("evacLaunchDelay", required: true)] public int EvacLaunchDelay; //in minutes
     [DataField("impostorGreetingSound")] public SoundSpecifier? ImpostorGreetingSound;
 }
@@ -44,17 +46,26 @@ public sealed partial class ImpostorRuleSystem : StationEventSystem<ImpostorRule
     [Dependency] private IRobustRandom _rand = default!;
     [Dependency] private ImpostorEvacSystem _specEvacSys = default!;
 
+    private const string ImpostorAntagId = "Impostor";
+
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<RulePlayerJobsAssignedEvent>(OnPlayerSpawning);
+        SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEnd);
     }
-    
+
+    private void OnRoundEnd(RoundEndTextAppendEvent ev)
+    {
+        ev.AddLine("");
+    }
+
     protected override void Started(EntityUid uid, ImpostorRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
         base.Started(uid, component, gameRule, args);
         _specEvacSys.RuleSelected = true;
-        _specEvacSys.TriggerDeathCount = component.EvacTriggerDeathCount;
+        _specEvacSys.MinDeathCount = component.EvacMinDeathCount;
+        _specEvacSys.MaxDeathCount = component.EvacMaxDeathCount;
         _specEvacSys.LaunchDelay = component.EvacLaunchDelay;
     }
 
@@ -75,7 +86,7 @@ public sealed partial class ImpostorRuleSystem : StationEventSystem<ImpostorRule
         
         if (_mindSys.TryGetMind(player.UserId, out var mindUid, out var mind))
         {
-            _roleSys.MindAddRole(mindUid.Value, new ImpostorRoleComponent());
+            _roleSys.MindAddRole(mindUid.Value, new ImpostorRoleComponent {PrototypeId = ImpostorAntagId});
 
             foreach (string mandatoryObjective in rule.ImpostorMandatoryObjectives)
             {

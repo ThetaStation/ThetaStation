@@ -8,6 +8,7 @@ impostor-announcement-sender = Automatic announcement system
 impostor-announcement-beginevac = Attention! Death toll has reached critical mark. Launching evacuation sequence.
 impostor-announcement-cancelevac = Evacuation canceled due to the neutralization of the threat.
 impostor-announcement-endevac = Evacuation pods have left the station. Launching self-destruction sequence.
+impostor-announcement-murderbone = Death toll went above critical mark. Rescue operation costs are estimated to exceed value of the recovered crew. Launching self-destruction sequence.
 
 ent-ImpostorEscapeObjective = Escape from the station
     .desc = Escape from the station using escape pod located at the bridge.

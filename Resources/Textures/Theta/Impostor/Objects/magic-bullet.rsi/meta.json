@@ -1,14 +1,14 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Taken from /tg/ station",
+  "copyright": "Created for ThetaStation",
   "size": {
     "x": 32,
     "y": 32
   },
   "states": [
     {
-      "name": "nt"
+      "name": "base"
     }
   ]
 }

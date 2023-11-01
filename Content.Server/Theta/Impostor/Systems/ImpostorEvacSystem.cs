@@ -6,6 +6,7 @@ using Content.Server.RoundEnd;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Systems;
 using Content.Server.Theta.Impostor.Components;
+using Content.Server.Theta.ShipEvent.Components;
 using Content.Shared.GameTicking;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
@@ -34,7 +35,9 @@ public sealed class ImpostorEvacSystem : EntitySystem
     /// </summary>
     public bool EvacFinished;
 
-    public int TriggerDeathCount;
+    public int MinDeathCount;
+
+    public int MaxDeathCount;
 
     public int CurrentDeathCount;
 
@@ -66,7 +69,7 @@ public sealed class ImpostorEvacSystem : EntitySystem
     private void OnRoundRestart(RoundRestartCleanupEvent ev)
     {
         RuleSelected = EvacActive = EvacFinished = false;
-        TriggerDeathCount = CurrentDeathCount = 0;
+        MinDeathCount = MaxDeathCount = CurrentDeathCount = 0;
     }
 
     private void OnPlayerDeath(EntityUid uid, MindContainerComponent component, MobStateChangedEvent args)
@@ -92,24 +95,24 @@ public sealed class ImpostorEvacSystem : EntitySystem
             }
         }
 
-        if (!(EvacActive || EvacFinished) && CurrentDeathCount >= TriggerDeathCount)
+        if (!(EvacActive || EvacFinished) && CurrentDeathCount >= MinDeathCount)
         {
             Announce(Loc.GetString("impostor-announcement-beginevac"), "/Audio/Misc/delta.ogg");
             EvacActive = true;
-            Timer.Spawn((int)TimeSpan.FromMinutes(LaunchDelay).TotalMilliseconds, DestroyStation, evacTimerToken);
+            Timer.Spawn(TimeSpan.FromMinutes(LaunchDelay), LauncEvac, evacTimerToken);
+        }
+
+        if (EvacActive && CurrentDeathCount >= MaxDeathCount)
+        {
+            Announce(Loc.GetString("impostor-announcement-murderbone"));
+            EvacActive = false;
+            EvacFinished = true;
+            Timer.Spawn(TimeSpan.FromSeconds(5), SelfDestruct);
         }
     }
 
-    private void DestroyStation()
+    private void LaunchPods()
     {
-        if (!RuleSelected)
-            return;
-        
-        Announce(Loc.GetString("impostor-announcement-endevac"));
-        EvacActive = false;
-        EvacFinished = true;
-        
-        //launch escape pods first
         foreach ((TransformComponent form, ImpostorLandmarkComponent marker) in EntityQuery<TransformComponent, ImpostorLandmarkComponent>())
         {
             if (marker.Type == ImpostorLandmarkType.EvacPod)
@@ -138,18 +141,34 @@ public sealed class ImpostorEvacSystem : EntitySystem
                     index++;
                 }
                 DirectionFlag dir = (DirectionFlag)(int)Math.Pow(2, index); //converting shuttle thrust index to direction
+                Vector2 dirVec = (DirectionExtensions.AsDir(dir).ToAngle() + Transform(form.GridUid.Value).LocalRotation).ToWorldVec();
                 _thrustSys.EnableLinearThrustDirection(shuttle, dir); //enabling thrusters (purely cosmetic)
-                _physSys.ApplyLinearImpulse(form.GridUid.Value, DirectionExtensions.AsDir(dir).ToVec()*thrust*100); //give it a good kick
+                _physSys.ApplyLinearImpulse(form.GridUid.Value, dirVec*thrust*100); //give it a good kick
             }
         }
+    }
 
-        //now nuke the station
+    private void SelfDestruct()
+    {
         EntityQueryEnumerator<NukeComponent> nukeQuery = EntityQueryEnumerator<NukeComponent>();
         while (nukeQuery.MoveNext(out EntityUid uid, out NukeComponent? nuke))
         {
             _nukeSys.ActivateBomb(uid, nuke);
         }
         _roundEndSys.EndRound();
+    }
+
+    private void LauncEvac()
+    {
+        if (!RuleSelected)
+            return;
+        
+        Announce(Loc.GetString("impostor-announcement-endevac"));
+        EvacActive = false;
+        EvacFinished = true;
+        
+        LaunchPods();
+        Timer.Spawn(TimeSpan.FromSeconds(5), SelfDestruct); //give pods a few seconds to fly away far enough
     }
 
     private void Announce(string message, string? sound = null)

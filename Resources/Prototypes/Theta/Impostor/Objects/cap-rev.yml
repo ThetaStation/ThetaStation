@@ -15,8 +15,8 @@
   parent: BaseCartridgeMagnum
   components:
     - type: Sprite
-      sprite: Theta/Impostor/magic-bullet.rsi
-      state: casing
+      sprite: Theta/Impostor/Objects/magic-bullet.rsi
+      #state: casing
     - type: CartridgeAmmo
       proto: ImpostorMagicBullet
     - type: ImpostorMagicBullet
