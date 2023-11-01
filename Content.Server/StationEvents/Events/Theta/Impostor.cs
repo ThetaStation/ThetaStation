@@ -43,9 +43,7 @@ public sealed partial class ImpostorRuleSystem : StationEventSystem<ImpostorRule
     [Dependency] private AudioSystem _audioSys = default!;
     [Dependency] private IRobustRandom _rand = default!;
     [Dependency] private ImpostorEvacSystem _specEvacSys = default!;
-    
-    private ImpostorRuleComponent ruleComp = default!;
-    
+
     public override void Initialize()
     {
         base.Initialize();
@@ -55,7 +53,6 @@ public sealed partial class ImpostorRuleSystem : StationEventSystem<ImpostorRule
     protected override void Started(EntityUid uid, ImpostorRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
         base.Started(uid, component, gameRule, args);
-        ruleComp = component;
         _specEvacSys.RuleSelected = true;
         _specEvacSys.TriggerDeathCount = component.EvacTriggerDeathCount;
         _specEvacSys.LaunchDelay = component.EvacLaunchDelay;
@@ -63,10 +60,10 @@ public sealed partial class ImpostorRuleSystem : StationEventSystem<ImpostorRule
 
     private void OnPlayerSpawning(RulePlayerJobsAssignedEvent ev)
     {
-        if (ruleComp == null) return;
+        ImpostorRuleComponent rule = EntityQuery<ImpostorRuleComponent>().First();
         
         List<IPlayerSession> candidates = GetPotentialImpostors(ev.Players, ev.Profiles);
-        for (int i = 0; i < ruleComp.ImpostorAmount; i++)
+        for (int i = 0; i < rule.ImpostorAmount; i++)
         {
             MakeImpostor(_rand.Pick(candidates));
         }
@@ -74,22 +71,24 @@ public sealed partial class ImpostorRuleSystem : StationEventSystem<ImpostorRule
 
     private void MakeImpostor(IPlayerSession player)
     {
+        ImpostorRuleComponent rule = EntityQuery<ImpostorRuleComponent>().First();
+        
         if (_mindSys.TryGetMind(player.UserId, out var mindUid, out var mind))
         {
             _roleSys.MindAddRole(mindUid.Value, new ImpostorRoleComponent());
 
-            foreach (string mandatoryObjective in ruleComp.ImpostorMandatoryObjectives)
+            foreach (string mandatoryObjective in rule.ImpostorMandatoryObjectives)
             {
                 EntityUid? objectiveUid = _objectiveSys.TryCreateObjective(mindUid.Value, mind, mandatoryObjective);
                 if(objectiveUid != null)
                     _mindSys.AddObjective(mindUid.Value, mind, objectiveUid.Value);
             }
 
-            if (ruleComp.ImpostorRandomObjectivesGroupId != null)
+            if (rule.ImpostorRandomObjectivesGroupId != null)
             {
-                for (int i = 0; i < ruleComp.RandomObjectiveAmount; i++)
+                for (int i = 0; i < rule.RandomObjectiveAmount; i++)
                 {
-                    EntityUid? objective = _objectiveSys.GetRandomObjective(mindUid.Value, mind, ruleComp.ImpostorRandomObjectivesGroupId);
+                    EntityUid? objective = _objectiveSys.GetRandomObjective(mindUid.Value, mind, rule.ImpostorRandomObjectivesGroupId);
                     if (objective == null) 
                         return;
                     _mindSys.AddObjective(mindUid.Value, mind, objective.Value);
@@ -97,12 +96,14 @@ public sealed partial class ImpostorRuleSystem : StationEventSystem<ImpostorRule
             }
 
             _chatSys.SendSimpleMessage(Loc.GetString("impostor-greeting"), player);
-            _audioSys.PlayGlobal(ruleComp.ImpostorGreetingSound, player);
+            _audioSys.PlayGlobal(rule.ImpostorGreetingSound, player);
         }
     }
 
     private List<IPlayerSession> GetPotentialImpostors(IPlayerSession[] playerPool, IReadOnlyDictionary<NetUserId, HumanoidCharacterProfile> profiles)
     {
+        ImpostorRuleComponent rule = EntityQuery<ImpostorRuleComponent>().First();
+        
         List<IPlayerSession> validPlayers = new();
         EntityQuery<PendingClockInComponent> pendingPlayers = GetEntityQuery<PendingClockInComponent>();
         foreach (IPlayerSession player in playerPool)
@@ -122,10 +123,10 @@ public sealed partial class ImpostorRuleSystem : StationEventSystem<ImpostorRule
             if (!profiles.ContainsKey(player.UserId))
                 continue;
             
-            if (profiles[player.UserId].AntagPreferences.Contains(ruleComp.ImpostorAntagId))
+            if (profiles[player.UserId].AntagPreferences.Contains(rule.ImpostorAntagId))
                 playersWithPref.Add(player);
         }
-        if (playersWithPref.Count < ruleComp.ImpostorAmount)
+        if (playersWithPref.Count < rule.ImpostorAmount)
         {
             Log.Info("Insufficient preferred impostors, picking at random.");
             return validPlayers;
