@@ -64,14 +64,7 @@ public sealed class ImpostorMagicRevolverSystem : EntitySystem
     
     private void OnBulletUseInHand(EntityUid uid, ImpostorMagicBulletComponent bullet, UseInHandEvent args)
     {
-        if (bullet.Marked)
-        {
-            _popupSys.PopupEntity(Loc.GetString("impostor-magicbullet-unmark"), uid, args.User);
-        }
-        else
-        {
-            _popupSys.PopupEntity(Loc.GetString("impostor-magicbullet-mark"), uid, args.User);
-        }
+        _popupSys.PopupEntity(Loc.GetString("impostor-magicbullet-" + (bullet.Marked ? "unmark" : "mark")), uid, args.User);
         bullet.Marked = !bullet.Marked;
         Comp<CartridgeAmmoComponent>(uid).Prototype = MagicProjectileProtoId + (bullet.Marked ? "Marked" : "");
         args.Handled = true;
