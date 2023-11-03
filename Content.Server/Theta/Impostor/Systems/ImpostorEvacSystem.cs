@@ -198,6 +198,9 @@ public sealed class ImpostorEvacSystem : EntitySystem
     
     private void OnRelayUse(EntityUid uid, ImpostorCommRelayComponent relay, UseInHandEvent args)
     {
+        if (EvacFinished)
+            return;
+        
         EvacActive = false;
         EvacFinished = true;
         evacTimerTokenSource.Cancel(); //should get called if impostor gets killed anyway, but just in case
