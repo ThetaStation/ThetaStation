@@ -1,0 +1,37 @@
+- type: entity
+  id: ImpostorPowerCellUnrechargeable
+  parent: BasePowerCell
+  components:
+    - type: Sprite
+      layers:
+        - map: [ "enum.PowerCellVisualLayers.Base" ]
+          state: hyper
+        - map: [ "enum.PowerCellVisualLayers.Unshaded" ]
+          state: o2
+          shader: unshaded
+    - type: Battery
+      maxCharge: 1000000 #~15 mins of work with 1kW load
+      startingCharge: 1000000
+      rechargeable: false
+      
+- type: entity
+  parent: BaseAPC
+  id: ImpostorAPC
+  components:
+    - type: BatteryContainer
+      checkPanel: true
+      batterySlot:
+        name: impostor-batterySlot
+        startingItem: ImpostorPowerCellUnrechargeable
+        ejectSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
+        insertSound: /Audio/Weapons/Guns/MagIn/batrifle_magout.ogg
+        ejectOnBreak: true
+        swap: true
+        whitelist:
+          components:
+            - Battery
+    - type: ItemSlots
+    - type: ContainerContainer
+      containers:
+        batterySlot: !type:ContainerSlot
+    - type: Battery

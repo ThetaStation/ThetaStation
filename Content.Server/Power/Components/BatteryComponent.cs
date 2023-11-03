@@ -42,6 +42,10 @@ namespace Content.Server.Power.Components
         [Access(typeof(BatterySystem))]
         public float Charge;
 
+        [DataField("rechargeable")] 
+        [Access(typeof(BatterySystem))]
+        public bool IsRechargeable = true;
+
         /// <summary>
         /// True if the battery is fully charged.
         /// </summary>
