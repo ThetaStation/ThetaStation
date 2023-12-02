@@ -25,7 +25,7 @@
       Min: 1
       Max: 4
       PotencyDivisor: 25
-      
+
 - type: entity
   parent: SeedBase
   name: packet of gourd seeds
@@ -71,7 +71,7 @@
         path: /Audio/Theta/Shipevent/tikvyak_hit.ogg
         params:
           volume: 2
-      
+
 # Bottle
 - type: construction
   name: gourd bottle
@@ -85,7 +85,7 @@
     sprite: Theta/ShipEvent/Objects/tikvyak.rsi
     state: produce
   objectType: Item
-  
+
 - type: constructionGraph
   id: GourdBottle
   start: start
@@ -160,7 +160,7 @@
     - type: Construction
       graph: GourdBottle
       node: bottle
-      
+
 # Wall
 - type: entity
   parent: BaseWall
@@ -202,7 +202,7 @@
           behaviors:
             - !type:PlaySoundBehavior
               sound:
-                path: /Audio/Theta/tikvyak_break.ogg
+                path: /Audio/Theta/Shipevent/tikvyak_break.ogg
                 volume: 6
             - !type:SpawnEntitiesBehavior
               spawn:
@@ -212,5 +212,5 @@
             - !type:DoActsBehavior
               acts: ["Destruction"]
       destroySound:
-        path: /Audio/Theta/tikvyak_break.ogg
+        path: /Audio/Theta/Shipevent/tikvyak_break.ogg
         volume: 6

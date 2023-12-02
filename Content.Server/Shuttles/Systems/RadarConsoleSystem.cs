@@ -16,6 +16,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Physics;
 using System.Linq;
 using System.Numerics;
+using Content.Server.Storage.EntitySystems;
 
 namespace Content.Server.Shuttles.Systems;
 
@@ -26,6 +27,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
     [Dependency] private readonly RadarRenderableSystem _radarRenderable = default!;
     [Dependency] private readonly TransformSystem _transformSystem = default!;
+    [Dependency] private readonly StorageSystem _storageSystem = default!;
 
     private const string OutputPortName = "CannonConsoleSender";
 
@@ -166,8 +168,8 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
                 if (!EntityManager.TryGetComponent(cprov.ProviderUid, out StorageComponent? storage))
                     return (0, 0);
 
-                maxCapacity = storage.StorageCapacityMax;
-                usedCapacity = storage.StorageUsed;
+                maxCapacity = storage.MaxSlots ?? storage.MaxTotalWeight;
+                usedCapacity = _storageSystem.GetCumulativeItemSizes(cprov.ProviderUid.Value, storage);
                 break;
             }
             default:

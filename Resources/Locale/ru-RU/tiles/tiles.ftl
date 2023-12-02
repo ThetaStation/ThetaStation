@@ -111,3 +111,4 @@ tiles-hull = наружная обшивка корпуса
 tiles-hull-reinforced = наружная укреплённая обшивка корпуса
 tiles-shuttle-floor = пол шаттла
 tiles-web = паутинный пол
+tiles-chromite = хромитовый пол

@@ -1,8 +1,8 @@
 ﻿using Content.Shared.Theta.MobHUD;
-using Robust.Client.GameObjects;
 using Robust.Client.GameStates;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
 namespace Content.Client.Theta.MobHUD;
@@ -13,7 +13,7 @@ public sealed class MobHUDSystem : SharedMobHUDSystem
     [Dependency] private readonly IClientGameStateManager statMan = default!;
     [Dependency] private readonly IPlayerManager playerMan = default!;
     [Dependency] private readonly IOverlayManager overlayMan = default!;
-    
+
     public MobHUDComponent? PlayerHUD;
 
     public override void Initialize()
@@ -35,7 +35,7 @@ public sealed class MobHUDSystem : SharedMobHUDSystem
     {
         UpdatePlayerHUD();
     }
-    
+
     public void OnPlayerEntityChange(PlayerDetachedEvent _)
     {
         UpdatePlayerHUD();

@@ -113,7 +113,7 @@ public sealed class TurretLoaderSystem : EntitySystem
             }
 
             loader.AmmoContainer = storage.Container;
-            loader.MaxContainerCapacity = storage.StorageCapacityMax;
+            loader.MaxContainerCapacity = storage.MaxSlots ?? storage.MaxTotalWeight;
 
             if (turretContainer != null && storage.Container != null)
             {

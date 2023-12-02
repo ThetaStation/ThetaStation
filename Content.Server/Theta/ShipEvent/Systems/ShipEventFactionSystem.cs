@@ -24,6 +24,7 @@ using Content.Shared.Ghost;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
+using Content.Shared.Players;
 using Content.Shared.Preferences;
 using Content.Shared.Projectiles;
 using Content.Shared.Roles.Theta;
@@ -36,7 +37,7 @@ using Robust.Server.GameObjects;
 using Robust.Server.Player;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Events;
-using Robust.Shared.Players;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -89,7 +90,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
 
     //used when setting up buttons for ghosts, in cases when mind from shipevent agent is transferred to null and not to ghost entity directly
-    private Dictionary<IPlayerSession, ShipEventFaction> lastTeamLookup = new();
+    private Dictionary<ICommonSession, ShipEventFaction> lastTeamLookup = new();
 
     private readonly Dictionary<string, int> _projectileDamage = new(); //cached damage for projectile prototypes
     private int _lastTeamNumber;
@@ -133,7 +134,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     public List<Processor> ShipProcessors = new();
 
     public ColorPalette ColorPalette = new ShipEventPalette();
-    
+
     //used by flag capture
     public bool AllowTeamRegistration = true;
     public bool RemoveEmptyTeams = true;
@@ -188,7 +189,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         CheckRoundendTimer();
         CheckPickupsTimer();
     }
-    
+
     //for handling intentional ghosting (suicide)
     private void OnPlayerGhostAttempt(GhostAttemptHandleEvent args)
     {
@@ -301,7 +302,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     {
         if (!RuleSelected || !Teams.Any())
             return;
-        
+
         RoundEndEvent?.Invoke(args);
 
         var sortedTeams = Teams.ShallowClone().OrderByDescending(t => t.Points).ToList();
@@ -432,13 +433,13 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                 WarningLoc = "generic-warning-window-warning-to-lobby",
             }
         );
-        _uiSys.OpenUi(bui, (IPlayerSession) session);
+        _uiSys.OpenUi(bui, session);
     }
 
     private void ReturnToLobbyPlayer(GenericWarningYesPressedMessage args)
     {
         if(Equals(args.UiKey, GenericWarningUiKey.ShipEventKey))
-            _ticker.Respawn((IPlayerSession) args.Session);
+            _ticker.Respawn(args.Session);
     }
 
     //for handling deaths
@@ -450,7 +451,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             if (args.Mind.Session == null || marker.Team == null)
                 return;
 
-            lastTeamLookup[(IPlayerSession)args.Mind.Session] = marker.Team;
+            lastTeamLookup[args.Mind.Session] = marker.Team;
             return;
         }
 
@@ -505,7 +506,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// <summary>
     /// Does everything needed to create a new team, from faction creation to ship spawning.
     /// </summary>
-    public void CreateTeam(ICommonSession session, string name, ShipTypePrototype? initialShipType, 
+    public void CreateTeam(ICommonSession session, string name, ShipTypePrototype? initialShipType,
         string? password, int maxMembers, bool noCaptain = false)
     {
         if (!RuleSelected || !AllowTeamRegistration)
@@ -539,11 +540,11 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>(ship);
         if (!spawners.Any())
         {
-            _chatSys.SendSimpleMessage(Loc.GetString("shipevent-respawnfailed"), (IPlayerSession)session);
+            _chatSys.SendSimpleMessage(Loc.GetString("shipevent-respawnfailed"), session);
             return;
         }
 
-        SpawnPlayer((IPlayerSession)session, spawners.First());
+        SpawnPlayer(session, spawners.First());
     }
 
     /// <summary>
@@ -552,7 +553,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// <param name="player">player's session</param>
     /// <param name="team">team's faction</param>
     /// <param name="password">password of the team</param>
-    public void JoinTeam(IPlayerSession player, ShipEventFaction team, string? password)
+    public void JoinTeam(ICommonSession player, ShipEventFaction team, string? password)
     {
         if (team.JoinPassword != password)
         {
@@ -589,7 +590,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// <param name="player">player's session</param>
     /// <param name="spawnerUid">spawner's entity</param>
     /// <returns>player's entity</returns>
-    private EntityUid SpawnPlayer(IPlayerSession player, EntityUid spawnerUid)
+    private EntityUid SpawnPlayer(ICommonSession player, EntityUid spawnerUid)
     {
         var spawner = EntityManager.GetComponent<ShipEventSpawnerComponent>(spawnerUid);
         var playerMob = EntityManager.SpawnEntity(spawner.Prototype, Transform(spawnerUid).Coordinates);
@@ -684,7 +685,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// </summary>
     /// <param name="session">Player session</param>
     /// <returns></returns>
-    private EntityUid SpawnPlayer(IPlayerSession session)
+    private EntityUid SpawnPlayer(ICommonSession session)
     {
         var mind = session.GetMind();
         if(mind == null)
@@ -709,7 +710,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// <param name="uid">player's uid</param>
     /// <param name="team">player's team</param>
     /// <param name="session">player's session</param>
-    private void SetupActions(EntityUid uid, ShipEventFaction team, IPlayerSession session)
+    private void SetupActions(EntityUid uid, ShipEventFaction team, ICommonSession session)
     {
         _actSys.AddAction(uid,"ShipEventTeamViewToggle");
         if (team.Captain == session.ConnectedClient.UserName)
@@ -834,7 +835,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         team.Ship = newShip;
 
-        List<IPlayerSession> sessions = new();
+        List<ICommonSession> sessions = new();
         foreach (var member in team.Members)
         {
             if (!_mindSystem.TryGetSession(member.Owner, out var session))

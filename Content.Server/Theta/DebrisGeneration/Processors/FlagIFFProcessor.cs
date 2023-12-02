@@ -49,8 +49,7 @@ public sealed partial class FlagIFFProcessor : Processor
 
         if (NameOverride != null)
         {
-            if (entMan.TryGetComponent<MetaDataComponent>(gridUid, out MetaDataComponent? meta))
-                meta.EntityName = NameOverride;
+            IoCManager.Resolve<MetaDataSystem>().SetEntityName(gridUid, NameOverride);
         }
 
         if(ColorOverride != null)

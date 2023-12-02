@@ -1366,35 +1366,6 @@ entities:
     - pos: 1.5,3.5
       parent: 1
       type: Transform
-- proto: TurretLoaderShipEvent
-  entities:
-  - uid: 270
-    components:
-    - pos: 0.5,3.5
-      parent: 1
-      type: Transform
-    - linkedPorts:
-        159:
-        - TurretLoaderSender: CannonConsoleReceiver
-      type: DeviceLinkSource
-  - uid: 271
-    components:
-    - pos: 0.5,1.5
-      parent: 1
-      type: Transform
-    - linkedPorts:
-        162:
-        - TurretLoaderSender: CannonConsoleReceiver
-      type: DeviceLinkSource
-  - uid: 272
-    components:
-    - pos: 6.5,2.5
-      parent: 1
-      type: Transform
-    - linkedPorts:
-        161:
-        - TurretLoaderSender: CannonConsoleReceiver
-      type: DeviceLinkSource
 - proto: WallReinforced
   entities:
   - uid: 170

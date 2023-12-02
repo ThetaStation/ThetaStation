@@ -111,3 +111,4 @@ tiles-hull = exterior hull plating
 tiles-hull-reinforced = exterior reinforced hull plating
 tiles-shuttle-floor = shuttle floor
 tiles-web = web tile
+tiles-chromite = chromite

@@ -9,25 +9,11 @@ namespace Content.Shared.Corvax.CCCVars;
 // ReSharper disable once InconsistentNaming
 public sealed class CCCVars
 {
-    /**
-     * Sponsors
-     */
-
     /// <summary>
-    ///     URL of the sponsors server API.
+    /// Deny any VPN connections.
     /// </summary>
-    public static readonly CVarDef<string> SponsorsApiUrl =
-        CVarDef.Create("sponsor.api_url", "", CVar.SERVERONLY);
-
-    /*
-     * Queue
-     */
-
-    /// <summary>
-    ///     Controls if the connections queue is enabled. If enabled stop kicking new players after `SoftMaxPlayers` cap and instead add them to queue.
-    /// </summary>
-    public static readonly CVarDef<bool>
-        QueueEnabled = CVarDef.Create("queue.enabled", false, CVar.SERVERONLY);
+    public static readonly CVarDef<bool> PanicBunkerDenyVPN =
+        CVarDef.Create("game.panic_bunker.deny_vpn", false, CVar.SERVERONLY);
 
     /**
      * TTS (Text-To-Speech)
@@ -104,6 +90,12 @@ public sealed class CCCVars
     /*
      * Theta
      */
+
+    /// <summary>
+    ///     URL of the sponsors server API.
+    /// </summary>
+    public static readonly CVarDef<string> SponsorsApiUrl =
+        CVarDef.Create("sponsor.api_url", "", CVar.SERVERONLY);
 
     /// <summary>
     /// Name of the game server in lobby.

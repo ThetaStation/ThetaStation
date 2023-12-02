@@ -22,7 +22,7 @@
   noSpawn: true
   components:
     - type: Item
-      size: 1
+      size: Tiny
     - type: Projectile
       damage:
         types:
@@ -70,7 +70,7 @@
   noSpawn: true
   components:
     - type: Item
-      size: 1
+      size: Tiny
     - type: Projectile
       damage:
         types:

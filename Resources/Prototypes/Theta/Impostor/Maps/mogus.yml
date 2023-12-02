@@ -22,6 +22,6 @@
         - type: StationJobs
           availableJobs:
             Passenger: [ -1, -1 ]
-            Engineer: [ 2, 2 ]
+            StationEngineer: [ 2, 2 ]
             MedicalDoctor: [ 2, 2 ]
             Captain: [ 1, 1 ]

@@ -59,6 +59,7 @@
     - Service
     - Supply
     - Syndicate
+    - Freelance
     globalReceive: true
   - type: Physics
     bodyType: KinematicController

@@ -67,6 +67,6 @@
     pocket1: ExtendedEmergencyOxygenTankFilled
     pocket2: ShipEventUplink40TC
     belt: ClothingBeltMilitaryWebbing
-  innerclothingskirt: ClothingUniformJumpskirtOperative
+  innerClothingSkirt: ClothingUniformJumpskirtOperative
   satchel: ClothingBackpackDuffelSyndicateOperative
   duffelbag: ClothingBackpackDuffelSyndicateOperative
