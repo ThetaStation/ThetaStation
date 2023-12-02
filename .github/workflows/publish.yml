@@ -70,4 +70,4 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key:  ${{ secrets.SSHKEY }}
         port: ${{ secrets.PORT }}
-        script: node ~/scripts/create-manifest.js -fork theta -id ${{ github.sha }}
+        script: node ~/ss14/manifest_generation/create-manifest.js -fork theta -id ${{ github.sha }}
