@@ -766,6 +766,9 @@
 
 - type: Tag
   id: NukeOpsUplink
+  
+- type: Tag
+  id: ShipEventUplink
 
 - type: Tag
   id: Ointment
@@ -1100,6 +1103,9 @@
 
 - type: Tag
   id: ModularReceiver
+  
+- type: Tag
+  id: Gourd # tikvyak!!!
 
 - type: Tag
   id: MindShield

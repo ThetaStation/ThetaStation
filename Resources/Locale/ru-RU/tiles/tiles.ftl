@@ -109,5 +109,6 @@ tiles-snow-floor = пол снег
 tiles-wood3 = пол сломанный деревянный
 tiles-hull = наружная обшивка корпуса
 tiles-hull-reinforced = наружная укреплённая обшивка корпуса
+tiles-shuttle-floor = пол шаттла
 tiles-web = паутинный пол
 tiles-chromite = хромитовый пол

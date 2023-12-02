@@ -18,6 +18,7 @@
             <controls:MainViewport Name="MainViewport"/>
             <widgets:GhostGui Name="Ghost" Access="Protected" />
             <hotbar:HotbarGui Name="Hotbar" Access="Protected" />
+            <Control Name="Radar" Access="Public" />
             <BoxContainer Name="TopLeftContainer" Orientation="Vertical">
                 <actions:ActionsBar Name="Actions" Access="Protected" />
                 <BoxContainer Name="VoteMenu" Access="Public" Orientation="Vertical"/>

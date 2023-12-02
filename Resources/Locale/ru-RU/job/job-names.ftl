@@ -79,6 +79,7 @@ JobMedicalIntern = интерн
 JobMime = мим
 JobMusician = музыкант
 JobPassenger = пассажир
+JobImmortalAssistant = ассистент
 JobParamedic = парамедик
 JobPsychologist = психолог
 JobQuartermaster = квартирмейстер

@@ -83,6 +83,9 @@
   - type: RotationVisuals
     defaultRotation: 90
     horizontalRotation: 90
+  - type: RadarRenderable
+    radarView: genericMob
+    group: enum.RadarRenderableGroup.ShipEventTeammate
   - type: HumanoidAppearance
     species: Human
   - type: SlowOnDamage
@@ -190,12 +193,12 @@
   - type: Strippable
   - type: UserInterface
     interfaces:
-      - key: enum.VoiceMaskUIKey.Key
-        type: VoiceMaskBoundUserInterface
-      - key: enum.HumanoidMarkingModifierKey.Key
-        type: HumanoidMarkingModifierBoundUserInterface
-      - key: enum.StrippingUiKey.Key
-        type: StrippableBoundUserInterface
+    - key: enum.VoiceMaskUIKey.Key
+      type: VoiceMaskBoundUserInterface
+    - key: enum.HumanoidMarkingModifierKey.Key
+      type: HumanoidMarkingModifierBoundUserInterface
+    - key: enum.StrippingUiKey.Key
+      type: StrippableBoundUserInterface
   - type: Puller
   - type: Speech
     speechSounds: Alto
@@ -287,8 +290,8 @@
   - type: Butcherable
     butcheringType: Spike # TODO human.
     spawned:
-      - id: FoodMeat
-        amount: 5
+    - id: FoodMeat
+      amount: 5
   - type: Respirator
     damage:
       types:
@@ -366,5 +369,5 @@
     requiredLegs: 2
   - type: UserInterface
     interfaces:
-      - key: enum.HumanoidMarkingModifierKey.Key # sure, this can go here too
-        type: HumanoidMarkingModifierBoundUserInterface
+    - key: enum.HumanoidMarkingModifierKey.Key # sure, this can go here too
+      type: HumanoidMarkingModifierBoundUserInterface

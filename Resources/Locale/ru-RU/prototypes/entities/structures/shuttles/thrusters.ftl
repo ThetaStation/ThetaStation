@@ -8,3 +8,5 @@ ent-Gyroscope = гироскоп
     .desc = Увеличивает потенциальное угловое вращение шаттла.
 ent-DebugGyroscope = дебаг гироскоп
     .desc = { ent-Gyroscope.desc }
+ent-SkipjackGyroscope = { ent-Gyroscope }
+    .desc = { ent-Gyroscope }

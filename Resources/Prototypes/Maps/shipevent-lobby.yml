@@ -1,0 +1,26 @@
+- type: entity
+  id: LobbyShipEventStation
+  parent:
+    - BaseStation
+    - BaseStationJobsSpawning
+    - BaseStationNanotrasen
+  noSpawn: true
+  components:
+    - type: Transform
+
+- type: gameMap
+  id: LobbyShipEvent
+  mapName: 'Lobby-ShipEvent'
+  mapPath: /Maps/Theta/Shipevent/shipevent-lobby.yml
+  minPlayers: 1
+  stations:
+    LobbyShipEvent:
+      stationProto: LobbyShipEventStation
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'Lobby'
+        - type: StationJobs
+          overflowJobs:
+            - PassengerGodmode
+          availableJobs:
+            PassengerGodmode: [ -1, -1 ]

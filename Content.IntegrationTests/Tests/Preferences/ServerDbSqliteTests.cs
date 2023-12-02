@@ -20,22 +20,22 @@ namespace Content.IntegrationTests.Tests.Preferences
         [TestPrototypes]
         private const string Prototypes = @"
 - type: dataset
-  id: sqlite_test_names_first_male
+  id: sqlite_test_names_first_male_en
   values:
   - Aaden
 
 - type: dataset
-  id: sqlite_test_names_first_female
+  id: sqlite_test_names_first_female_en
   values:
   - Aaliyah
 
 - type: dataset
-  id: sqlite_test_names_last_male
+  id: sqlite_test_names_last_male_en
   values:
   - Ackerley
 
 - type: dataset
-  id: sqlite_test_names_last_female
+  id: sqlite_test_names_last_female_en
   values:
   - Ackerla";  // Corvax-LastnameGender
 
@@ -56,7 +56,7 @@ namespace Content.IntegrationTests.Tests.Preferences
                     Color.Aquamarine,
                     Color.Azure,
                     Color.Beige,
-                    new ()
+                    new()
                 ),
                 ClothingPreference.Jumpskirt,
                 BackpackPreference.Backpack,
@@ -65,7 +65,7 @@ namespace Content.IntegrationTests.Tests.Preferences
                     {SharedGameTicker.FallbackOverflowJob, JobPriority.High}
                 },
                 PreferenceUnavailableMode.StayInLobby,
-                new List<string> (),
+                new List<string>(),
                 new List<string>()
             );
         }

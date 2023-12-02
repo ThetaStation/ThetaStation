@@ -9,7 +9,7 @@ whitelist-playercount-invalid =
                *[other] ->  и ниже { $max } игроков, так что, возможно, вы сможете присоединиться позже.
             }
     }
-whitelist-not-whitelisted-rp = Вас нет в вайтлисте. Чтобы попасть в вайтлист, посетите наш Discord (ссылку можно найти по адресу https://discord.station14.ru).
+whitelist-not-whitelisted-rp = Вас нет в вайтлисте. Чтобы попасть в вайтлист, посетите наш Discord (ссылку можно найти по адресу https://discord.gg/x2zEg7kWNr).
 cmd-whitelistadd-desc = Adds the player with the given username to the server whitelist.
 cmd-whitelistadd-help = Usage: whitelistadd <username>
 cmd-whitelistadd-existing = { $username } is already on the whitelist!

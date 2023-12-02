@@ -332,6 +332,12 @@ namespace Content.Shared.CCVar
         public static readonly CVarDef<float> ArtifactRoundEndTimer = CVarDef.Create("game.artifact_round_end_timer", 0.5f, CVar.NOTIFY | CVar.REPLICATED);
 
         /// <summary>
+        /// What is the primary language of the server, with the fallback being en-US.
+        /// </summary>
+        public static readonly CVarDef<string> CultureLocale =
+            CVarDef.Create("game.culture_locale", "en-US", CVar.REPLICATED | CVar.SERVER);
+
+        /// <summary>
         /// The time in seconds that the server should wait before restarting the round.
         /// Defaults to 2 minutes.
         /// </summary>

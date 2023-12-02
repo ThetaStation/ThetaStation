@@ -14,7 +14,7 @@
   - extended
   - shittersafari
   name: extended-title
-  showInVote: false #2boring2vote
+  showInVote: true
   description: extended-description
   rules:
   - BasicStationEventScheduler
@@ -62,6 +62,7 @@
   maxPlayers: 15
   showInVote: true
   supportedMaps: DeathMatchMapPool
+  forceMap: true
   rules:
     - DeathMatch31
 
