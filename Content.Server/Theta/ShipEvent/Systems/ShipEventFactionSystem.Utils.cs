@@ -16,6 +16,7 @@ namespace Content.Server.Theta.ShipEvent.Systems;
 public sealed partial class ShipEventFactionSystem
 {
     [Dependency] private readonly IdCardSystem _cardSystem = default!;
+    [Dependency] private readonly MetaDataSystem _metaDataSystem = default!;
 
     private const int minimalColorDelta = 100;
 
@@ -63,24 +64,17 @@ public sealed partial class ShipEventFactionSystem
     /// </summary>
     private void SetPlayerCharacterName(EntityUid uid, string name)
     {
-        if (EntityManager.TryGetComponent(uid, out MetaDataComponent? meta))
-        {
-            meta.EntityName = name;
-            Dirty(uid, meta);
-        }
+        _metaDataSystem.SetEntityName(uid, name);
 
         if (_cardSystem.TryFindIdCard(uid, out var idCard))
             _cardSystem.TryChangeFullName(idCard.Owner, name, idCard);
 
         _idSys.QueueIdentityUpdate(uid);
     }
-    
+
     private void SetName(EntityUid uid, string name)
     {
-        if (!TryComp<MetaDataComponent>(uid, out var meta))
-            return;
-        meta.EntityName = name;
-        Dirty(uid, meta);
+        _metaDataSystem.SetEntityName(uid, name);
     }
 
     private List<EntityUid> GetShipComponentHolders<T>(EntityUid shipEntity) where T : IComponent

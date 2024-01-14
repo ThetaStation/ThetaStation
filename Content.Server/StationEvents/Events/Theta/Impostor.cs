@@ -21,6 +21,7 @@ using Robust.Server.Player;
 using Robust.Shared.Audio;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Player;
 using Robust.Shared.Random;
 
 namespace Content.Server.StationEvents.Events.Theta;
@@ -70,7 +71,7 @@ public sealed partial class ImpostorRuleSystem : StationEventSystem<ImpostorRule
         ImpostorRuleComponent? rule = EntityQuery<ImpostorRuleComponent>().FirstOrDefault();
         if (rule == null)
             return;
-        
+
         EntityQueryEnumerator<ImpostorRoleComponent> query = EntityQueryEnumerator<ImpostorRoleComponent>();
         while(query.MoveNext(out EntityUid uid, out ImpostorRoleComponent? _))
         {
@@ -82,7 +83,7 @@ public sealed partial class ImpostorRuleSystem : StationEventSystem<ImpostorRule
                 }
             }
         }
-        
+
         ev.AddLine(Loc.GetString("impostor-roundend-impostordead"));
     }
 
@@ -129,14 +130,14 @@ public sealed partial class ImpostorRuleSystem : StationEventSystem<ImpostorRule
         List<IPlayerSession> candidates = GetPotentialImpostors(ev.Players, ev.Profiles, rule);
         if (candidates.Count == 0)
             return;
-        
+
         for (int i = 0; i < rule.ImpostorAmount; i++)
         {
             MakeImpostor(_rand.Pick(candidates), rule);
         }
     }
 
-    private void MakeImpostor(IPlayerSession player, ImpostorRuleComponent rule)
+    private void MakeImpostor(ICommonSession player, ImpostorRuleComponent rule)
     {
         if (_mindSys.TryGetMind(player.UserId, out var mindUid, out var mind))
         {
@@ -154,7 +155,7 @@ public sealed partial class ImpostorRuleSystem : StationEventSystem<ImpostorRule
                 for (int i = 0; i < rule.RandomObjectiveAmount; i++)
                 {
                     EntityUid? objective = _objectiveSys.GetRandomObjective(mindUid.Value, mind, rule.ImpostorRandomObjectivesGroupId);
-                    if (objective == null) 
+                    if (objective == null)
                         return;
                     _mindSys.AddObjective(mindUid.Value, mind, objective.Value);
                 }
@@ -165,28 +166,28 @@ public sealed partial class ImpostorRuleSystem : StationEventSystem<ImpostorRule
         }
     }
 
-    private List<IPlayerSession> GetPotentialImpostors(IPlayerSession[] playerPool, 
+    private List<ICommonSession> GetPotentialImpostors(ICommonSession[] playerPool,
         IReadOnlyDictionary<NetUserId, HumanoidCharacterProfile> profiles, ImpostorRuleComponent rule)
     {
-        List<IPlayerSession> validPlayers = new();
+        List<ICommonSession> validPlayers = new();
         EntityQuery<PendingClockInComponent> pendingPlayers = GetEntityQuery<PendingClockInComponent>();
-        foreach (IPlayerSession player in playerPool)
+        foreach (ICommonSession player in playerPool)
         {
             if (!_jobSys.CanBeAntag(player))
                 continue;
-            
+
             if (player.AttachedEntity != null && pendingPlayers.HasComponent(player.AttachedEntity.Value))
                 continue;
 
             validPlayers.Add(player);
         }
 
-        List<IPlayerSession> playersWithPref = new();
-        foreach (IPlayerSession player in validPlayers)
+        List<ICommonSession> playersWithPref = new();
+        foreach (ICommonSession player in validPlayers)
         {
             if (!profiles.ContainsKey(player.UserId))
                 continue;
-            
+
             if (profiles[player.UserId].AntagPreferences.Contains(rule.ImpostorAntagId))
                 playersWithPref.Add(player);
         }
@@ -195,7 +196,7 @@ public sealed partial class ImpostorRuleSystem : StationEventSystem<ImpostorRule
             Log.Info("Insufficient preferred impostors, picking at random.");
             return validPlayers;
         }
-        
+
         return playersWithPref;
     }
 }

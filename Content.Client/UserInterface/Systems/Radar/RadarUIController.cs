@@ -2,11 +2,11 @@
 using Content.Client.UserInterface.Systems.Gameplay;
 using Content.Client.UserInterface.Systems.Radar.Widgets;
 using Content.Shared.Theta.RadarHUD;
-using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Client.UserInterface.Controllers;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Player;
 
 namespace Content.Client.UserInterface.Systems.Radar;
 

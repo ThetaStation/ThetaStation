@@ -11,7 +11,7 @@
       sprite: Objects/Fun/toys.rsi
       state: football
     - type: Item
-      size: 12
+      size: Ginormous
       sprite: Objects/Fun/toys.rsi
       heldPrefix: singularitytoy
 

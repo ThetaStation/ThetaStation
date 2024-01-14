@@ -1,12 +1,10 @@
-﻿using System.Linq;
-using System.Numerics;
+﻿using System.Numerics;
 using Content.Server.Mind;
 using Content.Server.Shuttles.Components;
 using Content.Server.Theta.ShipEvent.Systems;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Theta.RadarPings;
 using Robust.Shared.Player;
-using Robust.Shared.Players;
 using Robust.Shared.Timing;
 
 namespace Content.Server.Theta.RadarPings;

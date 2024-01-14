@@ -21,9 +21,9 @@ SERVER_FILES = [
 VERSION = os.environ['GITHUB_SHA']
 
 FORK_ID = "theta"
-BUILD_URL = f"https://cdn.theta.dushess.net/builds/{{FORK_VERSION}}/{FILE}"
-MANIFEST_URL = f"https://cdn.theta.dushess.net/version/{{FORK_VERSION}}/manifest"
-MANIFEST_DOWNLOAD_URL = f"https://cdn.theta.dushess.net/version/{{FORK_VERSION}}/download"
+BUILD_URL = f"https://cdn.thetastation.org/builds/{{FORK_VERSION}}/{FILE}"
+MANIFEST_URL = f"https://cdn.thetastation.org/version/{{FORK_VERSION}}/manifest"
+MANIFEST_DOWNLOAD_URL = f"https://cdn.thetastation.org/version/{{FORK_VERSION}}/download"
 
 def main() -> None:
     client_file = os.path.join("release", FILE)

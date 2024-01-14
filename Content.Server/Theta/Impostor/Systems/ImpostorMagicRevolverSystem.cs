@@ -40,7 +40,7 @@ public sealed class ImpostorMagicRevolverSystem : EntitySystem
     private const string CaptainJobId = "Captain";
     private const string CommRelayProtId = "ImpostorCommRelay";
     private const uint MagicBanDuration = 60*8; //minutes
-    
+
     public override void Initialize()
     {
         base.Initialize();
@@ -56,11 +56,11 @@ public sealed class ImpostorMagicRevolverSystem : EntitySystem
     {
         if (HasComp<ProjectileComponent>(uid))
             return;
-        
+
         if(bullet.Marked)
             args.PushText(Loc.GetString("impostor-magicbullet-marked"));
     }
-    
+
     private void OnBulletUseInHand(EntityUid uid, ImpostorMagicBulletComponent bullet, UseInHandEvent args)
     {
         _popupSys.PopupEntity(Loc.GetString("impostor-magicbullet-" + (bullet.Marked ? "unmark" : "mark")), uid, args.User);
@@ -68,7 +68,7 @@ public sealed class ImpostorMagicRevolverSystem : EntitySystem
         Comp<CartridgeAmmoComponent>(uid).Prototype = MagicProjectileProtoId + (bullet.Marked ? "Marked" : "");
         args.Handled = true;
     }
-    
+
     //if bullet is marked and target is impostor - perma kill him and spawn comm relay
     //if bullet is not marked and target is not an impostor (just a regular shitter) - jobban him
     //else jobban captain
@@ -79,10 +79,10 @@ public sealed class ImpostorMagicRevolverSystem : EntitySystem
         MindComponent mind = Comp<MindComponent>(mindContainer.Mind.Value);
         if (mind.Session == null)
             return;
-        
+
         bool isImpostor = HasComp<ImpostorRoleComponent>(mindContainer.Mind);
         NetUserId userId = mind.Session.UserId;
-        
+
         _mobSys.ChangeMobState(args.Target, MobState.Dead);
         if (bullet.Marked && isImpostor)
         {
@@ -91,9 +91,9 @@ public sealed class ImpostorMagicRevolverSystem : EntitySystem
         }
         else if (!bullet.Marked && !isImpostor)
         {
-            if (_jobSys.MindTryGetJob(mindContainer.Mind, out JobComponent? job, out _) && job.PrototypeId != null)
+            if (_jobSys.MindTryGetJob(mindContainer.Mind, out JobComponent? job, out _) && job.Prototype != null)
             {
-                _banMan.CreateRoleBan(userId, null, null, null, null, job.PrototypeId, 
+                _banMan.CreateRoleBan(userId, null, null, null, null, job.Prototype,
                     MagicBanDuration, NoteSeverity.None, "Executed by captain", DateTimeOffset.Now);
             }
         }
@@ -105,11 +105,11 @@ public sealed class ImpostorMagicRevolverSystem : EntitySystem
             if (capMind.Session == null)
                 return;
             NetUserId capUserId = mind.Session.UserId;
-            _banMan.CreateRoleBan(capUserId, null, null, null, null, CaptainJobId, 
+            _banMan.CreateRoleBan(capUserId, null, null, null, null, CaptainJobId,
                 MagicBanDuration, NoteSeverity.None, "Poor judgment", DateTimeOffset.Now);
         }
     }
-    
+
     private void OnRevolverUse(EntityUid uid, ImpostorMagicRevolverComponent revolver, InteractUsingEvent args)
     {
         if (args.Handled)
@@ -128,14 +128,14 @@ public sealed class ImpostorMagicRevolverSystem : EntitySystem
                 new ImpostorMagicBulletLoadedEvent(), uid, uid, args.Used));
         }
     }
-    
+
     private void OnBulletDoAfterFinish(EntityUid uid, ImpostorMagicRevolverComponent revolver, ImpostorMagicBulletLoadedEvent args)
     {
-        if (args.Used == null) 
+        if (args.Used == null)
             return;
         _gunSys.TryRevolverInsert(uid, Comp<RevolverAmmoProviderComponent>(uid), args.Used.Value, args.User);
     }
-    
+
     private void OnRevolverShoot(EntityUid uid, ImpostorMagicRevolverComponent revolver, ref AttemptShootEvent args)
     {
         RevolverAmmoProviderComponent revolverProvider = Comp<RevolverAmmoProviderComponent>(uid);
@@ -143,14 +143,14 @@ public sealed class ImpostorMagicRevolverSystem : EntitySystem
         if (cartridgeUid != null && HasComp<ImpostorMagicBulletComponent>(cartridgeUid))
         {
             CartridgeAmmoComponent cartridge = Comp<CartridgeAmmoComponent>(cartridgeUid.Value);
-            
+
             bool userIsCap = false;
             if (TryComp(args.User, out MindContainerComponent? mindContainer) && mindContainer.HasMind)
             {
                 if (_jobSys.MindTryGetJob(mindContainer.Mind, out JobComponent? job, out _))
-                    userIsCap = job.PrototypeId == CaptainJobId;
+                    userIsCap = job.Prototype == CaptainJobId;
             }
-            
+
             if (!userIsCap)
                 cartridge.Prototype = RegularProjectileProtoId;
         }

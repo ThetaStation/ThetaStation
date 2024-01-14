@@ -19,7 +19,7 @@
     - type: CartridgeAmmo
       proto: ImpostorMagicBullet
     - type: ImpostorMagicBullet
-      
+
 - type: entity
   id: ImpostorMagicBullet
   name: bullet
@@ -27,12 +27,11 @@
   noSpawn: true
   components:
     - type: Projectile
-      spread: 0
       damage:
         types:
           Piercing: 200
     - type: ImpostorMagicBullet
-      
+
 - type: entity
   id: ImpostorMagicBulletMarked
   name: bullet

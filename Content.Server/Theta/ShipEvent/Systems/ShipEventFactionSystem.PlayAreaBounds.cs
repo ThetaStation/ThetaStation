@@ -4,7 +4,7 @@ using Content.Shared.Roles.Theta;
 using Content.Shared.Theta.ShipEvent;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
-using Robust.Shared.Players;
+using Robust.Shared.Player;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 

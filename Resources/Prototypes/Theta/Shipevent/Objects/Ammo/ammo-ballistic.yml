@@ -30,7 +30,7 @@
   noSpawn: true
   components:
   - type: Item
-    size: 1
+    size: Tiny
   - type: Projectile
     damage:
       types:
@@ -47,7 +47,7 @@
   parent: BaseCartridge
   components:
   - type: Item
-    size: 2
+    size: Small
   - type: Tag
     tags:
     - Cartridge
@@ -98,7 +98,7 @@
   parent: CartridgeFlak
   components:
   - type: Item
-    size: 5
+    size: Normal
   - type: CartridgeAmmo
     proto: BulletSPG
     deleteOnSpawn: true

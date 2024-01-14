@@ -1,6 +1,6 @@
 using Content.Shared.Theta.ShipEvent;
-using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Shared.Player;
 
 namespace Content.Client.Theta.ShipEvent.Systems;
 
@@ -9,7 +9,7 @@ public sealed class BoundsOverlaySystem : EntitySystem
     [Dependency] private readonly IOverlayManager _overMan = default!;
     public Box2 CurrentBounds;
     private BoundsOverlay overlay = default!;
-    
+
     public override void Initialize()
     {
         base.Initialize();

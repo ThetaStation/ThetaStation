@@ -29,8 +29,8 @@ public sealed class TeamConsoleSystem : EntitySystem
         var teams = _shipSys.Teams.Where(t => t.Name == args.Name);
         if (teams.Count() != 1)
             return;
-        
-        _shipSys.JoinTeam((IPlayerSession) args.Session, teams.First(), args.Password);
+
+        _shipSys.JoinTeam(args.Session, teams.First(), args.Password);
     }
 
     private void OnRefreshTeams(EntityUid uid, TeamConsoleComponent component, RefreshShipTeamsEvent args)

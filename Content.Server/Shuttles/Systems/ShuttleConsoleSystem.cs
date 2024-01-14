@@ -38,6 +38,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
     [Dependency] private readonly RadarConsoleSystem _radarConsoleSystem = default!;
     [Dependency] private readonly SharedContentEyeSystem _eyeSystem = default!;
     [Dependency] private readonly RadarRenderableSystem _radarRenderable = default!;
+    [Dependency] private readonly MetaDataSystem _metaDataSystem = default!;
 
     public override void Initialize()
     {
@@ -82,11 +83,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
             return;
         if (args.NewShipName.Length is > 25 or < 3)
             return;
-        if (!TryComp<TransformComponent>(uid, out var xform))
-            return;
-        if (!TryComp<MetaDataComponent>(xform.GridUid, out var meta))
-            return;
-        meta.EntityName = args.NewShipName;
+        _metaDataSystem.SetEntityName(uid, args.NewShipName);
         var shuttleComponent = EntityQueryEnumerator<ShuttleConsoleComponent>();
         while (shuttleComponent.MoveNext(out var uidS, out var _))
         {

@@ -26,13 +26,13 @@
       tags:
       - TurretAmmoContainer
     - type: Item
-      size: 9999
+      size: Ginormous
     - type: Sprite
       drawdepth: Items
       sprite: Theta/ShipEvent/Objects/AmmoContainer.rsi
       state: container
     - type: Storage
-      capacity: 100
+      maxTotalWeight: 100
       quickInsert: true
       areaInsert: true
       whitelist:
