@@ -2,12 +2,17 @@ using System.Linq;
 using Content.Server.Chat.Systems;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules.Components;
+using Content.Server.Humanoid;
 using Content.Server.Mind;
 using Content.Server.Objectives;
 using Content.Server.Roles;
 using Content.Server.Roles.Jobs;
 using Content.Server.Shuttles.Components;
+using Content.Server.Storage.Components;
+using Content.Server.Storage.EntitySystems;
+using Content.Server.Theta.Impostor.Components;
 using Content.Server.Theta.Impostor.Systems;
+using Content.Shared.Humanoid;
 using Content.Shared.Mind;
 using Content.Shared.Preferences;
 using Content.Shared.Theta.Impostor.Components;
@@ -15,6 +20,7 @@ using Robust.Server.GameObjects;
 using Robust.Server.Player;
 using Robust.Shared.Audio;
 using Robust.Shared.Network;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
 namespace Content.Server.StationEvents.Events.Theta;
@@ -45,13 +51,17 @@ public sealed partial class ImpostorRuleSystem : StationEventSystem<ImpostorRule
     [Dependency] private AudioSystem _audioSys = default!;
     [Dependency] private IRobustRandom _rand = default!;
     [Dependency] private ImpostorEvacSystem _specEvacSys = default!;
+    [Dependency] private EntityStorageSystem _storageSys = default!;
+    [Dependency] private IPrototypeManager _protMan = default!;
+    [Dependency] private HumanoidAppearanceSystem _appearanceSys = default!;
 
     private const string ImpostorAntagId = "Impostor";
 
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<RulePlayerJobsAssignedEvent>(OnPlayerSpawning);
+        SubscribeLocalEvent<RulePlayerSpawningEvent>(OnBeforeSpawn);
+        SubscribeLocalEvent<RulePlayerJobsAssignedEvent>(OnAfterSpawn);
         SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEnd);
     }
 
@@ -85,13 +95,41 @@ public sealed partial class ImpostorRuleSystem : StationEventSystem<ImpostorRule
         _specEvacSys.LaunchDelay = component.EvacLaunchDelay;
     }
 
-    private void OnPlayerSpawning(RulePlayerJobsAssignedEvent ev)
+    private void OnBeforeSpawn(RulePlayerSpawningEvent ev)
+    {
+        ImpostorRuleComponent? rule = EntityQuery<ImpostorRuleComponent>().FirstOrDefault();
+        if (rule == null)
+            return;
+
+        var pods = EntityQueryEnumerator<ImpostorCryoPodComponent, EntityStorageComponent>();
+        
+        foreach (IPlayerSession session in ev.PlayerPool)
+        {
+            if (pods.MoveNext(out EntityUid uid, out _, out EntityStorageComponent? storage))
+            {
+                HumanoidCharacterProfile profile = ev.Profiles[session.UserId];
+                EntityUid bodyUid = SpawnInContainerOrDrop("MobHuman", uid, storage.Contents.ID);
+                EntityUid mindUid = _mindSys.CreateMind(session.UserId);
+                _appearanceSys.LoadProfile(bodyUid, profile);
+                _mindSys.SetUserId(mindUid, session.UserId);
+                _mindSys.TransferTo(mindUid, bodyUid);
+                _ticker.PlayerJoinGame(session, true);
+            }
+        }
+        
+        ev.PlayerPool.Clear();
+    }
+
+    private void OnAfterSpawn(RulePlayerJobsAssignedEvent ev)
     {
         ImpostorRuleComponent? rule = EntityQuery<ImpostorRuleComponent>().FirstOrDefault();
         if (rule == null)
             return;
         
         List<IPlayerSession> candidates = GetPotentialImpostors(ev.Players, ev.Profiles, rule);
+        if (candidates.Count == 0)
+            return;
+        
         for (int i = 0; i < rule.ImpostorAmount; i++)
         {
             MakeImpostor(_rand.Pick(candidates), rule);
