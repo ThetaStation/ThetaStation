@@ -1,6 +1,7 @@
 - type: entity
   id: ImpostorPowerCellUnrechargeable
   parent: BasePowerCell
+  suffix: Impostor
   components:
     - type: Sprite
       layers:
@@ -15,8 +16,9 @@
       rechargeable: false
       
 - type: entity
-  parent: BaseAPC
   id: ImpostorAPC
+  parent: BaseAPC
+  suffix: Impostor
   components:
     - type: BatteryContainer
       checkPanel: true
@@ -35,3 +37,40 @@
       containers:
         batterySlot: !type:ContainerSlot
     - type: Battery
+      
+- type: entity
+  id: ImpostorAPCEmpty
+  parent: ImpostorAPC
+  suffix: Impostor, Empty
+  components:
+    - type: BatteryContainer
+      checkPanel: true
+      batterySlot:
+        name: impostor-batterySlot
+        ejectSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
+        insertSound: /Audio/Weapons/Guns/MagIn/batrifle_magout.ogg
+        ejectOnBreak: true
+        swap: true
+        whitelist:
+          components:
+            - Battery
+      
+- type: entity
+  id: ImpostorSolarPanelSpawner
+  name: solar panel spawner
+  suffix: Impostor
+  parent: MarkerBase
+  components:
+    - type: Sprite
+      layers:
+        - state: red
+        - sprite: Structures/Power/Generation/solar_panel.rsi
+          state: normal
+    - type: RandomSpawner
+      rarePrototypes:
+        - SolarPanel
+      rareChance: 0.2
+      prototypes:
+        - SolarPanelBroken
+      chance: 1
+      offset: 0.0
