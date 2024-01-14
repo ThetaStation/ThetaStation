@@ -12,12 +12,10 @@ using Content.Server.Storage.Components;
 using Content.Server.Storage.EntitySystems;
 using Content.Server.Theta.Impostor.Components;
 using Content.Server.Theta.Impostor.Systems;
-using Content.Shared.Humanoid;
 using Content.Shared.Mind;
 using Content.Shared.Preferences;
 using Content.Shared.Theta.Impostor.Components;
 using Robust.Server.GameObjects;
-using Robust.Server.Player;
 using Robust.Shared.Audio;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
@@ -104,7 +102,7 @@ public sealed partial class ImpostorRuleSystem : StationEventSystem<ImpostorRule
 
         var pods = EntityQueryEnumerator<ImpostorCryoPodComponent, EntityStorageComponent>();
         
-        foreach (IPlayerSession session in ev.PlayerPool)
+        foreach (ICommonSession session in ev.PlayerPool)
         {
             if (pods.MoveNext(out EntityUid uid, out _, out EntityStorageComponent? storage))
             {
@@ -127,7 +125,7 @@ public sealed partial class ImpostorRuleSystem : StationEventSystem<ImpostorRule
         if (rule == null)
             return;
         
-        List<IPlayerSession> candidates = GetPotentialImpostors(ev.Players, ev.Profiles, rule);
+        List<ICommonSession> candidates = GetPotentialImpostors(ev.Players, ev.Profiles, rule);
         if (candidates.Count == 0)
             return;
 
