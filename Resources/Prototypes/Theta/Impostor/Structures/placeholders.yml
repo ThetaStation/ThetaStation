@@ -26,12 +26,3 @@
     - type: Sprite
       sprite: Theta/Impostor/Structures/shower.rsi
       state: shower
-      
-- type: entity
-  id: ImpostorCryoPod
-  suffix: Impostor, Placeholder
-  parent: BaseStructure
-  components:
-    - type: Sprite
-      sprite: Theta/Impostor/Structures/sleeper.rsi
-      state: sleeper
