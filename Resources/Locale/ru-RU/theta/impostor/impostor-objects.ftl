@@ -1,8 +1,8 @@
 ent-ImpostorCryoPod = криокапсула
-    .desc = От неё веет холодом
-ent-ImpostorServer = server
+    .desc = От неё веет холодом.
+ent-ImpostorServer = сервер
     .desc = Бог знает чем он сейчас занят, но если постараться то из него всё ещё можно достать желанные чертежи.
-ent-ImpostorWashingMachine = washing machine
+ent-ImpostorWashingMachine = стиральная машина
     .desc = Требует воду для работы.
-ent-ImpostorShower = shower
+ent-ImpostorShower = душ
     .desc = Требует воду для работы.
