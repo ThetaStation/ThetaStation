@@ -34,7 +34,7 @@
     - type: Storage
       maxItemSize: Huge
       grid:
-      - 0,0,10,10
+      - 0,0,9,9
       quickInsert: true
       areaInsert: true
       whitelist:
