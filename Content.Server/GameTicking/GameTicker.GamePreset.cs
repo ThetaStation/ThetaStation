@@ -10,6 +10,7 @@ using Content.Shared.Database;
 using Content.Shared.FixedPoint;
 using Content.Shared.Ghost;
 using Content.Shared.Mind;
+using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
@@ -97,7 +98,7 @@ namespace Content.Server.GameTicking
 
         private void InitializeGamePreset()
         {
-            SetGamePreset(LobbyEnabled ? _configurationManager.GetCVar(CCVars.GameLobbyDefaultPreset) : "sandbox");
+            SetGamePreset(_configurationManager.GetCVar(CCVars.GameLobbyDefaultPreset));
         }
 
         public void SetGamePreset(GamePresetPrototype preset, bool force = false)
@@ -208,7 +209,7 @@ namespace Content.Server.GameTicking
             if (playerEntity != null && viaCommand)
                 _adminLogger.Add(LogType.Mind, $"{EntityManager.ToPrettyString(playerEntity.Value):player} is attempting to ghost via command");
 
-            var handleEv = new GhostAttemptHandleEvent(mind, canReturnGlobal);
+            var handleEv = new GhostAttemptHandleEvent(mindId, mind, canReturnGlobal);
             RaiseLocalEvent(handleEv);
 
             // Something else has handled the ghost attempt for us! We return its result.
@@ -277,7 +278,10 @@ namespace Content.Server.GameTicking
             var xformQuery = GetEntityQuery<TransformComponent>();
             var coords = _transform.GetMoverCoordinates(position, xformQuery);
 
-            var ghost = Spawn(ObserverPrototypeName, coords);
+            var ghostPrototype = ObserverPrototypeName;
+            if (TryComp<MindContainerComponent>(mind.OwnedEntity, out var mindContainerComponent))
+                ghostPrototype = mindContainerComponent.GhostPrototype;
+            var ghost = Spawn(ghostPrototype, coords);
 
             // Try setting the ghost entity name to either the character name or the player name.
             // If all else fails, it'll default to the default entity prototype name, "observer".
@@ -327,12 +331,15 @@ namespace Content.Server.GameTicking
 
     public sealed class GhostAttemptHandleEvent : HandledEntityEventArgs
     {
+        //mind uid
+        public EntityUid MindUid { get; }
         public MindComponent Mind { get; }
         public bool CanReturnGlobal { get; }
         public bool Result { get; set; }
 
-        public GhostAttemptHandleEvent(MindComponent mind, bool canReturnGlobal)
+        public GhostAttemptHandleEvent(EntityUid mindUid, MindComponent mind, bool canReturnGlobal)
         {
+            MindUid = mindUid;
             Mind = mind;
             CanReturnGlobal = canReturnGlobal;
         }

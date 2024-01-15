@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Linq;
 using Content.Client.CrewManifest;
 using Content.Client.GameTicking.Managers;
 using Content.Client.UserInterface.Controls;
@@ -161,7 +162,19 @@ namespace Content.Client.LateJoin
 
                 var firstCategory = true;
 
-                foreach (var department in _prototypeManager.EnumeratePrototypes<DepartmentPrototype>())
+                List<DepartmentPrototype> departments = _prototypeManager.EnumeratePrototypes<DepartmentPrototype>().ToList();
+
+                List<string> unsortedJobs = new();
+                foreach (var job in _prototypeManager.EnumeratePrototypes<JobPrototype>())
+                {
+                    if (job.AlwaysShowInLatejoin)
+                        unsortedJobs.Add(job.ID);
+                }
+
+                var unsortedDep = new DepartmentPrototype("Unsorted", "", Color.Gray, unsortedJobs);
+                departments.Add(unsortedDep);
+
+                foreach (var department in departments)
                 {
                     var departmentName = Loc.GetString($"department-{department.ID}");
                     _jobCategories[id] = new Dictionary<string, BoxContainer>();

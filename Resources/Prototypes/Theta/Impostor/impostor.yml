@@ -1,0 +1,65 @@
+- type: antag
+  id: Impostor
+  name: impostor-name
+  antagonist: true
+  setPreference: true
+  objective: impostor-objectives
+  
+- type: entity
+  noSpawn: true
+  id: Impostor
+  parent: BaseGameRule
+  components:
+    - type: ImpostorRule
+      id: Impostor
+      startAnnouncement: impostor-eventannouncement
+      maxOccurrences: 0
+      impostorAmount: 1
+      evacMinDeathCount: 3
+      evacMaxDeathCount: 6
+      evacLaunchDelay: 1
+      impostorAntagId: "Impostor"
+      #impostorRandomObjectivesGroupId: "ImpostorRandomObjectives"
+      impostorMandatoryObjectives:
+        - "ImpostorEscapeObjective"
+        - "ImpostorBombObjective"
+      impostorGreetingSound: !type:SoundPathSpecifier
+        path: /Audio/Ambience/ambidanger2.ogg
+
+- type: entity
+  noSpawn: true
+  id: ImpostorEscapeObjective
+  parent: BaseObjective
+  components:
+    - type: Objective
+      issuer: "NanoTrasen"
+      unique: false
+      difficulty: 0
+      icon:
+        sprite: Theta/Impostor/nt.rsi
+        state: nt
+    - type: ImpostorEscapeCondition
+      
+- type: entity
+  noSpawn: true
+  id: ImpostorBombObjective
+  parent: BaseObjective
+  components:
+    - type: Objective
+      issuer: "NanoTrasen"
+      unique: false
+      difficulty: 0
+      icon:
+        sprite: Theta/Impostor/nt.rsi
+        state: nt
+    - type: ImpostorBombCondition
+
+- type: entity
+  id: ImpostorLandmark
+  parent: MarkerBase
+  name: impostor landmark
+  components:
+    - type: ImpostorLandmark
+    - type: Sprite
+      sprite: Markers/cross.rsi
+      state: red

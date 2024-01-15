@@ -1,36 +1,30 @@
-<!-- ЭТО ШАБЛОН ВАШЕГО PULL REQUEST. Текст между стрелками - это комментарии - они не будут видны в PR. -->
-
-## Описание PR
-<!-- Ниже опишите ваш Pull Request. Что он изменяет? На что еще это может повлиять? Постарайтесь описать все внесённые вами изменения! -->
-
-**Медиа**
-<!-- Если приемлемо, добавьте скриншоты для демонстрации вашего PR. Если ваш PR представляет собой визуальное изменение, добавьте
-скриншоты, иначе он может быть закрыт. -->
-
-**Проверки**
-<!-- Выполнение всех следующих действий, если это приемлемо для вида изменений сильно ускорит разбор вашего PR -->
-- [ ] PR полностью завершён и мне не нужна помощь чтобы его закончить.
-- [ ] Я внимательно просмотрел все свои изменения и багов в них не нашёл.
-- [ ] Я запускал локальный сервер со своими изменениями и всё протестировал.
-- [ ] Я добавил скриншот/видео демонстрации PR в игре, **или** этот PR этого не требует.
-
-**Изменения**
 <!--
-Здесь вы можете написать список изменений, который будет автоматически добавлен в игру, когда ваш PR будет принят.
+Description: Describe changes in this PR. If there are issues that will be resolved by it - also put them here (to close them automatically use keywords https://help.github.com/en/articles/closing-issues-using-keywords).
 
-В журнал изменений следует помещать только то, что действительно важно игрокам.
+What will this PR improve: Describe motivation for your changes. This point is especially important for balance changes/new mechanics.
 
-В списке изменений тип значка не является часть предложения, поэтому явно указывайте - Добавлен, Удалён, Изменён.
-плохо: - add: Новый инструмент для инженеров
-хорошо: - add: Добавлен новый инструмент для инженеров
+Changelog: 
+Changelog supports following tags:
+add/new - new content
+del/delete - content removal
+mod/modify/tweak - content tweaks (ex: balances changes)
+fix/bugfix - bugfixes
+Adding [link] to the tag will provide a link to the Pull Request with this changelog, for example
+fix[link]: Fixed that one annoying bug everyone keeps talking about.
 
-Вы можете указать своё имя после символа :cl: именно оно будет отображаться в журнале изменений (иначе будет использоваться ваше имя на GitHub)
-Например: :cl: Ian
-
+You can put your name after :cl: (instead of ThetaStation). In case if your PR uses assets/code which is not yours, you should also add other authors here.
 -->
 
-:cl:
-- add: Добавлено веселье!
-- remove: Убрано веселье!
-- tweak: Изменено веселье!
-- fix: Исправлено веселье!
+
+## Description
+
+**Screenshots**
+
+## What will this PR improve
+
+## Changelog
+:cl: ThetaStation
+add: Added fun
+del: Removed fun
+mod: Tweaked fun
+fix: Fixed fun

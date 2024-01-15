@@ -558,6 +558,9 @@
   id: Goat
 
 - type: Tag
+  id: Gourd # tikvyak!!!
+
+- type: Tag
   id: Grenade
 
 - type: Tag
@@ -825,6 +828,9 @@
 
 - type: Tag
   id: NukeOpsUplink
+
+- type: Tag
+  id: ShipEventUplink
 
 - type: Tag
   id: Ointment
@@ -1191,3 +1197,4 @@
   id: WriteIgnoreStamps
 
 # PUT YOUR TAGS IN ALPHABETICAL ORDER
+

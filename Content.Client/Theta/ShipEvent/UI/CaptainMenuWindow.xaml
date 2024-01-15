@@ -1,0 +1,38 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+               Title="{Loc 'shipevent-capmenu-windowtitle'}"
+               MinSize="600 300"
+               SetSize="300 300">
+    <BoxContainer Orientation="Vertical">
+        <BoxContainer Orientation="Vertical">
+            <Label Text="{Loc 'shipevent-capmenu-shipmanagement'}" />
+            <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+                <Label Text="{Loc 'shipevent-capmenu-currentship'}" />
+                <Label Name="ShipName" Text="N/A" />
+            </BoxContainer>
+            <Button Name="ShipPickerButton" Text="{Loc 'shipevent-capmenu-shippickerbutton'}" />
+        </BoxContainer>
+        <BoxContainer Orientation="Vertical">
+            <Label Text="{Loc 'shipevent-capmenu-membermanagement'}" />
+            <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+                <Label Text="{Loc 'shipevent-capmenu-memberlist'}" />
+                <Label Name="MemberList" Text="N/A" />
+            </BoxContainer>
+            <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+                <LineEdit Name="KickCKeyEdit" MinWidth="200" />
+                <Button Name="KickButton" Text="{Loc 'shipevent-capmenu-kickbutton'}" />
+            </BoxContainer>
+            <BoxContainer Orientation="Horizontal">
+                <Label Name="MaxMembersLabel" Text="{Loc 'shipevent-teamcreation-maxmembers'}" />
+                <Control MinSize="10 0" />
+                <SpinBox Name="MaxMembersEdit" Value="0" />
+                <Control MinSize="10 0" />
+                <Button Name="SetMaxMembersButton" Text="{Loc 'shipevent-capmenu-setmaxcrew'}" />
+            </BoxContainer>
+            <BoxContainer>
+                <Label Name="PasswordLabel" Text="{Loc 'shipevent-teamcreation-password'}" />
+                <LineEdit Name="PasswordEdit" HorizontalExpand="True" />
+                <Button Name="SetPasswordButton" Text="{Loc 'shipevent-capmenu-setpassword'}" />
+            </BoxContainer>
+        </BoxContainer>
+    </BoxContainer>
+</DefaultWindow>

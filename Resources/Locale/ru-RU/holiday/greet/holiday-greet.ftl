@@ -82,3 +82,7 @@ holiday-custom-halloween = Ужасного Хэллоуина!
 holiday-custom-kindness-day = Совершите несколько неожиданных добрых поступков для незнакомцев!
 holiday-custom-christmas = Счастливого Рождества!
 holiday-custom-festive-season = Весёлых праздников!
+
+## Theta
+
+holiday-name-theta-day = Дня рождения Теты

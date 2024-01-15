@@ -102,6 +102,14 @@ public sealed partial class GunSystem : SharedGunSystem
         var toMap = toCoordinates.ToMapPos(EntityManager, TransformSystem);
         var mapDirection = toMap - fromMap.Position;
         var mapAngle = mapDirection.ToAngle();
+
+        if (gun.OnSpawnBulletOffset > 0)
+        {
+            var offsetVector = mapDirection.Normalized() * gun.OnSpawnBulletOffset;
+            fromCoordinates = fromCoordinates.Offset(offsetVector);
+            fromMap = fromMap.Offset(offsetVector);
+        }
+
         var angle = GetRecoilAngle(Timing.CurTime, gun, mapDirection.ToAngle());
 
         // If applicable, this ensures the projectile is parented to grid on spawn, instead of the map.

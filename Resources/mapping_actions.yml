@@ -705,7 +705,6 @@
     icon:
       entity: AirlockMaintLocked
     keywords: []
-    checkCanInteract: False
     clientExclusive: True
     autoPopulate: False
     temporary: True

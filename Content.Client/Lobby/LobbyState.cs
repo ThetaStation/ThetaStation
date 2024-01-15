@@ -14,6 +14,9 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
+using Content.Client.UserInterface.Systems.EscapeMenu;
+using Content.Shared.CCVar;
+using Content.Shared.Corvax.CCCVars;
 
 
 namespace Content.Client.Lobby
@@ -70,12 +73,17 @@ namespace Content.Client.Lobby
             };
 
             LayoutContainer.SetAnchorPreset(_lobby, LayoutContainer.LayoutPreset.Wide);
-            _lobby.ServerName.Text = _baseClient.GameInfo?.ServerName; //The eye of refactor gazes upon you...
+            var serverName = _configurationManager.GetCVar(CCCVars.ServerNameLobby);
+            if (string.IsNullOrWhiteSpace(serverName))
+                serverName = _baseClient.GameInfo?.ServerName;
+            _lobby.ServerName.Text = serverName; //The eye of refactor gazes upon you...
             UpdateLobbyUi();
 
             _lobby.CharacterPreview.CharacterSetupButton.OnPressed += OnSetupPressed;
             _lobby.ReadyButton.OnPressed += OnReadyPressed;
             _lobby.ReadyButton.OnToggled += OnReadyToggled;
+
+            HandleLocalization();
 
             _gameTicker.InfoBlobUpdated += UpdateLobbyUi;
             _gameTicker.LobbyStatusUpdated += LobbyStatusUpdated;
@@ -191,7 +199,6 @@ namespace Content.Client.Lobby
                 _lobby!.ReadyButton.Text = Loc.GetString("lobby-state-ready-button-join-state");
                 _lobby!.ReadyButton.ToggleMode = false;
                 _lobby!.ReadyButton.Pressed = false;
-                _lobby!.ObserveButton.Disabled = false;
             }
             else
             {
@@ -200,7 +207,6 @@ namespace Content.Client.Lobby
                 _lobby!.ReadyButton.ToggleMode = true;
                 _lobby!.ReadyButton.Disabled = false;
                 _lobby!.ReadyButton.Pressed = _gameTicker.AreWeReady;
-                _lobby!.ObserveButton.Disabled = true;
             }
 
             if (_gameTicker.ServerInfoBlob != null)
@@ -253,6 +259,15 @@ namespace Content.Client.Lobby
             }
 
             _consoleHost.ExecuteCommand($"toggleready {newReady}");
+        }
+
+        private void HandleLocalization()
+        {
+            _configurationManager.OnValueChanged(CCVars.CultureLocale, _ => _lobby!.ReadyButton.Text = Loc.GetString("ui-lobby-ready-up-button"));
+            _configurationManager.OnValueChanged(CCVars.CultureLocale, _ => _lobby!.AHelpButton.Text = Loc.GetString("ui-lobby-ahelp-button"));
+            _configurationManager.OnValueChanged(CCVars.CultureLocale, _ => _lobby!.OptionsButton.Text = Loc.GetString("ui-lobby-options-button"));
+            _configurationManager.OnValueChanged(CCVars.CultureLocale, _ => _lobby!.LeaveButton.Text = Loc.GetString("ui-lobby-leave-button"));
+            _configurationManager.OnValueChanged(CCVars.CultureLocale, _ => _lobby!.ServerInfoHeader.Text = Loc.GetString("ui-lobby-server-info-block"));
         }
     }
 }

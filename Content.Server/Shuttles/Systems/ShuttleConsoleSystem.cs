@@ -3,6 +3,7 @@ using Content.Server.Power.EntitySystems;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Events;
 using Content.Server.Station.Systems;
+using Content.Server.Theta.RadarRenderable;
 using Content.Server.UserInterface;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Alert;
@@ -33,7 +34,10 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
     [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly TagSystem _tags = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private readonly RadarConsoleSystem _radarConsoleSystem = default!;
     [Dependency] private readonly SharedContentEyeSystem _eyeSystem = default!;
+    [Dependency] private readonly RadarRenderableSystem _radarRenderable = default!;
+    [Dependency] private readonly MetaDataSystem _metaDataSystem = default!;
 
     public override void Initialize()
     {
@@ -44,6 +48,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         SubscribeLocalEvent<ShuttleConsoleComponent, AnchorStateChangedEvent>(OnConsoleAnchorChange);
         SubscribeLocalEvent<ShuttleConsoleComponent, ActivatableUIOpenAttemptEvent>(OnConsoleUIOpenAttempt);
         SubscribeLocalEvent<ShuttleConsoleComponent, ShuttleConsoleFTLRequestMessage>(OnDestinationMessage);
+        SubscribeLocalEvent<ShuttleConsoleComponent, ShuttleConsoleChangeShipNameMessage>(OnChangeShipName);
         SubscribeLocalEvent<ShuttleConsoleComponent, BoundUIClosedEvent>(OnConsoleUIClose);
 
         SubscribeLocalEvent<DroneConsoleComponent, ConsoleShuttleEvent>(OnCargoGetConsole);
@@ -68,6 +73,21 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
     private void OnFtlDestShutdown(EntityUid uid, FTLDestinationComponent component, ComponentShutdown args)
     {
         RefreshShuttleConsoles();
+    }
+
+    private void OnChangeShipName(EntityUid uid, ShuttleConsoleComponent component,
+        ShuttleConsoleChangeShipNameMessage args)
+    {
+        if (string.IsNullOrWhiteSpace(args.NewShipName))
+            return;
+        if (args.NewShipName.Length is > 25 or < 3)
+            return;
+        _metaDataSystem.SetEntityName(uid, args.NewShipName);
+        var shuttleComponent = EntityQueryEnumerator<ShuttleConsoleComponent>();
+        while (shuttleComponent.MoveNext(out var uidS, out var _))
+        {
+            UpdateState(uidS);
+        }
     }
 
     private void OnDestinationMessage(EntityUid uid, ShuttleConsoleComponent component,
@@ -330,6 +350,18 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         }
 
         docks ??= GetAllDocks();
+        var all = new List<CommonRadarEntityInterfaceState>();
+        ;
+        var cannons = new List<CannonInformationInterfaceState>();
+        var doors = new List<DoorInterfaceState>();
+        var shield = new List<ShieldInterfaceState>();
+        if (radar != null)
+        {
+            all = _radarRenderable.GetObjectsAround(consoleUid, radar);
+            cannons = _radarConsoleSystem.GetCannonInfosByMyGrid(consoleUid, radar);
+            doors = _radarConsoleSystem.GetDoorInfoByMyGrid(consoleUid, radar);
+			shield = _radarConsoleSystem.GetShieldsAround(radar);
+        }
 
         if (_ui.TryGetUi(consoleUid, ShuttleConsoleUiKey.Key, out var bui))
         {
@@ -340,8 +372,11 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
                 range,
                 GetNetCoordinates(consoleXform?.Coordinates),
                 consoleXform?.LocalRotation,
-                docks
-            ));
+                docks,
+                cannons,
+                doors,
+                all,
+                shield));
         }
     }
 
@@ -367,7 +402,16 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         {
             RemovePilot(uid, comp);
         }
+
+        var shuttleComponent = EntityQueryEnumerator<ShuttleConsoleComponent>();
+        while (shuttleComponent.MoveNext(out var uid, out var _))
+        {
+            if(!_ui.IsUiOpen(uid, ShuttleConsoleUiKey.Key))
+                continue;
+            UpdateState(uid);
+        }
     }
+
 
     /// <summary>
     /// If pilot is moved then we'll stop them from piloting.

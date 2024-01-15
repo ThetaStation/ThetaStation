@@ -82,3 +82,8 @@ holiday-custom-halloween = Have a spooky Halloween!
 holiday-custom-kindness-day = Go do some random acts of kindness for a stranger!
 holiday-custom-christmas = Have a merry Christmas!
 holiday-custom-festive-season = Have a nice festive season!
+
+## Theta
+
+holiday-name-theta-day = Birthday of Theta
+

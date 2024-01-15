@@ -1,0 +1,94 @@
+- type: tile
+  id: FloorVoxShuttle
+  name: tiles-shuttle-floor
+  sprite: /Textures/Theta/ShipEvent/Shuttles/tau_vox.rsi/vox_shuttle_floor.png
+  baseTurf: PlatingVoxShuttle
+  isSubfloor: false
+  canCrowbar: true
+  footstepSounds:
+    collection: FootstepFloor
+  itemDrop: FloorTileItemShuttleWhite
+  heatCapacity: 10000
+
+- type: tile
+  id: FloorVoxShuttle1
+  name: tiles-shuttle-floor
+  sprite: /Textures/Theta/ShipEvent/Shuttles/tau_vox.rsi/vox_shuttle_floor1.png
+  baseTurf: PlatingVoxShuttle
+  isSubfloor: false
+  canCrowbar: true
+  footstepSounds:
+    collection: FootstepFloor
+  itemDrop: FloorTileItemShuttleWhite
+  heatCapacity: 10000
+
+- type: tile
+  id: FloorVoxShuttle2
+  name: tiles-shuttle-floor
+  sprite: /Textures/Theta/ShipEvent/Shuttles/tau_vox.rsi/vox_shuttle_floor2.png
+  baseTurf: PlatingVoxShuttle
+  isSubfloor: false
+  canCrowbar: true
+  footstepSounds:
+    collection: FootstepFloor
+  itemDrop: FloorTileItemShuttleWhite
+  heatCapacity: 10000
+
+- type: tile
+  id: FloorVoxShuttleCatwalk
+  name: tiles-shuttle-floor
+  sprite: /Textures/Theta/ShipEvent/Shuttles/tau_vox.rsi/vox_shuttle_floorcatwalk.png
+  baseTurf: PlatingVoxShuttle
+  isSubfloor: false
+  canCrowbar: true
+  footstepSounds:
+    collection: FootstepFloor
+  itemDrop: FloorTileItemShuttleWhite
+  heatCapacity: 10000
+
+- type: tile
+  id: FloorVoxShuttleDown
+  name: tiles-shuttle-floor
+  sprite: /Textures/Theta/ShipEvent/Shuttles/tau_vox.rsi/vox_shuttle_floordown.png
+  baseTurf: PlatingVoxShuttle
+  isSubfloor: false
+  canCrowbar: true
+  footstepSounds:
+    collection: FootstepFloor
+  itemDrop: FloorTileItemShuttleWhite
+  heatCapacity: 10000
+
+- type: tile
+  id: FloorVoxShuttleUp
+  name: tiles-shuttle-floor
+  sprite: /Textures/Theta/ShipEvent/Shuttles/tau_vox.rsi/vox_shuttle_floorup.png
+  baseTurf: PlatingVoxShuttle
+  isSubfloor: false
+  canCrowbar: true
+  footstepSounds:
+    collection: FootstepFloor
+  itemDrop: FloorTileItemShuttleWhite
+  heatCapacity: 10000
+
+- type: tile
+  id: FloorVoxShuttlePlace
+  name: tiles-shuttle-floor
+  sprite: /Textures/Theta/ShipEvent/Shuttles/tau_vox.rsi/vox_shuttle_floorplace.png
+  baseTurf: PlatingVoxShuttle
+  isSubfloor: false
+  canCrowbar: true
+  footstepSounds:
+    collection: FootstepFloor
+  itemDrop: FloorTileItemShuttleWhite
+  heatCapacity: 10000
+
+- type: tile
+  id: PlatingVoxShuttle
+  name: tiles-plating
+  sprite: /Textures/Theta/ShipEvent/Shuttles/tau_vox.rsi/vox_shuttle_floorplating.png
+  baseTurf: Lattice
+  isSubfloor: true
+  footstepSounds:
+    collection: FootstepPlating
+  friction: 0.5
+  heatCapacity: 10000

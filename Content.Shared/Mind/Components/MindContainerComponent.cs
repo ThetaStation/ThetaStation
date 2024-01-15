@@ -1,5 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Shared.Mind.Components
 {
@@ -37,6 +39,12 @@ namespace Content.Shared.Mind.Components
         [DataField("ghostOnShutdown")]
         [Access(typeof(SharedMindSystem), Other = AccessPermissions.ReadWriteExecute)] // FIXME Friends
         public bool GhostOnShutdown { get; set; } = true;
+
+        /// <summary>
+        ///     Ghost type which will be spawned when this component is shutting down. Also requires ghostOnShutdown.
+        /// </summary>
+        [DataField("ghostPrototype", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+        public string GhostPrototype = "MobObserver";
     }
 
     public abstract class MindEvent : EntityEventArgs
@@ -92,6 +100,24 @@ namespace Content.Shared.Mind.Components
         public MindGotAddedEvent(Entity<MindComponent> mind, Entity<MindContainerComponent> container)
             : base(mind, container)
         {
+        }
+    }
+
+    public sealed class MindTransferredMessage : EntityEventArgs
+    {
+        public EntityUid? OldEntity;
+        public EntityUid? NewEntity;
+        public EntityUid MindUid;
+        public MindComponent Mind;
+        public MindContainerComponent? NewComponent;
+
+        public MindTransferredMessage(EntityUid? oldEnt, EntityUid? newEnt, EntityUid mindUid, MindComponent mind, MindContainerComponent? newComp)
+        {
+            NewEntity = newEnt;
+            OldEntity = oldEnt;
+            MindUid = mindUid;
+            Mind = mind;
+            NewComponent = newComp;
         }
     }
 }

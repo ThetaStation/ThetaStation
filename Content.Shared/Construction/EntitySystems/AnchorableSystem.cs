@@ -243,6 +243,9 @@ public sealed partial class AnchorableSystem : EntitySystem
         if (!Resolve(uid, ref anchorable))
             return false;
 
+        if (anchorable.Disabled)
+            return false;
+
         if (!Resolve(usingUid, ref usingTool))
             return false;
 

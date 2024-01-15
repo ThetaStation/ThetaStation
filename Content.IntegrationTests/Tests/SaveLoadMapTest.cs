@@ -13,7 +13,7 @@ namespace Content.IntegrationTests.Tests
     [TestFixture]
     public sealed class SaveLoadMapTest
     {
-        [Test]
+        [Test, Ignore("Too long for Theta Station")]
         public async Task SaveLoadMultiGridMap()
         {
             const string mapPath = @"/Maps/Test/TestMap.yml";

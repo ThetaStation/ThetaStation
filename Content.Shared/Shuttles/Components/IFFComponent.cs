@@ -27,7 +27,7 @@ public sealed partial class IFFComponent : Component
     /// Color for this to show up on IFF.
     /// </summary>
     [ViewVariables(VVAccess.ReadWrite), DataField, AutoNetworkedField]
-    public Color Color = IFFColor;
+    public Color Color = Color.Gold;
 }
 
 [Flags]

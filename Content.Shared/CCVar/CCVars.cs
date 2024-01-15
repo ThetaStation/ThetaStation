@@ -344,6 +344,13 @@ namespace Content.Shared.CCVar
         public static readonly CVarDef<int> GameAlertLevelChangeDelay =
             CVarDef.Create("game.alert_level_change_delay", 30, CVar.SERVERONLY);
 
+
+        /// <summary>
+        /// What is the primary language of the server, with the fallback being en-US.
+        /// </summary>
+        public static readonly CVarDef<string> CultureLocale =
+            CVarDef.Create("game.culture_locale", "en-US", CVar.REPLICATED | CVar.SERVER);
+
         /// <summary>
         /// The time in seconds that the server should wait before restarting the round.
         /// Defaults to 2 minutes.

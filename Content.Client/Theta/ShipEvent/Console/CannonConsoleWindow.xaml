@@ -1,0 +1,28 @@
+﻿<controls:FancyWindow xmlns="https://spacestation14.io"
+                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                      xmlns:radarSetups="clr-namespace:Content.Client.Theta.ModularRadar.RadarSetups"
+                      Title="{Loc 'cannon-console-window-title'}"
+                      SetSize="878 648"
+                      MinSize="788 320">
+    <GridContainer Columns="2"
+                   HorizontalAlignment="Stretch"
+                   Margin="5 5 5 5">
+        <BoxContainer HorizontalAlignment="Left"
+                      MinWidth="256"
+                      MaxWidth="256"
+                      Orientation="Vertical">
+            <BoxContainer Orientation="Vertical">
+                <controls:StripeBack>
+                    <Label Text="{Loc 'shipevent-cannonconsole-ammostatus'}" HorizontalAlignment="Center" />
+                </controls:StripeBack>
+                <BoxContainer Name="AmmoStatusContents" Orientation="Vertical"></BoxContainer>
+            </BoxContainer>
+        </BoxContainer>
+        <radarSetups:CannonModularRadar
+            Name="RadarScreen"
+            MouseFilter="Stop"
+            Margin="4"
+            HorizontalExpand="True"
+            VerticalExpand="True" />
+    </GridContainer>
+</controls:FancyWindow>

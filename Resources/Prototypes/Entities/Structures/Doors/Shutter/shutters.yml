@@ -94,6 +94,9 @@
     messagePerceivedByOthers: comp-window-knock
     interactSuccessSound:
       path: /Audio/Effects/glass_knock.ogg
+  - type: RadarRenderable
+    radarView: genericDoor
+    group: enum.RadarRenderableGroup.Door
 
 - type: entity
   id: ShuttersNormal
