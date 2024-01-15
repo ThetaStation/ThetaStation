@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Serialization;
 
@@ -20,7 +21,7 @@ public abstract class SharedRadarPingsSystem : EntitySystem
 
     protected void PlaySignalSound(Filter hearer, EntityUid from)
     {
-        _audioSystem.Play(PingSound, hearer, from, false);
+        _audioSystem.PlayEntity(PingSound, hearer, from, false);
     }
 }
 

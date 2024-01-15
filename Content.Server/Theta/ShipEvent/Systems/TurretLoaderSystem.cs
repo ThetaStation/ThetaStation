@@ -13,6 +13,8 @@ using Content.Shared.Throwing;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Storage;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
@@ -20,6 +22,7 @@ namespace Content.Server.Theta.ShipEvent.Systems;
 public sealed class TurretLoaderSystem : EntitySystem
 {
     [Dependency] private readonly ItemSlotsSystem _slotSys = default!;
+    [Dependency] private readonly IPrototypeManager _prototypeMan = default!;
     [Dependency] private readonly SharedAudioSystem _audioSys = default!;
 
     public override void Initialize()
@@ -113,7 +116,7 @@ public sealed class TurretLoaderSystem : EntitySystem
             }
 
             loader.AmmoContainer = storage.Container;
-            loader.MaxContainerCapacity = storage.MaxSlots ?? storage.MaxTotalWeight;
+            loader.MaxContainerCapacity = storage.Grid.GetArea();
 
             if (turretContainer != null && storage.Container != null)
             {

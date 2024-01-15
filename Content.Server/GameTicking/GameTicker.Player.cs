@@ -33,7 +33,7 @@ namespace Content.Server.GameTicking
                 if (args.NewStatus != SessionStatus.Disconnected)
                 {
                     mind.Session = session;
-                    _pvsOverride.AddSessionOverride(mindId.Value, session);
+                    _pvsOverride.AddSessionOverride(GetNetEntity(mindId.Value), session);
                 }
 
                 DebugTools.Assert(mind.Session == session);
@@ -69,6 +69,8 @@ namespace Content.Server.GameTicking
                     _chatManager.SendAdminAnnouncement(firstConnection
                         ? Loc.GetString("player-first-join-message", ("name", args.Session.Name))
                         : Loc.GetString("player-join-message", ("name", args.Session.Name)));
+
+                    RaiseNetworkEvent(GetConnectionStatusMsg(), session.Channel);
 
                     if (LobbyEnabled && _roundStartCountdownHasNotStartedYetDueToNoPlayers)
                     {
@@ -124,7 +126,7 @@ namespace Content.Server.GameTicking
                     _chatManager.SendAdminAnnouncement(Loc.GetString("player-leave-message", ("name", args.Session.Name)));
                     if (mind != null)
                     {
-                        _pvsOverride.ClearOverride(mindId!.Value);
+                        _pvsOverride.ClearOverride(GetNetEntity(mindId!.Value));
                         mind.Session = null;
                     }
 
@@ -158,7 +160,7 @@ namespace Content.Server.GameTicking
             }
         }
 
-        private HumanoidCharacterProfile GetPlayerProfile(ICommonSession p)
+        public HumanoidCharacterProfile GetPlayerProfile(ICommonSession p)
         {
             return (HumanoidCharacterProfile) _prefsManager.GetPreferences(p.UserId).SelectedCharacter;
         }

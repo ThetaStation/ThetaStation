@@ -11,6 +11,7 @@ using Content.Server.Theta.Impostor.Systems;
 using Content.Shared.Mind;
 using Content.Shared.Preferences;
 using Content.Shared.Theta.Impostor.Components;
+using Robust.Server.Audio;
 using Robust.Server.GameObjects;
 using Robust.Server.Player;
 using Robust.Shared.Audio;

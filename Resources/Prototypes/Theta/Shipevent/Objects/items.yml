@@ -32,7 +32,9 @@
       sprite: Theta/ShipEvent/Objects/AmmoContainer.rsi
       state: container
     - type: Storage
-      maxTotalWeight: 100
+      maxItemSize: Huge
+      grid:
+      - 0,0,9,9
       quickInsert: true
       areaInsert: true
       whitelist:

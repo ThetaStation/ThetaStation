@@ -10,6 +10,7 @@
     state: icon
   - type: Item
     size: Small
+    storedRotation: -90
   - type: Food
     requiresSpecialDigestion: true
   - type: SolutionContainerManager
@@ -181,6 +182,8 @@
   name: base hardsuit helmet with light
   noSpawn: true
   components:
+  - type: Item
+    heldPrefix: off
   - type: Sprite
     layers:
     - state: icon
