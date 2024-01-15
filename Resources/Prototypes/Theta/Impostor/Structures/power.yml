@@ -26,7 +26,7 @@
         name: impostor-batterySlot
         startingItem: ImpostorPowerCellUnrechargeable
         ejectSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
-        insertSound: /Audio/Weapons/Guns/MagIn/batrifle_magout.ogg
+        insertSound: /Audio/Weapons/Guns/MagOut/batrifle_magout.ogg
         ejectOnBreak: true
         swap: true
         whitelist:
@@ -48,7 +48,7 @@
       batterySlot:
         name: impostor-batterySlot
         ejectSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
-        insertSound: /Audio/Weapons/Guns/MagIn/batrifle_magout.ogg
+        insertSound: /Audio/Weapons/Guns/MagOut/batrifle_magout.ogg
         ejectOnBreak: true
         swap: true
         whitelist:

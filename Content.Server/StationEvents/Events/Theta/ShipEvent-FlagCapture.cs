@@ -50,6 +50,12 @@ public sealed class SEFCRule : StationEventSystem<SEFCRuleComponent>
     protected override void Started(EntityUid uid, SEFCRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
         base.Started(uid, component, gameRule, args);
+
+        if (!_shipSys.RuleSelected)
+        {
+            Log.Warning("Tried to start SEFC without shipevent, exiting.");
+            return;
+        }
         
         Box2 fieldBounds = _shipSys.GetPlayAreaBounds();
         _debrisSys.ClearArea(_shipSys.TargetMap, (Box2i)new Box2(fieldBounds.BottomLeft, fieldBounds.TopRight).Scale(0.1f));
@@ -88,6 +94,9 @@ public sealed class SEFCRule : StationEventSystem<SEFCRuleComponent>
     
     private void OnFlagShutdown(EntityUid uid, SEFCFlagComponent flag, ComponentShutdown args)
     {
+        if (!_shipSys.RuleSelected) //it shouldn't get this far without SE rule selected anyway, this is just for the unit tests
+            return;
+        
         ClearCenterOfTheField();
         EntityUid newFlag = Spawn(FlagPrototypeId, new MapCoordinates(FieldBounds.Center, _shipSys.TargetMap));
         Comp<SEFCFlagComponent>(newFlag).LastTeam = flag.LastTeam;
