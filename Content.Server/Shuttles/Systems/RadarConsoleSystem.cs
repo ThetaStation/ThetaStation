@@ -172,9 +172,6 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
                 if (!EntityManager.TryGetComponent(cprov.ProviderUid, out StorageComponent? storage))
                     return (0, 0);
 
-               // var maxSize = 4;
-               // if (storage.MaxItemSize != null)
-               //     maxSize = _prototypeMan.Index(storage.MaxItemSize.Value).Weight;
                 maxCapacity = storage.Grid.GetArea();
                 usedCapacity = _storageSystem.GetCumulativeItemAreas(cprov.ProviderUid!.Value);
                 break;
