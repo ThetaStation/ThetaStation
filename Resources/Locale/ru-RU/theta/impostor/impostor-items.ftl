@@ -13,3 +13,8 @@ impostor-magicbullet-tryload = { $name } заряжает в револьвер 
 ent-ImpostorMagicRevolver = револьвер капитана
     .desc = Матеба капитана, врученная ему за доблестную службу НТ.
     .suffix = Impostor
+    
+ent-ImpostorPowerCellUnrechargeable = одноразовая батарейка
+    .desc = Дешёвая, неперезаряжаемая батарейка. Знала бы НТ, как сильно она попортит кровь инженерам своей экономией...
+    .suffix = Impostor
+impostor-batteryslot = батарейка

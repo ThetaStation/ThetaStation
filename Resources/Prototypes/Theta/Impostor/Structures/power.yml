@@ -1,0 +1,76 @@
+- type: entity
+  id: ImpostorPowerCellUnrechargeable
+  parent: BasePowerCell
+  suffix: Impostor
+  components:
+    - type: Sprite
+      layers:
+        - map: [ "enum.PowerCellVisualLayers.Base" ]
+          state: medium
+        - map: [ "enum.PowerCellVisualLayers.Unshaded" ]
+          state: o2
+          shader: unshaded
+    - type: Battery
+      maxCharge: 3000000 #~15 mins of work with 3kW load
+      startingCharge: 3000000
+      rechargeable: false
+      
+- type: entity
+  id: ImpostorAPC
+  parent: BaseAPC
+  suffix: Impostor
+  components:
+    - type: BatteryContainer
+      checkPanel: true
+      batterySlot:
+        name: impostor-batterySlot
+        startingItem: ImpostorPowerCellUnrechargeable
+        ejectSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
+        insertSound: /Audio/Weapons/Guns/MagOut/batrifle_magout.ogg
+        ejectOnBreak: true
+        swap: true
+        whitelist:
+          components:
+            - Battery
+    - type: ItemSlots
+    - type: ContainerContainer
+      containers:
+        batterySlot: !type:ContainerSlot
+    - type: Battery
+      
+- type: entity
+  id: ImpostorAPCEmpty
+  parent: ImpostorAPC
+  suffix: Impostor, Empty
+  components:
+    - type: BatteryContainer
+      checkPanel: true
+      batterySlot:
+        name: impostor-batterySlot
+        ejectSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
+        insertSound: /Audio/Weapons/Guns/MagOut/batrifle_magout.ogg
+        ejectOnBreak: true
+        swap: true
+        whitelist:
+          components:
+            - Battery
+      
+- type: entity
+  id: ImpostorSolarPanelSpawner
+  name: solar panel spawner
+  suffix: Impostor
+  parent: MarkerBase
+  components:
+    - type: Sprite
+      layers:
+        - state: red
+        - sprite: Structures/Power/Generation/solar_panel.rsi
+          state: normal
+    - type: RandomSpawner
+      rarePrototypes:
+        - SolarPanel
+      rareChance: 0.2
+      prototypes:
+        - SolarPanelBroken
+      chance: 1
+      offset: 0.0

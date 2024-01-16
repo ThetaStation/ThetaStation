@@ -42,7 +42,7 @@ public sealed class ApcVisualizerSystem : VisualizerSystem<ApcVisualsComponent>
             {
                 for(var i = 0; i < comp.ChannelIndicators; ++i)
                 {
-                    var layer = ((byte)channelIndicatorOverlayStart + i);
+                    var layer = (byte)channelIndicatorOverlayStart + i;
                     sbyte channelState = (sbyte)((channelStates >> (i << (sbyte)ApcChannelState.LogWidth)) & (sbyte)ApcChannelState.All);
                     args.Sprite.LayerSetState(layer, $"{comp.ChannelPrefix}{i}-{comp.ChannelSuffixes[channelState]}");
                     args.Sprite.LayerSetVisible(layer, true);
@@ -56,16 +56,16 @@ public sealed class ApcVisualizerSystem : VisualizerSystem<ApcVisualsComponent>
         }
         else
         {
-            /// Overrides all of the lock and channel indicators.
+            // Overrides all of the lock and channel indicators.
             args.Sprite.LayerSetState(ApcVisualLayers.ChargeState, comp.EmaggedScreenState);
             for(var i = 0; i < comp.LockIndicators; ++i)
             {
-                var layer = ((byte)lockIndicatorOverlayStart + i);
+                var layer = (byte)lockIndicatorOverlayStart + i;
                 args.Sprite.LayerSetVisible(layer, false);
             }
             for(var i = 0; i < comp.ChannelIndicators; ++i)
             {
-                var layer = ((byte)channelIndicatorOverlayStart + i);
+                var layer = (byte)channelIndicatorOverlayStart + i;
                 args.Sprite.LayerSetVisible(layer, false);
             }
 

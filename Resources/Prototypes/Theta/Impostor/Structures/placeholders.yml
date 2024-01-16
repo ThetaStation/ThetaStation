@@ -1,0 +1,28 @@
+#for stuff which does not have mechanics yet, but help to fill the space
+
+- type: entity
+  id: ImpostorServer
+  suffix: Impostor, Placeholder
+  parent: BaseStructure
+  components:
+    - type: Sprite
+      sprite: Structures/Machines/server.rsi
+      state: server
+
+- type: entity
+  id: ImpostorWashingMachine
+  suffix: Impostor, Placeholder
+  parent: BaseStructure
+  components:
+    - type: Sprite
+      sprite: Theta/Impostor/Structures/washer.rsi
+      state: washer
+      
+- type: entity
+  id: ImpostorShower
+  suffix: Impostor, Placeholder
+  parent: BaseStructure
+  components:
+    - type: Sprite
+      sprite: Theta/Impostor/Structures/shower.rsi
+      state: shower

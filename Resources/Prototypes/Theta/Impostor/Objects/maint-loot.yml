@@ -1,0 +1,38 @@
+- type: entity
+  id: ImpostorMainLootSpawner
+  name: maint loot
+  suffix: Impostor
+  parent: MarkerBase
+  components:
+    - type: Sprite
+      layers:
+        - state: red
+    - type: RandomSpawner
+      rarePrototypes:
+        - BaseBallBat
+        - CombatKnife
+        - Spear
+        - ImpostorPowerCellUnrechargeable
+        - SheetSteel10
+        - SheetGlass10
+        - IngotGold
+        - ClothingHandsGlovesColorYellow
+        - DrinkVodkaBottleFull
+        - DrinkBeerBottleFull
+      rareChance: 0.4
+      prototypes:
+        - FlashlightLantern
+        - RadioHandheld
+        - Lighter
+        - Matchbox
+        - Crowbar
+        - Shovel
+        - Welder
+        - Bola
+        - PartRodMetal1
+        - ShardGlass
+        - ClothingHandsGlovesColorYellowBudget
+        - TrashBag
+        - RandomSpawner #trash
+      chance: 1
+      offset: 0.0

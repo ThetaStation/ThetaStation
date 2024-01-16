@@ -62,4 +62,4 @@
     - type: ImpostorLandmark
     - type: Sprite
       sprite: Markers/cross.rsi
-      state: red
+      state: blue

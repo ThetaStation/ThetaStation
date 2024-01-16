@@ -13,3 +13,8 @@ impostor-magicbullet-tryload = { $name } is loading a silver bullet into the rev
 ent-ImpostorMagicRevolver = captain's revolver
     .desc = Captain's mateba, given to him for his excellent service for NT.
     .suffix = Impostor
+    
+ent-ImpostorPowerCellUnrechargeable = single use battery
+    .desc = Cheap, unrechargeable battery. If only NT knew how much suffering it inflicted upon engineers by cutting corners...
+    .suffix = Impostor
+impostor-batteryslot = battery
