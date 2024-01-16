@@ -8,12 +8,15 @@ using Content.Server.Objectives;
 using Content.Server.Roles;
 using Content.Server.Roles.Jobs;
 using Content.Server.Shuttles.Components;
+using Content.Server.Spawners.EntitySystems;
+using Content.Server.Station.Systems;
 using Content.Server.Storage.Components;
 using Content.Server.Storage.EntitySystems;
 using Content.Server.Theta.Impostor.Components;
 using Content.Server.Theta.Impostor.Systems;
 using Content.Shared.Mind;
 using Content.Shared.Preferences;
+using Content.Shared.Roles;
 using Content.Shared.Theta.Impostor.Components;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
@@ -56,10 +59,16 @@ public sealed partial class ImpostorRuleSystem : StationEventSystem<ImpostorRule
 
     private const string ImpostorAntagId = "Impostor";
 
+    private EntityQueryEnumerator<ImpostorCryoPodComponent, EntityStorageComponent> _podQuery;
+
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<RulePlayerSpawningEvent>(OnBeforeSpawn);
+        SubscribeLocalEvent((PostGameMapLoad ev) =>
+        {
+            _podQuery = EntityManager.EntityQueryEnumerator<ImpostorCryoPodComponent, EntityStorageComponent>();
+        });
+        SubscribeLocalEvent<PlayerSpawningEvent>(OnSpawn, before: new[]{typeof(SpawnPointSystem)});
         SubscribeLocalEvent<RulePlayerJobsAssignedEvent>(OnAfterSpawn);
         SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEnd);
     }
@@ -94,29 +103,24 @@ public sealed partial class ImpostorRuleSystem : StationEventSystem<ImpostorRule
         _specEvacSys.LaunchDelay = component.EvacLaunchDelay;
     }
 
-    private void OnBeforeSpawn(RulePlayerSpawningEvent ev)
+    private void OnSpawn(PlayerSpawningEvent ev)
     {
         ImpostorRuleComponent? rule = EntityQuery<ImpostorRuleComponent>().FirstOrDefault();
-        if (rule == null)
+        if (rule == null || ev.Job?.Prototype == null || ev.HumanoidCharacterProfile == null)
             return;
 
-        var pods = EntityQueryEnumerator<ImpostorCryoPodComponent, EntityStorageComponent>();
-        
-        foreach (ICommonSession session in ev.PlayerPool)
+        if (_podQuery.MoveNext(out EntityUid uid, out _, out EntityStorageComponent? storage))
         {
-            if (pods.MoveNext(out EntityUid uid, out _, out EntityStorageComponent? storage))
+            EntityUid bodyUid = SpawnInContainerOrDrop("MobHuman", uid, storage.Contents.ID);
+            JobPrototype job = _protMan.Index<JobPrototype>(ev.Job.Prototype);
+            StartingGearPrototype gear = _protMan.Index<StartingGearPrototype>(job.StartingGear!);
+            foreach (EntProtoId pid in gear.Equipment.Values)
             {
-                HumanoidCharacterProfile profile = ev.Profiles[session.UserId];
-                EntityUid bodyUid = SpawnInContainerOrDrop("MobHuman", uid, storage.Contents.ID);
-                EntityUid mindUid = _mindSys.CreateMind(session.UserId);
-                _appearanceSys.LoadProfile(bodyUid, profile);
-                _mindSys.SetUserId(mindUid, session.UserId);
-                _mindSys.TransferTo(mindUid, bodyUid);
-                _ticker.PlayerJoinGame(session, true);
+                SpawnInContainerOrDrop(pid, uid, storage.Contents.ID);
             }
+            _appearanceSys.LoadProfile(bodyUid, ev.HumanoidCharacterProfile);
+            ev.SpawnResult = bodyUid;
         }
-        
-        ev.PlayerPool.Clear();
     }
 
     private void OnAfterSpawn(RulePlayerJobsAssignedEvent ev)
