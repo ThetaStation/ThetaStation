@@ -65,10 +65,7 @@ namespace Content.Server.Entry
             factory.DoAutoRegistrations();
             factory.IgnoreMissingComponents("Visuals");
 
-            foreach (var ignoreName in IgnoredComponents.List)
-            {
-                factory.RegisterIgnore(ignoreName);
-            }
+            factory.RegisterIgnore(IgnoredComponents.List);
 
             prototypes.RegisterIgnore("parallax");
             prototypes.RegisterIgnore("guideEntry");
@@ -137,7 +134,7 @@ namespace Content.Server.Entry
                 EntityJsonGenerator.PublishJson(file);
                 file.Flush();
                 file = resourceManager.UserData.OpenWriteText(resPath.WithName("mealrecipes_" + dest));
-                MicrowaveMealRecipeJsonGenerator.PublishJson(file);
+                MealsRecipesJsonGenerator.PublishJson(file);
                 file.Flush();
                 // Corvax-Wiki-End
                 IoCManager.Resolve<IBaseServer>().Shutdown("Data generation done");

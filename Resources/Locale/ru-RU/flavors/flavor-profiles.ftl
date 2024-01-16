@@ -44,6 +44,9 @@ flavor-base-sharp = резко
 flavor-base-syrupy = сиропово
 flavor-base-spaceshroom = таинственно
 flavor-base-clean = чисто
+flavor-base-alkaline = щёлочно
+flavor-base-holy = свято
+flavor-base-horrible = horrible
 # lmao
 flavor-base-terrible = ужасно
 
@@ -89,6 +92,7 @@ flavor-complex-dough = как тесто
 flavor-complex-sweet-dough = как сладкое тесто
 flavor-complex-tofu = как тофу
 flavor-complex-miso = как мисо
+flavor-complex-lemoon = как лавр
 flavor-complex-muffin = как маффин
 flavor-complex-peas = как горох
 flavor-complex-pineapple = как ананас
@@ -188,6 +192,7 @@ flavor-complex-ice = как лёд
 
 ## Cocktails
 
+flavor-complex-mopwata = как застоявшаяся грязная вода
 flavor-complex-long-island = подозрительно похож на холодный чай
 flavor-complex-three-mile-island = как чай, заваренный в ядерных отходах
 flavor-complex-whiskey-cola = как газированная патока

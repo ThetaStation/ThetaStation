@@ -17,6 +17,7 @@ using Robust.Shared.Physics;
 using System.Linq;
 using System.Numerics;
 using Content.Server.Storage.EntitySystems;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.Shuttles.Systems;
 
@@ -28,6 +29,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
     [Dependency] private readonly RadarRenderableSystem _radarRenderable = default!;
     [Dependency] private readonly TransformSystem _transformSystem = default!;
     [Dependency] private readonly StorageSystem _storageSystem = default!;
+    [Dependency] private readonly IPrototypeManager _prototypeMan = default!;
 
     private const string OutputPortName = "CannonConsoleSender";
 
@@ -138,10 +140,12 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 
     public List<EntityUid>? GetControlledCannons(EntityUid uid)
     {
+        //todo: we should store info about controlled cannons in the console component itself, instead of using THIS
         if (TryComp<DeviceLinkSourceComponent>(uid, out var linkSource))
         {
-            //todo: we should store info about controlled cannons in the console component itself, instead of using THIS
-            if(linkSource.Outputs.Keys.Contains(OutputPortName)) //using Keys.Contains() instead of ContainsKeys() because of retarded access restrictions
+            //using this shit instead of ContainsKeys() or Keys.Contains() because of retarded RT access restrictions
+            var keys = linkSource.Outputs.Select(tuple => (tuple.Key)).ToList();
+            if(keys.Contains(OutputPortName))
                 return linkSource.Outputs[OutputPortName].ToList();
         }
 
@@ -168,8 +172,8 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
                 if (!EntityManager.TryGetComponent(cprov.ProviderUid, out StorageComponent? storage))
                     return (0, 0);
 
-                maxCapacity = storage.MaxSlots ?? storage.MaxTotalWeight;
-                usedCapacity = _storageSystem.GetCumulativeItemSizes(cprov.ProviderUid.Value, storage);
+                maxCapacity = storage.Grid.GetArea();
+                usedCapacity = _storageSystem.GetCumulativeItemAreas(cprov.ProviderUid!.Value);
                 break;
             }
             default:

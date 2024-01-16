@@ -13,6 +13,7 @@ using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Objectives.Components;
 using Content.Shared.Theta.Impostor.Components;
+using Robust.Server.Audio;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Physics.Systems;
@@ -25,7 +26,7 @@ namespace Content.Server.Theta.Impostor.Systems;
 public sealed class ImpostorEvacSystem : EntitySystem
 {
     public bool RuleSelected;
-    
+
     /// <summary>
     /// True if evacuation is happening right now
     /// </summary>
@@ -78,7 +79,7 @@ public sealed class ImpostorEvacSystem : EntitySystem
     {
         if (!RuleSelected)
             return;
-        
+
         if (args.NewMobState != MobState.Dead)
             return;
 
@@ -86,7 +87,7 @@ public sealed class ImpostorEvacSystem : EntitySystem
         {
             CurrentDeathCount++;
             _audioSys.PlayGlobal("/Audio/Theta/Impostor/flatline.ogg", Filter.Broadcast(), true);
-            
+
             if (HasComp<ImpostorRoleComponent>(component.Mind))
             {
                 if (EvacActive && !evacTimerToken.IsCancellationRequested)
@@ -119,7 +120,7 @@ public sealed class ImpostorEvacSystem : EntitySystem
             {
                 if (!TryComp(form.GridUid, out ShuttleComponent? shuttle))
                     return;
-                
+
                 EntityQueryEnumerator<DockingComponent> dockQuery = EntityQueryEnumerator<DockingComponent>();
                 while(dockQuery.MoveNext(out EntityUid uid, out DockingComponent? dock))
                 {
@@ -127,7 +128,7 @@ public sealed class ImpostorEvacSystem : EntitySystem
                         continue;
                     _dockSys.Undock(uid, dock);
                 }
-                
+
                 //assuming all the thrusters are located on the same side of the pod
                 int index = 0;
                 int thrust = 0;
@@ -152,13 +153,13 @@ public sealed class ImpostorEvacSystem : EntitySystem
     {
         EvacActive = false;
         EvacFinished = true;
-        
+
         EntityQueryEnumerator<NukeComponent> nukeQuery = EntityQueryEnumerator<NukeComponent>();
         while (nukeQuery.MoveNext(out EntityUid uid, out NukeComponent? nuke))
         {
             _nukeSys.ActivateBomb(uid, nuke);
         }
-        
+
         _roundEndSys.EndRound();
     }
 
@@ -166,7 +167,7 @@ public sealed class ImpostorEvacSystem : EntitySystem
     {
         if (!RuleSelected)
             return;
-        
+
         Announce(Loc.GetString("impostor-announcement-endevac"));
 
         LaunchPods();
@@ -175,14 +176,14 @@ public sealed class ImpostorEvacSystem : EntitySystem
 
     private void Announce(string message, string? sound = null)
     {
-        _chatSys.DispatchGlobalAnnouncement(message, Loc.GetString("impostor-announcement-sender"), sound != null, 
+        _chatSys.DispatchGlobalAnnouncement(message, Loc.GetString("impostor-announcement-sender"), sound != null,
             sound != null ? new SoundPathSpecifier(sound) : null, Color.DarkRed);
     }
 
     private void OnObjectiveProgressRequest(EntityUid uid, ImpostorEscapeConditionComponent component, ref ObjectiveGetProgressEvent args)
     {
         args.Progress = 0;
-        
+
         if (args.Mind.OwnedEntity == null || args.Mind.TimeOfDeath != null)
             return;
 
@@ -195,7 +196,7 @@ public sealed class ImpostorEvacSystem : EntitySystem
             }
         }
     }
-    
+
     private void OnRelayUse(EntityUid uid, ImpostorCommRelayComponent relay, UseInHandEvent args)
     {
         if (EvacFinished)
@@ -204,9 +205,9 @@ public sealed class ImpostorEvacSystem : EntitySystem
         EvacActive = false;
         EvacFinished = true;
         evacTimerTokenSource.Cancel(); //should get called if impostor gets killed anyway, but just in case
-        
+
         Announce(Loc.GetString("impostor-announcement-relay"), "/Audio/Announcements/announce.ogg");
-        
+
         _roundEndSys.EndRound();
     }
 }

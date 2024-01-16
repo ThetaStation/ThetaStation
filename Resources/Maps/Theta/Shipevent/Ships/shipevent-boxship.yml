@@ -110,50 +110,36 @@ entities:
     - pos: 0.5,0.5
       parent: 1
       type: Transform
-    - enabled: True
-      type: AmbientSound
   - uid: 4
     components:
     - pos: 1.5,0.5
       parent: 1
       type: Transform
-    - enabled: True
-      type: AmbientSound
   - uid: 5
     components:
     - pos: 2.5,0.5
       parent: 1
       type: Transform
-    - enabled: True
-      type: AmbientSound
   - uid: 6
     components:
     - pos: 2.5,1.5
       parent: 1
       type: Transform
-    - enabled: True
-      type: AmbientSound
   - uid: 7
     components:
     - pos: 2.5,2.5
       parent: 1
       type: Transform
-    - enabled: True
-      type: AmbientSound
   - uid: 8
     components:
     - pos: 1.5,2.5
       parent: 1
       type: Transform
-    - enabled: True
-      type: AmbientSound
   - uid: 9
     components:
     - pos: 0.5,1.5
       parent: 1
       type: Transform
-    - enabled: True
-      type: AmbientSound
 - proto: CableHV
   entities:
   - uid: 10
@@ -161,15 +147,11 @@ entities:
     - pos: 0.5,2.5
       parent: 1
       type: Transform
-    - enabled: True
-      type: AmbientSound
   - uid: 11
     components:
     - pos: 0.5,1.5
       parent: 1
       type: Transform
-    - enabled: True
-      type: AmbientSound
 - proto: CableMV
   entities:
   - uid: 12
@@ -177,36 +159,26 @@ entities:
     - pos: 1.5,1.5
       parent: 1
       type: Transform
-    - enabled: True
-      type: AmbientSound
   - uid: 13
     components:
     - pos: 0.5,1.5
       parent: 1
       type: Transform
-    - enabled: True
-      type: AmbientSound
   - uid: 14
     components:
     - pos: 0.5,0.5
       parent: 1
       type: Transform
-    - enabled: True
-      type: AmbientSound
   - uid: 15
     components:
     - pos: 1.5,2.5
       parent: 1
       type: Transform
-    - enabled: True
-      type: AmbientSound
   - uid: 16
     components:
     - pos: 1.5,3.5
       parent: 1
       type: Transform
-    - enabled: True
-      type: AmbientSound
 - proto: CannonComputerShipEvent
   entities:
   - uid: 17
@@ -297,8 +269,6 @@ entities:
     - pos: 1.5,2.5
       parent: 1
       type: Transform
-    - enabled: False
-      type: AmbientSound
 - proto: ShipEventPlasmaCannon
   entities:
   - uid: 29
