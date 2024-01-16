@@ -11,8 +11,8 @@
           state: o2
           shader: unshaded
     - type: Battery
-      maxCharge: 1000000 #~15 mins of work with 1kW load
-      startingCharge: 1000000
+      maxCharge: 3000000 #~15 mins of work with 3kW load
+      startingCharge: 3000000
       rechargeable: false
       
 - type: entity
