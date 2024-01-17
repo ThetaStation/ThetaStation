@@ -8,22 +8,15 @@ namespace Content.Shared.Theta.ShipEvent;
 public sealed partial class CannonComponent : Component
 {
     /// <summary>
-    /// TurretLoader bound to this turret
-    /// </summary>
-    public TurretLoaderComponent? BoundLoader;
-
-    /// <summary>
     /// The TurretLoader's entity.
     /// </summary>
     [AutoNetworkedField]
-    public EntityUid? BoundLoaderEntity;
-
-    public AmmoProviderComponent? AmmoProvider;
+    public EntityUid? BoundLoaderUid;
 
     /// <summary>
     /// Ammo prototypes which this turret can use
     /// </summary>
-    [DataField("ammoPrototypes"), ViewVariables(VVAccess.ReadWrite)] 
+    [DataField("ammoPrototypes"), ViewVariables(VVAccess.ReadWrite)]
     public List<string> AmmoPrototypes = new();
 
     /// <summary>

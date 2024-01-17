@@ -27,7 +27,6 @@ public abstract class SharedCannonSystem : EntitySystem
         SubscribeAllEvent<RequestCannonShootEvent>(OnShootRequest);
         SubscribeAllEvent<RequestStopCannonShootEvent>(OnStopShootRequest);
         SubscribeLocalEvent<CannonComponent, AnchorStateChangedEvent>(OnAnchorChanged);
-        SubscribeLocalEvent<CannonComponent, ComponentInit>(OnInit);
         SubscribeLocalEvent<CannonComponent, ChangeDirectionAttemptEvent>(OnAttemptRotate);
 
         SubscribeLocalEvent<CannonComponent, TakeAmmoEvent>(OnAmmoRequest);
@@ -36,16 +35,17 @@ public abstract class SharedCannonSystem : EntitySystem
 
     private void OnAmmoRequest(EntityUid uid, CannonComponent cannon, TakeAmmoEvent ev)
     {
-        if (cannon.BoundLoader == null)
+        if (!TryComp<TurretLoaderComponent>(cannon.BoundLoaderUid, out var loader))
             return;
 
-        if (TryComp<TurretAmmoContainerComponent>(cannon.BoundLoader.ContainerSlot?.Item, out var ammoContainer))
+        if (TryComp<TurretAmmoContainerComponent>(loader.ContainerSlot?.Item, out var ammoContainer))
         {
             for (int i = 0; i < ev.Shots && i < ammoContainer.AmmoCount; i++)
             {
                 EntityUid roundUid = Spawn(ammoContainer.AmmoPrototype);
                 ev.Ammo.Add((roundUid, _gunSystem.EnsureShootable(roundUid)));
             }
+
             ammoContainer.AmmoCount -= ev.Shots;
             if (ammoContainer.AmmoCount < 0)
                 ammoContainer.AmmoCount = 0;
@@ -54,11 +54,13 @@ public abstract class SharedCannonSystem : EntitySystem
 
     private void OnAmmoCount(EntityUid uid, CannonComponent cannon, GetAmmoCountEvent ev)
     {
-        if (cannon.BoundLoader == null)
+        if (!TryComp<TurretLoaderComponent>(cannon.BoundLoaderUid, out var loader))
             return;
 
-        if (TryComp<TurretAmmoContainerComponent>(cannon.BoundLoader.ContainerSlot?.Item, out var ammoContainer))
+        if (TryComp<TurretAmmoContainerComponent>(loader.ContainerSlot?.Item, out var ammoContainer))
         {
+            if(_netMan.IsClient)
+                Log.Info($"AC: {ammoContainer.AmmoCount}, {ammoContainer.MaxAmmoCount}, {(ammoContainer.AmmoCount > 0 ? "NZ" : " ")}");
             ev.Capacity = ammoContainer.MaxAmmoCount;
             ev.Count = ammoContainer.AmmoCount;
         }
@@ -68,18 +70,6 @@ public abstract class SharedCannonSystem : EntitySystem
     {
         if(!component.Rotatable)
             args.Cancel();
-    }
-
-    private void OnInit(EntityUid uid, CannonComponent cannon, ComponentInit args)
-    {
-        foreach (IComponent comp in EntityManager.GetComponents(uid))
-        {
-            if (comp is AmmoProviderComponent provider)
-            {
-                cannon.AmmoProvider = provider;
-                break;
-            }
-        }
     }
 
     private void OnShootRequest(RequestCannonShootEvent ev, EntitySessionEventArgs args)

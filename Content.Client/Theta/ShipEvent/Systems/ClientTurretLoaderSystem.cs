@@ -43,7 +43,7 @@ public sealed class ClientTurretLoaderSystem : EntitySystem
         if (args.Current is not TurretLoaderState loaderState)
             return;
 
-        loader.BoundTurret = GetEntity(loaderState.BoundTurret);
+        loader.BoundTurretUid = GetEntity(loaderState.BoundTurret);
 
         if (loaderState.ContainerSlotID != null)
         {
