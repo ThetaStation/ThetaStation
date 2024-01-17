@@ -44,7 +44,6 @@ public sealed class ClientTurretLoaderSystem : EntitySystem
             return;
 
         loader.BoundTurret = GetEntity(loaderState.BoundTurret);
-        loader.MaxContainerCapacity = loaderState.MaxContainerCapacity;
 
         if (loaderState.ContainerSlotID != null)
         {
@@ -52,22 +51,10 @@ public sealed class ClientTurretLoaderSystem : EntitySystem
                 loader.ContainerSlot = slot;
         }
 
-        if (EntityManager.TryGetComponent<ContainerManagerComponent>(uid, out var contMan) &&
-            loaderState.ContainerID != null)
-        {
-            var ammoContainer = loader.ContainerSlot?.Item;
-
-            if (ammoContainer == null)
-                return;
-
-            if (_contSys.TryGetContainer((EntityUid)ammoContainer, loaderState.ContainerID, out var cont))
-                loader.AmmoContainer = (Container)cont;
-        }
-
         if (!EntityManager.TryGetComponent(uid, out SpriteComponent? sprite))
             return;
 
-        bool loaded = loader.AmmoContainer != null && loader.ContainerSlot?.Item != null; //this may seem redundant, but ammo container isn't always updated correctly
+        bool loaded = TryComp<TurretAmmoContainerComponent>(loader.ContainerSlot?.Item, out _);
         sprite.LayerSetState(0, loaded ? "loader-loaded" : "loader");
     }
 }

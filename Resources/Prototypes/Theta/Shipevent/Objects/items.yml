@@ -13,38 +13,16 @@
         - ShipEventUplink
 
 # Ammo containers
-- type: Tag
-  id: TurretAmmoContainer
 
 - type: entity
   id: TurretAmmoContainer
   name: ammo container
   parent: BaseItem
+  abstract: true
   components:
-    - type: AmmoContainer
-    - type: Tag
-      tags:
-      - TurretAmmoContainer
     - type: Item
       size: Ginormous
     - type: Sprite
       drawdepth: Items
       sprite: Theta/ShipEvent/Objects/AmmoContainer.rsi
       state: container
-    - type: Storage
-      maxItemSize: Huge
-      grid:
-      - 0,0,9,9
-      quickInsert: true
-      areaInsert: true
-      whitelist:
-        components:
-        - CartridgeAmmo
-    - type: ContainerContainer
-      containers:
-        storagebase: !type:Container
-    - type: Dumpable
-    - type: UserInterface
-      interfaces:
-      - key: enum.StorageUiKey.Key
-        type: StorageBoundUserInterface

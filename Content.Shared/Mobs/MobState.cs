@@ -32,7 +32,7 @@ public record struct MobStateChangedEvent(EntityUid Target, MobStateComponent Co
 
 public static class A
 {
-    //^.^
+    //^.^ todo: remove this
 }
 
 //This is dumb and I hate it but I don't feel like refactoring this garbage

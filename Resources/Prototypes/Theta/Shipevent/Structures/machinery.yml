@@ -183,7 +183,7 @@
           ejectSound: /Audio/Weapons/Guns/MagOut/batrifle_magout.ogg
           priority: 2
           whitelist:
-            tags:
+            components:
             - TurretAmmoContainer
     - type: ContainerContainer
       containers:

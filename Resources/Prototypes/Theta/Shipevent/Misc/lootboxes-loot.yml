@@ -57,10 +57,9 @@
       drawdepth: Items
       sprite: Theta/ShipEvent/Objects/AmmoContainer.rsi
       state: container-he
-    - type: StorageFill
-      contents:
-        - id: CartridgeFlakHE
-          amount: 50
+    - type: TurretAmmoContainer
+      ammoPrototype: CartridgeFlakHE
+      ammoCount: 100
 
 # Ebic ammo - EMP
 - type: entity
@@ -102,10 +101,9 @@
       drawdepth: Items
       sprite: Theta/ShipEvent/Objects/AmmoContainer.rsi
       state: container-emp
-    - type: StorageFill
-      contents:
-        - id: CartridgeFlakEMP
-          amount: 50
+    - type: TurretAmmoContainer
+      ammoPrototype: CartridgeFlakEMP
+      ammoCount: 100
 
 # Misc
 - type: entity
