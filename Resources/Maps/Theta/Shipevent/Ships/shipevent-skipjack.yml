@@ -1409,7 +1409,7 @@ entities:
     - provider: 237
       container: storagebase
       type: ContainerAmmoProvider
-- proto: ShipEventTeleporter
+- proto: ShipPickupBeacon
   entities:
   - uid: 176
     components:

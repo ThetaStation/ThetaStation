@@ -874,7 +874,7 @@ entities:
     - links:
       - 61
       type: DeviceLinkSink
-- proto: ShipEventTeleporter
+- proto: ShipPickupBeacon
   entities:
   - uid: 126
     components:

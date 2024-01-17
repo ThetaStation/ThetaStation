@@ -105,6 +105,9 @@ public abstract class SharedEmitSoundSystem : EntitySystem
 
     protected void TryEmitSound(EntityUid uid, BaseEmitSoundComponent component, EntityUid? user=null, bool predict=true)
     {
+        if (TerminatingOrDeleted(uid))
+            return;
+
         if (component.Sound == null)
             return;
 

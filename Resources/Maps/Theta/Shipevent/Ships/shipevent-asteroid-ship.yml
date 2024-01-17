@@ -1264,7 +1264,7 @@ entities:
     - provider: 253
       container: storagebase
       type: ContainerAmmoProvider
-- proto: ShipEventTeleporter
+- proto: ShipPickupBeacon
   entities:
   - uid: 167
     components:

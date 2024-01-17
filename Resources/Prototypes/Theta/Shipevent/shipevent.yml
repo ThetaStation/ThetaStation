@@ -54,19 +54,19 @@
       pickupsPositions: 25
       pickupsSpawnInterval: 60 # in seconds
       pickupMinDistance: 100
-      pickupsPrototypes: ShipEventPickupsPrototypes
+      pickupPrototype: ShipEventPickupPrototype
 
       #stealth timers
       stealthDuration: 60000
       stealthCooldown: 180000
 
 - type: weightedRandomEntity
-  id: ShipEventPickupsPrototypes
+  id: ShipEventPickupPrototype
   weights:
-    ShuttlePickupAmmo: 1.0
-    ShuttlePickupHeal: 1.0
-    ShuttlePickupPower: 0.4
-    
+    ShipPickupAmmo: 1.0
+    ShipPickupHeal: 1.0
+    ShipPickupPower: 0.4
+
 - type: antag
   id: ShipTester
   name: shipevent-role-name

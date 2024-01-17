@@ -1,8 +1,7 @@
 ﻿- type: entity
-  id: ShipEventTeleporter
+  id: ShipPickupBeacon
   parent: [ BaseMachinePowered, ConstructibleMachine ]
-  name: ship fast teleporter
-  description: Blueshpess...
+  name: pickup beacon
   components:
     - type: InteractionOutline
     - type: Physics
@@ -36,6 +35,6 @@
       powerLoad: 1000
     - type: Appearance
     - type: CollideOnAnchor
-    - type: TeleportationBeacon
-      teleportId: ShipEventLoot
+    - type: ShipPickupBeacon
+      id: loot
 
