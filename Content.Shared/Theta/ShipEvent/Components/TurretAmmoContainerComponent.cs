@@ -10,9 +10,9 @@ public sealed partial class TurretAmmoContainerComponent : Component
     [DataField("ammoPrototype", required: true, customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
     public string AmmoPrototype;
 
-    [DataField("ammoCount", required: true)]
+    [DataField("maxAmmoCount", required: true)]
     public int MaxAmmoCount;
 
-    [AutoNetworkedField]
+    [DataField("ammoCount"), AutoNetworkedField]
     public int AmmoCount;
 }

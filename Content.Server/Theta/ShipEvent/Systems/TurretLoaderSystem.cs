@@ -8,9 +8,9 @@ using Content.Shared.Theta.ShipEvent.Components;
 using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
 using Content.Shared.Throwing;
-using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Interaction;
 using Robust.Shared.Audio.Systems;
+using Content.Server.Administration.Commands;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
@@ -32,13 +32,8 @@ public sealed class TurretLoaderSystem : EntitySystem
         SubscribeLocalEvent<TurretLoaderComponent, TurretLoaderAfterShotMessage>(AfterShot);
         SubscribeLocalEvent<TurretLoaderComponent, ComponentGetState>(GetLoaderState);
         SubscribeLocalEvent<TurretLoaderComponent, NewLinkEvent>(OnLink);
-        SubscribeLocalEvent<TurretAmmoContainerComponent, ComponentInit>(OnContainerInit);
         SubscribeLocalEvent<TurretAmmoContainerComponent, ExaminedEvent>(OnContainerExamine);
-    }
-
-    private void OnContainerInit(EntityUid uid, TurretAmmoContainerComponent container, ComponentInit ev)
-    {
-        container.AmmoCount = container.MaxAmmoCount;
+        SubscribeNetworkEvent<TurretLoaderSyncMessage>(OnSync);
     }
 
     private void OnContainerExamine(EntityUid uid, TurretAmmoContainerComponent container, ExaminedEvent args)
@@ -184,6 +179,14 @@ public sealed class TurretLoaderSystem : EntitySystem
             ammoCount = ammoContainer.AmmoCount;
 
         args.PushMarkup(Loc.GetString("shipevent-turretloader-ammocount-examine", ("count", ammoCount)));
+    }
+
+    private void OnSync(TurretLoaderSyncMessage ev)
+    {
+        EntityUid uid = GetEntity(ev.LoaderUid);
+        if (!uid.IsValid() || !TryComp<TurretLoaderComponent>(uid, out var loader))
+            return;
+        Dirty(uid, loader);
     }
 }
 

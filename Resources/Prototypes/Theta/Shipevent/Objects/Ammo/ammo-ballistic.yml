@@ -112,6 +112,7 @@
   - type: TurretAmmoContainer
     ammoPrototype: CartridgeMachineGun
     ammoCount: 200
+    maxAmmoCount: 200
 
 - type: entity
   id: TurretAmmoContainerFlakFilled
@@ -121,6 +122,7 @@
   - type: TurretAmmoContainer
     ammoPrototype: CartridgeFlak
     ammoCount: 100
+    maxAmmoCount: 100
 
 - type: entity
   id: TurretAmmoContainerSPGFilled
@@ -130,6 +132,7 @@
   - type: TurretAmmoContainer
     ammoPrototype: CartridgeSPG
     ammoCount: 20
+    maxAmmoCount: 20
 
 # Closets
 - type: entity

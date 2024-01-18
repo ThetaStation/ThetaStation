@@ -60,6 +60,7 @@
     - type: TurretAmmoContainer
       ammoPrototype: CartridgeFlakHE
       ammoCount: 100
+      maxAmmoCount: 100
 
 # Ebic ammo - EMP
 - type: entity
@@ -104,6 +105,7 @@
     - type: TurretAmmoContainer
       ammoPrototype: CartridgeFlakEMP
       ammoCount: 100
+      maxAmmoCount: 100
 
 # Misc
 - type: entity

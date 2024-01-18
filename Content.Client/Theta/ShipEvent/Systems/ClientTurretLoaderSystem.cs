@@ -1,4 +1,5 @@
 using Content.Shared.Containers.ItemSlots;
+using Content.Shared.Theta.ShipEvent;
 using Content.Shared.Theta.ShipEvent.Components;
 using Robust.Client.GameObjects;
 using Robust.Shared.Containers;
@@ -11,10 +12,6 @@ public sealed class ClientTurretLoaderSystem : EntitySystem
     [Dependency] private readonly SharedContainerSystem _contSys = default!;
     [Dependency] private readonly ItemSlotsSystem _slotSys = default!;
 
-    //So, what does this dict do? Some components receive state update even before initialization, which breaks appearance & other stuff
-    //In theory this should not happen, but since it does, we need this lookup
-    private Dictionary<TurretLoaderComponent, ComponentHandleState> queuedStateUpdates = new();
-
     public override void Initialize()
     {
         base.Initialize();
@@ -24,22 +21,13 @@ public sealed class ClientTurretLoaderSystem : EntitySystem
 
     private void OnLoaderInit(EntityUid uid, TurretLoaderComponent loader, ComponentInit args)
     {
-        if (queuedStateUpdates.ContainsKey(loader))
-        {
-            ComponentHandleState state = queuedStateUpdates[loader];
-            SetLoaderState(uid, loader, ref state);
-            queuedStateUpdates.Remove(loader);
-        }
+        TurretLoaderSyncMessage ev = new();
+        ev.LoaderUid = GetNetEntity(uid);
+        RaiseNetworkEvent(ev);
     }
 
     private void SetLoaderState(EntityUid uid, TurretLoaderComponent loader, ref ComponentHandleState args)
     {
-        if (!loader.Initialized)
-        {
-            queuedStateUpdates[loader] = args;
-            return;
-        }
-
         if (args.Current is not TurretLoaderState loaderState)
             return;
 
