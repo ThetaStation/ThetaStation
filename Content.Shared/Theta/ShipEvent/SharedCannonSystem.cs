@@ -29,7 +29,7 @@ public abstract class SharedCannonSystem : EntitySystem
         SubscribeLocalEvent<CannonComponent, ChangeDirectionAttemptEvent>(OnAttemptRotate);
 
         SubscribeLocalEvent<CannonComponent, TakeAmmoEvent>(OnAmmoRequest);
-        SubscribeLocalEvent<CannonComponent, GetAmmoCountEvent>(OnAmmoCount, after: new[] { typeof(SharedGunSystem) });
+        SubscribeLocalEvent<CannonComponent, GetAmmoCountEvent>(OnAmmoCount);
     }
 
     private void OnAmmoRequest(EntityUid uid, CannonComponent cannon, TakeAmmoEvent ev)
