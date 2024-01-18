@@ -9,7 +9,6 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Theta.ShipEvent.Components;
 using Robust.Shared.Network;
-using Content.Shared.Mobs;
 
 namespace Content.Shared.Theta.ShipEvent;
 
@@ -30,7 +29,7 @@ public abstract class SharedCannonSystem : EntitySystem
         SubscribeLocalEvent<CannonComponent, ChangeDirectionAttemptEvent>(OnAttemptRotate);
 
         SubscribeLocalEvent<CannonComponent, TakeAmmoEvent>(OnAmmoRequest);
-        SubscribeLocalEvent<CannonComponent, GetAmmoCountEvent>(OnAmmoCount);
+        SubscribeLocalEvent<CannonComponent, GetAmmoCountEvent>(OnAmmoCount, after: new[] { typeof(SharedGunSystem) });
     }
 
     private void OnAmmoRequest(EntityUid uid, CannonComponent cannon, TakeAmmoEvent ev)
@@ -52,15 +51,13 @@ public abstract class SharedCannonSystem : EntitySystem
         }
     }
 
-    private void OnAmmoCount(EntityUid uid, CannonComponent cannon, GetAmmoCountEvent ev)
+    private void OnAmmoCount(EntityUid uid, CannonComponent cannon, ref GetAmmoCountEvent ev)
     {
         if (!TryComp<TurretLoaderComponent>(cannon.BoundLoaderUid, out var loader))
             return;
 
         if (TryComp<TurretAmmoContainerComponent>(loader.ContainerSlot?.Item, out var ammoContainer))
         {
-            if(_netMan.IsClient)
-                Log.Info($"AC: {ammoContainer.AmmoCount}, {ammoContainer.MaxAmmoCount}, {(ammoContainer.AmmoCount > 0 ? "NZ" : " ")}");
             ev.Capacity = ammoContainer.MaxAmmoCount;
             ev.Count = ammoContainer.AmmoCount;
         }
@@ -68,7 +65,7 @@ public abstract class SharedCannonSystem : EntitySystem
 
     private void OnAttemptRotate(EntityUid uid, CannonComponent component, ChangeDirectionAttemptEvent args)
     {
-        if(!component.Rotatable)
+        if (!component.Rotatable)
             args.Cancel();
     }
 

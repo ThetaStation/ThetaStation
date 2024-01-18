@@ -1226,8 +1226,6 @@ entities:
       links:
       - 40
       - 273
-    - type: ContainerAmmoProvider
-      container: ""
 - proto: ShipEventIonCannon
   entities:
   - uid: 181
@@ -1254,8 +1252,6 @@ entities:
     - type: DeviceLinkSink
       links:
       - 43
-    - type: ContainerAmmoProvider
-      container: ""
 - proto: ShipEventSPG
   entities:
   - uid: 183
@@ -1270,8 +1266,6 @@ entities:
       links:
       - 41
       - 272
-    - type: ContainerAmmoProvider
-      container: ""
 - proto: SpawnPointCaptain
   entities:
   - uid: 184

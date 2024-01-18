@@ -1,6 +1,7 @@
 using Content.Server.Explosion.EntitySystems;
 using Content.Server.Shuttles.Components;
 using Content.Server.Theta.ShipEvent.Components;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Random;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
@@ -8,6 +9,7 @@ namespace Content.Server.Theta.ShipEvent.Systems;
 public sealed partial class ShipPickupSystem : EntitySystem
 {
     [Dependency] private readonly IRobustRandom _rand = default!;
+    [Dependency] private readonly SharedAudioSystem _audioSys = default!;
 
     public override void Initialize()
     {
@@ -19,14 +21,18 @@ public sealed partial class ShipPickupSystem : EntitySystem
         if (args.User == null || !HasComp<ShuttleComponent>(args.User))
             return;
 
-        foreach (var (beacon, transform) in EntityQuery<ShipPickupBeaconComponent, TransformComponent>())
+        var beaconQuery = EntityQueryEnumerator<TransformComponent, ShipPickupBeaconComponent>();
+        while (beaconQuery.MoveNext(out var beaconUid, out var form, out var beacon))
         {
-            if (transform.GridUid == args.User && pickup.TargetBeaconId == beacon.Id)
+            if (form.GridUid == args.User && pickup.TargetBeaconId == beacon.Id)
             {
-                foreach(string entProtoId in pickup.EntsToSpawn)
+                foreach (string entProtoId in pickup.EntsToSpawn)
                 {
-                    Spawn(entProtoId, transform.Coordinates);
+                    Spawn(entProtoId, form.Coordinates);
                 }
+
+                _audioSys.PlayPredicted(beacon.TeleportationSound, beaconUid, beaconUid);
+
                 break;
             }
         }

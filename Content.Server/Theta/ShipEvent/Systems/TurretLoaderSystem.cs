@@ -25,6 +25,7 @@ public sealed class TurretLoaderSystem : EntitySystem
         SubscribeLocalEvent<TurretLoaderComponent, ComponentInit>(OnInit);
         SubscribeLocalEvent<TurretLoaderComponent, ComponentRemove>(OnRemoval);
         SubscribeLocalEvent<TurretLoaderComponent, EntInsertedIntoContainerMessage>(OnContainerInsert);
+        SubscribeLocalEvent<TurretLoaderComponent, EntRemovedFromContainerMessage>(OnContainerRemove);
         SubscribeLocalEvent<TurretLoaderComponent, InteractHandEvent>(OnHandInteract);
         SubscribeLocalEvent<TurretLoaderComponent, ThrowHitByEvent>(HandleThrowCollide);
         SubscribeLocalEvent<TurretLoaderComponent, ExaminedEvent>(OnExamined);
@@ -90,8 +91,10 @@ public sealed class TurretLoaderSystem : EntitySystem
             turretAmmoProts = EntityManager.GetComponent<CannonComponent>(loader.BoundTurretUid.Value).AmmoPrototypes;
 
         var ammoContainerUid = loader.ContainerSlot?.Item;
-        if (EntityManager.TryGetComponent<TurretAmmoContainerComponent>(ammoContainerUid, out var ammoContainer))
+        if (TryComp<TurretAmmoContainerComponent>(ammoContainerUid, out var ammoContainer))
         {
+            Dirty(ammoContainerUid.Value, ammoContainer);
+
             if (ammoContainer.AmmoCount == 0 || turretAmmoProts == null || !turretAmmoProts.Contains(ammoContainer.AmmoPrototype))
             {
                 _audioSys.PlayPredicted(loader.InvalidAmmoTypeSound, loaderUid, loaderUid);
@@ -135,6 +138,11 @@ public sealed class TurretLoaderSystem : EntitySystem
     private void OnContainerInsert(EntityUid uid, TurretLoaderComponent loader, EntInsertedIntoContainerMessage args)
     {
         CheckAmmoContainer(uid, loader);
+    }
+
+    private void OnContainerRemove(EntityUid uid, TurretLoaderComponent loader, EntRemovedFromContainerMessage args)
+    {
+        Dirty(uid, loader);
     }
 
     private void OnLink(EntityUid uid, TurretLoaderComponent loader, NewLinkEvent args)

@@ -6,6 +6,9 @@ namespace Content.Shared.Weapons.Ranged.Events;
 [ByRefEvent]
 public struct GetAmmoCountEvent
 {
+    private int _count;
+
     public int Count;
+    
     public int Capacity;
 }

@@ -90,12 +90,10 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
         var list = new List<CannonInformationInterfaceState>();
         var myGrid = Transform(uid).GridUid;
         var controlledCannons = GetControlledCannons(uid);
-        var cannonQuery = EntityQueryEnumerator<CannonComponent>();
+        var cannonQuery = EntityQueryEnumerator<TransformComponent, CannonComponent>();
 
-        while (cannonQuery.MoveNext(out var cannonUid, out var cannon))
+        while (cannonQuery.MoveNext(out var cannonUid, out var form, out var cannon))
         {
-            var form = Transform(cannonUid);
-
             if (form.GridUid != myGrid || !form.Anchored)
                 continue;
 
