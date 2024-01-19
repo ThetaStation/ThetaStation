@@ -80,6 +80,9 @@ public sealed partial class ShipEventFactionSystem
 
     private void OnBoundsOverlayInfoRequest(BoundsOverlayInfoRequest args, EntitySessionEventArgs sargs)
     {
+        if(!RuleSelected)
+            return;
+
         UpdateBoundsOverlay(sargs.SenderSession);
     }
 }
