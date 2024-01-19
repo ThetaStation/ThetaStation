@@ -92,8 +92,7 @@ public sealed class CannonInformationInterfaceState
     public NetEntity Uid;
     public bool IsControlling;
     public int Ammo;
-    public int MaxCapacity;
-    public int UsedCapacity;
+    public int MaxAmmo;
 }
 
 [Serializable, NetSerializable]

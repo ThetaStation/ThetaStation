@@ -4,6 +4,7 @@ using Content.Server.Theta.ShipEvent.Systems;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Theta.ShipEvent;
+using Content.Shared.Theta.ShipEvent.Components;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Shared.Physics.Components;
@@ -149,13 +150,13 @@ public sealed class CannonSystem : SharedCannonSystem
             return;
 
         cannon.ObstructedRanges = CalculateFiringRanges(uid, GetCannonGun(uid)!);
-        Dirty(cannon);
+        Dirty(uid, cannon);
     }
 
     private void OnRemoval(EntityUid uid, CannonComponent cannon, ComponentRemove args)
     {
-        if (cannon.BoundLoader != null)
-            cannon.BoundLoader.BoundTurret = null;
+        if (Exists(cannon.BoundLoaderUid) && TryComp<TurretLoaderComponent>(cannon.BoundLoaderUid, out var loader))
+            loader.BoundTurretUid = null;
     }
 
     private void OnRotateCannons(RotateCannonsEvent ev)
@@ -178,7 +179,7 @@ public sealed class CannonSystem : SharedCannonSystem
             marker.Team = EntityManager.EnsureComponent<ShipEventFactionMarkerComponent>(entity).Team;
         }
 
-        if (cannon.BoundLoaderEntity != null)
-            RaiseLocalEvent(cannon.BoundLoaderEntity.Value, new TurretLoaderAfterShotMessage());
+        if (cannon.BoundLoaderUid != null)
+            RaiseLocalEvent(cannon.BoundLoaderUid.Value, new TurretLoaderAfterShotMessage());
     }
 }

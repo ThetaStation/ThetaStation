@@ -32,7 +32,7 @@ public sealed class CannonConsoleSystem : EntitySystem
         EntityCoordinates? coordinates = transform.Coordinates;
 
         var all = _radarRenderable.GetObjectsAround(uid, radarConsole);
-        var cannonsInformation = _radarConsoleSystem.GetCannonInfosByMyGrid(uid, radarConsole);
+        var cannonsInformation = _radarConsoleSystem.GetCannonInfoByMyGrid(uid, radarConsole);
         var doors = _radarConsoleSystem.GetDoorInfoByMyGrid(uid, radarConsole);
 		var shield =_radarConsoleSystem.GetShieldsAround(radarConsole);
 

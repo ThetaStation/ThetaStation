@@ -109,30 +109,30 @@
   name: Machine gun ammo container
   parent: TurretAmmoContainer
   components:
-    - type: StorageFill
-      contents:
-        - id: CartridgeMachineGun
-          amount: 100
+  - type: TurretAmmoContainer
+    ammoPrototype: CartridgeMachineGun
+    ammoCount: 200
+    maxAmmoCount: 200
 
 - type: entity
   id: TurretAmmoContainerFlakFilled
   name: Flak ammo container
   parent: TurretAmmoContainer
   components:
-    - type: StorageFill
-      contents:
-        - id: CartridgeFlak
-          amount: 50
+  - type: TurretAmmoContainer
+    ammoPrototype: CartridgeFlak
+    ammoCount: 100
+    maxAmmoCount: 100
 
 - type: entity
   id: TurretAmmoContainerSPGFilled
   name: SPG ammo container
   parent: TurretAmmoContainer
   components:
-    - type: StorageFill
-      contents:
-        - id: CartridgeSPG
-          amount: 20
+  - type: TurretAmmoContainer
+    ammoPrototype: CartridgeSPG
+    ammoCount: 20
+    maxAmmoCount: 20
 
 # Closets
 - type: entity
@@ -155,7 +155,7 @@
     - type: StorageFill
       contents:
         - id: TurretAmmoContainerMachineGunFilled
-          amount: 10
+          amount: 5
 
 - type: entity
   id: FlakAmmoClosetShipEvent
@@ -165,7 +165,7 @@
     - type: StorageFill
       contents:
         - id: TurretAmmoContainerFlakFilled
-          amount: 10
+          amount: 5
 
 - type: entity
   id: SPGAmmoClosetShipEvent
@@ -175,4 +175,4 @@
     - type: StorageFill
       contents:
         - id: TurretAmmoContainerSPGFilled
-          amount: 10
+          amount: 7

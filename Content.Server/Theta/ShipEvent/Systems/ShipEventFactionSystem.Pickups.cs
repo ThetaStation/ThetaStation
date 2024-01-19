@@ -11,7 +11,7 @@ public sealed partial class ShipEventFactionSystem
     public readonly List<EntityUid> Pickups = new();
 
     public int PickupsPositionsCount;
-    public string PickupsDatasetPrototype = "";
+    public string PickupPrototype = "";
     public float PickupsSpawnInterval;
     public float PickupMinDistance;
 
@@ -78,7 +78,7 @@ public sealed partial class ShipEventFactionSystem
     {
         foreach (var mapPos in PickupPositions)
         {
-            var weight = _protMan.Index<WeightedRandomEntityPrototype>(PickupsDatasetPrototype);
+            var weight = _protMan.Index<WeightedRandomEntityPrototype>(PickupPrototype);
             var entityUid = Spawn(weight.Pick(_random), mapPos);
             Pickups.Add(entityUid);
         }

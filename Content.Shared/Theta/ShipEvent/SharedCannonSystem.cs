@@ -6,6 +6,9 @@ using Robust.Shared.Physics.Systems;
 using Robust.Shared.Serialization;
 using System.Numerics;
 using Content.Shared.Interaction.Events;
+using Content.Shared.Weapons.Ranged.Events;
+using Content.Shared.Theta.ShipEvent.Components;
+using Robust.Shared.Network;
 
 namespace Content.Shared.Theta.ShipEvent;
 
@@ -15,6 +18,7 @@ public abstract class SharedCannonSystem : EntitySystem
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly ItemSlotsSystem _slotSys = default!;
+    [Dependency] private readonly INetManager _netMan = default!;
 
     public override void Initialize()
     {
@@ -22,26 +26,47 @@ public abstract class SharedCannonSystem : EntitySystem
         SubscribeAllEvent<RequestCannonShootEvent>(OnShootRequest);
         SubscribeAllEvent<RequestStopCannonShootEvent>(OnStopShootRequest);
         SubscribeLocalEvent<CannonComponent, AnchorStateChangedEvent>(OnAnchorChanged);
-        SubscribeLocalEvent<CannonComponent, ComponentInit>(OnInit);
         SubscribeLocalEvent<CannonComponent, ChangeDirectionAttemptEvent>(OnAttemptRotate);
+
+        SubscribeLocalEvent<CannonComponent, TakeAmmoEvent>(OnAmmoRequest);
+        SubscribeLocalEvent<CannonComponent, GetAmmoCountEvent>(OnAmmoCount);
+    }
+
+    private void OnAmmoRequest(EntityUid uid, CannonComponent cannon, TakeAmmoEvent ev)
+    {
+        if (!TryComp<TurretLoaderComponent>(cannon.BoundLoaderUid, out var loader))
+            return;
+
+        if (TryComp<TurretAmmoContainerComponent>(loader.ContainerSlot?.Item, out var ammoContainer))
+        {
+            for (int i = 0; i < ev.Shots && i < ammoContainer.AmmoCount; i++)
+            {
+                EntityUid roundUid = Spawn(ammoContainer.AmmoPrototype);
+                ev.Ammo.Add((roundUid, _gunSystem.EnsureShootable(roundUid)));
+            }
+
+            ammoContainer.AmmoCount -= ev.Shots;
+            if (ammoContainer.AmmoCount < 0)
+                ammoContainer.AmmoCount = 0;
+        }
+    }
+
+    private void OnAmmoCount(EntityUid uid, CannonComponent cannon, ref GetAmmoCountEvent ev)
+    {
+        if (!TryComp<TurretLoaderComponent>(cannon.BoundLoaderUid, out var loader))
+            return;
+
+        if (TryComp<TurretAmmoContainerComponent>(loader.ContainerSlot?.Item, out var ammoContainer))
+        {
+            ev.Capacity = ammoContainer.MaxAmmoCount;
+            ev.Count = ammoContainer.AmmoCount;
+        }
     }
 
     private void OnAttemptRotate(EntityUid uid, CannonComponent component, ChangeDirectionAttemptEvent args)
     {
-        if(!component.Rotatable)
+        if (!component.Rotatable)
             args.Cancel();
-    }
-
-    private void OnInit(EntityUid uid, CannonComponent cannon, ComponentInit args)
-    {
-        foreach (IComponent comp in EntityManager.GetComponents(uid))
-        {
-            if (comp is AmmoProviderComponent provider)
-            {
-                cannon.AmmoProvider = provider;
-                break;
-            }
-        }
     }
 
     private void OnShootRequest(RequestCannonShootEvent ev, EntitySessionEventArgs args)

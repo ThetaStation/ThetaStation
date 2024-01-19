@@ -756,9 +756,6 @@ entities:
       - 68
       - 142
       type: DeviceLinkSink
-    - provider: 139
-      container: storagebase
-      type: ContainerAmmoProvider
   - uid: 103
     components:
     - flags: SessionSpecific
@@ -773,9 +770,6 @@ entities:
       - 132
       - 68
       type: DeviceLinkSink
-    - provider: 133
-      container: storagebase
-      type: ContainerAmmoProvider
   - uid: 104
     components:
     - flags: SessionSpecific
@@ -791,9 +785,6 @@ entities:
       - 140
       - 68
       type: DeviceLinkSink
-    - provider: 141
-      container: storagebase
-      type: ContainerAmmoProvider
   - uid: 105
     components:
     - flags: SessionSpecific
@@ -809,9 +800,6 @@ entities:
       - 134
       - 68
       type: DeviceLinkSink
-    - provider: 135
-      container: storagebase
-      type: ContainerAmmoProvider
   - uid: 106
     components:
     - flags: SessionSpecific
@@ -827,9 +815,6 @@ entities:
       - 136
       - 68
       type: DeviceLinkSink
-    - provider: 137
-      container: storagebase
-      type: ContainerAmmoProvider
   - uid: 107
     components:
     - flags: SessionSpecific
@@ -846,9 +831,6 @@ entities:
       - 68
       - 138
       type: DeviceLinkSink
-    - provider: 143
-      container: storagebase
-      type: ContainerAmmoProvider
 - proto: ShipEventIonCannon
   entities:
   - uid: 108
@@ -879,7 +861,7 @@ entities:
     - links:
       - 69
       type: DeviceLinkSink
-- proto: ShipEventTeleporter
+- proto: ShipPickupBeacon
   entities:
   - uid: 88
     components:
