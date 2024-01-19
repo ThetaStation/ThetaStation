@@ -79,8 +79,8 @@ public sealed partial class ShipEventRuleComponent : Component
     [DataField("pickupsPrototypes", customTypeSerializer: typeof(PrototypeIdSerializer<WeightedRandomEntityPrototype>))]
     public string PickupsPrototypes = default!;
 
-    [DataField("spaceColor")]
-    public Color? SpaceColor = null;
+    [DataField("spaceLightColor")]
+    public Color? SpaceLightColor = null;
 }
 
 public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
@@ -116,8 +116,8 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         base.Started(uid, component, gameRule, args);
 
         var map = _mapMan.CreateMap();
-        if (component.SpaceColor != null)
-            EnsureComp<MapLightComponent>(_mapMan.GetMapEntityId(map)).AmbientLightColor = component.SpaceColor.Value;
+        if (component.SpaceLightColor != null)
+            EnsureComp<MapLightComponent>(_mapMan.GetMapEntityId(map)).AmbientLightColor = component.SpaceLightColor.Value;
         _shipSys.TargetMap = map;
         _shipSys.RuleSelected = true;
 
