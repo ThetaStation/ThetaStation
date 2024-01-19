@@ -22,7 +22,7 @@ public abstract class PlayerFaction
     public PlayerFaction(string name, string iconPath = "")
     {
         Name = name;
-        if(iconPath != "")
+        if (iconPath != "")
             Icon = new SpriteSpecifier.Texture(new ResPath(iconPath));
         Members = new List<AntagonistRoleComponent>();
     }
