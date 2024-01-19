@@ -16,6 +16,7 @@ using Robust.Shared.Serialization.Markdown;
 using Robust.Shared.Serialization.Markdown.Mapping;
 using Robust.Shared.Serialization.Markdown.Value;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
+using Robust.Shared.Map.Components;
 
 namespace Content.Server.StationEvents.Events.Theta;
 
@@ -77,6 +78,9 @@ public sealed partial class ShipEventRuleComponent : Component
 
     [DataField("pickupsPrototypes", customTypeSerializer: typeof(PrototypeIdSerializer<WeightedRandomEntityPrototype>))]
     public string PickupsPrototypes = default!;
+
+    [DataField("spaceColor")]
+    public Color? SpaceColor = null;
 }
 
 public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
@@ -112,6 +116,8 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         base.Started(uid, component, gameRule, args);
 
         var map = _mapMan.CreateMap();
+        if (component.SpaceColor != null)
+            EnsureComp<MapLightComponent>(_mapMan.GetMapEntityId(map)).AmbientLightColor = component.SpaceColor.Value;
         _shipSys.TargetMap = map;
         _shipSys.RuleSelected = true;
 
