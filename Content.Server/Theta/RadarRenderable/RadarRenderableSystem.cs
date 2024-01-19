@@ -83,13 +83,13 @@ public sealed class RadarRenderableSystem : EntitySystem
         if (controlledCannons != null)
             controlled = controlledCannons.Contains(uid);
 
-        var (usedCapacity, maxCapacity) = _radarConsoleSystem.GetCannonAmmoCount(uid, cannon);
+        var (ammo, maxAmmo) = _radarConsoleSystem.GetCannonAmmoCount(uid, cannon);
         var mainColor = controlled ? Color.Lime : (isCannonConsole ? Color.LightGreen : Color.YellowGreen);
 
         var hsvColor = Color.ToHsv(mainColor);
         const float additionalDegreeCoeff = 20f / 360f;
         // X is hue
-        var hueOffset = hsvColor.X * usedCapacity / Math.Max(1, maxCapacity);
+        var hueOffset = hsvColor.X * ammo / Math.Max(1, maxAmmo);
         hsvColor.X = Math.Max(hueOffset + additionalDegreeCoeff, additionalDegreeCoeff);
 
         mainColor = Color.FromHsv(hsvColor);

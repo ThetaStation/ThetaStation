@@ -1,0 +1,71 @@
+- type: entity
+  parent: BaseItem
+  id: ShipPickupBase
+  suffix: ShipEvent
+  abstract: true
+  components:
+    - type: TriggerOnParentChange
+    - type: Sprite
+      sprite: Objects/Fun/toys.rsi
+      state: football
+    - type: Item
+      size: Ginormous
+      sprite: Objects/Fun/toys.rsi
+      heldPrefix: singularitytoy
+    #- type: EmitSoundOnTrigger
+    #  sound:
+    #    collection: BikeHorn
+    #    params:
+    #      variation: 0.125
+    - type: DeleteOnTrigger
+
+- type: entity
+  id: ShipPickupHeal
+  name: heal pickup
+  parent: ShipPickupBase
+  components:
+    - type: HealGrid
+      health: 5000
+    - type: RadarRenderable
+      radarView: healContainer
+      group: enum.RadarRenderableGroup.Pickup
+
+- type: entity
+  id: ShipPickupAmmo
+  name: ammo pickup
+  parent: ShipPickupBase
+  components:
+    - type: ShipPickupable
+      targetBeaconId: loot
+      prototypes:
+        - TurretAmmoContainerMachineGunFilled
+        - TurretAmmoContainerFlakFilled
+        - TurretAmmoContainerSPGFilled
+    - type: RadarRenderable
+      radarView: ammoContainer
+      group: enum.RadarRenderableGroup.Pickup
+
+- type: entity
+  id: ShipPickupPower
+  name: powers pickup
+  parent: ShipPickupBase
+  components:
+    - type: ShipPickupable
+      targetBeaconId: loot
+      prototypes:
+        - PickupLootSpawner
+    - type: RadarRenderable
+      radarView: randomPower
+      group: enum.RadarRenderableGroup.Pickup
+
+- type: entity
+  id: PickupLootSpawner
+  components:
+  - type: RandomSpawner
+    prototypes:
+      - PointStorageItem
+      - TurretAmmoContainerFlakHEFilled
+      - TurretAmmoContainerFlakEMPFilled
+      - ShipEventRCD
+      - ShipEventPlasmaGun
+    chance: 1

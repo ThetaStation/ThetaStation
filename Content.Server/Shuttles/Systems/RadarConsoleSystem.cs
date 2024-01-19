@@ -85,36 +85,30 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
         return list;
     }
 
-    public List<CannonInformationInterfaceState> GetCannonInfosByMyGrid(EntityUid uid, RadarConsoleComponent component)
+    public List<CannonInformationInterfaceState> GetCannonInfoByMyGrid(EntityUid uid, RadarConsoleComponent component)
     {
         var list = new List<CannonInformationInterfaceState>();
-
         var myGrid = Transform(uid).GridUid;
-
         var controlledCannons = GetControlledCannons(uid);
-        foreach (var (cannon, transform) in EntityQuery<CannonComponent, TransformComponent>())
+        var cannonQuery = EntityQueryEnumerator<TransformComponent, CannonComponent>();
+
+        while (cannonQuery.MoveNext(out var cannonUid, out var form, out var cannon))
         {
-            if (transform.GridUid != myGrid)
-                continue;
-            if (!transform.Anchored)
+            if (form.GridUid != myGrid || !form.Anchored)
                 continue;
 
             var controlled = false;
             if (controlledCannons != null)
-                controlled = controlledCannons.Contains(cannon.Owner);
+                controlled = controlledCannons.Contains(cannonUid);
 
-            var ammoCountEv = new GetAmmoCountEvent();
-            RaiseLocalEvent(cannon.Owner, ref ammoCountEv);
-
-            var (usedCapacity, maxCapacity) = GetCannonAmmoCount(cannon.Owner, cannon);
+            var (ammo, maxAmmo) = GetCannonAmmoCount(cannonUid, cannon);
 
             list.Add(new CannonInformationInterfaceState
             {
-                Uid = GetNetEntity(cannon.Owner),
+                Uid = GetNetEntity(cannonUid),
                 IsControlling = controlled,
-                Ammo = ammoCountEv.Count,
-                UsedCapacity = usedCapacity,
-                MaxCapacity = maxCapacity
+                Ammo = ammo,
+                MaxAmmo = maxAmmo
             });
         }
 
@@ -152,37 +146,15 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
         return null;
     }
 
-    public (int usedCapacity, int maxCapacity) GetCannonAmmoCount(EntityUid consoleUid, CannonComponent? cannon)
+    public (int ammo, int maxAmmo) GetCannonAmmoCount(EntityUid cannonUid, CannonComponent? cannon)
     {
-        if (!Resolve(consoleUid, ref cannon))
+        if (!Resolve(cannonUid, ref cannon))
             return (0, 0);
 
         var ammoCountEv = new GetAmmoCountEvent();
-        RaiseLocalEvent(consoleUid, ref ammoCountEv);
+        RaiseLocalEvent(cannonUid, ref ammoCountEv);
 
-        int maxCapacity;
-        int usedCapacity;
-
-        switch (cannon.AmmoProvider)
-        {
-            case null:
-                return (0, 0);
-            case ContainerAmmoProviderComponent cprov:
-            {
-                if (!EntityManager.TryGetComponent(cprov.ProviderUid, out StorageComponent? storage))
-                    return (0, 0);
-
-                maxCapacity = storage.Grid.GetArea();
-                usedCapacity = _storageSystem.GetCumulativeItemAreas(cprov.ProviderUid!.Value);
-                break;
-            }
-            default:
-                maxCapacity = ammoCountEv.Capacity;
-                usedCapacity = ammoCountEv.Count;
-                break;
-        }
-
-        return (usedCapacity, maxCapacity);
+        return (ammoCountEv.Count, ammoCountEv.Capacity);
     }
 
     protected override void UpdateState(EntityUid uid, RadarConsoleComponent component)
@@ -219,7 +191,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
             GetNetCoordinates(coordinates),
             angle,
             new List<DockingInterfaceState>(),
-            GetCannonInfosByMyGrid(uid, component),
+            GetCannonInfoByMyGrid(uid, component),
             GetDoorInfoByMyGrid(uid, component),
             _radarRenderable.GetObjectsAround(uid, component),
             GetShieldsAround(component)

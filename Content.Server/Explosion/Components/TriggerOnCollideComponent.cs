@@ -1,3 +1,5 @@
+using Robust.Shared.Prototypes;
+
 namespace Content.Server.Explosion.Components
 {
     [RegisterComponent]
@@ -11,5 +13,11 @@ namespace Content.Server.Explosion.Components
         /// </summary>
         [DataField("ignoreOtherNonHard")]
         public bool IgnoreOtherNonHard = true;
+
+        /// <summary>
+        /// Components that should be present on the other fixture to trigger this one.
+        /// </summary>
+        [DataField("componentFilter")]
+        public ComponentRegistry RequiredComponents = new();
     }
 }
