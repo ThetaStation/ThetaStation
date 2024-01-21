@@ -2,7 +2,7 @@
 
 namespace Content.Shared.Theta.ShipEvent.CircularShield;
 
-public abstract class SharedCircularShieldSystem : EntitySystem
+public class SharedCircularShieldSystem : EntitySystem
 {
     public Vector2[] GenerateConeVertices(int radius, Angle angle, Angle width, int extraArcPoints = 0)
     {

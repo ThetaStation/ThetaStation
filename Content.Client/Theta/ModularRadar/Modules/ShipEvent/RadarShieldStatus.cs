@@ -1,5 +1,5 @@
 using System.Numerics;
-using Content.Client.Theta.ShipEvent.Systems;
+using Content.Shared.Theta.ShipEvent.CircularShield;
 using Content.Shared.Theta.ShipEvent.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -8,12 +8,12 @@ namespace Content.Client.Theta.ModularRadar.Modules.ShipEvent;
 
 public sealed class RadarShieldStatus : RadarModule
 {
-    private readonly CircularShieldSystem _shieldSys;
+    private readonly SharedCircularShieldSystem _shieldSys;
     private readonly TransformSystem _formSys;
 
     public RadarShieldStatus(ModularRadarControl parentRadar) : base(parentRadar)
     {
-        _shieldSys = EntManager.System<CircularShieldSystem>();
+        _shieldSys = EntManager.System<SharedCircularShieldSystem>();
         _formSys = EntManager.System<TransformSystem>();
     }
 
