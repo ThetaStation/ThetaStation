@@ -33,15 +33,13 @@ public sealed class CannonConsoleSystem : EntitySystem
 
         var all = _radarRenderable.GetObjectsAround(uid, radarConsole);
         var cannonsInformation = _radarConsoleSystem.GetCannonInfoByMyGrid(uid, radarConsole);
-        var doors = _radarConsoleSystem.GetDoorInfoByMyGrid(uid, radarConsole);
 
         var radarState = new CannonConsoleBoundInterfaceState(
             radarConsole.MaxRange,
             GetNetCoordinates(coordinates),
             angle,
-            new List<DockingInterfaceState>(),
+            new List<DockingInterfaceState>(), //pzdc
             cannonsInformation,
-            doors,
             all
         );
 

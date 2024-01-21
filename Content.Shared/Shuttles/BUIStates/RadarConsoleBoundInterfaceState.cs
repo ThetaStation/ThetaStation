@@ -1,4 +1,3 @@
-using Content.Shared.Theta.RadarRenderable;
 using Robust.Shared.Map;
 using Robust.Shared.Serialization;
 
@@ -24,8 +23,6 @@ public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
 
     public readonly List<CannonInformationInterfaceState> Cannons;
 
-    public readonly List<DoorInterfaceState> Doors;
-
     public readonly List<CommonRadarEntityInterfaceState> CommonEntities;
 
     public RadarConsoleBoundInterfaceState(
@@ -34,7 +31,6 @@ public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
         Angle? angle,
         List<DockingInterfaceState> docks,
         List<CannonInformationInterfaceState> cannons,
-        List<DoorInterfaceState> doors,
         List<CommonRadarEntityInterfaceState> common)
     {
         MaxRange = maxRange;
@@ -42,7 +38,6 @@ public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
         Angle = angle;
         Docks = docks;
         Cannons = cannons;
-        Doors = doors;
         CommonEntities = common;
     }
 }

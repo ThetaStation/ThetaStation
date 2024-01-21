@@ -124,14 +124,14 @@ public sealed class RadarRenderableSystem : EntitySystem
         if (TryComp<IFFComponent>(Transform(uid).GridUid, out var iff) && iff.Flags == IFFFlags.Hide)
             return null;
 
-        Color ? color = null;
+        Color? color = null;
 
-         if (mindContainer.Mind != null)
-         {
-             if (EntityManager.TryGetComponent<ShipEventRoleComponent>(mindContainer.Mind.Value, out var roleComponent) &&
-                 roleComponent.Faction is ShipEventFaction shipEventFaction)
-                 color = shipEventFaction.Color;
-         }
+        if (mindContainer.Mind != null)
+        {
+            if (EntityManager.TryGetComponent<ShipEventRoleComponent>(mindContainer.Mind.Value, out var roleComponent) &&
+                roleComponent.Faction is ShipEventFaction shipEventFaction)
+                color = shipEventFaction.Color;
+        }
 
         return new CommonRadarEntityInterfaceState(
             GetNetCoordinates(_transformSystem.GetMoverCoordinates(uid, xform)),
@@ -155,17 +155,13 @@ public sealed class RadarRenderableSystem : EntitySystem
 
         Color? color = Color.White;
 
-        if (door.State == DoorState.Closed)
+        if (door.State == DoorState.Open)
         {
-            color = Color.Red;
-        }
-        else if (door.State == DoorState.Opening | door.State == DoorState.Closing)
-        {
-            color = Color.Yellow;
+            color = Color.LimeGreen;
         }
         else
         {
-            color = Color.LimeGreen;
+            color = Color.Red;
         }
 
         return new CommonRadarEntityInterfaceState(

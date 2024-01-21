@@ -82,23 +82,6 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
         return list;
     }
 
-    public List<DoorInterfaceState> GetDoorInfoByMyGrid(EntityUid uid, RadarConsoleComponent component)
-    {
-        var list = new List<DoorInterfaceState>();
-
-        var myGrid = Transform(uid).GridUid;
-
-        foreach (var door in EntityQuery<DoorSignalControlComponent>())
-        {
-            if (Transform(door.Owner).GridUid != myGrid)
-                continue;
-
-            list.Add(new DoorInterfaceState { Uid = GetNetEntity(door.Owner) });
-        }
-
-        return list;
-    }
-
     public List<EntityUid>? GetControlledCannons(EntityUid uid)
     {
         //todo: we should store info about controlled cannons in the console component itself, instead of using THIS
@@ -159,7 +142,6 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
             angle,
             new List<DockingInterfaceState>(),
             GetCannonInfoByMyGrid(uid, component),
-            GetDoorInfoByMyGrid(uid, component),
             _radarRenderable.GetObjectsAround(uid, component)
         );
 
