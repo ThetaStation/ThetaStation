@@ -34,7 +34,6 @@ public sealed class CannonConsoleSystem : EntitySystem
         var all = _radarRenderable.GetObjectsAround(uid, radarConsole);
         var cannonsInformation = _radarConsoleSystem.GetCannonInfoByMyGrid(uid, radarConsole);
         var doors = _radarConsoleSystem.GetDoorInfoByMyGrid(uid, radarConsole);
-		var shield =_radarConsoleSystem.GetShieldsAround(radarConsole);
 
         var radarState = new CannonConsoleBoundInterfaceState(
             radarConsole.MaxRange,
@@ -43,8 +42,7 @@ public sealed class CannonConsoleSystem : EntitySystem
             new List<DockingInterfaceState>(),
             cannonsInformation,
             doors,
-            all,
-            shield
+            all
         );
 
         _uiSystem.TrySetUiState(uid, CannonConsoleUiKey.Key, radarState);

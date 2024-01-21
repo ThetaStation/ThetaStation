@@ -21,11 +21,6 @@ public sealed partial class CircularShieldConsoleWindow : DefaultWindow
 
         ShieldEnableButton.OnPressed += _ => OnEnableButtonPressed?.Invoke();
 
-        if (RadarScreen.TryGetModule<RadarShieldStatus>(out var shieldModule))
-        {
-            OnShieldParametersChanged += shieldModule.UpdateShieldParameters;
-        }
-
         if (RadarScreen.TryGetModule<RadarControlShield>(out var controlShield))
         {
             controlShield.UpdateShieldRotation += angle => OnShieldParametersChanged?.Invoke(angle, null, null);

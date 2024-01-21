@@ -28,8 +28,6 @@ public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
 
     public readonly List<CommonRadarEntityInterfaceState> CommonEntities;
 
-    public readonly List<ShieldInterfaceState> Shields;
-
     public RadarConsoleBoundInterfaceState(
         float maxRange,
         NetCoordinates? coordinates,
@@ -37,8 +35,7 @@ public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
         List<DockingInterfaceState> docks,
         List<CannonInformationInterfaceState> cannons,
         List<DoorInterfaceState> doors,
-        List<CommonRadarEntityInterfaceState> common,
-        List<ShieldInterfaceState> shields)
+        List<CommonRadarEntityInterfaceState> common)
     {
         MaxRange = maxRange;
         Coordinates = coordinates;
@@ -46,7 +43,6 @@ public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
         Docks = docks;
         Cannons = cannons;
         Doors = doors;
-        Shields = shields;
         CommonEntities = common;
     }
 }

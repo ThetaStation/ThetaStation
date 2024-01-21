@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using System.Numerics;
-using Content.Shared.Shuttles.BUIStates;
-using Content.Shared.Theta.ShipEvent.UI;
+﻿using System.Numerics;
 using Robust.Client.UserInterface;
 using Robust.Shared.Input;
 
@@ -11,36 +8,22 @@ public sealed class RadarControlShield : RadarModule
 {
     public event Action<Angle>? UpdateShieldRotation;
 
-    private readonly List<ShieldInterfaceState> _shields = new();
-
     private bool _holdLmb = false;
 
     public RadarControlShield(ModularRadarControl parentRadar) : base(parentRadar)
     {
     }
 
-    public override void UpdateState(BoundUserInterfaceState state)
-    {
-        if (state is not ShieldConsoleBoundsUserInterfaceState shieldState)
-            return;
-        _shields.Clear();
-        _shields.Add(shieldState.Shield);
-    }
-
     public override void MouseMove(GUIMouseMoveEventArgs args)
     {
-        if (_shields.Count == 0)
-            return;
-        if(_holdLmb)
+        if (_holdLmb)
             RotateShields(args.RelativePosition);
+
         args.Handle();
     }
     public override void OnKeyBindDown(GUIBoundKeyEventArgs args)
     {
         if (args.Function != EngineKeyFunctions.Use)
-            return;
-
-        if (_shields.Count == 0)
             return;
 
         RotateShields(args.RelativePosition);
@@ -51,9 +34,6 @@ public sealed class RadarControlShield : RadarModule
     public override void OnKeyBindUp(GUIBoundKeyEventArgs args)
     {
         if (args.Function != EngineKeyFunctions.Use)
-            return;
-
-        if (_shields.Count == 0)
             return;
 
         _holdLmb = false;

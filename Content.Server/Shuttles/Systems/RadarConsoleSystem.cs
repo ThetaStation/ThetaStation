@@ -1,19 +1,14 @@
 using Content.Server.DeviceLinking.Components;
-using Content.Server.Storage.Components;
 using Content.Server.Theta.RadarRenderable;
 using Content.Server.UserInterface;
 using Content.Shared.DeviceLinking;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
-using Content.Shared.Storage;
 using Content.Shared.Theta.ShipEvent;
-using Content.Shared.Theta.ShipEvent.Components;
-using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
-using Robust.Shared.Physics;
 using System.Linq;
 using System.Numerics;
 using Content.Server.Storage.EntitySystems;
@@ -55,34 +50,6 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
                 continue;
             UpdateState(uid, radar);
         }
-    }
-    public List<ShieldInterfaceState> GetShieldsAround(RadarConsoleComponent component)
-    {
-        var list = new List<ShieldInterfaceState>();
-
-        if (!TryComp<TransformComponent>(component.Owner, out var xform))
-            return list;
-
-        var query = EntityQueryEnumerator<CircularShieldComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out var shield, out var transform))
-        {
-            if (!shield.Enabled)
-                continue;
-            if (!xform.MapPosition.InRange(transform.MapPosition, component.MaxRange))
-                continue;
-
-            list.Add(new ShieldInterfaceState
-            {
-                Coordinates =  GetNetCoordinates(_transformSystem.GetMoverCoordinates(uid, transform)),
-                Powered = shield.Powered,
-                Angle = shield.Angle,
-                Width = shield.Width,
-                Radius = shield.Radius,
-                IsControlling = false,
-            });
-        }
-
-        return list;
     }
 
     public List<CannonInformationInterfaceState> GetCannonInfoByMyGrid(EntityUid uid, RadarConsoleComponent component)
@@ -193,8 +160,7 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
             new List<DockingInterfaceState>(),
             GetCannonInfoByMyGrid(uid, component),
             GetDoorInfoByMyGrid(uid, component),
-            _radarRenderable.GetObjectsAround(uid, component),
-            GetShieldsAround(component)
+            _radarRenderable.GetObjectsAround(uid, component)
         );
 
         _uiSystem.TrySetUiState(uid, RadarConsoleUiKey.Key, radarState);
