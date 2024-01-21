@@ -2,6 +2,7 @@ using Content.Shared.Shuttles.Components;
 
 namespace Content.Shared.Shuttles.Systems;
 
+//todo (radars): this shouldn't exist
 public abstract class SharedRadarConsoleSystem : EntitySystem
 {
     public const float DefaultMinRange = 64f;

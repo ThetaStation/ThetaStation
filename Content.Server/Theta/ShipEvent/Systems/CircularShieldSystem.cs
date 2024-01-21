@@ -63,8 +63,7 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
             Width = shield.Width,
             MaxWidth = shield.MaxWidth,
             Radius = shield.Radius,
-            MaxRadius = shield.MaxRadius,
-            IsControlling = true
+            MaxRadius = shield.MaxRadius
         };
 
         var angle = Angle.Zero;

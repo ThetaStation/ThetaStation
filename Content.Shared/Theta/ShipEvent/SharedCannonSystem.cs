@@ -27,7 +27,6 @@ public abstract class SharedCannonSystem : EntitySystem
         SubscribeAllEvent<RequestStopCannonShootEvent>(OnStopShootRequest);
         SubscribeLocalEvent<CannonComponent, AnchorStateChangedEvent>(OnAnchorChanged);
         SubscribeLocalEvent<CannonComponent, ChangeDirectionAttemptEvent>(OnAttemptRotate);
-
         SubscribeLocalEvent<CannonComponent, TakeAmmoEvent>(OnAmmoRequest);
         SubscribeLocalEvent<CannonComponent, GetAmmoCountEvent>(OnAmmoCount);
     }

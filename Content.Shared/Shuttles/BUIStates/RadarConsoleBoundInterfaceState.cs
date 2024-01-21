@@ -8,36 +8,31 @@ namespace Content.Shared.Shuttles.BUIStates;
 public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
 {
     public readonly float MaxRange;
-
     /// <summary>
     /// The relevant coordinates to base the radar around.
     /// </summary>
     public NetCoordinates? Coordinates;
-
     /// <summary>
     /// The relevant rotation to rotate the angle around.
     /// </summary>
     public Angle? Angle;
-
-    public readonly List<DockingInterfaceState> Docks;
-
-    public readonly List<CannonInformationInterfaceState> Cannons;
-
+    public readonly List<DockingInterfaceState> Docks; //todo (radars): docks are only required for the shuttle console; move em outta here
     public readonly List<CommonRadarEntityInterfaceState> CommonEntities;
 
+    //todo (radars): we are already sending all the data we need for the radar's UI, by dirtying cannons, shields, and other stuff,
+    //yet we redundantly send those BUI states. we need to come up with a way to separate shield, cannon and shuttle console windows
+    //functionality into something like radar modules, and force them to use clients comp data
     public RadarConsoleBoundInterfaceState(
         float maxRange,
         NetCoordinates? coordinates,
         Angle? angle,
         List<DockingInterfaceState> docks,
-        List<CannonInformationInterfaceState> cannons,
         List<CommonRadarEntityInterfaceState> common)
     {
         MaxRange = maxRange;
         Coordinates = coordinates;
         Angle = angle;
         Docks = docks;
-        Cannons = cannons;
         CommonEntities = common;
     }
 }
@@ -90,20 +85,12 @@ public sealed class CannonInformationInterfaceState
 public sealed class ShieldInterfaceState
 {
     public NetCoordinates Coordinates;
-
     public bool Powered;
-
     public Angle Angle;
-
     public Angle Width;
-
     public Angle MaxWidth;
-
     public int Radius;
-
     public int MaxRadius;
-
-    public bool IsControlling;
 }
 
 /// <summary>

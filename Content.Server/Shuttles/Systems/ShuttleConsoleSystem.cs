@@ -356,13 +356,10 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         }
 
         docks ??= GetAllDocks();
-        var all = new List<CommonRadarEntityInterfaceState>();
-        var cannons = new List<CannonInformationInterfaceState>();
+
+        List<CommonRadarEntityInterfaceState> common = new();
         if (radar != null)
-        {
-            all = _radarRenderable.GetObjectsAround(consoleUid, radar);
-            cannons = _radarConsoleSystem.GetCannonInfoByMyGrid(consoleUid, radar);
-        }
+            _radarRenderable.GetObjectsAround(consoleUid, radar);
 
         if (_ui.TryGetUi(consoleUid, ShuttleConsoleUiKey.Key, out var bui))
         {
@@ -374,8 +371,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
                 GetNetCoordinates(consoleXform?.Coordinates),
                 consoleXform?.LocalRotation,
                 docks,
-                cannons,
-                all));
+                common));
         }
     }
 
@@ -405,7 +401,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         var shuttleComponent = EntityQueryEnumerator<ShuttleConsoleComponent>();
         while (shuttleComponent.MoveNext(out var uid, out var _))
         {
-            if(!_ui.IsUiOpen(uid, ShuttleConsoleUiKey.Key))
+            if (!_ui.IsUiOpen(uid, ShuttleConsoleUiKey.Key))
                 continue;
             UpdateState(uid);
         }
@@ -461,7 +457,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         pilotComponent.Console = uid;
         ActionBlockerSystem.UpdateCanMove(entity);
         pilotComponent.Position = EntityManager.GetComponent<TransformComponent>(entity).Coordinates;
-        Dirty(pilotComponent);
+        Dirty(entity, pilotComponent);
     }
 
     public void RemovePilot(EntityUid pilotUid, PilotComponent pilotComponent)

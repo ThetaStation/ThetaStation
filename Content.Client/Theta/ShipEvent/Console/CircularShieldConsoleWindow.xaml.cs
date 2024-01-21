@@ -25,7 +25,7 @@ public sealed partial class CircularShieldConsoleWindow : DefaultWindow
         {
             controlShield.UpdateShieldRotation += angle => OnShieldParametersChanged?.Invoke(angle, null, null);
         }
-        
+
         ShieldWidthSlider.OnValueChanged += width => OnShieldParametersChanged?.Invoke(null, Angle.FromDegrees(width.Value), null);
         ShieldRadiusSlider.OnValueChanged += radius => OnShieldParametersChanged?.Invoke(null, null, (int)radius.Value);
     }
@@ -42,11 +42,9 @@ public sealed partial class CircularShieldConsoleWindow : DefaultWindow
 
     public void UpdateState(ShieldConsoleBoundsUserInterfaceState shieldState)
     {
-        if(!shieldState.Shield.IsControlling)
-            return;
         RadarScreen.UpdateState(shieldState);
         var state = shieldState.Shield;
-        
+
         ShieldPowerStatusLabel.SetMarkup(Loc.GetString(state.Powered ? "shipevent-shieldconsole-powered" : "shipevent-shieldconsole-nopower"));
         ShieldWidthSlider.SetValueWithoutEvent((float)state.Width.Degrees);
         ShieldWidthSlider.MaxValue = (float)state.MaxWidth; //todo: send min/max values only once to save state bytes

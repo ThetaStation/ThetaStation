@@ -12,11 +12,13 @@ using Content.Shared.Theta.ShipEvent;
 
 namespace Content.Server.Theta.RadarRenderable;
 
+//todo (radars): there shouldn't be a cannon/mob/door specific code
 public sealed class RadarRenderableSystem : EntitySystem
 {
     [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
     [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
     [Dependency] private readonly RadarConsoleSystem _radarConsoleSystem = default!;
+    [Dependency] private readonly CannonConsoleSystem _cannonConsoleSystem = default!;
 
     public List<CommonRadarEntityInterfaceState> GetObjectsAround(EntityUid consoleUid, RadarConsoleComponent radar)
     {
@@ -73,18 +75,13 @@ public sealed class RadarRenderableSystem : EntitySystem
         var myGrid = consoleTransform.GridUid;
         var isCannonConsole = HasComp<CannonConsoleComponent>(consoleUid);
 
-        var controlledCannons = _radarConsoleSystem.GetControlledCannons(consoleUid);
         if (Transform(uid).GridUid != myGrid)
             return null;
         if (!Transform(uid).Anchored)
             return null;
 
-        var controlled = false;
-        if (controlledCannons != null)
-            controlled = controlledCannons.Contains(uid);
-
-        var (ammo, maxAmmo) = _radarConsoleSystem.GetCannonAmmoCount(uid, cannon);
-        var mainColor = controlled ? Color.Lime : (isCannonConsole ? Color.LightGreen : Color.YellowGreen);
+        var (ammo, maxAmmo) = _cannonConsoleSystem.GetCannonAmmoCount(uid, cannon);
+        var mainColor = (cannon.BoundConsoleUid == consoleUid) ? Color.Lime : (isCannonConsole ? Color.LightGreen : Color.YellowGreen);
 
         var hsvColor = Color.ToHsv(mainColor);
         const float additionalDegreeCoeff = 20f / 360f;

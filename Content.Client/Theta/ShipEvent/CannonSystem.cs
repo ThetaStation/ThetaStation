@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Client.Weapons.Ranged.Systems;
 using Content.Shared.Theta.ShipEvent;
+using FastAccessors;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -11,28 +12,47 @@ public sealed class CannonSystem : SharedCannonSystem
     [Dependency] private readonly GunSystem _gunSystem = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
 
+    private readonly Dictionary<EntityUid, EntityUid?> _boundConsoleLookup = new();
     private readonly Dictionary<EntityUid, Vector2> _toUpdateRotation = new();
-
     private readonly Dictionary<EntityUid, (EntityUid, Vector2)> _firingCannons = new();
+
+    public Action<EntityUid, CannonComponent>? CannonChangedEvent; //used by radar
 
     public override void Initialize()
     {
         base.Initialize();
         UpdatesOutsidePrediction = true;
+        SubscribeLocalEvent<CannonComponent, ComponentInit>(OnInit);
+        SubscribeLocalEvent<CannonComponent, ComponentRemove>(OnRemoval);
+        SubscribeLocalEvent<CannonComponent, AfterAutoHandleStateEvent>(OnNewState);
         SubscribeLocalEvent<CannonComponent, RotateCannonEvent>(RotateCannons);
         SubscribeLocalEvent<CannonComponent, StartCannonFiringEvent>(RequestCannonShoot);
         SubscribeLocalEvent<CannonComponent, StopCannonFiringEventEvent>(RequestStopCannonShoot);
-        SubscribeLocalEvent<CannonComponent, ComponentRemove>(OnComponentRemove);
+    }
+
+    private void OnInit(EntityUid uid, CannonComponent cannon, ComponentInit args)
+    {
+        CannonChangedEvent?.Invoke(uid, cannon);
+    }
+
+    private void OnRemoval(EntityUid uid, CannonComponent cannon, ComponentRemove args)
+    {
+        _firingCannons.Remove(uid);
+        CannonChangedEvent?.Invoke(uid, cannon);
+    }
+
+    private void OnNewState(EntityUid uid, CannonComponent cannon, AfterAutoHandleStateEvent args)
+    {
+        if (_boundConsoleLookup.TryGetValue(uid, out var oldConsoleUid) && oldConsoleUid != cannon.BoundConsoleUid)
+        {
+            _boundConsoleLookup[uid] = cannon.BoundConsoleUid;
+            CannonChangedEvent?.Invoke(uid, cannon);
+        }
     }
 
     private void RequestCannonShoot(EntityUid uid, CannonComponent cannon, ref StartCannonFiringEvent args)
     {
         _firingCannons[uid] = (args.Pilot, args.Coordinates);
-    }
-
-    private void OnComponentRemove(EntityUid uid, CannonComponent cannon, ComponentRemove args)
-    {
-        _firingCannons.Remove(uid);
     }
 
     private void RequestStopCannonShoot(EntityUid uid, CannonComponent cannon, ref StopCannonFiringEventEvent args)

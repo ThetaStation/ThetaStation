@@ -39,7 +39,7 @@ public sealed class RadarPingsModule : RadarModule
         var offsetMatrix = OffsetMatrix;
         var relativePositionToCoordinates = RelativePositionToCoordinates(mouseRelativePosition, offsetMatrix);
 
-        _radarPingsSystem.SendPing(OwnerUid, relativePositionToCoordinates);
+        _radarPingsSystem.SendPing(ParentUid, relativePositionToCoordinates);
     }
 
     private void AddPing(PingInformation ping)
