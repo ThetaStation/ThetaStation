@@ -41,8 +41,8 @@ public sealed class BoundsOverlay : Overlay
     {
         if (args.MapId != TargetMap)
             return;
-        
-        if (_entMan.TryGetComponent<TransformComponent>(_playerMan.LocalPlayer?.ControlledEntity, out var form))
+
+        if (_entMan.TryGetComponent<TransformComponent>(_playerMan.LocalSession?.AttachedEntity, out var form))
         {
             SecondsOutsideBounds += (float) (DateTime.Now - LastTime).TotalSeconds;
 
@@ -53,11 +53,6 @@ public sealed class BoundsOverlay : Overlay
 
                 _boundsShader.SetParameter("SCREEN_TEXTURE", ScreenTexture);
                 _boundsShader.SetParameter("BRIGHTNESS", Math.Clamp(SecondsOutsideBounds / FadeInTime, 0, 1));
-                _boundsShader.SetParameter("DET_LEVELS", 4);
-                
-                //so much zeros because we actually need mat2, yet RT does not have an overload for them
-                _boundsShader.SetParameter("SCALE_MATRIX", new Matrix3(0, 8.0f, 5.5f, 0, -5.5f, 8.0f, 0, 0, 0));
-                
                 _boundsShader.SetParameter("BASE_COLOR", new Vector3(1, 0, 0));
 
                 args.WorldHandle.UseShader(_boundsShader);
@@ -69,7 +64,7 @@ public sealed class BoundsOverlay : Overlay
                 SecondsOutsideBounds = 0;
             }
         }
-        
+
         args.WorldHandle.DrawRect(new Box2(Bounds.Left - BorderWidth, Bounds.Bottom - BorderWidth, Bounds.Right - BorderWidth, Bounds.Top - BorderWidth), Color.Red, false);
         args.WorldHandle.DrawRect(Bounds, Color.Red, false);
 
