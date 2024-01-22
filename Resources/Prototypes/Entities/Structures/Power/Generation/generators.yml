@@ -193,6 +193,7 @@
   components:
     - type: PowerSupplier
       supplyRate: 150000
+      supplyRampPosition: 150000
 
 - type: entity
   parent: BaseGeneratorWallmount
