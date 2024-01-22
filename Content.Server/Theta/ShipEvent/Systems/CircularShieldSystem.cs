@@ -11,6 +11,7 @@ using Content.Shared.Theta.ShipEvent.CircularShield;
 using Content.Shared.Theta.ShipEvent.Components;
 using Content.Shared.Theta.ShipEvent.UI;
 using Robust.Server.GameObjects;
+using Robust.Server.GameStates;
 using Robust.Shared.Physics.Collision.Shapes;
 using Robust.Shared.Physics.Dynamics;
 using Robust.Shared.Physics.Events;
@@ -23,7 +24,8 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
     [Dependency] private readonly PhysicsSystem _physSys = default!;
     [Dependency] private readonly FixtureSystem _fixSys = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSys = default!;
-    [Dependency] private readonly TransformSystem _transformSystem = default!;
+    [Dependency] private readonly TransformSystem _formSys = default!;
+    [Dependency] private readonly PvsOverrideSystem _pvsIgnoreSys = default!;
 
     private const string ShieldFixtureId = "ShieldFixture";
 
@@ -57,7 +59,7 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
 
         var shieldState = new ShieldInterfaceState
         {
-            Coordinates = GetNetCoordinates(_transformSystem.GetMoverCoordinates(console.BoundShield.Value, transform)),
+            Coordinates = GetNetCoordinates(_formSys.GetMoverCoordinates(console.BoundShield.Value, transform)),
             Powered = shield.Powered,
             Angle = shield.Angle,
             Width = shield.Width,
@@ -77,7 +79,7 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
 
     private void OnShieldToggle(EntityUid uid, CircularShieldConsoleComponent console, CircularShieldToggleMessage args)
     {
-        if(console.BoundShield == null)
+        if (console.BoundShield == null)
             return;
 
         if (!TryComp(console.BoundShield, out CircularShieldComponent? shield))
@@ -90,7 +92,7 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
         {
             UpdateShieldFixture(console.BoundShield.Value, shield);
         }
-        Dirty(shield);
+        Dirty(uid, shield);
     }
 
     private void OnShieldChangeParams(EntityUid uid, CircularShieldConsoleComponent console, CircularShieldChangeParametersMessage args)
@@ -115,15 +117,17 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
         }
         else
         {
-            if(shield.DesiredDraw > 0)
+            if (shield.DesiredDraw > 0)
                 shield.Powered = false;
         }
 
-        Dirty(shield);
+        Dirty(uid, shield);
     }
 
     private void OnShieldInit(EntityUid uid, CircularShieldComponent shield, ComponentInit args)
     {
+        _pvsIgnoreSys.AddGlobalOverride(uid);
+
         if (EntityManager.TryGetComponent<DeviceLinkSinkComponent>(uid, out var source))
         {
             if (source.LinkedSources.Count > 0)
