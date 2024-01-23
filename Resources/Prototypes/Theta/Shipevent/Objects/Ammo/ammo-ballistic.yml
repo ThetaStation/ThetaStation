@@ -14,7 +14,7 @@
   noSpawn: true
   components:
   - type: TimedDespawn
-    lifetime: 5
+    lifetime: 3
   - type: Projectile
     damage:
       types:
@@ -81,11 +81,11 @@
     timeRemaining: 20
   - type: VelocityExplosionTrigger
     minVelocity: 10
-    intensityMultiplier: 4
-    maxIntensity: 200
+    intensityMultiplier: 5
+    maxIntensity: 500
   - type: Explosive
     explosionType: Default
-    maxIntensity: 20
+    maxIntensity: 500
     intensitySlope: 5
     totalIntensity: 1 #gets overriden by VelocityExplosionTrigger
   - type: MovementAcceleration
