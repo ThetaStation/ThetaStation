@@ -9,6 +9,7 @@ using Content.Shared.Explosion;
 using Content.Shared.Ghost;
 using Content.Shared.Projectiles;
 using Content.Shared.Roles.Theta;
+using Content.Shared.Theta.ShipEvent.Components;
 using Robust.Server.Maps;
 
 namespace Content.Server.Theta.ShipEvent.Systems;

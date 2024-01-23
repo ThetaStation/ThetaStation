@@ -1,5 +1,10 @@
-﻿using System.Numerics;
+﻿using System.Linq;
+using System.Numerics;
+using Content.Shared.Random;
 using Content.Shared.Shuttles.Components;
+using Content.Shared.Theta.ShipEvent;
+using Content.Shared.Theta.ShipEvent.Components;
+using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
@@ -7,20 +12,74 @@ using Robust.Shared.Collections;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
+using Serilog;
 
 namespace Content.Client.Theta.ModularRadar.Modules;
 
 public sealed class RadarGrids : RadarModule
 {
+    [Dependency] private readonly IPrototypeManager _proto = default!;
+    private readonly MapSystem _mapSystem;
+    private readonly RulesSystem _ruleSystem;
+
     /// <summary>
     /// Shows a label on each radar object.
     /// </summary>
     private Dictionary<EntityUid, Control> _iffControls = new();
 
+    private Dictionary<MapGridComponent, GridInfo> _cachedGridInfo = new();
+
     public bool ShowIFF { get; set; } = true;
+
+    private float _updateEdgeTimer = 0;
+
+    private const string PlayerShipRulePrototype = "ShipNearby";
 
     public RadarGrids(ModularRadarControl parentRadar) : base(parentRadar)
     {
+        _mapSystem = EntManager.System<MapSystem>();
+        _ruleSystem = EntManager.System<RulesSystem>();
+    }
+
+    public override void FrameUpdate(FrameEventArgs args)
+    {
+        if (Radar.Visible)
+        {
+            _updateEdgeTimer += args.DeltaSeconds;
+            UpdateGridEdges();
+        }
+    }
+
+    private void UpdateGridEdges()
+    {
+        var fixturesQuery = EntManager.GetEntityQuery<FixturesComponent>();
+        var mapPosition = ParentCoordinates!.Value.ToMap(EntManager);
+        var ourGridId = ParentCoordinates!.Value.GetGridUid(EntManager);
+
+        var findGridsIntersecting = MapManager.FindGridsIntersecting(mapPosition.MapId,
+            new Box2(mapPosition.Position - MaxRadarRangeVector, mapPosition.Position + MaxRadarRangeVector)).ToList();
+        findGridsIntersecting.Add(EntManager.GetComponent<MapGridComponent>(ourGridId!.Value));
+
+        foreach (var grid in findGridsIntersecting)
+        {
+            if (!fixturesQuery.HasComponent(grid.Owner))
+                continue;
+
+            if (!_cachedGridInfo.TryGetValue(grid, out var info))
+            {
+                var newInfo = new GridInfo(_updateEdgeTimer + GetCacheTimeExpiration(grid.Owner), GetGridEdges(grid));
+                _cachedGridInfo.Add(grid, newInfo);
+                continue;
+            }
+
+            if (_updateEdgeTimer > info.NextUpdateTime)
+            {
+                info.Edges = GetGridEdges(grid);
+                info.NextUpdateTime = _updateEdgeTimer + GetCacheTimeExpiration(grid.Owner);
+            }
+        }
     }
 
     public override void Draw(DrawingHandleScreen handle, Parameters parameters)
@@ -116,7 +175,8 @@ public sealed class RadarGrids : RadarModule
                     Math.Clamp(uiPosition.Y, 10f, Radar.Height - label.Height));
 
                 label.Visible = true;
-                label.Text = Loc.GetString("shuttle-console-iff-label", ("name", name), ("distance", $"{distance:0.0}"));
+                label.Text = Loc.GetString("shuttle-console-iff-label", ("name", name),
+                    ("distance", $"{distance:0.0}"));
                 LayoutContainer.SetPosition(label, uiPosition);
             }
             else
@@ -154,12 +214,42 @@ public sealed class RadarGrids : RadarModule
         _iffControls.Remove(uid);
     }
 
-    private void DrawGrid(DrawingHandleScreen handle, Parameters parameters, Matrix3 matrix, MapGridComponent grid, Color color)
+    private void DrawGrid(DrawingHandleScreen handle, Parameters parameters, Matrix3 matrix, MapGridComponent grid,
+        Color color)
     {
-        var rator = grid.GetAllTilesEnumerator();
-        var edges = new ValueList<Vector2>();
+        if (_cachedGridInfo.TryGetValue(grid, out var info))
+        {
+            var toRemoveIndexes = new List<Vector2>();
+            var toDrawEdges = info.Edges.ToList();
+            for (int i = 0; i < toDrawEdges.Count; i++)
+            {
+                var vector = toDrawEdges[i];
+                vector = matrix.Transform(vector);
+                if (vector.Length() > ActualRadarRange)
+                {
+                    toRemoveIndexes.Add(toDrawEdges[i]);
+                    continue;
+                }
 
-        while (rator.MoveNext(out var tileRef))
+                vector = ScalePosition(new Vector2(vector.X, -vector.Y));
+                toDrawEdges[i] = vector;
+            }
+
+            foreach (var vec in toRemoveIndexes)
+            {
+                toDrawEdges.Remove(vec);
+            }
+
+            handle.DrawPrimitives(DrawPrimitiveTopology.LineList, toDrawEdges.ToArray(), color);
+        }
+    }
+
+    private List<Vector2> GetGridEdges(MapGridComponent grid)
+    {
+        var enumerator = _mapSystem.GetAllTilesEnumerator(grid.Owner, grid);
+        var edges = new List<Vector2>();
+
+        while (enumerator.MoveNext(out var tileRef))
         {
             // TODO: Short-circuit interior chunk nodes
             // This can be optimised a lot more if required.
@@ -171,7 +261,7 @@ public sealed class RadarGrids : RadarModule
                 var dir = (DirectionFlag) Math.Pow(2, i);
                 var dirVec = dir.AsDir().ToIntVec();
 
-                if (!grid.GetTileRef(tileRef.Value.GridIndices + dirVec).Tile.IsEmpty)
+                if (!_mapSystem.GetTileRef(grid.Owner, grid, tileRef.Value.GridIndices + dirVec).Tile.IsEmpty)
                     continue;
 
                 Vector2 start;
@@ -202,20 +292,32 @@ public sealed class RadarGrids : RadarModule
                         throw new NotImplementedException();
                 }
 
-                var adjustedStart = matrix.Transform(start);
-                var adjustedEnd = matrix.Transform(end);
-
-                if (adjustedStart.Length() > ActualRadarRange || adjustedEnd.Length() > ActualRadarRange)
-                    continue;
-
-                start = ScalePosition(new Vector2(adjustedStart.X, -adjustedStart.Y));
-                end = ScalePosition(new Vector2(adjustedEnd.X, -adjustedEnd.Y));
-
                 edges.Add(start);
                 edges.Add(end);
             }
         }
 
-        handle.DrawPrimitives(DrawPrimitiveTopology.LineList, edges.Span, color);
+        return edges;
+    }
+
+    private float GetCacheTimeExpiration(EntityUid gridUid)
+    {
+        if (EntManager.HasComponent<ShipEventFactionMarkerComponent>(gridUid))
+            return 0;
+        if (!_ruleSystem.IsTrue(gridUid, _proto.Index<RulesPrototype>(PlayerShipRulePrototype)))
+            return 30;
+        return 0;
+    }
+
+    private sealed class GridInfo
+    {
+        public float NextUpdateTime;
+        public List<Vector2> Edges;
+
+        public GridInfo(float nextUpdateTime, List<Vector2> edges)
+        {
+            NextUpdateTime = nextUpdateTime;
+            Edges = edges;
+        }
     }
 }
