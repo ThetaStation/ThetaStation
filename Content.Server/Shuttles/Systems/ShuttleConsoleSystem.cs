@@ -359,7 +359,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
 
         List<CommonRadarEntityInterfaceState> common = new();
         if (radar != null)
-            _radarRenderable.GetObjectsAround(consoleUid, radar);
+            common = _radarRenderable.GetObjectsAround(consoleUid, radar);
 
         if (_ui.TryGetUi(consoleUid, ShuttleConsoleUiKey.Key, out var bui))
         {
