@@ -1,13 +1,17 @@
-﻿using Content.Shared.Theta.ShipEvent.UI;
+﻿using Content.Shared.Shuttles.BUIStates;
+using Content.Shared.Theta.ShipEvent;
+using Content.Shared.Theta.ShipEvent.UI;
 using JetBrains.Annotations;
 
 namespace Content.Client.Theta.ShipEvent.Console;
 
-//todo (radars): move this into some kind of module/force it to use client comps (we are already ignoring pvs for controlled cannons)
+//todo (radars): move this into some kind of module
 [UsedImplicitly]
 public sealed class CannonConsoleBoundUserInterface : BoundUserInterface
 {
     private CannonConsoleWindow? _window;
+
+    private CannonSystem _cannonSys = default!;
 
     public CannonConsoleBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey) {}
 
@@ -18,6 +22,8 @@ public sealed class CannonConsoleBoundUserInterface : BoundUserInterface
         _window.OnClose += Close;
         _window.OpenCentered();
 
+        _cannonSys = EntMan.System<CannonSystem>();
+
         var msg = new CannonConsoleBUIStateMessage();
         msg.Created = true;
         SendMessage(msg);
@@ -26,12 +32,21 @@ public sealed class CannonConsoleBoundUserInterface : BoundUserInterface
     protected override void UpdateState(BoundUserInterfaceState state)
     {
         base.UpdateState(state);
-        if (state is not CannonConsoleBoundInterfaceState cState)
+        if (state is not RadarConsoleBoundInterfaceState radarState)
             return;
 
-        _window?.SetMatrix(EntMan.GetCoordinates(cState.Coordinates), cState.Angle);
+        _window?.SetMatrix(EntMan.GetCoordinates(radarState.Coordinates), radarState.Angle);
         _window?.SetOwner(Owner);
-        _window?.UpdateState(cState);
+
+        var ammoValues = new List<(int, int)>();
+        var query = EntMan.EntityQueryEnumerator<CannonComponent>();
+        while (query.MoveNext(out var uid, out var cannon))
+        {
+            if (cannon.BoundConsoleUid == Owner)
+                ammoValues.Add(_cannonSys.GetCannonAmmoCount(uid, cannon));
+        }
+
+        _window?.UpdateState(radarState, ammoValues);
     }
 
     protected override void Dispose(bool disposing)

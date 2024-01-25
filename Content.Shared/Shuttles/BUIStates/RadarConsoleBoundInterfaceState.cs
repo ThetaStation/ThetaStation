@@ -70,18 +70,6 @@ public enum RadarRenderableGroup
     All = (ShipEventTeammate | Projectiles | Cannon | Door | Pickup),
 }
 
-/// <summary>
-/// State of each cannon on shuttle grid
-/// </summary>
-[Serializable, NetSerializable]
-public sealed class CannonInformationInterfaceState
-{
-    public NetEntity Uid;
-    public bool IsControlling;
-    public int Ammo;
-    public int MaxAmmo;
-}
-
 [Serializable, NetSerializable]
 public sealed class ShieldInterfaceState
 {

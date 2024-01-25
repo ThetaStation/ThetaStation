@@ -1,7 +1,9 @@
 using System.Numerics;
 using Content.Client.Weapons.Ranged.Systems;
 using Content.Shared.Theta.ShipEvent;
+using Content.Shared.Weapons.Ranged.Events;
 using FastAccessors;
+using Linguini.Bundle.Errors;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 

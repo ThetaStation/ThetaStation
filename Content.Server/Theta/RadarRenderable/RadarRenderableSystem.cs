@@ -1,5 +1,6 @@
 using Content.Server.Roles;
 using Content.Server.Shuttles.Systems;
+using Content.Server.Theta.ShipEvent;
 using Content.Server.Theta.ShipEvent.Console;
 using Content.Shared.Doors.Components;
 using Content.Shared.Mind.Components;
@@ -18,7 +19,7 @@ public sealed class RadarRenderableSystem : EntitySystem
     [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
     [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
     [Dependency] private readonly RadarConsoleSystem _radarConsoleSystem = default!;
-    [Dependency] private readonly CannonConsoleSystem _cannonConsoleSystem = default!;
+    [Dependency] private readonly CannonSystem _cannonSystem = default!;
 
     public List<CommonRadarEntityInterfaceState> GetObjectsAround(EntityUid consoleUid, RadarConsoleComponent radar)
     {
@@ -80,7 +81,7 @@ public sealed class RadarRenderableSystem : EntitySystem
         if (!Transform(uid).Anchored)
             return null;
 
-        var (ammo, maxAmmo) = _cannonConsoleSystem.GetCannonAmmoCount(uid, cannon);
+        var (ammo, maxAmmo) = _cannonSystem.GetCannonAmmoCount(uid, cannon);
         var mainColor = (cannon.BoundConsoleUid == consoleUid) ? Color.Lime : (isCannonConsole ? Color.LightGreen : Color.YellowGreen);
 
         var hsvColor = Color.ToHsv(mainColor);
