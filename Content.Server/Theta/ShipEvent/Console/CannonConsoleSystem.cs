@@ -5,6 +5,7 @@ using Content.Shared.Theta.ShipEvent;
 using Content.Shared.Theta.ShipEvent.UI;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Server.GameObjects;
+using Robust.Server.GameStates;
 using Robust.Shared.Map;
 
 namespace Content.Server.Theta.ShipEvent.Console;
@@ -13,6 +14,13 @@ public sealed class CannonConsoleSystem : EntitySystem
 {
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
     [Dependency] private readonly RadarRenderableSystem _radarRenderable = default!;
+    [Dependency] private readonly PvsOverrideSystem _pvsOverrideSys = default!;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        SubscribeLocalEvent<CannonConsoleComponent, CannonConsoleBUIStateMessage>(OnBUIStateChange);
+    }
 
     public override void Update(float frameTime)
     {
@@ -24,6 +32,29 @@ public sealed class CannonConsoleSystem : EntitySystem
             if (!_uiSystem.IsUiOpen(uid, CannonConsoleUiKey.Key))
                 continue;
             UpdateState(uid, radar, transform);
+        }
+    }
+
+    public void OnBUIStateChange(EntityUid uid, CannonConsoleComponent console, CannonConsoleBUIStateMessage msg)
+    {
+        List<EntityUid> controlledUids = new();
+        var query = EntityManager.EntityQueryEnumerator<CannonComponent>();
+        while (query.MoveNext(out var cannonUid, out var cannon))
+        {
+            if (cannon.BoundConsoleUid == uid)
+                controlledUids.Add(cannonUid);
+        }
+
+        foreach (EntityUid controlledUid in controlledUids)
+        {
+            if (msg.Created)
+            {
+                _pvsOverrideSys.AddSessionOverride(controlledUid, msg.Session);
+            }
+            else
+            {
+                _pvsOverrideSys.RemoveSessionOverride(controlledUid, msg.Session);
+            }
         }
     }
 

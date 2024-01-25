@@ -22,6 +22,7 @@ public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
     //todo (radars): we are already sending all the data we need for the radar's UI, by dirtying cannons, shields, and other stuff,
     //yet we redundantly send those BUI states. we need to come up with a way to separate shield, cannon and shuttle console windows
     //functionality into something like radar modules, and force them to use clients comp data
+    //...or atleast remove docks from this state and move it to shuttle console
     public RadarConsoleBoundInterfaceState(
         float maxRange,
         NetCoordinates? coordinates,
