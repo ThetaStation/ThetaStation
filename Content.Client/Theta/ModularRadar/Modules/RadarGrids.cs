@@ -302,8 +302,8 @@ public sealed class RadarGrids : RadarModule
 
     private float GetCacheTimeExpiration(EntityUid gridUid)
     {
-       // if (EntManager.HasComponent<ShuttleComponent>(gridUid))
-       //     return 0;
+        if (EntManager.HasComponent<ShipEventFactionMarkerComponent>(gridUid))
+            return 0;
         if (!_ruleSystem.IsTrue(gridUid, _proto.Index<RulesPrototype>(PlayerShipRulePrototype)))
             return 30;
         return 0;

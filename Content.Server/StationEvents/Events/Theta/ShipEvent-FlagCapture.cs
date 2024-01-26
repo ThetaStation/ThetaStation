@@ -6,6 +6,7 @@ using Content.Server.Theta.DebrisGeneration;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Server.Theta.ShipEvent.Systems;
 using Content.Shared.Roles.Theta;
+using Content.Shared.Theta.ShipEvent.Components;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
@@ -46,7 +47,7 @@ public sealed class SEFCRule : StationEventSystem<SEFCRuleComponent>
         SubscribeLocalEvent<SEFCFlagComponent, ComponentShutdown>(OnFlagShutdown);
         _shipSys.RoundEndEvent += OnRoundEnd;
     }
-    
+
     protected override void Started(EntityUid uid, SEFCRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
         base.Started(uid, component, gameRule, args);
@@ -56,20 +57,20 @@ public sealed class SEFCRule : StationEventSystem<SEFCRuleComponent>
             Log.Warning("Tried to start SEFC without shipevent, exiting.");
             return;
         }
-        
+
         Box2 fieldBounds = _shipSys.GetPlayAreaBounds();
         _debrisSys.ClearArea(_shipSys.TargetMap, (Box2i)new Box2(fieldBounds.BottomLeft, fieldBounds.TopRight).Scale(0.1f));
         Spawn(FlagPrototypeId, new MapCoordinates(fieldBounds.Center, _shipSys.TargetMap));
 
         _shipSys.CreateTeam(default!, "RED", null, null, 0, true);
         _shipSys.Teams[0].Color = Color.Red;
-        
+
         _shipSys.CreateTeam(default!, "BLU", null, null, 0, true);
         _shipSys.Teams[1].Color = Color.Blue;
-        
+
         _shipSys.AllowTeamRegistration = false;
         _shipSys.RemoveEmptyTeams = false;
-        
+
         Timer.SpawnRepeating(UpdateInterval, CheckFlagPositions, CancellationToken.None);
     }
 
@@ -91,12 +92,12 @@ public sealed class SEFCRule : StationEventSystem<SEFCRuleComponent>
             flag.LastTeam = newTeam;
         }
     }
-    
+
     private void OnFlagShutdown(EntityUid uid, SEFCFlagComponent flag, ComponentShutdown args)
     {
         if (!_shipSys.RuleSelected) //it shouldn't get this far without SE rule selected anyway, this is just for the unit tests
             return;
-        
+
         ClearCenterOfTheField();
         EntityUid newFlag = Spawn(FlagPrototypeId, new MapCoordinates(FieldBounds.Center, _shipSys.TargetMap));
         Comp<SEFCFlagComponent>(newFlag).LastTeam = flag.LastTeam;
@@ -105,7 +106,7 @@ public sealed class SEFCRule : StationEventSystem<SEFCRuleComponent>
     private void CheckFlagPositions()
     {
         bool centerClear = false;
-        
+
         foreach ((SEFCFlagComponent _, TransformComponent form) in EntityManager.EntityQuery<SEFCFlagComponent, TransformComponent>())
         {
             if (!FieldBounds.Contains(_formSys.GetWorldPosition(form)))
@@ -129,7 +130,7 @@ public sealed class SEFCRule : StationEventSystem<SEFCRuleComponent>
                 Log.Error($"SEFC, OnRoundEnd: Flag's last team is null ({flag.Owner}). Either none of the teams have ever captured it, or something went wrong.");
                 continue;
             }
-            
+
             flag.LastTeam.Points += PointsPerFlag;
             args.AddLine(Loc.GetString("sefc-teamwin", ("team", flag.LastTeam.Name)));
         }
