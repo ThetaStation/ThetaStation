@@ -90,6 +90,7 @@
     !type:TextureRadarForm
     sprite: /Textures/Theta/ShipEvent/Objects/Anomalies.rsi/radanomaly.png
     scale: 1
+    constScale: false
 
 #todo (radars): it sucks having to create 999 protos for circles with different radius
 - type: radarEntityView
@@ -97,12 +98,14 @@
   defaultColor: "#ffff0022"
   form:
     !type:CircleRadarForm
-    radius: 29.9
+    radius: 79.9
+    constScale: false
 
 - type: radarEntityView
   id: radanomaly_border
   defaultColor: "#ffaa00"
   form:
     !type:CircleRadarForm
-    radius: 30
+    radius: 80
+    constScale: false
     filled: false

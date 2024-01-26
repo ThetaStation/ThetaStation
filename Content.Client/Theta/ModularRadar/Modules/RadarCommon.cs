@@ -42,11 +42,10 @@ public sealed class RadarCommon : RadarModule
             foreach (string viewProt in state.ViewPrototypes)
             {
                 var view = _prototypeManager.Index<RadarEntityViewPrototype>(viewProt);
-
                 var position = EntManager.GetCoordinates(state.Coordinates).ToMapPos(EntManager, _transformSystem);
                 var angle = state.Angle;
-
                 var color = state.OverrideColor ?? view.DefaultColor;
+                var scale = view.OnRadarForm.ConstantScale ? 1 : NormalMinimapScale;
 
                 switch (view.OnRadarForm)
                 {
@@ -54,7 +53,8 @@ public sealed class RadarCommon : RadarModule
                         var uiPosition = matrix.Transform(position);
                         uiPosition.Y = -uiPosition.Y;
                         uiPosition = ScalePosition(uiPosition);
-                        handle.DrawCircle(uiPosition, circleRadarForm.Radius, color, circleRadarForm.Filled);
+
+                        handle.DrawCircle(uiPosition, circleRadarForm.Radius * scale, color, circleRadarForm.Filled);
                         break;
                     case ShapeRadarForm shapeRadarForm:
                         var verts = new Vector2[shapeRadarForm.Vertices.Length];
@@ -64,7 +64,8 @@ public sealed class RadarCommon : RadarModule
                             verts[i] *= shapeRadarForm.Size;
                             verts[i] = matrix.Transform(position + angle.RotateVec(verts[i]));
                             verts[i].Y = -verts[i].Y;
-                            verts[i] = ScalePosition(verts[i]);
+                            if (!view.OnRadarForm.ConstantScale)
+                                verts[i] = ScalePosition(verts[i]);
                         }
                         handle.DrawPrimitives(GetTopology((SharedDrawPrimitiveTopology) shapeRadarForm.PrimitiveTopology), verts, color);
                         break;
@@ -72,7 +73,8 @@ public sealed class RadarCommon : RadarModule
                         var uiPositionChar = matrix.Transform(position);
                         uiPositionChar.Y = -uiPositionChar.Y;
                         uiPositionChar = ScalePosition(uiPositionChar);
-                        _font.DrawChar(handle, new Rune((uint) charRadarForm.Char), uiPositionChar, charRadarForm.Scale, color);
+
+                        _font.DrawChar(handle, new Rune((uint) charRadarForm.Char), uiPositionChar, charRadarForm.Scale * scale, color);
                         break;
                     case TextureRadarForm textureRadarForm:
                         var uiPositionTexture = matrix.Transform(position);
@@ -80,7 +82,7 @@ public sealed class RadarCommon : RadarModule
                         uiPositionTexture = ScalePosition(uiPositionTexture);
 
                         var texture = _spriteSystem.Frame0(textureRadarForm.Sprite);
-                        var textureSize = texture.Size * textureRadarForm.Scale;
+                        var textureSize = texture.Size * textureRadarForm.Scale * scale;
                         var box = UIBox2.FromDimensions(uiPositionTexture - textureSize * 0.5f, textureSize);
 
                         handle.DrawTextureRect(texture, box);

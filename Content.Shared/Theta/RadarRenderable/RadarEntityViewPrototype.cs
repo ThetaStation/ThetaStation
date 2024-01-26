@@ -14,16 +14,18 @@ public sealed class RadarEntityViewPrototype : IPrototype
     public Color DefaultColor;
 
     [DataField("form")]
-    public IRadarRenderableForm OnRadarForm = default!;
+    public RadarRenderableForm OnRadarForm = default!;
 }
 
-public interface IRadarRenderableForm
+public abstract class RadarRenderableForm
 {
+    [DataField("constScale")]
+    public bool ConstantScale = true;
 }
 
 [Serializable]
 [DataDefinition]
-public sealed partial class ShapeRadarForm : IRadarRenderableForm
+public sealed partial class ShapeRadarForm : RadarRenderableForm
 {
     [DataField("vertices", required: true)]
     public Vector2[] Vertices = Array.Empty<Vector2>();
@@ -37,7 +39,7 @@ public sealed partial class ShapeRadarForm : IRadarRenderableForm
 
 [Serializable]
 [DataDefinition]
-public sealed partial class CircleRadarForm : IRadarRenderableForm
+public sealed partial class CircleRadarForm : RadarRenderableForm
 {
     [DataField("radius")]
     public float Radius = 1f;
@@ -48,7 +50,7 @@ public sealed partial class CircleRadarForm : IRadarRenderableForm
 
 [Serializable]
 [DataDefinition]
-public sealed partial class CharRadarForm : IRadarRenderableForm
+public sealed partial class CharRadarForm : RadarRenderableForm
 {
     [DataField("char", required: true)]
     public char Char = '\0';
@@ -59,7 +61,7 @@ public sealed partial class CharRadarForm : IRadarRenderableForm
 
 [Serializable]
 [DataDefinition]
-public sealed partial class TextureRadarForm : IRadarRenderableForm
+public sealed partial class TextureRadarForm : RadarRenderableForm
 {
     [DataField("sprite", required: true)]
     public SpriteSpecifier Sprite = default!;
