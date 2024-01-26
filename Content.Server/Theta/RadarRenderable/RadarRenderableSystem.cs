@@ -98,7 +98,7 @@ public sealed class RadarRenderableSystem : EntitySystem
         return new CommonRadarEntityInterfaceState(
             GetNetCoordinates(_transformSystem.GetMoverCoordinates(uid, xform)),
             _transformSystem.GetWorldRotation(xform),
-            radarRenderable.RadarView,
+            radarRenderable.ViewPrototypes,
             mainColor
         );
     }
@@ -109,7 +109,7 @@ public sealed class RadarRenderableSystem : EntitySystem
         return new CommonRadarEntityInterfaceState(
             GetNetCoordinates(_transformSystem.GetMoverCoordinates(uid, xform)),
             _transformSystem.GetWorldRotation(xform),
-            renderable.RadarView
+            renderable.ViewPrototypes
         );
     }
 
@@ -136,7 +136,7 @@ public sealed class RadarRenderableSystem : EntitySystem
         return new CommonRadarEntityInterfaceState(
             GetNetCoordinates(_transformSystem.GetMoverCoordinates(uid, xform)),
             _transformSystem.GetWorldRotation(xform),
-            renderable.RadarView,
+            renderable.ViewPrototypes,
             color
         );
     }
@@ -171,7 +171,7 @@ public sealed class RadarRenderableSystem : EntitySystem
         return new CommonRadarEntityInterfaceState(
             GetNetCoordinates(_transformSystem.GetMoverCoordinates(uid, xform)),
             _transformSystem.GetWorldRotation(xform),
-            renderable.RadarView,
+            renderable.ViewPrototypes,
             color
         );
     }

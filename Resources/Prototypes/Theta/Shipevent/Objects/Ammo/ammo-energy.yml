@@ -15,7 +15,8 @@
       range: 4
       energyConsumption: 3000
     - type: RadarRenderable
-      radarView: ionProjectile
+      viewProtos: 
+      - ionProjectile
 
 # Plasma
 - type: entity

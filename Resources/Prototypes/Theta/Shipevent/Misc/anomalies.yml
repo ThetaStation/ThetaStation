@@ -1,0 +1,14 @@
+- type: entity
+  id: ShipEventRadiationAnomaly
+  parent: RadiationPulse
+  components:
+  - type: RadiationSource
+    intensity: 10
+  - type: TimedDespawn
+    lifetime: 120
+  - type: RadarRenderable
+    viewProtos: 
+    - radanomaly_icon
+    - radanomaly_border
+    - radanomaly_fill
+    group: enum.RadarRenderableGroup.Anomaly

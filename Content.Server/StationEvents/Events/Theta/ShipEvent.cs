@@ -1,8 +1,8 @@
 using Content.Server.GameTicking.Rules.Components;
-using Content.Server.Theta.DebrisGeneration;
-using Content.Server.Theta.DebrisGeneration.Generators;
-using Content.Server.Theta.DebrisGeneration.Processors;
-using Content.Server.Theta.DebrisGeneration.Prototypes;
+using Content.Server.Theta.MapGen;
+using Content.Server.Theta.MapGen.Generators;
+using Content.Server.Theta.MapGen.Processors;
+using Content.Server.Theta.MapGen.Prototypes;
 using Content.Shared.Theta.ShipEvent;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Server.Theta.ShipEvent.Systems;
@@ -86,7 +86,7 @@ public sealed partial class ShipEventRuleComponent : Component
 public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
 {
     [Dependency] private ShipEventFactionSystem _shipSys = default!;
-    [Dependency] private DebrisGenerationSystem _debrisSys = default!;
+    [Dependency] private MapGenSystem _mapGenSys = default!;
     [Dependency] private readonly IMapManager _mapMan = default!;
     [Dependency] private readonly IPrototypeManager _protMan = default!;
     [Dependency] private readonly IPlayerManager _playerMan = default!;
@@ -187,7 +187,7 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
 
         List<Processor> globalProcessors = new() { iffSplitProc, iffFlagProc };
 
-        _debrisSys.SpawnStructures(map,
+        _mapGenSys.SpawnStructures(map,
             Vector2i.Zero,
             component.InitialObstacleAmount + _rand.Next(-component.ObstacleAmountAmplitude, component.ObstacleAmountAmplitude),
             _shipSys.MaxSpawnOffset,

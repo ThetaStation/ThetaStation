@@ -2,7 +2,7 @@ using System.Numerics;
 using System.Threading;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules.Components;
-using Content.Server.Theta.DebrisGeneration;
+using Content.Server.Theta.MapGen;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Server.Theta.ShipEvent.Systems;
 using Content.Shared.Roles.Theta;
@@ -30,7 +30,7 @@ public sealed partial class SEFCFlagComponent : Component
 public sealed class SEFCRule : StationEventSystem<SEFCRuleComponent>
 {
     [Dependency] private TransformSystem _formSys = default!;
-    [Dependency] private DebrisGenerationSystem _debrisSys = default!;
+    [Dependency] private MapGenSystem _mapGenSys = default!;
     [Dependency] private ShipEventFactionSystem _shipSys = default!;
 
     private const string FlagPrototypeId = "SEFCFlag";
@@ -58,7 +58,7 @@ public sealed class SEFCRule : StationEventSystem<SEFCRuleComponent>
         }
         
         Box2 fieldBounds = _shipSys.GetPlayAreaBounds();
-        _debrisSys.ClearArea(_shipSys.TargetMap, (Box2i)new Box2(fieldBounds.BottomLeft, fieldBounds.TopRight).Scale(0.1f));
+        _mapGenSys.ClearArea(_shipSys.TargetMap, (Box2i)new Box2(fieldBounds.BottomLeft, fieldBounds.TopRight).Scale(0.1f));
         Spawn(FlagPrototypeId, new MapCoordinates(fieldBounds.Center, _shipSys.TargetMap));
 
         _shipSys.CreateTeam(default!, "RED", null, null, 0, true);
@@ -76,7 +76,7 @@ public sealed class SEFCRule : StationEventSystem<SEFCRuleComponent>
     //to ensure that flags will not become stuck inside some asteroid
     private void ClearCenterOfTheField()
     {
-        _debrisSys.ClearArea(_shipSys.TargetMap, (Box2i)new Box2(FieldBounds.BottomLeft, FieldBounds.TopRight).Scale(0.1f));
+        _mapGenSys.ClearArea(_shipSys.TargetMap, (Box2i)new Box2(FieldBounds.BottomLeft, FieldBounds.TopRight).Scale(0.1f));
     }
 
     private void OnFlagParentChanged(EntityUid uid, SEFCFlagComponent flag, ref EntParentChangedMessage args)

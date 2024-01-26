@@ -56,15 +56,15 @@ public sealed class CommonRadarEntityInterfaceState
 {
     public NetCoordinates Coordinates;
     public Angle Angle;
-    public string RadarViewPrototype;
+    public List<string> ViewPrototypes;
     public Color? OverrideColor;
 
-    public CommonRadarEntityInterfaceState(NetCoordinates coordinates, Angle angle, string radarViewPrototype,
+    public CommonRadarEntityInterfaceState(NetCoordinates coordinates, Angle angle, List<string> viewPrototypes,
         Color? color = null)
     {
         Coordinates = coordinates;
         Angle = angle;
-        RadarViewPrototype = radarViewPrototype;
+        ViewPrototypes = viewPrototypes;
         OverrideColor = color;
     }
 }
@@ -79,8 +79,9 @@ public enum RadarRenderableGroup
     Cannon                 = 1 << 2,
     Door                   = 1 << 3,
     Pickup                 = 1 << 4,
+    Anomaly                = 1 << 5,
 
-    All = (ShipEventTeammate | Projectiles | Cannon | Door | Pickup),
+    All = (ShipEventTeammate | Projectiles | Cannon | Door | Pickup | Anomaly),
 }
 
 /// <summary>

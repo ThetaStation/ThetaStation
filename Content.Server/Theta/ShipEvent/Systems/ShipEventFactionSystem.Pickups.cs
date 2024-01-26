@@ -1,5 +1,4 @@
-﻿using Content.Shared.Dataset;
-using Content.Shared.Random;
+﻿using Content.Shared.Random;
 using Content.Shared.Random.Helpers;
 using Robust.Shared.Map;
 
@@ -22,7 +21,7 @@ public sealed partial class ShipEventFactionSystem
         if (_timing.CurTime < _nextPickupsSpawn)
             return;
 
-        if(PickupPositions.Count == 0)
+        if (PickupPositions.Count == 0)
             FindPickupPositions();
 
         DeletePickups();

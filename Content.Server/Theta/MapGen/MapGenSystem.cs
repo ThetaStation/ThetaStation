@@ -1,18 +1,18 @@
 using System.Linq;
 using System.Numerics;
-using Content.Server.Theta.DebrisGeneration.Prototypes;
+using Content.Server.Theta.MapGen.Prototypes;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
-namespace Content.Server.Theta.DebrisGeneration;
+namespace Content.Server.Theta.MapGen;
 
 /// <summary>
 /// System providing modular, procedural generation of various structures
 /// </summary>
-public sealed class DebrisGenerationSystem : EntitySystem
+public sealed class MapGenSystem : EntitySystem
 {
     //public fields are for the systems most commonly used by generators & processors,
     //to prevent wasting a bit of time calling IoC every time & for convenience
@@ -515,7 +515,7 @@ public sealed class DebrisGenerationSystem : EntitySystem
 [ImplicitDataDefinitionForInheritors]
 public abstract partial class Generator
 {
-    public abstract EntityUid Generate(DebrisGenerationSystem sys, MapId targetMap);
+    public abstract EntityUid Generate(MapGenSystem sys, MapId targetMap);
 }
 
 /// <summary>
@@ -524,5 +524,5 @@ public abstract partial class Generator
 [ImplicitDataDefinitionForInheritors]
 public abstract partial class Processor
 {
-    public abstract void Process(DebrisGenerationSystem sys, MapId targetMap, EntityUid gridUid, bool isGlobal);
+    public abstract void Process(MapGenSystem sys, MapId targetMap, EntityUid gridUid, bool isGlobal);
 }

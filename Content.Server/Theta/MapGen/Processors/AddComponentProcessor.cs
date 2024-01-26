@@ -5,7 +5,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Reflection;
 using Robust.Shared.Serialization.Manager;
 
-namespace Content.Server.Theta.DebrisGeneration.Processors;
+namespace Content.Server.Theta.MapGen.Processors;
 
 /// <summary>
 /// Processor which adds specified components onto processed grid (not grid entities)
@@ -17,7 +17,7 @@ public sealed partial class AddComponentsProcessor : Processor
     [AlwaysPushInheritance]
     public ComponentRegistry Components = new();
 
-    public override void Process(DebrisGenerationSystem sys, MapId targetMap, EntityUid gridUid, bool isGlobal)
+    public override void Process(MapGenSystem sys, MapId targetMap, EntityUid gridUid, bool isGlobal)
     {
         if (isGlobal)
         {
@@ -32,7 +32,7 @@ public sealed partial class AddComponentsProcessor : Processor
         }
     }
 
-    public void AddComponents(DebrisGenerationSystem sys, EntityUid gridUid)
+    public void AddComponents(MapGenSystem sys, EntityUid gridUid)
     {
         //todo: this is a copypaste from AddComponentSpecial, all concerns from there apply here too
         var factory = IoCManager.Resolve<IComponentFactory>();

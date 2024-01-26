@@ -2,7 +2,7 @@ using Content.Server.Shuttles.Systems;
 using Content.Shared.Shuttles.Components;
 using Robust.Shared.Map;
 
-namespace Content.Server.Theta.DebrisGeneration.Processors;
+namespace Content.Server.Theta.MapGen.Processors;
 
 /// <summary>
 /// Processor which adds specified IFF flags onto processed grid
@@ -24,7 +24,7 @@ public sealed partial class FlagIFFProcessor : Processor
     [DataField("colorOverride")]
     public Color? ColorOverride;
 
-    public override void Process(DebrisGenerationSystem sys, MapId targetMap, EntityUid gridUid, bool isGlobal)
+    public override void Process(MapGenSystem sys, MapId targetMap, EntityUid gridUid, bool isGlobal)
     {
         var shuttleSys = sys.EntMan.System<ShuttleSystem>();
         if (isGlobal)

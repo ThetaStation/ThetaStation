@@ -34,7 +34,8 @@
           layer:
             - WallLayer
     - type: RadarRenderable
-      radarView: flagView
+      viewProtos: 
+      - flagView
       group: enum.RadarRenderableGroup.Pickup
 
 - type: entity

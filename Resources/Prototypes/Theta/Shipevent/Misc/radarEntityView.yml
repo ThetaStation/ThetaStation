@@ -81,3 +81,28 @@
     !type:CharRadarForm
     char: '+'
     scale: 1.5
+
+#anomalies
+- type: radarEntityView
+  id: radanomaly_icon
+  defaultColor: "#ffffff"
+  form:
+    !type:TextureRadarForm
+    sprite: /Textures/Theta/ShipEvent/Objects/Anomalies.rsi/radanomaly.png
+    scale: 1
+
+#todo (radars): it sucks having to create 999 protos for circles with different radius
+- type: radarEntityView
+  id: radanomaly_fill
+  defaultColor: "#ffff0022"
+  form:
+    !type:CircleRadarForm
+    radius: 29.9
+
+- type: radarEntityView
+  id: radanomaly_border
+  defaultColor: "#ffaa00"
+  form:
+    !type:CircleRadarForm
+    radius: 30
+    filled: false

@@ -39,8 +39,11 @@ public sealed partial class ShapeRadarForm : IRadarRenderableForm
 [DataDefinition]
 public sealed partial class CircleRadarForm : IRadarRenderableForm
 {
-    [DataField("radius", required: true)]
+    [DataField("radius")]
     public float Radius = 1f;
+
+    [DataField("filled")]
+    public bool Filled = true;
 }
 
 [Serializable]

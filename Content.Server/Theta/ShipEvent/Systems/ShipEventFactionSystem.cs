@@ -13,8 +13,8 @@ using Content.Server.Radio.Components;
 using Content.Server.Roles;
 using Content.Server.RoundEnd;
 using Content.Server.Shuttles.Components;
-using Content.Server.Theta.DebrisGeneration;
-using Content.Server.Theta.DebrisGeneration.Prototypes;
+using Content.Server.Theta.MapGen;
+using Content.Server.Theta.MapGen.Prototypes;
 using Content.Server.Theta.MobHUD;
 using Content.Server.Theta.NiceColors;
 using Content.Server.Theta.NiceColors.ColorPalettes;
@@ -52,7 +52,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     [Dependency] private readonly ChatSystem _chatSys = default!;
     [Dependency] private readonly IChatManager _chatManager = default!;
     [Dependency] private readonly MobHUDSystem _hudSys = default!;
-    [Dependency] private readonly DebrisGenerationSystem _debrisSys = default!;
+    [Dependency] private readonly MapGenSystem _mapGenSys = default!;
     [Dependency] private readonly IdentitySystem _idSys = default!;
     [Dependency] private readonly MapLoaderSystem _mapSys = default!;
     [Dependency] private readonly IMapManager _mapMan = default!;
@@ -510,7 +510,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
         ShipTypePrototype shipType = initialShipType ?? _random.Pick(ShipTypes.Where(t => t.MinCrewAmount == 1).ToList());
 
-        var ship = _debrisSys.RandomPosSpawn(
+        var ship = _mapGenSys.RandomPosSpawn(
             TargetMap,
             new Vector2(CurrentBoundsOffset, CurrentBoundsOffset),
             MaxSpawnOffset - CurrentBoundsOffset,
@@ -814,7 +814,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
             shipStructProt = _protMan.Index<StructurePrototype>(_random.Pick(ShipTypes).StructurePrototype);
         }
 
-        var newShip = _debrisSys.RandomPosSpawn(
+        var newShip = _mapGenSys.RandomPosSpawn(
             TargetMap,
             new Vector2(CurrentBoundsOffset, CurrentBoundsOffset),
             MaxSpawnOffset - CurrentBoundsOffset,
