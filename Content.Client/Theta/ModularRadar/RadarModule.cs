@@ -15,7 +15,7 @@ public abstract class RadarModule
 
     protected EntityCoordinates? ParentCoordinates => Radar.GetConsoleCoordinates();
     protected Angle? ParentRotation => Radar.GetConsoleRotation();
-    protected EntityUid OwnerUid => Radar.OwnerUid;
+    protected EntityUid ParentUid => Radar.OwnerUid;
 
     protected Vector2 MaxRadarRangeVector => new Vector2(MaxRadarRange, MaxRadarRange);
 

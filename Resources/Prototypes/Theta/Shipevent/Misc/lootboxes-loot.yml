@@ -115,8 +115,8 @@
     - type: RCD
       delay: 0
     - type: LimitedCharges
-      maxCharges: 50
-      charges: 50
+      maxCharges: 20
+      charges: 20
     - type: UseDelay
       delay: 0
 
@@ -137,4 +137,4 @@
       startingCharge: 10000
     - type: ProjectileBatteryAmmoProvider
       proto: PlasmaBolt
-      fireCost: 200
+      fireCost: 1000

@@ -356,17 +356,10 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         }
 
         docks ??= GetAllDocks();
-        var all = new List<CommonRadarEntityInterfaceState>();
-        var cannons = new List<CannonInformationInterfaceState>();
-        var doors = new List<DoorInterfaceState>();
-        var shield = new List<ShieldInterfaceState>();
+
+        List<CommonRadarEntityInterfaceState> common = new();
         if (radar != null)
-        {
-            all = _radarRenderable.GetObjectsAround(consoleUid, radar);
-            cannons = _radarConsoleSystem.GetCannonInfoByMyGrid(consoleUid, radar);
-            doors = _radarConsoleSystem.GetDoorInfoByMyGrid(consoleUid, radar);
-            shield = _radarConsoleSystem.GetShieldsAround(radar);
-        }
+            common = _radarRenderable.GetObjectsAround(consoleUid, radar);
 
         if (_ui.TryGetUi(consoleUid, ShuttleConsoleUiKey.Key, out var bui))
         {
@@ -378,10 +371,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
                 GetNetCoordinates(consoleXform?.Coordinates),
                 consoleXform?.LocalRotation,
                 docks,
-                cannons,
-                doors,
-                all,
-                shield));
+                common));
         }
     }
 
@@ -411,7 +401,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         var shuttleComponent = EntityQueryEnumerator<ShuttleConsoleComponent>();
         while (shuttleComponent.MoveNext(out var uid, out var _))
         {
-            if(!_ui.IsUiOpen(uid, ShuttleConsoleUiKey.Key))
+            if (!_ui.IsUiOpen(uid, ShuttleConsoleUiKey.Key))
                 continue;
             UpdateState(uid);
         }
@@ -467,7 +457,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         pilotComponent.Console = uid;
         ActionBlockerSystem.UpdateCanMove(entity);
         pilotComponent.Position = EntityManager.GetComponent<TransformComponent>(entity).Coordinates;
-        Dirty(pilotComponent);
+        Dirty(entity, pilotComponent);
     }
 
     public void RemovePilot(EntityUid pilotUid, PilotComponent pilotComponent)

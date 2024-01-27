@@ -1,4 +1,3 @@
-using Content.Shared.Theta.RadarRenderable;
 using Robust.Shared.Map;
 using Robust.Shared.Serialization;
 
@@ -9,44 +8,32 @@ namespace Content.Shared.Shuttles.BUIStates;
 public class RadarConsoleBoundInterfaceState : BoundUserInterfaceState
 {
     public readonly float MaxRange;
-
     /// <summary>
     /// The relevant coordinates to base the radar around.
     /// </summary>
     public NetCoordinates? Coordinates;
-
     /// <summary>
     /// The relevant rotation to rotate the angle around.
     /// </summary>
     public Angle? Angle;
-
-    public readonly List<DockingInterfaceState> Docks;
-
-    public readonly List<CannonInformationInterfaceState> Cannons;
-
-    public readonly List<DoorInterfaceState> Doors;
-
+    public readonly List<DockingInterfaceState> Docks; //todo (radars): docks are only required for the shuttle console; move em outta here
     public readonly List<CommonRadarEntityInterfaceState> CommonEntities;
 
-    public readonly List<ShieldInterfaceState> Shields;
-
+    //todo (radars): we are already sending all the data we need for the radar's UI, by dirtying cannons, shields, and other stuff,
+    //yet we redundantly send those BUI states. we need to come up with a way to separate shield, cannon and shuttle console windows
+    //functionality into something like radar modules, and force them to use clients comp data
+    //...or atleast remove docks from this state and move it to shuttle console
     public RadarConsoleBoundInterfaceState(
         float maxRange,
         NetCoordinates? coordinates,
         Angle? angle,
         List<DockingInterfaceState> docks,
-        List<CannonInformationInterfaceState> cannons,
-        List<DoorInterfaceState> doors,
-        List<CommonRadarEntityInterfaceState> common,
-        List<ShieldInterfaceState> shields)
+        List<CommonRadarEntityInterfaceState> common)
     {
         MaxRange = maxRange;
         Coordinates = coordinates;
         Angle = angle;
         Docks = docks;
-        Cannons = cannons;
-        Doors = doors;
-        Shields = shields;
         CommonEntities = common;
     }
 }
@@ -83,36 +70,16 @@ public enum RadarRenderableGroup
     All = (ShipEventTeammate | Projectiles | Cannon | Door | Pickup),
 }
 
-/// <summary>
-/// State of each cannon on shuttle grid
-/// </summary>
-[Serializable, NetSerializable]
-public sealed class CannonInformationInterfaceState
-{
-    public NetEntity Uid;
-    public bool IsControlling;
-    public int Ammo;
-    public int MaxAmmo;
-}
-
 [Serializable, NetSerializable]
 public sealed class ShieldInterfaceState
 {
     public NetCoordinates Coordinates;
-
     public bool Powered;
-
     public Angle Angle;
-
     public Angle Width;
-
     public Angle MaxWidth;
-
     public int Radius;
-
     public int MaxRadius;
-
-    public bool IsControlling;
 }
 
 /// <summary>

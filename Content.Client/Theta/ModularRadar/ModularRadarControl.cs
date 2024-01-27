@@ -23,12 +23,12 @@ public abstract class ModularRadarControl : MapGridControl
     /// Used to transform all of the radar objects. Typically is a shuttle console parented to a grid.
     /// </summary>
     private EntityCoordinates? _coordinates;
-
     private Angle? _rotation;
-
     public EntityUid OwnerUid;
 
     protected readonly List<RadarModule> Modules = new();
+
+    public Action? OnParentUidSet;
 
     public ModularRadarControl(float minRange = 64f, float maxRange = 256f, float range = 256f)
         : base(minRange, maxRange, range)
@@ -89,6 +89,7 @@ public abstract class ModularRadarControl : MapGridControl
     public void SetOwnerUid(EntityUid uid)
     {
         OwnerUid = uid;
+        OnParentUidSet?.Invoke();
     }
 
     public void UpdateState(BoundUserInterfaceState ls)
