@@ -57,9 +57,9 @@
       pickupPrototype: ShipEventPickupPrototype
 
       #anomalies
-      anomalySpawnInterval: 60 #5 mins
+      anomalySpawnInterval: 90
       anomalyPrototypes:
-        - "shipevent_radanomaly"
+        - "ShipEventRadiationAnomaly"
 
 - type: weightedRandomEntity
   id: ShipEventPickupPrototype

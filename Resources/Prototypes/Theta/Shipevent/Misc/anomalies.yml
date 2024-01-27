@@ -12,10 +12,3 @@
     - radanomaly_border
     - radanomaly_fill
     group: enum.RadarRenderableGroup.Anomaly
-
-- type: structure
-  id: shipevent_radanomaly
-  generator: !type:PrototypeSpawnGenerator
-    proto: ShipEventRadiationAnomaly
-  spawnWeight: 0
-  minDistance: 10

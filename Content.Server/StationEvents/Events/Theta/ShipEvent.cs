@@ -65,7 +65,7 @@ public sealed partial class ShipEventRuleComponent : Component
 
     [DataField("anomalySpawnInterval")]
     public float AnomalySpawnInterval;
-    [DataField("anomalyPrototypes", customTypeSerializer: typeof(PrototypeIdListSerializer<StructurePrototype>))]
+    [DataField("anomalyPrototypes", customTypeSerializer: typeof(PrototypeIdListSerializer<EntityPrototype>))]
     public List<string> AnomalyPrototypes = new();
 
     [DataField("spaceLightColor")]
@@ -145,7 +145,7 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         _shipSys.AnomalySpawnInterval = component.AnomalySpawnInterval;
         foreach (var anomalyProtId in component.AnomalyPrototypes)
         {
-            _shipSys.AnomalyPrototypes.Add(_protMan.Index<StructurePrototype>(anomalyProtId));
+            _shipSys.AnomalyPrototypes.Add(_protMan.Index<EntityPrototype>(anomalyProtId));
         }
 
         List<StructurePrototype> obstacleStructProts = new();
