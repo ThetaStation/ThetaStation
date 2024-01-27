@@ -6,6 +6,7 @@ using Content.Shared.Theta.ShipEvent.UI;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Shared.Map;
+using Robust.Shared.Timing;
 
 namespace Content.Client.Theta.ModularRadar;
 
@@ -167,6 +168,14 @@ public abstract class ModularRadarControl : MapGridControl
         foreach (var module in Modules)
         {
             module.Draw(handle, parameters);
+        }
+    }
+
+    protected override void FrameUpdate(FrameEventArgs args)
+    {
+        foreach (var module in Modules)
+        {
+            module.FrameUpdate(args);
         }
     }
 

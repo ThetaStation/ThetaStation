@@ -2,6 +2,7 @@
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Shared.Map;
+using Robust.Shared.Timing;
 
 namespace Content.Client.Theta.ModularRadar;
 
@@ -39,6 +40,7 @@ public abstract class RadarModule
     public virtual void OnKeyBindUp(GUIBoundKeyEventArgs args) { }
     public virtual void UpdateState(BoundUserInterfaceState state) { }
     public virtual void Draw(DrawingHandleScreen handle, Parameters parameters) { }
+    public virtual void FrameUpdate(FrameEventArgs args) { }
     public virtual void OnClear() { }
 
     protected Vector2 RelativePositionToCoordinates(Vector2 pos, Matrix3 matrix)
