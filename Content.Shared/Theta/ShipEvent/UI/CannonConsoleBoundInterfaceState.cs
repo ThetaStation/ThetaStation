@@ -11,7 +11,11 @@ public enum CannonConsoleUiKey : byte
 }
 
 [Serializable, NetSerializable]
-public sealed class CannonConsoleBUIStateMessage : BoundUserInterfaceMessage
+public sealed class CannonConsoleBUICreatedMessage : BoundUserInterfaceMessage
 {
-    public bool Created; //true - bui was just created, false - bui disposed
+}
+
+[Serializable, NetSerializable]
+public sealed class CannonConsoleBUIDisposedMessgae : BoundUserInterfaceMessage
+{
 }

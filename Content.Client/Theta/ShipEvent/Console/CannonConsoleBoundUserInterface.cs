@@ -24,9 +24,7 @@ public sealed class CannonConsoleBoundUserInterface : BoundUserInterface
 
         _cannonSys = EntMan.System<CannonSystem>();
 
-        var msg = new CannonConsoleBUIStateMessage();
-        msg.Created = true;
-        SendMessage(msg);
+        SendMessage(new CannonConsoleBUICreatedMessage());
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)
@@ -55,8 +53,7 @@ public sealed class CannonConsoleBoundUserInterface : BoundUserInterface
 
         if (disposing)
         {
-            var msg = new CannonConsoleBUIStateMessage();
-            SendMessage(msg);
+            SendMessage(new CannonConsoleBUICreatedMessage());
 
             _window?.Dispose();
         }
