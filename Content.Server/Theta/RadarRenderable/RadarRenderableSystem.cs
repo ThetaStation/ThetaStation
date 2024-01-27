@@ -1,5 +1,6 @@
 using Content.Server.Roles;
 using Content.Server.Shuttles.Systems;
+using Content.Server.Theta.ShipEvent;
 using Content.Server.Theta.ShipEvent.Console;
 using Content.Shared.Doors.Components;
 using Content.Shared.Mind.Components;
@@ -12,11 +13,13 @@ using Content.Shared.Theta.ShipEvent;
 
 namespace Content.Server.Theta.RadarRenderable;
 
+//todo (radars): there shouldn't be a cannon/mob/door specific code
 public sealed class RadarRenderableSystem : EntitySystem
 {
     [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
     [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
     [Dependency] private readonly RadarConsoleSystem _radarConsoleSystem = default!;
+    [Dependency] private readonly CannonSystem _cannonSystem = default!;
 
     public List<CommonRadarEntityInterfaceState> GetObjectsAround(EntityUid consoleUid, RadarConsoleComponent radar)
     {
@@ -73,18 +76,13 @@ public sealed class RadarRenderableSystem : EntitySystem
         var myGrid = consoleTransform.GridUid;
         var isCannonConsole = HasComp<CannonConsoleComponent>(consoleUid);
 
-        var controlledCannons = _radarConsoleSystem.GetControlledCannons(consoleUid);
         if (Transform(uid).GridUid != myGrid)
             return null;
         if (!Transform(uid).Anchored)
             return null;
 
-        var controlled = false;
-        if (controlledCannons != null)
-            controlled = controlledCannons.Contains(uid);
-
-        var (ammo, maxAmmo) = _radarConsoleSystem.GetCannonAmmoCount(uid, cannon);
-        var mainColor = controlled ? Color.Lime : (isCannonConsole ? Color.LightGreen : Color.YellowGreen);
+        var (ammo, maxAmmo) = _cannonSystem.GetCannonAmmoCount(uid, cannon);
+        var mainColor = (cannon.BoundConsoleUid == consoleUid) ? Color.Lime : (isCannonConsole ? Color.LightGreen : Color.YellowGreen);
 
         var hsvColor = Color.ToHsv(mainColor);
         const float additionalDegreeCoeff = 20f / 360f;
@@ -124,14 +122,14 @@ public sealed class RadarRenderableSystem : EntitySystem
         if (TryComp<IFFComponent>(Transform(uid).GridUid, out var iff) && iff.Flags == IFFFlags.Hide)
             return null;
 
-        Color ? color = null;
+        Color? color = null;
 
-         if (mindContainer.Mind != null)
-         {
-             if (EntityManager.TryGetComponent<ShipEventRoleComponent>(mindContainer.Mind.Value, out var roleComponent) &&
-                 roleComponent.Faction is ShipEventFaction shipEventFaction)
-                 color = shipEventFaction.Color;
-         }
+        if (mindContainer.Mind != null)
+        {
+            if (EntityManager.TryGetComponent<ShipEventRoleComponent>(mindContainer.Mind.Value, out var roleComponent) &&
+                roleComponent.Faction is ShipEventFaction shipEventFaction)
+                color = shipEventFaction.Color;
+        }
 
         return new CommonRadarEntityInterfaceState(
             GetNetCoordinates(_transformSystem.GetMoverCoordinates(uid, xform)),
@@ -155,17 +153,13 @@ public sealed class RadarRenderableSystem : EntitySystem
 
         Color? color = Color.White;
 
-        if (door.State == DoorState.Closed)
+        if (door.State == DoorState.Open)
         {
-            color = Color.Red;
-        }
-        else if (door.State == DoorState.Opening | door.State == DoorState.Closing)
-        {
-            color = Color.Yellow;
+            color = Color.LimeGreen;
         }
         else
         {
-            color = Color.LimeGreen;
+            color = Color.Red;
         }
 
         return new CommonRadarEntityInterfaceState(

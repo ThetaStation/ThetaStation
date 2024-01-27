@@ -9,7 +9,7 @@ namespace Content.Client.Theta.ShipEvent.Systems;
 public sealed class ClientShipStealthSystem : EntitySystem
 {
     [Dependency] private UserInterfaceSystem _uiSys = default!;
-    
+
     public override void Initialize()
     {
         base.Initialize();
@@ -21,7 +21,8 @@ public sealed class ClientShipStealthSystem : EntitySystem
         var uid = EntityManager.GetEntity(msg.Console);
         if (TryComp<UserInterfaceComponent>(uid, out var ui))
         {
-            if (ui.OpenInterfaces[ShuttleConsoleUiKey.Key] is ModularRadarShuttleConsoleBoundUserInterface shuttleConsoleBui)
+            if (ui.OpenInterfaces.TryGetValue(ShuttleConsoleUiKey.Key, out var bui) && 
+            bui is ModularRadarShuttleConsoleBoundUserInterface shuttleConsoleBui)
                 shuttleConsoleBui.SetStealthStatus(msg.StealthReady);
         }
     }

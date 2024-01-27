@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace Content.Client.Theta.ModularRadar.UI.ShuttleConsole;
 
-//todo: separate stealth controls from radar
+//todo (radars): separate stealth controls from radar
 [UsedImplicitly]
 public sealed class ModularRadarShuttleConsoleBoundUserInterface : BoundUserInterface
 {
@@ -87,7 +87,7 @@ public sealed class ModularRadarShuttleConsoleBoundUserInterface : BoundUserInte
         _window?.UpdateState(state);
         _window?.SetOwner(Owner);
     }
-    
+
     public void SetStealthStatus(bool ready)
     {
         _window?.SetStealthStatus(ready);

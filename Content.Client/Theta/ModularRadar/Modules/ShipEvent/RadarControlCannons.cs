@@ -1,27 +1,56 @@
-﻿using System.Linq;
-using System.Numerics;
+﻿using System.Numerics;
 using Content.Client.Theta.ShipEvent;
-using Content.Shared.Shuttles.BUIStates;
+using Content.Shared.Theta.ShipEvent;
 using Robust.Client.Player;
 using Robust.Client.UserInterface;
 using Robust.Shared.Input;
 
-namespace Content.Client.Theta.ModularRadar.Modules;
+namespace Content.Client.Theta.ModularRadar.Modules.ShipEvent;
 
 public sealed class RadarControlCannons : RadarModule
 {
-    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private readonly IPlayerManager _playerMan = default!;
+    private readonly CannonSystem _cannonSys = default!;
 
-    private List<CannonInformationInterfaceState> _cannons = new();
-
-    private List<EntityUid> _controlledCannons = new();
-
+    private HashSet<EntityUid> _controlledCannons = new();
     private int _nextMouseHandle;
-
     private const int MouseCd = 20;
 
     public RadarControlCannons(ModularRadarControl parentRadar) : base(parentRadar)
     {
+        _cannonSys = EntManager.System<CannonSystem>();
+        _cannonSys.CannonChangedEvent += OnCannonChanges;
+        parentRadar.OnParentUidSet += OnParentSet;
+    }
+
+    private HashSet<EntityUid> GetAllControlledCannons()
+    {
+        HashSet<EntityUid> result = new();
+
+        var query = EntManager.EntityQueryEnumerator<CannonComponent>();
+        while (query.MoveNext(out var uid, out var cannon))
+        {
+            if (cannon.BoundConsoleUid == ParentUid)
+                result.Add(uid);
+        }
+
+        return result;
+    }
+
+    private void OnCannonChanges(EntityUid uid, CannonComponent cannon)
+    {
+        if (cannon.LifeStage == ComponentLifeStage.Removing || cannon.BoundConsoleUid != ParentUid)
+        {
+            _controlledCannons.Remove(uid);
+            return;
+        }
+
+        _controlledCannons.Add(uid);
+    }
+
+    private void OnParentSet()
+    {
+        _controlledCannons = GetAllControlledCannons();
     }
 
     public override void MouseMove(GUIMouseMoveEventArgs args)
@@ -50,7 +79,7 @@ public sealed class RadarControlCannons : RadarModule
 
         var coordinates = RotateCannons(args.RelativePosition);
 
-        var player = _player.LocalPlayer?.ControlledEntity;
+        var player = _playerMan.LocalSession?.AttachedEntity;
         if (player == null)
             return;
 
@@ -82,7 +111,7 @@ public sealed class RadarControlCannons : RadarModule
     {
         var offsetMatrix = OffsetMatrix;
         var relativePositionToCoordinates = RelativePositionToCoordinates(mouseRelativePosition, offsetMatrix);
-        var player = _player.LocalPlayer?.ControlledEntity;
+        var player = _playerMan.LocalSession?.AttachedEntity;
         if (player == null)
             return relativePositionToCoordinates;
         foreach (var entityUid in _controlledCannons)
@@ -92,17 +121,5 @@ public sealed class RadarControlCannons : RadarModule
         }
 
         return relativePositionToCoordinates;
-    }
-
-    public override void UpdateState(BoundUserInterfaceState state)
-    {
-        if (state is not RadarConsoleBoundInterfaceState radarState)
-            return;
-
-        _cannons = radarState.Cannons;
-        _controlledCannons = _cannons
-            .Where(i => i.IsControlling)
-            .Select(i => EntManager.GetEntity(i.Uid))
-            .ToList();
     }
 }

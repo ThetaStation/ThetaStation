@@ -10,7 +10,6 @@ using Robust.Shared.GameStates;
 using Content.Shared.Throwing;
 using Content.Shared.Interaction;
 using Robust.Shared.Audio.Systems;
-using Content.Server.Administration.Commands;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
@@ -69,8 +68,15 @@ public sealed class TurretLoaderSystem : EntitySystem
             {
                 if (EntityManager.TryGetComponent<CannonComponent>(loader.BoundTurretUid, out var cannon))
                 {
-                    cannon.BoundLoaderUid = uid;
-                    Dirty(loader.BoundTurretUid.Value, cannon);
+                    if(cannon.BoundLoaderUid == null)
+                    {
+                        cannon.BoundLoaderUid = uid;
+                        Dirty(loader.BoundTurretUid.Value, cannon);
+                    }
+                    else
+                    {
+                        loader.BoundTurretUid = null;
+                    }
                 }
             }
         }

@@ -27,7 +27,6 @@ public abstract class SharedCannonSystem : EntitySystem
         SubscribeAllEvent<RequestStopCannonShootEvent>(OnStopShootRequest);
         SubscribeLocalEvent<CannonComponent, AnchorStateChangedEvent>(OnAnchorChanged);
         SubscribeLocalEvent<CannonComponent, ChangeDirectionAttemptEvent>(OnAttemptRotate);
-
         SubscribeLocalEvent<CannonComponent, TakeAmmoEvent>(OnAmmoRequest);
         SubscribeLocalEvent<CannonComponent, GetAmmoCountEvent>(OnAmmoCount);
     }
@@ -45,7 +44,9 @@ public abstract class SharedCannonSystem : EntitySystem
                 ev.Ammo.Add((roundUid, _gunSystem.EnsureShootable(roundUid)));
             }
 
-            ammoContainer.AmmoCount -= ev.Shots;
+            if (!_netMan.IsClient)
+                ammoContainer.AmmoCount -= ev.Shots;
+
             if (ammoContainer.AmmoCount < 0)
                 ammoContainer.AmmoCount = 0;
         }
@@ -165,6 +166,17 @@ public abstract class SharedCannonSystem : EntitySystem
         }
 
         return true;
+    }
+
+    public (int ammo, int maxAmmo) GetCannonAmmoCount(EntityUid uid, CannonComponent? cannon)
+    {
+        if (!Resolve(uid, ref cannon))
+            return (0, 0);
+
+        var ammoCountEv = new GetAmmoCountEvent();
+        RaiseLocalEvent(uid, ref ammoCountEv);
+
+        return (ammoCountEv.Count, ammoCountEv.Capacity);
     }
 
     protected virtual void OnAnchorChanged(EntityUid uid, CannonComponent cannon, ref AnchorStateChangedEvent args)

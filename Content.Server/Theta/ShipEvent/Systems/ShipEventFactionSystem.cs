@@ -1,4 +1,3 @@
-using System.Data;
 using System.Linq;
 using System.Numerics;
 using System.Threading;
@@ -32,6 +31,7 @@ using Content.Shared.Roles.Theta;
 using Content.Shared.Shuttles.Events;
 using Content.Shared.Theta.MobHUD;
 using Content.Shared.Theta.ShipEvent;
+using Content.Shared.Theta.ShipEvent.Components;
 using Content.Shared.Theta.ShipEvent.Misc.GenericWarningUI;
 using Content.Shared.Theta.ShipEvent.UI;
 using Robust.Server.GameObjects;
@@ -746,6 +746,11 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     /// <param name="team">Team in question</param>
     public void SetMarkers(EntityUid shipEntity, ShipEventFaction team)
     {
+        var markerComponent = EnsureComp<ShipEventFactionMarkerComponent>(shipEntity);
+        markerComponent.Team = team;
+        // The non-team faction does not exist in the client's space.
+        // Dirty(shipEntity, markerComponent);
+
         var spawners = GetShipComponentHolders<ShipEventSpawnerComponent>(shipEntity);
         foreach (var spawner in spawners)
         {

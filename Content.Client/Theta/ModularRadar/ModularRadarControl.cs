@@ -6,6 +6,7 @@ using Content.Shared.Theta.ShipEvent.UI;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Shared.Map;
+using Robust.Shared.Timing;
 
 namespace Content.Client.Theta.ModularRadar;
 
@@ -22,12 +23,12 @@ public abstract class ModularRadarControl : MapGridControl
     /// Used to transform all of the radar objects. Typically is a shuttle console parented to a grid.
     /// </summary>
     private EntityCoordinates? _coordinates;
-
     private Angle? _rotation;
-
     public EntityUid OwnerUid;
 
     protected readonly List<RadarModule> Modules = new();
+
+    public Action? OnParentUidSet;
 
     public ModularRadarControl(float minRange = 64f, float maxRange = 256f, float range = 256f)
         : base(minRange, maxRange, range)
@@ -88,6 +89,7 @@ public abstract class ModularRadarControl : MapGridControl
     public void SetOwnerUid(EntityUid uid)
     {
         OwnerUid = uid;
+        OnParentUidSet?.Invoke();
     }
 
     public void UpdateState(BoundUserInterfaceState ls)
@@ -167,6 +169,14 @@ public abstract class ModularRadarControl : MapGridControl
         foreach (var module in Modules)
         {
             module.Draw(handle, parameters);
+        }
+    }
+
+    protected override void FrameUpdate(FrameEventArgs args)
+    {
+        foreach (var module in Modules)
+        {
+            module.FrameUpdate(args);
         }
     }
 

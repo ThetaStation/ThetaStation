@@ -43,9 +43,9 @@ public sealed class PlayerFactionSystem : EntitySystem
         List<MindComponent> living = new();
         foreach (var member in faction.Members)
         {
-            if(!TryComp<MindComponent>(member.Owner, out var mind))
+            if (!TryComp<MindComponent>(member.Owner, out var mind) || mind.OwnedEntity == null)
                 continue;
-            if (!_mobStateSystem.IsDead(member.Owner))
+            if (!_mobStateSystem.IsDead(mind.OwnedEntity.Value))
                 living.Add(mind);
         }
 

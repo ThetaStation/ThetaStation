@@ -1,7 +1,8 @@
-using Content.Server.Administration.Logs.Converters;
 using Content.Server.Theta.ShipEvent.Components;
+using Content.Server.Theta.ShipEvent.Console;
 using Content.Server.Theta.ShipEvent.Systems;
-using Content.Shared.Clothing.Components;
+using Content.Shared.DeviceLinking;
+using Content.Shared.DeviceLinking.Events;
 using Content.Shared.Interaction;
 using Content.Shared.Theta.ShipEvent;
 using Content.Shared.Theta.ShipEvent.Components;
@@ -22,14 +23,77 @@ public sealed class CannonSystem : SharedCannonSystem
     {
         base.Initialize();
         SubscribeNetworkEvent<RotateCannonsEvent>(OnRotateCannons);
-        SubscribeLocalEvent<CannonComponent, AmmoShotEvent>(AfterShot);
+        SubscribeLocalEvent<CannonComponent, ComponentInit>(OnInit);
         SubscribeLocalEvent<CannonComponent, ComponentRemove>(OnRemoval);
+        SubscribeLocalEvent<CannonComponent, NewLinkEvent>(OnLink);
+        SubscribeLocalEvent<CannonComponent, AmmoShotEvent>(AfterShot);
+    }
+
+    private void OnInit(EntityUid uid, CannonComponent cannon, ComponentInit args)
+    {
+        if (EntityManager.TryGetComponent<DeviceLinkSinkComponent>(uid, out var sink))
+        {
+            foreach (EntityUid sourceUid in sink.LinkedSources)
+            {
+                if (HasComp<CannonConsoleComponent>(sourceUid))
+                {
+                    cannon.BoundConsoleUid = sourceUid;
+                    Dirty(uid, cannon);
+                    break;
+                }
+            }
+        }
+    }
+
+    private void OnRemoval(EntityUid uid, CannonComponent cannon, ComponentRemove args)
+    {
+        if (Exists(cannon.BoundLoaderUid) && TryComp<TurretLoaderComponent>(cannon.BoundLoaderUid, out var loader))
+        {
+            loader.BoundTurretUid = null;
+            Dirty(cannon.BoundLoaderUid.Value, loader);
+        }
+    }
+
+    private void OnRotateCannons(RotateCannonsEvent ev)
+    {
+        foreach (var uid in ev.Cannons)
+        {
+            var cannon = EntityManager.GetComponent<CannonComponent>(GetEntity(uid));
+            if (!cannon.Rotatable)
+                continue;
+
+            _rotateToFaceSystem.TryFaceCoordinates(GetEntity(uid), ev.Coordinates);
+        }
+    }
+
+    public void OnLink(EntityUid uid, CannonComponent cannon, NewLinkEvent ev)
+    {
+        if (ev.Sink != uid) //console is the source
+            return;
+
+        if (HasComp<CannonConsoleComponent>(ev.Source))
+        {
+            cannon.BoundConsoleUid = ev.Source;
+            Dirty(uid, cannon);
+        }
+    }
+
+    private void AfterShot(EntityUid entity, CannonComponent cannon, AmmoShotEvent args)
+    {
+        foreach (EntityUid projectile in args.FiredProjectiles)
+        {
+            var marker = EntityManager.EnsureComponent<ShipEventFactionMarkerComponent>(projectile);
+            marker.Team = EntityManager.EnsureComponent<ShipEventFactionMarkerComponent>(entity).Team;
+        }
+
+        if (cannon.BoundLoaderUid != null)
+            RaiseLocalEvent(cannon.BoundLoaderUid.Value, new TurretLoaderAfterShotMessage());
     }
 
     public void RefreshFiringRanges(EntityUid uid, CannonComponent cannon)
     {
         cannon.ObstructedRanges = CalculateFiringRanges(uid, GetCannonGun(uid)!);
-        Dirty(cannon);
+        Dirty(uid, cannon);
     }
 
     private List<(Angle, Angle)> CalculateFiringRanges(EntityUid uid, GunComponent gun)
@@ -134,52 +198,5 @@ public sealed class CannonSystem : SharedCannonSystem
         }
 
         return (aangle, w);
-    }
-
-    protected override void OnAnchorChanged(EntityUid uid, CannonComponent cannon, ref AnchorStateChangedEvent args)
-    {
-        //see comment on field itself
-        if (cannon.FirstAnchor)
-        {
-            cannon.FirstAnchor = false;
-            return;
-        }
-
-        base.OnAnchorChanged(uid, cannon, ref args);
-        if (!args.Anchored)
-            return;
-
-        cannon.ObstructedRanges = CalculateFiringRanges(uid, GetCannonGun(uid)!);
-        Dirty(uid, cannon);
-    }
-
-    private void OnRemoval(EntityUid uid, CannonComponent cannon, ComponentRemove args)
-    {
-        if (Exists(cannon.BoundLoaderUid) && TryComp<TurretLoaderComponent>(cannon.BoundLoaderUid, out var loader))
-            loader.BoundTurretUid = null;
-    }
-
-    private void OnRotateCannons(RotateCannonsEvent ev)
-    {
-        foreach (var uid in ev.Cannons)
-        {
-            var cannon = EntityManager.GetComponent<CannonComponent>(GetEntity(uid));
-            if (!cannon.Rotatable)
-                continue;
-
-            _rotateToFaceSystem.TryFaceCoordinates(GetEntity(uid), ev.Coordinates);
-        }
-    }
-
-    private void AfterShot(EntityUid entity, CannonComponent cannon, AmmoShotEvent args)
-    {
-        foreach (EntityUid projectile in args.FiredProjectiles)
-        {
-            var marker = EntityManager.EnsureComponent<ShipEventFactionMarkerComponent>(projectile);
-            marker.Team = EntityManager.EnsureComponent<ShipEventFactionMarkerComponent>(entity).Team;
-        }
-
-        if (cannon.BoundLoaderUid != null)
-            RaiseLocalEvent(cannon.BoundLoaderUid.Value, new TurretLoaderAfterShotMessage());
     }
 }
