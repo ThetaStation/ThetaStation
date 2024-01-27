@@ -11,23 +11,16 @@ public sealed partial class ShipEventFactionSystem
 
     public int PickupsPositionsCount;
     public string PickupPrototype = "";
-    public float PickupsSpawnInterval;
+    public float PickupSpawnInterval;
     public float PickupMinDistance;
 
-    private TimeSpan _nextPickupsSpawn;
-
-    private void CheckPickupsTimer()
+    private void PickupsUpdate()
     {
-        if (_timing.CurTime < _nextPickupsSpawn)
-            return;
-
         if (PickupPositions.Count == 0)
             FindPickupPositions();
 
         DeletePickups();
         SpawnPickups();
-
-        _nextPickupsSpawn = _timing.CurTime + TimeSpan.FromSeconds(PickupsSpawnInterval);
     }
 
     private void FindPickupPositions()
@@ -41,14 +34,14 @@ public sealed partial class ShipEventFactionSystem
         var attempts = 0;
         while (PickupPositions.Count != PickupsPositionsCount)
         {
-            if(attempts == maxAttempts)
+            if (attempts == maxAttempts)
                 break;
 
             var randomX = _random.Next((int) areaBounds.Left, (int) areaBounds.Right);
             var randomY = _random.Next((int) areaBounds.Bottom, (int) areaBounds.Top);
 
             var mapPos = new MapCoordinates(randomX, randomY, TargetMap);
-            if(!CanPlacePickupPosition(mapPos))
+            if (!CanPlacePickupPosition(mapPos))
             {
                 attempts++;
                 continue;

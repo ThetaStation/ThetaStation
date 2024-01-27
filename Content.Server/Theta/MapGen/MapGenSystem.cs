@@ -174,12 +174,18 @@ public sealed class MapGenSystem : EntitySystem
         return EntityUid.Invalid;
     }
 
+    public EntityUid RandomPosSpawn(MapId targetMap, Vector2 startPos, int maxOffset, int tries, 
+    EntityPrototype prototype, bool forceIfFailed = false)
+    {
+        
+    }
+
     /// <summary>
     /// Deletes every grid in given area
     /// </summary>
     public void ClearArea(MapId targetMap, Box2i bounds)
     {
-        foreach(MapGridComponent grid in MapMan.FindGridsIntersecting(targetMap, bounds))
+        foreach (MapGridComponent grid in MapMan.FindGridsIntersecting(targetMap, bounds))
         {
             EntMan.DeleteEntity(grid.Owner);
         }

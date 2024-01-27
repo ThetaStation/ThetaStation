@@ -4,9 +4,6 @@ using Robust.Shared.Map;
 
 namespace Content.Server.Theta.MapGen.Generators;
 
-/// <summary>
-/// Generator which simply loads new map from path
-/// </summary>
 public sealed partial class MapLoaderGenerator : Generator
 {
     [DataField("mapPath", required: true)]

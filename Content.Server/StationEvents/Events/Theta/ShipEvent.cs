@@ -17,6 +17,7 @@ using Robust.Shared.Serialization.Markdown.Mapping;
 using Robust.Shared.Serialization.Markdown.Value;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.List;
 
 namespace Content.Server.StationEvents.Events.Theta;
 
@@ -28,31 +29,20 @@ public sealed partial class ShipEventRuleComponent : Component
     [DataField("roundDuration")] public int RoundDuration; //set to negative if you don't need a timed round end
 
     [DataField("teamCheckInterval")] public float TeamCheckInterval;
-
     [DataField("respawnDelay")] public int RespawnDelay;
 
     [DataField("initialObstacleAmount")] public int InitialObstacleAmount;
-
     [DataField("minFieldSize")] public int MinFieldSize;
-
     [DataField("maxFieldSize")] public int MaxFieldSize;
-
     [DataField("metersPerPlayer")] public int MetersPerPlayer; //scaling field based on online (at roundstart)
-
     [DataField("roundFieldSizeTo")] public int RoundFieldSizeTo;
 
     [DataField("bonusInterval")] public int BonusInterval;
-
     [DataField("pointsPerInterval")] public int PointsPerInterval;
-
     [DataField("pointsPerHitMultiplier")] public float PointsPerHitMultiplier;
-
     [DataField("pointsPerAssist")] public int PointsPerAssist;
-
     [DataField("pointsPerKill")] public int PointsPerKill;
-
     [DataField("outOfBoundsPenalty")] public int OutOfBoundsPenalty;
-
     [DataField("hudPrototypeId")] public string HUDPrototypeId = "";
 
     [DataField("captainHudPrototypeId")] public string CaptainHUDPrototypeId = "";
@@ -60,24 +50,23 @@ public sealed partial class ShipEventRuleComponent : Component
     [DataField("shipTypes")] public List<string> ShipTypes = new();
 
     [DataField("obstacleTypes")] public List<string> ObstacleTypes = new();
-
     [DataField("obstacleAmountAmplitude")] public int ObstacleAmountAmplitude;
-
     [DataField("obstacleSizeAmplitude")] public int ObstacleSizeAmplitude;
 
     [DataField("boundsCompressionInterval")] public float BoundsCompressionInterval;
-
     [DataField("boundsCompressionDistance")] public int BoundsCompressionDistance;
 
     [DataField("pickupsPositions")] public int PickupsPositionsCount;
-
-    // in seconds
     [DataField("pickupsSpawnInterval")] public float PickupsSpawnInterval;
-
     [DataField("pickupMinDistance")] public float PickupMinDistance;
 
     [DataField("pickupPrototype", customTypeSerializer: typeof(PrototypeIdSerializer<WeightedRandomEntityPrototype>))]
     public string PickupPrototype = default!;
+
+    [DataField("anomalySpawnInterval")]
+    public float AnomalySpawnInterval;
+    [DataField("anomalyPrototypes", customTypeSerializer: typeof(PrototypeIdListSerializer<StructurePrototype>))]
+    public List<string> AnomalyPrototypes = new();
 
     [DataField("spaceLightColor")]
     public Color? SpaceLightColor = null;
@@ -119,7 +108,6 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         if (component.SpaceLightColor != null)
             EnsureComp<MapLightComponent>(_mapMan.GetMapEntityId(map)).AmbientLightColor = component.SpaceLightColor.Value;
         _shipSys.TargetMap = map;
-        _shipSys.RuleSelected = true;
 
         _shipSys.RoundDuration = component.RoundDuration;
         _shipSys.TimedRoundEnd = component.RoundDuration > 0;
@@ -133,7 +121,7 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         _shipSys.OutOfBoundsPenalty = component.OutOfBoundsPenalty;
 
         _shipSys.PickupsPositionsCount = component.PickupsPositionsCount;
-        _shipSys.PickupsSpawnInterval = component.PickupsSpawnInterval;
+        _shipSys.PickupSpawnInterval = component.PickupsSpawnInterval;
         _shipSys.PickupMinDistance = component.PickupMinDistance;
         _shipSys.PickupPrototype = component.PickupPrototype;
 
@@ -141,7 +129,7 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         _shipSys.CaptainHUDPrototypeId = component.CaptainHUDPrototypeId;
 
         _shipSys.MaxSpawnOffset = Math.Clamp(
-            (int)Math.Round((float)_playerMan.PlayerCount * component.MetersPerPlayer / component.RoundFieldSizeTo) * component.RoundFieldSizeTo,
+            (int) Math.Round((float) _playerMan.PlayerCount * component.MetersPerPlayer / component.RoundFieldSizeTo) * component.RoundFieldSizeTo,
             component.MinFieldSize,
             component.MaxFieldSize);
 
@@ -152,6 +140,12 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         foreach (var shipTypeProtId in component.ShipTypes)
         {
             _shipSys.ShipTypes.Add(_protMan.Index<ShipTypePrototype>(shipTypeProtId));
+        }
+
+        _shipSys.AnomalySpawnInterval = component.AnomalySpawnInterval;
+        foreach (var anomalyProtId in component.AnomalyPrototypes)
+        {
+            _shipSys.AnomalyPrototypes.Add(_protMan.Index<StructurePrototype>(anomalyProtId));
         }
 
         List<StructurePrototype> obstacleStructProts = new();
@@ -193,7 +187,8 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
             _shipSys.MaxSpawnOffset,
             obstacleStructProts,
             globalProcessors);
-
         _shipSys.ShipProcessors.Add(iffSplitProc);
+
+        _shipSys.RuleSelected = true;
     }
 }

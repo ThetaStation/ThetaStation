@@ -56,9 +56,10 @@
       pickupMinDistance: 100
       pickupPrototype: ShipEventPickupPrototype
 
-      #stealth timers
-      stealthDuration: 60000
-      stealthCooldown: 180000
+      #anomalies
+      anomalySpawnInterval: 60 #5 mins
+      anomalyPrototypes:
+        - "shipevent_radanomaly"
 
 - type: weightedRandomEntity
   id: ShipEventPickupPrototype

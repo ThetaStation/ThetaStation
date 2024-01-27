@@ -241,5 +241,17 @@ public sealed partial class ShipEventFactionSystem
         }
         return null;
     }
+
+    //yes, RT does not have such a method
+    public T ListPick<T>(List<T> list)
+    {
+        if (list.Count == 0)
+            throw new Exception("Dude, your list is empty.");
+
+        if (list.Count == 1)
+            return list.First();
+
+        return list[_random.Next(0, list.Count)];
+    }
 }
 

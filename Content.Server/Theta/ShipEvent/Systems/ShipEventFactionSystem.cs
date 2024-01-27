@@ -1,6 +1,7 @@
 using System.Data;
 using System.Linq;
 using System.Numerics;
+using System.Threading;
 using Content.Server.Actions;
 using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
@@ -41,6 +42,7 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using Timer = Robust.Shared.Timing.Timer;
 using Robust.Shared.Utility;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
@@ -68,15 +70,14 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     [Dependency] private readonly HumanoidAppearanceSystem _humanoidAppearanceSystem = default!;
     [Dependency] private readonly IServerPreferencesManager _prefsManager = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly ITimerManager _timerMan = default!;
 
     //used when setting up buttons for ghosts, in cases when mind from shipevent agent is transferred to null and not to ghost entity directly
     private Dictionary<ICommonSession, ShipEventFaction> _lastTeamLookup = new();
 
     private readonly Dictionary<string, int> _projectileDamage = new(); //cached damage for projectile prototypes
     private int _lastTeamNumber;
-    private float _teamCheckTimer;
     public float RoundendTimer;
-    private float _boundsCompressionTimer;
     private int _lastAnnoucementMinute;
 
     //all time-related fields are specified in seconds
@@ -98,25 +99,30 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     public string HUDPrototypeId = "ShipeventHUD";
     public string CaptainHUDPrototypeId = "";
 
-    public bool BoundsCompression = false;
-    public float BoundsCompressionInterval;
-    public int BoundsCompressionDistance; //how much play area bounds are compressed after every BoundCompressionInterval
-    public int CurrentBoundsOffset; //inward offset of bounds
-
-    public bool RuleSelected;
+    private bool _ruleSelected = false;
+    public bool RuleSelected
+    {
+        get => _ruleSelected;
+        set
+        {
+            _ruleSelected = value;
+            if (value)
+                OnRuleSelected?.Invoke();
+        }
+    }
 
     public List<ShipTypePrototype> ShipTypes = new();
     public MapId TargetMap;
-
-    public List<ShipEventFaction> Teams { get; } = new();
-
     public List<Processor> ShipProcessors = new();
 
-    public ColorPalette ColorPalette = new ShipEventPalette();
+    public List<ShipEventFaction> Teams { get; } = new();
+    public List<Timer> Timers = new();
 
-    //used by flag capture
+    public ColorPalette ColorPalette = new ShipEventPalette();
     public bool AllowTeamRegistration = true;
     public bool RemoveEmptyTeams = true;
+
+    public Action? OnRuleSelected;
     public Action<RoundEndTextAppendEvent>? RoundEndEvent;
 
     public override void Initialize()
@@ -146,27 +152,32 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEnd);
         SubscribeLocalEvent<RoundEndDiscordTextAppendEvent>(OnRoundEndDiscord);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
+
+        OnRuleSelected += SetupTimers;
     }
 
-    //todo: use Robust.Timing.Timer
     public override void Update(float frametime)
     {
         if (!RuleSelected)
             return;
 
-        _teamCheckTimer += frametime;
         RoundendTimer += frametime;
-        _boundsCompressionTimer += frametime;
-
-        if (_teamCheckTimer > TeamCheckInterval)
-        {
-            _teamCheckTimer -= TeamCheckInterval;
-            CheckTeams(TeamCheckInterval);
-        }
-
-        CheckBoundsCompressionTimer();
         CheckRoundendTimer();
-        CheckPickupsTimer();
+    }
+
+    private void SetupTimers()
+    {
+        SetupTimer(TeamCheckInterval, CheckTeams);
+        SetupTimer(BoundsCompressionInterval, BoundsUpdate);
+        SetupTimer(PickupSpawnInterval, PickupsUpdate);
+        SetupTimer(AnomalySpawnInterval, AnomalyUpdate);
+    }
+
+    private void SetupTimer(float seconds, Action action)
+    {
+        Timer timer = new((int) (seconds * 1000), true, action);
+        _timerMan.AddTimer(timer);
+        Timers.Add(timer);
     }
 
     //for handling intentional ghosting (suicide)
@@ -267,26 +278,23 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     private void OnRoundRestart(RoundRestartCleanupEvent ev)
     {
         _lastTeamNumber = 0;
-        _teamCheckTimer = 0;
         RoundendTimer = 0;
-        _boundsCompressionTimer = 0;
         _lastAnnoucementMinute = 0;
-
         CurrentBoundsOffset = 0;
 
         RuleSelected = false;
         AllowTeamRegistration = true;
         RemoveEmptyTeams = true;
 
-        ShipTypes.Clear();
         TargetMap = MapId.Nullspace;
 
+        ShipTypes.Clear();
+        ShipProcessors.Clear();
+        AnomalyPrototypes.Clear();
+        PickupPositions.Clear();
         Teams.Clear();
         _lastTeamLookup.Clear();
-
-        ShipProcessors.Clear();
-
-        PickupPositions.Clear();
+        Timers.Clear();
     }
 
     private void OnRoundEnd(RoundEndTextAppendEvent args)
@@ -897,7 +905,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         }
     }
 
-    private void CheckTeams(float deltaTime)
+    private void CheckTeams()
     {
         List<ShipEventFaction> emptyTeams = new();
         foreach (var team in Teams)
@@ -969,7 +977,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
                 team.LastBonusInterval++;
             }
 
-            team.TimeSinceRemoval += deltaTime;
+            team.TimeSinceRemoval += TeamCheckInterval;
         }
 
         if (!RemoveEmptyTeams)

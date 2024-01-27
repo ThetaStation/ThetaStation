@@ -64,8 +64,7 @@ public sealed class RadarCommon : RadarModule
                             verts[i] *= shapeRadarForm.Size;
                             verts[i] = matrix.Transform(position + angle.RotateVec(verts[i]));
                             verts[i].Y = -verts[i].Y;
-                            if (!view.OnRadarForm.ConstantScale)
-                                verts[i] = ScalePosition(verts[i]);
+                            verts[i] = ScalePosition(verts[i]);
                         }
                         handle.DrawPrimitives(GetTopology((SharedDrawPrimitiveTopology) shapeRadarForm.PrimitiveTopology), verts, color);
                         break;
