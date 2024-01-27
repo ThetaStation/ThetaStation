@@ -24,6 +24,7 @@ public sealed partial class ShipEventFactionSystem
                 continue;
 
             SpawnAtPosition(protId, new(_mapMan.GetMapEntityId(TargetMap), pos));
+            break;
         }
     }
 }
