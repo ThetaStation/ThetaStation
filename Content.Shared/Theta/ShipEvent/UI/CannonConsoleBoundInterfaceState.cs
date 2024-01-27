@@ -16,6 +16,6 @@ public sealed class CannonConsoleBUICreatedMessage : BoundUserInterfaceMessage
 }
 
 [Serializable, NetSerializable]
-public sealed class CannonConsoleBUIDisposedMessgae : BoundUserInterfaceMessage
+public sealed class CannonConsoleBUIDisposedMessage : BoundUserInterfaceMessage
 {
 }

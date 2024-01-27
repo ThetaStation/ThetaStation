@@ -53,8 +53,7 @@ public sealed class CannonConsoleBoundUserInterface : BoundUserInterface
 
         if (disposing)
         {
-            SendMessage(new CannonConsoleBUICreatedMessage());
-
+            SendMessage(new CannonConsoleBUIDisposedMessage());
             _window?.Dispose();
         }
     }

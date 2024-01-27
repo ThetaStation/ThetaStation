@@ -18,7 +18,8 @@ public sealed class CannonConsoleSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<CannonConsoleComponent, CannonConsoleBUIStateMessage>(OnBUIStateChange);
+        SubscribeLocalEvent<CannonConsoleComponent, CannonConsoleBUICreatedMessage>(OnBUICreated);
+        SubscribeLocalEvent<CannonConsoleComponent, CannonConsoleBUIDisposedMessage>(OnBUIDisposed);
     }
 
     public override void Update(float frameTime)
@@ -31,29 +32,6 @@ public sealed class CannonConsoleSystem : EntitySystem
             if (!_uiSystem.IsUiOpen(uid, CannonConsoleUiKey.Key))
                 continue;
             UpdateState(uid, radar, transform);
-        }
-    }
-
-    public void OnBUIStateChange(EntityUid uid, CannonConsoleComponent console, CannonConsoleBUIStateMessage msg)
-    {
-        List<EntityUid> controlledUids = new();
-        var query = EntityManager.EntityQueryEnumerator<CannonComponent>();
-        while (query.MoveNext(out var cannonUid, out var cannon))
-        {
-            if (cannon.BoundConsoleUid == uid)
-                controlledUids.Add(cannonUid);
-        }
-
-        foreach (EntityUid controlledUid in controlledUids)
-        {
-            if (msg.Created)
-            {
-                _pvsOverrideSys.AddSessionOverride(controlledUid, msg.Session);
-            }
-            else
-            {
-                _pvsOverrideSys.RemoveSessionOverride(controlledUid, msg.Session);
-            }
         }
     }
 
@@ -71,5 +49,34 @@ public sealed class CannonConsoleSystem : EntitySystem
         );
 
         _uiSystem.TrySetUiState(uid, CannonConsoleUiKey.Key, radarState);
+    }
+
+    private List<EntityUid> GetControlledCannons(EntityUid uid)
+    {
+        List<EntityUid> result = new();
+        var query = EntityManager.EntityQueryEnumerator<CannonComponent>();
+        while (query.MoveNext(out var cannonUid, out var cannon))
+        {
+            if (cannon.BoundConsoleUid == uid)
+                result.Add(cannonUid);
+        }
+
+        return result;
+    }
+
+    private void OnBUICreated(EntityUid uid, CannonConsoleComponent console, CannonConsoleBUICreatedMessage msg)
+    {
+        foreach (EntityUid controlledUid in GetControlledCannons(uid))
+        {
+            _pvsOverrideSys.AddSessionOverride(controlledUid, msg.Session);
+        }
+    }
+
+    private void OnBUIDisposed(EntityUid uid, CannonConsoleComponent console, CannonConsoleBUIDisposedMessage msg)
+    {
+        foreach (EntityUid controlledUid in GetControlledCannons(uid))
+        {
+            _pvsOverrideSys.RemoveSessionOverride(controlledUid, msg.Session);
+        }
     }
 }
