@@ -174,12 +174,6 @@ public sealed class MapGenSystem : EntitySystem
         return EntityUid.Invalid;
     }
 
-    public EntityUid RandomPosSpawn(MapId targetMap, Vector2 startPos, int maxOffset, int tries, 
-    EntityPrototype prototype, bool forceIfFailed = false)
-    {
-        
-    }
-
     /// <summary>
     /// Deletes every grid in given area
     /// </summary>
