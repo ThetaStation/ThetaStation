@@ -17,7 +17,13 @@ public sealed partial class RadiationPulseComponent : Component
 
     /// <summary>
     ///     The range of animation.
-    ///     Can be overridden by <see cref="RadiationSourceComponent"/>.
     /// </summary>
+    [DataField("visualRange")]
     public float VisualRange = 5f;
+
+    /// <summary>
+    /// If set, VisualRange will be overriden by radiation source, so effect covers whole irradiated area.
+    /// </summary>
+    [DataField("autoRange")]
+    public bool AutoRange = true;
 }

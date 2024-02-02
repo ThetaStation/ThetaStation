@@ -14,7 +14,7 @@ public sealed partial class ShipEventFactionSystem
     public float PickupSpawnInterval;
     public float PickupMinDistance;
 
-    private void PickupsUpdate()
+    private void PickupSpawn()
     {
         if (PickupPositions.Count == 0)
             FindPickupPositions();

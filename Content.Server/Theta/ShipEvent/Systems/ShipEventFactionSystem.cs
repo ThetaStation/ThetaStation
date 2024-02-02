@@ -1,6 +1,5 @@
 using System.Linq;
 using System.Numerics;
-using System.Threading;
 using Content.Server.Actions;
 using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
@@ -69,8 +68,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     [Dependency] private readonly PlayerFactionSystem _factionSystem = default!;
     [Dependency] private readonly HumanoidAppearanceSystem _humanoidAppearanceSystem = default!;
     [Dependency] private readonly IServerPreferencesManager _prefsManager = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly ITimerManager _timerMan = default!;
+    [Dependency] private readonly PhysicsSystem _physSys = default!;
 
     //used when setting up buttons for ghosts, in cases when mind from shipevent agent is transferred to null and not to ghost entity directly
     private Dictionary<ICommonSession, ShipEventFaction> _lastTeamLookup = new();
@@ -153,6 +152,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         SubscribeLocalEvent<RoundEndDiscordTextAppendEvent>(OnRoundEndDiscord);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
 
+        AnomalyInit();
+
         OnRuleSelected += SetupTimers;
     }
 
@@ -169,8 +170,9 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     {
         SetupTimer(TeamCheckInterval, CheckTeams);
         SetupTimer(BoundsCompressionInterval, BoundsUpdate);
-        SetupTimer(PickupSpawnInterval, PickupsUpdate);
-        SetupTimer(AnomalySpawnInterval, AnomalyUpdate);
+        SetupTimer(PickupSpawnInterval, PickupSpawn);
+        SetupTimer(AnomalyUpdateInterval, AnomalyUpdate);
+        SetupTimer(AnomalySpawnInterval, AnomalySpawn);
     }
 
     private void SetupTimer(float seconds, Action action)

@@ -19,7 +19,7 @@ public sealed class RadiationPulseSystem : EntitySystem
         component.StartTime = _timing.RealTime;
 
         // try to get radiation range or keep default visual range
-        if (TryComp<RadiationSourceComponent>(uid, out var radSource))
+        if (component.AutoRange && TryComp<RadiationSourceComponent>(uid, out var radSource))
         {
             component.VisualRange = radSource.Intensity / radSource.Slope;
         }

@@ -63,6 +63,8 @@ public sealed partial class ShipEventRuleComponent : Component
     [DataField("pickupPrototype", customTypeSerializer: typeof(PrototypeIdSerializer<WeightedRandomEntityPrototype>))]
     public string PickupPrototype = default!;
 
+    [DataField("anomalyUpdateInterval")]
+    public float AnomalyUpdateInterval;
     [DataField("anomalySpawnInterval")]
     public float AnomalySpawnInterval;
     [DataField("anomalyPrototypes", customTypeSerializer: typeof(PrototypeIdListSerializer<EntityPrototype>))]
@@ -142,6 +144,7 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
             _shipSys.ShipTypes.Add(_protMan.Index<ShipTypePrototype>(shipTypeProtId));
         }
 
+        _shipSys.AnomalyUpdateInterval = component.AnomalyUpdateInterval;
         _shipSys.AnomalySpawnInterval = component.AnomalySpawnInterval;
         foreach (var anomalyProtId in component.AnomalyPrototypes)
         {

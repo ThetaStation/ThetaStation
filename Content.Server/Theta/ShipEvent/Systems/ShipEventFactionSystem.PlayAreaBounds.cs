@@ -5,6 +5,7 @@ using Content.Shared.Random.Helpers;
 using Content.Shared.Roles.Theta;
 using Content.Shared.Theta.ShipEvent;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
@@ -36,7 +37,12 @@ public sealed partial class ShipEventFactionSystem
         CompressBounds();
     }
 
-    private bool IsTeamOutOfBounds(ShipEventFaction team)
+    public bool IsPositionOutOfBounds(Vector2 worldPos)
+    {
+        return !GetPlayAreaBounds().Contains(worldPos);
+    }
+
+    public bool IsTeamOutOfBounds(ShipEventFaction team)
     {
         if (!team.ShouldRespawn)
         {
@@ -44,7 +50,7 @@ public sealed partial class ShipEventFactionSystem
                 EntityManager.TryGetComponent<PhysicsComponent>(team.Ship, out var grid))
             {
                 Matrix3 wmat = _formSys.GetWorldMatrix(form);
-                return !GetPlayAreaBounds().Contains(wmat.Transform(grid.LocalCenter));
+                return IsPositionOutOfBounds(wmat.Transform(grid.LocalCenter));
             }
         }
 
@@ -55,16 +61,11 @@ public sealed partial class ShipEventFactionSystem
     private void PunishOutOfBoundsTeam(ShipEventFaction team)
     {
         team.Points = Math.Max(0, team.Points - OutOfBoundsPenalty);
-
-        var shipEnts = Transform(team.Ship).ChildEnumerator;
-        while (shipEnts.MoveNext(out var uid))
-        {
-            if (_random.Prob(0.1f))
-                _expSys.QueueExplosion(uid, ExplosionSystem.DefaultExplosionPrototypeId, 2, 0.5f, 1);
-        }
+        var form = Transform(team.Ship);
+        _expSys.QueueExplosion(Pick(form.ChildEntities), ExplosionSystem.DefaultExplosionPrototypeId, 2, 0.5f, 1);
     }
 
-    private void CompressBounds()
+    public void CompressBounds()
     {
         CurrentBoundsOffset = Math.Min(MaxSpawnOffset / 2, CurrentBoundsOffset + BoundsCompressionDistance);
         UpdateBoundsOverlay();

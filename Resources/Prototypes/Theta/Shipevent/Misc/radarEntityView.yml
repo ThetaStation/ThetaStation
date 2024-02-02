@@ -98,7 +98,7 @@
   defaultColor: "#ffff0022"
   form:
     !type:CircleRadarForm
-    radius: 79.9
+    radius: 179.9
     constScale: false
 
 - type: radarEntityView
@@ -106,6 +106,32 @@
   defaultColor: "#ffaa00"
   form:
     !type:CircleRadarForm
-    radius: 80
+    radius: 180
+    constScale: false
+    filled: false
+
+- type: radarEntityView
+  id: ionanomaly_icon
+  defaultColor: "#ffffff"
+  form:
+    !type:TextureRadarForm
+    sprite: /Textures/Theta/ShipEvent/Objects/Anomalies.rsi/ionanomaly.png
+    scale: 1
+    constScale: false
+
+- type: radarEntityView
+  id: ionanomaly_fill
+  defaultColor: "#00aaee22"
+  form:
+    !type:CircleRadarForm
+    radius: 179.9
+    constScale: false
+
+- type: radarEntityView
+  id: ionanomaly_border
+  defaultColor: "#0000ff"
+  form:
+    !type:CircleRadarForm
+    radius: 180
     constScale: false
     filled: false

@@ -244,15 +244,9 @@ public sealed partial class ShipEventFactionSystem
     }
 
     //yes, RT does not have such a method
-    public T ListPick<T>(List<T> list)
+    public T Pick<T>(IEnumerable<T> enumerable)
     {
-        if (list.Count == 0)
-            throw new Exception("Dude, your list is empty.");
-
-        if (list.Count == 1)
-            return list.First();
-
-        return list[_random.Next(0, list.Count)];
+        return enumerable.ElementAt(_random.Next(0, enumerable.Count()));
     }
 }
 
