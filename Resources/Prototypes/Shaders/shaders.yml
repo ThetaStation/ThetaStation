@@ -89,7 +89,7 @@
   path: "/Textures/Theta/ShipEvent/Shaders/bounds_overlay.swsl"
 
 - type: shader
-  id: Wormhole
+  id: WormholeOverlay
   kind: source
   path: "/Textures/Theta/ShipEvent/Shaders/wormhole.swsl"
 

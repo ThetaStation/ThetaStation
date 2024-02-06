@@ -5,43 +5,40 @@ using Robust.Client.Graphics;
 using Robust.Shared.Enums;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Collision.Shapes;
-using Robust.Shared.Physics.Systems;
 
 namespace Content.Client.Theta.ShipEvent.Systems;
 
 public sealed class CircularShieldOverlay : Overlay
 {
-    private IEntityManager entMan = default!;
-    private TransformSystem formSys = default!;
-    private FixtureSystem fixSys = default!;
+    private IEntityManager _entMan = default!;
+    private TransformSystem _formSys = default!;
 
     private const string ShieldFixtureId = "ShieldFixture";
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
 
-    public CircularShieldOverlay(IEntityManager _entMan)
+    public CircularShieldOverlay(IEntityManager entMan)
     {
-        entMan = _entMan;
-        formSys = entMan.System<TransformSystem>();
-        fixSys = entMan.System<FixtureSystem>();
+        _entMan = entMan;
+        _formSys = _entMan.System<TransformSystem>();
     }
 
     protected override void Draw(in OverlayDrawArgs args)
     {
         foreach ((var form, var shield, var fix) in
-                 entMan.EntityQuery<TransformComponent, CircularShieldComponent, FixturesComponent>())
+                 _entMan.EntityQuery<TransformComponent, CircularShieldComponent, FixturesComponent>())
         {
             if (!shield.CanWork || form.MapID != args.MapId)
                 continue;
 
-            PolygonShape? shape = (PolygonShape?)fix.Fixtures.GetValueOrDefault(ShieldFixtureId)?.Shape ?? null;
+            PolygonShape? shape = (PolygonShape?) fix.Fixtures.GetValueOrDefault(ShieldFixtureId)?.Shape ?? null;
             if (shape == null)
                 continue;
 
             Vector2[] verts = new Vector2[shape.VertexCount + 1];
             for (var i = 0; i < shape.VertexCount; i++)
             {
-                verts[i] = formSys.GetWorldMatrix(form).Transform(shape.Vertices[i]);
+                verts[i] = _formSys.GetWorldMatrix(form).Transform(shape.Vertices[i]);
             }
 
             verts[shape.VertexCount] = verts[0];
