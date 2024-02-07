@@ -89,7 +89,7 @@
   form:
     !type:TextureRadarForm
     sprite: /Textures/Theta/ShipEvent/Objects/Anomalies.rsi/radanomaly.png
-    scale: 1.5
+    scale: 1
     constScale: false
 
 #todo (radars): it sucks having to create 999 protos for circles with different radius
@@ -116,7 +116,7 @@
   form:
     !type:TextureRadarForm
     sprite: /Textures/Theta/ShipEvent/Objects/Anomalies.rsi/ionanomaly.png
-    scale: 1.5
+    scale: 1
     constScale: false
 
 - type: radarEntityView
@@ -135,12 +135,3 @@
     radius: 180
     constScale: false
     filled: false
-
-- type: radarEntityView
-  id: wormhole_icon
-  defaultColor: "#ffffff"
-  form:
-    !type:TextureRadarForm
-    sprite: /Textures/Theta/ShipEvent/Objects/Anomalies.rsi/wormhole.png
-    scale: 1.5
-    constScale: false

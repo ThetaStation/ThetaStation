@@ -13,7 +13,7 @@
         shape:
           !type:PhysShapeCircle
             radius: 0.1
-        mask: #required for RandomWalk (I guess forces aren't applied to ents without fixtures)
+        mask:
         - None
         layer:
         - None
@@ -70,39 +70,3 @@
     range: 2
     energyConsumption: 500
     disableDuration: 1
-
-- type: entity
-  id: ShipEventWormholeAnomaly
-  components:
-  - type: Transform
-    traverseGrids: false
-  - type: Physics
-    bodyType: Static
-  - type: Fixtures
-    fixtures:
-      fix:
-        shape:
-          !type:PhysShapeCircle
-          radius: 0.2
-        hard: false
-        layer:
-          - AllMask
-        mask:
-          - AllMask
-  - type: Sprite
-    sprite: Structures/Power/Generation/Singularity/singularity_2.rsi
-    state: singularity_2
-  - type: PointLight
-    enabled: true
-    radius: 5
-  - type: RadarRenderable
-    viewProtos: 
-    - wormhole_icon
-    group: enum.RadarRenderableGroup.Anomaly
-  - type: ShipEventWormholeAnomaly
-
-- type: entity
-  id: ShipEventWormholeSpawner
-  components:
-  - type: ShipEventWormholeSpawner
-    wormholeProtoId: ShipEventWormholeAnomaly

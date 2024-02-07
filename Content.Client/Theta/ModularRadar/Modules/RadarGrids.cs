@@ -54,19 +54,13 @@ public sealed class RadarGrids : RadarModule
 
     private void UpdateGridEdges()
     {
-        if (ParentCoordinates == null)
-            return;
-
         var fixturesQuery = EntManager.GetEntityQuery<FixturesComponent>();
-        var mapPosition = ParentCoordinates.Value.ToMap(EntManager);
+        var mapPosition = ParentCoordinates!.Value.ToMap(EntManager);
         var ourGridId = ParentCoordinates!.Value.GetGridUid(EntManager);
-
-        if (ourGridId == null)
-            return;
 
         var findGridsIntersecting = MapManager.FindGridsIntersecting(mapPosition.MapId,
             new Box2(mapPosition.Position - MaxRadarRangeVector, mapPosition.Position + MaxRadarRangeVector)).ToList();
-        findGridsIntersecting.Add(EntManager.GetComponent<MapGridComponent>(ourGridId.Value));
+        findGridsIntersecting.Add(EntManager.GetComponent<MapGridComponent>(ourGridId!.Value));
 
         foreach (var grid in findGridsIntersecting)
         {

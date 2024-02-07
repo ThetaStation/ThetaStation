@@ -62,7 +62,7 @@ public sealed partial class ShipEventFactionSystem
     {
         team.Points = Math.Max(0, team.Points - OutOfBoundsPenalty);
         var form = Transform(team.Ship);
-        _expSys.QueueExplosion(Pick(form.ChildEntities), ExplosionSystem.DefaultExplosionPrototypeId, 4, 0.5f, 1);
+        _expSys.QueueExplosion(Pick(form.ChildEntities), ExplosionSystem.DefaultExplosionPrototypeId, 2, 0.5f, 1);
     }
 
     public void CompressBounds()

@@ -1,4 +1,3 @@
-using System.Numerics;
 using Robust.Shared.Map;
 using Robust.Shared.Serialization;
 
@@ -40,24 +39,4 @@ public sealed class ShipEventStealthStatusMessage : EntityEventArgs
         StealthReady = ready;
         Console = console;
     }
-}
-
-[Serializable, NetSerializable]
-public sealed class WormholeOverlayAddGrid : EntityEventArgs
-{
-    public NetEntity GridUid;
-    /// <summary>
-    /// Reverse mode spits grid out instead of sucking it in
-    /// </summary>
-    public bool Reverse;
-    /// <summary>
-    /// World pos
-    /// </summary>
-    public Vector2 AttractionCenter;
-}
-
-[Serializable, NetSerializable]
-public sealed class WormholeOverlayRemoveGrid : EntityEventArgs
-{
-    public NetEntity GridUid;
 }

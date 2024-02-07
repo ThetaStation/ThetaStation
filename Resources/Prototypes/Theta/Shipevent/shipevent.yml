@@ -57,12 +57,11 @@
       pickupPrototype: ShipEventPickupPrototype
 
       #anomalies
-      anomalyUpdateInterval: 1
+      anomalyUpdateInterval: 2
       anomalySpawnInterval: 30
       anomalyPrototypes:
         - "ShipEventRadiationAnomaly"
         - "ShipEventIonAnomaly"
-        - "ShipEventWormholeSpawner"
 
 - type: weightedRandomEntity
   id: ShipEventPickupPrototype

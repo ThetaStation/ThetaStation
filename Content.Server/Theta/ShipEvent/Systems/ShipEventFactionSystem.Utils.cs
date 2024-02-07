@@ -1,9 +1,9 @@
 ﻿//Because it's pain to work with 800+ line class
 
 using System.Linq;
-using System.Numerics;
 using Content.Server.Access.Systems;
 using Content.Server.Explosion.Components;
+using Content.Server.Theta.ShipEvent.Components;
 using Content.Shared.Chat;
 using Content.Shared.Explosion;
 using Content.Shared.Ghost;
@@ -206,20 +206,30 @@ public sealed partial class ShipEventFactionSystem
         return Math.Sqrt(delta);
     }
 
-    private EntityUid? RandomPosEntSpawn(string prot, int attempts)
+    private EntityUid RandomPosSpawn(string mapPath)
     {
-        for (int c = 0; c < attempts; c++)
+        const int shipCollisionCheckRange = 30;
+
+        Vector2i mapPos = Vector2i.Zero;
+        for (int c = 0; c < 100; c++)
         {
-            Box2 bounds = GetPlayAreaBounds();
-            Vector2 pos = _random.NextVector2Box(bounds.BottomLeft.X, bounds.BottomLeft.Y, bounds.TopRight.X, bounds.TopRight.Y);
-
-            if (_mapMan.TryFindGridAt(new(pos, TargetMap), out _, out _))
-                continue;
-
-            return SpawnAtPosition(prot, new(_mapMan.GetMapEntityId(TargetMap), pos));
+            mapPos = (Vector2i) _random.NextVector2Box(0, 0, MaxSpawnOffset, MaxSpawnOffset).Rounded();
+            if (!_mapMan.FindGridsIntersecting(TargetMap,
+                    new Box2(mapPos - shipCollisionCheckRange, mapPos + shipCollisionCheckRange)).Any())
+                break;
         }
 
-        return null;
+        var loadOptions = new MapLoadOptions
+        {
+            Rotation = _random.NextAngle(),
+            Offset = mapPos,
+            LoadMap = false
+        };
+
+        if (_mapSys.TryLoad(TargetMap, mapPath, out var rootUids, loadOptions))
+            return rootUids[0];
+
+        return EntityUid.Invalid;
     }
 
     public PlayerFaction? TryGetTeamByMember(EntityUid member)
