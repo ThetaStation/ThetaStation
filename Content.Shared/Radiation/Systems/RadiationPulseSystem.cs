@@ -11,17 +11,11 @@ public sealed class RadiationPulseSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<RadiationPulseComponent, ComponentStartup>(OnStartup);
+        SubscribeLocalEvent<RadiationPulseComponent, ComponentStartup>(OnPulseStartup);
     }
 
-    private void OnStartup(EntityUid uid, RadiationPulseComponent component, ComponentStartup args)
+    private void OnPulseStartup(EntityUid uid, RadiationPulseComponent component, ComponentStartup args)
     {
         component.StartTime = _timing.RealTime;
-
-        // try to get radiation range or keep default visual range
-        if (component.AutoRange && TryComp<RadiationSourceComponent>(uid, out var radSource))
-        {
-            component.VisualRange = radSource.Intensity / radSource.Slope;
-        }
     }
 }

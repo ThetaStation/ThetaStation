@@ -20,10 +20,4 @@ public sealed partial class RadiationPulseComponent : Component
     /// </summary>
     [DataField("visualRange")]
     public float VisualRange = 5f;
-
-    /// <summary>
-    /// If set, VisualRange will be overriden by radiation source, so effect covers whole irradiated area.
-    /// </summary>
-    [DataField("autoRange")]
-    public bool AutoRange = true;
 }

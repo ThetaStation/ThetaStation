@@ -46,7 +46,6 @@
     intensity: 30
   - type: RadiationPulse
     visualRange: 5
-    autoRange: false
 
 - type: entity
   id: ShipEventIonAnomaly
