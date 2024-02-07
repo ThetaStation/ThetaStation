@@ -1,6 +1,8 @@
+using System.Linq;
 using System.Numerics;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Shared.Theta.ShipEvent.Components;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -21,17 +23,31 @@ public sealed partial class ShipEventFactionSystem
         while (query.MoveNext(out var uid, out var anomaly, out var form))
         {
             Vector2 worldPos = _formSys.GetWorldPosition(form);
-            Vector2 bottomLeft = worldPos - new Vector2(anomaly.Range / 2);
-            Vector2 topRight = worldPos + new Vector2(anomaly.Range / 2);
 
             if (IsPositionOutOfBounds(worldPos))
             {
-                Vector2 delta = GetPlayAreaBounds().Center - worldPos / 2;
-                _physSys.SetLinearVelocity(uid, delta);
-                _physSys.ApplyLinearImpulse(uid, delta);
+                var body = Comp<PhysicsComponent>(uid);
+                Vector2 normalDelta = (GetPlayAreaBounds().Center - worldPos).Normalized();
+                _physSys.ResetDynamics(body);
+                _physSys.SetLinearVelocity(uid, normalDelta * 10, body: body);
+                _physSys.ApplyLinearImpulse(uid, normalDelta * 10, body: body);
             }
 
-            foreach (var grid in _mapMan.FindGridsIntersecting(TargetMap, new Box2(bottomLeft, topRight)))
+            //todo
+            //single check against whole anomaly range is unreliable and often does not include player ships (idk why)
+            //so instead we do 4 checks. obviously it's also 4 times more expensive
+            Vector2 lb = worldPos + new Vector2(-anomaly.Range);
+            Vector2 rb = worldPos + new Vector2(anomaly.Range, -anomaly.Range);
+            Vector2 lt = worldPos + new Vector2(-anomaly.Range, anomaly.Range);
+            Vector2 rt = worldPos + new Vector2(anomaly.Range);
+
+            HashSet<MapGridComponent> intersections = new();
+            intersections.UnionWith(_mapMan.FindGridsIntersecting(TargetMap, Box2.FromTwoPoints(worldPos, lb)));
+            intersections.UnionWith(_mapMan.FindGridsIntersecting(TargetMap, Box2.FromTwoPoints(worldPos, rb)));
+            intersections.UnionWith(_mapMan.FindGridsIntersecting(TargetMap, Box2.FromTwoPoints(worldPos, lt)));
+            intersections.UnionWith(_mapMan.FindGridsIntersecting(TargetMap, Box2.FromTwoPoints(worldPos, rt)));
+
+            foreach (var grid in intersections)
             {
                 if (!TryComp<ShipEventFactionMarkerComponent>(grid.Owner, out var marker))
                     return;

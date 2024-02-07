@@ -34,7 +34,7 @@
     - radanomaly_fill
     group: enum.RadarRenderableGroup.Anomaly
   - type: ShipEventProximityAnomaly
-    range: 50
+    range: 30
     toSpawn: RadiationPulseStrong
 
 - type: entity
@@ -59,7 +59,7 @@
     - ionanomaly_fill
     group: enum.RadarRenderableGroup.Anomaly
   - type: ShipEventProximityAnomaly
-    range: 50
+    range: 30
     toSpawn: EmpPulse
 
 - type: entity
@@ -68,5 +68,6 @@
   - type: TriggerOnSpawn
   - type: EmpOnTrigger
     range: 2
-    energyConsumption: 500
-    disableDuration: 1
+    energyConsumption: 5000
+    disableDuration: 5
+  - type: DeleteOnTrigger
