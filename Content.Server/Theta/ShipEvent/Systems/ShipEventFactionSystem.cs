@@ -152,8 +152,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         SubscribeLocalEvent<RoundEndDiscordTextAppendEvent>(OnRoundEndDiscord);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
 
-        AnomalyInit();
-
         OnRuleSelected += SetupTimers;
     }
 

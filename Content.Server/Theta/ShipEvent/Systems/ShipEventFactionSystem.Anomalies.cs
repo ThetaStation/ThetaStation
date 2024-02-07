@@ -15,10 +15,6 @@ public sealed partial class ShipEventFactionSystem
     public float AnomalySpawnInterval;
     public List<EntityPrototype> AnomalyPrototypes = new();
 
-    private void AnomalyInit()
-    {
-    }
-
     private void AnomalyUpdate()
     {
         var query = EntityManager.EntityQueryEnumerator<ShipEventProximityAnomalyComponent, TransformComponent>();
@@ -35,7 +31,7 @@ public sealed partial class ShipEventFactionSystem
                 _physSys.ApplyLinearImpulse(uid, delta);
             }
 
-            foreach (var grid in _mapMan.FindGridsIntersecting(TargetMap, new Box2(bottomLeft, topRight), true))
+            foreach (var grid in _mapMan.FindGridsIntersecting(TargetMap, new Box2(bottomLeft, topRight)))
             {
                 if (!TryComp<ShipEventFactionMarkerComponent>(grid.Owner, out var marker))
                     return;
@@ -51,17 +47,6 @@ public sealed partial class ShipEventFactionSystem
         if (AnomalyPrototypes.Count == 0)
             return;
 
-        string protId = Pick(AnomalyPrototypes).ID;
-        for (int c = 0; c < 50; c++)
-        {
-            Box2 bounds = GetPlayAreaBounds();
-            Vector2 pos = _random.NextVector2Box(bounds.BottomLeft.X, bounds.BottomLeft.Y, bounds.TopRight.X, bounds.TopRight.Y);
-
-            if (_mapMan.TryFindGridAt(new(pos, TargetMap), out _, out _))
-                continue;
-
-            SpawnAtPosition(protId, new(_mapMan.GetMapEntityId(TargetMap), pos));
-            break;
-        }
+        RandomPosEntSpawn(Pick(AnomalyPrototypes).ID, 50);
     }
 }

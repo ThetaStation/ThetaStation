@@ -33,6 +33,12 @@ public sealed partial class ApcComponent : BaseApcNetComponent
     [DataField("hasAccess")]
     public bool HasAccess = false;
 
+    /// <summary>
+    /// If set, APC's main breaker will be automatically re-enabled after EMP passes.
+    /// </summary>
+    [DataField("enableAfterEmp")]
+    public bool EnableAfterEmp = false;
+
     public const float HighPowerThreshold = 0.9f;
     public static TimeSpan VisualsChangeDelay = TimeSpan.FromSeconds(1);
 
