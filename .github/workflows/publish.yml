@@ -70,7 +70,7 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSHKEY }}
         port: ${{ secrets.PORT }}
-        script: node ~/scripts/push_to_manifest.js -fork theta -id ${{ github.sha }}
+        script: node ~/ss14/manifest_generation/create-manifest.js -fork theta -id ${{ github.sha }}
 
 #    - name: Publish changelog (Discord)
 #      run: Tools/actions_changelogs_since_last_run.py
