@@ -84,7 +84,8 @@
     defaultRotation: 90
     horizontalRotation: 90
   - type: RadarRenderable
-    radarView: genericMob
+    viewProtos: 
+    - genericMob
     group: enum.RadarRenderableGroup.ShipEventTeammate
   - type: HumanoidAppearance
     species: Human

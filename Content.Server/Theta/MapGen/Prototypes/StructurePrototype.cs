@@ -1,6 +1,6 @@
 using Robust.Shared.Prototypes;
 
-namespace Content.Server.Theta.DebrisGeneration.Prototypes;
+namespace Content.Server.Theta.MapGen.Prototypes;
 
 [Prototype("structure")]
 public sealed class StructurePrototype : IPrototype

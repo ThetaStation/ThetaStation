@@ -24,6 +24,7 @@ public abstract class RadarModule
     protected int SizeFull => (int) ((Radar.GetUIDisplayRadius() + Radar.GetMinimapMargin()) * 2 * Radar.UIScale);
     protected int ScaledMinimapRadius => (int) (Radar.GetUIDisplayRadius() * Radar.UIScale);
     protected float MinimapScale => Radar.WorldRange != 0 ? ScaledMinimapRadius / Radar.WorldRange : 0f;
+    protected float NormalMinimapScale => MinimapScale / (ScaledMinimapRadius / 64);
     protected float MaxRadarRange => Radar.MaxRadarRange;
     protected float WorldRange => Radar.WorldRange;
     protected float ActualRadarRange => Radar.GetActualRadarRange();

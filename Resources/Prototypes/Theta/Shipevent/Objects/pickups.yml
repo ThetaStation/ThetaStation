@@ -27,7 +27,8 @@
     - type: HealGrid
       health: 5000
     - type: RadarRenderable
-      radarView: healContainer
+      viewProtos: 
+      - healContainer
       group: enum.RadarRenderableGroup.Pickup
 
 - type: entity
@@ -42,7 +43,8 @@
         - TurretAmmoContainerFlakFilled
         - TurretAmmoContainerSPGFilled
     - type: RadarRenderable
-      radarView: ammoContainer
+      viewProtos: 
+      - ammoContainer
       group: enum.RadarRenderableGroup.Pickup
 
 - type: entity
@@ -55,7 +57,8 @@
       prototypes:
         - PickupLootSpawner
     - type: RadarRenderable
-      radarView: randomPower
+      viewProtos: 
+      - randomPower
       group: enum.RadarRenderableGroup.Pickup
 
 - type: entity

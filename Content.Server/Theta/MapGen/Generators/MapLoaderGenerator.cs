@@ -2,17 +2,14 @@ using System.Numerics;
 using Robust.Server.Maps;
 using Robust.Shared.Map;
 
-namespace Content.Server.Theta.DebrisGeneration.Generators;
+namespace Content.Server.Theta.MapGen.Generators;
 
-/// <summary>
-/// Generator which simply loads new map from path
-/// </summary>
 public sealed partial class MapLoaderGenerator : Generator
 {
     [DataField("mapPath", required: true)]
     public string MapPath = "";
 
-    public override EntityUid Generate(DebrisGenerationSystem sys, MapId targetMap)
+    public override EntityUid Generate(MapGenSystem sys, MapId targetMap)
     {
         var loadOptions = new MapLoadOptions
         {

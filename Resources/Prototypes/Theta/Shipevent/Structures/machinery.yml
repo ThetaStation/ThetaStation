@@ -1,4 +1,15 @@
 ﻿- type: entity
+  id: APCShipEvent
+  parent: APCHighCapacity
+  suffix: ShipEvent
+  components:
+    - type: AccessReader
+      enabled: false
+    - type: Apc
+      enableAfterEmp: true
+
+
+- type: entity
   id: CannonComputerShipEvent
   name: cannon console
   suffix: ShipEvent

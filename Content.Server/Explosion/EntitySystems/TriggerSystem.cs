@@ -27,7 +27,6 @@ using Robust.Shared.Physics.Systems;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Map;
 using Robust.Shared.Random;
-using Timer = Robust.Shared.Timing.Timer;
 
 namespace Content.Server.Explosion.EntitySystems
 {
@@ -80,6 +79,7 @@ namespace Content.Server.Explosion.EntitySystems
             InitializeVoice();
             InitializeMobstate();
 
+            SubscribeLocalEvent<TriggerOnSpawnComponent, ComponentInit>(OnTriggerSpawn);
             SubscribeLocalEvent<TriggerOnCollideComponent, StartCollideEvent>(OnTriggerCollide);
             SubscribeLocalEvent<TriggerOnActivateComponent, ActivateInWorldEvent>(OnActivate);
             SubscribeLocalEvent<TriggerImplantActionComponent, ActivateImplantEvent>(OnImplantTrigger);
@@ -188,6 +188,11 @@ namespace Content.Server.Explosion.EntitySystems
                 _radioSystem.SendRadioMessage(uid, deathMessage, _prototypeManager.Index<RadioChannelPrototype>(component.RadioChannel), uid);
 
             args.Handled = true;
+        }
+
+        private void OnTriggerSpawn(EntityUid uid, TriggerOnSpawnComponent component, ComponentInit args)
+        {
+            Trigger(uid);
         }
 
         private void OnTriggerCollide(EntityUid uid, TriggerOnCollideComponent component, ref StartCollideEvent args)

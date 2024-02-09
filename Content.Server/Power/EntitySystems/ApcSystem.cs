@@ -36,6 +36,7 @@ public sealed class ApcSystem : EntitySystem
         SubscribeLocalEvent<ApcComponent, GotEmaggedEvent>(OnEmagged);
 
         SubscribeLocalEvent<ApcComponent, EmpPulseEvent>(OnEmpPulse);
+        SubscribeLocalEvent<ApcComponent, EmpDisabledRemoved>(OnEmpDisabled);
     }
 
     public override void Update(float deltaTime)
@@ -202,6 +203,12 @@ public sealed class ApcSystem : EntitySystem
             args.Disabled = true;
             ApcToggleBreaker(uid, component);
         }
+    }
+
+    private void OnEmpDisabled(EntityUid uid, ApcComponent component, EmpDisabledRemoved args)
+    {
+        if (component.EnableAfterEmp && !component.MainBreakerEnabled)
+            ApcToggleBreaker(uid, component);
     }
 }
 

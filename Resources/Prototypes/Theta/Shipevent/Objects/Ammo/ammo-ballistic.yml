@@ -20,7 +20,8 @@
       types:
         Piercing: 50
   - type: RadarRenderable
-    radarView: machineGunProjectile
+    viewProtos: 
+    - machineGunProjectile
 
 # Flak Cannon round
 - type: entity

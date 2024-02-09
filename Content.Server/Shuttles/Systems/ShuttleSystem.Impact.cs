@@ -44,8 +44,8 @@ public sealed partial class ShuttleSystem
 
         var otherXform = Transform(args.OtherEntity);
 
-        var ourPoint = ourXform.InvWorldMatrix.Transform(args.WorldPoint);
-        var otherPoint = otherXform.InvWorldMatrix.Transform(args.WorldPoint);
+        var ourPoint = _formSys.GetInvWorldMatrix(ourXform).Transform(args.WorldPoint);
+        var otherPoint = _formSys.GetInvWorldMatrix(otherXform).Transform(args.WorldPoint);
 
         var ourVelocity = _physics.GetLinearVelocity(uid, ourPoint, ourBody, ourXform);
         var otherVelocity = _physics.GetLinearVelocity(args.OtherEntity, otherPoint, otherBody, otherXform);
@@ -54,15 +54,14 @@ public sealed partial class ShuttleSystem
         if (jungleDiff < MinimumImpactVelocity)
             return;
 
-        var coordinates = new EntityCoordinates(ourXform.MapUid.Value, args.WorldPoint);
+        var ourCoords = new EntityCoordinates(ourXform.MapUid.Value, args.WorldPoint);
         var volume = MathF.Min(10f, 1f * MathF.Pow(jungleDiff, 0.5f) - 5f);
         var audioParams = AudioParams.Default.WithVariation(SharedContentAudioSystem.DefaultVariation).WithVolume(volume);
 
-        _audio.PlayPvs(_shuttleImpactSound, coordinates, audioParams);
+        _audio.PlayPvs(_shuttleImpactSound, ourCoords, audioParams);
 
         var kineticEnergy = ourBody.Mass * Math.Pow(jungleDiff, 2) / 2;
-		var mapCoords = coordinates.ToMap(EntityManager);
-		var intensity = (float)(kineticEnergy*IntensityMultiplier);
-        _expSys.QueueExplosion(mapCoords, ExplosionSystem.DefaultExplosionPrototypeId, intensity , 5f, 50f);
+        var intensity = (float) (kineticEnergy * IntensityMultiplier);
+        _expSys.QueueExplosion(ourCoords.ToMap(EntityManager, _formSys), ExplosionSystem.DefaultExplosionPrototypeId, intensity, 5f, 50f);
     }
 }

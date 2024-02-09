@@ -5,7 +5,7 @@ using Robust.Shared.Random;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 
-namespace Content.Server.Theta.DebrisGeneration.Generators;
+namespace Content.Server.Theta.MapGen.Generators;
 
 /// <summary>
 /// Procedural asteroid generator. Resulting shape is basically just a bunch of circles slapped onto each other
@@ -36,7 +36,7 @@ public sealed partial class AsteroidGenerator : Generator
     [DataField("wallPrototypeId", required: true, customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
     public string WallPrototypeId = "";
 
-    public override EntityUid Generate(DebrisGenerationSystem sys, MapId targetMap)
+    public override EntityUid Generate(MapGenSystem sys, MapId targetMap)
     {
         var tileDefMan = sys.TileDefMan;
 

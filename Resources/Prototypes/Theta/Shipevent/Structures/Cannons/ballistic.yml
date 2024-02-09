@@ -38,7 +38,8 @@
     - type: Damageable
       damageContainer: Inorganic
     - type: RadarRenderable
-      radarView: genericCannon
+      viewProtos: 
+      - genericCannon
       group: enum.RadarRenderableGroup.Cannon
     - type: DeviceNetwork
       deviceNetId: Wireless

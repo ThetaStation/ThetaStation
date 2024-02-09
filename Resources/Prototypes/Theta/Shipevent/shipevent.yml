@@ -14,7 +14,7 @@
 
       #time
       roundDuration: 1800
-      teamCheckInterval: 5.0
+      teamCheckInterval: 5
       respawnDelay: 60
       bonusInterval: 600
 
@@ -56,9 +56,12 @@
       pickupMinDistance: 100
       pickupPrototype: ShipEventPickupPrototype
 
-      #stealth timers
-      stealthDuration: 60000
-      stealthCooldown: 180000
+      #anomalies
+      anomalyUpdateInterval: 2
+      anomalySpawnInterval: 30
+      anomalyPrototypes:
+        - "ShipEventRadiationAnomaly"
+        - "ShipEventIonAnomaly"
 
 - type: weightedRandomEntity
   id: ShipEventPickupPrototype

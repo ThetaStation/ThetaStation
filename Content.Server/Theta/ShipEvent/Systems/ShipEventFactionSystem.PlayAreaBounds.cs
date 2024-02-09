@@ -1,16 +1,24 @@
+using System.Linq;
 using System.Numerics;
 using Content.Server.Explosion.EntitySystems;
+using Content.Shared.Random.Helpers;
 using Content.Shared.Roles.Theta;
 using Content.Shared.Theta.ShipEvent;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Player;
+using Robust.Shared.Random;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
 public sealed partial class ShipEventFactionSystem
 {
     [Dependency] private readonly ExplosionSystem _expSys = default!;
+    public bool BoundsCompression = false;
+    public float BoundsCompressionInterval;
+    public int BoundsCompressionDistance; //how much play area bounds are compressed after every BoundCompressionInterval
+    public int CurrentBoundsOffset; //inward offset of bounds
 
     public Box2 GetPlayAreaBounds()
     {
@@ -21,19 +29,20 @@ public sealed partial class ShipEventFactionSystem
             MaxSpawnOffset - CurrentBoundsOffset);
     }
 
-    private void CheckBoundsCompressionTimer()
+    private void BoundsUpdate()
     {
         if (!BoundsCompression)
             return;
 
-        if (_boundsCompressionTimer > BoundsCompressionInterval)
-        {
-            _boundsCompressionTimer -= BoundsCompressionInterval;
-            CompressBounds();
-        }
+        CompressBounds();
     }
 
-    private bool IsTeamOutOfBounds(ShipEventFaction team)
+    public bool IsPositionOutOfBounds(Vector2 worldPos)
+    {
+        return !GetPlayAreaBounds().Contains(worldPos);
+    }
+
+    public bool IsTeamOutOfBounds(ShipEventFaction team)
     {
         if (!team.ShouldRespawn)
         {
@@ -41,7 +50,7 @@ public sealed partial class ShipEventFactionSystem
                 EntityManager.TryGetComponent<PhysicsComponent>(team.Ship, out var grid))
             {
                 Matrix3 wmat = _formSys.GetWorldMatrix(form);
-                return !GetPlayAreaBounds().Contains(wmat.Transform(grid.LocalCenter));
+                return IsPositionOutOfBounds(wmat.Transform(grid.LocalCenter));
             }
         }
 
@@ -52,13 +61,11 @@ public sealed partial class ShipEventFactionSystem
     private void PunishOutOfBoundsTeam(ShipEventFaction team)
     {
         team.Points = Math.Max(0, team.Points - OutOfBoundsPenalty);
-
-        Vector2 teamShipPos = _formSys.GetWorldPosition(Transform(team.Ship));
-        MapCoordinates mapCoords = new MapCoordinates(teamShipPos + new Vector2(5, 5) + _random.NextVector2(5), TargetMap);
-        _expSys.QueueExplosion(mapCoords, ExplosionSystem.DefaultExplosionPrototypeId, 300, 5, 100);
+        var form = Transform(team.Ship);
+        _expSys.QueueExplosion(Pick(form.ChildEntities), ExplosionSystem.DefaultExplosionPrototypeId, 5, 0.5f, 1);
     }
 
-    private void CompressBounds()
+    public void CompressBounds()
     {
         CurrentBoundsOffset = Math.Min(MaxSpawnOffset / 2, CurrentBoundsOffset + BoundsCompressionDistance);
         UpdateBoundsOverlay();
@@ -80,7 +87,7 @@ public sealed partial class ShipEventFactionSystem
 
     private void OnBoundsOverlayInfoRequest(BoundsOverlayInfoRequest args, EntitySessionEventArgs sargs)
     {
-        if(!RuleSelected)
+        if (!RuleSelected)
             return;
 
         UpdateBoundsOverlay(sargs.SenderSession);
