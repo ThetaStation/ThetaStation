@@ -43,6 +43,7 @@ using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Timer = Robust.Shared.Timing.Timer;
 using Robust.Shared.Utility;
+using System.Threading;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
@@ -115,7 +116,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     public List<Processor> ShipProcessors = new();
 
     public List<ShipEventFaction> Teams { get; } = new();
-    public List<Timer> Timers = new();
 
     public ColorPalette ColorPalette = new ShipEventPalette();
     public bool AllowTeamRegistration = true;
@@ -123,6 +123,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     public Action? OnRuleSelected;
     public Action<RoundEndTextAppendEvent>? RoundEndEvent;
+
+    public CancellationTokenSource TimerTokenSource = new();
 
     public override void Initialize()
     {
@@ -176,8 +178,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     private void SetupTimer(float seconds, Action action)
     {
         Timer timer = new((int) (seconds * 1000), true, action);
-        _timerMan.AddTimer(timer);
-        Timers.Add(timer);
+        _timerMan.AddTimer(timer, TimerTokenSource.Token);
     }
 
     //for handling intentional ghosting (suicide)
@@ -294,7 +295,10 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
         PickupPositions.Clear();
         Teams.Clear();
         _lastTeamLookup.Clear();
-        Timers.Clear();
+
+        TimerTokenSource.Cancel();
+        TimerTokenSource.Dispose();
+        TimerTokenSource = new();
     }
 
     private void OnRoundEnd(RoundEndTextAppendEvent args)
