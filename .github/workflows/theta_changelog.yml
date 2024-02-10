@@ -7,7 +7,7 @@ on:
 
 jobs:
   generate-cl:
-    runs-on: [self-hosted, linux, x64] # updated here
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo Content
         uses: actions/checkout@v2 # checkout the repository content
