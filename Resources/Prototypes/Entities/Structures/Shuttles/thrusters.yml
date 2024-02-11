@@ -5,10 +5,10 @@
   components:
     - type: AmbientSound
       enabled: false
-      range: 4
+      range: 8
       volume: -4
       sound:
-        path: /Audio/Effects/shuttle_thruster.ogg
+        path: /Audio/Theta/Shipevent/thruster_cycle.ogg
     - type: Transform
       anchored: true
     - type: Physics
@@ -19,6 +19,15 @@
       damage:
         types:
           Heat: 40
+      soundSpinup: 
+        path: /Audio/Theta/Shipevent/thruster_rise.ogg
+        params:
+          volume: -4
+      soundCycle: /Audio/Theta/Shipevent/thruster_cycle.ogg
+      soundShutdown: 
+        path: /Audio/Theta/Shipevent/thruster_fall.ogg
+        params:
+          volume: -4
     - type: InteractionOutline
     - type: Sprite
     - type: Appearance
