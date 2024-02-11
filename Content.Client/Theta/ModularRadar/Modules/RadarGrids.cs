@@ -2,19 +2,16 @@
 using System.Numerics;
 using Content.Shared.Random;
 using Content.Shared.Shuttles.Components;
-using Content.Shared.Theta.ShipEvent;
 using Content.Shared.Theta.ShipEvent.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
-using Robust.Shared.Collections;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
-using Serilog;
 
 namespace Content.Client.Theta.ModularRadar.Modules;
 
@@ -23,6 +20,7 @@ public sealed class RadarGrids : RadarModule
     [Dependency] private readonly IPrototypeManager _proto = default!;
     private readonly MapSystem _mapSystem;
     private readonly RulesSystem _ruleSystem;
+    private readonly TransformSystem _formSystem;
 
     /// <summary>
     /// Shows a label on each radar object.
@@ -41,6 +39,7 @@ public sealed class RadarGrids : RadarModule
     {
         _mapSystem = EntManager.System<MapSystem>();
         _ruleSystem = EntManager.System<RulesSystem>();
+        _formSystem = EntManager.System<TransformSystem>();
     }
 
     public override void FrameUpdate(FrameEventArgs args)
@@ -58,7 +57,7 @@ public sealed class RadarGrids : RadarModule
             return;
 
         var fixturesQuery = EntManager.GetEntityQuery<FixturesComponent>();
-        var mapPosition = ParentCoordinates.Value.ToMap(EntManager);
+        var mapPosition = ParentCoordinates.Value.ToMap(EntManager, _formSystem);
         var ourGridId = ParentCoordinates!.Value.GetGridUid(EntManager);
 
         if (ourGridId == null)
@@ -97,17 +96,14 @@ public sealed class RadarGrids : RadarModule
 
         // Draw our grid in detail
         var ourGridId = ParentCoordinates!.Value.GetGridUid(EntManager);
-        if (EntManager.TryGetComponent<MapGridComponent>(ourGridId, out var ourGrid) &&
-            fixturesQuery.TryGetComponent(ourGridId, out var ourFixturesComp))
+        if (EntManager.TryGetComponent<MapGridComponent>(ourGridId, out var ourGrid))
         {
-            var ourGridMatrix = xformQuery.GetComponent(ourGridId.Value).WorldMatrix;
-
+            var ourGridMatrix = _formSystem.GetWorldMatrix(ourGridId.Value);
             Matrix3.Multiply(in ourGridMatrix, in parameters.DrawMatrix, out var matrix);
-
-            DrawGrid(handle, parameters, matrix, ourGrid, Color.MediumSpringGreen);
+            DrawGrid(handle, matrix, ourGrid, Color.MediumSpringGreen);
         }
 
-        var mapPosition = ParentCoordinates.Value.ToMap(EntManager);
+        var mapPosition = ParentCoordinates.Value.ToMap(EntManager, _formSystem);
 
         var shown = new HashSet<EntityUid>();
         // Draw other grids... differently
@@ -120,8 +116,7 @@ public sealed class RadarGrids : RadarModule
             EntManager.TryGetComponent<IFFComponent>(grid.Owner, out var iff);
 
             // Hide it entirely.
-            if (iff != null &&
-                (iff.Flags & IFFFlags.Hide) != 0x0)
+            if (iff != null && (iff.Flags & IFFFlags.Hide) != 0x0)
             {
                 continue;
             }
@@ -132,8 +127,7 @@ public sealed class RadarGrids : RadarModule
             if (name == string.Empty)
                 name = Loc.GetString("shuttle-console-unknown");
 
-            var gridXform = xformQuery.GetComponent(grid.Owner);
-            var gridMatrix = gridXform.WorldMatrix;
+            var gridMatrix = _formSystem.GetWorldMatrix(grid.Owner);
             Matrix3.Multiply(in gridMatrix, in parameters.DrawMatrix, out var matty);
             var color = iff?.Color ?? Color.Gold;
 
@@ -141,9 +135,7 @@ public sealed class RadarGrids : RadarModule
             // Color.FromHex("#FFC000FF")
             // Hostile default: Color.Firebrick
 
-            if (ShowIFF &&
-                (iff == null && IFFComponent.ShowIFFDefault ||
-                 (iff.Flags & IFFFlags.HideLabel) == 0x0))
+            if (ShowIFF && (iff == null && IFFComponent.ShowIFFDefault || (iff.Flags & IFFFlags.HideLabel) == 0x0))
             {
                 var gridBounds = grid.LocalAABB;
                 Label label;
@@ -191,7 +183,7 @@ public sealed class RadarGrids : RadarModule
             }
 
             // Detailed view
-            DrawGrid(handle, parameters, matty, grid, color);
+            DrawGrid(handle, matty, grid, color);
         }
 
         foreach (var (ent, _) in _iffControls)
@@ -220,33 +212,28 @@ public sealed class RadarGrids : RadarModule
         _iffControls.Remove(uid);
     }
 
-    private void DrawGrid(DrawingHandleScreen handle, Parameters parameters, Matrix3 matrix, MapGridComponent grid,
-        Color color)
+    private void DrawGrid(DrawingHandleScreen handle, Matrix3 matrix, MapGridComponent grid, Color color)
     {
         if (_cachedGridInfo.TryGetValue(grid, out var info))
         {
-            var toRemoveIndexes = new List<Vector2>();
-            var toDrawEdges = info.Edges.ToList();
-            for (int i = 0; i < toDrawEdges.Count; i++)
+            Vector2[] edges = new Vector2[info.Edges.Count];
+            for (int i = 0; i < info.Edges.Count - 1; i += 2)
             {
-                var vector = toDrawEdges[i];
-                vector = matrix.Transform(vector);
-                if (vector.Length() > ActualRadarRange)
-                {
-                    toRemoveIndexes.Add(toDrawEdges[i]);
+                Vector2 start = info.Edges[i];
+                Vector2 end = info.Edges[i + 1];
+                start = matrix.Transform(start);
+                end = matrix.Transform(end);
+
+                if (start.Length() > ActualRadarRange || end.Length() > ActualRadarRange)
                     continue;
-                }
 
-                vector = ScalePosition(new Vector2(vector.X, -vector.Y));
-                toDrawEdges[i] = vector;
+                start = ScalePosition(new Vector2(start.X, -start.Y));
+                end = ScalePosition(new Vector2(end.X, -end.Y));
+                edges[i] = start;
+                edges[i + 1] = end;
             }
 
-            foreach (var vec in toRemoveIndexes)
-            {
-                toDrawEdges.Remove(vec);
-            }
-
-            handle.DrawPrimitives(DrawPrimitiveTopology.LineList, toDrawEdges.ToArray(), color);
+            handle.DrawPrimitives(DrawPrimitiveTopology.LineList, edges.ToArray(), color);
         }
     }
 
