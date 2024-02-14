@@ -184,11 +184,18 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         List<Processor> globalProcessors = new() { iffSplitProc, iffFlagProc };
 
         Distribution distribution = new SimpleDistribution();
-        if (component.UseNoise && component.NoiseGenerator != null)
-            distribution = new NoiseDistribution(
+        if (_rand.Prob(0.05f))
+        {
+            distribution = new FunnyDistribution();
+        }
+        else
+        {
+            if (component.UseNoise && component.NoiseGenerator != null)
+                distribution = new NoiseDistribution(
                 component.NoiseGenerator,
                 _shipSys.MaxSpawnOffset / MapGenSystem.SectorSize,
                 component.NoiseThreshold);
+        }
 
         _mapGenSys.SpawnStructures(map,
             Vector2i.Zero,
