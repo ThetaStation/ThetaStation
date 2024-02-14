@@ -61,7 +61,7 @@ public sealed class MapGenSystem : EntitySystem
             var structProt = PickStructure(structures);
             if (structProt == null)
             {
-                Logger.Warning("Debris generation, GenerateDebris: Could not pick structure prototype, skipping");
+                Log.Warning("Debris generation, GenerateDebris: Could not pick structure prototype, skipping");
                 continue;
             }
 
@@ -73,7 +73,7 @@ public sealed class MapGenSystem : EntitySystem
 
             if (spawnPos == null)
             {
-                Logger.Warning("Debris generation, GenerateDebris: Failed to find spawn position, deleting grid");
+                Log.Warning("Debris generation, GenerateDebris: Failed to find spawn position, deleting grid");
                 EntityManager.DeleteEntity(grid);
                 continue;
             }
@@ -82,7 +82,7 @@ public sealed class MapGenSystem : EntitySystem
             pos.X += structProt.MinDistance - gridComp.LocalAABB.Left;
             pos.Y += structProt.MinDistance - gridComp.LocalAABB.Bottom;
 
-            gridForm.Coordinates = new EntityCoordinates(gridForm.Coordinates.EntityId, pos);
+            FormSys.SetWorldPosition(grid, pos);
             SpawnedGrids.Add(grid);
             foreach (var proc in structProt.Processors)
             {
@@ -97,7 +97,7 @@ public sealed class MapGenSystem : EntitySystem
 
         MapMan.SetMapPaused(TargetMap, false);
         TargetMap = MapId.Nullspace;
-        Logger.Info($"Debris generation, GenerateDebris: Spawned {SpawnedGrids.Count} grids");
+        Log.Info($"Debris generation, GenerateDebris: Spawned {SpawnedGrids.Count} grids");
         SpawnedGrids.Clear();
 
         spawnSectors.Clear();
@@ -120,7 +120,7 @@ public sealed class MapGenSystem : EntitySystem
             startPos.X + maxOffset - gridComp.LocalAABB.Width,
             startPos.Y + maxOffset - gridComp.LocalAABB.Height);
 
-        var finalDistance = (int)Math.Ceiling(structure.MinDistance + Math.Max(gridComp.LocalAABB.Height, gridComp.LocalAABB.Width));
+        var finalDistance = (int) Math.Ceiling(structure.MinDistance + Math.Max(gridComp.LocalAABB.Height, gridComp.LocalAABB.Width));
 
         Vector2i mapPos = Vector2i.Zero;
         var result = false;
@@ -144,16 +144,16 @@ public sealed class MapGenSystem : EntitySystem
 
         if (result)
         {
-            Logger.Info($"Debris generation, RandomPosSpawn: Spawned grid {grid.ToString()} successfully");
-            gridForm.Coordinates = new EntityCoordinates(gridForm.Coordinates.EntityId, mapPos);
+            Log.Info($"Debris generation, RandomPosSpawn: Spawned grid {grid.ToString()} successfully");
+            FormSys.SetWorldPosition(grid, mapPos);
         }
         else if (forceIfFailed)
         {
-            Logger.Info($"Debris generation, RandomPosSpawn: Failed to find spawn position for grid {grid.ToString()}," +
+            Log.Info($"Debris generation, RandomPosSpawn: Failed to find spawn position for grid {grid.ToString()}," +
                         "but forceIfFailed is set to true; proceeding to force-spawn");
             mapPos = (Vector2i) Rand.NextVector2Box(bounds.Left, bounds.Bottom, bounds.Right, bounds.Top).Rounded();
 
-            gridForm.Coordinates = new EntityCoordinates(gridForm.Coordinates.EntityId, mapPos);
+            FormSys.SetWorldPosition(grid, mapPos);
         }
 
         if (result || forceIfFailed)
