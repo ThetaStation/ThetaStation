@@ -28,9 +28,9 @@ public sealed class MapGenSystem : EntitySystem
     public List<EntityUid> SpawnedGrids = new();
 
     //primitive quad tree (aka plain grid) for optimising collision checks
-    private const int spawnSectorSize = 100;
-    private Dictionary<Vector2i, HashSet<SectorRange>> spawnSectors = new(); //sector pos => free ranges in this sector
-    private Dictionary<Vector2i, double> spawnSectorVolumes = new(); //sector pos => occupied volume in this sector
+    private const int SpawnSectorSize = 100;
+    private Dictionary<Vector2i, HashSet<SectorRange>> _spawnSectors = new(); //sector pos => free ranges in this sector
+    private Dictionary<Vector2i, double> _spawnSectorVolumes = new(); //sector pos => occupied volume in this sector
 
     /// <summary>
     /// Randomly places specified structures onto map
@@ -100,8 +100,8 @@ public sealed class MapGenSystem : EntitySystem
         Log.Info($"Debris generation, GenerateDebris: Spawned {SpawnedGrids.Count} grids");
         SpawnedGrids.Clear();
 
-        spawnSectors.Clear();
-        spawnSectorVolumes.Clear();
+        _spawnSectors.Clear();
+        _spawnSectorVolumes.Clear();
     }
 
     /// <summary>
@@ -169,7 +169,7 @@ public sealed class MapGenSystem : EntitySystem
             return grid;
         }
 
-        Logger.Error($"Debris generation, RandomPosSpawn: Failed to find spawn position, deleting grid {grid.ToString()}");
+        Log.Error($"Debris generation, RandomPosSpawn: Failed to find spawn position, deleting grid {grid.ToString()}");
         EntityManager.DeleteEntity(grid);
         return EntityUid.Invalid;
     }
@@ -192,17 +192,17 @@ public sealed class MapGenSystem : EntitySystem
     /// <param name="maxDebrisOffset">Size of grid's square</param>
     private void SetupGrid(Vector2i startPos, int maxDebrisOffset)
     {
-        for (int y = 0; y < maxDebrisOffset; y += spawnSectorSize)
+        for (int y = 0; y < maxDebrisOffset; y += SpawnSectorSize)
         {
-            for (int x = 0; x < maxDebrisOffset; x += spawnSectorSize)
+            for (int x = 0; x < maxDebrisOffset; x += SpawnSectorSize)
             {
                 Vector2i sectorPos = new Vector2i(startPos.X + x, startPos.Y + y);
-                spawnSectors[sectorPos] = new HashSet<SectorRange>
+                _spawnSectors[sectorPos] = new HashSet<SectorRange>
                 {
-                    new SectorRange(sectorPos.Y, sectorPos.Y + spawnSectorSize,
-                        new List<(int, int)>{(sectorPos.X, sectorPos.X + spawnSectorSize)})
+                    new SectorRange(sectorPos.Y, sectorPos.Y + SpawnSectorSize,
+                        new List<(int, int)>{(sectorPos.X, sectorPos.X + SpawnSectorSize)})
                 };
-                spawnSectorVolumes[sectorPos] = spawnSectorSize * spawnSectorSize;
+                _spawnSectorVolumes[sectorPos] = SpawnSectorSize * SpawnSectorSize;
             }
         }
     }
@@ -210,14 +210,13 @@ public sealed class MapGenSystem : EntitySystem
     /// <summary>
     /// Randomly picks structures from structure list, accounting for their weight
     /// </summary>
-    // todo: maybe it's worth to PR this to RT (weighted random selection)
     private StructurePrototype? PickStructure(List<StructurePrototype> structures)
     {
         float totalWeight = structures.Select(s => s.SpawnWeight).Sum();
         float randFloat = Rand.NextFloat(0, totalWeight);
 
         StructurePrototype? picked = null;
-        foreach(var structProt in structures)
+        foreach (var structProt in structures)
         {
             if (structProt.SpawnWeight > randFloat)
             {
@@ -230,19 +229,19 @@ public sealed class MapGenSystem : EntitySystem
 
         return picked;
     }
-    
+
     /// <summary>
     /// Generates spawn position in random sector of the grid
     /// </summary>
     private Vector2? GenerateSpawnPosition(Box2i bounds)
     {
         var volume = bounds.Height * bounds.Width;
-        var shuffledSectors = spawnSectors.Keys.ToList();
+        var shuffledSectors = _spawnSectors.Keys.ToList();
         Rand.Shuffle(shuffledSectors);
 
-        foreach(var randomSector in shuffledSectors)
+        foreach (var randomSector in shuffledSectors)
         {
-            if (spawnSectorVolumes[randomSector] < volume)
+            if (_spawnSectorVolumes[randomSector] < volume)
                 continue;
             var result = TryPlaceInSector(randomSector, bounds, out var spawnPos);
             if (result)
@@ -266,7 +265,7 @@ public sealed class MapGenSystem : EntitySystem
         int lx, ly, hx, hy;
         lx = ly = hx = hy = 0;
 
-        foreach (SectorRange range in spawnSectors[sectorPos])
+        foreach (SectorRange range in _spawnSectors[sectorPos])
         {
             foreach ((int start, int end) in range.XRanges)
             {
@@ -281,7 +280,7 @@ public sealed class MapGenSystem : EntitySystem
                         hy = range.Top - bounds.Height;
                         break;
                     }
-                    SectorRange combinedRange = CombineRangesVertically(spawnSectors[sectorPos], start, end, range.Bottom, range.Top, bounds.Width);
+                    SectorRange combinedRange = CombineRangesVertically(_spawnSectors[sectorPos], start, end, range.Bottom, range.Top, bounds.Width);
 
                     if (combinedRange.Top - combinedRange.Bottom >= bounds.Height)
                     {
@@ -306,12 +305,12 @@ public sealed class MapGenSystem : EntitySystem
 
         if (result)
         {
-            spawnSectors[sectorPos] = SubtractRange(spawnSectors[sectorPos],
+            _spawnSectors[sectorPos] = SubtractRange(_spawnSectors[sectorPos],
                     RangeFromBox(
                         Box2i.FromDimensions(resultPos, new Vector2i(bounds.Width, bounds.Height))
                         )
                     );
-            spawnSectorVolumes[sectorPos] -= bounds.Height * bounds.Width;
+            _spawnSectorVolumes[sectorPos] -= bounds.Height * bounds.Width;
         }
 
         return result;
@@ -324,7 +323,7 @@ public sealed class MapGenSystem : EntitySystem
     {
         return new SectorRange(box.Bottom, box.Top, new List<(int, int)> {(box.Left, box.Right)});
     }
-    
+
     /// <summary>
     /// Subtracts range from existing ranges
     /// </summary>
@@ -491,7 +490,7 @@ public sealed class MapGenSystem : EntitySystem
 
         return newRanges;
     }
-    
+
     /// <summary>
     /// SectorRange represents single 'line' of sector space. It contains info about it's height (Bottom, Top) & free spaces on that height level (XRanges)
     /// </summary>
