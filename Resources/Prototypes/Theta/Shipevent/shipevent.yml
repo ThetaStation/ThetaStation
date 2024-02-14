@@ -37,16 +37,19 @@
         - "shiptype_skipjack"
         - "shiptype_tikvyak"
         - "shiptype_asteroid_ship"
+      useNoise: true
+      noiseGenerator: !type:FastNoiseLite
+        frequency: 2
+      noiseThreshold: 0.1
 
       #bounds
       boundsCompressionInterval: 0
       boundsCompressionDistance: 0
 
+      #obstacles
       obstacleTypes:
         - "asteroid_small"
         - "asteroid_large"
-
-      #randomisation
       obstacleAmountAmplitude: 0
       obstacleSizeAmplitude: 0
 

@@ -40,7 +40,7 @@ public sealed partial class AsteroidGenerator : Generator
     {
         var tileDefMan = sys.TileDefMan;
 
-        var tileSet = GenerateTileSet(sys.Rand);
+        var tileSet = GenerateTileSet(sys.Random);
 
         var gridComp = sys.MapMan.CreateGrid(targetMap);
         var gridUid = gridComp.Owner;
@@ -51,7 +51,7 @@ public sealed partial class AsteroidGenerator : Generator
         foreach (var pos in tileSet)
         {
             tiles.Add((pos, new Tile(tileDefMan[FloorId].TileId)));
-            if (sys.Rand.Prob(Erosion))
+            if (sys.Random.Prob(Erosion))
                 continue;
             ents.Add((new EntityCoordinates(gridUid, pos), WallPrototypeId));
         }

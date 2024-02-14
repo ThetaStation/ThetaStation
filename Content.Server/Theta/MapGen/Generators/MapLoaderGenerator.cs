@@ -13,7 +13,7 @@ public sealed partial class MapLoaderGenerator : Generator
     {
         var loadOptions = new MapLoadOptions
         {
-            Rotation = sys.Rand.NextAngle(),
+            Rotation = sys.Random.NextAngle(),
             Offset = Vector2.Zero,
             LoadMap = false
         };
