@@ -235,9 +235,7 @@ namespace Content.IntegrationTests.Tests
                 "NukeOperativeSpawner",
                 "TimedSpawner",
                 // makes an announcement on mapInit.
-                "AnnounceOnSpawn",
-                //spawns audio ents probably
-                "EmpPulse"
+                "AnnounceOnSpawn"
             };
 
             Assert.That(server.CfgMan.GetCVar(CVars.NetPVS), Is.False);
@@ -267,6 +265,10 @@ namespace Content.IntegrationTests.Tests
                 // TODO fix ninja
                 // Currently ninja fails to equip their own loadout.
                 if (protoId == "MobHumanSpaceNinja")
+                    continue;
+
+                //spawns audio ents
+                if (protoId == "EmpPulse")
                     continue;
 
                 var count = server.EntMan.EntityCount;
