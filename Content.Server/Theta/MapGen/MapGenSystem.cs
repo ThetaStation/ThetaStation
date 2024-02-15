@@ -49,8 +49,8 @@ public sealed class MapGenSystem : EntitySystem
         int structureAmount,
         int maxOffset,
         List<StructurePrototype> structures,
-        List<Processor> globalProcessors,
-        Distribution distribution)
+        List<IMapGenProcessor> globalProcessors,
+        IMapGenDistribution distribution)
     {
         if (targetMap == MapId.Nullspace || !MapMan.MapExists(targetMap))
             return;
@@ -114,7 +114,7 @@ public sealed class MapGenSystem : EntitySystem
     /// Randomly places specified structure onto map. Does not optimise collision checking in any way
     /// </summary>
     public EntityUid RandomPosSpawn(MapId targetMap, Vector2 startPos, int maxOffset, int tries,
-        StructurePrototype structure, List<Processor>? extraProcessors = null, bool forceIfFailed = false)
+        StructurePrototype structure, List<IMapGenProcessor>? extraProcessors = null, bool forceIfFailed = false)
     {
         TargetMap = targetMap;
 
@@ -166,7 +166,7 @@ public sealed class MapGenSystem : EntitySystem
         {
             if (extraProcessors != null)
             {
-                foreach (Processor extraProc in extraProcessors)
+                foreach (IMapGenProcessor extraProc in extraProcessors)
                 {
                     extraProc.Process(this, targetMap, grid, false);
                 }
@@ -239,7 +239,7 @@ public sealed class MapGenSystem : EntitySystem
     /// <summary>
     /// Generates spawn position in random sector of the grid
     /// </summary>
-    private Vector2? GenerateSpawnPosition(Box2i bounds, Distribution distribution, int tries)
+    private Vector2? GenerateSpawnPosition(Box2i bounds, IMapGenDistribution distribution, int tries)
     {
         var volume = bounds.Height * bounds.Width;
 

@@ -181,9 +181,9 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         iffFlagProc.Flags = new() { IFFFlags.HideLabel };
         iffFlagProc.ColorOverride = Color.Gold;
 
-        List<Processor> globalProcessors = new() { iffSplitProc, iffFlagProc };
+        List<IMapGenProcessor> globalProcessors = new() { iffSplitProc, iffFlagProc };
 
-        Distribution distribution = new SimpleDistribution();
+        IMapGenDistribution distribution = new SimpleDistribution();
         if (_rand.Prob(0.05f))
         {
             distribution = new FunnyDistribution();

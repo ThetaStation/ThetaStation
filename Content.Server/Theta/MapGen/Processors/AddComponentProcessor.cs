@@ -16,7 +16,7 @@ public sealed partial class AddComponentsProcessor : IMapGenProcessor
     [AlwaysPushInheritance]
     public ComponentRegistry Components = new();
 
-    public override void Process(MapGenSystem sys, MapId targetMap, EntityUid gridUid, bool isGlobal)
+    public void Process(MapGenSystem sys, MapId targetMap, EntityUid gridUid, bool isGlobal)
     {
         if (isGlobal)
         {

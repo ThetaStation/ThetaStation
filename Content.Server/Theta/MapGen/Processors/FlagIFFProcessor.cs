@@ -24,7 +24,7 @@ public sealed partial class FlagIFFProcessor : IMapGenProcessor
     [DataField("colorOverride")]
     public Color? ColorOverride;
 
-    public override void Process(MapGenSystem sys, MapId targetMap, EntityUid gridUid, bool isGlobal)
+    public void Process(MapGenSystem sys, MapId targetMap, EntityUid gridUid, bool isGlobal)
     {
         var shuttleSys = sys.EntMan.System<ShuttleSystem>();
         if (isGlobal)
