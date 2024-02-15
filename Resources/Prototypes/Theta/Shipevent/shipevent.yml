@@ -37,6 +37,7 @@
         - "shiptype_skipjack"
         - "shiptype_tikvyak"
         - "shiptype_asteroid_ship"
+        - "shiptype_diyship"
 
       #bounds
       boundsCompressionInterval: 0

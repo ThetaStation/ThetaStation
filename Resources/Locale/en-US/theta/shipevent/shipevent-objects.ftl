@@ -27,29 +27,32 @@ ent-PointStorageItem = point storage
 ent-ShipEventPlasmaGun = plasma caster
     .desc = Incredibly powerful energy gun, capable of turning your enemies into pile of ash in a blink of an eye.
     .suffix = ShipEvent
+ent-ShipEventFlakCannonFlatpack = flak cannon flatpack
+    .suffix = ShipEvent
+ent-ShipEventLoaderFlatpack = loader flatpack
+    .suffix = ShipEvent
+ent-ShipEventThrusterFlatpack = thruster flatpack
+    .suffix = ShipEvent
+ent-ShipEventGyroscopeFlatpack = gyroscope flatpack
+    .suffix = ShipEvent
 
 ## Cannons
 
 ent-ShipEventMachineGunCannon = machine gun turret
     .desc = Machine gun turret, for dealing with enemy's manpower.
     .suffix = ShipEvent
-
 ent-ShipEventFlakCannon = flak cannon
     .desc = Flak cannon, effective in close & medium range combat.
     .suffix = ShipEvent
-
 ent-ShipEventSPG = self propelled artillery
     .desc = SPG, fires self propelled projectiles. While they take some time to fully accelerate, their damage is devastating.
     .suffix = ShipEvent
-
 ent-ShipEventMachineGunCannonLongMuzzle = machine gun turret
     .desc = Machine gun turret, for dealing with enemy's manpower.
     .suffix = Muzzle Length - 2
-
 ent-ShipEventFlakCannonLongMuzzle = flak cannon
     .desc = Flak cannon, effective in close & medium range combat.
     .suffix = Muzzle Length - 2
-
 ent-ShipEventSPGLongMuzzle = self propelled artillery
     .desc = SPG, fires self propelled projectiles. While they take some time to fully accelerate, resulting explosion is devastating.
     .suffix = Muzzle Length - 2

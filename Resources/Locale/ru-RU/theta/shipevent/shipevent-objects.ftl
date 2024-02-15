@@ -27,6 +27,14 @@ ent-PointStorageItem = хранилище очков
 ent-ShipEventPlasmaGun = плазмолив
     .desc = Невероятно мощное энергооружие, способное в мгновение ока превратить ваших противников в кучку золы.
     .suffix = ShipEvent
+ent-ShipEventFlakCannonFlatpack = портативная пушка
+    .suffix = ShipEvent
+ent-ShipEventLoaderFlatpack = портативный зарядник
+    .suffix = ShipEvent
+ent-ShipEventThrusterFlatpack = портативный двигатель
+    .suffix = ShipEvent
+ent-ShipEventGyroscopeFlatpack = портативный гироскоп
+    .suffix = ShipEvent
 
 ## Cannons
 

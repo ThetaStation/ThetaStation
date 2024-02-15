@@ -13,7 +13,6 @@
         - ShipEventUplink
 
 # Ammo containers
-
 - type: entity
   id: TurretAmmoContainer
   name: ammo container
@@ -26,3 +25,56 @@
       drawdepth: Items
       sprite: Theta/ShipEvent/Objects/AmmoContainer.rsi
       state: container
+
+#Flatpacks
+- type: entity
+  parent: BaseItem
+  id: ShipEventFlakCannonFlatpack
+  suffix: ShipEvent
+  components:
+  - type: Item
+    size: Normal
+  - type: Flatpack
+    entity: ShipEventFlakCannon
+  - type: Sprite
+    sprite: Objects/Power/solar_parts.rsi
+    state: solar_assembly_parts
+
+- type: entity
+  parent: BaseItem
+  id: ShipEventLoaderFlatpack
+  suffix: ShipEvent
+  components:
+  - type: Item
+    size: Normal
+  - type: Flatpack
+    entity: TurretLoaderShipEvent
+  - type: Sprite
+    sprite: Objects/Power/solar_parts.rsi
+    state: solar_assembly_parts
+
+- type: entity
+  parent: BaseItem
+  id: ShipEventThrusterFlatpack
+  suffix: ShipEvent
+  components:
+  - type: Item
+    size: Normal
+  - type: Flatpack
+    entity: Thruster
+  - type: Sprite
+    sprite: Objects/Power/solar_parts.rsi
+    state: solar_assembly_parts
+
+- type: entity
+  parent: BaseItem
+  id: ShipEventGyroscopeFlatpack
+  suffix: ShipEvent
+  components:
+  - type: Item
+    size: Normal
+  - type: Flatpack
+    entity: Gyroscope
+  - type: Sprite
+    sprite: Objects/Power/solar_parts.rsi
+    state: solar_assembly_parts

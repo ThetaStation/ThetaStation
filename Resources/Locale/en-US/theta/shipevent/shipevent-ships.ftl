@@ -14,8 +14,7 @@ shipevent-arrowhead-desc =
     it relies on it's speed for avoiding enemy missiles, since it's armour is much weaker than of heavier ships.
 
 shipevent-boxship-name = Boxship
-shipevent-boxship-desc =
-    Five by five meters steel box, housing all the machinery you'd expect to see inside regular battleship. Great option for farming points and annoying everyone else.
+shipevent-boxship-desc = You LOVE this ship if you're reading this.
 
 shipevent-skipjack-name = Skipjack
 shipevent-skipjack-desc = A reshaped space pirate support ship that was once stolen from a landfill in the Solar System.
@@ -29,3 +28,8 @@ shipevent-asteroid-ship-desc =
     It is poorly protected, has 6 static cannons on the 3 sides and looks like an asteroid. 
     The cannons are hidden behind doors which look like an asteroid rock and are controlled from the inside.
     Has extended stealth mode duration.
+
+shipevent-diyship-name = DIY ship
+shipevent-diyship-desc =
+    Extremely popular among both children and poor spacemen, this "Build It Yourself" kit provides you with
+    everything needed to build your very own battleship.

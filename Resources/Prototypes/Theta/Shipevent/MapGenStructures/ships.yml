@@ -55,7 +55,7 @@
   id: shiptype_skipjack
   name: shipevent-skipjack-name
   description: shipevent-skipjack-desc
-  class: shipevent-shipclass-heavyclass
+  class: shipevent-shipclass-heavy
   previewImage: /Textures/Theta/ShipEvent/ShipPreviews/skipjack-preview.png
   structurePrototype: "shipevent_skipjack"
   minCrewAmount: 3
@@ -91,3 +91,19 @@
   previewImage: /Textures/Theta/ShipEvent/ShipPreviews/asteroid-ship-preview.png
   structurePrototype: "shipevent_asteroid_ship"
   minCrewAmount: 2
+
+- type: structure
+  id: shipevent_diyship
+  generator: !type:MapLoaderGenerator
+    mapPath: "/Maps/Theta/Shipevent/Ships/shipevent-diyship.yml"
+  spawnWeight: 0
+  minDistance: 10
+
+- type: shiptype
+  id: shiptype_diyship
+  name: shipevent-diyship-name
+  description: shipevent-diyship-desc
+  class: shipevent-shipclass-light
+  minCrewAmount: 1
+  previewImage: /Textures/Theta/ShipEvent/ShipPreviews/diyship-preview.png
+  structurePrototype: "shipevent_diyship"
