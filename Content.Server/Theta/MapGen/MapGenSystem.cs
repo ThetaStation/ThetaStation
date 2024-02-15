@@ -515,25 +515,25 @@ public sealed class MapGenSystem : EntitySystem
 /// <summary>
 /// Distribution is used for generating spawn positions. It may be simple randint or some 2D noise.
 /// </summary>
-public abstract class Distribution
+public interface IMapGenDistribution
 {
-    public abstract Vector2 Generate(MapGenSystem sys);
+    public Vector2 Generate(MapGenSystem sys);
 }
 
 /// <summary>
 /// Generator is a base class for generating structures
 /// </summary>
 [ImplicitDataDefinitionForInheritors]
-public abstract partial class Generator
+public partial interface IMapGenGenerator
 {
-    public abstract EntityUid Generate(MapGenSystem sys, MapId targetMap);
+    public EntityUid Generate(MapGenSystem sys, MapId targetMap);
 }
 
 /// <summary>
 /// Processor is a base class for post-processing structures
 /// </summary>
 [ImplicitDataDefinitionForInheritors]
-public abstract partial class Processor
+public partial interface IMapGenProcessor
 {
-    public abstract void Process(MapGenSystem sys, MapId targetMap, EntityUid gridUid, bool isGlobal);
+    public void Process(MapGenSystem sys, MapId targetMap, EntityUid gridUid, bool isGlobal);
 }

@@ -2,7 +2,7 @@ using System.Numerics;
 
 namespace Content.Server.Theta.MapGen.Distributions;
 
-public sealed class FunnyDistribution : Distribution
+public sealed class FunnyDistribution : IMapGenDistribution
 {
     private List<Vector2> _positions = new();
     private int _lastIndex;
@@ -17,7 +17,7 @@ public sealed class FunnyDistribution : Distribution
         }
     }
 
-    public override Vector2 Generate(MapGenSystem sys)
+    public Vector2 Generate(MapGenSystem sys)
     {
         Vector2 pos = _positions[_lastIndex] * sys.MaxSpawnOffset + sys.StartPos;
         _lastIndex++;

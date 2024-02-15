@@ -7,7 +7,7 @@ namespace Content.Server.Theta.MapGen.Processors;
 /// <summary>
 /// Processor which adds specified IFF flags onto processed grid
 /// </summary>
-public sealed partial class FlagIFFProcessor : Processor
+public sealed partial class FlagIFFProcessor : IMapGenProcessor
 {
     [DataField("flags", required: true)]
     public List<IFFFlags> Flags = new();

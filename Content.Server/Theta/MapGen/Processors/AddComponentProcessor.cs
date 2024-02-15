@@ -1,6 +1,5 @@
 using JetBrains.Annotations;
 using Robust.Shared.Map;
-using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Reflection;
 using Robust.Shared.Serialization.Manager;
@@ -11,7 +10,7 @@ namespace Content.Server.Theta.MapGen.Processors;
 /// Processor which adds specified components onto processed grid (not grid entities)
 /// </summary>
 [UsedImplicitly]
-public sealed partial class AddComponentsProcessor : Processor
+public sealed partial class AddComponentsProcessor : IMapGenProcessor
 {
     [DataField("components", required: true)]
     [AlwaysPushInheritance]

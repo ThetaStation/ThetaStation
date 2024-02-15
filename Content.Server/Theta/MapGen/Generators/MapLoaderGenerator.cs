@@ -4,12 +4,12 @@ using Robust.Shared.Map;
 
 namespace Content.Server.Theta.MapGen.Generators;
 
-public sealed partial class MapLoaderGenerator : Generator
+public sealed partial class MapLoaderGenerator : IMapGenGenerator
 {
     [DataField("mapPath", required: true)]
     public string MapPath = "";
 
-    public override EntityUid Generate(MapGenSystem sys, MapId targetMap)
+    public EntityUid Generate(MapGenSystem sys, MapId targetMap)
     {
         var loadOptions = new MapLoadOptions
         {

@@ -1,11 +1,10 @@
 using System.Numerics;
 using Robust.Shared.Noise;
 using Robust.Shared.Random;
-using Robust.Shared.Timing;
 
 namespace Content.Server.Theta.MapGen.Distributions;
 
-public sealed class NoiseDistribution : Distribution
+public sealed class NoiseDistribution : IMapGenDistribution
 {
     private List<Vector2> _positions = new();
     private int _lastIndex;
@@ -40,7 +39,7 @@ public sealed class NoiseDistribution : Distribution
         }
     }
 
-    public override Vector2 Generate(MapGenSystem sys)
+    public Vector2 Generate(MapGenSystem sys)
     {
         Vector2 pos = _positions[_lastIndex] * sys.MaxSpawnOffset + sys.StartPos;
         _lastIndex++;
