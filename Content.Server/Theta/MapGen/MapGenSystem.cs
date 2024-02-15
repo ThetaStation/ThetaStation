@@ -21,16 +21,18 @@ public sealed class MapGenSystem : EntitySystem
     [Dependency] public readonly ITileDefinitionManager TileDefMan = default!;
     [Dependency] public readonly TransformSystem FormSys = default!;
     [Dependency] public readonly IPrototypeManager ProtMan = default!;
-    [Dependency] public readonly IRobustRandom Rand = default!;
+    [Dependency] public readonly IRobustRandom Random = default!;
     public IEntityManager EntMan => EntityManager;
 
     public MapId TargetMap = MapId.Nullspace;
+    public Vector2i StartPos;
+    public int MaxSpawnOffset;
     public List<EntityUid> SpawnedGrids = new();
 
     //primitive quad tree (aka plain grid) for optimising collision checks
-    private const int spawnSectorSize = 100;
-    private Dictionary<Vector2i, HashSet<SectorRange>> spawnSectors = new(); //sector pos => free ranges in this sector
-    private Dictionary<Vector2i, double> spawnSectorVolumes = new(); //sector pos => occupied volume in this sector
+    public const int SectorSize = 100;
+    private Dictionary<Vector2i, HashSet<SectorRange>> _spawnSectors = new(); //sector pos => free ranges in this sector
+    private Dictionary<Vector2i, double> _spawnSectorVolumes = new(); //sector pos => occupied volume in this sector
 
     /// <summary>
     /// Randomly places specified structures onto map
@@ -47,13 +49,16 @@ public sealed class MapGenSystem : EntitySystem
         int structureAmount,
         int maxOffset,
         List<StructurePrototype> structures,
-        List<Processor> globalProcessors)
+        List<IMapGenProcessor> globalProcessors,
+        IMapGenDistribution distribution)
     {
         if (targetMap == MapId.Nullspace || !MapMan.MapExists(targetMap))
             return;
         TargetMap = targetMap;
         MapMan.SetMapPaused(TargetMap, true);
 
+        StartPos = startPos;
+        MaxSpawnOffset = maxOffset;
         SetupGrid(startPos, maxOffset);
 
         for (int n = 0; n < structureAmount; n++)
@@ -61,19 +66,17 @@ public sealed class MapGenSystem : EntitySystem
             var structProt = PickStructure(structures);
             if (structProt == null)
             {
-                Logger.Warning("Debris generation, GenerateDebris: Could not pick structure prototype, skipping");
+                Log.Warning("MapGenSystem, SpawnStructures: Could not pick structure prototype, skipping");
                 continue;
             }
 
             var grid = structProt.Generator.Generate(this, TargetMap);
             var gridComp = EntMan.GetComponent<MapGridComponent>(grid);
-            var gridForm = EntMan.GetComponent<TransformComponent>(grid);
 
-            var spawnPos = GenerateSpawnPosition((Box2i)gridComp.LocalAABB.Enlarged(structProt.MinDistance));
-
+            var spawnPos = GenerateSpawnPosition((Box2i) gridComp.LocalAABB.Enlarged(structProt.MinDistance), distribution, 50);
             if (spawnPos == null)
             {
-                Logger.Warning("Debris generation, GenerateDebris: Failed to find spawn position, deleting grid");
+                Log.Warning("MapGenSystem, SpawnStructures: Failed to find spawn position, deleting grid");
                 EntityManager.DeleteEntity(grid);
                 continue;
             }
@@ -82,7 +85,7 @@ public sealed class MapGenSystem : EntitySystem
             pos.X += structProt.MinDistance - gridComp.LocalAABB.Left;
             pos.Y += structProt.MinDistance - gridComp.LocalAABB.Bottom;
 
-            gridForm.Coordinates = new EntityCoordinates(gridForm.Coordinates.EntityId, pos);
+            FormSys.SetWorldPosition(grid, pos);
             SpawnedGrids.Add(grid);
             foreach (var proc in structProt.Processors)
             {
@@ -97,18 +100,21 @@ public sealed class MapGenSystem : EntitySystem
 
         MapMan.SetMapPaused(TargetMap, false);
         TargetMap = MapId.Nullspace;
-        Logger.Info($"Debris generation, GenerateDebris: Spawned {SpawnedGrids.Count} grids");
+        Log.Info($"MapGenSystem, SpawnStructures: Spawned {SpawnedGrids.Count} grids");
         SpawnedGrids.Clear();
 
-        spawnSectors.Clear();
-        spawnSectorVolumes.Clear();
+        StartPos = Vector2i.Zero;
+        MaxSpawnOffset = 0;
+
+        _spawnSectors.Clear();
+        _spawnSectorVolumes.Clear();
     }
 
     /// <summary>
     /// Randomly places specified structure onto map. Does not optimise collision checking in any way
     /// </summary>
     public EntityUid RandomPosSpawn(MapId targetMap, Vector2 startPos, int maxOffset, int tries,
-        StructurePrototype structure, List<Processor>? extraProcessors = null, bool forceIfFailed = false)
+        StructurePrototype structure, List<IMapGenProcessor>? extraProcessors = null, bool forceIfFailed = false)
     {
         TargetMap = targetMap;
 
@@ -120,13 +126,13 @@ public sealed class MapGenSystem : EntitySystem
             startPos.X + maxOffset - gridComp.LocalAABB.Width,
             startPos.Y + maxOffset - gridComp.LocalAABB.Height);
 
-        var finalDistance = (int)Math.Ceiling(structure.MinDistance + Math.Max(gridComp.LocalAABB.Height, gridComp.LocalAABB.Width));
+        var finalDistance = (int) Math.Ceiling(structure.MinDistance + Math.Max(gridComp.LocalAABB.Height, gridComp.LocalAABB.Width));
 
         Vector2i mapPos = Vector2i.Zero;
         var result = false;
         for (int n = 0; n < tries; n++)
         {
-            mapPos = (Vector2i) Rand.NextVector2Box(
+            mapPos = (Vector2i) Random.NextVector2Box(
                 bounds.Left + gridComp.LocalAABB.Width,
                 bounds.Bottom + gridComp.LocalAABB.Height,
                 bounds.Right - gridComp.LocalAABB.Width,
@@ -144,23 +150,23 @@ public sealed class MapGenSystem : EntitySystem
 
         if (result)
         {
-            Logger.Info($"Debris generation, RandomPosSpawn: Spawned grid {grid.ToString()} successfully");
-            gridForm.Coordinates = new EntityCoordinates(gridForm.Coordinates.EntityId, mapPos);
+            Log.Info($"MapGenSystem, RandomPosSpawn: Spawned grid {grid.ToString()} successfully");
+            FormSys.SetWorldPosition(grid, mapPos);
         }
         else if (forceIfFailed)
         {
-            Logger.Info($"Debris generation, RandomPosSpawn: Failed to find spawn position for grid {grid.ToString()}," +
+            Log.Info($"MapGenSystem, RandomPosSpawn: Failed to find spawn position for grid {grid.ToString()}," +
                         "but forceIfFailed is set to true; proceeding to force-spawn");
-            mapPos = (Vector2i) Rand.NextVector2Box(bounds.Left, bounds.Bottom, bounds.Right, bounds.Top).Rounded();
+            mapPos = (Vector2i) Random.NextVector2Box(bounds.Left, bounds.Bottom, bounds.Right, bounds.Top).Rounded();
 
-            gridForm.Coordinates = new EntityCoordinates(gridForm.Coordinates.EntityId, mapPos);
+            FormSys.SetWorldPosition(grid, mapPos);
         }
 
         if (result || forceIfFailed)
         {
             if (extraProcessors != null)
             {
-                foreach (Processor extraProc in extraProcessors)
+                foreach (IMapGenProcessor extraProc in extraProcessors)
                 {
                     extraProc.Process(this, targetMap, grid, false);
                 }
@@ -169,7 +175,7 @@ public sealed class MapGenSystem : EntitySystem
             return grid;
         }
 
-        Logger.Error($"Debris generation, RandomPosSpawn: Failed to find spawn position, deleting grid {grid.ToString()}");
+        Log.Error($"MapGenSystem, RandomPosSpawn: Failed to find spawn position, deleting grid {grid.ToString()}");
         EntityManager.DeleteEntity(grid);
         return EntityUid.Invalid;
     }
@@ -189,20 +195,20 @@ public sealed class MapGenSystem : EntitySystem
     /// Sets up collision grid
     /// </summary>
     /// <param name="startPos">Bottom-left corner of grid's square</param>
-    /// <param name="maxDebrisOffset">Size of grid's square</param>
-    private void SetupGrid(Vector2i startPos, int maxDebrisOffset)
+    /// <param name="maxOffset">Grid's size</param>
+    private void SetupGrid(Vector2i startPos, int maxOffset)
     {
-        for (int y = 0; y < maxDebrisOffset; y += spawnSectorSize)
+        for (int y = 0; y < maxOffset; y += SectorSize)
         {
-            for (int x = 0; x < maxDebrisOffset; x += spawnSectorSize)
+            for (int x = 0; x < maxOffset; x += SectorSize)
             {
                 Vector2i sectorPos = new Vector2i(startPos.X + x, startPos.Y + y);
-                spawnSectors[sectorPos] = new HashSet<SectorRange>
+                _spawnSectors[sectorPos] = new HashSet<SectorRange>
                 {
-                    new SectorRange(sectorPos.Y, sectorPos.Y + spawnSectorSize,
-                        new List<(int, int)>{(sectorPos.X, sectorPos.X + spawnSectorSize)})
+                    new SectorRange(sectorPos.Y, sectorPos.Y + SectorSize,
+                        new List<(int, int)>{(sectorPos.X, sectorPos.X + SectorSize)})
                 };
-                spawnSectorVolumes[sectorPos] = spawnSectorSize * spawnSectorSize;
+                _spawnSectorVolumes[sectorPos] = SectorSize * SectorSize;
             }
         }
     }
@@ -210,14 +216,13 @@ public sealed class MapGenSystem : EntitySystem
     /// <summary>
     /// Randomly picks structures from structure list, accounting for their weight
     /// </summary>
-    // todo: maybe it's worth to PR this to RT (weighted random selection)
     private StructurePrototype? PickStructure(List<StructurePrototype> structures)
     {
         float totalWeight = structures.Select(s => s.SpawnWeight).Sum();
-        float randFloat = Rand.NextFloat(0, totalWeight);
+        float randFloat = Random.NextFloat(0, totalWeight);
 
         StructurePrototype? picked = null;
-        foreach(var structProt in structures)
+        foreach (var structProt in structures)
         {
             if (structProt.SpawnWeight > randFloat)
             {
@@ -230,22 +235,20 @@ public sealed class MapGenSystem : EntitySystem
 
         return picked;
     }
-    
+
     /// <summary>
     /// Generates spawn position in random sector of the grid
     /// </summary>
-    private Vector2? GenerateSpawnPosition(Box2i bounds)
+    private Vector2? GenerateSpawnPosition(Box2i bounds, IMapGenDistribution distribution, int tries)
     {
         var volume = bounds.Height * bounds.Width;
-        var shuffledSectors = spawnSectors.Keys.ToList();
-        Rand.Shuffle(shuffledSectors);
 
-        foreach(var randomSector in shuffledSectors)
+        for (int i = 0; i < tries; i++)
         {
-            if (spawnSectorVolumes[randomSector] < volume)
+            Vector2i sectorPos = (distribution.Generate(this) / SectorSize).Floored() * SectorSize;
+            if (_spawnSectorVolumes[sectorPos] < volume)
                 continue;
-            var result = TryPlaceInSector(randomSector, bounds, out var spawnPos);
-            if (result)
+            if (TryPlaceInSector(sectorPos, bounds, out Vector2i spawnPos))
                 return spawnPos;
         }
 
@@ -266,7 +269,7 @@ public sealed class MapGenSystem : EntitySystem
         int lx, ly, hx, hy;
         lx = ly = hx = hy = 0;
 
-        foreach (SectorRange range in spawnSectors[sectorPos])
+        foreach (SectorRange range in _spawnSectors[sectorPos])
         {
             foreach ((int start, int end) in range.XRanges)
             {
@@ -281,7 +284,7 @@ public sealed class MapGenSystem : EntitySystem
                         hy = range.Top - bounds.Height;
                         break;
                     }
-                    SectorRange combinedRange = CombineRangesVertically(spawnSectors[sectorPos], start, end, range.Bottom, range.Top, bounds.Width);
+                    SectorRange combinedRange = CombineRangesVertically(_spawnSectors[sectorPos], start, end, range.Bottom, range.Top, bounds.Width);
 
                     if (combinedRange.Top - combinedRange.Bottom >= bounds.Height)
                     {
@@ -299,19 +302,19 @@ public sealed class MapGenSystem : EntitySystem
 
             if (result)
             {
-                resultPos = new Vector2i(Rand.Next(lx, hx), Rand.Next(ly, hy));
+                resultPos = new Vector2i(Random.Next(lx, hx), Random.Next(ly, hy));
                 break;
             }
         }
 
         if (result)
         {
-            spawnSectors[sectorPos] = SubtractRange(spawnSectors[sectorPos],
+            _spawnSectors[sectorPos] = SubtractRange(_spawnSectors[sectorPos],
                     RangeFromBox(
                         Box2i.FromDimensions(resultPos, new Vector2i(bounds.Width, bounds.Height))
                         )
                     );
-            spawnSectorVolumes[sectorPos] -= bounds.Height * bounds.Width;
+            _spawnSectorVolumes[sectorPos] -= bounds.Height * bounds.Width;
         }
 
         return result;
@@ -324,7 +327,7 @@ public sealed class MapGenSystem : EntitySystem
     {
         return new SectorRange(box.Bottom, box.Top, new List<(int, int)> {(box.Left, box.Right)});
     }
-    
+
     /// <summary>
     /// Subtracts range from existing ranges
     /// </summary>
@@ -467,7 +470,7 @@ public sealed class MapGenSystem : EntitySystem
             List<(int, int)> r = new();
             foreach ((int start, int end) in ranges)
             {
-                if(!(start > range.Item2 || end < range.Item1))
+                if (!(start > range.Item2 || end < range.Item1))
                 {
                     if (end > range.Item1 && range.Item1 > start)
                         r.Add((start, range.Item1));
@@ -491,7 +494,7 @@ public sealed class MapGenSystem : EntitySystem
 
         return newRanges;
     }
-    
+
     /// <summary>
     /// SectorRange represents single 'line' of sector space. It contains info about it's height (Bottom, Top) & free spaces on that height level (XRanges)
     /// </summary>
@@ -510,19 +513,27 @@ public sealed class MapGenSystem : EntitySystem
 }
 
 /// <summary>
-/// Generator is a base class for generating debris
+/// Distribution is used for generating spawn positions. It may be simple randint or some 2D noise.
 /// </summary>
-[ImplicitDataDefinitionForInheritors]
-public abstract partial class Generator
+public interface IMapGenDistribution
 {
-    public abstract EntityUid Generate(MapGenSystem sys, MapId targetMap);
+    public Vector2 Generate(MapGenSystem sys);
 }
 
 /// <summary>
-/// Processor is a base class for post-processing debris
+/// Generator is a base class for generating structures
 /// </summary>
 [ImplicitDataDefinitionForInheritors]
-public abstract partial class Processor
+public partial interface IMapGenGenerator
 {
-    public abstract void Process(MapGenSystem sys, MapId targetMap, EntityUid gridUid, bool isGlobal);
+    public EntityUid Generate(MapGenSystem sys, MapId targetMap);
+}
+
+/// <summary>
+/// Processor is a base class for post-processing structures
+/// </summary>
+[ImplicitDataDefinitionForInheritors]
+public partial interface IMapGenProcessor
+{
+    public void Process(MapGenSystem sys, MapId targetMap, EntityUid gridUid, bool isGlobal);
 }

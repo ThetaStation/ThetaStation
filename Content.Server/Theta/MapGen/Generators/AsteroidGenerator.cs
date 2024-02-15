@@ -10,7 +10,7 @@ namespace Content.Server.Theta.MapGen.Generators;
 /// <summary>
 /// Procedural asteroid generator. Resulting shape is basically just a bunch of circles slapped onto each other
 /// </summary>
-public sealed partial class AsteroidGenerator : Generator
+public sealed partial class AsteroidGenerator : IMapGenGenerator
 {
     [DataField("size", required: true)]
     public int Size;
@@ -36,11 +36,11 @@ public sealed partial class AsteroidGenerator : Generator
     [DataField("wallPrototypeId", required: true, customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
     public string WallPrototypeId = "";
 
-    public override EntityUid Generate(MapGenSystem sys, MapId targetMap)
+    public EntityUid Generate(MapGenSystem sys, MapId targetMap)
     {
         var tileDefMan = sys.TileDefMan;
 
-        var tileSet = GenerateTileSet(sys.Rand);
+        var tileSet = GenerateTileSet(sys.Random);
 
         var gridComp = sys.MapMan.CreateGrid(targetMap);
         var gridUid = gridComp.Owner;
@@ -51,7 +51,7 @@ public sealed partial class AsteroidGenerator : Generator
         foreach (var pos in tileSet)
         {
             tiles.Add((pos, new Tile(tileDefMan[FloorId].TileId)));
-            if (sys.Rand.Prob(Erosion))
+            if (sys.Random.Prob(Erosion))
                 continue;
             ents.Add((new EntityCoordinates(gridUid, pos), WallPrototypeId));
         }

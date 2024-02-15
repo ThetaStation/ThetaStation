@@ -18,6 +18,8 @@ using Robust.Shared.Serialization.Markdown.Value;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.List;
+using Content.Server.Theta.MapGen.Distributions;
+using Robust.Shared.Noise;
 
 namespace Content.Server.StationEvents.Events.Theta;
 
@@ -26,50 +28,47 @@ public sealed partial class ShipEventRuleComponent : Component
 {
     //all time related fields are in seconds
 
+    //time
     [DataField("roundDuration")] public int RoundDuration; //set to negative if you don't need a timed round end
-
     [DataField("teamCheckInterval")] public float TeamCheckInterval;
     [DataField("respawnDelay")] public int RespawnDelay;
-
-    [DataField("initialObstacleAmount")] public int InitialObstacleAmount;
-    [DataField("minFieldSize")] public int MinFieldSize;
-    [DataField("maxFieldSize")] public int MaxFieldSize;
-    [DataField("metersPerPlayer")] public int MetersPerPlayer; //scaling field based on online (at roundstart)
-    [DataField("roundFieldSizeTo")] public int RoundFieldSizeTo;
-
     [DataField("bonusInterval")] public int BonusInterval;
+    [DataField("boundsCompressionInterval")] public float BoundsCompressionInterval;
+    [DataField("pickupsSpawnInterval")] public float PickupsSpawnInterval;
+    [DataField("anomalyUpdateInterval")] public float AnomalyUpdateInterval;
+    [DataField("anomalySpawnInterval")] public float AnomalySpawnInterval;
+
+    //points
     [DataField("pointsPerInterval")] public int PointsPerInterval;
     [DataField("pointsPerHitMultiplier")] public float PointsPerHitMultiplier;
     [DataField("pointsPerAssist")] public int PointsPerAssist;
     [DataField("pointsPerKill")] public int PointsPerKill;
     [DataField("outOfBoundsPenalty")] public int OutOfBoundsPenalty;
-    [DataField("hudPrototypeId")] public string HUDPrototypeId = "";
 
-    [DataField("captainHudPrototypeId")] public string CaptainHUDPrototypeId = "";
-
-    [DataField("shipTypes")] public List<string> ShipTypes = new();
-
+    //mapgen
+    [DataField("initialObstacleAmount")] public int InitialObstacleAmount;
     [DataField("obstacleTypes")] public List<string> ObstacleTypes = new();
     [DataField("obstacleAmountAmplitude")] public int ObstacleAmountAmplitude;
     [DataField("obstacleSizeAmplitude")] public int ObstacleSizeAmplitude;
+    [DataField("minFieldSize")] public int MinFieldSize;
+    [DataField("maxFieldSize")] public int MaxFieldSize;
+    [DataField("metersPerPlayer")] public int MetersPerPlayer; //scaling field based on online (at roundstart)
+    [DataField("roundFieldSizeTo")] public int RoundFieldSizeTo;
+    [DataField("useNoise")] public bool UseNoise;
+    [DataField("noiseGenerator")] public FastNoiseLite? NoiseGenerator;
+    [DataField("noiseThreshold")] public float NoiseThreshold;
 
-    [DataField("boundsCompressionInterval")] public float BoundsCompressionInterval;
+    //misc
+    [DataField("hudPrototypeId")] public string HUDPrototypeId = "";
+    [DataField("captainHudPrototypeId")] public string CaptainHUDPrototypeId = "";
+    [DataField("shipTypes")] public List<string> ShipTypes = new();
     [DataField("boundsCompressionDistance")] public int BoundsCompressionDistance;
-
     [DataField("pickupsPositions")] public int PickupsPositionsCount;
-    [DataField("pickupsSpawnInterval")] public float PickupsSpawnInterval;
     [DataField("pickupMinDistance")] public float PickupMinDistance;
-
     [DataField("pickupPrototype", customTypeSerializer: typeof(PrototypeIdSerializer<WeightedRandomEntityPrototype>))]
     public string PickupPrototype = default!;
-
-    [DataField("anomalyUpdateInterval")]
-    public float AnomalyUpdateInterval;
-    [DataField("anomalySpawnInterval")]
-    public float AnomalySpawnInterval;
     [DataField("anomalyPrototypes", customTypeSerializer: typeof(PrototypeIdListSerializer<EntityPrototype>))]
     public List<string> AnomalyPrototypes = new();
-
     [DataField("spaceLightColor")]
     public Color? SpaceLightColor = null;
 }
@@ -182,14 +181,29 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         iffFlagProc.Flags = new() { IFFFlags.HideLabel };
         iffFlagProc.ColorOverride = Color.Gold;
 
-        List<Processor> globalProcessors = new() { iffSplitProc, iffFlagProc };
+        List<IMapGenProcessor> globalProcessors = new() { iffSplitProc, iffFlagProc };
+
+        IMapGenDistribution distribution = new SimpleDistribution();
+        if (_rand.Prob(0.05f))
+        {
+            distribution = new FunnyDistribution();
+        }
+        else
+        {
+            if (component.UseNoise && component.NoiseGenerator != null)
+                distribution = new NoiseDistribution(
+                component.NoiseGenerator,
+                _shipSys.MaxSpawnOffset / MapGenSystem.SectorSize,
+                component.NoiseThreshold);
+        }
 
         _mapGenSys.SpawnStructures(map,
             Vector2i.Zero,
             component.InitialObstacleAmount + _rand.Next(-component.ObstacleAmountAmplitude, component.ObstacleAmountAmplitude),
             _shipSys.MaxSpawnOffset,
             obstacleStructProts,
-            globalProcessors);
+            globalProcessors,
+            distribution);
         _shipSys.ShipProcessors.Add(iffSplitProc);
 
         _shipSys.RuleSelected = true;

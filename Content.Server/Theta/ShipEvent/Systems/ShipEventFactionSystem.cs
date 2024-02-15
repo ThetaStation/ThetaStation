@@ -112,7 +112,7 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     public List<ShipTypePrototype> ShipTypes = new();
     public MapId TargetMap;
-    public List<Processor> ShipProcessors = new();
+    public List<IMapGenProcessor> ShipProcessors = new();
 
     public List<ShipEventFaction> Teams { get; } = new();
     public List<Timer> Timers = new();
