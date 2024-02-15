@@ -1061,6 +1061,8 @@ entities:
     - type: Transform
       pos: 2.5,2.5
       parent: 1
+    - type: ShipStealth
+      stealthDuration: 90
 - proto: CrowbarRed
   entities:
   - uid: 147
@@ -1547,55 +1549,53 @@ entities:
     - type: Transform
       pos: 6.5,3.5
       parent: 1
-- proto: ThrusterUnanchored
-  entities:
   - uid: 207
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 0.5,-9.5
-      parent: 1
-  - uid: 208
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -1.5,-4.5
-      parent: 1
-  - uid: 209
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -2.5,2.5
-      parent: 1
-  - uid: 210
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 6.5,-4.5
-      parent: 1
-  - uid: 211
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 7.5,2.5
-      parent: 1
-  - uid: 212
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 4.5,-9.5
-      parent: 1
-  - uid: 213
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 7.5,-3.5
       parent: 1
-  - uid: 214
+  - uid: 208
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 0.5,-9.5
+      parent: 1
+  - uid: 209
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 4.5,-9.5
+      parent: 1
+  - uid: 210
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -2.5,2.5
+      parent: 1
+  - uid: 211
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 6.5,-4.5
+      parent: 1
+  - uid: 212
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 7.5,2.5
+      parent: 1
+  - uid: 213
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -2.5,-3.5
+      parent: 1
+  - uid: 214
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: -1.5,-4.5
       parent: 1
 - proto: ToolboxSyndicateFilled
   entities:

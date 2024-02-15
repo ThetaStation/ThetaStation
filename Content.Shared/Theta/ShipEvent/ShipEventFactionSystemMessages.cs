@@ -32,11 +32,11 @@ public sealed class ShipEventRequestStealthStatusMessage : BoundUserInterfaceMes
 public sealed class ShipEventStealthStatusMessage : EntityEventArgs
 {
     public bool StealthReady;
-    public NetEntity Console;
+    public NetEntity ConsoleUid;
 
     public ShipEventStealthStatusMessage(bool ready, NetEntity console)
     {
         StealthReady = ready;
-        Console = console;
+        ConsoleUid = console;
     }
 }

@@ -73,13 +73,16 @@
       range: 4
       volume: -4
       sound:
-        path: /Audio/Effects/shuttle_thruster.ogg
+        path: /Audio/Theta/Shipevent/thruster_cycle.ogg
     - type: Thruster
       baseThrust: 150
       thrust: 150
       damage:
         types:
           Heat: 40
+      soundSpinup: /Audio/Theta/Shipevent/thruster_rise.ogg
+      soundCycle: /Audio/Theta/Shipevent/thruster_cycle.ogg
+      soundShutdown: /Audio/Theta/Shipevent/thruster_fall.ogg
     - type: ApcPowerReceiver
       powerLoad: 1500
     - type: ExtensionCableReceiver

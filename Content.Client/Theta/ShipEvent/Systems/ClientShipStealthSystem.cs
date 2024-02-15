@@ -18,7 +18,7 @@ public sealed class ClientShipStealthSystem : EntitySystem
 
     private void OnStealthStatusReceived(ShipEventStealthStatusMessage msg)
     {
-        var uid = EntityManager.GetEntity(msg.Console);
+        var uid = EntityManager.GetEntity(msg.ConsoleUid);
         if (TryComp<UserInterfaceComponent>(uid, out var ui))
         {
             if (ui.OpenInterfaces.TryGetValue(ShuttleConsoleUiKey.Key, out var bui) && 
