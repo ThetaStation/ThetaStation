@@ -217,6 +217,7 @@ public sealed class RadarGrids : RadarModule
         if (_cachedGridInfo.TryGetValue(grid, out var info))
         {
             Vector2[] edges = new Vector2[info.Edges.Count];
+            int edgesLength = 0;
             for (int i = 0; i < info.Edges.Count - 1; i += 2)
             {
                 Vector2 start = info.Edges[i];
@@ -229,11 +230,12 @@ public sealed class RadarGrids : RadarModule
 
                 start = ScalePosition(new Vector2(start.X, -start.Y));
                 end = ScalePosition(new Vector2(end.X, -end.Y));
-                edges[i] = start;
-                edges[i + 1] = end;
+                edges[edgesLength] = start;
+                edges[edgesLength + 1] = end;
+                edgesLength += 2;
             }
 
-            handle.DrawPrimitives(DrawPrimitiveTopology.LineList, edges.ToArray(), color);
+            handle.DrawPrimitives(DrawPrimitiveTopology.LineList, edges, color);
         }
     }
 
