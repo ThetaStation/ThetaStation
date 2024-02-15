@@ -7,15 +7,15 @@ on:
 
 jobs:
   generate-cl:
-    runs-on: [self-hosted, linux, x64] # updated here
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo Content
         uses: actions/checkout@v2 # checkout the repository content
 
-      #- name: Setup Python
-      #  uses: actions/setup-python@v4
-      #  with:
-      #    python-version: '3.11' # install the python version needed
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11' # install the python version needed
 
       - name: Install Python Packages
         run: |
