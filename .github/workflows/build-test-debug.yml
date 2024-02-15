@@ -33,10 +33,10 @@ jobs:
         cd RobustToolbox/
         git submodule update --init --recursive
 
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v3.2.0
-      with:
-        dotnet-version: 8.0.x
+    #- name: Setup .NET Core
+    #  uses: actions/setup-dotnet@v3.2.0
+    #  with:
+    #    dotnet-version: 8.0.x
 
     - name: Install dependencies
       run: dotnet restore
