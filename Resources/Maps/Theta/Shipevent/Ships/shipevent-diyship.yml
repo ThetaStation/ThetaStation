@@ -404,6 +404,9 @@ entities:
     - type: Transform
       pos: 1.5,2.5
       parent: 1
+    - type: LimitedCharges
+      maxCharges: 70
+      charges: 70
 - proto: ShipEventThrusterFlatpack
   entities:
   - uid: 73
