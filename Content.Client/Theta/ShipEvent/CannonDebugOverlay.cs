@@ -6,7 +6,8 @@ using Robust.Shared.Enums;
 
 namespace Content.Client.Theta;
 
-/* uncomment when needed, I can't be bothered to make a command for that
+// uncomment when needed, I can't be bothered to make a command for that
+/*
 public sealed class DebugOverlaySystem : EntitySystem
 {
     private DebugOverlay overlay = default!;

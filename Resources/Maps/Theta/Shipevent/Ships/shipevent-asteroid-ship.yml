@@ -371,13 +371,6 @@ entities:
     - type: Transform
       pos: 9.5,4.5
       parent: 1
-  - uid: 36
-    components:
-    - type: MetaData
-      flags: PvsPriority
-    - type: Transform
-      pos: 10.5,0.5
-      parent: 1
   - uid: 37
     components:
     - type: MetaData
@@ -629,6 +622,13 @@ entities:
       flags: PvsPriority
     - type: Transform
       pos: 9.5,-2.5
+      parent: 1
+  - uid: 174
+    components:
+    - type: MetaData
+      flags: PvsPriority
+    - type: Transform
+      pos: 10.5,0.5
       parent: 1
 - proto: AtmosDeviceFanTiny
   entities:
@@ -972,7 +972,7 @@ entities:
       enabled: True
     - type: DeviceLinkSource
       linkedPorts:
-        182:
+        180:
         - CannonConsoleSender: CannonConsoleReceiver
   - uid: 137
     components:
@@ -984,7 +984,7 @@ entities:
       enabled: True
     - type: DeviceLinkSource
       linkedPorts:
-        183:
+        181:
         - CannonConsoleSender: CannonConsoleReceiver
   - uid: 138
     components:
@@ -995,9 +995,9 @@ entities:
       enabled: True
     - type: DeviceLinkSource
       linkedPorts:
-        181:
+        179:
         - CannonConsoleSender: CannonConsoleReceiver
-        184:
+        182:
         - CannonConsoleSender: CannonConsoleReceiver
   - uid: 139
     components:
@@ -1009,9 +1009,9 @@ entities:
       enabled: True
     - type: DeviceLinkSource
       linkedPorts:
-        185:
+        183:
         - CannonConsoleSender: CannonConsoleReceiver
-        186:
+        184:
         - CannonConsoleSender: CannonConsoleReceiver
 - proto: Chair
   entities:
@@ -1240,24 +1240,17 @@ entities:
       parent: 1
 - proto: RockSecretDoor
   entities:
-  - uid: 173
+  - uid: 36
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
-      pos: -0.5,-12.5
+      pos: 3.5,7.5
       parent: 1
     - type: DeviceLinkSink
       links:
       - 197
-  - uid: 174
-    components:
-    - type: MetaData
-      flags: PvsPriority
-    - type: Transform
-      pos: 2.5,-13.5
-      parent: 1
-  - uid: 175
+  - uid: 173
     components:
     - type: MetaData
       flags: PvsPriority
@@ -1266,61 +1259,67 @@ entities:
       parent: 1
     - type: DeviceLinkSink
       links:
-      - 197
+      - 273
+  - uid: 175
+    components:
+    - type: MetaData
+      flags: PvsPriority
+    - type: Transform
+      pos: -5.5,-0.5
+      parent: 1
+    - type: DeviceLinkSink
+      links:
+      - 196
   - uid: 176
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -5.5,-0.5
+      pos: 1.5,7.5
       parent: 1
     - type: DeviceLinkSink
       links:
-      - 200
+      - 197
   - uid: 177
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 1.5,7.5
-      parent: 1
-    - type: DeviceLinkSink
-      links:
-      - 199
-  - uid: 178
-    components:
-    - type: MetaData
-      flags: PvsPriority
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 3.5,7.5
-      parent: 1
-    - type: DeviceLinkSink
-      links:
-      - 199
-  - uid: 179
-    components:
-    - type: MetaData
-      flags: PvsPriority
-    - type: Transform
-      rot: 1.5707963267948966 rad
       pos: 10.5,-0.5
       parent: 1
     - type: DeviceLinkSink
       links:
       - 198
+  - uid: 195
+    components:
+    - type: MetaData
+      flags: PvsPriority
+    - type: Transform
+      pos: 2.5,-13.5
+      parent: 1
+    - type: DeviceLinkSink
+      links:
+      - 273
+  - uid: 272
+    components:
+    - type: MetaData
+      flags: PvsPriority
+    - type: Transform
+      pos: -0.5,-12.5
+      parent: 1
+    - type: DeviceLinkSink
+      links:
+      - 273
 - proto: SheetSteel
   entities:
-  - uid: 180
+  - uid: 178
     components:
     - type: Transform
       pos: 1.5,-7.5
       parent: 1
 - proto: ShipEventStaticFlakCannon
   entities:
-  - uid: 181
+  - uid: 179
     components:
     - type: MetaData
       flags: SessionSpecific
@@ -1330,12 +1329,12 @@ entities:
       parent: 1
     - type: Cannon
       ranges:
-      - 1.6780139654164279 rad: 5.8542171047370894 rad
+      - 1.6743807341165697 rad: 6.076016492536239 rad
     - type: DeviceLinkSink
       links:
-      - 216
+      - 214
       - 138
-  - uid: 182
+  - uid: 180
     components:
     - type: MetaData
       flags: SessionSpecific
@@ -1345,13 +1344,12 @@ entities:
       parent: 1
     - type: Cannon
       ranges:
-      - 3.2488102922113247 rad: 1.78532925199433 rad
-      - 4.888463090777781 rad: 4.214564306170634 rad
+      - 3.245177060911466 rad: 6.076016492536239 rad
     - type: DeviceLinkSink
       links:
-      - 222
+      - 220
       - 136
-  - uid: 183
+  - uid: 181
     components:
     - type: MetaData
       flags: SessionSpecific
@@ -1361,13 +1359,12 @@ entities:
       parent: 1
     - type: Cannon
       ranges:
-      - 4.176105491364292 rad: 1.7853292519943296 rad
-      - 0.10721763862153139 rad: 4.214564306170634 rad
+      - 0.10358440732167315 rad: 6.076016492536239 rad
     - type: DeviceLinkSink
       links:
-      - 220
+      - 218
       - 137
-  - uid: 184
+  - uid: 182
     components:
     - type: MetaData
       flags: SessionSpecific
@@ -1377,104 +1374,112 @@ entities:
       parent: 1
     - type: Cannon
       ranges:
-      - 1.6780139654164279 rad: 5.8542171047370894 rad
+      - 1.6743807341165697 rad: 6.076016492536239 rad
     - type: DeviceLinkSink
       links:
-      - 218
+      - 216
       - 138
-  - uid: 185
+  - uid: 183
     components:
     - type: Transform
       pos: 5.5,-11.5
       parent: 1
     - type: Cannon
       ranges:
-      - 4.819606619006222 rad: 2.7126244511472963 rad
-      - 1.0900113550583748 rad: 3.4249820683987915 rad
+      - 4.8159733877063635 rad: 6.200371499429681 rad
     - type: DeviceLinkSink
       links:
-      - 224
+      - 222
       - 139
-  - uid: 186
+  - uid: 184
     components:
     - type: Transform
       pos: -0.5,-11.5
       parent: 1
     - type: Cannon
       ranges:
-      - 1.6780139654164279 rad: 2.712624451147297 rad
-      - 4.69525161211278 rad: 3.4249820683987915 rad
+      - 4.691618380812922 rad: 6.200371499429681 rad
     - type: DeviceLinkSink
       links:
-      - 226
+      - 224
       - 139
 - proto: ShipPickupBeacon
   entities:
-  - uid: 187
+  - uid: 185
     components:
     - type: Transform
       pos: 3.5,-3.5
       parent: 1
 - proto: ShuttleWindow
   entities:
-  - uid: 188
+  - uid: 186
     components:
     - type: Transform
       pos: 1.5,3.5
       parent: 1
-  - uid: 189
+  - uid: 187
     components:
     - type: Transform
       pos: 6.5,-0.5
       parent: 1
-  - uid: 190
+  - uid: 188
     components:
     - type: Transform
       pos: 3.5,3.5
       parent: 1
-  - uid: 191
+  - uid: 189
     components:
     - type: Transform
       pos: 6.5,0.5
       parent: 1
-  - uid: 192
+  - uid: 190
     components:
     - type: Transform
       pos: 2.5,3.5
       parent: 1
-  - uid: 193
+  - uid: 191
     components:
     - type: Transform
       pos: 6.5,-1.5
       parent: 1
-  - uid: 194
+  - uid: 192
     components:
     - type: Transform
       pos: -1.5,0.5
       parent: 1
-  - uid: 195
+  - uid: 193
     components:
     - type: Transform
       pos: -1.5,-0.5
       parent: 1
-  - uid: 196
+  - uid: 194
     components:
     - type: Transform
       pos: -1.5,-1.5
       parent: 1
 - proto: SignalButton
   entities:
-  - uid: 197
+  - uid: 196
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 3.5,-8.5
+      rot: -1.5707963267948966 rad
+      pos: 2.5,-0.5
       parent: 1
     - type: DeviceLinkSource
       linkedPorts:
         175:
         - Pressed: Toggle
-        173:
+  - uid: 197
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 2.5,-0.5
+      parent: 1
+    - type: DeviceLinkSource
+      linkedPorts:
+        176:
+        - Pressed: Toggle
+        36:
         - Pressed: Toggle
   - uid: 198
     components:
@@ -1484,40 +1489,31 @@ entities:
       parent: 1
     - type: DeviceLinkSource
       linkedPorts:
-        179:
-        - Pressed: Toggle
-  - uid: 199
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 2.5,-0.5
-      parent: 1
-    - type: DeviceLinkSource
-      linkedPorts:
         177:
         - Pressed: Toggle
-        178:
-        - Pressed: Toggle
-  - uid: 200
+  - uid: 273
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
       pos: 2.5,-0.5
       parent: 1
     - type: DeviceLinkSource
       linkedPorts:
-        176:
+        272:
+        - Pressed: Toggle
+        173:
+        - Pressed: Toggle
+        195:
         - Pressed: Toggle
 - proto: SMESBasic
   entities:
-  - uid: 201
+  - uid: 199
     components:
     - type: Transform
       pos: 0.5,-5.5
       parent: 1
 - proto: SubstationWallBasic
   entities:
-  - uid: 202
+  - uid: 200
     components:
     - type: Transform
       rot: 3.141592653589793 rad
@@ -1525,73 +1521,73 @@ entities:
       parent: 1
 - proto: TableReinforced
   entities:
-  - uid: 203
+  - uid: 201
     components:
     - type: Transform
       pos: 2.5,-0.5
       parent: 1
 - proto: TeamSpawnerShipEvent
   entities:
-  - uid: 204
+  - uid: 202
     components:
     - type: Transform
       pos: 2.5,-1.5
       parent: 1
 - proto: Thruster
   entities:
-  - uid: 205
+  - uid: 203
     components:
     - type: Transform
       pos: -1.5,3.5
       parent: 1
-  - uid: 206
+  - uid: 204
     components:
     - type: Transform
       pos: 6.5,3.5
       parent: 1
-  - uid: 207
+  - uid: 205
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 7.5,-3.5
       parent: 1
-  - uid: 208
+  - uid: 206
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 0.5,-9.5
       parent: 1
-  - uid: 209
+  - uid: 207
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 4.5,-9.5
       parent: 1
-  - uid: 210
+  - uid: 208
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -2.5,2.5
       parent: 1
-  - uid: 211
+  - uid: 209
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 6.5,-4.5
       parent: 1
-  - uid: 212
+  - uid: 210
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 7.5,2.5
       parent: 1
-  - uid: 213
+  - uid: 211
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -2.5,-3.5
       parent: 1
-  - uid: 214
+  - uid: 212
     components:
     - type: Transform
       rot: 3.141592653589793 rad
@@ -1599,13 +1595,21 @@ entities:
       parent: 1
 - proto: ToolboxSyndicateFilled
   entities:
-  - uid: 215
+  - uid: 213
     components:
     - type: Transform
       pos: 1.5,-7.5
       parent: 1
 - proto: TurretAmmoContainerFlakFilled
   entities:
+  - uid: 215
+    components:
+    - type: MetaData
+      flags: InContainer
+    - type: Transform
+      parent: 214
+    - type: Physics
+      canCollide: False
   - uid: 217
     components:
     - type: MetaData
@@ -1646,17 +1650,9 @@ entities:
       parent: 224
     - type: Physics
       canCollide: False
-  - uid: 227
-    components:
-    - type: MetaData
-      flags: InContainer
-    - type: Transform
-      parent: 226
-    - type: Physics
-      canCollide: False
 - proto: TurretLoaderShipEvent
   entities:
-  - uid: 216
+  - uid: 214
     components:
     - type: Transform
       pos: 0.5,2.5
@@ -1666,12 +1662,12 @@ entities:
         ammoContainer: !type:ContainerSlot
           showEnts: False
           occludes: True
-          ent: 217
+          ent: 215
     - type: DeviceLinkSource
       linkedPorts:
-        181:
+        179:
         - TurretLoaderSender: CannonConsoleReceiver
-  - uid: 218
+  - uid: 216
     components:
     - type: Transform
       pos: 4.5,2.5
@@ -1681,12 +1677,12 @@ entities:
         ammoContainer: !type:ContainerSlot
           showEnts: False
           occludes: True
-          ent: 219
+          ent: 217
     - type: DeviceLinkSource
       linkedPorts:
-        184:
+        182:
         - TurretLoaderSender: CannonConsoleReceiver
-  - uid: 220
+  - uid: 218
     components:
     - type: Transform
       pos: 5.5,1.5
@@ -1696,12 +1692,12 @@ entities:
         ammoContainer: !type:ContainerSlot
           showEnts: False
           occludes: True
-          ent: 221
+          ent: 219
     - type: DeviceLinkSource
       linkedPorts:
-        183:
+        181:
         - TurretLoaderSender: CannonConsoleReceiver
-  - uid: 222
+  - uid: 220
     components:
     - type: Transform
       pos: -0.5,1.5
@@ -1711,12 +1707,12 @@ entities:
         ammoContainer: !type:ContainerSlot
           showEnts: False
           occludes: True
-          ent: 223
+          ent: 221
     - type: DeviceLinkSource
       linkedPorts:
-        182:
+        180:
         - TurretLoaderSender: CannonConsoleReceiver
-  - uid: 224
+  - uid: 222
     components:
     - type: Transform
       pos: 4.5,-7.5
@@ -1726,12 +1722,12 @@ entities:
         ammoContainer: !type:ContainerSlot
           showEnts: False
           occludes: True
-          ent: 225
+          ent: 223
     - type: DeviceLinkSource
       linkedPorts:
-        185:
+        183:
         - TurretLoaderSender: CannonConsoleReceiver
-  - uid: 226
+  - uid: 224
     components:
     - type: Transform
       pos: 4.5,-5.5
@@ -1741,238 +1737,238 @@ entities:
         ammoContainer: !type:ContainerSlot
           showEnts: False
           occludes: True
-          ent: 227
+          ent: 225
     - type: DeviceLinkSource
       linkedPorts:
-        186:
+        184:
         - TurretLoaderSender: CannonConsoleReceiver
 - proto: VendingMachineSpaceUp
   entities:
-  - uid: 228
+  - uid: 226
     components:
     - type: Transform
       pos: 5.5,-2.5
       parent: 1
 - proto: WallShuttle
   entities:
-  - uid: 229
+  - uid: 227
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: 5.5,2.5
       parent: 1
-  - uid: 230
+  - uid: 228
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: -0.5,-7.5
       parent: 1
-  - uid: 231
+  - uid: 229
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: -0.5,3.5
       parent: 1
-  - uid: 232
+  - uid: 230
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: 0.5,3.5
       parent: 1
-  - uid: 233
+  - uid: 231
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: -0.5,-4.5
       parent: 1
-  - uid: 234
+  - uid: 232
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: -1.5,-3.5
       parent: 1
-  - uid: 235
+  - uid: 233
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: 6.5,-3.5
       parent: 1
-  - uid: 236
+  - uid: 234
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: -0.5,-5.5
       parent: 1
-  - uid: 237
+  - uid: 235
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: 5.5,-5.5
       parent: 1
-  - uid: 238
+  - uid: 236
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: -0.5,-8.5
       parent: 1
-  - uid: 239
+  - uid: 237
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: 3.5,-8.5
       parent: 1
-  - uid: 240
+  - uid: 238
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: 5.5,-8.5
       parent: 1
-  - uid: 241
+  - uid: 239
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: 5.5,-3.5
       parent: 1
-  - uid: 242
+  - uid: 240
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: 5.5,-7.5
       parent: 1
-  - uid: 243
+  - uid: 241
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: 4.5,-8.5
       parent: 1
-  - uid: 244
+  - uid: 242
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: 4.5,3.5
       parent: 1
-  - uid: 245
+  - uid: 243
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: -0.5,-6.5
       parent: 1
-  - uid: 246
+  - uid: 244
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: 5.5,-4.5
       parent: 1
-  - uid: 247
+  - uid: 245
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: 6.5,-2.5
       parent: 1
-  - uid: 248
+  - uid: 246
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: 5.5,3.5
       parent: 1
-  - uid: 249
+  - uid: 247
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: 0.5,-8.5
       parent: 1
-  - uid: 250
+  - uid: 248
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: -0.5,-3.5
       parent: 1
-  - uid: 251
+  - uid: 249
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: 5.5,-6.5
       parent: 1
-  - uid: 252
+  - uid: 250
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: -0.5,2.5
       parent: 1
-  - uid: 253
+  - uid: 251
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: -1.5,-2.5
       parent: 1
-  - uid: 254
+  - uid: 252
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: 6.5,1.5
       parent: 1
-  - uid: 255
+  - uid: 253
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: 6.5,2.5
       parent: 1
-  - uid: 256
+  - uid: 254
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: -1.5,2.5
       parent: 1
-  - uid: 257
+  - uid: 255
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: -1.5,1.5
       parent: 1
-  - uid: 258
+  - uid: 256
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: 3.5,-9.5
       parent: 1
-  - uid: 259
+  - uid: 257
     components:
     - type: MetaData
       flags: PvsPriority
     - type: Transform
       pos: 1.5,-8.5
       parent: 1
-  - uid: 260
+  - uid: 258
     components:
     - type: MetaData
       flags: PvsPriority
@@ -1981,77 +1977,77 @@ entities:
       parent: 1
 - proto: Windoor
   entities:
-  - uid: 261
+  - uid: 259
     components:
     - type: Transform
       pos: 4.5,-3.5
       parent: 1
-  - uid: 262
+  - uid: 260
     components:
     - type: Transform
       pos: 2.5,-3.5
       parent: 1
-  - uid: 263
+  - uid: 261
     components:
     - type: Transform
       pos: 0.5,-3.5
       parent: 1
 - proto: WindowFrostedDirectional
   entities:
-  - uid: 264
+  - uid: 262
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 1.5,-7.5
       parent: 1
-  - uid: 265
+  - uid: 263
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 1.5,-6.5
       parent: 1
-  - uid: 266
+  - uid: 264
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 1.5,-5.5
       parent: 1
-  - uid: 267
+  - uid: 265
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 1.5,-4.5
       parent: 1
-  - uid: 268
+  - uid: 266
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 3.5,-7.5
       parent: 1
-  - uid: 269
+  - uid: 267
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 3.5,-6.5
       parent: 1
-  - uid: 270
+  - uid: 268
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 3.5,-5.5
       parent: 1
-  - uid: 271
+  - uid: 269
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 3.5,-4.5
       parent: 1
-  - uid: 272
+  - uid: 270
     components:
     - type: Transform
       pos: 3.5,-3.5
       parent: 1
-  - uid: 273
+  - uid: 271
     components:
     - type: Transform
       pos: 1.5,-3.5
