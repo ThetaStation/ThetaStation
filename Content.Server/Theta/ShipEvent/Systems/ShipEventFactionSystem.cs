@@ -176,6 +176,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     private void SetupTimer(float seconds, Action action)
     {
+        if (seconds <= 0)
+            return;
         Timer timer = new((int) (seconds * 1000), true, action);
         _timerMan.AddTimer(timer, TimerTokenSource.Token);
     }
