@@ -10,6 +10,7 @@ using Content.Shared.Theta.ShipEvent.Components;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Shared.Physics.Components;
+using Robust.Shared.Prototypes;
 using System.Numerics;
 
 namespace Content.Server.Theta.ShipEvent;
@@ -17,6 +18,7 @@ namespace Content.Server.Theta.ShipEvent;
 public sealed class CannonSystem : SharedCannonSystem
 {
     [Dependency] private readonly RotateToFaceSystem _rotateToFaceSystem = default!;
+    [Dependency] private readonly IPrototypeManager _protMan = default!;
 
     private const int CollisionCheckDistance = 10;
 
@@ -102,24 +104,27 @@ public sealed class CannonSystem : SharedCannonSystem
         List<(Angle, Angle)> ranges = new();
         TransformComponent gridForm = EntityManager.GetComponent<TransformComponent>(Transform(uid).ParentUid);
 
-        //todo: I haven't figured out how to get all fixtures in range. definitely should be possible, but...
         foreach (EntityUid childUid in gridForm.ChildEntities)
         {
+            //checking if obstacle is not too far/close to the cannon
             TransformComponent form = Transform(childUid);
             Vector2 dir = form.LocalPosition - Transform(uid).LocalPosition;
             float dist = dir.Length();
             if (dist > CollisionCheckDistance || dist < 1)
                 continue;
 
+            //checking that obstacle is anchored and solid
             PhysicsComponent? phys = EntityManager.GetComponentOrNull<PhysicsComponent>(childUid);
             if (!form.Anchored || phys == null || !phys.Hard)
                 continue;
 
-            (Angle start0, Angle width0) = GetDirSector(dir);
+            //calculating circular sector that obstacle occupies relative to the cannon
+            (Angle start0, Angle width0) = GetObstacleSector(dir);
             ranges.Add((start0, width0));
 
             (Angle start2, Angle width2) = (start0, width0);
 
+            //checking whether new sector overlaps with any existing ones and combining them if so
             List<(Angle, Angle)> overlaps = new();
             foreach ((Angle start1, Angle width1) in ranges)
             {
@@ -137,21 +142,39 @@ public sealed class CannonSystem : SharedCannonSystem
             ranges.Add((start2, width2));
         }
 
-        double ew = gun.MaxAngle + 0.04;
+        Angle maxSpread = Angle.Zero;
+
+        //adding ammo spread (for shotguns)
+        CannonComponent cannon = Comp<CannonComponent>(uid);
+        foreach (string ammoProtId in cannon.AmmoPrototypes)
+        {
+            EntityPrototype ammoProt = _protMan.Index<EntityPrototype>(ammoProtId);
+            if (ammoProt.Components.TryGetValue("CartridgeAmmo", out var compEntry)
+                && compEntry.Component is CartridgeAmmoComponent cartridge)
+            {
+                maxSpread = cartridge.Spread > maxSpread ? cartridge.Spread : maxSpread;
+            }
+        }
+
+        //and spread from the gun itself
+        maxSpread += gun.MaxAngle + Angle.FromDegrees(10);
+
+        //subtracting spread from every range
         for (int i = 0; i < ranges.Count; i++)
         {
-            ranges[i] = (ThetaHelpers.AngNormal(ranges[i].Item1 - ew), ranges[i].Item2 + ew);
+            ranges[i] = (ThetaHelpers.AngNormal(ranges[i].Item1 - maxSpread / 2), ranges[i].Item2 + maxSpread);
         }
 
         return ranges;
     }
 
-    private (Angle, Angle) GetDirSector(Vector2 dir)
+    //delta between cannon's and obstacle's position
+    private (Angle, Angle) GetObstacleSector(Vector2 delta)
     {
-        Angle dirAngle = ThetaHelpers.AngNormal(new Angle(dir));
+        Angle dirAngle = ThetaHelpers.AngNormal(new Angle(delta));
         Vector2 a, b;
 
-        //this can be done without ugly conditional below, by rotating tile's square by dir angle and finding left- and rightmost points,
+        //this can be done without ugly conditional below, by rotating tile's square by delta's angle and finding left- and rightmost points,
         //but this certainly will be heavier and less clear
         if (dirAngle % (Math.PI * 0.5) == 0)
         {
@@ -159,20 +182,20 @@ public sealed class CannonSystem : SharedCannonSystem
             {
                 case 0:
                 case Math.Tau:
-                    a = dir - Vector2Helpers.Half;
-                    b = new Vector2(dir.X - 0.5f, dir.Y + 0.5f);
+                    a = delta - Vector2Helpers.Half;
+                    b = new Vector2(delta.X - 0.5f, delta.Y + 0.5f);
                     break;
                 case Math.PI * 0.5:
-                    a = dir - Vector2Helpers.Half;
-                    b = new Vector2(dir.X + 0.5f, dir.Y - 0.5f);
+                    a = delta - Vector2Helpers.Half;
+                    b = new Vector2(delta.X + 0.5f, delta.Y - 0.5f);
                     break;
                 case Math.PI:
-                    a = dir + Vector2Helpers.Half;
-                    b = new Vector2(dir.X + 0.5f, dir.Y - 0.5f);
+                    a = delta + Vector2Helpers.Half;
+                    b = new Vector2(delta.X + 0.5f, delta.Y - 0.5f);
                     break;
                 case Math.PI * 1.5:
-                    a = dir + Vector2Helpers.Half;
-                    b = new Vector2(dir.X - 0.5f, dir.Y + 0.5f);
+                    a = delta + Vector2Helpers.Half;
+                    b = new Vector2(delta.X - 0.5f, delta.Y + 0.5f);
                     break;
                 default:
                     return (double.NaN, double.NaN);
@@ -180,13 +203,13 @@ public sealed class CannonSystem : SharedCannonSystem
         }
         else if (dirAngle > 0 && dirAngle < Math.PI * 0.5 || dirAngle > Math.PI && dirAngle < Math.PI * 1.5)
         {
-            a = new Vector2(dir.X - 0.5f, dir.Y + 0.5f);
-            b = new Vector2(dir.X + 0.5f, dir.Y - 0.5f);
+            a = new Vector2(delta.X - 0.5f, delta.Y + 0.5f);
+            b = new Vector2(delta.X + 0.5f, delta.Y - 0.5f);
         }
         else
         {
-            a = dir + Vector2Helpers.Half;
-            b = dir - Vector2Helpers.Half;
+            a = delta + Vector2Helpers.Half;
+            b = delta - Vector2Helpers.Half;
         }
 
         Angle aangle = ThetaHelpers.AngNormal(new Angle(a));
