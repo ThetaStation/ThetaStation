@@ -15,7 +15,7 @@ public sealed class GenerateCannonFiringRangesCommand : IConsoleCommand
     public string Command => "se_genranges";
     public string Description => "Generates firing ranges for all cannons on specified grid.";
     public string Help => "Specify grid's entity uid.";
-    
+
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         if (args.Length < 1)
@@ -29,7 +29,7 @@ public sealed class GenerateCannonFiringRangesCommand : IConsoleCommand
             int count = 0;
             IEntityManager entMan = IoCManager.Resolve<IEntityManager>();
             CannonSystem cannonSys = entMan.System<CannonSystem>();
-            
+
             Stopwatch watch = new Stopwatch();
             watch.Start();
             foreach ((CannonComponent cannon, TransformComponent form) in entMan.EntityQuery<CannonComponent, TransformComponent>())

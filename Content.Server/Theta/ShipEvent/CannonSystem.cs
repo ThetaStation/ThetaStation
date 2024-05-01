@@ -4,6 +4,7 @@ using Content.Server.Theta.ShipEvent.Systems;
 using Content.Shared.DeviceLinking;
 using Content.Shared.DeviceLinking.Events;
 using Content.Shared.Interaction;
+using Content.Shared.Theta;
 using Content.Shared.Theta.ShipEvent;
 using Content.Shared.Theta.ShipEvent.Components;
 using Content.Shared.Weapons.Ranged.Components;
@@ -122,9 +123,9 @@ public sealed class CannonSystem : SharedCannonSystem
             List<(Angle, Angle)> overlaps = new();
             foreach ((Angle start1, Angle width1) in ranges)
             {
-                if (AreSectorsOverlapping(start0, width0, start1, width1))
+                if (ThetaHelpers.AngSectorsOverlap(start0, width0, start1, width1))
                 {
-                    (start2, width2) = CombinedSector(start2, width2, start1, width1);
+                    (start2, width2) = ThetaHelpers.AngCombinedSector(start2, width2, start1, width1);
                     overlaps.Add((start1, width1));
                 }
             }
@@ -139,7 +140,7 @@ public sealed class CannonSystem : SharedCannonSystem
         double ew = gun.MaxAngle + 0.04;
         for (int i = 0; i < ranges.Count; i++)
         {
-            ranges[i] = (ReducedAndPositive(ranges[i].Item1 - ew), ranges[i].Item2 + ew);
+            ranges[i] = (ThetaHelpers.AngNormal(ranges[i].Item1 - ew), ranges[i].Item2 + ew);
         }
 
         return ranges;
@@ -147,7 +148,7 @@ public sealed class CannonSystem : SharedCannonSystem
 
     private (Angle, Angle) GetDirSector(Vector2 dir)
     {
-        Angle dirAngle = ReducedAndPositive(new Angle(dir));
+        Angle dirAngle = ThetaHelpers.AngNormal(new Angle(dir));
         Vector2 a, b;
 
         //this can be done without ugly conditional below, by rotating tile's square by dir angle and finding left- and rightmost points,
@@ -188,8 +189,8 @@ public sealed class CannonSystem : SharedCannonSystem
             b = dir - Vector2Helpers.Half;
         }
 
-        Angle aangle = ReducedAndPositive(new Angle(a));
-        Angle bangle = ReducedAndPositive(new Angle(b));
+        Angle aangle = ThetaHelpers.AngNormal(new Angle(a));
+        Angle bangle = ThetaHelpers.AngNormal(new Angle(b));
         Angle w = Angle.ShortestDistance(aangle, bangle);
         if (w < 0)
         {
