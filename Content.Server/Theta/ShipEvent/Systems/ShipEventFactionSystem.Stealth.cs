@@ -31,7 +31,8 @@ public partial class ShipEventFactionSystem
         Timer.Spawn((stealth.StealthDuration + stealth.StealthCooldown) * 1000, () =>
         {
             _onCooldown.Remove(shuttle);
-            RaiseNetworkEvent(new ShipEventStealthStatusMessage(true, EntityManager.GetNetEntity(uid)));
+            if (EntityManager.EntityExists(uid))
+                RaiseNetworkEvent(new ShipEventStealthStatusMessage(true, EntityManager.GetNetEntity(uid)));
         });
     }
 
