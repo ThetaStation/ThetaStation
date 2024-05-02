@@ -222,17 +222,6 @@ public sealed partial class ShipEventFactionSystem
         return null;
     }
 
-    public PlayerFaction? TryGetTeamByMember(EntityUid member)
-    {
-        foreach (var team in Teams)
-        {
-            var memberRole = _factionSystem.TryGetRoleByEntity(team, member);
-            if (memberRole != null)
-                return team;
-        }
-        return null;
-    }
-
     //yes, RT does not have such a method
     public T Pick<T>(IEnumerable<T> enumerable)
     {

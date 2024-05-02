@@ -28,16 +28,19 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
 
     public void SendPing(EntityUid pingOwner, Vector2 coordinates)
     {
-        var sender = _playerManager.LocalPlayer!.ControlledEntity!.Value;
+        EntityUid? sender = _playerManager.LocalSession?.AttachedEntity;
+        if (sender == null)
+        {
+            Log.Error("Ping sender is null, how's that possible?");
+            return;
+        }
+
         if (_canNetworkPing)
         {
-            RaiseNetworkEvent(new SpreadPingEvent(GetNetEntity(sender), GetNetEntity(pingOwner), coordinates));
+            RaiseNetworkEvent(new SpreadPingEvent(GetNetEntity(sender.Value), GetNetEntity(pingOwner), coordinates));
             _canNetworkPing = false;
             Timer.Spawn(NetworkPingCd, () => _canNetworkPing = true);
         }
-
-        PlaySignalSound(Filter.Entities(sender), pingOwner);
-        PlayPing(GetPing(pingOwner, coordinates));
     }
 
     private void PlayPing(PingInformation ping)
