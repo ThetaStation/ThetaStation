@@ -3,6 +3,7 @@ using Content.Server.Shuttles.Systems;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Theta.ShipEvent;
+using Robust.Shared.Player;
 using Robust.Shared.Timing;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
@@ -22,42 +23,43 @@ public partial class ShipEventFactionSystem
 
     private void OnStealthInit(EntityUid uid, ShipStealthComponent stealth, ComponentInit args)
     {
-        var xform = Transform(uid);
-        if (xform.GridUid == null)
-            return;
-
-        var shuttle = xform.GridUid.Value;
-        _onCooldown.Add(shuttle);
-        Timer.Spawn((stealth.StealthDuration + stealth.StealthCooldown) * 1000, () =>
-        {
-            _onCooldown.Remove(shuttle);
-            RaiseNetworkEvent(new ShipEventStealthStatusMessage(true, EntityManager.GetNetEntity(uid)));
-        });
+        TryActivateStealth(uid, 10); //spawn camping measure
     }
 
     private void OnStealthActivated(EntityUid uid, ShuttleConsoleComponent _, ShipEventToggleStealthMessage args)
     {
+        TryActivateStealth(uid);
+    }
+
+    private bool TryActivateStealth(EntityUid uid, int? durationOverride = null, int? cdOverride = null)
+    {
         var xform = Transform(uid);
         if (xform.GridUid == null)
-            return;
+            return false;
 
         var shuttle = xform.GridUid.Value;
         if (_onCooldown.Contains(shuttle))
-            return;
+            return false;
 
         if (!TryComp<ShipStealthComponent>(uid, out var stealth))
-            return;
+            return false;
 
         //multiplying by thousand since component fields are in seconds
+        int duration = (durationOverride ?? stealth.StealthDuration) * 1000;
+        int cooldown = (cdOverride ?? stealth.StealthCooldown) * 1000;
+
         _iffSys.AddIFFFlag(shuttle, IFFFlags.Hide);
-        Timer.Spawn(stealth.StealthDuration * 1000, () => { _iffSys.RemoveIFFFlag(shuttle, IFFFlags.Hide); });
+        Timer.Spawn(duration, () => { _iffSys.RemoveIFFFlag(shuttle, IFFFlags.Hide); });
 
         _onCooldown.Add(shuttle);
-        Timer.Spawn((stealth.StealthDuration + stealth.StealthCooldown) * 1000, () =>
+        Timer.Spawn(duration + cooldown, () =>
         {
             _onCooldown.Remove(shuttle);
-            RaiseNetworkEvent(new ShipEventStealthStatusMessage(true, EntityManager.GetNetEntity(uid)), args.Session);
+            if (EntityManager.EntityExists(uid))
+                RaiseNetworkEvent(new ShipEventStealthStatusMessage(true, EntityManager.GetNetEntity(uid)));
         });
+
+        return true;
     }
 
     private void OnStealthStatusRequest(EntityUid uid, ShuttleConsoleComponent _, ShipEventRequestStealthStatusMessage args)

@@ -6,7 +6,7 @@
     - type: ShipEventRule
       id: ShipEvent
       startAnnouncement: shipevent-eventannouncement
-      maxOccurrences: 0 # only shitspawn
+      maxOccurrences: 0
       endAfter: 1
 
       hudPrototypeId: "ShipeventHUD"
@@ -60,8 +60,8 @@
       pickupPrototype: ShipEventPickupPrototype
 
       #anomalies
-      anomalyUpdateInterval: 2
-      anomalySpawnInterval: 30
+      anomalyUpdateInterval: -1 #currently they are barely working
+      anomalySpawnInterval: -1
       anomalyPrototypes:
         - "ShipEventRadiationAnomaly"
         - "ShipEventIonAnomaly"

@@ -93,60 +93,6 @@ public abstract class SharedCannonSystem : EntitySystem
         _gunSystem.AttemptShoot(GetEntity(ev.PilotUid), evCannonUid, gun, coords);
     }
 
-    public Angle Max(params Angle[] args)
-    {
-        Angle max = args[0];
-        foreach (Angle d in args)
-        {
-            if (d > max)
-                max = d;
-        }
-        return max;
-    }
-
-    public Angle Min(params Angle[] args)
-    {
-        Angle min = args[0];
-        foreach (Angle d in args)
-        {
-            if (d < min)
-                min = d;
-        }
-        return min;
-    }
-
-    public Angle ReducedAndPositive(Angle x)
-    {
-        x = x.Reduced();
-        if (x < 0)
-            x += 2 * Math.PI;
-        return x;
-    }
-
-    public bool IsInsideSector(Angle x, Angle start, Angle width)
-    {
-        Angle dist = Angle.ShortestDistance(start, x);
-        return Math.Sign(width) == Math.Sign(dist) ? Math.Abs(width) >= Math.Abs(dist) : Math.Abs(width) >= Math.Tau - Math.Abs(dist);
-    }
-
-    public bool AreSectorsOverlapping(Angle start0, Angle width0, Angle start1, Angle width1)
-    {
-        Angle end0 = ReducedAndPositive(start0 + width0);
-        Angle end1 = ReducedAndPositive(start1 + width1);
-        return IsInsideSector(start0, start1, width1) || IsInsideSector(start1, start0, width0) ||
-               IsInsideSector(end0, start1, width1) || IsInsideSector(end1, start0, width0);
-    }
-
-    //only accepts sectors with positive width
-    public (Angle, Angle) CombinedSector(Angle start0, Angle width0, Angle start1, Angle width1)
-    {
-        Angle startlow, widthlow, starthigh, widthhigh, disthigh;
-        (startlow, widthlow, starthigh, widthhigh) = IsInsideSector(start1, start0, width0) ? (start0, width0, start1, width1) : (start1, width1, start0, width0);
-        disthigh = ReducedAndPositive(starthigh + widthhigh) > startlow ? starthigh + widthhigh - startlow : Math.Tau - startlow + ReducedAndPositive(starthigh + widthhigh);
-
-        return (startlow, Math.Min(Math.Max(widthlow, disthigh), Math.Tau));
-    }
-
     private bool CanShoot(RequestCannonShootEvent args, GunComponent gun, CannonComponent cannon)
     {
         if (!_gunSystem.CanShoot(gun))
@@ -157,11 +103,11 @@ public abstract class SharedCannonSystem : EntitySystem
         if (!pilotTransform.GridUid.Equals(cannonTransform.GridUid))
             return false;
 
-        Angle firingAngle = ReducedAndPositive(new Angle(args.Coordinates - _transform.GetWorldPosition(cannonTransform)) -
+        Angle firingAngle = ThetaHelpers.AngNormal(new Angle(args.Coordinates - _transform.GetWorldPosition(cannonTransform)) -
                                                _transform.GetWorldRotation(Transform(cannonTransform.GridUid ?? GetEntity(args.CannonUid))));
-        foreach ((Angle start, Angle w) in cannon.ObstructedRanges)
+        foreach ((Angle start, Angle width) in cannon.ObstructedRanges)
         {
-            if (IsInsideSector(firingAngle, start, w))
+            if (ThetaHelpers.AngInSector(firingAngle, start, width))
                 return false;
         }
 

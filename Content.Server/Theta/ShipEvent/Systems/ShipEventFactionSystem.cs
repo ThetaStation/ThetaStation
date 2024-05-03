@@ -56,7 +56,6 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
     [Dependency] private readonly MobHUDSystem _hudSys = default!;
     [Dependency] private readonly MapGenSystem _mapGenSys = default!;
     [Dependency] private readonly IdentitySystem _idSys = default!;
-    [Dependency] private readonly MapLoaderSystem _mapSys = default!;
     [Dependency] private readonly IMapManager _mapMan = default!;
     [Dependency] private readonly IPrototypeManager _protMan = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
@@ -177,6 +176,8 @@ public sealed partial class ShipEventFactionSystem : EntitySystem
 
     private void SetupTimer(float seconds, Action action)
     {
+        if (seconds <= 0)
+            return;
         Timer timer = new((int) (seconds * 1000), true, action);
         _timerMan.AddTimer(timer, TimerTokenSource.Token);
     }

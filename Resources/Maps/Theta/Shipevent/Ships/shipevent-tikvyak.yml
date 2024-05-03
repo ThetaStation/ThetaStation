@@ -861,7 +861,7 @@ entities:
       parent: 1
     - type: Cannon
       ranges:
-      - 4.176105491364292 rad: 3.567218918145179 rad
+      - 4.172472260064434 rad: 3.7890183059443285 rad
     - type: DeviceLinkSink
       links:
       - 62
@@ -876,7 +876,7 @@ entities:
       parent: 1
     - type: Cannon
       ranges:
-      - 5.283254218582705 rad: 2.8924779792127424 rad
+      - 5.279620987282847 rad: 3.114277367011892 rad
     - type: DeviceLinkSink
       links:
       - 62
@@ -891,7 +891,7 @@ entities:
       parent: 1
     - type: Cannon
       ranges:
-      - 1.0345128377744992 rad: 2.892477979212742 rad
+      - 1.030879606474641 rad: 3.1142773670118915 rad
     - type: DeviceLinkSink
       links:
       - 62
@@ -906,7 +906,7 @@ entities:
       parent: 1
     - type: Cannon
       ranges:
-      - 1.4669206260604755 rad: 3.567218918145179 rad
+      - 1.4632873947606173 rad: 3.7890183059443285 rad
     - type: DeviceLinkSink
       links:
       - 62
@@ -922,7 +922,7 @@ entities:
       parent: 1
     - type: Cannon
       ranges:
-      - 3.2488102922113247 rad: 2.2489768515708133 rad
+      - 2.8961112105126006 rad: 3.1689079401676947 rad
     - type: DeviceLinkSink
       links:
       - 61

@@ -25,11 +25,6 @@
     Telecrystal: 8 # Originally was 13 TC but was not used due to high cost
   categories:
   - UplinkWeapons
-  conditions:
-    - !type:StoreWhitelistCondition
-      blacklist:
-        tags:
-          - ShipEventUplink
 
 # Inbuilt suppressor so it's sneaky + more expensive.
 - type: listing
@@ -99,6 +94,11 @@
     Telecrystal: 8
   categories:
   - UplinkWeapons
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkDisposableTurret
@@ -114,6 +114,7 @@
       blacklist:
         tags:
           - NukeOpsUplink
+          - ShipEventUplink
 
 # Explosives
 
@@ -136,6 +137,11 @@
     Telecrystal: 1
   categories:
   - UplinkExplosives
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkSmokeGrenade
@@ -146,6 +152,11 @@
     Telecrystal: 1
   categories:
   - UplinkExplosives
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkSyndieMiniBomb
@@ -156,6 +167,11 @@
     Telecrystal: 6
   categories:
     - UplinkExplosives
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkSupermatterGrenade
@@ -166,6 +182,11 @@
     Telecrystal: 6
   categories:
     - UplinkExplosives
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkWhiteholeGrenade
@@ -176,6 +197,11 @@
     Telecrystal: 3
   categories:
     - UplinkExplosives
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkGrenadePenguin
@@ -272,6 +298,7 @@
     blacklist:
       tags:
       - NukeOpsUplink
+      - ShipEventUplink
 
 - type: listing
   id: UplinkSyndicateBombNukie
@@ -413,6 +440,11 @@
     Telecrystal: 2
   categories:
   - UplinkAmmo
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 #Utility
 
@@ -547,6 +579,7 @@
       blacklist:
         tags:
           - NukeOpsUplink
+          - ShipEventUplink
 
 - type: listing
   id: UplinkReinforcementRadioSyndicateMonkeyNukeops # Version for Nukeops that spawns a syndicate monkey with the NukeOperative component.
@@ -563,7 +596,6 @@
       whitelist:
         tags:
           - NukeOpsUplink
-          - ShipEventUplink
 
 - type: listing
   id: UplinkStealthBox
@@ -622,6 +654,11 @@
     Telecrystal: 4
   categories:
   - UplinkUtility
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkHypopen
@@ -679,6 +716,11 @@
     Telecrystal: 2
   categories:
   - UplinkUtility
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkSyndicateWeaponModule
@@ -689,6 +731,11 @@
     Telecrystal: 5
   categories:
     - UplinkUtility
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 # Implants
 
 - type: listing
@@ -718,6 +765,11 @@
     Telecrystal: 5
   categories:
     - UplinkImplants
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkScramImplanter
@@ -729,6 +781,11 @@
     Telecrystal: 6 # it's a gamble that may kill you easily so 6 TC per 2 uses, second one more of a backup
   categories:
     - UplinkImplants
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkDnaScramblerImplant
@@ -808,6 +865,11 @@
     Telecrystal: 2
   categories:
   - UplinkImplants
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkUplinkImplanter # uplink uplink real
@@ -857,6 +919,11 @@
     Telecrystal: 4
   categories:
   - UplinkBundles
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkEmpKit
@@ -897,6 +964,11 @@
     Telecrystal: 4
   categories:
   - UplinkBundles
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkMedsBundle
@@ -1068,21 +1140,6 @@
       blacklist:
         tags:
           - ShipEventUplink
-
-- type: listing
-  id: UplinkPowerSink
-  name: uplink-power-sink-name
-  description: uplink-power-sink-desc
-  productEntity: PowerSink
-  cost:
-    Telecrystal: 8
-  categories:
-  - UplinkTools
-  conditions:
-    - !type:BuyerWhitelistCondition
-      blacklist:
-        components:
-          - SurplusBundle
 
 - type: listing
   id: UplinkCarpDehydrated
@@ -1310,6 +1367,11 @@
     Telecrystal: 12
   categories:
     - UplinkUtility
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 # Armor
 
@@ -1420,6 +1482,11 @@
     Telecrystal: 10
   categories:
   - UplinkArmor
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkClothingOuterHardsuitJuggernaut
@@ -1430,6 +1497,11 @@
     Telecrystal: 12
   categories:
   - UplinkArmor
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 # Misc
 
@@ -1573,6 +1645,11 @@
     Telecrystal: 5
   categories:
   - UplinkMisc
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkCombatMedipen
@@ -1633,6 +1710,11 @@
     Telecrystal: 4
   categories:
     - UplinkMisc
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkMobCatMicrobomb
@@ -1650,6 +1732,21 @@
         tags:
           - NukeOpsUplink
 
+- type: listing
+  id: UplinkGrapplingHook
+  name: uplink-grappling-hook-name
+  description: uplink-grappling-hook-desc
+  productEntity: WeaponGrapplingGun
+  cost:
+    Telecrystal: 8
+  categories:
+    - UplinkUtility
+  conditions:
+    - !type:StoreWhitelistCondition
+      whitelist:
+        tags:
+          - ShipEventUplink
+
  # Pointless
 
 - type: listing
@@ -1661,6 +1758,11 @@
     Telecrystal: 4
   categories:
   - UplinkPointless
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkSyndicateStamp
@@ -1671,6 +1773,11 @@
     Telecrystal: 2
   categories:
   - UplinkPointless
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkCatEars
@@ -1691,6 +1798,11 @@
     Telecrystal: 1
   categories:
   - UplinkPointless
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkOutlawGlasses
@@ -1701,6 +1813,11 @@
     Telecrystal: 1
   categories:
   - UplinkPointless
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkCostumePyjama
@@ -1711,6 +1828,11 @@
     Telecrystal: 4
   categories:
   - UplinkPointless
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkCostumeClown
@@ -1721,6 +1843,11 @@
     Telecrystal: 2
   categories:
   - UplinkPointless
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkCarpSuitBundle
@@ -1731,6 +1858,11 @@
     Telecrystal: 4
   categories:
   - UplinkPointless
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkOperativeSuit
@@ -1741,6 +1873,11 @@
     Telecrystal: 1
   categories:
   - UplinkPointless
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkOperativeSkirt
@@ -1751,6 +1888,11 @@
     Telecrystal: 1
   categories:
   - UplinkPointless
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkBalloon
@@ -1771,6 +1913,11 @@
     Telecrystal: 1
   categories:
   - UplinkPointless
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkScarfSyndieGreen
@@ -1781,19 +1928,9 @@
     Telecrystal: 1
   categories:
     - UplinkPointless
-
-- type: listing
-  id: UplinkGrapplingHook
-  name: uplink-grappling-hook-name
-  description: uplink-grappling-hook-desc
-  productEntity: WeaponGrapplingGun
-  cost:
-    Telecrystal: 8
-  categories:
-    - UplinkUtility
   conditions:
     - !type:StoreWhitelistCondition
-      whitelist:
+      blacklist:
         tags:
           - ShipEventUplink
 

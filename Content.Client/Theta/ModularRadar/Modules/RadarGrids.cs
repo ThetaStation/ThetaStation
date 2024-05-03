@@ -224,10 +224,6 @@ public sealed class RadarGrids : RadarModule
                 Vector2 end = info.Edges[i + 1];
                 start = matrix.Transform(start);
                 end = matrix.Transform(end);
-
-                if (start.Length() > ActualRadarRange || end.Length() > ActualRadarRange)
-                    continue;
-
                 start = ScalePosition(new Vector2(start.X, -start.Y));
                 end = ScalePosition(new Vector2(end.X, -end.Y));
                 edges[edgesLength] = start;

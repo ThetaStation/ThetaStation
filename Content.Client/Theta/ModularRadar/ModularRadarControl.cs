@@ -1,9 +1,12 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using Content.Client.Resources;
 using Content.Client.UserInterface.Controls;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Theta.ShipEvent.UI;
+using Pidgin;
 using Robust.Client.Graphics;
+using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Shared.Map;
 using Robust.Shared.Timing;
@@ -17,7 +20,7 @@ public abstract class ModularRadarControl : MapGridControl
 {
     [Dependency] private readonly IEntityManager _entManager = default!;
 
-    private const float GridLinesDistance = 32f;
+    private const int CircleDistance = 50; //in world meters
 
     /// <summary>
     /// Used to transform all of the radar objects. Typically is a shuttle console parented to a grid.
@@ -30,9 +33,12 @@ public abstract class ModularRadarControl : MapGridControl
 
     public Action? OnParentUidSet;
 
+    private Font _font;
+
     public ModularRadarControl(float minRange = 64f, float maxRange = 256f, float range = 256f)
         : base(minRange, maxRange, range)
     {
+        _font = IoCManager.Resolve<IResourceCache>().GetFont("/Fonts/NotoSans/NotoSans-Regular.ttf", 6);
     }
 
     protected override void MouseMove(GUIMouseMoveEventArgs args)
@@ -130,7 +136,7 @@ public abstract class ModularRadarControl : MapGridControl
         base.Draw(handle);
 
         var background = GetBackground();
-        handle.DrawCircle(new Vector2(MidPoint, MidPoint), ScaledMinimapRadius, background);
+        handle.DrawRect(new UIBox2(Vector2.Zero, new Vector2(SizeFull)), background);
 
         // No data
         if (_coordinates == null || _rotation == null)
@@ -139,20 +145,20 @@ public abstract class ModularRadarControl : MapGridControl
             return;
         }
 
-        var gridLines = new Color(0.08f, 0.08f, 0.08f);
-        var gridLinesRadial = 8;
-        var gridLinesEquatorial = (int) Math.Floor(WorldRange / GridLinesDistance);
-
-        for (var i = 1; i < gridLinesEquatorial + 1; i++)
+        var linesRadial = 8;
+        for (var i = 0; i < linesRadial; i++)
         {
-            handle.DrawCircle(new Vector2(MidPoint, MidPoint), GridLinesDistance * MinimapScale * i, gridLines, false);
+            Angle angle = Math.PI / linesRadial * i;
+            Vector2 extent = angle.ToVec() * SizeFull;
+            handle.DrawLine(MidpointVector - extent, MidpointVector + extent, new Color(0.08f, 0.08f, 0.08f));
         }
 
-        for (var i = 0; i < gridLinesRadial; i++)
+        var circles = (int) Math.Log2(WorldRange);
+        for (var i = 0; i < circles; i++)
         {
-            Angle angle = (Math.PI / gridLinesRadial) * i;
-            var aExtent = angle.ToVec() * ScaledMinimapRadius;
-            handle.DrawLine(new Vector2(MidPoint, MidPoint) - aExtent, new Vector2(MidPoint, MidPoint) + aExtent, gridLines);
+            var radius = (float) Math.Pow(2, i) * CircleDistance;
+            handle.DrawString(_font, new Vector2(MidPoint, MidPoint - radius * MinimapScale), radius.ToString(), Color.DimGray);
+            handle.DrawCircle(MidpointVector, radius * MinimapScale, Color.DimGray, false);
         }
 
         var offsetMatrix = GetOffsetMatrix();
@@ -214,7 +220,7 @@ public abstract class ModularRadarControl : MapGridControl
 
     protected virtual Color GetBackground()
     {
-        return new Color(0.08f, 0.08f, 0.08f);
+        return Color.Black;
     }
 
     // Api to bypass encapsulation without changing MapGridControl

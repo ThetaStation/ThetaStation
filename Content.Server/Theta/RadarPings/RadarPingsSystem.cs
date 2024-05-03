@@ -4,6 +4,7 @@ using Content.Server.Shuttles.Components;
 using Content.Server.Theta.ShipEvent.Systems;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Theta.RadarPings;
+using Content.Shared.Theta.ShipEvent.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 
@@ -67,18 +68,17 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
     private Filter GetPlayersFilter(SpreadPingEvent ev)
     {
         var filter = Filter.Empty();
+        var senderUid = GetEntity(ev.Sender);
 
-        // Fallback for non-shipevent rounds
         if (_shipEventSystem.RuleSelected)
         {
-            var team = _shipEventSystem.TryGetTeamByMember(GetEntity(ev.Sender));
+            var team = Comp<ShipEventFactionMarkerComponent>(senderUid).Team;
             if (team != null)
             {
                 var list = new List<ICommonSession>();
                 foreach (var member in team.Members)
                 {
-                    if(_mindSystem.TryGetMind(member.Owner, out _, out var mind) &&
-                       _mindSystem.TryGetSession(mind, out var session))
+                    if (_mindSystem.TryGetSession(member.Owner, out var session))
                         list.Add(session);
                 }
                 filter.AddPlayers(list);
@@ -86,12 +86,11 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
         }
         else
         {
-            filter = Filter.BroadcastGrid(GetEntity(ev.Sender));
+            // Fallback for non-shipevent rounds
+            var gridUid = Transform(senderUid).GridUid;
+            if (gridUid != null)
+                filter = Filter.BroadcastGrid(gridUid.Value);
         }
-
-        if (_mindSystem.TryGetMind(GetEntity(ev.Sender), out _, out var ownerMind) &&
-            _mindSystem.TryGetSession(ownerMind, out var ownerSession))
-            filter.RemovePlayer(ownerSession);
 
         return filter;
     }

@@ -1,9 +1,11 @@
 using System.Numerics;
+using Content.Client.Resources;
 using Content.Client.UserInterface.Controls;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using JetBrains.Annotations;
 using Robust.Client.Graphics;
+using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Collections;
@@ -24,8 +26,6 @@ public sealed class RadarControl : MapGridControl
     [Dependency] private readonly IEntityManager _entManager = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
     private SharedTransformSystem _transform;
-
-    private const float GridLinesDistance = 32f;
 
     /// <summary>
     /// Used to transform all of the radar objects. Typically is a shuttle console parented to a grid.
@@ -56,9 +56,12 @@ public sealed class RadarControl : MapGridControl
 
     private List<Entity<MapGridComponent>> _grids = new();
 
+    private Font _font;
+
     public RadarControl() : base(64f, 256f, 256f)
     {
         _transform = _entManager.System<SharedTransformSystem>();
+        _font = IoCManager.Resolve<IResourceCache>().GetFont("/Fonts/NotoSans/NotoSans-Regular.ttf", 6);
     }
 
     public void SetMatrix(EntityCoordinates? coordinates, Angle? angle)
@@ -132,10 +135,7 @@ public sealed class RadarControl : MapGridControl
     {
         base.Draw(handle);
 
-        var fakeAA = new Color(0.08f, 0.08f, 0.08f);
-
-        handle.DrawCircle(new Vector2(MidPoint, MidPoint), ScaledMinimapRadius + 1, fakeAA);
-        handle.DrawCircle(new Vector2(MidPoint, MidPoint), ScaledMinimapRadius, Color.Black);
+        handle.DrawRect(new UIBox2(Vector2.Zero, new Vector2(SizeFull)), Color.Black);
 
         // No data
         if (_coordinates == null || _rotation == null)
@@ -144,20 +144,21 @@ public sealed class RadarControl : MapGridControl
             return;
         }
 
-        var gridLines = new Color(0.08f, 0.08f, 0.08f);
-        var gridLinesRadial = 8;
-        var gridLinesEquatorial = (int) Math.Floor(WorldRange / GridLinesDistance);
-
-        for (var i = 1; i < gridLinesEquatorial + 1; i++)
+        var linesRadial = 8;
+        for (var i = 0; i < linesRadial; i++)
         {
-            handle.DrawCircle(new Vector2(MidPoint, MidPoint), GridLinesDistance * MinimapScale * i, gridLines, false);
+            Angle angle = Math.PI / linesRadial * i;
+            Vector2 extent = angle.ToVec() * SizeFull;
+            handle.DrawLine(new Vector2(MidPoint, MidPoint) - extent, new Vector2(MidPoint, MidPoint) + extent, new Color(0.08f, 0.08f, 0.08f));
         }
 
-        for (var i = 0; i < gridLinesRadial; i++)
+        var circleDistance = 50f;
+        var circles = (int) WorldRange / circleDistance;
+        for (var i = 0; i < circles; i++)
         {
-            Angle angle = (Math.PI / gridLinesRadial) * i;
-            var aExtent = angle.ToVec() * ScaledMinimapRadius;
-            handle.DrawLine(new Vector2(MidPoint, MidPoint) - aExtent, new Vector2(MidPoint, MidPoint) + aExtent, gridLines);
+            var radius = (i + 1) * circleDistance;
+            handle.DrawString(_font, new Vector2(MidPoint, MidPoint - radius * MinimapScale), radius.ToString(), Color.DimGray);
+            handle.DrawCircle(MidpointVector, radius * MinimapScale, Color.DimGray, false);
         }
 
         var metaQuery = _entManager.GetEntityQuery<MetaDataComponent>();

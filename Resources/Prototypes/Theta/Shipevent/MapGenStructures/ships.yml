@@ -55,7 +55,7 @@
   id: shiptype_skipjack
   name: shipevent-skipjack-name
   description: shipevent-skipjack-desc
-  class: shipevent-shipclass-heavyclass
+  class: shipevent-shipclass-heavy
   previewImage: /Textures/Theta/ShipEvent/ShipPreviews/skipjack-preview.png
   structurePrototype: "shipevent_skipjack"
   minCrewAmount: 3

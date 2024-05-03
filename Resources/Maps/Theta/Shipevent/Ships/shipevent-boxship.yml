@@ -286,7 +286,7 @@ entities:
       parent: 1
     - type: Cannon
       ranges:
-      - 3.124455285317883 rad: 2.9613344649341804 rad
+      - 2.7717562036191588 rad: 3.881265553531062 rad
     - type: DeviceLinkSink
       links:
       - 17

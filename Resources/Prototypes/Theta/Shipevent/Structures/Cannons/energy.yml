@@ -5,6 +5,8 @@
   name: ion cannon
   components:
     - type: Cannon
+      ammoPrototypes:
+        - "IonBolt"
     - type: Sprite
       layers:
         - state: syndie_lethal
@@ -68,6 +70,8 @@
   name: plasma cannon
   components:
     - type: Cannon
+      ammoPrototypes:
+        - "PlasmaCannonShot"
     - type: Sprite
       layers:
         - state: syndie_lethal
