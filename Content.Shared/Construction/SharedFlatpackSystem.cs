@@ -67,8 +67,7 @@ public abstract class SharedFlatpackSystem : EntitySystem
         }
 
         var buildPos = _map.TileIndicesFor(grid, gridComp, xform.Coordinates);
-        var intersecting = _entityLookup.GetEntitiesIntersecting(buildPos.ToEntityCoordinates(grid, _mapManager).Offset(new Vector2(0.5f, 0.5f))
-            , LookupFlags.Dynamic | LookupFlags.Static);
+        var intersecting = _entityLookup.GetEntitiesIntersecting(new EntityCoordinates(grid, buildPos), LookupFlags.Dynamic | LookupFlags.Static);
 
         // todo make this logic smarter.
         // This should eventually allow for shit like building microwaves on tables and such.
