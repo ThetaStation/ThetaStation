@@ -153,10 +153,10 @@ public abstract class ModularRadarControl : MapGridControl
             handle.DrawLine(MidpointVector - extent, MidpointVector + extent, new Color(0.08f, 0.08f, 0.08f));
         }
 
-        var circles = (int) WorldRange / CircleDistance;
+        var circles = (int) Math.Log2(WorldRange);
         for (var i = 0; i < circles; i++)
         {
-            var radius = (i + 1) * CircleDistance;
+            var radius = (float) Math.Pow(2, i) * CircleDistance;
             handle.DrawString(_font, new Vector2(MidPoint, MidPoint - radius * MinimapScale), radius.ToString(), Color.DimGray);
             handle.DrawCircle(MidpointVector, radius * MinimapScale, Color.DimGray, false);
         }
