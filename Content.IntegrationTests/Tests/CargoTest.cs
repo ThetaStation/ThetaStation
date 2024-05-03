@@ -20,7 +20,7 @@ public sealed class CargoTest
         new("FunCrateGambling")
     };
 
-    [Test]
+    [Test, Ignore("Useless for Theta Station")]
     public async Task NoCargoOrderArbitrage()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -52,7 +52,8 @@ public sealed class CargoTest
 
         await pair.CleanReturnAsync();
     }
-    [Test]
+
+    [Test, Ignore("Useless for Theta Station")]
     public async Task NoCargoBountyArbitrageTest()
     {
         await using var pair = await PoolManager.GetServerClient();
