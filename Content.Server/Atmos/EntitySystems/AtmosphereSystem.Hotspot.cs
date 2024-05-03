@@ -81,7 +81,7 @@ namespace Content.Server.Atmos.EntitySystems
 
             if (_hotspotSoundCooldown++ == 0 && !string.IsNullOrEmpty(HotspotSound))
             {
-                var coordinates = tile.GridIndices.ToEntityCoordinates(tile.GridIndex, _mapManager);
+                var coordinates = new EntityCoordinates(tile.GridIndex, tile.GridIndices);
                 // A few details on the audio parameters for fire.
                 // The greater the fire state, the lesser the pitch variation.
                 // The greater the fire state, the greater the volume.

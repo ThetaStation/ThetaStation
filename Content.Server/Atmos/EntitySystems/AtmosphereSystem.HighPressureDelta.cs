@@ -100,7 +100,7 @@ namespace Content.Server.Atmos.EntitySystems
             {
                 if(_spaceWindSoundCooldown == 0 && !string.IsNullOrEmpty(SpaceWindSound))
                 {
-                    var coordinates = tile.GridIndices.ToEntityCoordinates(tile.GridIndex, _mapManager);
+                    var coordinates = new EntityCoordinates(tile.GridIndex, tile.GridIndices);
                     _audio.PlayPvs(SpaceWindSound, coordinates, AudioParams.Default.WithVariation(0.125f).WithVolume(MathHelper.Clamp(tile.PressureDifference / 10, 10, 100)));
                 }
             }
@@ -157,13 +157,16 @@ namespace Content.Server.Atmos.EntitySystems
                 var pressureMovements = EnsureComp<MovedByPressureComponent>(entity);
                 if (pressure.LastHighPressureMovementAirCycle < gridAtmosphere.Comp.UpdateCounter)
                 {
+                    var coords = tile.PressureSpecificTarget?.GridIndices != null ?
+                        new EntityCoordinates(tile.GridIndex, tile.PressureSpecificTarget.GridIndices) :
+                        EntityCoordinates.Invalid;
                     // tl;dr YEET
                     ExperiencePressureDifference(
                         (entity, pressureMovements),
                         gridAtmosphere.Comp.UpdateCounter,
                         tile.PressureDifference,
                         tile.PressureDirection, 0,
-                        tile.PressureSpecificTarget?.GridIndices.ToEntityCoordinates(tile.GridIndex, _mapManager) ?? EntityCoordinates.Invalid,
+                        coords,
                         gridWorldRotation,
                         xforms.GetComponent(entity),
                         body);

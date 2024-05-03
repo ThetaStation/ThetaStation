@@ -97,7 +97,7 @@ public sealed class EntityAnomalySystem : EntitySystem
             if (!valid)
                 continue;
             amountCounter++;
-            Spawn(_random.Pick(spawns), tileref.GridIndices.ToEntityCoordinates(xform.GridUid.Value, _map));
+            Spawn(_random.Pick(spawns), new EntityCoordinates(xform.GridUid.Value, tileref.GridIndices));
             if (amountCounter >= amount)
                 return;
         }
