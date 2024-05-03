@@ -44,10 +44,10 @@ public partial class ShipEventFactionSystem
         if (!TryComp<ShipStealthComponent>(uid, out var stealth))
             return false;
 
+        //multiplying by thousand since component fields are in seconds
         int duration = (durationOverride ?? stealth.StealthDuration) * 1000;
         int cooldown = (cdOverride ?? stealth.StealthCooldown) * 1000;
 
-        //multiplying by thousand since component fields are in seconds
         _iffSys.AddIFFFlag(shuttle, IFFFlags.Hide);
         Timer.Spawn(duration, () => { _iffSys.RemoveIFFFlag(shuttle, IFFFlags.Hide); });
 
@@ -55,7 +55,8 @@ public partial class ShipEventFactionSystem
         Timer.Spawn(duration + cooldown, () =>
         {
             _onCooldown.Remove(shuttle);
-            RaiseNetworkEvent(new ShipEventStealthStatusMessage(true, EntityManager.GetNetEntity(uid)));
+            if (EntityManager.EntityExists(uid))
+                RaiseNetworkEvent(new ShipEventStealthStatusMessage(true, EntityManager.GetNetEntity(uid)));
         });
 
         return true;
