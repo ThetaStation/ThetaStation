@@ -27,7 +27,7 @@ public sealed partial class CircularShieldConsoleWindow : DefaultWindow
         }
 
         ShieldWidthSlider.OnValueChanged += width => OnShieldParametersChanged?.Invoke(null, Angle.FromDegrees(width.Value), null);
-        ShieldRadiusSlider.OnValueChanged += radius => OnShieldParametersChanged?.Invoke(null, null, (int)radius.Value);
+        ShieldRadiusSlider.OnValueChanged += radius => OnShieldParametersChanged?.Invoke(null, null, (int) radius.Value);
     }
 
     public void SetMatrix(EntityCoordinates? coordinates, Angle? angle)
@@ -46,8 +46,8 @@ public sealed partial class CircularShieldConsoleWindow : DefaultWindow
         var state = shieldState.Shield;
 
         ShieldPowerStatusLabel.SetMarkup(Loc.GetString(state.Powered ? "shipevent-shieldconsole-powered" : "shipevent-shieldconsole-nopower"));
-        ShieldWidthSlider.SetValueWithoutEvent((float)state.Width.Degrees);
-        ShieldWidthSlider.MaxValue = (float)state.MaxWidth; //todo: send min/max values only once to save state bytes
+        ShieldWidthSlider.SetValueWithoutEvent((float) state.Width.Degrees);
+        ShieldWidthSlider.MaxValue = (float) state.MaxWidth; //todo: send min/max values only once to save state bytes
         ShieldRadiusSlider.SetValueWithoutEvent(state.Radius);
         ShieldRadiusSlider.MaxValue = state.MaxRadius;
     }

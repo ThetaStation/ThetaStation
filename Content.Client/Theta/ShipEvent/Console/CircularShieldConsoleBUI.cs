@@ -32,7 +32,7 @@ public sealed class CircularShieldConsoleBoundUserInterface : BoundUserInterface
 
     private void UpdateShieldParameters(Angle? angle, Angle? width, int? radius)
     {
-        if(_nextUpdate > _gameTiming.RealTime)
+        if (_nextUpdate > _gameTiming.RealTime)
             return;
         _nextUpdate = _gameTiming.RealTime + _updateCd;
 

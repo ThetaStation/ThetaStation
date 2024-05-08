@@ -3,48 +3,44 @@ using Content.Shared.Theta.ShipEvent.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Shared.Enums;
-using Robust.Shared.Physics;
-using Robust.Shared.Physics.Collision.Shapes;
 using Robust.Shared.Physics.Systems;
+using Content.Shared.Theta.ShipEvent.CircularShield;
 
 namespace Content.Client.Theta.ShipEvent.Systems;
 
 public sealed class CircularShieldOverlay : Overlay
 {
-    private IEntityManager entMan = default!;
-    private TransformSystem formSys = default!;
-    private FixtureSystem fixSys = default!;
+    private IEntityManager _entMan = default!;
+    private TransformSystem _formSys = default!;
+    private SharedCircularShieldSystem _shieldSys = default!;
 
     private const string ShieldFixtureId = "ShieldFixture";
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
 
-    public CircularShieldOverlay(IEntityManager _entMan)
+    public CircularShieldOverlay(IEntityManager entMan)
     {
-        entMan = _entMan;
-        formSys = entMan.System<TransformSystem>();
-        fixSys = entMan.System<FixtureSystem>();
+        _entMan = entMan;
+        _formSys = _entMan.System<TransformSystem>();
+        _shieldSys = _entMan.System<SharedCircularShieldSystem>();
     }
 
     protected override void Draw(in OverlayDrawArgs args)
     {
-        foreach ((var form, var shield, var fix) in
-                 entMan.EntityQuery<TransformComponent, CircularShieldComponent, FixturesComponent>())
+        foreach ((var form, var shield) in _entMan.EntityQuery<TransformComponent, CircularShieldComponent>())
         {
             if (!shield.CanWork || form.MapID != args.MapId)
                 continue;
 
-            PolygonShape? shape = (PolygonShape?)fix.Fixtures.GetValueOrDefault(ShieldFixtureId)?.Shape ?? null;
-            if (shape == null)
-                continue;
-
-            Vector2[] verts = new Vector2[shape.VertexCount + 1];
-            for (var i = 0; i < shape.VertexCount; i++)
+            Vector2[] verts = _shieldSys.GenerateConeVertices(
+                shield.Radius,
+                shield.Angle,
+                shield.Width,
+                (int) (shield.Width / Math.Tau * 20));
+            for (int i = 0; i < verts.Length; i++)
             {
-                verts[i] = formSys.GetWorldMatrix(form).Transform(shape.Vertices[i]);
+                verts[i] = _formSys.GetWorldMatrix(form).Transform(verts[i]);
             }
-
-            verts[shape.VertexCount] = verts[0];
 
             //todo: add fancy shader here
             args.DrawingHandle.DrawPrimitives(DrawPrimitiveTopology.TriangleFan, verts, shield.Color.WithAlpha(0.01f));
