@@ -16,7 +16,7 @@ public sealed class BoundsOverlay : Overlay
     [Dependency] private readonly IResourceCache _resCache = default!;
     [Dependency] private readonly IPlayerManager _playerMan = default!;
     private readonly TransformSystem _formSys;
-    
+
     private ShaderInstance _boundsShader;
 
     public override bool RequestScreenTexture => true;

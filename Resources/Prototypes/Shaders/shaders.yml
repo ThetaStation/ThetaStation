@@ -94,6 +94,11 @@
   path: "/Textures/Theta/ShipEvent/Shaders/wormhole.swsl"
 
 - type: shader
+  id: ShieldOverlay
+  kind: source
+  path: "/Textures/Theta/ShipEvent/Shaders/circular_waves.swsl"
+
+- type: shader
   id: PaperStamp
   kind: source
   path: "/Textures/Shaders/paperstamp.swsl"

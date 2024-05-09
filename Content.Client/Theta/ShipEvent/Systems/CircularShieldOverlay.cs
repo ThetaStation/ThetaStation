@@ -3,8 +3,9 @@ using Content.Shared.Theta.ShipEvent.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Shared.Enums;
-using Robust.Shared.Physics.Systems;
 using Content.Shared.Theta.ShipEvent.CircularShield;
+using Robust.Shared.Prototypes;
+using Vector3 = Robust.Shared.Maths.Vector3;
 
 namespace Content.Client.Theta.ShipEvent.Systems;
 
@@ -13,21 +14,28 @@ public sealed class CircularShieldOverlay : Overlay
     private IEntityManager _entMan = default!;
     private TransformSystem _formSys = default!;
     private SharedCircularShieldSystem _shieldSys = default!;
-
-    private const string ShieldFixtureId = "ShieldFixture";
+    private IEyeManager _eyeMan = default!;
+    private ShaderInstance _shader;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
 
-    public CircularShieldOverlay(IEntityManager entMan)
+    public CircularShieldOverlay()
     {
-        _entMan = entMan;
+        _entMan = IoCManager.Resolve<IEntityManager>();
         _formSys = _entMan.System<TransformSystem>();
         _shieldSys = _entMan.System<SharedCircularShieldSystem>();
+        _eyeMan = IoCManager.Resolve<IEyeManager>();
+        _shader = IoCManager.Resolve<IPrototypeManager>().Index<ShaderPrototype>("ShieldOverlay").InstanceUnique();
+
+        _shader.SetParameter("SPEED", 5.0f);
+        _shader.SetParameter("BRIGHTNESS", 0.5f);
+        _shader.SetParameter("FREQUENCY", 0.5f);
     }
 
     protected override void Draw(in OverlayDrawArgs args)
     {
-        foreach ((var form, var shield) in _entMan.EntityQuery<TransformComponent, CircularShieldComponent>())
+        var query = _entMan.EntityQuery<TransformComponent, CircularShieldComponent>();
+        foreach ((var form, var shield) in query)
         {
             if (!shield.CanWork || form.MapID != args.MapId)
                 continue;
@@ -42,9 +50,14 @@ public sealed class CircularShieldOverlay : Overlay
                 verts[i] = _formSys.GetWorldMatrix(form).Transform(verts[i]);
             }
 
-            //todo: add fancy shader here
-            args.DrawingHandle.DrawPrimitives(DrawPrimitiveTopology.TriangleFan, verts, shield.Color.WithAlpha(0.01f));
-            args.DrawingHandle.DrawPrimitives(DrawPrimitiveTopology.LineStrip, verts, shield.Color.WithAlpha(0.1f));
+            Vector2 shieldPos = args.Viewport.WorldToLocal(_formSys.GetWorldPosition(form));
+            //shieldPos /= args.ViewportBounds.Size;
+
+            _shader.SetParameter("BASE_COLOR", new Vector3(shield.Color.R, shield.Color.G, shield.Color.B));
+            _shader.SetParameter("CENTER", shieldPos);
+            args.WorldHandle.UseShader(_shader);
+            args.WorldHandle.DrawPrimitives(DrawPrimitiveTopology.TriangleFan, verts, Color.White);
+            args.WorldHandle.UseShader(null);
         }
     }
 }
