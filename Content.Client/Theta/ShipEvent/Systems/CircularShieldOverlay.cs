@@ -27,7 +27,7 @@ public sealed class CircularShieldOverlay : Overlay
         _eyeMan = IoCManager.Resolve<IEyeManager>();
         _shader = IoCManager.Resolve<IPrototypeManager>().Index<ShaderPrototype>("ShieldOverlay").InstanceUnique();
 
-        _shader.SetParameter("SPEED", 5.0f);
+        _shader.SetParameter("SPEED", 10.0f);
         _shader.SetParameter("BRIGHTNESS", 0.5f);
         _shader.SetParameter("FREQUENCY", 0.5f);
     }
@@ -51,7 +51,7 @@ public sealed class CircularShieldOverlay : Overlay
             }
 
             Vector2 shieldPos = args.Viewport.WorldToLocal(_formSys.GetWorldPosition(form));
-            shieldPos.Y = -shieldPos.Y + args.ViewportBounds.Size.Y;
+            shieldPos.Y = args.ViewportBounds.Size.Y - shieldPos.Y;
 
             _shader.SetParameter("BASE_COLOR", new Vector3(shield.Color.R, shield.Color.G, shield.Color.B));
             _shader.SetParameter("CENTER", shieldPos);

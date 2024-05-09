@@ -56,7 +56,7 @@ public partial class CircularShieldEffect
     public virtual void OnShieldEnter(EntityUid uid, CircularShieldComponent shield) { }
 }
 
-[RegisterComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class CircularShieldConsoleComponent : Component
 {
     [AutoNetworkedField, ViewVariables(VVAccess.ReadWrite)]
