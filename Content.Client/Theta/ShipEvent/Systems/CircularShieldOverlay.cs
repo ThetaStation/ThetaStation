@@ -51,7 +51,7 @@ public sealed class CircularShieldOverlay : Overlay
             }
 
             Vector2 shieldPos = args.Viewport.WorldToLocal(_formSys.GetWorldPosition(form));
-            //shieldPos /= args.ViewportBounds.Size;
+            shieldPos.Y = -shieldPos.Y + args.ViewportBounds.Size.Y;
 
             _shader.SetParameter("BASE_COLOR", new Vector3(shield.Color.R, shield.Color.G, shield.Color.B));
             _shader.SetParameter("CENTER", shieldPos);
