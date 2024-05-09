@@ -22,4 +22,10 @@ public sealed partial class CannonComponent : Component
 
     [DataField("rotatable")]
     public bool Rotatable = true;
+
+    /// <summary>
+    /// Recoil impulse, applied to parent grid after each shot
+    /// </summary>
+    [DataField("recoil")]
+    public float Recoil = 0;
 }

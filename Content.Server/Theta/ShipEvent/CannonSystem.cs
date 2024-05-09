@@ -1,4 +1,3 @@
-using Content.Server.Theta.ShipEvent.Components;
 using Content.Server.Theta.ShipEvent.Console;
 using Content.Server.Theta.ShipEvent.Systems;
 using Content.Shared.DeviceLinking;
@@ -9,6 +8,8 @@ using Content.Shared.Theta.ShipEvent;
 using Content.Shared.Theta.ShipEvent.Components;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
+using Content.Shared.Weapons.Ranged.Systems;
+using Robust.Server.GameObjects;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Prototypes;
 using System.Numerics;
@@ -17,6 +18,8 @@ namespace Content.Server.Theta.ShipEvent;
 
 public sealed class CannonSystem : SharedCannonSystem
 {
+    [Dependency] private readonly TransformSystem _formSys = default!;
+    [Dependency] private readonly PhysicsSystem _physSys = default!;
     [Dependency] private readonly RotateToFaceSystem _rotateToFaceSystem = default!;
     [Dependency] private readonly IPrototypeManager _protMan = default!;
 
@@ -81,12 +84,21 @@ public sealed class CannonSystem : SharedCannonSystem
         }
     }
 
-    private void AfterShot(EntityUid entity, CannonComponent cannon, AmmoShotEvent args)
+    private void AfterShot(EntityUid uid, CannonComponent cannon, AmmoShotEvent args)
     {
+        if (cannon.Recoil > 0)
+        {
+            var cannonForm = Transform(uid);
+            _physSys.ApplyLinearImpulse(
+                cannonForm.GridUid!.Value,
+                _formSys.GetWorldRotation(cannonForm).ToWorldVec() * cannon.Recoil * args.FiredProjectiles.Count * -1
+                );
+        }
+
         foreach (EntityUid projectile in args.FiredProjectiles)
         {
             var marker = EntityManager.EnsureComponent<ShipEventFactionMarkerComponent>(projectile);
-            marker.Team = EntityManager.EnsureComponent<ShipEventFactionMarkerComponent>(entity).Team;
+            marker.Team = EntityManager.EnsureComponent<ShipEventFactionMarkerComponent>(uid).Team;
         }
 
         if (cannon.BoundLoaderUid != null)

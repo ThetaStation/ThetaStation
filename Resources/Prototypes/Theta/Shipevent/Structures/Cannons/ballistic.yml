@@ -103,6 +103,7 @@
         - "CartridgeFlak"
         - "CartridgeFlakHE"
         - "CartridgeFlakEMP"
+      recoil: 10.0
     - type: Sprite
       layers:
         - state: syndie_lethal
@@ -148,6 +149,7 @@
         - "CartridgeFlakHE"
         - "CartridgeFlakEMP"
       rotatable: false
+      recoil: 10.0
     - type: Sprite
       layers:
         - state: syndie_lethal
@@ -191,6 +193,7 @@
     - type: Cannon
       ammoPrototypes:
         - "CartridgeSPG"
+      recoil: 50.0
     - type: Sprite
       layers:
         - state: syndie_lethal
