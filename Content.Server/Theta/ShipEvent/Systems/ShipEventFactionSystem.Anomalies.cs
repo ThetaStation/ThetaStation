@@ -59,9 +59,7 @@ public sealed partial class ShipEventFactionSystem
 
             if (IsPositionOutOfBounds(worldPos))
             {
-                var body = Comp<PhysicsComponent>(uid);
-                Vector2 normalDelta = (GetPlayAreaBounds().Center - worldPos).Normalized();
-                _physSys.ApplyLinearImpulse(uid, normalDelta * 1000, body: body);
+                _formSys.SetWorldPosition(form, GetPlayAreaBounds().Center);
             }
 
             foreach (EntityUid trackedUid in anomaly.TrackedUids)
