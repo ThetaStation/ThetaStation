@@ -29,20 +29,17 @@ public sealed class RadarShieldStatus : RadarModule
             if (!shield.Powered)
                 continue;
 
-            var position = _formSys.GetWorldPosition(EntManager.GetComponent<TransformComponent>(uid));
+            var position = _formSys.GetWorldPosition(uid);
             var color = shield.Color;
 
-            var cone = _shieldSys.GenerateConeVertices(shield.Radius, shield.Angle, shield.Width, 5);
-            var verts = new Vector2[cone.Length + 1];
-            for (var i = 0; i < cone.Length; i++)
+            var verts = _shieldSys.GenerateConeVertices(shield.Radius, shield.Angle, shield.Width, (int) (shield.Width / Math.Tau * 20));
+            for (var i = 0; i < verts.Length; i++)
             {
-                verts[i] = cone[i];
                 verts[i] = parameters.DrawMatrix.Transform(position + rot.RotateVec(verts[i]));
                 verts[i].Y = -verts[i].Y;
                 verts[i] = ScalePosition(verts[i]);
             }
 
-            verts[cone.Length] = verts[0];
             handle.DrawPrimitives(DrawPrimitiveTopology.TriangleFan, verts, color.WithAlpha(0.1f));
             handle.DrawPrimitives(DrawPrimitiveTopology.LineStrip, verts, color);
         }

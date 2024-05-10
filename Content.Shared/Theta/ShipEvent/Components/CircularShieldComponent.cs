@@ -39,25 +39,24 @@ public sealed partial class CircularShieldComponent : Component
     [AutoNetworkedField, DataField("radius"), ViewVariables(VVAccess.ReadWrite)]
     public int Radius;
 
-    [DataField("effects", serverOnly:true)]
+    [DataField("effects", serverOnly: true)]
     public List<CircularShieldEffect> Effects = new();
 
     public bool CanWork => Enabled && Powered;
 
-    public int DesiredDraw => Enabled ? (int)(Radius * Radius * Width * 0.5 * ConsumptionPerSquareMeter) : 0;
+    public int DesiredDraw => Enabled ? (int) (Radius * Radius * Width * 0.5 * ConsumptionPerSquareMeter) : 0;
 }
 
 [ImplicitDataDefinitionForInheritors]
 public abstract partial class CircularShieldEffect
 {
-    public abstract void OnShieldInit(EntityUid uid, CircularShieldComponent shield);
-
-    public abstract void OnShieldEnter(EntityUid uid, CircularShieldComponent shield);
-
-    public abstract void OnShieldExit(EntityUid uid, CircularShieldComponent shield);
+    public virtual void OnShieldInit(EntityUid uid, CircularShieldComponent shield) { }
+    public virtual void OnShieldShutdown(EntityUid uid, CircularShieldComponent shield) { }
+    public virtual void OnShieldUpdate(EntityUid uid, CircularShieldComponent shield, float time) { }
+    public virtual void OnShieldEnter(EntityUid uid, CircularShieldComponent shield) { }
 }
 
-[RegisterComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class CircularShieldConsoleComponent : Component
 {
     [AutoNetworkedField, ViewVariables(VVAccess.ReadWrite)]

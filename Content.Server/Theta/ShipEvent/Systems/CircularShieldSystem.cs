@@ -7,6 +7,7 @@ using Content.Shared.DeviceLinking.Events;
 using Content.Shared.Physics;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
+using Content.Shared.Theta;
 using Content.Shared.Theta.ShipEvent.CircularShield;
 using Content.Shared.Theta.ShipEvent.Components;
 using Content.Shared.Theta.ShipEvent.UI;
@@ -38,10 +39,23 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
         SubscribeLocalEvent<CircularShieldConsoleComponent, AfterActivatableUIOpenEvent>(AfterUIOpen);
 
         SubscribeLocalEvent<CircularShieldComponent, ComponentInit>(OnShieldInit);
+        SubscribeLocalEvent<CircularShieldComponent, ComponentShutdown>(OnShieldRemoved);
         SubscribeLocalEvent<CircularShieldComponent, PowerChangedEvent>(OnShieldPowerChanged);
-        SubscribeLocalEvent<CircularShieldComponent, StartCollideEvent>(OnShieldFixtureEnter);
-        SubscribeLocalEvent<CircularShieldComponent, EndCollideEvent>(OnShieldFixtureExit);
+        SubscribeLocalEvent<CircularShieldComponent, StartCollideEvent>(OnShieldEnter);
         SubscribeLocalEvent<CircularShieldComponent, NewLinkEvent>(OnShieldLink);
+    }
+
+    public override void Update(float time)
+    {
+        base.Update(time);
+        var query = EntityManager.EntityQueryEnumerator<CircularShieldComponent>();
+        while (query.MoveNext(out EntityUid uid, out CircularShieldComponent? shield))
+        {
+            foreach (CircularShieldEffect effect in shield.Effects)
+            {
+                effect.OnShieldUpdate(uid, shield, time);
+            }
+        }
     }
 
     private void AfterUIOpen(EntityUid uid, CircularShieldConsoleComponent component, AfterActivatableUIOpenEvent args)
@@ -88,16 +102,20 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
         shield.Enabled = !shield.Enabled;
         UpdateConsoleState(uid, console);
 
-        if (shield.Enabled)
+        if (!shield.Enabled)
         {
-            UpdateShieldFixture(console.BoundShield.Value, shield);
+            foreach (CircularShieldEffect effect in shield.Effects)
+            {
+                effect.OnShieldShutdown(uid, shield);
+            }
         }
-        Dirty(uid, shield);
+
+        Dirty(console.BoundShield.Value, shield);
     }
 
     private void OnShieldChangeParams(EntityUid uid, CircularShieldConsoleComponent console, CircularShieldChangeParametersMessage args)
     {
-        if(console.BoundShield == null)
+        if (console.BoundShield == null)
             return;
 
         if (!TryComp(console.BoundShield, out CircularShieldComponent? shield))
@@ -115,13 +133,12 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
         {
             receiver.Load = shield.DesiredDraw;
         }
-        else
+        else if (shield.DesiredDraw > 0)
         {
-            if (shield.DesiredDraw > 0)
-                shield.Powered = false;
+            shield.Powered = false;
         }
 
-        Dirty(uid, shield);
+        Dirty(console.BoundShield.Value, shield);
     }
 
     private void OnShieldInit(EntityUid uid, CircularShieldComponent shield, ComponentInit args)
@@ -147,6 +164,14 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
         }
     }
 
+    private void OnShieldRemoved(EntityUid uid, CircularShieldComponent shield, ComponentShutdown args)
+    {
+        foreach (CircularShieldEffect effect in shield.Effects)
+        {
+            effect.OnShieldShutdown(uid, shield);
+        }
+    }
+
     private void OnShieldPowerChanged(EntityUid uid, CircularShieldComponent shield, ref PowerChangedEvent args)
     {
         shield.Powered = args.Powered;
@@ -154,28 +179,29 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
         if (shield.BoundConsole == null)
             return;
         UpdateConsoleState(shield.BoundConsole.Value);
-        Dirty(shield);
+
+        if (!shield.Powered)
+        {
+            foreach (CircularShieldEffect effect in shield.Effects)
+            {
+                effect.OnShieldShutdown(uid, shield);
+            }
+        }
+
+        Dirty(uid, shield);
     }
 
-    private void OnShieldFixtureEnter(EntityUid uid, CircularShieldComponent shield, ref StartCollideEvent args)
+    private void OnShieldEnter(EntityUid uid, CircularShieldComponent shield, ref StartCollideEvent args)
     {
         if (!shield.CanWork || args.OurFixtureId != ShieldFixtureId)
+            return;
+
+        if (!EntityInShield(uid, shield, args.OtherEntity, _formSys))
             return;
 
         foreach (CircularShieldEffect effect in shield.Effects)
         {
             effect.OnShieldEnter(args.OtherEntity, shield);
-        }
-    }
-
-    private void OnShieldFixtureExit(EntityUid uid, CircularShieldComponent shield, ref EndCollideEvent args)
-    {
-        if (!shield.CanWork || args.OurFixtureId != ShieldFixtureId)
-            return;
-
-        foreach (CircularShieldEffect effect in shield.Effects)
-        {
-            effect.OnShieldExit(args.OtherEntity, shield);
         }
     }
 
@@ -187,30 +213,24 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
         shield.BoundConsole = args.Source;
         console.BoundShield = uid;
 
-        Dirty(shield);
-        Dirty(console);
+        Dirty(uid, shield);
+        Dirty(shield.BoundConsole.Value, console);
     }
 
-    private void UpdateShieldFixture(EntityUid uid, CircularShieldComponent shield, int extraArcPoints = 0)
+    private void UpdateShieldFixture(EntityUid uid, CircularShieldComponent shield)
     {
-        if (shield.Radius < 1)
-            shield.Radius = 1;
-        if (shield.Width < 0.16) //10 deg
-            shield.Width = 0.16;
-
-        Vector2[] cone = GenerateConeVertices(shield.Radius, shield.Angle, shield.Width, 5);
+        shield.Radius = Math.Max(shield.Radius, 1);
+        shield.Width = Math.Max(shield.Width, Angle.FromDegrees(10));
 
         Fixture? shieldFix = _fixSys.GetFixtureOrNull(uid, ShieldFixtureId);
         if (shieldFix == null)
         {
-            PolygonShape shape = new PolygonShape();
-            shape.Set(cone, cone.Length);
-
-            _fixSys.TryCreateFixture(uid, shape, ShieldFixtureId, hard: false, collisionLayer: (int)CollisionGroup.BulletImpassable);
+            PhysShapeCircle circle = new(shield.Radius);
+            _fixSys.TryCreateFixture(uid, circle, ShieldFixtureId, hard: false, collisionLayer: (int) CollisionGroup.BulletImpassable);
         }
         else
         {
-            _physSys.SetVertices(uid, ShieldFixtureId, shieldFix, (PolygonShape)shieldFix.Shape, cone);
+            _physSys.SetRadius(uid, ShieldFixtureId, shieldFix, shieldFix.Shape, shield.Radius);
         }
     }
 }

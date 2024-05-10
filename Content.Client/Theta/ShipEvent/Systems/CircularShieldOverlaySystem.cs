@@ -4,17 +4,17 @@ namespace Content.Client.Theta.ShipEvent.Systems;
 
 public sealed class CircularShieldOverlaySystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager overlayMan = default!;
-    
+    [Dependency] private readonly IOverlayManager _overlayMan = default!;
+
     public override void Initialize()
     {
         base.Initialize();
-        overlayMan.AddOverlay(new CircularShieldOverlay(EntityManager));
+        _overlayMan.AddOverlay(new CircularShieldOverlay());
     }
 
     public override void Shutdown()
     {
         base.Shutdown();
-        overlayMan.RemoveOverlay<CircularShieldOverlay>();
+        _overlayMan.RemoveOverlay<CircularShieldOverlay>();
     }
 }

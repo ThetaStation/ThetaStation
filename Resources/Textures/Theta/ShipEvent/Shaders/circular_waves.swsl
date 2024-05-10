@@ -1,0 +1,15 @@
+uniform highp float SPEED;
+uniform highp float BRIGHTNESS;
+uniform highp float FREQUENCY;
+uniform highp vec2 CENTER;
+uniform highp vec3 BASE_COLOR;
+
+void fragment()
+{
+    //waves
+    highp vec2 delta = FRAGCOORD.xy - CENTER;
+    highp float i = sin(length(delta * FREQUENCY) - SPEED * TIME) * BRIGHTNESS;
+
+    COLOR.xyz = BASE_COLOR;
+    COLOR.w = i;
+}

@@ -2,6 +2,7 @@ uniform sampler2D SCREEN_TEXTURE;
 uniform highp float BRIGHTNESS;
 uniform highp vec3 BASE_COLOR;
 
+//https://www.shadertoy.com/view/4djSRW
 highp float rand(highp vec2 n) { 
     return fract(sin(dot(n, vec2(12.9898, 4.1414))) * 43758.5453);
 }
@@ -17,6 +18,7 @@ highp float noise(highp vec2 p){
     return res*res;
 }
 
+//https://www.shadertoy.com/view/tdG3Rd
 highp float fbm(highp vec2 uv, highp mat2 m){
     highp float n = 0.0;
     
@@ -32,7 +34,7 @@ void fragment() {
     mat2 scale_mat = mat2(2.0, 1.2, -1.2, 2.0);
     int fbm_iters = 2;
 
-    highp float f = fbm(UV, scale_mat); //Fractional brownian motion warp overlay, based on https://www.shadertoy.com/view/tdG3Rd
+    highp float f = fbm(UV, scale_mat);
     for(int c = 0; c < fbm_iters; c++){f = fbm(UV + f, scale_mat);}
     COLOR.xyz = mix(texture(SCREEN_TEXTURE, UV).xyz, BASE_COLOR, f*BRIGHTNESS);
 }
