@@ -48,7 +48,7 @@ public sealed partial class CircularShieldComponent : Component
 }
 
 [ImplicitDataDefinitionForInheritors]
-public partial class CircularShieldEffect
+public abstract partial class CircularShieldEffect
 {
     public virtual void OnShieldInit(EntityUid uid, CircularShieldComponent shield) { }
     public virtual void OnShieldShutdown(EntityUid uid, CircularShieldComponent shield) { }
