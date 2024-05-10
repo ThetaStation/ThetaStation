@@ -1,5 +1,4 @@
 using System.Linq;
-using System.Numerics;
 using Content.Server.Power.Components;
 using Content.Server.UserInterface;
 using Content.Shared.DeviceLinking;
@@ -7,7 +6,6 @@ using Content.Shared.DeviceLinking.Events;
 using Content.Shared.Physics;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
-using Content.Shared.Theta;
 using Content.Shared.Theta.ShipEvent.CircularShield;
 using Content.Shared.Theta.ShipEvent.Components;
 using Content.Shared.Theta.ShipEvent.UI;
