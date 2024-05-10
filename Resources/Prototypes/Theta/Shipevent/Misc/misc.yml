@@ -1,7 +1,0 @@
-﻿- type: rules
-  id: ShipNearby
-  rules:
-  - !type:NearbyComponentsRule
-    range: 150
-    components:
-    - type: Shuttle
