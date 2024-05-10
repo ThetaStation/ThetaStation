@@ -1,11 +1,13 @@
-using System.Linq;
 using System.Numerics;
+using Content.Shared.Physics;
 using Content.Server.Theta.ShipEvent.Components;
-using Content.Shared.Theta.ShipEvent.Components;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Physics.Collision.Shapes;
 using Robust.Shared.Physics.Components;
+using Robust.Shared.Physics.Dynamics;
+using Robust.Shared.Physics.Events;
+using Robust.Shared.Physics.Systems;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Random;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
@@ -13,9 +15,40 @@ namespace Content.Server.Theta.ShipEvent.Systems;
 //also consider using same system for circular shields
 public sealed partial class ShipEventFactionSystem
 {
+    [Dependency] private FixtureSystem _fixSys = default!;
+    private const string AnomalyFixtureId = "ProxAnomalyFixture";
+
     public float AnomalyUpdateInterval;
     public float AnomalySpawnInterval;
     public List<EntityPrototype> AnomalyPrototypes = new();
+
+    private void InitializeAnomalies()
+    {
+        SubscribeLocalEvent<ShipEventProximityAnomalyComponent, ComponentInit>(OnInit);
+        SubscribeLocalEvent<ShipEventProximityAnomalyComponent, StartCollideEvent>(OnCollision);
+    }
+
+    private void OnInit(EntityUid uid, ShipEventProximityAnomalyComponent anomaly, ComponentInit args)
+    {
+        Fixture? fix = _fixSys.GetFixtureOrNull(uid, AnomalyFixtureId);
+        if (fix == null)
+        {
+            PhysShapeCircle circle = new(anomaly.Range);
+            _fixSys.TryCreateFixture(uid, circle, AnomalyFixtureId, hard: false, collisionLayer: (int) CollisionGroup.Impassable);
+        }
+        else
+        {
+            _physSys.SetRadius(uid, AnomalyFixtureId, fix, fix.Shape, anomaly.Range);
+        }
+    }
+
+    private void OnCollision(EntityUid uid, ShipEventProximityAnomalyComponent anomaly, StartCollideEvent args)
+    {
+        var gridUid = Transform(args.OtherEntity).GridUid;
+        if (gridUid == null)
+            return;
+        anomaly.TrackedUids.Add(gridUid.Value);
+    }
 
     private void AnomalyUpdate()
     {
@@ -26,34 +59,21 @@ public sealed partial class ShipEventFactionSystem
 
             if (IsPositionOutOfBounds(worldPos))
             {
-                var body = Comp<PhysicsComponent>(uid);
-                Vector2 normalDelta = (GetPlayAreaBounds().Center - worldPos).Normalized();
-                _physSys.ResetDynamics(body);
-                _physSys.SetLinearVelocity(uid, normalDelta * 10, body: body);
-                _physSys.ApplyLinearImpulse(uid, normalDelta * 10, body: body);
+                _formSys.SetWorldPosition(form, GetPlayAreaBounds().Center);
             }
 
-            //todo
-            //single check against whole anomaly range is unreliable and often does not include player ships (idk why)
-            //so instead we do 4 checks. obviously it's also 4 times more expensive
-            Vector2 lb = worldPos + new Vector2(-anomaly.Range);
-            Vector2 rb = worldPos + new Vector2(anomaly.Range, -anomaly.Range);
-            Vector2 lt = worldPos + new Vector2(-anomaly.Range, anomaly.Range);
-            Vector2 rt = worldPos + new Vector2(anomaly.Range);
-
-            HashSet<MapGridComponent> intersections = new();
-            intersections.UnionWith(_mapMan.FindGridsIntersecting(TargetMap, Box2.FromTwoPoints(worldPos, lb)));
-            intersections.UnionWith(_mapMan.FindGridsIntersecting(TargetMap, Box2.FromTwoPoints(worldPos, rb)));
-            intersections.UnionWith(_mapMan.FindGridsIntersecting(TargetMap, Box2.FromTwoPoints(worldPos, lt)));
-            intersections.UnionWith(_mapMan.FindGridsIntersecting(TargetMap, Box2.FromTwoPoints(worldPos, rt)));
-
-            foreach (var grid in intersections)
+            foreach (EntityUid trackedUid in anomaly.TrackedUids)
             {
-                if (!TryComp<ShipEventFactionMarkerComponent>(grid.Owner, out var marker))
-                    return;
+                var trackedForm = Transform(trackedUid);
+                //ik ik, proper way to do this would be getting grid's AABB and checking whether it's edge is still inside anomaly
+                //but that's expensive and not very important
+                if ((_formSys.GetWorldPosition(trackedForm) - _formSys.GetWorldPosition(form)).Length() > anomaly.Range + 10)
+                {
+                    anomaly.TrackedUids.Remove(trackedUid);
+                    continue;
+                }
 
-                var gridForm = Transform(grid.Owner);
-                SpawnAtPosition(anomaly.ToSpawn, Transform(Pick(gridForm.ChildEntities)).Coordinates);
+                SpawnAtPosition(anomaly.ToSpawn, Transform(Pick(trackedForm.ChildEntities)).Coordinates);
             }
         }
     }

@@ -60,8 +60,8 @@
       pickupPrototype: ShipEventPickupPrototype
 
       #anomalies
-      anomalyUpdateInterval: -1 #currently they are barely working
-      anomalySpawnInterval: -1
+      anomalyUpdateInterval: 2
+      anomalySpawnInterval: 60
       anomalyPrototypes:
         - "ShipEventRadiationAnomaly"
         - "ShipEventIonAnomaly"
