@@ -8,6 +8,7 @@ using Robust.Shared.Physics.Dynamics;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Physics;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
@@ -30,7 +31,10 @@ public sealed partial class ShipEventFactionSystem
 
     private void OnInit(EntityUid uid, ShipEventProximityAnomalyComponent anomaly, ComponentInit args)
     {
+        if (!HasComp<FixturesComponent>(uid))
+            return;
         Fixture? fix = _fixSys.GetFixtureOrNull(uid, AnomalyFixtureId);
+
         if (fix == null)
         {
             PhysShapeCircle circle = new(anomaly.Range);
