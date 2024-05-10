@@ -33,8 +33,6 @@ public sealed class RadarGrids : RadarModule
 
     private float _updateEdgeTimer = 0;
 
-    private const string PlayerShipRulePrototype = "ShipNearby";
-
     public RadarGrids(ModularRadarControl parentRadar) : base(parentRadar)
     {
         _mapSystem = EntManager.System<MapSystem>();
@@ -295,9 +293,9 @@ public sealed class RadarGrids : RadarModule
     {
         if (EntManager.HasComponent<ShipEventFactionMarkerComponent>(gridUid))
             return 0;
-        if (!_ruleSystem.IsTrue(gridUid, _proto.Index<RulesPrototype>(PlayerShipRulePrototype)))
-            return 30;
-        return 0;
+        if ((_formSystem.GetWorldPosition(ParentUid) - _formSystem.GetWorldPosition(gridUid)).Length() < 50)
+            return 0;
+        return 30;
     }
 
     private sealed class GridInfo
