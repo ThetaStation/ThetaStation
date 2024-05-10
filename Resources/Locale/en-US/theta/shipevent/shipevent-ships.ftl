@@ -15,7 +15,7 @@ shipevent-arrowhead-desc =
 
 shipevent-boxship-name = Boxship
 shipevent-boxship-desc =
-    Five by five meters steel box, housing all the machinery you'd expect to see inside regular battleship. Great option for farming points and annoying everyone else.
+    Also known as "coffin".
 
 shipevent-skipjack-name = Skipjack
 shipevent-skipjack-desc = A reshaped space pirate support ship that was once stolen from a landfill in the Solar System.

@@ -98,6 +98,7 @@ entities:
           - 0
         chunkSize: 4
     - type: GasTileOverlay
+    - type: IFF
 - proto: APCShipEvent
   entities:
   - uid: 2
@@ -244,11 +245,9 @@ entities:
   - uid: 25
     components:
     - type: Transform
-      pos: -0.5,1.5
+      rot: 3.141592653589793 rad
+      pos: 2.5,-0.5
       parent: 1
-    - type: Thruster
-      baseThrust: 1000
-      thrust: 1000
 - proto: HoloFan
   entities:
   - uid: 26
@@ -316,94 +315,82 @@ entities:
   - uid: 33
     components:
     - type: Transform
-      pos: -0.5,2.5
+      rot: 3.141592653589793 rad
+      pos: -0.5,1.5
       parent: 1
   - uid: 34
     components:
     - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -0.5,0.5
-      parent: 1
-  - uid: 35
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 3.5,0.5
-      parent: 1
-  - uid: 36
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 3.5,2.5
+      pos: 3.5,1.5
       parent: 1
 - proto: ToolboxSyndicateFilled
   entities:
-  - uid: 37
+  - uid: 35
     components:
     - type: Transform
       pos: 0.5,0.5
       parent: 1
 - proto: WindowReinforcedDirectional
   entities:
-  - uid: 38
+  - uid: 36
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 0.5,1.5
       parent: 1
-  - uid: 39
+  - uid: 37
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 0.5,2.5
       parent: 1
-  - uid: 40
+  - uid: 38
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 0.5,2.5
       parent: 1
-  - uid: 41
+  - uid: 39
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 1.5,2.5
       parent: 1
-  - uid: 42
+  - uid: 40
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 2.5,2.5
       parent: 1
-  - uid: 43
+  - uid: 41
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 2.5,2.5
       parent: 1
-  - uid: 44
+  - uid: 42
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 2.5,1.5
       parent: 1
-  - uid: 45
+  - uid: 43
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 2.5,0.5
       parent: 1
-  - uid: 46
+  - uid: 44
     components:
     - type: Transform
       pos: 2.5,0.5
       parent: 1
-  - uid: 47
+  - uid: 45
     components:
     - type: Transform
       pos: 0.5,0.5
       parent: 1
-  - uid: 48
+  - uid: 46
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
