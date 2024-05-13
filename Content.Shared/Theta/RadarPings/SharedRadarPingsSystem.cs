@@ -19,9 +19,11 @@ public abstract class SharedRadarPingsSystem : EntitySystem
 
     protected abstract PingInformation GetPing(EntityUid sender, Vector2 coordinates);
 
-    protected void PlaySignalSound(Filter hearer, EntityUid from)
+    protected void PlaySignalSound(Filter hearer)
     {
-        _audioSystem.PlayEntity(PingSound, hearer, from, false);
+        if(hearer.Count == 0)
+            return;
+        _audioSystem.PlayGlobal(PingSound, hearer, false);
     }
 }
 

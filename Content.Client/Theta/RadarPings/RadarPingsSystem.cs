@@ -41,6 +41,9 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
             _canNetworkPing = false;
             Timer.Spawn(NetworkPingCd, () => _canNetworkPing = true);
         }
+
+        PlaySignalSound(Filter.Entities(sender.Value));
+        PlayPing(GetPing(pingOwner, coordinates));
     }
 
     private void PlayPing(PingInformation ping)

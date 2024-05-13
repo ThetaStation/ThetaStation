@@ -5,6 +5,7 @@ using Content.Server.Theta.ShipEvent.Systems;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Theta.RadarPings;
 using Content.Shared.Theta.ShipEvent.Components;
+using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 
@@ -30,7 +31,7 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
 
         var filter = GetPlayersFilter(ev);
         var evPingOwner = GetEntity(ev.PingOwner);
-        PlaySignalSound(filter, evPingOwner);
+        PlaySignalSound(filter);
 
         var ping = GetPing(evPingOwner, ev.Coordinates);
         RaiseNetworkEvent(new SendPingEvent(ping), filter);
@@ -81,6 +82,7 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
                     if (_mindSystem.TryGetSession(member.Owner, out var session))
                         list.Add(session);
                 }
+
                 filter.AddPlayers(list);
             }
         }
@@ -91,6 +93,11 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
             if (gridUid != null)
                 filter = Filter.BroadcastGrid(gridUid.Value);
         }
+
+        // remove sender because his event on clientside
+        if (_mindSystem.TryGetMind(senderUid, out _, out var ownerMind) &&
+            _mindSystem.TryGetSession(ownerMind, out var senderSession))
+            filter.RemovePlayer(senderSession);
 
         return filter;
     }
