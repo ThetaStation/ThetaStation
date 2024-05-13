@@ -21,13 +21,13 @@ public sealed class StructurePrototype : IPrototype
     public int MinDistance;
 
     /// <summary>
-    /// Generator which will generate base grid of this structure
+    /// Generator which will generate base grid(s) of this structure
     /// </summary>
     [DataField("generator", required: true)]
     public IMapGenGenerator Generator = default!;
 
     /// <summary>
-    /// Processors which will be applied to base grid of this structure
+    /// Processors which will be applied to base grid(s) of this structure
     /// </summary>
     [DataField("processors")]
     public IMapGenProcessor[] Processors = Array.Empty<IMapGenProcessor>();

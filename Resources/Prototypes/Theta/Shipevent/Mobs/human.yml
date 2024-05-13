@@ -3,7 +3,7 @@
   name: observer
   parent: MobObserver
   components:
-    - type: ShipEventFactionMarker
+    - type: ShipEventTeamMarker
     - type: UserInterface
       interfaces:
       - key: enum.TeamViewUiKey.Key
@@ -38,7 +38,7 @@
     - type: Loadout
       prototypes: [ShipEventStandard]
     - type: UsePlayerNameForEntityName
-    - type: ShipEventFactionMarker
+    - type: ShipEventTeamMarker
     - type: RadarHUD
     - type: UserInterface
       interfaces:

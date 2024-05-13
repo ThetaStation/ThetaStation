@@ -14,7 +14,7 @@ namespace Content.Server.Theta.ShipEvent.Systems;
 
 //todo: create one component for all kinds of anomalies, so it's behaviour depends on a list of effects instead of a specific comp
 //also consider using same system for circular shields
-public sealed partial class ShipEventFactionSystem
+public sealed partial class ShipEventTeamSystem
 {
     [Dependency] private FixtureSystem _fixSys = default!;
     private const string AnomalyFixtureId = "ProxAnomalyFixture";
@@ -66,8 +66,15 @@ public sealed partial class ShipEventFactionSystem
                 _formSys.SetWorldPosition(form, GetPlayAreaBounds().Center);
             }
 
+            List<EntityUid> toRemove = new();
             foreach (EntityUid trackedUid in anomaly.TrackedUids)
             {
+                if (!Exists(trackedUid))
+                {
+                    toRemove.Add(trackedUid);
+                    continue;
+                }
+
                 var trackedForm = Transform(trackedUid);
                 //ik ik, proper way to do this would be getting grid's AABB and checking whether it's edge is still inside anomaly
                 //but that's expensive and not very important
@@ -78,6 +85,11 @@ public sealed partial class ShipEventFactionSystem
                 }
 
                 SpawnAtPosition(anomaly.ToSpawn, Transform(Pick(trackedForm.ChildEntities)).Coordinates);
+            }
+
+            foreach (EntityUid ruid in toRemove)
+            {
+                anomaly.TrackedUids.Remove(ruid);
             }
         }
     }

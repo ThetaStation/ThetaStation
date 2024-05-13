@@ -21,7 +21,7 @@
       sprite: /Textures/Theta/ShipEvent/Objects/Flag.rsi
       state: flag
     - type: SEFCFlag
-    - type: ShipEventFactionMarker #to detach it from deleted ship
+    - type: ShipEventTeamMarker #to detach it from deleted ship
     - type: Physics
       bodyType: Dynamic
     - type: Fixtures

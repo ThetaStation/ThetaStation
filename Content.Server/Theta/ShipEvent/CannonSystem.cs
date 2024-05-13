@@ -97,8 +97,8 @@ public sealed class CannonSystem : SharedCannonSystem
 
         foreach (EntityUid projectile in args.FiredProjectiles)
         {
-            var marker = EntityManager.EnsureComponent<ShipEventFactionMarkerComponent>(projectile);
-            marker.Team = EntityManager.EnsureComponent<ShipEventFactionMarkerComponent>(uid).Team;
+            var marker = EntityManager.EnsureComponent<ShipEventTeamMarkerComponent>(projectile);
+            marker.Team = EntityManager.EnsureComponent<ShipEventTeamMarkerComponent>(uid).Team;
         }
 
         if (cannon.BoundLoaderUid != null)

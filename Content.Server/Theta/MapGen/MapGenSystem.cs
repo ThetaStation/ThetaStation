@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Numerics;
 using Content.Server.Theta.MapGen.Prototypes;
+using Microsoft.CodeAnalysis.FlowAnalysis.DataFlow;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -17,6 +18,7 @@ public sealed class MapGenSystem : EntitySystem
     //public fields are for the systems most commonly used by generators & processors,
     //to prevent wasting a bit of time calling IoC every time & for convenience
     [Dependency] public readonly IMapManager MapMan = default!;
+    [Dependency] public readonly MapSystem MapSys = default!;
     [Dependency] public readonly MapLoaderSystem MapLoader = default!;
     [Dependency] public readonly ITileDefinitionManager TileDefMan = default!;
     [Dependency] public readonly TransformSystem FormSys = default!;
@@ -70,27 +72,33 @@ public sealed class MapGenSystem : EntitySystem
                 continue;
             }
 
-            var grid = structProt.Generator.Generate(this, TargetMap);
-            var gridComp = EntMan.GetComponent<MapGridComponent>(grid);
+            var gridUids = structProt.Generator.Generate(this, TargetMap);
+            var aabb = ComputeTotalAABB(gridUids).Enlarged(structProt.MinDistance);
+            if (aabb.Width + aabb.Height > 200)
+                Log.Warning("MapGenSystem, SpawnStructures: Structure's AABB is suspiciously big");
 
-            var spawnPos = GenerateSpawnPosition((Box2i) gridComp.LocalAABB.Enlarged(structProt.MinDistance), distribution, 50);
+            var spawnPos = GenerateSpawnPosition((Box2i) aabb, distribution, 50);
             if (spawnPos == null)
             {
-                Log.Warning("MapGenSystem, SpawnStructures: Failed to find spawn position, deleting grid");
-                EntityManager.DeleteEntity(grid);
+                Log.Warning("MapGenSystem, SpawnStructures: Failed to find spawn position, deleting grids");
+                foreach (EntityUid gridUid in gridUids) { QueueDel(gridUid); }
                 continue;
             }
 
-            Vector2 pos = spawnPos.Value;
-            pos.X += structProt.MinDistance - gridComp.LocalAABB.Left;
-            pos.Y += structProt.MinDistance - gridComp.LocalAABB.Bottom;
+            //Vector2 pos = spawnPos.Value;
+            //pos.X += structProt.MinDistance - gridComp.LocalAABB.Left;
+            //pos.Y += structProt.MinDistance - gridComp.LocalAABB.Bottom;
 
-            FormSys.SetWorldPosition(grid, pos);
-            SpawnedGrids.Add(grid);
-            foreach (var proc in structProt.Processors)
+            foreach (EntityUid gridUid in gridUids)
             {
-                proc.Process(this, TargetMap, grid, false);
+                var form = Transform(gridUid);
+                FormSys.SetLocalPosition(gridUid, spawnPos.Value + form.LocalPosition, form);
+                foreach (var proc in structProt.Processors)
+                {
+                    proc.Process(this, TargetMap, gridUid, false);
+                }
             }
+            SpawnedGrids.AddRange(gridUids);
         }
 
         foreach (var proc in globalProcessors)
@@ -113,33 +121,29 @@ public sealed class MapGenSystem : EntitySystem
     /// <summary>
     /// Randomly places specified structure onto map. Does not optimise collision checking in any way
     /// </summary>
-    public EntityUid RandomPosSpawn(MapId targetMap, Vector2 startPos, int maxOffset, int tries,
+    public IEnumerable<EntityUid> RandomPosSpawn(MapId targetMap, Vector2 startPos, int maxOffset, int tries,
         StructurePrototype structure, List<IMapGenProcessor>? extraProcessors = null, bool forceIfFailed = false)
     {
         TargetMap = targetMap;
 
-        var grid = structure.Generator.Generate(this, TargetMap);
-        var gridComp = EntMan.GetComponent<MapGridComponent>(grid);
-        var gridForm = EntMan.GetComponent<TransformComponent>(grid);
+        var gridUids = structure.Generator.Generate(this, TargetMap);
+        var aabb = ComputeTotalAABB(gridUids);
         var bounds = new Box2(startPos.X,
             startPos.Y,
-            startPos.X + maxOffset - gridComp.LocalAABB.Width,
-            startPos.Y + maxOffset - gridComp.LocalAABB.Height);
-
-        var finalDistance = (int) Math.Ceiling(structure.MinDistance + Math.Max(gridComp.LocalAABB.Height, gridComp.LocalAABB.Width));
+            startPos.X + maxOffset - aabb.Width,
+            startPos.Y + maxOffset - aabb.Height);
+        var finalDistance = (int) Math.Ceiling(structure.MinDistance + Math.Max(aabb.Height, aabb.Width));
 
         Vector2i mapPos = Vector2i.Zero;
         var result = false;
         for (int n = 0; n < tries; n++)
         {
             mapPos = (Vector2i) Random.NextVector2Box(
-                bounds.Left + gridComp.LocalAABB.Width,
-                bounds.Bottom + gridComp.LocalAABB.Height,
-                bounds.Right - gridComp.LocalAABB.Width,
-                bounds.Top - gridComp.LocalAABB.Height
-                ).Rounded();
-            if (!MapMan.FindGridsIntersecting(targetMap,
-                    new Box2(mapPos - finalDistance, mapPos + finalDistance)).Any())
+                bounds.Left + aabb.Width,
+                bounds.Bottom + aabb.Height,
+                bounds.Right - aabb.Width,
+                bounds.Top - aabb.Height).Rounded();
+            if (!MapMan.FindGridsIntersecting(targetMap, new Box2(mapPos - finalDistance, mapPos + finalDistance)).Any())
             {
                 result = true;
                 break;
@@ -150,16 +154,23 @@ public sealed class MapGenSystem : EntitySystem
 
         if (result)
         {
-            Log.Info($"MapGenSystem, RandomPosSpawn: Spawned grid {grid.ToString()} successfully");
-            FormSys.SetWorldPosition(grid, mapPos);
+            Log.Info($"MapGenSystem, RandomPosSpawn: Spawned {gridUids.Count()} grid(s) successfully");
+            foreach (EntityUid gridUid in gridUids)
+            {
+                var form = Transform(gridUid);
+                FormSys.SetLocalPosition(gridUid, mapPos + form.LocalPosition, form);
+            }
         }
         else if (forceIfFailed)
         {
-            Log.Info($"MapGenSystem, RandomPosSpawn: Failed to find spawn position for grid {grid.ToString()}," +
+            Log.Info($"MapGenSystem, RandomPosSpawn: Failed to find spawn position for grid {gridUids.ToString()}," +
                         "but forceIfFailed is set to true; proceeding to force-spawn");
             mapPos = (Vector2i) Random.NextVector2Box(bounds.Left, bounds.Bottom, bounds.Right, bounds.Top).Rounded();
-
-            FormSys.SetWorldPosition(grid, mapPos);
+            foreach (EntityUid gridUid in gridUids)
+            {
+                var form = Transform(gridUid);
+                FormSys.SetLocalPosition(gridUid, mapPos + form.LocalPosition, form);
+            }
         }
 
         if (result || forceIfFailed)
@@ -168,16 +179,19 @@ public sealed class MapGenSystem : EntitySystem
             {
                 foreach (IMapGenProcessor extraProc in extraProcessors)
                 {
-                    extraProc.Process(this, targetMap, grid, false);
+                    foreach (EntityUid gridUid in gridUids)
+                    {
+                        extraProc.Process(this, targetMap, gridUid, false);
+                    }
                 }
             }
 
-            return grid;
+            return gridUids;
         }
 
-        Log.Error($"MapGenSystem, RandomPosSpawn: Failed to find spawn position, deleting grid {grid.ToString()}");
-        EntityManager.DeleteEntity(grid);
-        return EntityUid.Invalid;
+        Log.Error($"MapGenSystem, RandomPosSpawn: Failed to find spawn position, deleting grid {gridUids.ToString()}");
+        foreach (EntityUid gridUid in gridUids) { QueueDel(gridUid); }
+        return new List<EntityUid>();
     }
 
     /// <summary>
@@ -510,6 +524,23 @@ public sealed class MapGenSystem : EntitySystem
             XRanges = xRanges;
         }
     }
+
+    private Box2 ComputeTotalAABB(IEnumerable<EntityUid> gridUids)
+    {
+        Vector2 min = new Vector2(float.PositiveInfinity);
+        Vector2 max = new Vector2(float.NegativeInfinity);
+        foreach (EntityUid gridUid in gridUids)
+        {
+            MapGridComponent grid = Comp<MapGridComponent>(gridUid);
+            Box2 aabb = grid.LocalAABB.Translated(FormSys.GetWorldPosition(gridUid));
+            min.X = Math.Min(aabb.BottomLeft.X, min.X);
+            min.Y = Math.Min(aabb.BottomLeft.Y, min.Y);
+            max.X = Math.Max(aabb.TopRight.X, min.X);
+            max.Y = Math.Max(aabb.TopRight.Y, max.Y);
+        }
+
+        return new Box2(Vector2.Zero, max - min);
+    }
 }
 
 /// <summary>
@@ -526,7 +557,7 @@ public interface IMapGenDistribution
 [ImplicitDataDefinitionForInheritors]
 public partial interface IMapGenGenerator
 {
-    public EntityUid Generate(MapGenSystem sys, MapId targetMap);
+    public IEnumerable<EntityUid> Generate(MapGenSystem sys, MapId targetMap);
 }
 
 /// <summary>

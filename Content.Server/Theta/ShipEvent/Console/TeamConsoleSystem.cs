@@ -8,7 +8,7 @@ namespace Content.Server.Theta.ShipEvent.Console;
 
 public sealed class TeamConsoleSystem : EntitySystem
 {
-    [Dependency] private readonly ShipEventFactionSystem _shipSys = default!;
+    [Dependency] private readonly ShipEventTeamSystem _shipSys = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
 
     public override void Initialize()

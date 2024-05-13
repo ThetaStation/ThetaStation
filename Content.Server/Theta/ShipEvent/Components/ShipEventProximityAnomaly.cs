@@ -16,6 +16,6 @@ public sealed partial class ShipEventProximityAnomalyComponent : Component
     [DataField("toSpawn", required: true, customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
     public string ToSpawn;
 
-    [Access(new Type[] { typeof(ShipEventFactionSystem) })]
+    [Access(new Type[] { typeof(ShipEventTeamSystem) })]
     public HashSet<EntityUid> TrackedUids = new();
 }

@@ -4,7 +4,7 @@ using Robust.Shared.Map;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
-public sealed partial class ShipEventFactionSystem
+public sealed partial class ShipEventTeamSystem
 {
     public readonly List<MapCoordinates> PickupPositions = new();
     public readonly List<EntityUid> Pickups = new();

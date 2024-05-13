@@ -17,7 +17,7 @@ public sealed class ToggleRoundEndTimerCommand : IConsoleCommand
     public string Help => "";
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
-        ShipEventFactionSystem seSys = IoCManager.Resolve<IEntityManager>().System<ShipEventFactionSystem>();
+        ShipEventTeamSystem seSys = IoCManager.Resolve<IEntityManager>().System<ShipEventTeamSystem>();
         seSys.TimedRoundEnd = !seSys.TimedRoundEnd;
         shell.WriteLine("Round end timer is now " + (seSys.TimedRoundEnd ? "enabled" : "disabled"));
     }
@@ -39,7 +39,7 @@ public sealed class SetRoundEndTimerCommand : IConsoleCommand
 
         if (int.TryParse(args[0], out int newTime))
         {
-            ShipEventFactionSystem seSys = IoCManager.Resolve<IEntityManager>().System<ShipEventFactionSystem>();
+            ShipEventTeamSystem seSys = IoCManager.Resolve<IEntityManager>().System<ShipEventTeamSystem>();
             seSys.RoundendTimer = newTime;
             shell.WriteLine("Timer set successfully.");
         }
@@ -61,7 +61,7 @@ public sealed class ToggleTeamRegistrationCommand : IConsoleCommand
     
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
-        ShipEventFactionSystem seSys = IoCManager.Resolve<IEntityManager>().System<ShipEventFactionSystem>();
+        ShipEventTeamSystem seSys = IoCManager.Resolve<IEntityManager>().System<ShipEventTeamSystem>();
         seSys.AllowTeamRegistration = !seSys.AllowTeamRegistration;
         shell.WriteLine("Team registration is now " + (seSys.AllowTeamRegistration ? "enabled" : "disabled"));
     }
@@ -78,7 +78,7 @@ public sealed class ToggleEmptyTeamRemovalCommand : IConsoleCommand
     
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
-        ShipEventFactionSystem seSys = IoCManager.Resolve<IEntityManager>().System<ShipEventFactionSystem>();
+        ShipEventTeamSystem seSys = IoCManager.Resolve<IEntityManager>().System<ShipEventTeamSystem>();
         seSys.RemoveEmptyTeams = !seSys.RemoveEmptyTeams;
         shell.WriteLine("Empty team removal is now " + (seSys.RemoveEmptyTeams ? "enabled" : "disabled"));
     }
@@ -92,12 +92,12 @@ public sealed class RemoveTeamCommand : LocalizedCommands
     public override string Help => "First arg - team name, second arg (optional) - removal reason. " +
                                    "Name and removal reason should be separated by comma (as an argument itself), ex: 'se_remteam Team 1 , Assholes'";
 
-    private ShipEventFactionSystem? seSys;
+    private ShipEventTeamSystem? seSys;
 
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         if(seSys == null)
-            seSys = IoCManager.Resolve<IEntityManager>().System<ShipEventFactionSystem>();
+            seSys = IoCManager.Resolve<IEntityManager>().System<ShipEventTeamSystem>();
 
         if (args.Length == 0)
         {
@@ -124,9 +124,9 @@ public sealed class RemoveTeamCommand : LocalizedCommands
                 commaPassed = true;
         }
 
-        seSys = IoCManager.Resolve<IEntityManager>().System<ShipEventFactionSystem>();
+        seSys = IoCManager.Resolve<IEntityManager>().System<ShipEventTeamSystem>();
 
-        ShipEventFaction? teamToRemove = null;
+        ShipEventTeam? teamToRemove = null;
         foreach (var team in seSys.Teams)
         {
             if (team.Name == teamName)
@@ -147,7 +147,7 @@ public sealed class RemoveTeamCommand : LocalizedCommands
     public override CompletionResult GetCompletion(IConsoleShell shell, string[] args)
     {
         if(seSys == null)
-            seSys = IoCManager.Resolve<IEntityManager>().System<ShipEventFactionSystem>();
+            seSys = IoCManager.Resolve<IEntityManager>().System<ShipEventTeamSystem>();
         if(args.Length == 1)
             return CompletionResult.FromOptions(seSys.Teams.Select(t => t.Name));
         return CompletionResult.Empty;

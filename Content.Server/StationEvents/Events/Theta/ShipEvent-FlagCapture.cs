@@ -22,7 +22,7 @@ public sealed partial class SEFCFlagComponent : Component
     /// <summary>
     /// Last team which has captured this flag
     /// </summary>
-    public ShipEventFaction? LastTeam;
+    public ShipEventTeam? LastTeam;
 
     /// <summary>
     /// To prevent message spam
@@ -35,7 +35,7 @@ public sealed class SEFCRule : StationEventSystem<SEFCRuleComponent>
 {
     [Dependency] private TransformSystem _formSys = default!;
     [Dependency] private MapGenSystem _mapGenSys = default!;
-    [Dependency] private ShipEventFactionSystem _shipSys = default!;
+    [Dependency] private ShipEventTeamSystem _shipSys = default!;
     [Dependency] private IGameTiming _timing = default!;
 
     private const string FlagPrototypeId = "SEFCFlag";
@@ -91,8 +91,8 @@ public sealed class SEFCRule : StationEventSystem<SEFCRuleComponent>
         if (parentChangedRecently)
             return;
 
-        ShipEventFaction? oldTeam = CompOrNull<ShipEventFactionMarkerComponent>(args.OldParent)?.Team;
-        ShipEventFaction? newTeam = CompOrNull<ShipEventFactionMarkerComponent>(args.Transform.ParentUid)?.Team;
+        ShipEventTeam? oldTeam = CompOrNull<ShipEventTeamMarkerComponent>(args.OldParent)?.Team;
+        ShipEventTeam? newTeam = CompOrNull<ShipEventTeamMarkerComponent>(args.Transform.ParentUid)?.Team;
 
         if (oldTeam != null)
             _shipSys.TeamMessage(oldTeam, Loc.GetString("sefc-flaglost"));

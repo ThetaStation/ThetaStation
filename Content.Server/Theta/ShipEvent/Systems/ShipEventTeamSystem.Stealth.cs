@@ -8,7 +8,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
-public partial class ShipEventFactionSystem
+public partial class ShipEventTeamSystem
 {
     [Dependency] private ShuttleSystem _iffSys = default!;
 

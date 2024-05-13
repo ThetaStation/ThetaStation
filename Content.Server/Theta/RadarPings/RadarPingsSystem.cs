@@ -12,7 +12,7 @@ namespace Content.Server.Theta.RadarPings;
 
 public sealed class RadarPingsSystem : SharedRadarPingsSystem
 {
-    [Dependency] private readonly ShipEventFactionSystem _shipEventSystem = default!;
+    [Dependency] private readonly ShipEventTeamSystem _shipSys = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly MindSystem _mindSystem = default!;
 
@@ -70,19 +70,11 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
         var filter = Filter.Empty();
         var senderUid = GetEntity(ev.Sender);
 
-        if (_shipEventSystem.RuleSelected)
+        if (_shipSys.RuleSelected)
         {
-            var team = Comp<ShipEventFactionMarkerComponent>(senderUid).Team;
+            var team = Comp<ShipEventTeamMarkerComponent>(senderUid).Team;
             if (team != null)
-            {
-                var list = new List<ICommonSession>();
-                foreach (var member in team.Members)
-                {
-                    if (_mindSystem.TryGetSession(member.Owner, out var session))
-                        list.Add(session);
-                }
-                filter.AddPlayers(list);
-            }
+                filter.AddPlayers(_shipSys.GetTeamSessions(team));
         }
         else
         {

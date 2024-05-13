@@ -3,7 +3,7 @@ using Content.Shared.Theta.ShipEvent.UI;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
-public partial class ShipEventFactionSystem
+public partial class ShipEventTeamSystem
 {
     private void InitializeCaptainMenu()
     {
@@ -56,18 +56,20 @@ public partial class ShipEventFactionSystem
     {
         foreach (var team in Teams)
         {
-            if (team.Captain != msg.Session.ConnectedClient.UserName)
+            if (team.Captain != msg.Session.Name)
                 continue;
+
             if (msg.CKey == team.Captain)
                 break;
-            var members = _factionSystem.GetMembersByUserNames(team);
-            if (members.TryGetValue(msg.CKey, out var member))
+
+            if (team.Members.Contains(msg.CKey))
             {
-                var memberEntity = member.Owner;
-                team.RemoveMember(member);
-                EntityManager.DeleteEntity(memberEntity);
-                if(_mindSystem.TryGetSession(member.Owner, out var session))
+                team.Members.Remove(msg.CKey);
+                if (_playerMan.TryGetSessionByUsername(msg.CKey, out var session))
+                {
                     _chatSys.SendSimpleMessage(Loc.GetString("shipevent-kicked"), session, ChatChannel.Local, Color.DarkRed);
+                    QueueDel(session.AttachedEntity);
+                }
             }
             break;
         }

@@ -1,5 +1,6 @@
 using System.Numerics;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
@@ -36,14 +37,13 @@ public sealed partial class AsteroidGenerator : IMapGenGenerator
     [DataField("wallPrototypeId", required: true, customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
     public string WallPrototypeId = "";
 
-    public EntityUid Generate(MapGenSystem sys, MapId targetMap)
+    public IEnumerable<EntityUid> Generate(MapGenSystem sys, MapId targetMap)
     {
         var tileDefMan = sys.TileDefMan;
 
         var tileSet = GenerateTileSet(sys.Random);
 
-        var gridComp = sys.MapMan.CreateGrid(targetMap);
-        var gridUid = gridComp.Owner;
+        Entity<MapGridComponent> gridUid = sys.MapMan.CreateGridEntity(targetMap);
 
         List<(Vector2i, Tile)> tiles = new();
         List<(EntityCoordinates, string)> ents = new();
@@ -56,14 +56,14 @@ public sealed partial class AsteroidGenerator : IMapGenGenerator
             ents.Add((new EntityCoordinates(gridUid, pos), WallPrototypeId));
         }
 
-        gridComp.SetTiles(tiles);
+        sys.MapSys.SetTiles(gridUid, gridUid.Comp, tiles);
         foreach ((EntityCoordinates coords, string protId) in ents)
         {
             var ent = sys.EntMan.SpawnEntity(protId, coords);
             sys.FormSys.AttachToGridOrMap(ent);
         }
 
-        return gridUid;
+        return new List<EntityUid>() { gridUid };
     }
 
     private HashSet<Vector2i> GenerateTileSet(IRobustRandom random)

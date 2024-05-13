@@ -21,10 +21,10 @@ public sealed class ShipEventPalette : ColorPalette
 
         foreach (var (_, color) in Color.GetAllDefaultColors())
         {
-            if(color.AByte != 0xFF)
+            if (color.AByte != 0xFF)
                 continue;
             const double lightLuminosity = 255f / 2f;
-            if(color.RByte * 0.2126 + color.GByte * 0.7152 + color.BByte * 0.0722 < lightLuminosity)
+            if (color.RByte * 0.2126 + color.GByte * 0.7152 + color.BByte * 0.0722 < lightLuminosity)
                 continue;
             colors.Add(color);
         }
