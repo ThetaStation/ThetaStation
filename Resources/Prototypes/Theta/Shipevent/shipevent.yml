@@ -16,7 +16,7 @@
       roundDuration: 1800
       teamCheckInterval: 5
       playerCheckInterval: 2
-      respawnDelay: 5
+      respawnDelay: 60
       bonusInterval: 600
 
       #points
@@ -27,7 +27,7 @@
       outOfBoundsPenalty: 2000
 
       #map gen
-      initialObstacleAmount: 0
+      initialObstacleAmount: 200
       minFieldSize: 1000
       maxFieldSize: 3000
       metersPerPlayer: 100
