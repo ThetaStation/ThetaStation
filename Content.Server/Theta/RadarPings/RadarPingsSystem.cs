@@ -5,7 +5,7 @@ using Content.Server.Theta.ShipEvent.Systems;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Theta.RadarPings;
 using Content.Shared.Theta.ShipEvent.Components;
-using Robust.Shared.Map;
+using Robust.Server.Player;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 
@@ -16,8 +16,9 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
     [Dependency] private readonly ShipEventFactionSystem _shipEventSystem = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly MindSystem _mindSystem = default!;
+    [Dependency] private readonly IPlayerManager _playerManager = default!;
 
-    private Dictionary<ICommonSession, TimeSpan> _playersPingCd = new();
+    private readonly Dictionary<ICommonSession, TimeSpan> _playersPingCd = new();
 
     public override void Initialize()
     {
@@ -39,9 +40,7 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
 
     private bool IsValidPing(EntityUid sender)
     {
-        if (!_mindSystem.TryGetMind(sender, out _, out var mind))
-            return false;
-        if (!_mindSystem.TryGetSession(mind, out var session))
+        if (!_playerManager.TryGetSessionByEntity(sender, out var session))
             return false;
 
         if (_playersPingCd.TryGetValue(session, out var nextPing) && _gameTiming.CurTime < nextPing)
@@ -95,8 +94,7 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
         }
 
         // remove sender because his event on clientside
-        if (_mindSystem.TryGetMind(senderUid, out _, out var ownerMind) &&
-            _mindSystem.TryGetSession(ownerMind, out var senderSession))
+        if (_playerManager.TryGetSessionByEntity(senderUid, out var senderSession))
             filter.RemovePlayer(senderSession);
 
         return filter;
