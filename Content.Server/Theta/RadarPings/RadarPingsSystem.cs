@@ -5,6 +5,7 @@ using Content.Server.Theta.ShipEvent.Systems;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Theta.RadarPings;
 using Content.Shared.Theta.ShipEvent.Components;
+using Robust.Server.Player;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 
@@ -15,8 +16,9 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
     [Dependency] private readonly ShipEventTeamSystem _shipSys = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly MindSystem _mindSystem = default!;
+    [Dependency] private readonly IPlayerManager _playerManager = default!;
 
-    private Dictionary<ICommonSession, TimeSpan> _playersPingCd = new();
+    private readonly Dictionary<ICommonSession, TimeSpan> _playersPingCd = new();
 
     public override void Initialize()
     {
@@ -30,7 +32,7 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
 
         var filter = GetPlayersFilter(ev);
         var evPingOwner = GetEntity(ev.PingOwner);
-        PlaySignalSound(filter, evPingOwner);
+        PlaySignalSound(filter);
 
         var ping = GetPing(evPingOwner, ev.Coordinates);
         RaiseNetworkEvent(new SendPingEvent(ping), filter);
@@ -38,9 +40,7 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
 
     private bool IsValidPing(EntityUid sender)
     {
-        if (!_mindSystem.TryGetMind(sender, out _, out var mind))
-            return false;
-        if (!_mindSystem.TryGetSession(mind, out var session))
+        if (!_playerManager.TryGetSessionByEntity(sender, out var session))
             return false;
 
         if (_playersPingCd.TryGetValue(session, out var nextPing) && _gameTiming.CurTime < nextPing)
@@ -83,6 +83,10 @@ public sealed class RadarPingsSystem : SharedRadarPingsSystem
             if (gridUid != null)
                 filter = Filter.BroadcastGrid(gridUid.Value);
         }
+
+        // remove sender because his event on clientside
+        if (_playerManager.TryGetSessionByEntity(senderUid, out var senderSession))
+            filter.RemovePlayer(senderSession);
 
         return filter;
     }
