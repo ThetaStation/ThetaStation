@@ -1,4 +1,3 @@
-using Content.Server.Theta.ShipEvent.Systems;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
@@ -14,8 +13,5 @@ public sealed partial class ShipEventProximityAnomalyComponent : Component
     public int Range;
 
     [DataField("toSpawn", required: true, customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
-    public string ToSpawn;
-
-    [Access(new Type[] { typeof(ShipEventTeamSystem) })]
-    public HashSet<EntityUid> TrackedUids = new();
+    public string ToSpawn = "";
 }
