@@ -12,7 +12,7 @@ using Robust.Shared.Random;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
-public sealed partial class ShipEventFactionSystem
+public sealed partial class ShipEventTeamSystem
 {
     [Dependency] private readonly ExplosionSystem _expSys = default!;
     public bool BoundsCompression = false;
@@ -42,15 +42,14 @@ public sealed partial class ShipEventFactionSystem
         return !GetPlayAreaBounds().Contains(worldPos);
     }
 
-    public bool IsTeamOutOfBounds(ShipEventFaction team)
+    public bool IsTeamOutOfBounds(ShipEventTeam team)
     {
         if (!team.ShouldRespawn)
         {
-            if (EntityManager.TryGetComponent<TransformComponent>(team.Ship, out var form) &&
-                EntityManager.TryGetComponent<PhysicsComponent>(team.Ship, out var grid))
+            if (EntityManager.TryGetComponent<TransformComponent>(team.ShipMainGrid, out var form) &&
+                EntityManager.TryGetComponent<PhysicsComponent>(team.ShipMainGrid, out var grid))
             {
-                Matrix3 wmat = _formSys.GetWorldMatrix(form);
-                return IsPositionOutOfBounds(wmat.Transform(grid.LocalCenter));
+                return IsPositionOutOfBounds(grid.LocalCenter + _formSys.GetWorldPosition(form));
             }
         }
 
@@ -58,10 +57,10 @@ public sealed partial class ShipEventFactionSystem
     }
 
     //idk how to name it otherwise
-    private void PunishOutOfBoundsTeam(ShipEventFaction team)
+    private void PunishOutOfBoundsTeam(ShipEventTeam team)
     {
         team.Points = Math.Max(0, team.Points - OutOfBoundsPenalty);
-        var form = Transform(team.Ship);
+        var form = Transform(team.ShipMainGrid!.Value);
         _expSys.QueueExplosion(Pick(form.ChildEntities), ExplosionSystem.DefaultExplosionPrototypeId, 5, 0.5f, 1);
     }
 

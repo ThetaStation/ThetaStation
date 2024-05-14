@@ -31,6 +31,7 @@ public sealed partial class ShipEventRuleComponent : Component
     //time
     [DataField("roundDuration")] public int RoundDuration; //set to negative if you don't need a timed round end
     [DataField("teamCheckInterval")] public float TeamCheckInterval;
+    [DataField("playerCheckInterval")] public float PlayerCheckInterval;
     [DataField("respawnDelay")] public int RespawnDelay;
     [DataField("bonusInterval")] public int BonusInterval;
     [DataField("boundsCompressionInterval")] public float BoundsCompressionInterval;
@@ -75,7 +76,7 @@ public sealed partial class ShipEventRuleComponent : Component
 
 public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
 {
-    [Dependency] private ShipEventFactionSystem _shipSys = default!;
+    [Dependency] private ShipEventTeamSystem _shipSys = default!;
     [Dependency] private MapGenSystem _mapGenSys = default!;
     [Dependency] private readonly IMapManager _mapMan = default!;
     [Dependency] private readonly IPrototypeManager _protMan = default!;
@@ -100,7 +101,6 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         return new EntityPrototype.ComponentRegistryEntry(iffSplitComp, mapping);
     }
 
-    //todo: merge this with ShipEventFactionSystem?
     protected override void Started(EntityUid uid, ShipEventRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
         base.Started(uid, component, gameRule, args);
@@ -113,6 +113,7 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         _shipSys.RoundDuration = component.RoundDuration;
         _shipSys.TimedRoundEnd = component.RoundDuration > 0;
         _shipSys.TeamCheckInterval = component.TeamCheckInterval;
+        _shipSys.PlayerCheckInterval = component.PlayerCheckInterval;
         _shipSys.RespawnDelay = component.RespawnDelay;
         _shipSys.BonusInterval = component.BonusInterval;
         _shipSys.PointsPerInterval = component.PointsPerInterval;

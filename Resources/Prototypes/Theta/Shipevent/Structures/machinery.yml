@@ -67,7 +67,7 @@
   name: team console
   parent: BaseComputer
   components:
-    - type: ShipEventFactionMarker
+    - type: ShipEventTeamMarker
     - type: TeamConsole
     - type: ActivatableUI
       key: enum.TeamCreationUiKey.Key
@@ -100,6 +100,7 @@
     drawdepth: Mobs
     sprite: /Textures/Structures/Machines/cloning.rsi
     state: pod_1
+  - type: ShipEventTeamMarker
   - type: ShipEventSpawner
     prototype: MobHumanShipEvent
   - type: Physics

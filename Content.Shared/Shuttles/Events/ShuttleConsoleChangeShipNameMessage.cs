@@ -3,7 +3,7 @@
 namespace Content.Shared.Shuttles.Events;
 
 /// <summary>
-/// Raised on the client when it change shuttle name
+/// Raised on the client when it changes shuttle name
 /// </summary>
 [Serializable, NetSerializable]
 public sealed class ShuttleConsoleChangeShipNameMessage : BoundUserInterfaceMessage

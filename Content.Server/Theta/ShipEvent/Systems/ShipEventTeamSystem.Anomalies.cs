@@ -14,7 +14,7 @@ namespace Content.Server.Theta.ShipEvent.Systems;
 
 //todo: create one component for all kinds of anomalies, so it's behaviour depends on a list of effects instead of a specific comp
 //also consider using same system for circular shields
-public sealed partial class ShipEventFactionSystem
+public sealed partial class ShipEventTeamSystem
 {
     [Dependency] private FixtureSystem _fixSys = default!;
     private const string AnomalyFixtureId = "ProxAnomalyFixture";
@@ -26,7 +26,9 @@ public sealed partial class ShipEventFactionSystem
     private void InitializeAnomalies()
     {
         SubscribeLocalEvent<ShipEventProximityAnomalyComponent, ComponentInit>(OnInit);
+        SubscribeLocalEvent<ShipEventProximityAnomalyComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<ShipEventProximityAnomalyComponent, StartCollideEvent>(OnCollision);
+        SubscribeLocalEvent<ShipEventProximityAnomalyComponent, EndCollideEvent>(OnExit);
     }
 
     private void OnInit(EntityUid uid, ShipEventProximityAnomalyComponent anomaly, ComponentInit args)
@@ -46,12 +48,32 @@ public sealed partial class ShipEventFactionSystem
         }
     }
 
-    private void OnCollision(EntityUid uid, ShipEventProximityAnomalyComponent anomaly, StartCollideEvent args)
+    private void OnShutdown(EntityUid uid, ShipEventProximityAnomalyComponent anomaly, ComponentShutdown args)
+    {
+        var query = EntityManager.EntityQueryEnumerator<ShipEventProximityAnomalyTrackerComponent>();
+        while (query.MoveNext(out var trackedUid, out var tracker))
+        {
+            if (tracker.TrackedBy == uid)
+                EntityManager.RemoveComponent<ShipEventProximityAnomalyTrackerComponent>(trackedUid);
+        }
+    }
+
+    private void OnCollision(EntityUid uid, ShipEventProximityAnomalyComponent anomaly, ref StartCollideEvent args)
     {
         var gridUid = Transform(args.OtherEntity).GridUid;
         if (gridUid == null)
             return;
-        anomaly.TrackedUids.Add(gridUid.Value);
+
+        EnsureComp<ShipEventProximityAnomalyTrackerComponent>(gridUid.Value).TrackedBy = uid;
+    }
+
+    private void OnExit(EntityUid uid, ShipEventProximityAnomalyComponent anomaly, ref EndCollideEvent args)
+    {
+        var gridUid = Transform(args.OtherEntity).GridUid;
+        if (gridUid == null)
+            return;
+
+        EntityManager.RemoveComponent<ShipEventProximityAnomalyTrackerComponent>(gridUid.Value);
     }
 
     private void AnomalyUpdate()
@@ -62,21 +84,15 @@ public sealed partial class ShipEventFactionSystem
             Vector2 worldPos = _formSys.GetWorldPosition(form);
 
             if (IsPositionOutOfBounds(worldPos))
-            {
                 _formSys.SetWorldPosition(form, GetPlayAreaBounds().Center);
-            }
 
-            foreach (EntityUid trackedUid in anomaly.TrackedUids)
+            var trackerQuery = EntityManager.EntityQueryEnumerator<ShipEventProximityAnomalyTrackerComponent>();
+            while (trackerQuery.MoveNext(out var trackedUid, out var tracker))
             {
-                var trackedForm = Transform(trackedUid);
-                //ik ik, proper way to do this would be getting grid's AABB and checking whether it's edge is still inside anomaly
-                //but that's expensive and not very important
-                if ((_formSys.GetWorldPosition(trackedForm) - _formSys.GetWorldPosition(form)).Length() > anomaly.Range + 10)
-                {
-                    anomaly.TrackedUids.Remove(trackedUid);
+                if (tracker.TrackedBy != uid)
                     continue;
-                }
 
+                var trackedForm = Transform(trackedUid);
                 SpawnAtPosition(anomaly.ToSpawn, Transform(Pick(trackedForm.ChildEntities)).Coordinates);
             }
         }

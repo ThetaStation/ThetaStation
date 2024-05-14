@@ -291,7 +291,7 @@ public sealed class RadarGrids : RadarModule
 
     private float GetCacheTimeExpiration(EntityUid gridUid)
     {
-        if (EntManager.HasComponent<ShipEventFactionMarkerComponent>(gridUid))
+        if (EntManager.HasComponent<ShipEventTeamMarkerComponent>(gridUid))
             return 0;
         if ((_formSystem.GetWorldPosition(ParentUid) - _formSystem.GetWorldPosition(gridUid)).Length() < 50)
             return 0;

@@ -10,6 +10,7 @@ using Content.Shared.Roles.Theta;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Theta.ShipEvent;
+using Content.Shared.Theta.ShipEvent.Components;
 
 namespace Content.Server.Theta.RadarRenderable;
 
@@ -113,23 +114,15 @@ public sealed class RadarRenderableSystem : EntitySystem
 
     private CommonRadarEntityInterfaceState? GetMobState(EntityUid uid, RadarRenderableComponent renderable, TransformComponent xform)
     {
-        if (!TryComp<MindContainerComponent>(uid, out var mindContainer) ||
-            !TryComp<MobStateComponent>(uid, out var mobState))
-            return null;
-        if (_mobStateSystem.IsIncapacitated(uid, mobState))
+        if (_mobStateSystem.IsIncapacitated(uid))
             return null;
 
         if (TryComp<IFFComponent>(Transform(uid).GridUid, out var iff) && iff.Flags == IFFFlags.Hide)
             return null;
 
         Color? color = null;
-
-        if (mindContainer.Mind != null)
-        {
-            if (EntityManager.TryGetComponent<ShipEventRoleComponent>(mindContainer.Mind.Value, out var roleComponent) &&
-                roleComponent.Faction is ShipEventFaction shipEventFaction)
-                color = shipEventFaction.Color;
-        }
+        if (TryComp<ShipEventTeamMarkerComponent>(uid, out var marker) && marker.Team != null)
+            color = marker.Team.Color;
 
         return new CommonRadarEntityInterfaceState(
             GetNetCoordinates(_transformSystem.GetMoverCoordinates(uid, xform)),

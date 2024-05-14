@@ -8,7 +8,7 @@ namespace Content.Server.Theta.ShipEvent.Console;
 
 public sealed class TeamConsoleSystem : EntitySystem
 {
-    [Dependency] private readonly ShipEventFactionSystem _shipSys = default!;
+    [Dependency] private readonly ShipEventTeamSystem _shipSys = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
 
     public override void Initialize()
@@ -49,7 +49,7 @@ public sealed class TeamConsoleSystem : EntitySystem
         foreach (var team in _shipSys.Teams)
         {
             var hasPassword = team.JoinPassword != null;
-            teamStates.Add(new ShipTeamForLobbyState(team.Name, team.Members.Count, team.Captain, hasPassword, team.MaxMembers));
+            teamStates.Add(new ShipTeamForLobbyState(team.Name, team.Members.Count, team.Captain ?? "NONE", hasPassword, team.MaxMembers));
         }
 
         return teamStates;

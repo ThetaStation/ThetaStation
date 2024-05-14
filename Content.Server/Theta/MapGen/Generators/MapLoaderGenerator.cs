@@ -9,7 +9,7 @@ public sealed partial class MapLoaderGenerator : IMapGenGenerator
     [DataField("mapPath", required: true)]
     public string MapPath = "";
 
-    public EntityUid Generate(MapGenSystem sys, MapId targetMap)
+    public IEnumerable<EntityUid> Generate(MapGenSystem sys, MapId targetMap)
     {
         var loadOptions = new MapLoadOptions
         {
@@ -19,8 +19,8 @@ public sealed partial class MapLoaderGenerator : IMapGenGenerator
         };
 
         if (sys.MapLoader.TryLoad(targetMap, MapPath, out var rootUids, loadOptions))
-            return rootUids[0];
+            return rootUids;
 
-        return EntityUid.Invalid;
+        return new List<EntityUid>();
     }
 }

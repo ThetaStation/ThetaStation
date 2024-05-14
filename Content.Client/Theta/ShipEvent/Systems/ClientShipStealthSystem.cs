@@ -5,7 +5,7 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client.Theta.ShipEvent.Systems;
 
-//todo: read comment in SHipEventFactionSystem.Stealth.cs ((this thing sucks ass))
+//todo: read comment in ShipEventTeamSystem.Stealth.cs ((this thing sucks ass))
 public sealed class ClientShipStealthSystem : EntitySystem
 {
     [Dependency] private UserInterfaceSystem _uiSys = default!;

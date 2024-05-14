@@ -15,6 +15,7 @@
       #time
       roundDuration: 1800
       teamCheckInterval: 5
+      playerCheckInterval: 2
       respawnDelay: 60
       bonusInterval: 600
 
