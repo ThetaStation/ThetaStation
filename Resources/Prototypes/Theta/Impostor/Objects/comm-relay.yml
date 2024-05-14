@@ -1,0 +1,8 @@
+- type: entity
+  id: ImpostorCommRelay
+  parent: BaseItem
+  components:
+    - type: Sprite
+      sprite: Theta/Impostor/Objects/relay.rsi
+      state: relay
+    - type: ImpostorCommRelay

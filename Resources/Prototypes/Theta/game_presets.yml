@@ -24,3 +24,16 @@
     - SEFC
   supportedMaps: ShipEventMapPool
   forceMap: true
+  
+- type: gamePreset
+  id: Impostor
+  alias:
+    - mogus
+  name: impostor-title
+  description: impostor-desc
+  showInVote: true
+  rules:
+    - Impostor
+    - RampingStationEventScheduler
+  supportedMaps: ImpostorMapPool
+  forceMap: true
