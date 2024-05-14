@@ -253,14 +253,12 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
                 ("name", team.Name),
                 ("color", team.Color),
                 ("shipname", team.ShipName),
-                ("capname", team.Captain)
-            ));
+                ("capname", team.Captain ?? "NONE")));
             args.AddLine(Loc.GetString("shipevent-roundend-teamstats",
                 ("points", team.Points),
                 ("kills", team.Kills),
                 ("assists", team.Assists),
-                ("respawns", team.Respawns)
-            ));
+                ("respawns", team.Respawns)));
             args.AddLine("");
         }
 
@@ -279,9 +277,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
                 winner = team;
         }
 
-        args.AddLine(Loc.GetString("shipevent-roundend-discord-team",
-            ("capname", winner.Captain)
-        ));
+        args.AddLine(Loc.GetString("shipevent-roundend-discord-team", ("capname", winner.Captain ?? "NONE")));
         args.AddLine(Loc.GetString("shipevent-roundend-discord-teamstats",
             ("points", winner.Points),
             ("kills", winner.Kills),
@@ -305,14 +301,12 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
             _actSys.AddAction(uid, "ShipEventReturnToLobbyAction");
     }
 
-    private void OnViewToggle(EntityUid entity, ShipEventTeamMarkerComponent marker, ShipEventTeamViewToggleEvent args)
+    private void OnViewToggle(EntityUid uid, ShipEventTeamMarkerComponent marker, ShipEventTeamViewToggleEvent args)
     {
         if (!RuleSelected || args.Handled)
             return;
 
-        if (!_mindSys.TryGetMind(entity, out _, out var mind))
-            return;
-        if (!_mindSys.TryGetSession(mind, out var session))
+        if (!_playerMan.TryGetSessionByEntity(uid, out var session))
             return;
 
         args.Handled = true;
@@ -331,9 +325,9 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         }
 
         Enum uiKey = TeamViewUiKey.Key;
-        if (_uiSys.IsUiOpen(entity, uiKey))
+        if (_uiSys.IsUiOpen(uid, uiKey))
             return;
-        if (_uiSys.TryGetUi(entity, uiKey, out var bui))
+        if (_uiSys.TryGetUi(uid, uiKey, out var bui))
         {
             _uiSys.OpenUi(bui, session);
             _uiSys.SetUiState(bui, new TeamViewBoundUserInterfaceState(teamsInfo));
@@ -345,10 +339,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         if (!RuleSelected || args.Handled)
             return;
 
-        if (!_mindSys.TryGetMind(uid, out _, out var mind))
-            return;
-
-        if (!_mindSys.TryGetSession(mind, out var session))
+        if (!_playerMan.TryGetSessionByEntity(uid, out var session))
             return;
 
         args.Handled = true;
@@ -436,10 +427,18 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         QueueDel(uid);
     }
 
+    //todo: our generic y/n dialog window is very weird
     private void OnReturnPlayerToLobby(GenericWarningYesPressedMessage args)
     {
         if (Equals(args.UiKey, GenericWarningUiKey.ShipEventKey))
+        {
+            if (TryComp<ShipEventTeamMarkerComponent>(args.Session.AttachedEntity, out var marker) && marker.Team != null)
+            {
+                marker.Team.Captain = marker.Team.Captain == args.Session.Name ? null : marker.Team.Captain;
+                marker.Team.Members.Remove(args.Session.Name);
+            }
             _ticker.Respawn(args.Session);
+        }
     }
 
     private bool TrySpawnPlayer(ICommonSession session, ShipEventTeam team, [NotNullWhen(true)] out EntityUid? uid, EntityUid? spawnerUid = null)
@@ -537,10 +536,10 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
             }
 
             //if cap is disconnected we won't be able to get his session, thus triggering this condition
-            if (!_playerMan.TryGetSessionByUsername(team.Captain, out _))
+            if (team.Captain == null || !_playerMan.TryGetSessionByUsername(team.Captain, out _))
             {
                 var newCap = activeMembers.First();
-                TeamMessage(team, Loc.GetString("shipevent-team-captainchange", ("oldcap", team.Captain), ("newcap", newCap.Name)));
+                TeamMessage(team, Loc.GetString("shipevent-team-captainchange", ("oldcap", team.Captain ?? "NONE"), ("newcap", newCap.Name)));
                 team.Captain = newCap.Name;
             }
 
@@ -614,8 +613,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
             return;
 
         Color color = ColorPalette.GetNextColor();
-        ShipEventTeam team = new(IsValidName(name) ? name : GenerateTeamName(), color,
-            noCaptain ? "N/A" : session.Channel.UserName, password)
+        ShipEventTeam team = new(IsValidName(name) ? name : GenerateTeamName(), color, noCaptain ? null : session.Channel.UserName, password)
         {
             ChosenShipType = initialShipType,
             JoinPassword = password,

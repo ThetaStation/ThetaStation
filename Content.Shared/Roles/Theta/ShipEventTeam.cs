@@ -6,7 +6,7 @@ public sealed class ShipEventTeam
 {
     public string Name;
     public Color Color;
-    public string Captain;
+    public string? Captain;
     public List<string> Members = new();
 
     public Dictionary<ShipEventTeam, int> Hits = new(); //hits from other teams, not vice-versa
@@ -40,7 +40,7 @@ public sealed class ShipEventTeam
         set => _maxMembers = int.Clamp(value, 0, 100);
     }
 
-    public ShipEventTeam(string name, Color color, string captain, string? password = null)
+    public ShipEventTeam(string name, Color color, string? captain, string? password = null)
     {
         Name = name;
         Color = color;

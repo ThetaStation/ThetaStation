@@ -49,7 +49,7 @@ public sealed class TeamConsoleSystem : EntitySystem
         foreach (var team in _shipSys.Teams)
         {
             var hasPassword = team.JoinPassword != null;
-            teamStates.Add(new ShipTeamForLobbyState(team.Name, team.Members.Count, team.Captain, hasPassword, team.MaxMembers));
+            teamStates.Add(new ShipTeamForLobbyState(team.Name, team.Members.Count, team.Captain ?? "NONE", hasPassword, team.MaxMembers));
         }
 
         return teamStates;
