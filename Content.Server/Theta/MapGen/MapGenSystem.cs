@@ -68,26 +68,27 @@ public sealed class MapGenSystem : EntitySystem
             var structProt = PickStructure(structures);
             if (structProt == null)
             {
-                Log.Warning("MapGenSystem, SpawnStructures: Could not pick structure prototype, skipping");
+                Log.Warning("Could not pick structure prototype, skipping");
                 continue;
             }
 
             var gridUids = structProt.Generator.Generate(this, TargetMap);
             var aabb = ComputeTotalAABB(gridUids).Enlarged(structProt.MinDistance);
             if (aabb.Width + aabb.Height > 200)
-                Log.Warning("MapGenSystem, SpawnStructures: Structure's AABB is suspiciously big");
+                Log.Warning("Structure's AABB is suspiciously big");
 
             var spawnPos = GenerateSpawnPosition((Box2i) aabb, distribution, 50);
             if (spawnPos == null)
             {
-                Log.Warning("MapGenSystem, SpawnStructures: Failed to find spawn position, deleting grids");
+                Log.Warning("Failed to find spawn position, deleting grids");
                 foreach (EntityUid gridUid in gridUids) { QueueDel(gridUid); }
                 continue;
             }
 
-            //Vector2 pos = spawnPos.Value;
-            //pos.X += structProt.MinDistance - gridComp.LocalAABB.Left;
-            //pos.Y += structProt.MinDistance - gridComp.LocalAABB.Bottom;
+            Vector2 pos = spawnPos.Value;
+            pos.X += structProt.MinDistance - aabb.Left;
+            pos.Y += structProt.MinDistance - aabb.Bottom;
+            spawnPos = pos;
 
             foreach (EntityUid gridUid in gridUids)
             {
@@ -108,7 +109,7 @@ public sealed class MapGenSystem : EntitySystem
 
         MapMan.SetMapPaused(TargetMap, false);
         TargetMap = MapId.Nullspace;
-        Log.Info($"MapGenSystem, SpawnStructures: Spawned {SpawnedGrids.Count} grids");
+        Log.Info($"Spawned {SpawnedGrids.Count} grids");
         SpawnedGrids.Clear();
 
         StartPos = Vector2i.Zero;
@@ -151,10 +152,13 @@ public sealed class MapGenSystem : EntitySystem
         }
 
         TargetMap = MapId.Nullspace;
+        string gridString = "[";
+        foreach (EntityUid uid in gridUids) { gridString += uid.ToString() + ", "; }
+        gridString += "]";
 
         if (result)
         {
-            Log.Info($"MapGenSystem, RandomPosSpawn: Spawned {gridUids.Count()} grid(s) successfully");
+            Log.Info($"Spawned grids {gridString} successfully");
             foreach (EntityUid gridUid in gridUids)
             {
                 var form = Transform(gridUid);
@@ -163,7 +167,7 @@ public sealed class MapGenSystem : EntitySystem
         }
         else if (forceIfFailed)
         {
-            Log.Info($"MapGenSystem, RandomPosSpawn: Failed to find spawn position for grid {gridUids.ToString()}," +
+            Log.Info($"Failed to find spawn position for grids {gridString}," +
                         "but forceIfFailed is set to true; proceeding to force-spawn");
             mapPos = (Vector2i) Random.NextVector2Box(bounds.Left, bounds.Bottom, bounds.Right, bounds.Top).Rounded();
             foreach (EntityUid gridUid in gridUids)
@@ -189,7 +193,7 @@ public sealed class MapGenSystem : EntitySystem
             return gridUids;
         }
 
-        Log.Error($"MapGenSystem, RandomPosSpawn: Failed to find spawn position, deleting grid {gridUids.ToString()}");
+        Log.Error($"Failed to find spawn position, deleting grids {gridString}");
         foreach (EntityUid gridUid in gridUids) { QueueDel(gridUid); }
         return new List<EntityUid>();
     }
@@ -532,14 +536,15 @@ public sealed class MapGenSystem : EntitySystem
         foreach (EntityUid gridUid in gridUids)
         {
             MapGridComponent grid = Comp<MapGridComponent>(gridUid);
-            Box2 aabb = grid.LocalAABB.Translated(FormSys.GetWorldPosition(gridUid));
+            //Box2 aabb = grid.LocalAABB.Translated(FormSys.GetWorldPosition(gridUid));
+            Box2 aabb = grid.LocalAABB;
             min.X = Math.Min(aabb.BottomLeft.X, min.X);
             min.Y = Math.Min(aabb.BottomLeft.Y, min.Y);
             max.X = Math.Max(aabb.TopRight.X, min.X);
             max.Y = Math.Max(aabb.TopRight.Y, max.Y);
         }
 
-        return new Box2(Vector2.Zero, max - min);
+        return new Box2(min, max);
     }
 }
 

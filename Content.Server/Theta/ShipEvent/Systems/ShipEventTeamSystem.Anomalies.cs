@@ -46,11 +46,12 @@ public sealed partial class ShipEventTeamSystem
         }
     }
 
-    private void OnCollision(EntityUid uid, ShipEventProximityAnomalyComponent anomaly, StartCollideEvent args)
+    private void OnCollision(EntityUid uid, ShipEventProximityAnomalyComponent anomaly, ref StartCollideEvent args)
     {
         var gridUid = Transform(args.OtherEntity).GridUid;
         if (gridUid == null)
             return;
+
         anomaly.TrackedUids.Add(gridUid.Value);
     }
 
