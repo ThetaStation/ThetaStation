@@ -536,7 +536,6 @@ public sealed class MapGenSystem : EntitySystem
         foreach (EntityUid gridUid in gridUids)
         {
             MapGridComponent grid = Comp<MapGridComponent>(gridUid);
-            //Box2 aabb = grid.LocalAABB.Translated(FormSys.GetWorldPosition(gridUid));
             Box2 aabb = grid.LocalAABB;
             min.X = Math.Min(aabb.BottomLeft.X, min.X);
             min.Y = Math.Min(aabb.BottomLeft.Y, min.Y);
