@@ -687,7 +687,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         DetachEnemiesFromGrid(team.ShipGrids, team);
         foreach (EntityUid gridUid in team.ShipGrids)
         {
-            Del(gridUid);
+            QueueDel(gridUid);
         }
         team.ShipGrids.Clear();
         team.ShipMainGrid = null;
@@ -695,7 +695,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         foreach (ICommonSession session in GetTeamSessions(team))
         {
             if (session.AttachedEntity != null && !HasComp<GhostComponent>(session.AttachedEntity))
-                Del(session.AttachedEntity);
+                QueueDel(session.AttachedEntity);
         }
 
         if (immediate)

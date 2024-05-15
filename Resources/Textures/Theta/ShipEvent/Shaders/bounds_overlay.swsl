@@ -31,7 +31,7 @@ highp float fbm(highp vec2 uv, highp mat2 m){
 }
 
 void fragment() {
-    mat2 scale_mat = mat2(2.0, 1.2, -1.2, 2.0);
+    highp mat2 scale_mat = mat2(2.0, 1.2, -1.2, 2.0);
     int fbm_iters = 2;
 
     highp float f = fbm(UV, scale_mat);
