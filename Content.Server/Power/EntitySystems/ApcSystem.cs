@@ -2,7 +2,6 @@ using Content.Server.Emp;
 using Content.Server.Popups;
 using Content.Server.Power.Components;
 using Content.Server.Power.Pow3r;
-using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.APC;
 using Content.Shared.Emag.Components;
@@ -37,6 +36,7 @@ public sealed class ApcSystem : EntitySystem
         SubscribeLocalEvent<ApcComponent, GotEmaggedEvent>(OnEmagged);
 
         SubscribeLocalEvent<ApcComponent, EmpPulseEvent>(OnEmpPulse);
+        SubscribeLocalEvent<ApcComponent, EmpDisabledRemoved>(OnEmpDisabled);
     }
 
     public override void Update(float deltaTime)
@@ -165,8 +165,12 @@ public sealed class ApcSystem : EntitySystem
             return ApcChargeState.Full;
         }
 
+        bool rechargeable = true;
+        if (TryComp(uid, out BatteryComponent? bat))
+            rechargeable = bat.IsRechargeable;
+
         var delta = battery.CurrentSupply - battery.CurrentReceiving;
-        return delta < 0 ? ApcChargeState.Charging : ApcChargeState.Lack;
+        return delta < 0 && rechargeable ? ApcChargeState.Charging : ApcChargeState.Lack;
     }
 
     private ApcExternalPowerState CalcExtPowerState(EntityUid uid, PowerState.Battery battery)
@@ -193,6 +197,12 @@ public sealed class ApcSystem : EntitySystem
             args.Disabled = true;
             ApcToggleBreaker(uid, component);
         }
+    }
+
+    private void OnEmpDisabled(EntityUid uid, ApcComponent component, EmpDisabledRemoved args)
+    {
+        if (component.EnableAfterEmp && !component.MainBreakerEnabled)
+            ApcToggleBreaker(uid, component);
     }
 }
 

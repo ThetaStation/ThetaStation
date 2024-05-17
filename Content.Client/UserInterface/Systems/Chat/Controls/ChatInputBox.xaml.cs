@@ -1,13 +1,17 @@
 ﻿using Content.Client.Stylesheets;
+﻿using Content.Shared.CCVar;
 using Content.Shared.Chat;
 using Content.Shared.Input;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Configuration;
 
 namespace Content.Client.UserInterface.Systems.Chat.Controls;
 
 [Virtual]
 public class ChatInputBox : PanelContainer
 {
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
+
     public readonly ChannelSelectorButton ChannelSelector;
     public readonly HistoryLineEdit Input;
     public readonly ChannelFilterButton FilterButton;
@@ -16,6 +20,8 @@ public class ChatInputBox : PanelContainer
 
     public ChatInputBox()
     {
+        IoCManager.InjectDependencies(this);
+
         Container = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Horizontal,
@@ -38,6 +44,7 @@ public class ChatInputBox : PanelContainer
             HorizontalExpand = true,
             StyleClasses = {"chatLineEdit"}
         };
+        _cfg.OnValueChanged(CCVars.CultureLocale, _ => Input.PlaceHolder =  Loc.GetString("hud-chatbox-info", ("talk-key", BoundKeyHelper.ShortKeyName(ContentKeyFunctions.FocusChat)), ("cycle-key", BoundKeyHelper.ShortKeyName(ContentKeyFunctions.CycleChatChannelForward))));
         Container.AddChild(Input);
         FilterButton = new ChannelFilterButton
         {

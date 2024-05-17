@@ -2,13 +2,15 @@ name: Diff RSIs
 
 on:
   pull_request_target:
+    types: [ labeled ]
     paths:
       - '**.rsi/**.png'
 
 jobs:
   diff:
     name: Diff
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
+    if: github.actor != 'IanComradeBot' && github.event.pull_request.draft == false && github.event.review.state == 'approved' && github.event.label.name == 'Approved'
     steps:
       - name: Checkout
         uses: actions/checkout@v3.6.0

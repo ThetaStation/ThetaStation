@@ -1,0 +1,26 @@
+# Machine Gun
+- type: entity
+  id: ShipEventMachineGunCannonLongMuzzle
+  parent: ShipEventMachineGunCannon
+  suffix: Muzzle Length - 2
+  components:
+    - type: Gun
+      onSpawnBulletOffset: 2
+
+# Light Cannon
+- type: entity
+  id: ShipEventFlakCannonLongMuzzle
+  parent: ShipEventFlakCannon
+  suffix: Muzzle Length - 2
+  components:
+    - type: Gun
+      onSpawnBulletOffset: 2
+
+# Artillery
+- type: entity
+  id: ShipEventSPGLongMuzzle
+  parent: ShipEventSPG
+  suffix: Muzzle Length - 2
+  components:
+    - type: Gun
+      onSpawnBulletOffset: 2

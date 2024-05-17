@@ -136,6 +136,9 @@ namespace Content.Server.Power.EntitySystems
             if (!Resolve(uid, ref battery))
                 return;
 
+            if (!battery.IsRechargeable && value > battery.Charge)
+                return;
+
             var old = battery.CurrentCharge;
             battery.CurrentCharge = MathHelper.Clamp(value, 0, battery.MaxCharge);
             if (MathHelper.CloseTo(battery.CurrentCharge, old))
@@ -166,6 +169,14 @@ namespace Content.Server.Power.EntitySystems
                 return false;
 
             return battery.CurrentCharge / battery.MaxCharge >= 0.99f;
+        }
+
+        public void MakeRechargeable(EntityUid uid, bool rechargeable, BatteryComponent? battery = null)
+        {
+            if (!Resolve(uid, ref battery))
+                return;
+
+            battery.IsRechargeable = rechargeable;
         }
     }
 }

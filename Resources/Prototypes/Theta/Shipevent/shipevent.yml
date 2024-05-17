@@ -1,0 +1,82 @@
+﻿- type: entity
+  noSpawn: true
+  id: ShipEvent
+  parent: BaseGameRule
+  components:
+    - type: ShipEventRule
+      id: ShipEvent
+      startAnnouncement: shipevent-eventannouncement
+      maxOccurrences: 0
+      endAfter: 1
+
+      hudPrototypeId: "ShipeventHUD"
+      captainHudPrototypeId: "ShipeventHUDCaptain"
+
+      #time
+      roundDuration: 1800
+      teamCheckInterval: 5
+      playerCheckInterval: 2
+      respawnDelay: 60
+      bonusInterval: 600
+
+      #points
+      pointsPerInterval: 5000
+      pointsPerHitMultiplier: 0.01
+      pointsPerAssist: 5000
+      pointsPerKill : 10000
+      outOfBoundsPenalty: 2000
+
+      #map gen
+      initialObstacleAmount: 200
+      minFieldSize: 1000
+      maxFieldSize: 3000
+      metersPerPlayer: 100
+      roundFieldSizeTo: 1000
+      shipTypes:
+        - "shiptype_arrowhead"
+        - "shiptype_mule"
+        - "shiptype_skipjack"
+        - "shiptype_tikvyak"
+        - "shiptype_asteroid_ship"
+        - "shiptype_boxship"
+      useNoise: true
+      noiseGenerator: !type:FastNoiseLite
+        frequency: 2
+      noiseThreshold: 0.1
+
+      #bounds
+      boundsCompressionInterval: 0
+      boundsCompressionDistance: 0
+
+      #obstacles
+      obstacleTypes:
+        - "asteroid_small"
+        - "asteroid_large"
+      obstacleAmountAmplitude: 0
+      obstacleSizeAmplitude: 0
+
+      #pickups
+      pickupsPositions: 25
+      pickupsSpawnInterval: 60 # in seconds
+      pickupMinDistance: 100
+      pickupPrototype: ShipEventPickupPrototype
+
+      #anomalies
+      anomalyUpdateInterval: 2
+      anomalySpawnInterval: 60
+      anomalyPrototypes:
+        - "ShipEventRadiationAnomaly"
+        - "ShipEventIonAnomaly"
+
+- type: weightedRandomEntity
+  id: ShipEventPickupPrototype
+  weights:
+    ShipPickupAmmo: 1.0
+    ShipPickupHeal: 1.0
+    ShipPickupPower: 0.4
+
+- type: antag
+  id: ShipTester
+  name: shipevent-role-name
+  antagonist: true
+  objective: roles-antag-shiptester

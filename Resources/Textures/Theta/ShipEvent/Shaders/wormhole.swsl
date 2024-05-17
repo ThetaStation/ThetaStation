@@ -1,0 +1,18 @@
+uniform sampler2D SCREEN_TEXTURE;
+uniform highp vec2 SCREEN_SIZE;
+uniform highp vec2 AttractionCenter;
+uniform highp float AttractionStrength;
+uniform highp float Reverse; //1 or 0
+
+void fragment(){
+    //equivalent to if (Reverse) { time = 5.0 - TIME; }
+    highp float time = (2.0 * Reverse - 1.0) * (5.0 * Reverse - TIME);
+    time = max(0.0, time);
+    
+    highp vec2 delta = FRAGCOORD.xy - AttractionCenter;
+    highp vec2 origin = AttractionStrength * time * (1.0/length(delta)) * delta + FRAGCOORD.xy;
+    highp vec2 originUv = origin / SCREEN_SIZE;
+    //equivalent to if(originUv.x > 1.0 && ...) { COLOR = highp vec4(0.0); }
+    highp float m = float(originUv.x < 1.0 && originUv.y < 1.0 && originUv.x > 0.0 && originUv.y > 0.0);
+    COLOR = texture(SCREEN_TEXTURE, originUv) * m;
+}

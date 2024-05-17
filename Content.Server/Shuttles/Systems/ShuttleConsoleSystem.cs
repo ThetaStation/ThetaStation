@@ -3,6 +3,8 @@ using Content.Server.Power.EntitySystems;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Events;
 using Content.Server.Station.Systems;
+using Content.Server.Theta.RadarRenderable;
+using Content.Server.UserInterface;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Alert;
 using Content.Shared.Popups;
@@ -35,7 +37,10 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
     [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly TagSystem _tags = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private readonly RadarConsoleSystem _radarConsoleSystem = default!;
     [Dependency] private readonly SharedContentEyeSystem _eyeSystem = default!;
+    [Dependency] private readonly RadarRenderableSystem _radarRenderable = default!;
+    [Dependency] private readonly MetaDataSystem _metaDataSystem = default!;
 
     private EntityQuery<MetaDataComponent> _metaQuery;
     private EntityQuery<TransformComponent> _xformQuery;
@@ -55,6 +60,8 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         SubscribeLocalEvent<ShuttleConsoleComponent, ActivatableUIOpenAttemptEvent>(OnConsoleUIOpenAttempt);
         Subs.BuiEvents<ShuttleConsoleComponent>(ShuttleConsoleUiKey.Key, subs =>
         {
+            subs.Event<ShuttleConsoleFTLRequestMessage>(OnDestinationMessage);
+            subs.Event<ShuttleConsoleChangeShipNameMessage>(OnChangeShipName);
             subs.Event<ShuttleConsoleFTLBeaconMessage>(OnBeaconFTLMessage);
             subs.Event<ShuttleConsoleFTLPositionMessage>(OnPositionFTLMessage);
             subs.Event<BoundUIClosedEvent>(OnConsoleUIClose);
@@ -86,6 +93,80 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
     private void OnFtlDestShutdown(EntityUid uid, FTLDestinationComponent component, ComponentShutdown args)
     {
         RefreshShuttleConsoles();
+    }
+
+    private void OnChangeShipName(EntityUid uid, ShuttleConsoleComponent component,
+        ShuttleConsoleChangeShipNameMessage args)
+    {
+        if (string.IsNullOrWhiteSpace(args.NewShipName))
+            return;
+        if (args.NewShipName.Length is > 25 or < 3)
+            return;
+        _metaDataSystem.SetEntityName(uid, args.NewShipName);
+        var shuttleComponent = EntityQueryEnumerator<ShuttleConsoleComponent>();
+        while (shuttleComponent.MoveNext(out var uidS, out var _))
+        {
+            UpdateState(uidS);
+        }
+    }
+
+    private void OnDestinationMessage(EntityUid uid, ShuttleConsoleComponent component,
+        ShuttleConsoleFTLRequestMessage args)
+    {
+        var destination = GetEntity(args.Destination);
+
+        if (!TryComp<FTLDestinationComponent>(destination, out var dest))
+        {
+            return;
+        }
+
+        if (!dest.Enabled)
+            return;
+
+        EntityUid? entity = uid;
+
+        var getShuttleEv = new ConsoleShuttleEvent
+        {
+            Console = uid,
+        };
+
+        RaiseLocalEvent(entity.Value, ref getShuttleEv);
+        entity = getShuttleEv.Console;
+
+        if (!TryComp<TransformComponent>(entity, out var xform) ||
+            !TryComp<ShuttleComponent>(xform.GridUid, out var shuttle))
+        {
+            return;
+        }
+
+        if (dest.Whitelist?.IsValid(entity.Value, EntityManager) == false &&
+            dest.Whitelist?.IsValid(xform.GridUid.Value, EntityManager) == false)
+        {
+            return;
+        }
+
+        var shuttleUid = xform.GridUid.Value;
+
+        if (HasComp<FTLComponent>(shuttleUid))
+        {
+            _popup.PopupCursor(Loc.GetString("shuttle-console-in-ftl"), args.Session);
+            return;
+        }
+
+        if (!_shuttle.CanFTL(xform.GridUid, out var reason))
+        {
+            _popup.PopupCursor(reason, args.Session);
+            return;
+        }
+
+        var dock = HasComp<MapComponent>(destination) && HasComp<MapGridComponent>(destination);
+        var tagEv = new FTLTagEvent();
+        RaiseLocalEvent(xform.GridUid.Value, ref tagEv);
+
+        var ev = new ShuttleConsoleFTLTravelStartEvent(uid);
+        RaiseLocalEvent(ref ev);
+
+        _shuttle.FTLTravel(xform.GridUid.Value, shuttle, destination, dock: dock, priorityTag: tagEv.Tag);
     }
 
     private void OnDock(DockEvent ev)
@@ -266,7 +347,62 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
 
         if (_ui.HasUi(consoleUid, ShuttleConsoleUiKey.Key))
         {
-            _ui.SetUiState(consoleUid, ShuttleConsoleUiKey.Key, new ShuttleBoundUserInterfaceState(navState, mapState, dockState));
+            var metaQuery = GetEntityQuery<MetaDataComponent>();
+
+            // Can't go anywhere when in FTL.
+            var locked = shuttleFtl != null || Paused(shuttleGridUid.Value);
+
+            // Can't cache it because it may have a whitelist for the particular console.
+            // Include paused as we still want to show CentCom.
+            var destQuery = AllEntityQuery<FTLDestinationComponent>();
+
+            while (destQuery.MoveNext(out var destUid, out var comp))
+            {
+                // Can't warp to itself or if it's not on the whitelist (console or shuttle).
+                if (destUid == shuttleGridUid ||
+                    comp.Whitelist?.IsValid(entity.Value) == false &&
+                    (shuttleGridUid == null || comp.Whitelist?.IsValid(shuttleGridUid.Value, EntityManager) == false))
+                {
+                    continue;
+                }
+
+                var meta = metaQuery.GetComponent(destUid);
+                var name = meta.EntityName;
+
+                if (string.IsNullOrEmpty(name))
+                    name = Loc.GetString("shuttle-console-unknown");
+
+                var canTravel = !locked &&
+                                comp.Enabled &&
+                                (!TryComp<FTLComponent>(destUid, out var ftl) || ftl.State == FTLState.Cooldown);
+
+                // Can't travel to same map (yet)
+                if (canTravel && consoleXform?.MapUid == Transform(destUid).MapUid)
+                {
+                    canTravel = false;
+                }
+
+                destinations.Add((GetNetEntity(destUid), name, canTravel));
+            }
+        }
+
+        docks ??= GetAllDocks();
+
+        List<CommonRadarEntityInterfaceState> common = new();
+        if (radar != null)
+            common = _radarRenderable.GetObjectsAround(consoleUid, radar);
+
+        if (_ui.TryGetUi(consoleUid, ShuttleConsoleUiKey.Key, out var bui))
+        {
+            _ui.SetUiState(bui, new ShuttleConsoleBoundInterfaceState(
+                ftlState,
+                ftlTime,
+                destinations,
+                range,
+                GetNetCoordinates(consoleXform?.Coordinates),
+                consoleXform?.LocalRotation,
+                docks,
+                common));
         }
     }
 
@@ -292,6 +428,36 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         {
             RemovePilot(uid, comp);
         }
+
+        var shuttleComponent = EntityQueryEnumerator<ShuttleConsoleComponent>();
+        while (shuttleComponent.MoveNext(out var uid, out var _))
+        {
+            if (!_ui.IsUiOpen(uid, ShuttleConsoleUiKey.Key))
+                continue;
+            UpdateState(uid);
+        }
+    }
+
+
+    /// <summary>
+    /// If pilot is moved then we'll stop them from piloting.
+    /// </summary>
+    private void HandlePilotMove(EntityUid uid, PilotComponent component, ref MoveEvent args)
+    {
+        if (component.Console == null || component.Position == null)
+        {
+            DebugTools.Assert(component.Position == null && component.Console == null);
+            EntityManager.RemoveComponent<PilotComponent>(uid);
+            return;
+        }
+
+        if (args.NewPosition.TryDistance(EntityManager, component.Position.Value, out var distance) &&
+            distance < PilotComponent.BreakDistance)
+        {
+            return;
+        }
+
+        RemovePilot(uid, component);
     }
 
     protected override void HandlePilotShutdown(EntityUid uid, PilotComponent component, ComponentShutdown args)

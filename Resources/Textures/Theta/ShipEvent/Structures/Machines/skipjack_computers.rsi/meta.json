@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "https://github.com/TauCetiStation/TauCetiClassic/commit/386a4ec288741d2e2ef8f65409dde9d78a359d17",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "left",
+      "delays": [
+        [
+          0.2,
+          0.2
+        ]
+      ]
+    },
+	{
+      "name": "left_off"
+    },
+	{
+		"name": "left_broken"
+	},
+	{
+      "name": "right",
+      "delays": [
+        [
+          0.2,
+          0.2
+        ]
+      ]
+    },
+	{
+      "name": "right_off"
+    },
+	{
+		"name": "right_broken"
+	}
+  ]
+}

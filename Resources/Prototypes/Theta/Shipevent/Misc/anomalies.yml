@@ -1,0 +1,72 @@
+- type: entity
+  id: ShipEventBaseAnomaly
+  components:
+  - type: TimedDespawn
+    lifetime: 180
+  - type: Physics
+    bodyType: Dynamic
+    bodyStatus: InAir
+  - type: CanMoveInAir
+  - type: Fixtures
+    fixtures:
+      fix:
+        shape:
+          !type:PhysShapeCircle
+            radius: 0.1
+        mask:
+        - None
+        layer:
+        - None
+  - type: RandomWalk
+    maxSpeed: 30
+    minSpeed: 10
+    maxStepCooldown: 10
+    minStepCooldown: 2
+
+- type: entity
+  id: ShipEventRadiationAnomaly
+  parent: ShipEventBaseAnomaly
+  components:
+  - type: RadarRenderable
+    viewProtos: 
+    - radanomaly_icon
+    - radanomaly_border
+    - radanomaly_fill
+    group: enum.RadarRenderableGroup.Anomaly
+  - type: ShipEventProximityAnomaly
+    range: 30
+    toSpawn: RadiationPulseStrong
+
+- type: entity
+  name: shimmering anomaly
+  id: RadiationPulseStrong
+  parent: RadiationPulse
+  components:
+  - type: RadiationSource
+    intensity: 30
+  - type: RadiationPulse
+    visualRange: 5
+
+- type: entity
+  id: ShipEventIonAnomaly
+  parent: ShipEventBaseAnomaly
+  components:
+  - type: RadarRenderable
+    viewProtos: 
+    - ionanomaly_icon
+    - ionanomaly_border
+    - ionanomaly_fill
+    group: enum.RadarRenderableGroup.Anomaly
+  - type: ShipEventProximityAnomaly
+    range: 30
+    toSpawn: EmpPulse
+
+- type: entity
+  id: EmpPulse
+  components:
+  - type: TriggerOnSpawn
+  - type: EmpOnTrigger
+    range: 2
+    energyConsumption: 5000
+    disableDuration: 5
+  - type: DeleteOnTrigger

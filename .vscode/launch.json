@@ -50,6 +50,14 @@
                 "Client"
             ],
             "preLaunchTask": "build"
+        },
+        {
+            "name": "Server/Compat Client",
+            "configurations": [
+                "Server",
+                "Client (Compatibility renderer)"
+            ],
+            "preLaunchTask": "build"
         }
     ]
 }

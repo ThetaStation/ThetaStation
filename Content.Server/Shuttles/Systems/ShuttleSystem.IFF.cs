@@ -36,11 +36,9 @@ public sealed partial class ShuttleSystem
     {
         if (!TryComp<TransformComponent>(uid, out var xform) || xform.GridUid == null ||
             (component.AllowedFlags & IFFFlags.Hide) == 0x0)
-        {
             return;
-        }
 
-        if (!args.Show)
+        if (!args.Show) 
         {
             AddIFFFlag(xform.GridUid.Value, IFFFlags.Hide);
         }

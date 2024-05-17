@@ -22,6 +22,8 @@ public sealed partial class ShuttleConsoleWindow : FancyWindow,
 
     public event Action<NetEntity, NetEntity>? DockRequest;
     public event Action<NetEntity>? UndockRequest;
+    public event Action<string>? ChangeNamePressed;
+
 
     public ShuttleConsoleWindow()
     {
@@ -40,8 +42,10 @@ public sealed partial class ShuttleConsoleWindow : FancyWindow,
         MapModeButton.Group = group;
         DockModeButton.Group = group;
 
+    }
         NavModeButton.Pressed = true;
         SetupMode(_mode);
+
 
         MapContainer.RequestFTL += (coords, angle) =>
         {
@@ -58,6 +62,12 @@ public sealed partial class ShuttleConsoleWindow : FancyWindow,
             DockRequest?.Invoke(entity, netEntity);
         };
 
+
+        DockContainer.ChangeNamePressed += (str) => 
+        {
+            ChangeName();
+            ShipName.Text = String.Empty;
+        }
         DockContainer.UndockRequest += entity =>
         {
             UndockRequest?.Invoke(entity);
@@ -80,6 +90,44 @@ public sealed partial class ShuttleConsoleWindow : FancyWindow,
         if (mode != ShuttleConsoleMode.Dock)
         {
             DockContainer.Visible = false;
+        }
+    }
+
+    private void ChangeName()
+    {
+        var name = ShipName.Text;
+        if (string.IsNullOrWhiteSpace(name))
+            return;
+        if (name.Length is > 25 or < 3)
+            return;
+
+        ChangeNamePressed?.Invoke(name);
+    }
+
+    public void SetMatrix(EntityCoordinates? coordinates, Angle? angle)
+    {
+        _shuttleEntity = coordinates?.EntityId;
+        RadarScreen.SetMatrix(coordinates, angle);
+    }
+
+    public void UpdateState(ShuttleConsoleBoundInterfaceState scc)
+    {
+        UpdateDocks(scc.Docks);
+        UpdateFTL(scc.Destinations, scc.FTLState, scc.FTLTime);
+        RadarScreen.UpdateState(scc);
+        MaxRadarRange.Text = $"{scc.MaxRange:0}";
+        UpdateNameInputPlaceholder();
+    }
+
+    public void UpdateNameInputPlaceholder()
+    {
+        var metaQuery = _entManager.GetEntityQuery<MetaDataComponent>();
+        if (_shuttleEntity != null)
+        {
+            var name = metaQuery.GetComponent(_shuttleEntity.Value).EntityName;
+            if (name == string.Empty)
+                name = Loc.GetString("shuttle-console-unknown");
+            ShipName.PlaceHolder = name;
         }
     }
 

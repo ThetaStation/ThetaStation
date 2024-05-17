@@ -85,6 +85,10 @@
   - type: RotationVisuals
     defaultRotation: 90
     horizontalRotation: 90
+  - type: RadarRenderable
+    viewProtos: 
+    - genericMob
+    group: enum.RadarRenderableGroup.ShipEventTeammate
   - type: HumanoidAppearance
     species: Human
   - type: SlowOnDamage
@@ -291,8 +295,8 @@
   - type: Butcherable
     butcheringType: Spike # TODO human.
     spawned:
-      - id: FoodMeat
-        amount: 5
+    - id: FoodMeat
+      amount: 5
   - type: Respirator
     damage:
       types:

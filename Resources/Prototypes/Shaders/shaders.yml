@@ -82,6 +82,21 @@
   id: Stealth
   kind: source
   path: "/Textures/Shaders/stealth.swsl"
+  
+- type: shader
+  id: BoundsOverlay
+  kind: source
+  path: "/Textures/Theta/ShipEvent/Shaders/bounds_overlay.swsl"
+
+- type: shader
+  id: Wormhole
+  kind: source
+  path: "/Textures/Theta/ShipEvent/Shaders/wormhole.swsl"
+
+- type: shader
+  id: ShieldOverlay
+  kind: source
+  path: "/Textures/Theta/ShipEvent/Shaders/circular_waves.swsl"
 
 - type: shader
   id: PaperStamp

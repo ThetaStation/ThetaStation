@@ -11,22 +11,11 @@ public sealed class RadiationPulseSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<RadiationPulseComponent, ComponentStartup>(OnStartup);
+        SubscribeLocalEvent<RadiationPulseComponent, ComponentStartup>(OnPulseStartup);
     }
 
-    private void OnStartup(EntityUid uid, RadiationPulseComponent component, ComponentStartup args)
+    private void OnPulseStartup(EntityUid uid, RadiationPulseComponent component, ComponentStartup args)
     {
         component.StartTime = _timing.RealTime;
-
-        // try to get despawn time or keep default duration time
-        if (TryComp<TimedDespawnComponent>(uid, out var despawn))
-        {
-            component.VisualDuration = despawn.Lifetime;
-        }
-        // try to get radiation range or keep default visual range
-        if (TryComp<RadiationSourceComponent>(uid, out var radSource))
-        {
-            component.VisualRange = radSource.Intensity / radSource.Slope;
-        }
     }
 }

@@ -64,4 +64,42 @@ public sealed class CCCVars
     /// </summary>
     public static readonly CVarDef<bool> PeacefulRoundEnd =
         CVarDef.Create("game.peaceful_end", true, CVar.SERVERONLY);
+
+    /*
+     * Discord Auth
+     */
+
+    /// <summary>
+    ///     Enabled Discord linking, show linking button and modal window
+    /// </summary>
+    public static readonly CVarDef<bool> DiscordAuthEnabled =
+        CVarDef.Create("discord_auth.enabled", false, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     URL of the Discord auth server API
+    /// </summary>
+    public static readonly CVarDef<string> DiscordAuthApiUrl =
+        CVarDef.Create("discord_auth.api_url", "", CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Secret key of the Discord auth server API
+    /// </summary>
+    public static readonly CVarDef<string> DiscordAuthApiKey =
+        CVarDef.Create("discord_auth.api_key", "", CVar.SERVERONLY | CVar.CONFIDENTIAL);
+
+    /*
+     * Theta
+     */
+
+    /// <summary>
+    ///     URL of the sponsors server API.
+    /// </summary>
+    public static readonly CVarDef<string> SponsorsApiUrl =
+        CVarDef.Create("sponsor.api_url", "", CVar.SERVERONLY);
+
+    /// <summary>
+    /// Name of the game server in lobby.
+    /// </summary>
+    public static readonly CVarDef<string> ServerNameLobby =
+        CVarDef.Create("game.servername_lobby", "", CVar.ARCHIVE | CVar.REPLICATED | CVar.SERVER);
 }

@@ -10,6 +10,11 @@
     Telecrystal: 3
   categories:
   - UplinkWeaponry
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkRevolverPython
@@ -31,6 +36,11 @@
     Telecrystal: 4
   categories:
   - UplinkWeaponry
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 # Poor accuracy, slow to fire, cheap option
 - type: listing
@@ -42,6 +52,11 @@
     Telecrystal: 1
   categories:
   - UplinkWeaponry
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkEsword
@@ -63,7 +78,12 @@
   cost:
     Telecrystal: 2
   categories:
-  - UplinkWeaponry
+  - UplinkWeapons
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkThrowingKnivesKit
@@ -75,6 +95,11 @@
     Telecrystal: 6
   categories:
     - UplinkWeaponry
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkGlovesNorthStar
@@ -85,6 +110,11 @@
     Telecrystal: 8
   categories:
   - UplinkWeaponry
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkDisposableTurret
@@ -100,6 +130,7 @@
       blacklist:
         tags:
           - NukeOpsUplink
+          - ShipEventUplink
 
 - type: listing
   id: UplinkEshield
@@ -193,6 +224,11 @@
     Telecrystal: 1
   categories:
   - UplinkExplosives
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkSmokeGrenade
@@ -203,6 +239,11 @@
     Telecrystal: 1
   categories:
   - UplinkExplosives
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkSyndieMiniBomb
@@ -213,6 +254,11 @@
     Telecrystal: 6
   categories:
     - UplinkExplosives
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkSupermatterGrenade
@@ -223,6 +269,11 @@
     Telecrystal: 6
   categories:
     - UplinkExplosives
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkWhiteholeGrenade
@@ -233,6 +284,11 @@
     Telecrystal: 3
   categories:
     - UplinkExplosives
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkGrenadePenguin
@@ -248,6 +304,10 @@
     blacklist:
       components:
       - SurplusBundle
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+        - ShipEventUplink
 
 - type: listing
   id: UplinkC4
@@ -304,6 +364,11 @@
     Telecrystal: 4
   categories:
   - UplinkExplosives
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkSyndicateBomb
@@ -320,6 +385,7 @@
     blacklist:
       tags:
       - NukeOpsUplink
+      - ShipEventUplink
 
 - type: listing
   id: UplinkSyndicateBombNukie
@@ -388,6 +454,11 @@
     Telecrystal: 1
   categories:
   - UplinkAmmo
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 # For the C20R
 - type: listing
@@ -412,6 +483,11 @@
     Telecrystal: 1
   categories:
   - UplinkAmmo
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 # For the Python
 - type: listing
@@ -424,6 +500,11 @@
     Telecrystal: 3
   categories:
   - UplinkAmmo
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 # For the mosin
 - type: listing
@@ -435,6 +516,11 @@
     Telecrystal: 1
   categories:
   - UplinkAmmo
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 # for the hristov
 - type: listing
@@ -446,6 +532,11 @@
     Telecrystal: 2
   categories:
   - UplinkAmmo
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkAmmoBundle
@@ -898,6 +989,7 @@
     blacklist:
       tags:
       - NukeOpsUplink
+      - ShipEventUplink
 
 - type: listing
   id: UplinkReinforcementRadioSyndicate
@@ -913,6 +1005,7 @@
     - !type:StoreWhitelistCondition
       blacklist:
         tags:
+          - ShipEventUplink
           - NukeOpsUplink
 
 - type: listing
@@ -961,6 +1054,7 @@
     - !type:StoreWhitelistCondition
       blacklist:
         tags:
+          - ShipEventUplink
           - NukeOpsUplink
 
 - type: listing
@@ -1036,6 +1130,7 @@
       blacklist:
         tags:
           - NukeOpsUplink
+          - ShipEventUplink
 
 - type: listing
   id: UplinkFreedomImplanter
@@ -1047,6 +1142,11 @@
     Telecrystal: 5
   categories:
     - UplinkImplants
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkScramImplanter
@@ -1058,6 +1158,11 @@
     Telecrystal: 6 # it's a gamble that may kill you easily so 6 TC per 2 uses, second one more of a backup
   categories:
     - UplinkImplants
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkDnaScramblerImplant
@@ -1069,6 +1174,11 @@
     Telecrystal: 5
   categories:
     - UplinkImplants
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - ShipEventUplink
 
 - type: listing
   id: UplinkEmpImplanter
@@ -1116,6 +1226,7 @@
       whitelist:
         tags:
           - NukeOpsUplink
+          - ShipEventUplink
     - !type:BuyerWhitelistCondition
       blacklist:
         components:
@@ -1152,6 +1263,7 @@
       blacklist:
         tags:
           - NukeOpsUplink
+          - ShipEventUplink
 
 - type: listing
   id: UplinkDeathRattle
@@ -1709,10 +1821,10 @@
   categories:
   - UplinkJob
   conditions:
-  - !type:BuyerJobCondition
-    whitelist:
-    - Librarian
   - !type:BuyerWhitelistCondition
     blacklist:
       components:
+  - !type:BuyerJobCondition
+    whitelist:
+    - Librarian
       - SurplusBundle

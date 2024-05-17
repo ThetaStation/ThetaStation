@@ -185,7 +185,9 @@ public sealed class TipsSystem : EntitySystem
 
     private void AnnounceRandomTip()
     {
-        if (!_prototype.TryIndex<DatasetPrototype>(_tipsDataset, out var tips))
+        var tipsDataset = _cfg.GetCVar(CCVars.CultureLocale) == "en-US" ? "Tips_en" : "Tips_ru";
+
+        if (!_prototype.TryIndex<DatasetPrototype>(tipsDataset, out var tips))
             return;
 
         var tip = _random.Pick(tips.Values);
