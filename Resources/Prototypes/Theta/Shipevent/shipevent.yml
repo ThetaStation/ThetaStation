@@ -39,6 +39,7 @@
         - "shiptype_tikvyak"
         - "shiptype_asteroid_ship"
         - "shiptype_boxship"
+        - "shiptype_python"
       useNoise: true
       noiseGenerator: !type:FastNoiseLite
         frequency: 2
