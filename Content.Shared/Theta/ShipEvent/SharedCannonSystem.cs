@@ -1,8 +1,6 @@
-using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Map;
-using Robust.Shared.Physics.Systems;
 using Robust.Shared.Serialization;
 using System.Numerics;
 using Content.Shared.Interaction.Events;
@@ -15,9 +13,7 @@ namespace Content.Shared.Theta.ShipEvent;
 public abstract class SharedCannonSystem : EntitySystem
 {
     [Dependency] private readonly SharedGunSystem _gunSystem = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly ItemSlotsSystem _slotSys = default!;
     [Dependency] private readonly INetManager _netMan = default!;
 
     public override void Initialize()
@@ -100,7 +96,10 @@ public abstract class SharedCannonSystem : EntitySystem
 
         TransformComponent cannonTransform = Transform(GetEntity(args.CannonUid));
         TransformComponent pilotTransform = Transform(GetEntity(args.PilotUid));
-        if (!pilotTransform.GridUid.Equals(cannonTransform.GridUid))
+        if (TryComp<ShipEventTeamMarkerComponent>(pilotTransform.GridUid, out var marker) &&
+            marker.Team != null &&
+            cannonTransform.GridUid != null &&
+            !marker.Team.ShipGrids.Contains(cannonTransform.GridUid.Value))
             return false;
 
         Angle firingAngle = ThetaHelpers.AngNormal(new Angle(args.Coordinates - _transform.GetWorldPosition(cannonTransform)) -

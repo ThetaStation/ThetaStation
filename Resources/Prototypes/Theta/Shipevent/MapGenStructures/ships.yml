@@ -91,3 +91,19 @@
   previewImage: /Textures/Theta/ShipEvent/ShipPreviews/asteroid-ship-preview.png
   structurePrototype: "shipevent_asteroid_ship"
   minCrewAmount: 2
+
+- type: structure
+  id: shipevent_python
+  generator: !type:MapLoaderGenerator
+    mapPath: "/Maps/Theta/Shipevent/Ships/shipevent-python.yml"
+  spawnWeight: 0
+  minDistance: 20
+
+- type: shiptype
+  id: shiptype_python
+  name: shipevent-python-name
+  description: shipevent-python-desc
+  class: shipevent-shipclass-heavy
+  previewImage: /Textures/Theta/ShipEvent/ShipPreviews/python-preview.png
+  structurePrototype: "shipevent_python"
+  minCrewAmount: 2

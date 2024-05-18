@@ -15,11 +15,11 @@ shipevent-arrowhead-desc =
 
 shipevent-boxship-name = Boxship
 shipevent-boxship-desc =
-    Also known as "coffin".
+    Also known as "coffin". VERY HARD TO CONTROL.
 
 shipevent-skipjack-name = Skipjack
 shipevent-skipjack-desc = A reshaped space pirate support ship that was once stolen from a landfill in the Solar System.
-    NO SIDE ENGINES AND VERY DIFFICULT TO CONTROL! Owns heavy armor and many types of weapons in large quantities.
+    LACK OF SIDE THRUSTERS MAKES IT HARD TO CONTROL! Owns heavy armor and many types of weapons in large quantities.
 
 shipevent-tikvyak-name = Gourd
 shipevent-tikvyak-desc = A GOURD IS NOT A PUMPKIN!!!
@@ -29,3 +29,7 @@ shipevent-asteroid-ship-desc =
     It is poorly protected, has 6 static cannons on the 3 sides and looks like an asteroid. 
     The cannons are hidden behind doors which look like an asteroid rock and are controlled from the inside.
     Has extended stealth mode duration.
+
+shipevent-python-name = Python
+shipevent-python-desc =
+    Long ship consisting of 4 sections connected with chains for flexibility. VERY HARD TO CONTROL.
