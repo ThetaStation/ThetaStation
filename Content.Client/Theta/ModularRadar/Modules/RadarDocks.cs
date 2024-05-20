@@ -11,14 +11,9 @@ namespace Content.Client.Theta.ModularRadar.Modules;
 
 public sealed class RadarDocks : RadarModule
 {
-    private Dictionary<EntityUid, List<DockingInterfaceState>> _docks = new();
+    private Dictionary<NetEntity, List<DockingPortState>> _docks = new();
 
     public bool ShowDocks { get; set; } = true;
-
-    /// <summary>
-    /// Currently hovered docked to show on the map.
-    /// </summary>
-    public EntityUid? HighlightedDock;
 
     public RadarDocks(ModularRadarControl parentRadar) : base(parentRadar)
     {
@@ -29,14 +24,7 @@ public sealed class RadarDocks : RadarModule
         if(state is not RadarConsoleBoundInterfaceState radarState)
             return;
 
-        _docks.Clear();
-
-        foreach (var dockState in radarState.Docks)
-        {
-            var coordinates = dockState.Coordinates;
-            var grid = _docks.GetOrNew(EntManager.GetEntity(coordinates.NetEntity));
-            grid.Add(dockState);
-        }
+        _docks = radarState.DockState.Docks;
     }
 
     public override void Draw(DrawingHandleScreen handle, Parameters parameters)
@@ -83,19 +71,19 @@ public sealed class RadarDocks : RadarModule
             return;
 
         const float DockScale = 1f;
+        var nent = EntManager.GetNetEntity(uid);
 
-        if (_docks.TryGetValue(uid, out var docks))
+        if (_docks.TryGetValue(nent, out var docks))
         {
             foreach (var state in docks)
             {
-                var ent = EntManager.GetEntity(state.Entity);
                 var position = state.Coordinates.Position;
                 var uiPosition = parameters.DrawMatrix.Transform(position);
 
-                if (uiPosition.Length() > WorldRange - DockScale)
+                if (uiPosition.Length() > (WorldRange * 2f) - DockScale)
                     continue;
 
-                var color = HighlightedDock == ent ? state.HighlightedColor : state.Color;
+                var color = Color.ToSrgb(Color.Magenta);
 
                 uiPosition.Y = -uiPosition.Y;
 

@@ -113,7 +113,6 @@
   parent: RCD
   components:
     - type: RCD
-      delay: 0
     - type: LimitedCharges
       maxCharges: 20
       charges: 20

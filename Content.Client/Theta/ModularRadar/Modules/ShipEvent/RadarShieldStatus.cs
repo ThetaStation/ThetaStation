@@ -19,8 +19,6 @@ public sealed class RadarShieldStatus : RadarModule
 
     public override void Draw(DrawingHandleScreen handle, Parameters parameters)
     {
-        base.Draw(handle, parameters);
-
         var ourGridId = ParentCoordinates!.Value.GetGridUid(EntManager);
         var rot = _formSys.GetWorldRotation(ourGridId!.Value);
         var query = EntManager.EntityQueryEnumerator<CircularShieldComponent>();

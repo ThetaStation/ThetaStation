@@ -1,10 +1,12 @@
 using System.Numerics;
 using Content.Shared.Radiation.Components;
+using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Enums;
 using Robust.Shared.Graphics;
 using Robust.Shared.Map;
+using Robust.Shared.Physics;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
@@ -15,6 +17,7 @@ namespace Content.Client.Radiation.Overlays
         [Dependency] private readonly IEntityManager _entityManager = default!;
         [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
         [Dependency] private readonly IGameTiming _gameTiming = default!;
+        private TransformSystem? _transform;
 
         private const float MaxDist = 15.0f;
 
@@ -81,6 +84,8 @@ namespace Content.Client.Radiation.Overlays
         //Queries all pulses on the map and either adds or removes them from the list of rendered pulses based on whether they should be drawn (in range? on the same z-level/map? pulse entity still exists?)
         private void RadiationQuery(IEye? currentEye)
         {
+            _transform ??= _entityManager.System<TransformSystem>();
+
             if (currentEye == null)
             {
                 _pulses.Clear();
@@ -100,7 +105,7 @@ namespace Content.Client.Radiation.Overlays
                             (
                                 _baseShader.Duplicate(),
                                 new RadiationShaderInstance(
-                                    _entityManager.GetComponent<TransformComponent>(pulseEntity).MapPosition,
+                                    _transform.GetMapCoordinates(pulseEntity),
                                     pulse.VisualRange,
                                     pulse.StartTime
                                 )
@@ -117,7 +122,7 @@ namespace Content.Client.Radiation.Overlays
                     _entityManager.TryGetComponent(pulseEntity, out RadiationPulseComponent? pulse))
                 {
                     var shaderInstance = _pulses[pulseEntity];
-                    shaderInstance.instance.CurrentMapCoords = _entityManager.GetComponent<TransformComponent>(pulseEntity).MapPosition;
+                    shaderInstance.instance.CurrentMapCoords = _transform.GetMapCoordinates(pulseEntity);
                     shaderInstance.instance.Range = pulse.VisualRange;
                 } else {
                     _pulses[pulseEntity].shd.Dispose();
@@ -129,7 +134,10 @@ namespace Content.Client.Radiation.Overlays
 
         private bool PulseQualifies(EntityUid pulseEntity, MapCoordinates currentEyeLoc)
         {
-            return _entityManager.GetComponent<TransformComponent>(pulseEntity).MapID == currentEyeLoc.MapId && _entityManager.GetComponent<TransformComponent>(pulseEntity).Coordinates.InRange(_entityManager, EntityCoordinates.FromMap(_entityManager, _entityManager.GetComponent<TransformComponent>(pulseEntity).ParentUid, currentEyeLoc), MaxDist);
+            var transformComponent = _entityManager.GetComponent<TransformComponent>(pulseEntity);
+            var transformSystem = _entityManager.System<SharedTransformSystem>();
+            return transformComponent.MapID == currentEyeLoc.MapId
+                && transformComponent.Coordinates.InRange(_entityManager, transformSystem, EntityCoordinates.FromMap(transformComponent.ParentUid, currentEyeLoc, transformSystem, _entityManager), MaxDist);
         }
 
         private sealed record RadiationShaderInstance(MapCoordinates CurrentMapCoords, float Range, TimeSpan Start)

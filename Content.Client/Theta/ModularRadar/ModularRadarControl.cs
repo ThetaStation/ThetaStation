@@ -20,7 +20,7 @@ public abstract class ModularRadarControl : MapGridControl
 {
     [Dependency] private readonly IEntityManager _entManager = default!;
 
-    private const int CircleDistance = 50; //in world meters
+    public readonly Font Font;
 
     /// <summary>
     /// Used to transform all of the radar objects. Typically is a shuttle console parented to a grid.
@@ -33,12 +33,10 @@ public abstract class ModularRadarControl : MapGridControl
 
     public Action? OnParentUidSet;
 
-    private Font _font;
-
     public ModularRadarControl(float minRange = 64f, float maxRange = 256f, float range = 256f)
         : base(minRange, maxRange, range)
     {
-        _font = IoCManager.Resolve<IResourceCache>().GetFont("/Fonts/NotoSans/NotoSans-Regular.ttf", 6);
+        Font = IoCManager.Resolve<IResourceCache>().GetFont("/Fonts/NotoSans/NotoSans-Regular.ttf", 6);
     }
 
     protected override void MouseMove(GUIMouseMoveEventArgs args)
@@ -103,10 +101,10 @@ public abstract class ModularRadarControl : MapGridControl
         switch (ls)
         {
             case RadarConsoleBoundInterfaceState state:
-                UpdateMaxRange(state.MaxRange);
+                UpdateMaxRange(state.NavState.MaxRange);
                 break;
             case ShieldConsoleBoundsUserInterfaceState shieldState:
-                UpdateMaxRange(shieldState.MaxRange);
+                UpdateMaxRange(shieldState.NavState.MaxRange);
                 break;
         }
 
@@ -135,30 +133,15 @@ public abstract class ModularRadarControl : MapGridControl
     {
         base.Draw(handle);
 
-        var background = GetBackground();
-        handle.DrawRect(new UIBox2(Vector2.Zero, new Vector2(SizeFull)), background);
+        var backing = GetBackground();
+        handle.DrawRect(PixelSizeBox, backing);
+        DrawCircles(handle);
 
         // No data
         if (_coordinates == null || _rotation == null)
         {
             Clear();
             return;
-        }
-
-        var linesRadial = 8;
-        for (var i = 0; i < linesRadial; i++)
-        {
-            Angle angle = Math.PI / linesRadial * i;
-            Vector2 extent = angle.ToVec() * SizeFull;
-            handle.DrawLine(MidpointVector - extent, MidpointVector + extent, new Color(0.08f, 0.08f, 0.08f));
-        }
-
-        var circles = (int) Math.Log2(WorldRange);
-        for (var i = 0; i < circles; i++)
-        {
-            var radius = (float) Math.Pow(2, i) * CircleDistance;
-            handle.DrawString(_font, new Vector2(MidPoint, MidPoint - radius * MinimapScale), radius.ToString(), Color.DimGray);
-            handle.DrawCircle(MidpointVector, radius * MinimapScale, Color.DimGray, false);
         }
 
         var offsetMatrix = GetOffsetMatrix();
@@ -194,6 +177,44 @@ public abstract class ModularRadarControl : MapGridControl
         }
     }
 
+    private void DrawCircles(DrawingHandleScreen handle)
+    {
+        // Equatorial lines
+        var gridLines = Color.LightGray.WithAlpha(0.01f);
+
+        // Each circle is this x distance of the last one.
+        const float EquatorialMultiplier = 25;
+        var origin = ScalePosition(-new Vector2(Offset.X, -Offset.Y));
+        var color = Color.ToSrgb(gridLines).WithAlpha(0.05f);
+
+        var circles = (int) Math.Log2(WorldRange);
+        for (var i = 0; i < circles; i++)
+        {
+            var radius = (float) Math.Pow(2, i) * EquatorialMultiplier;
+
+            var text = $"{radius:0}m";
+            var textDimensions = handle.GetDimensions(Font, text, UIScale);
+
+            handle.DrawCircle(MidPointVector, radius * MinimapScale, Color.DimGray, false);
+            handle.DrawString(Font,
+                ScalePosition(new Vector2(0f, -radius)) - new Vector2(0f, textDimensions.Y),
+                text,
+                UIScale,
+                color);
+        }
+
+        const int gridLinesRadial = 8;
+
+        for (var i = 0; i < gridLinesRadial; i++)
+        {
+            Angle angle = (Math.PI / gridLinesRadial) * i;
+            // TODO: Handle distance properly.
+            var aExtent = angle.ToVec() * ScaledMinimapRadius * 1.42f;
+            var lineColor = Color.MediumSpringGreen.WithAlpha(0.02f);
+            handle.DrawLine(origin - aExtent, origin + aExtent, lineColor);
+        }
+    }
+
     public Matrix3 GetOffsetMatrix()
     {
         if (_coordinates == null || _rotation == null)
@@ -209,7 +230,7 @@ public abstract class ModularRadarControl : MapGridControl
         );
     }
 
-    protected virtual Angle GetMatrixRotation()
+    public virtual Angle GetMatrixRotation()
     {
         var xformQuery = _entManager.GetEntityQuery<TransformComponent>();
         if (!xformQuery.TryGetComponent(_coordinates!.Value.EntityId, out var xform))

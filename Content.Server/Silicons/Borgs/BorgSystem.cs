@@ -1,9 +1,11 @@
-﻿using Content.Server.Actions;
+using Content.Server.Actions;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
+using Content.Server.DeviceNetwork.Systems;
+using Content.Server.Explosion.EntitySystems;
 using Content.Server.Hands.Systems;
 using Content.Server.PowerCell;
-using Content.Server.UserInterface;
+using Content.Shared.UserInterface;
 using Content.Shared.Access.Systems;
 using Content.Shared.Alert;
 using Content.Shared.Database;
@@ -14,6 +16,7 @@ using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Systems;
+using Content.Shared.Pointing;
 using Content.Shared.PowerCell;
 using Content.Shared.PowerCell.Components;
 using Content.Shared.Roles;
@@ -25,6 +28,7 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
+using Robust.Shared.Timing;
 
 namespace Content.Server.Silicons.Borgs;
 
@@ -33,10 +37,13 @@ public sealed partial class BorgSystem : SharedBorgSystem
 {
     [Dependency] private readonly IAdminLogManager _adminLog = default!;
     [Dependency] private readonly IBanManager _banManager = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedAccessSystem _access = default!;
     [Dependency] private readonly ActionsSystem _actions = default!;
     [Dependency] private readonly AlertsSystem _alerts = default!;
+    [Dependency] private readonly DeviceNetworkSystem _deviceNetwork = default!;
+    [Dependency] private readonly ExplosionSystem _explosion = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly HandsSystem _hands = default!;
     [Dependency] private readonly MetaDataSystem _metaData = default!;
@@ -67,10 +74,12 @@ public sealed partial class BorgSystem : SharedBorgSystem
         SubscribeLocalEvent<BorgChassisComponent, GetCharactedDeadIcEvent>(OnGetDeadIC);
 
         SubscribeLocalEvent<BorgBrainComponent, MindAddedMessage>(OnBrainMindAdded);
+        SubscribeLocalEvent<BorgBrainComponent, PointAttemptEvent>(OnBrainPointAttempt);
 
         InitializeModules();
         InitializeMMI();
         InitializeUI();
+        InitializeTransponder();
     }
 
     private void OnMapInit(EntityUid uid, BorgChassisComponent component, MapInitEvent args)
@@ -242,6 +251,11 @@ public sealed partial class BorgSystem : SharedBorgSystem
         _mind.TransferTo(mindId, containerEnt, mind: mind);
     }
 
+    private void OnBrainPointAttempt(EntityUid uid, BorgBrainComponent component, PointAttemptEvent args)
+    {
+        args.Cancel();
+    }
+
     private void UpdateBatteryAlert(EntityUid uid, PowerCellSlotComponent? slotComponent = null)
     {
         if (!_powerCell.TryGetBatteryFromSlot(uid, out var battery, slotComponent))
@@ -274,7 +288,7 @@ public sealed partial class BorgSystem : SharedBorgSystem
 
         component.Activated = true;
         InstallAllModules(uid, component);
-        Dirty(component);
+        Dirty(uid, component);
         _movementSpeedModifier.RefreshMovementSpeedModifiers(uid);
     }
 
@@ -288,7 +302,7 @@ public sealed partial class BorgSystem : SharedBorgSystem
 
         component.Activated = false;
         DisableAllModules(uid, component);
-        Dirty(component);
+        Dirty(uid, component);
         _movementSpeedModifier.RefreshMovementSpeedModifiers(uid);
     }
 

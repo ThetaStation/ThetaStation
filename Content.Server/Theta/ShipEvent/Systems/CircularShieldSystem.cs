@@ -1,6 +1,6 @@
 using System.Linq;
 using Content.Server.Power.Components;
-using Content.Server.UserInterface;
+using Content.Server.Shuttles.Systems;
 using Content.Shared.DeviceLinking;
 using Content.Shared.DeviceLinking.Events;
 using Content.Shared.Physics;
@@ -9,6 +9,7 @@ using Content.Shared.Shuttles.Components;
 using Content.Shared.Theta.ShipEvent.CircularShield;
 using Content.Shared.Theta.ShipEvent.Components;
 using Content.Shared.Theta.ShipEvent.UI;
+using Content.Shared.UserInterface;
 using Robust.Server.GameObjects;
 using Robust.Server.GameStates;
 using Robust.Shared.Physics.Collision.Shapes;
@@ -24,6 +25,7 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
     [Dependency] private readonly FixtureSystem _fixSys = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSys = default!;
     [Dependency] private readonly TransformSystem _formSys = default!;
+    [Dependency] private readonly ShuttleConsoleSystem _shuttleConsole = default!;
     [Dependency] private readonly PvsOverrideSystem _pvsIgnoreSys = default!;
 
     private const string ShieldFixtureId = "ShieldFixture";
@@ -80,11 +82,8 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
             MaxRadius = shield.MaxRadius
         };
 
-        var angle = Angle.Zero;
-        _uiSys.TrySetUiState(uid, CircularShieldConsoleUiKey.Key, new ShieldConsoleBoundsUserInterfaceState(
-            radar.MaxRange,
-            GetNetCoordinates(transform.Coordinates),
-            angle,
+        _uiSys.SetUiState(uid, CircularShieldConsoleUiKey.Key, new ShieldConsoleBoundsUserInterfaceState(
+            _shuttleConsole.GetNavState(uid, new Dictionary<NetEntity, List<DockingPortState>>()),
             shieldState
             ));
     }

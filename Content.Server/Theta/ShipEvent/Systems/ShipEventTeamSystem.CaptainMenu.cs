@@ -17,7 +17,9 @@ public partial class ShipEventTeamSystem
     {
         foreach (var team in Teams)
         {
-            if (team.Captain == msg.Session.ConnectedClient.UserName)
+            if(!_playerMan.TryGetSessionByEntity(msg.Actor, out var session))
+                continue;
+            if (team.Captain == session.Channel.UserName)
             {
                 team.JoinPassword = msg.Password;
                 break;
@@ -29,7 +31,9 @@ public partial class ShipEventTeamSystem
     {
         foreach (var team in Teams)
         {
-            if (team.Captain == msg.Session.ConnectedClient.UserName)
+            if(!_playerMan.TryGetSessionByEntity(msg.Actor, out var session))
+                continue;
+            if (team.Captain == session.Channel.UserName)
             {
                 team.MaxMembers = msg.MaxMembers;
                 break;
@@ -41,7 +45,9 @@ public partial class ShipEventTeamSystem
     {
         foreach (var team in Teams)
         {
-            if (team.Captain == msg.Session.ConnectedClient.UserName)
+            if(!_playerMan.TryGetSessionByEntity(msg.Actor, out var session))
+                continue;
+            if (team.Captain == session.Channel.UserName)
             {
                 team.ChosenShipType = msg.NewShip;
                 var shipName = team.ChosenShipType.Name;
@@ -56,7 +62,10 @@ public partial class ShipEventTeamSystem
     {
         foreach (var team in Teams)
         {
-            if (team.Captain != msg.Session.Name)
+            if(!_playerMan.TryGetSessionByEntity(msg.Actor, out var session))
+                continue;
+
+            if (team.Captain != session.Channel.UserName)
                 continue;
 
             if (msg.CKey == team.Captain)
@@ -65,11 +74,8 @@ public partial class ShipEventTeamSystem
             if (team.Members.Contains(msg.CKey))
             {
                 team.Members.Remove(msg.CKey);
-                if (_playerMan.TryGetSessionByUsername(msg.CKey, out var session))
-                {
-                    _chatSys.SendSimpleMessage(Loc.GetString("shipevent-kicked"), session, ChatChannel.Local, Color.DarkRed);
-                    QueueDel(session.AttachedEntity);
-                }
+                _chatSys.SendSimpleMessage(Loc.GetString("shipevent-kicked"), session, ChatChannel.Local, Color.DarkRed);
+                QueueDel(session.AttachedEntity);
             }
             break;
         }

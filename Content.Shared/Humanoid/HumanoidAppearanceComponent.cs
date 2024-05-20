@@ -80,11 +80,6 @@ public sealed partial class HumanoidAppearanceComponent : Component
     [DataField, AutoNetworkedField]
     public Color EyeColor = Color.Brown;
 
-    // Corvax-ChatColor-Start
-    [DataField("speakerColor")]
-    public Color SpeakerColor = Color.White;
-    // Corvax-ChatColor-End
-
     /// <summary>
     ///     Hair color of this humanoid. Used to avoid looping through all markings
     /// </summary>
@@ -96,6 +91,12 @@ public sealed partial class HumanoidAppearanceComponent : Component
     /// </summary>
     [ViewVariables(VVAccess.ReadOnly)]
     public Color? CachedFacialHairColor;
+
+    /// <summary>
+    ///     Which layers of this humanoid that should be hidden on equipping a corresponding item..
+    /// </summary>
+    [DataField]
+    public HashSet<HumanoidVisualLayers> HideLayersOnEquip = [HumanoidVisualLayers.Hair];
 }
 
 [DataDefinition]

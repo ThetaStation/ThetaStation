@@ -7,7 +7,6 @@
     - type: Tag
       tags:
         - Wall
-        - RCDDeconstructWhitelist
     - type: Sprite
       sprite: Theta/ShipEvent/Shuttles/tau_vox.rsi
     - type: Icon
@@ -23,6 +22,10 @@
           layer:
             - WallLayer
           density: 3000
+    - type: RCDDeconstructable
+      cost: 4
+      delay: 2
+      fx: EffectRCDDeconstruct2
     - type: Destructible
       thresholds:
         - trigger:
@@ -37,11 +40,9 @@
           behaviors:
             - !type:PlaySoundBehavior
               sound:
-                path: /Audio/Effects/metalbreak.ogg
+                collection: MetalBreak
             - !type:DoActsBehavior
               acts: ["Destruction"]
-      destroySound:
-        path: /Audio/Effects/metalbreak.ogg
 
 - type: entity
   parent: VoxShuttleWall

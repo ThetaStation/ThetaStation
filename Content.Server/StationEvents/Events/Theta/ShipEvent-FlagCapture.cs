@@ -1,6 +1,6 @@
 using System.Threading;
 using Content.Server.GameTicking;
-using Content.Server.GameTicking.Rules.Components;
+using Content.Server.GameTicking.Components;
 using Content.Server.Theta.MapGen;
 using Content.Server.Theta.ShipEvent.Systems;
 using Content.Shared.Roles.Theta;

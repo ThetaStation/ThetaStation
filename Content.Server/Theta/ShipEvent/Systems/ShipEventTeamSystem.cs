@@ -327,11 +327,8 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         Enum uiKey = TeamViewUiKey.Key;
         if (_uiSys.IsUiOpen(uid, uiKey))
             return;
-        if (_uiSys.TryGetUi(uid, uiKey, out var bui))
-        {
-            _uiSys.OpenUi(bui, session);
-            _uiSys.SetUiState(bui, new TeamViewBoundUserInterfaceState(teamsInfo));
-        }
+        _uiSys.OpenUi(uid, uiKey, session);
+        _uiSys.SetUiState(uid, uiKey, new TeamViewBoundUserInterfaceState(teamsInfo));
     }
 
     private void OnCapMenuToggle(EntityUid uid, ShipEventTeamMarkerComponent marker, ShipEventCaptainMenuToggleEvent args)
@@ -353,7 +350,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
             if (team.Captain != session.Name)
                 continue;
 
-            _uiSys.TrySetUiState(uid, uiKey, new ShipEventCaptainMenuBoundUserInterfaceState(
+            _uiSys.SetUiState(uid, uiKey, new ShipEventCaptainMenuBoundUserInterfaceState(
                     team.Members,
                     team.ChosenShipType,
                     team.JoinPassword,
@@ -361,7 +358,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
             break;
         }
 
-        _uiSys.TryOpen(uid, uiKey, session);
+        _uiSys.OpenUi(uid, uiKey, session);
     }
 
     private void OnShipPickerInfoRequest(GetShipPickerInfoMessage msg)
@@ -369,7 +366,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         if (!RuleSelected)
             return;
 
-        _uiSys.TrySetUiState(GetEntity(msg.Entity),
+        _uiSys.SetUiState(GetEntity(msg.Entity),
             msg.UiKey,
             new ShipPickerBoundUserInterfaceState(ShipTypes));
     }
@@ -382,13 +379,11 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         if (!_playerMan.TryGetSessionByEntity(args.Performer, out var session))
             return;
 
-        if (!_uiSys.TryGetUi(args.Performer, GenericWarningUiKey.ShipEventKey, out var bui))
-            return;
-        _uiSys.SetUiState(bui, new GenericWarningBoundUserInterfaceState
+        _uiSys.SetUiState(args.Performer, GenericWarningUiKey.ShipEventKey, new GenericWarningBoundUserInterfaceState
         {
             WarningLoc = "generic-warning-window-warning-to-lobby",
         });
-        _uiSys.OpenUi(bui, session);
+        _uiSys.OpenUi(args.Performer, GenericWarningUiKey.ShipEventKey, session);
     }
 
     #endregion
@@ -430,15 +425,17 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
     //todo: our generic y/n dialog window is very weird
     private void OnReturnPlayerToLobby(GenericWarningYesPressedMessage args)
     {
-        if (Equals(args.UiKey, GenericWarningUiKey.ShipEventKey))
+        if (!Equals(args.UiKey, GenericWarningUiKey.ShipEventKey))
+            return;
+        var entityUid = GetEntity(args.Entity);
+        if(!_playerMan.TryGetSessionByEntity(entityUid, out var session))
+            return;
+        if (TryComp<ShipEventTeamMarkerComponent>(entityUid, out var marker) && marker.Team != null)
         {
-            if (TryComp<ShipEventTeamMarkerComponent>(args.Session.AttachedEntity, out var marker) && marker.Team != null)
-            {
-                marker.Team.Captain = marker.Team.Captain == args.Session.Name ? null : marker.Team.Captain;
-                marker.Team.Members.Remove(args.Session.Name);
-            }
-            _ticker.Respawn(args.Session);
+            marker.Team.Captain = marker.Team.Captain == session.Channel.UserName ? null : marker.Team.Captain;
+            marker.Team.Members.Remove(session.Channel.UserName);
         }
+        _ticker.Respawn(session);
     }
 
     private bool TrySpawnPlayer(ICommonSession session, ShipEventTeam team, [NotNullWhen(true)] out EntityUid? uid, EntityUid? spawnerUid = null)

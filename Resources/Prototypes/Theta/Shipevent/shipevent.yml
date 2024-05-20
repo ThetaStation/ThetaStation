@@ -3,12 +3,11 @@
   id: ShipEvent
   parent: BaseGameRule
   components:
-    - type: ShipEventRule
-      id: ShipEvent
+    - type: StationEvent
       startAnnouncement: shipevent-eventannouncement
       maxOccurrences: 0
-      endAfter: 1
-
+      endTime: 1
+    - type: ShipEventRule
       hudPrototypeId: "ShipeventHUD"
       captainHudPrototypeId: "ShipeventHUDCaptain"
 

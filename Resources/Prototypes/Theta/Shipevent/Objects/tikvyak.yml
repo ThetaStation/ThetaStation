@@ -122,7 +122,8 @@
       canChangeTransferAmount: true
       maxTransferAmount: 5
     - type: Drink
-      isOpen: true
+    - type: Openable
+      opened: true
     - type: MeleeWeapon
       soundNoDamage:
         path: "/Audio/Effects/Fluids/splat.ogg"
@@ -141,7 +142,7 @@
       solution: drink
     - type: UserInterface
       interfaces:
-        - key: enum.TransferAmountUiKey.Key
+        enum.TransferAmountUiKey.Key:
           type: TransferAmountBoundUserInterface
     - type: DamageOtherOnHit
       damage:
@@ -170,7 +171,6 @@
     - type: Tag
       tags:
         - Wall
-        - RCDDeconstructWhitelist
     - type: Sprite
       sprite: Theta/ShipEvent/Objects/tikvyak.rsi
       state: wall
@@ -188,6 +188,10 @@
           layer:
             - WallLayer
           density: 3000
+    - type: RCDDeconstructable
+      cost: 4
+      delay: 2
+      fx: EffectRCDDeconstruct2
     - type: Destructible
       thresholds:
         - trigger:
@@ -211,6 +215,3 @@
                   max: 2
             - !type:DoActsBehavior
               acts: ["Destruction"]
-      destroySound:
-        path: /Audio/Theta/Shipevent/tikvyak_break.ogg
-        volume: 6

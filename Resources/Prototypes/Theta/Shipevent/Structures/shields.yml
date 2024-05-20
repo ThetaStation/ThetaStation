@@ -9,7 +9,7 @@
       key: enum.CircularShieldConsoleUiKey.Key
     - type: UserInterface
       interfaces:
-        - key: enum.CircularShieldConsoleUiKey.Key
+        enum.CircularShieldConsoleUiKey.Key:
           type: CircularShieldConsoleBoundUserInterface
     - type: RadarConsole
     - type: PointLight

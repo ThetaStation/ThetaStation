@@ -33,7 +33,7 @@ public sealed class CannonConsoleBoundUserInterface : BoundUserInterface
         if (state is not RadarConsoleBoundInterfaceState radarState)
             return;
 
-        _window?.SetMatrix(EntMan.GetCoordinates(radarState.Coordinates), radarState.Angle);
+        _window?.SetMatrix(EntMan.GetCoordinates(radarState.NavState.Coordinates), radarState.NavState.Angle);
         _window?.SetOwner(Owner);
 
         var ammoValues = new List<(int, int)>();

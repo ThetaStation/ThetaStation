@@ -6,15 +6,15 @@
     - type: ShipEventTeamMarker
     - type: UserInterface
       interfaces:
-      - key: enum.TeamViewUiKey.Key
-        type: TeamViewBoundUserInterface
-        requireInputValidation: false
-      - key: enum.CaptainMenuUiKey.Key
-        type: CaptainMenuBoundUserInterface
-        requireInputValidation: false
-      - key: enum.GenericWarningUiKey.ShipEventKey
-        type: GenericWarningWindowBoundUserInterface
-        requireInputValidation: false
+        enum.TeamViewUiKey.Key:
+          type: TeamViewBoundUserInterface
+          requireInputValidation: false
+        enum.CaptainMenuUiKey.Key:
+          type: CaptainMenuBoundUserInterface
+          requireInputValidation: false
+        enum.GenericWarningUiKey.ShipEventKey:
+          type: GenericWarningWindowBoundUserInterface
+          requireInputValidation: false
     - type: MindContainer
       ghostPrototype: ObserverShipEvent
 
@@ -42,10 +42,10 @@
     - type: RadarHUD
     - type: UserInterface
       interfaces:
-      - key: enum.TeamViewUiKey.Key
-        type: TeamViewBoundUserInterface
-      - key: enum.CaptainMenuUiKey.Key
-        type: CaptainMenuBoundUserInterface
+        enum.TeamViewUiKey.Key:
+          type: TeamViewBoundUserInterface
+        enum.CaptainMenuUiKey.Key:
+          type: CaptainMenuBoundUserInterface
     - type: MobHUD
     - type: MindContainer
       ghostPrototype: ObserverShipEvent
@@ -67,6 +67,3 @@
     pocket1: ExtendedEmergencyOxygenTankFilled
     pocket2: ShipEventUplink40TC
     belt: ClothingBeltMilitaryWebbing
-  innerClothingSkirt: ClothingUniformJumpskirtOperative
-  satchel: ClothingBackpackDuffelSyndicateOperative
-  duffelbag: ClothingBackpackDuffelSyndicateOperative

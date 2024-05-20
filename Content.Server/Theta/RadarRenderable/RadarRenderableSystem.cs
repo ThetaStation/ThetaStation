@@ -22,20 +22,22 @@ public sealed class RadarRenderableSystem : EntitySystem
     [Dependency] private readonly RadarConsoleSystem _radarConsoleSystem = default!;
     [Dependency] private readonly CannonSystem _cannonSystem = default!;
 
-    public List<CommonRadarEntityInterfaceState> GetObjectsAround(EntityUid consoleUid, RadarConsoleComponent radar)
+    public List<CommonRadarEntityInterfaceState> GetObjectsAround(EntityUid consoleUid, RadarConsoleComponent? radar = null)
     {
         var states = new List<CommonRadarEntityInterfaceState>();
-        if (!TryComp<TransformComponent>(consoleUid, out var xform))
+        if (!Resolve(consoleUid, ref radar))
             return states;
-        states.AddRange(GetRadarRenderableStates(consoleUid, radar, xform));
+        states.AddRange(GetRadarRenderableStates(consoleUid, radar));
         return states;
     }
 
     private List<CommonRadarEntityInterfaceState> GetRadarRenderableStates(EntityUid consoleUid,
-        RadarConsoleComponent radar,
-        TransformComponent xform)
+        RadarConsoleComponent? radar = null,
+        TransformComponent? xform = null)
     {
         var states = new List<CommonRadarEntityInterfaceState>();
+        if (!Resolve(consoleUid, ref radar, ref xform))
+            return states;
         var query = EntityQueryEnumerator<RadarRenderableComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var radarRenderable, out var transform))
         {

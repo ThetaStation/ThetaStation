@@ -33,7 +33,7 @@
     skipChecks: true
   - type: UserInterface
     interfaces:
-      - key: enum.GenericWarningUiKey.ShipEventKey
+      enum.GenericWarningUiKey.ShipEventKey:
         type: GenericWarningWindowBoundUserInterface
         requireInputValidation: false
   - type: Ghost

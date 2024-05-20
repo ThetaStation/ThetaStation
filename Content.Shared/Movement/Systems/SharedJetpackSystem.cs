@@ -94,7 +94,7 @@ public abstract class SharedJetpackSystem : EntitySystem
         _mover.SetRelay(user, jetpackUid);
 
         if (TryComp<PhysicsComponent>(user, out var physics))
-            _physics.SetBodyStatus(physics, BodyStatus.InAir);
+            _physics.SetBodyStatus(user, physics, BodyStatus.InAir);
 
         userComp.Jetpack = jetpackUid;
     }
@@ -105,7 +105,7 @@ public abstract class SharedJetpackSystem : EntitySystem
             return;
 
         if (TryComp<PhysicsComponent>(uid, out var physics))
-            _physics.SetBodyStatus(physics, BodyStatus.OnGround);
+            _physics.SetBodyStatus(uid, physics, BodyStatus.OnGround);
 
         RemComp<RelayInputMoverComponent>(uid);
     }

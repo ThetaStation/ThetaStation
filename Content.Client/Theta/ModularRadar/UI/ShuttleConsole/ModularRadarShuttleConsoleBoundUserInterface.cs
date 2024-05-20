@@ -2,6 +2,7 @@ using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Events;
 using Content.Shared.Theta.ShipEvent;
 using JetBrains.Annotations;
+using Robust.Shared.Map;
 
 namespace Content.Client.Theta.ModularRadar.UI.ShuttleConsole;
 
@@ -19,10 +20,11 @@ public sealed class ModularRadarShuttleConsoleBoundUserInterface : BoundUserInte
     {
         base.Open();
         _window = new ModularRadarShuttleConsoleWindow();
-        _window.UndockPressed += OnUndockPressed;
-        _window.StartAutodockPressed += OnAutodockPressed;
-        _window.StopAutodockPressed += OnStopAutodockPressed;
-        _window.DestinationPressed += OnDestinationPressed;
+
+        _window.RequestFTL += OnFTLRequest;
+        _window.RequestBeaconFTL += OnFTLBeaconRequest;
+        _window.DockRequest += OnDockRequest;
+        _window.UndockRequest += OnUndockRequest;
         _window.ChangeNamePressed += OnChangeNamePressed;
         _window.StealthButtonPressed += OnStealthButtonPressed;
         _window.OpenCentered();
@@ -30,22 +32,49 @@ public sealed class ModularRadarShuttleConsoleBoundUserInterface : BoundUserInte
         _window.OnClose += OnClose;
     }
 
-    private void OnDestinationPressed(NetEntity obj)
+    private void OnUndockRequest(NetEntity entity)
     {
-        SendMessage(new ShuttleConsoleFTLRequestMessage()
+        SendMessage(new UndockRequestMessage()
         {
-            Destination = obj,
+            DockEntity = entity,
+        });
+    }
+
+    private void OnChangeNamePressed(string name)
+    {
+        SendMessage(new ShuttleConsoleChangeShipNameMessage(name));
+    }
+
+    private void OnDockRequest(NetEntity entity, NetEntity target)
+    {
+        SendMessage(new DockRequestMessage()
+        {
+            DockEntity = entity,
+            TargetDockEntity = target,
+        });
+    }
+
+    private void OnFTLBeaconRequest(NetEntity ent, Angle angle)
+    {
+        SendMessage(new ShuttleConsoleFTLBeaconMessage()
+        {
+            Beacon = ent,
+            Angle = angle,
+        });
+    }
+
+    private void OnFTLRequest(MapCoordinates obj, Angle angle)
+    {
+        SendMessage(new ShuttleConsoleFTLPositionMessage()
+        {
+            Coordinates = obj,
+            Angle = angle,
         });
     }
 
     private void OnStealthButtonPressed()
     {
         SendMessage(new ShipEventToggleStealthMessage());
-    }
-
-    private void OnChangeNamePressed(string name)
-    {
-        SendMessage(new ShuttleConsoleChangeShipNameMessage(name));
     }
 
     private void OnClose()
@@ -62,30 +91,13 @@ public sealed class ModularRadarShuttleConsoleBoundUserInterface : BoundUserInte
             _window?.Dispose();
         }
     }
-
-    private void OnStopAutodockPressed(NetEntity obj)
-    {
-        SendMessage(new StopAutodockRequestMessage() { DockEntity = obj });
-    }
-
-    private void OnAutodockPressed(NetEntity obj)
-    {
-        SendMessage(new AutodockRequestMessage() { DockEntity = obj });
-    }
-
-    private void OnUndockPressed(NetEntity obj)
-    {
-        SendMessage(new UndockRequestMessage() { DockEntity = obj });
-    }
-
     protected override void UpdateState(BoundUserInterfaceState state)
     {
         base.UpdateState(state);
-        if (state is ShuttleConsoleBoundInterfaceState cState)
-            _window?.SetMatrix(EntMan.GetCoordinates(cState.Coordinates), cState.Angle);
+        if (state is not ThetaShuttleConsoleBoundInterfaceState cState)
+            return;
 
-        _window?.UpdateState(state);
-        _window?.SetOwner(Owner);
+        _window?.UpdateState(Owner, cState);
     }
 
     public void SetStealthStatus(bool ready)

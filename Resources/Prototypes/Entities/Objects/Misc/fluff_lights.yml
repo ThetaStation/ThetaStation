@@ -166,6 +166,7 @@
   - type: AutoRecharge
     rechargeDuration: 30
   - type: MeleeWeapon
+    wideAnimationRotation: 180
     damage:
       types:
         Blunt: 0 # melee weapon to allow flashing individual targets
@@ -214,6 +215,11 @@
     enabled: false
     radius: 8
     energy: 5
+  - type: ItemSlots
+    slots:
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default
+        startingItem: PowerCellMedium
   - type: Anchorable
   - type: Damageable
     damageContainer: Inorganic
@@ -226,7 +232,7 @@
       behaviors:
       - !type:PlaySoundBehavior
         sound:
-          path: /Audio/Effects/glass_break1.ogg
+          collection: GlassBreak
       - !type:SpawnEntitiesBehavior
         spawn:
           FloodlightBroken:
@@ -262,7 +268,7 @@
       behaviors:
       - !type:PlaySoundBehavior
         sound:
-          path: /Audio/Effects/metalbreak.ogg
+          collection: MetalGlassBreak
       - !type:SpawnEntitiesBehavior
         spawn:
           SheetSteel1:

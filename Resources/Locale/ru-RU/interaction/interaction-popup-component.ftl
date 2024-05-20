@@ -31,6 +31,7 @@ petting-success-bear = Вы нерешительно гладите { $target } 
 petting-success-slimes = Вы гладите { $target } по { POSS-ADJ($target) } студенистой поверхности.
 petting-success-snake = Вы гладите { $target } по { POSS-ADJ($target) } большой чешуйчатой голове.
 petting-success-monkey = Вы гладите { $target } по { POSS-ADJ($target) } озорной маленькой голове.
+petting-success-nymph = Вы гладите { $target } по { POSS-ADJ($target) } маленькой деревянной голове.
 petting-failure-generic = Вы тянетесь погладить { $target }, но { $target } настороженно уклоняется от вас.
 petting-failure-bat = Вы тянетесь погладить { $target }, но { $target } очень трудно поймать!
 petting-failure-carp = Вы тянетесь погладить { $target }, но { POSS-ADJ($target) } острые зубки заставляют вас передумать.
@@ -50,7 +51,9 @@ petting-failure-bear = Вы думаете погладить { $target }, но 
 
 ## Knocking on windows
 
-petting-failure-monkey = Вы тянетесь погладить { $target }, но { SUBJECT($target) } едва не кусает вас за пальцы!
+petting-failure-monkey = Вы тянетесь погладить { $target }, но { $target } едва не кусает вас за пальцы!
+petting-failure-nymph = Вы тянетесь погладить { $target }, но { POSS-ADJ($target) } отодвигает свои ветви в сторону.
+petting-failure-shadow = Вы тянетесь погладить { $target }, но ваша рука проходит сквозь холодную тьму { POSS-ADJ($target) } тела.
 petting-success-honkbot = Вы гладите { $target } по его скользкой металлической голове.
 petting-success-mimebot = Вы гладите { $target } по { POSS-ADJ($target) } холодной металлической голове..
 petting-success-cleanbot = Вы гладите { $target } по его влажной металлической голове.
@@ -60,8 +63,6 @@ petting-success-recycler = Вы гладите { $target } по { POSS-ADJ($targ
 petting-failure-cleanbot = Вы тянетесь погладить { $target }, но { $target } занят уборкой!
 petting-failure-mimebot = Вы тянетесь погладить { $target }, но { $target } занят мимированием!
 petting-failure-medibot = Вы тянетесь погладить { $target }, но { $target } едва не пронзает вашу руку шприцом!
-# Shown when knocking on a window
-comp-window-knock = *тук-тук*
 hugging-success-generic = Вы обнимаете { $target }.
 hugging-success-generic-others = { CAPITALIZE($user) } обнимает { $target }.
 fence-rattle-success = *бдзынь*

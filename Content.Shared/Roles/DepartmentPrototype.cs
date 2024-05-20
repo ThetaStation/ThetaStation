@@ -6,7 +6,7 @@ namespace Content.Shared.Roles;
 [Prototype("department")]
 public sealed partial class DepartmentPrototype : IPrototype
 {
-    [IdDataField] public string ID { get; } = default!;
+    [IdDataField] public string ID { get; set;  } = default!;
 
     /// <summary>
     ///     A description string to display in the character menu as an explanation of the department's function.
@@ -31,13 +31,33 @@ public sealed partial class DepartmentPrototype : IPrototype
     [DataField, ViewVariables(VVAccess.ReadWrite)]
     public bool Primary = true;
 
-    public DepartmentPrototype(string id, string desc, Color color, List<string> roles)
+    /// <summary>
+    /// Departments with a higher weight sorted before other departments in UI.
+    /// </summary>
+    [DataField("weight")]
+    public int Weight { get; private set; } = 0;
+}
+
+/// <summary>
+/// Sorts <see cref="DepartmentPrototype"/> appropriately for display in the UI,
+/// respecting their <see cref="DepartmentPrototype.Weight"/>.
+/// </summary>
+public sealed class DepartmentUIComparer : IComparer<DepartmentPrototype>
+{
+    public static readonly DepartmentUIComparer Instance = new();
+
+    public int Compare(DepartmentPrototype? x, DepartmentPrototype? y)
     {
-        ID = id;
-        Description = desc;
-        Color = color;
-        Roles = roles;
+        if (ReferenceEquals(x, y))
+            return 0;
+        if (ReferenceEquals(null, y))
+            return 1;
+        if (ReferenceEquals(null, x))
+            return -1;
+
+        var cmp = -x.Weight.CompareTo(y.Weight);
+        if (cmp != 0)
+            return cmp;
+        return string.Compare(x.ID, y.ID, StringComparison.Ordinal);
     }
-    
-    public DepartmentPrototype(){}
 }

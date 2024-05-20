@@ -1,312 +1,346 @@
 ﻿using System.Linq;
 using System.Numerics;
+using Content.Client.Shuttles.UI;
 using Content.Shared.Random;
 using Content.Shared.Shuttles.Components;
+using Content.Shared.Shuttles.Systems;
 using Content.Shared.Theta.ShipEvent.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Threading;
 using Robust.Shared.Timing;
+using Robust.Shared.Utility;
 
 namespace Content.Client.Theta.ModularRadar.Modules;
 
 public sealed class RadarGrids : RadarModule
 {
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    private readonly MapSystem _mapSystem;
-    private readonly RulesSystem _ruleSystem;
-    private readonly TransformSystem _formSystem;
+    [Dependency] private readonly IParallelManager _parallel = default!;
+    private readonly SharedShuttleSystem _shuttles;
+    private readonly SharedMapSystem Maps;
+    private readonly SharedTransformSystem _transform;
 
-    /// <summary>
-    /// Shows a label on each radar object.
-    /// </summary>
-    private Dictionary<EntityUid, Control> _iffControls = new();
+    private GridDrawJob _drawJob;
 
-    private Dictionary<MapGridComponent, GridInfo> _cachedGridInfo = new();
+    // Cache grid drawing data as it can be expensive to build
+    public readonly Dictionary<EntityUid, GridDrawData> GridData = new();
 
     public bool ShowIFF { get; set; } = true;
 
-    private float _updateEdgeTimer = 0;
+    // Per-draw caching
+    private readonly List<Vector2i> _gridTileList = new();
+    private readonly HashSet<Vector2i> _gridNeighborSet = new();
+    private readonly List<(Vector2 Start, Vector2 End)> _edges = new();
+
+    private Vector2[] _allVertices = Array.Empty<Vector2>();
+
+    private (DirectionFlag, Vector2i)[] _neighborDirections;
+
+    private List<Entity<MapGridComponent>> _grids = new();
 
     public RadarGrids(ModularRadarControl parentRadar) : base(parentRadar)
     {
-        _mapSystem = EntManager.System<MapSystem>();
-        _ruleSystem = EntManager.System<RulesSystem>();
-        _formSystem = EntManager.System<TransformSystem>();
-    }
+        _shuttles = EntManager.System<SharedShuttleSystem>();
+        _transform = EntManager.System<SharedTransformSystem>();
 
-    public override void FrameUpdate(FrameEventArgs args)
-    {
-        if (Radar.Visible)
+        Maps = EntManager.System<SharedMapSystem>();
+
+        _drawJob = new GridDrawJob()
         {
-            _updateEdgeTimer += args.DeltaSeconds;
-            UpdateGridEdges();
-        }
-    }
+            ScaledVertices = _allVertices,
+        };
 
-    private void UpdateGridEdges()
-    {
-        if (ParentCoordinates == null)
-            return;
+        _neighborDirections = new (DirectionFlag, Vector2i)[4];
 
-        var fixturesQuery = EntManager.GetEntityQuery<FixturesComponent>();
-        var mapPosition = ParentCoordinates.Value.ToMap(EntManager, _formSystem);
-        var ourGridId = ParentCoordinates!.Value.GetGridUid(EntManager);
-
-        if (ourGridId == null)
-            return;
-
-        var findGridsIntersecting = MapManager.FindGridsIntersecting(mapPosition.MapId,
-            new Box2(mapPosition.Position - MaxRadarRangeVector, mapPosition.Position + MaxRadarRangeVector)).ToList();
-        findGridsIntersecting.Add(EntManager.GetComponent<MapGridComponent>(ourGridId.Value));
-
-        foreach (var grid in findGridsIntersecting)
+        for (var i = 0; i < 4; i++)
         {
-            if (!fixturesQuery.HasComponent(grid.Owner))
-                continue;
-
-            if (!_cachedGridInfo.TryGetValue(grid, out var info))
-            {
-                var newInfo = new GridInfo(_updateEdgeTimer + GetCacheTimeExpiration(grid.Owner), GetGridEdges(grid));
-                _cachedGridInfo.Add(grid, newInfo);
-                continue;
-            }
-
-            if (_updateEdgeTimer > info.NextUpdateTime)
-            {
-                info.Edges = GetGridEdges(grid);
-                info.NextUpdateTime = _updateEdgeTimer + GetCacheTimeExpiration(grid.Owner);
-            }
+            var dir = (DirectionFlag) Math.Pow(2, i);
+            var dirVec = dir.AsDir().ToIntVec();
+            _neighborDirections[i] = (dir, dirVec);
         }
     }
 
     public override void Draw(DrawingHandleScreen handle, Parameters parameters)
     {
         var fixturesQuery = EntManager.GetEntityQuery<FixturesComponent>();
-        var xformQuery = EntManager.GetEntityQuery<TransformComponent>();
         var bodyQuery = EntManager.GetEntityQuery<PhysicsComponent>();
-        var metaQuery = EntManager.GetEntityQuery<MetaDataComponent>();
 
         // Draw our grid in detail
         var ourGridId = ParentCoordinates!.Value.GetGridUid(EntManager);
-        if (EntManager.TryGetComponent<MapGridComponent>(ourGridId, out var ourGrid))
+        if (EntManager.TryGetComponent<MapGridComponent>(ourGridId, out var ourGrid) &&
+            fixturesQuery.HasComponent(ourGridId.Value))
         {
-            var ourGridMatrix = _formSystem.GetWorldMatrix(ourGridId.Value);
+            var ourGridMatrix = _transform.GetWorldMatrix(ourGridId.Value);
             Matrix3.Multiply(in ourGridMatrix, in parameters.DrawMatrix, out var matrix);
-            DrawGrid(handle, matrix, ourGrid, Color.MediumSpringGreen);
+            var color = _shuttles.GetIFFColor(ourGridId.Value, self: true);
+
+            DrawGrid(handle, matrix, (ourGridId.Value, ourGrid), color);
         }
 
-        var mapPosition = ParentCoordinates.Value.ToMap(EntManager, _formSystem);
+        var mapPos = ParentCoordinates.Value.ToMap(EntManager, _transform);
+        var rot = Radar.GetMatrixRotation();// TODO: Я ХЗ НУЖНО ЛИ ЭТО ИЛИ НЕ НУЖНО НЕ ЗНАЮ !!!ПРОВЕРИТЬ!!! + ParentRotation!.Value;
+        var viewBounds = new Box2Rotated(new Box2(-WorldRange, -WorldRange, WorldRange, WorldRange).Translated(mapPos.Position), rot, mapPos.Position);
+        var viewAABB = viewBounds.CalcBoundingBox();
 
-        var shown = new HashSet<EntityUid>();
-        // Draw other grids... differently
-        foreach (var grid in MapManager.FindGridsIntersecting(mapPosition.MapId,
-                     new Box2(mapPosition.Position - MaxRadarRangeVector, mapPosition.Position + MaxRadarRangeVector)))
+        _grids.Clear();
+        MapManager.FindGridsIntersecting(mapPos.MapId, new Box2(mapPos.Position - MaxRadarRangeVector, mapPos.Position + MaxRadarRangeVector), ref _grids, approx: true, includeMap: false);
+// Draw other grids... differently
+        foreach (var grid in _grids)
         {
-            if (grid.Owner == ourGridId || !fixturesQuery.HasComponent(grid.Owner))
+            var gUid = grid.Owner;
+            if (gUid == ourGridId || !fixturesQuery.HasComponent(gUid))
                 continue;
 
-            EntManager.TryGetComponent<IFFComponent>(grid.Owner, out var iff);
+            var gridBody = bodyQuery.GetComponent(gUid);
+            EntManager.TryGetComponent<IFFComponent>(gUid, out var iff);
 
-            // Hide it entirely.
-            if (iff != null && (iff.Flags & IFFFlags.Hide) != 0x0)
-            {
+            if (!_shuttles.CanDraw(gUid, gridBody, iff))
                 continue;
-            }
 
-            shown.Add(grid.Owner);
-            var name = metaQuery.GetComponent(grid.Owner).EntityName;
-
-            if (name == string.Empty)
-                name = Loc.GetString("shuttle-console-unknown");
-
-            var gridMatrix = _formSystem.GetWorldMatrix(grid.Owner);
+            var gridMatrix = _transform.GetWorldMatrix(gUid);
             Matrix3.Multiply(in gridMatrix, in parameters.DrawMatrix, out var matty);
-            var color = iff?.Color ?? Color.Gold;
+            var color = _shuttles.GetIFFColor(grid, self: false, iff);
 
             // Others default:
             // Color.FromHex("#FFC000FF")
             // Hostile default: Color.Firebrick
+            var labelName = _shuttles.GetIFFLabel(grid, self: false, iff);
 
-            if (ShowIFF && (iff == null && IFFComponent.ShowIFFDefault || (iff.Flags & IFFFlags.HideLabel) == 0x0))
+            if (ShowIFF &&
+                 labelName != null)
             {
-                var gridBounds = grid.LocalAABB;
-                Label label;
+                var gridBounds = grid.Comp.LocalAABB;
 
-                if (!_iffControls.TryGetValue(grid.Owner, out var control))
-                {
-                    label = new Label()
-                    {
-                        HorizontalAlignment = Control.HAlignment.Left,
-                    };
-
-                    _iffControls[grid.Owner] = label;
-                    Radar.AddChild(label);
-                }
-                else
-                {
-                    label = (Label) control;
-                }
-
-                var gridBody = bodyQuery.GetComponent(grid.Owner);
-                label.FontColorOverride = color;
                 var gridCentre = matty.Transform(gridBody.LocalCenter);
                 gridCentre.Y = -gridCentre.Y;
                 var distance = gridCentre.Length();
+                var labelText = Loc.GetString("shuttle-console-iff-label", ("name", labelName),
+                    ("distance", $"{distance:0.0}"));
+
+                // yes 1.0 scale is intended here.
+                var labelDimensions = handle.GetDimensions(Radar.Font, labelText, 1f);
 
                 // y-offset the control to always render below the grid (vertically)
-                var yOffset = Math.Max(gridBounds.Height, gridBounds.Width) * MinimapScale / 1.8f / Radar.UIScale;
+                var yOffset = Math.Max(gridBounds.Height, gridBounds.Width) * MinimapScale / 1.8f;
 
                 // The actual position in the UI. We offset the matrix position to render it off by half its width
                 // plus by the offset.
-                var uiPosition = ScalePosition(gridCentre) / Radar.UIScale - new Vector2(label.Width / 2f, -yOffset);
+                var uiPosition = ScalePosition(gridCentre)- new Vector2(labelDimensions.X / 2f, -yOffset);
 
                 // Look this is uggo so feel free to cleanup. We just need to clamp the UI position to within the viewport.
-                uiPosition = new Vector2(Math.Clamp(uiPosition.X, 0f, Radar.Width - label.Width),
-                    Math.Clamp(uiPosition.Y, 10f, Radar.Height - label.Height));
+                uiPosition = new Vector2(Math.Clamp(uiPosition.X, 0f, PixelWidth - labelDimensions.X ),
+                    Math.Clamp(uiPosition.Y, 0f, PixelHeight - labelDimensions.Y));
 
-                label.Visible = true;
-                label.Text = Loc.GetString("shuttle-console-iff-label", ("name", name),
-                    ("distance", $"{distance:0.0}"));
-                LayoutContainer.SetPosition(label, uiPosition);
-            }
-            else
-            {
-                ClearLabel(grid.Owner);
+                handle.DrawString(Radar.Font, uiPosition, labelText, color);
             }
 
             // Detailed view
+            var gridAABB = gridMatrix.TransformBox(grid.Comp.LocalAABB);
+
+            // Skip drawing if it's out of range.
+            if (!gridAABB.Intersects(viewAABB))
+                continue;
+
             DrawGrid(handle, matty, grid, color);
         }
-
-        foreach (var (ent, _) in _iffControls)
-        {
-            if (shown.Contains(ent))
-                continue;
-            ClearLabel(ent);
-        }
     }
 
-    public override void OnClear()
+    private void DrawGrid(DrawingHandleScreen handle, Matrix3 matrix, Entity<MapGridComponent> grid, Color color, float alpha = 0.01f)
     {
-        foreach (var (_, label) in _iffControls)
+        var rator = Maps.GetAllTilesEnumerator(grid.Owner, grid.Comp);
+        var minimapScale = MinimapScale;
+        var midpoint = new Vector2(MidPoint, MidPoint);
+        var tileSize = grid.Comp.TileSize;
+
+        // Check if we even have data
+        // TODO: Need to prune old grid-data if we don't draw it.
+        var gridData = GridData.GetOrNew(grid.Owner);
+
+        if (gridData.LastBuild < grid.Comp.LastTileModifiedTick)
         {
-            label.Dispose();
-        }
+            gridData.Vertices.Clear();
+            _gridTileList.Clear();
+            _gridNeighborSet.Clear();
 
-        _iffControls.Clear();
-    }
-
-    private void ClearLabel(EntityUid uid)
-    {
-        if (!_iffControls.TryGetValue(uid, out var label))
-            return;
-        label.Dispose();
-        _iffControls.Remove(uid);
-    }
-
-    private void DrawGrid(DrawingHandleScreen handle, Matrix3 matrix, MapGridComponent grid, Color color)
-    {
-        if (_cachedGridInfo.TryGetValue(grid, out var info))
-        {
-            Vector2[] edges = new Vector2[info.Edges.Count];
-            int edgesLength = 0;
-            for (int i = 0; i < info.Edges.Count - 1; i += 2)
+            // Okay so there's 2 steps to this
+            // 1. Is that get we get a set of all tiles. This is used to decompose into triangle-strips
+            // 2. Is that we get a list of all tiles. This is used for edge data to decompose into line-strips.
+            while (rator.MoveNext(out var tileRef))
             {
-                Vector2 start = info.Edges[i];
-                Vector2 end = info.Edges[i + 1];
-                start = matrix.Transform(start);
-                end = matrix.Transform(end);
-                start = ScalePosition(new Vector2(start.X, -start.Y));
-                end = ScalePosition(new Vector2(end.X, -end.Y));
-                edges[edgesLength] = start;
-                edges[edgesLength + 1] = end;
-                edgesLength += 2;
+                var index = tileRef.Value.GridIndices;
+                _gridNeighborSet.Add(index);
+                _gridTileList.Add(index);
+
+                var bl = Maps.TileToVector(grid, index);
+                var br = bl + new Vector2(tileSize, 0f);
+                var tr = bl + new Vector2(tileSize, tileSize);
+                var tl = bl + new Vector2(0f, tileSize);
+
+                gridData.Vertices.Add(bl);
+                gridData.Vertices.Add(br);
+                gridData.Vertices.Add(tl);
+
+                gridData.Vertices.Add(br);
+                gridData.Vertices.Add(tl);
+                gridData.Vertices.Add(tr);
             }
 
-            handle.DrawPrimitives(DrawPrimitiveTopology.LineList, edges, color);
-        }
-    }
+            gridData.EdgeIndex = gridData.Vertices.Count;
+            _edges.Clear();
 
-    private List<Vector2> GetGridEdges(MapGridComponent grid)
-    {
-        var enumerator = _mapSystem.GetAllTilesEnumerator(grid.Owner, grid);
-        var edges = new List<Vector2>();
-
-        while (enumerator.MoveNext(out var tileRef))
-        {
-            // TODO: Short-circuit interior chunk nodes
-            // This can be optimised a lot more if required.
-            Vector2? tileVec = null;
-
-            // Iterate edges and see which we can draw
-            for (var i = 0; i < 4; i++)
+            foreach (var index in _gridTileList)
             {
-                var dir = (DirectionFlag) Math.Pow(2, i);
-                var dirVec = dir.AsDir().ToIntVec();
-
-                if (!_mapSystem.GetTileRef(grid.Owner, grid, tileRef.Value.GridIndices + dirVec).Tile.IsEmpty)
-                    continue;
-
-                Vector2 start;
-                Vector2 end;
-                tileVec ??= (Vector2) tileRef.Value.GridIndices * grid.TileSize;
-
-                // Draw line
-                // Could probably rotate this but this might be faster?
-                switch (dir)
+                // We get all of the raw lines up front
+                // then we decompose them into longer lines in a separate step.
+                foreach (var (dir, dirVec) in _neighborDirections)
                 {
-                    case DirectionFlag.South:
-                        start = tileVec.Value;
-                        end = tileVec.Value + new Vector2(grid.TileSize, 0f);
-                        break;
-                    case DirectionFlag.East:
-                        start = tileVec.Value + new Vector2(grid.TileSize, 0f);
-                        end = tileVec.Value + new Vector2(grid.TileSize, grid.TileSize);
-                        break;
-                    case DirectionFlag.North:
-                        start = tileVec.Value + new Vector2(grid.TileSize, grid.TileSize);
-                        end = tileVec.Value + new Vector2(0f, grid.TileSize);
-                        break;
-                    case DirectionFlag.West:
-                        start = tileVec.Value + new Vector2(0f, grid.TileSize);
-                        end = tileVec.Value;
-                        break;
-                    default:
-                        throw new NotImplementedException();
-                }
+                    var neighbor = index + dirVec;
 
-                edges.Add(start);
-                edges.Add(end);
+                    if (_gridNeighborSet.Contains(neighbor))
+                        continue;
+
+                    var bl = Maps.TileToVector(grid, index);
+                    var br = bl + new Vector2(tileSize, 0f);
+                    var tr = bl + new Vector2(tileSize, tileSize);
+                    var tl = bl + new Vector2(0f, tileSize);
+
+                    // Could probably rotate this but this might be faster?
+                    Vector2 actualStart;
+                    Vector2 actualEnd;
+
+                    switch (dir)
+                    {
+                        case DirectionFlag.South:
+                            actualStart = bl;
+                            actualEnd = br;
+                            break;
+                        case DirectionFlag.East:
+                            actualStart = br;
+                            actualEnd = tr;
+                            break;
+                        case DirectionFlag.North:
+                            actualStart = tr;
+                            actualEnd = tl;
+                            break;
+                        case DirectionFlag.West:
+                            actualStart = tl;
+                            actualEnd = bl;
+                            break;
+                        default:
+                            throw new NotImplementedException();
+                    }
+
+                    _edges.Add((actualStart, actualEnd));
+                }
             }
+
+            // Decompose the edges into longer lines to save data.
+            // Now we decompose the lines into longer lines (less data to send to the GPU)
+            var decomposed = true;
+
+            while (decomposed)
+            {
+                decomposed = false;
+
+                for (var i = 0; i < _edges.Count; i++)
+                {
+                    var (start, end) = _edges[i];
+                    var neighborFound = false;
+                    var neighborIndex = 0;
+                    Vector2 neighborStart;
+                    Vector2 neighborEnd = Vector2.Zero;
+
+                    // Does our end correspond with another start?
+                    for (var j = i + 1; j < _edges.Count; j++)
+                    {
+                        (neighborStart, neighborEnd) = _edges[j];
+
+                        if (!end.Equals(neighborStart))
+                            continue;
+
+                        neighborFound = true;
+                        neighborIndex = j;
+                        break;
+                    }
+
+                    if (!neighborFound)
+                        continue;
+
+                    // Check if our start and the neighbor's end are collinear
+                    if (!CollinearSimplifier.IsCollinear(start, end, neighborEnd, 10f * float.Epsilon))
+                        continue;
+
+                    decomposed = true;
+                    _edges[i] = (start, neighborEnd);
+                    _edges.RemoveAt(neighborIndex);
+                }
+            }
+
+            gridData.Vertices.EnsureCapacity(_edges.Count * 2);
+
+            foreach (var edge in _edges)
+            {
+                gridData.Vertices.Add(edge.Start);
+                gridData.Vertices.Add(edge.End);
+            }
+
+            gridData.LastBuild = grid.Comp.LastTileModifiedTick;
         }
 
-        return edges;
-    }
+        var totalData = gridData.Vertices.Count;
+        var triCount = gridData.EdgeIndex;
+        var edgeCount = totalData - gridData.EdgeIndex;
+        Extensions.EnsureLength(ref _allVertices, totalData);
 
-    private float GetCacheTimeExpiration(EntityUid gridUid)
-    {
-        if (EntManager.HasComponent<ShipEventTeamMarkerComponent>(gridUid))
-            return 0;
-        if ((_formSystem.GetWorldPosition(ParentUid) - _formSystem.GetWorldPosition(gridUid)).Length() < 50)
-            return 0;
-        return 30;
-    }
+        _drawJob.MidPoint = midpoint;
+        _drawJob.Matrix = matrix;
+        _drawJob.MinimapScale = minimapScale;
+        _drawJob.Vertices = gridData.Vertices;
+        _drawJob.ScaledVertices = _allVertices;
 
-    private sealed class GridInfo
-    {
-        public float NextUpdateTime;
-        public List<Vector2> Edges;
+        _parallel.ProcessNow(_drawJob, totalData);
 
-        public GridInfo(float nextUpdateTime, List<Vector2> edges)
+        const float BatchSize = 3f * 4096;
+
+        for (var i = 0; i < Math.Ceiling(triCount / BatchSize); i++)
         {
-            NextUpdateTime = nextUpdateTime;
-            Edges = edges;
+            var start = (int) (i * BatchSize);
+            var end = (int) Math.Min(triCount, start + BatchSize);
+            var count = end - start;
+            handle.DrawPrimitives(DrawPrimitiveTopology.TriangleList, new Span<Vector2>(_allVertices, start, count), color.WithAlpha(alpha));
+        }
+
+        handle.DrawPrimitives(DrawPrimitiveTopology.LineList, new Span<Vector2>(_allVertices, gridData.EdgeIndex, edgeCount), color);
+    }
+
+
+    private record struct GridDrawJob : IParallelRobustJob
+    {
+        public int BatchSize => 16;
+
+        public float MinimapScale;
+        public Vector2 MidPoint;
+        public Matrix3 Matrix;
+
+        public List<Vector2> Vertices;
+        public Vector2[] ScaledVertices;
+
+        public void Execute(int index)
+        {
+            var vert = Vertices[index];
+            var adjustedVert = Matrix.Transform(vert);
+            adjustedVert = adjustedVert with { Y = -adjustedVert.Y };
+
+            var scaledVert = ScalePosition(adjustedVert, MinimapScale, MidPoint);
+            ScaledVertices[index] = scaledVert;
         }
     }
 }

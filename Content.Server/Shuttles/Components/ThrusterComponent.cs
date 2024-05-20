@@ -28,9 +28,6 @@ namespace Content.Server.Shuttles.Components
         [ViewVariables(VVAccess.ReadWrite), DataField("thrust")]
         public float Thrust = 100f;
 
-        [DataField("baseThrust"), ViewVariables(VVAccess.ReadWrite)]
-        public float BaseThrust = 100f;
-
         [DataField("thrusterType")]
         public ThrusterType Type = ThrusterType.Linear;
 

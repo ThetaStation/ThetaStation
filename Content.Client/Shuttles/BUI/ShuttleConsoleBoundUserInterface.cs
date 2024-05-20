@@ -2,7 +2,7 @@ using Content.Client.Shuttles.UI;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Events;
 using JetBrains.Annotations;
-using Robust.Client.GameObjects;
+using Robust.Shared.Map;
 
 namespace Content.Client.Shuttles.BUI;
 
@@ -20,20 +20,21 @@ public sealed class ShuttleConsoleBoundUserInterface : BoundUserInterface
     {
         base.Open();
         _window = new ShuttleConsoleWindow();
-        _window.UndockPressed += OnUndockPressed;
-        _window.StartAutodockPressed += OnAutodockPressed;
-        _window.StopAutodockPressed += OnStopAutodockPressed;
-        _window.DestinationPressed += OnDestinationPressed;
-        _window.ChangeNamePressed += OnChangeNamePressed;
         _window.OpenCentered();
-        _window.OnClose += OnClose;
+        _window.OnClose += Close;
+
+        _window.RequestFTL += OnFTLRequest;
+        _window.RequestBeaconFTL += OnFTLBeaconRequest;
+        _window.DockRequest += OnDockRequest;
+        _window.UndockRequest += OnUndockRequest;
+        _window.ChangeNamePressed += OnChangeNamePressed;
     }
 
-    private void OnDestinationPressed(NetEntity obj)
+    private void OnUndockRequest(NetEntity entity)
     {
-        SendMessage(new ShuttleConsoleFTLRequestMessage()
+        SendMessage(new UndockRequestMessage()
         {
-            Destination = obj,
+            DockEntity = entity,
         });
     }
 
@@ -42,9 +43,31 @@ public sealed class ShuttleConsoleBoundUserInterface : BoundUserInterface
         SendMessage(new ShuttleConsoleChangeShipNameMessage(name));
     }
 
-    private void OnClose()
+    private void OnDockRequest(NetEntity entity, NetEntity target)
     {
-        Close();
+        SendMessage(new DockRequestMessage()
+        {
+            DockEntity = entity,
+            TargetDockEntity = target,
+        });
+    }
+
+    private void OnFTLBeaconRequest(NetEntity ent, Angle angle)
+    {
+        SendMessage(new ShuttleConsoleFTLBeaconMessage()
+        {
+            Beacon = ent,
+            Angle = angle,
+        });
+    }
+
+    private void OnFTLRequest(MapCoordinates obj, Angle angle)
+    {
+        SendMessage(new ShuttleConsoleFTLPositionMessage()
+        {
+            Coordinates = obj,
+            Angle = angle,
+        });
     }
 
     protected override void Dispose(bool disposing)
@@ -57,27 +80,12 @@ public sealed class ShuttleConsoleBoundUserInterface : BoundUserInterface
         }
     }
 
-    private void OnStopAutodockPressed(NetEntity obj)
-    {
-        SendMessage(new StopAutodockRequestMessage() { DockEntity = obj });
-    }
-
-    private void OnAutodockPressed(NetEntity obj)
-    {
-        SendMessage(new AutodockRequestMessage() { DockEntity = obj });
-    }
-
-    private void OnUndockPressed(NetEntity obj)
-    {
-        SendMessage(new UndockRequestMessage() { DockEntity = obj });
-    }
-
     protected override void UpdateState(BoundUserInterfaceState state)
     {
         base.UpdateState(state);
-        if (state is not ShuttleConsoleBoundInterfaceState cState) return;
+        if (state is not ShuttleBoundUserInterfaceState cState)
+            return;
 
-        _window?.SetMatrix(EntMan.GetCoordinates(cState.Coordinates), cState.Angle);
-        _window?.UpdateState(cState);
+        _window?.UpdateState(Owner, cState);
     }
 }

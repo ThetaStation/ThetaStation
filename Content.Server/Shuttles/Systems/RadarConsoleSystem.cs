@@ -3,6 +3,8 @@ using Content.Server.UserInterface;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
+using Content.Shared.PowerCell;
+using Content.Shared.Movement.Components;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
 using System.Numerics;
@@ -11,6 +13,7 @@ namespace Content.Server.Shuttles.Systems;
 
 public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 {
+    [Dependency] private readonly ShuttleConsoleSystem _console = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
     [Dependency] private readonly RadarRenderableSystem _radarRenderable = default!;
 
@@ -53,29 +56,19 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
 
         EntityCoordinates? coordinates = onGrid ? xform.Coordinates : null;
 
-        // Use ourself I guess.
-        if (TryComp<IntrinsicUIComponent>(uid, out var intrinsic))
+        if (component.FollowEntity)
         {
-            foreach (var uiKey in intrinsic.UIs)
-            {
-                if (uiKey.Key?.Equals(RadarConsoleUiKey.Key) == true)
-                {
-                    coordinates = new EntityCoordinates(uid, Vector2.Zero);
-                    angle = Angle.Zero;
-                    break;
-                }
-            }
+            coordinates = new EntityCoordinates(uid, Vector2.Zero);
+            angle = Angle.Zero;
         }
 
         var radarState = new RadarConsoleBoundInterfaceState(
-            component.MaxRange,
-            GetNetCoordinates(coordinates),
-            angle,
-            new List<DockingInterfaceState>(),
+            new NavInterfaceState(component.MaxRange, GetNetCoordinates(coordinates), angle, new Dictionary<NetEntity, List<DockingPortState>>()),
+            new DockingInterfaceState(),
             _radarRenderable.GetObjectsAround(uid, component)
         );
 
-        _uiSystem.TrySetUiState(uid, RadarConsoleUiKey.Key, radarState);
+        _uiSystem.SetUiState(uid, RadarConsoleUiKey.Key, radarState);
     }
 
     public bool HasFlag(RadarConsoleComponent radar, RadarRenderableGroup e)

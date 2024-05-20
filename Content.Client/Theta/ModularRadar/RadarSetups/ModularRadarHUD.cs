@@ -29,7 +29,7 @@ public sealed class ModularRadarHUD : ModularRadarControl
         return Color.White.WithAlpha(1);
     }
 
-    protected override Angle GetMatrixRotation()
+    public override Angle GetMatrixRotation()
     {
         return -GetConsoleRotation()!.Value;
     }

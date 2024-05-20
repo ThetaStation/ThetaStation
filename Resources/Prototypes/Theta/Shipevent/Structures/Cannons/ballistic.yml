@@ -38,7 +38,7 @@
     - type: Damageable
       damageContainer: Inorganic
     - type: RadarRenderable
-      viewProtos: 
+      viewProtos:
       - genericCannon
       group: enum.RadarRenderableGroup.Cannon
     - type: DeviceNetwork
@@ -71,7 +71,7 @@
               acts: [ "Destruction" ]
             - !type:PlaySoundBehavior
               sound:
-                path: /Audio/Effects/metalbreak.ogg
+                collection: MetalBreak
             - !type:SpawnEntitiesBehavior
               spawn:
                 SheetSteel1:
@@ -117,7 +117,7 @@
               acts: [ "Destruction" ]
             - !type:PlaySoundBehavior
               sound:
-                path: /Audio/Effects/metalbreak.ogg
+                collection: MetalBreak
             - !type:SpawnEntitiesBehavior
               spawn:
                 SheetSteel1:
@@ -163,7 +163,7 @@
               acts: [ "Destruction" ]
             - !type:PlaySoundBehavior
               sound:
-                path: /Audio/Effects/metalbreak.ogg
+                collection: MetalBreak
             - !type:SpawnEntitiesBehavior
               spawn:
                 SheetSteel1:
@@ -207,7 +207,7 @@
               acts: [ "Destruction" ]
             - !type:PlaySoundBehavior
               sound:
-                path: /Audio/Effects/metalbreak.ogg
+                collection: MetalBreak
             - !type:SpawnEntitiesBehavior
               spawn:
                 SheetSteel1:
