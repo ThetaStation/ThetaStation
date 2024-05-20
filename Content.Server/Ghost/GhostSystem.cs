@@ -424,10 +424,10 @@ namespace Content.Server.Ghost
             bool canReturn = false)
         {
             _transformSystem.TryGetMapOrGridCoordinates(targetEntity, out var spawnPosition);
-            return SpawnGhost(mind, spawnPosition, canReturn);
+            return SpawnGhost(mind, targetEntity, spawnPosition, canReturn);
         }
 
-        public EntityUid? SpawnGhost(Entity<MindComponent?> mind, EntityCoordinates? spawnPosition = null,
+        public EntityUid? SpawnGhost(Entity<MindComponent?> mind, EntityUid? targetEntity, EntityCoordinates? spawnPosition = null,
             bool canReturn = false)
         {
             if (!Resolve(mind, ref mind.Comp))
@@ -448,7 +448,11 @@ namespace Content.Server.Ghost
                 return null;
             }
 
-            var ghost = SpawnAtPosition(GameTicker.ObserverPrototypeName, spawnPosition.Value);
+            var ghostProto = GameTicker.ObserverPrototypeName;
+            if (targetEntity != null && TryComp<MindContainerComponent>(targetEntity, out var mindContainer))
+                ghostProto = mindContainer.GhostPrototype;
+
+            var ghost = SpawnAtPosition(ghostProto, spawnPosition.Value);
             var ghostComponent = Comp<GhostComponent>(ghost);
 
             // Try setting the ghost entity name to either the character name or the player name.

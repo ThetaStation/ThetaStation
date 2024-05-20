@@ -275,7 +275,7 @@ namespace Content.Server.GameTicking
                 }
             }
 
-            var ghost = _ghost.SpawnGhost((mindId, mind), position, canReturn);
+            var ghost = _ghost.SpawnGhost((mindId, mind), playerEntity, position, canReturn);
             if (ghost == null)
                 return false;
 

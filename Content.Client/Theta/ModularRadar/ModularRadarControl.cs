@@ -183,26 +183,24 @@ public abstract class ModularRadarControl : MapGridControl
         var gridLines = Color.LightGray.WithAlpha(0.01f);
 
         // Each circle is this x distance of the last one.
-        const float EquatorialMultiplier = 2f;
-
-        var minDistance = MathF.Pow(EquatorialMultiplier, EquatorialMultiplier * 1.5f);
-        var maxDistance = MathF.Pow(2f, EquatorialMultiplier * 6f);
-        var cornerDistance = MathF.Sqrt(WorldRange * WorldRange + WorldRange * WorldRange);
-
+        const float EquatorialMultiplier = 25;
         var origin = ScalePosition(-new Vector2(Offset.X, -Offset.Y));
+        var color = Color.ToSrgb(gridLines).WithAlpha(0.05f);
 
-        for (var radius = minDistance; radius <= maxDistance; radius *= EquatorialMultiplier)
+        var circles = (int) Math.Log2(WorldRange);
+        for (var i = 0; i < circles; i++)
         {
-            if (radius > cornerDistance)
-                continue;
+            var radius = (float) Math.Pow(2, i) * EquatorialMultiplier;
 
-            var color = Color.ToSrgb(gridLines).WithAlpha(0.05f);
-            var scaledRadius = MinimapScale * radius;
             var text = $"{radius:0}m";
             var textDimensions = handle.GetDimensions(Font, text, UIScale);
 
-            handle.DrawCircle(origin, scaledRadius, color, false);
-            handle.DrawString(Font, ScalePosition(new Vector2(0f, -radius)) - new Vector2(0f, textDimensions.Y), text, UIScale, color);
+            handle.DrawCircle(MidPointVector, radius * MinimapScale, Color.DimGray, false);
+            handle.DrawString(Font,
+                ScalePosition(new Vector2(0f, -radius)) - new Vector2(0f, textDimensions.Y),
+                text,
+                UIScale,
+                color);
         }
 
         const int gridLinesRadial = 8;
