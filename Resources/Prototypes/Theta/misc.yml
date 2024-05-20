@@ -1,0 +1,43 @@
+- type: entity
+  parent: BaseStructure
+  id: ChainPost
+  name: post
+  components:
+  - type: Transform
+    anchored: false
+    noRot: true
+  - type: Sprite
+    texture: "Theta/Misc/stolb.png"
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      collider:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.2
+        layer:
+        - WallLayer
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: Metallic
+  - type: Repairable
+  - type: Destructible
+    thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: 300
+        behaviors:
+          - !type:PlaySoundBehavior
+            sound: !type:SoundPathSpecifier
+              path: "/Audio/Effects/metalbreak.ogg"
+          - !type:SpawnEntitiesBehavior
+            spawn:
+              SheetSteel:
+                min: 1
+                max: 3
+          - !type:DoActsBehavior
+            acts: [ "Destruction" ]
+  - type: JointVisuals
+    sprite: "Theta/Misc/chain.png"
+  - type: Chain

@@ -76,12 +76,15 @@ public sealed class RadarRenderableSystem : EntitySystem
         if (!TryComp<CannonComponent>(uid, out var cannon))
             return null;
 
-        var myGrid = consoleTransform.GridUid;
+        var consoleGrid = consoleTransform.GridUid;
         var isCannonConsole = HasComp<CannonConsoleComponent>(consoleUid);
 
-        if (Transform(uid).GridUid != myGrid)
+        if (xform.GridUid == null || !xform.Anchored)
             return null;
-        if (!Transform(uid).Anchored)
+
+        if (TryComp<ShipEventTeamMarkerComponent>(consoleGrid, out var consoleMarker) &&
+            consoleMarker.Team != null &&
+            !consoleMarker.Team.ShipGrids.Contains(xform.GridUid.Value))
             return null;
 
         var (ammo, maxAmmo) = _cannonSystem.GetCannonAmmoCount(uid, cannon);
