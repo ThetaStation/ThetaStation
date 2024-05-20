@@ -11,13 +11,11 @@
     - type: MeleeSound
       soundGroups:
         Brute:
-          path:
-            "/Audio/Effects/glass_hit.ogg"
+          collection: GlassSmash
     - type: WallMount
       arc: 360 # interact despite grilles
     - type: Tag
       tags:
-        - RCDDeconstructWhitelist
         - ForceFixRotations
         - Window
     - type: Sprite
@@ -40,6 +38,10 @@
     - type: Damageable
       damageContainer: Inorganic
       damageModifierSet: Glass
+    - type: RCDDeconstructable
+      cost: 4
+      delay: 2
+      fx: EffectRCDDeconstruct2
     - type: ExaminableDamage
       messages: WindowMessages
     - type: Repairable

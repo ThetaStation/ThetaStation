@@ -63,14 +63,12 @@ public sealed class RadarConsoleSystem : SharedRadarConsoleSystem
         }
 
         var radarState = new RadarConsoleBoundInterfaceState(
-            component.MaxRange,
-            GetNetCoordinates(coordinates),
-            angle,
-            new List<DockingInterfaceState>(),
+            new NavInterfaceState(component.MaxRange, GetNetCoordinates(coordinates), angle, new Dictionary<NetEntity, List<DockingPortState>>()),
+            new DockingInterfaceState(),
             _radarRenderable.GetObjectsAround(uid, component)
         );
 
-        _uiSystem.TrySetUiState(uid, RadarConsoleUiKey.Key, radarState);
+        _uiSystem.SetUiState(uid, RadarConsoleUiKey.Key, radarState);
     }
 
     public bool HasFlag(RadarConsoleComponent radar, RadarRenderableGroup e)

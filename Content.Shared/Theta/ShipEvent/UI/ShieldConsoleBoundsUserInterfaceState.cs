@@ -7,16 +7,12 @@ namespace Content.Shared.Theta.ShipEvent.UI;
 [Serializable, NetSerializable]
 public sealed class ShieldConsoleBoundsUserInterfaceState : BoundUserInterfaceState
 {
-    public readonly float MaxRange;
-    public NetCoordinates? Coordinates;
-    public Angle? Angle;
+    public NavInterfaceState NavState;
     public ShieldInterfaceState Shield;
 
-    public ShieldConsoleBoundsUserInterfaceState(float maxRange, NetCoordinates? coordinates, Angle? angle, ShieldInterfaceState shield)
+    public ShieldConsoleBoundsUserInterfaceState( NavInterfaceState navState, ShieldInterfaceState shield)
     {
-        MaxRange = maxRange;
-        Coordinates = coordinates;
-        Angle = angle;
+        NavState = navState;
         Shield = shield;
     }
 }

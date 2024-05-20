@@ -29,6 +29,8 @@ public abstract class RadarModule
     protected float WorldRange => Radar.WorldRange;
     protected float ActualRadarRange => Radar.GetActualRadarRange();
     protected Matrix3 OffsetMatrix => Radar.GetOffsetMatrix().Invert();
+    protected int PixelHeight => Radar.PixelHeight;
+    protected int PixelWidth => Radar.PixelWidth;
 
     protected RadarModule(ModularRadarControl parentRadar)
     {
@@ -59,6 +61,11 @@ public abstract class RadarModule
     protected Vector2 InverseScalePosition(Vector2 value)
     {
         return (value - MidpointVector) / MinimapScale;
+    }
+
+    protected static Vector2 ScalePosition(Vector2 value, float minimapScale, Vector2 midpointVector)
+    {
+        return value * minimapScale + midpointVector;
     }
 
     public sealed class Parameters

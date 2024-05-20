@@ -1,8 +1,11 @@
-﻿using System.Linq;
+﻿using System.ComponentModel;
+using System.Linq;
 using Content.Server.Theta.ShipEvent.Systems;
 using Content.Server.UserInterface;
 using Content.Shared.Theta.ShipEvent.UI;
+using Content.Shared.UserInterface;
 using Robust.Server.GameObjects;
+using Robust.Server.Player;
 
 namespace Content.Server.Theta.ShipEvent.Console;
 
@@ -10,6 +13,7 @@ public sealed class TeamConsoleSystem : EntitySystem
 {
     [Dependency] private readonly ShipEventTeamSystem _shipSys = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
+    [Dependency] private readonly IPlayerManager _playerManager = default!;
 
     public override void Initialize()
     {
@@ -25,7 +29,8 @@ public sealed class TeamConsoleSystem : EntitySystem
         if (teams.Count() != 1)
             return;
 
-        _shipSys.JoinTeam(args.Session, teams.First(), args.Password);
+        if(_playerManager.TryGetSessionByEntity(args.Actor, out var session))
+            _shipSys.JoinTeam(session, teams.First(), args.Password);
     }
 
     private void OnRefreshTeams(EntityUid uid, TeamConsoleComponent component, RefreshShipTeamsEvent args)
@@ -40,7 +45,7 @@ public sealed class TeamConsoleSystem : EntitySystem
 
     private void UpdateState(EntityUid uid)
     {
-        _uiSystem.TrySetUiState(uid, TeamCreationUiKey.Key, new ShipEventLobbyBoundUserInterfaceState(GetTeams()));
+        _uiSystem.SetUiState(uid, TeamCreationUiKey.Key, new ShipEventLobbyBoundUserInterfaceState(GetTeams()));
     }
 
     private List<ShipTeamForLobbyState> GetTeams()
@@ -57,7 +62,7 @@ public sealed class TeamConsoleSystem : EntitySystem
 
     private void OnTeamCreationRequest(EntityUid uid, TeamConsoleComponent component, TeamCreationRequest args)
     {
-        if (args.Session.AttachedEntity == null)
+        if(!_playerManager.TryGetSessionByEntity(args.Actor, out var session))
             return;
 
         if (!_shipSys.AllowTeamRegistration)
@@ -71,7 +76,7 @@ public sealed class TeamConsoleSystem : EntitySystem
             return;
         }
 
-        _shipSys.CreateTeam(args.Session, args.Name, args.ShipType, args.Password, args.MaxPlayers);
+        _shipSys.CreateTeam(session, args.Name, args.ShipType, args.Password, args.MaxPlayers);
     }
 
     private void SendResponse(EntityUid uid, Enum uiKey, ResponseTypes response)
@@ -87,7 +92,7 @@ public sealed class TeamConsoleSystem : EntitySystem
                 break;
         }
 
-        _uiSystem.TrySetUiState(uid, uiKey, new ShipEventCreateTeamBoundUserInterfaceState(Loc.GetString(text)));
+        _uiSystem.SetUiState(uid, uiKey, new ShipEventCreateTeamBoundUserInterfaceState(Loc.GetString(text)));
     }
 
 

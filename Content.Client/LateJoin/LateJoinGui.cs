@@ -170,9 +170,15 @@ namespace Content.Client.LateJoin
                         unsortedJobs.Add(job.ID);
                 }
 
-                var unsortedDep = new DepartmentPrototype("Unsorted", "", Color.Gray, unsortedJobs);
+                var unsortedDep = new DepartmentPrototype
+                {
+                    ID = "Unsorted",
+                    Description = "",
+                    Color = Color.Gray,
+                    Roles = unsortedJobs,
+                };
                 departments.Add(unsortedDep);
-                
+
                 _jobButtons[id] = new Dictionary<string, List<JobButton>>();
 
                 foreach (var department in departments)

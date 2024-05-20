@@ -21,7 +21,7 @@ public sealed class ClientShipStealthSystem : EntitySystem
         var uid = EntityManager.GetEntity(msg.ConsoleUid);
         if (TryComp<UserInterfaceComponent>(uid, out var ui))
         {
-            if (ui.OpenInterfaces.TryGetValue(ShuttleConsoleUiKey.Key, out var bui) && 
+            if (ui.ClientOpenInterfaces.TryGetValue(ShuttleConsoleUiKey.Key, out var bui) &&
             bui is ModularRadarShuttleConsoleBoundUserInterface shuttleConsoleBui)
                 shuttleConsoleBui.SetStealthStatus(msg.StealthReady);
         }

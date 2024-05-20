@@ -5,8 +5,6 @@
   id: BaseMobVulpkanin
   abstract: true
   components:
-  - type: HumanoidAppearance
-    species: Vulpkanin
   - type: Hunger # on 1.5x more
     thresholds:
       Overfed: 250
@@ -61,6 +59,3 @@
   id: MobVulpkaninDummy
   noSpawn: true
   description: A dummy vulpkanin meant to be used in character setup.
-  components:
-  - type: HumanoidAppearance
-    species: Vulpkanin

@@ -20,7 +20,7 @@
       key: enum.CannonConsoleUiKey.Key
     - type: UserInterface
       interfaces:
-        - key: enum.CannonConsoleUiKey.Key
+        enum.CannonConsoleUiKey.Key:
           type: CannonConsoleBoundUserInterface
     - type: RadarConsole
     - type: PointLight
@@ -73,7 +73,7 @@
       key: enum.TeamCreationUiKey.Key
     - type: UserInterface
       interfaces:
-        - key: enum.TeamCreationUiKey.Key
+        enum.TeamCreationUiKey.Key:
           type: ShipEventLobbyBoundUserInterface
     - type: PointLight
       radius: 1.5
@@ -137,8 +137,7 @@
   - type: MeleeSound
     soundGroups:
       Brute:
-        path:
-          "/Audio/Effects/glass_hit.ogg"
+        collection: GlassSmash
 
 - type: entity
   id: TurretLoaderShipEvent
@@ -176,8 +175,8 @@
             damage: 300
           behaviors:
             - !type:PlaySoundBehavior
-              sound: !type:SoundPathSpecifier
-                path: "/Audio/Effects/metalbreak.ogg"
+              sound:
+                collection: MetalBreak
             - !type:SpawnEntitiesBehavior
               spawn:
                 SheetSteel:

@@ -4,7 +4,7 @@
   sprite: /Textures/Theta/ShipEvent/Shuttles/tau_vox.rsi/vox_shuttle_floor.png
   baseTurf: PlatingVoxShuttle
   isSubfloor: false
-  canCrowbar: true
+  deconstructTools: [ Prying ]
   footstepSounds:
     collection: FootstepFloor
   itemDrop: FloorTileItemShuttleWhite
@@ -16,7 +16,7 @@
   sprite: /Textures/Theta/ShipEvent/Shuttles/tau_vox.rsi/vox_shuttle_floor1.png
   baseTurf: PlatingVoxShuttle
   isSubfloor: false
-  canCrowbar: true
+  deconstructTools: [ Prying ]
   footstepSounds:
     collection: FootstepFloor
   itemDrop: FloorTileItemShuttleWhite
@@ -28,7 +28,7 @@
   sprite: /Textures/Theta/ShipEvent/Shuttles/tau_vox.rsi/vox_shuttle_floor2.png
   baseTurf: PlatingVoxShuttle
   isSubfloor: false
-  canCrowbar: true
+  deconstructTools: [ Prying ]
   footstepSounds:
     collection: FootstepFloor
   itemDrop: FloorTileItemShuttleWhite
@@ -40,7 +40,7 @@
   sprite: /Textures/Theta/ShipEvent/Shuttles/tau_vox.rsi/vox_shuttle_floorcatwalk.png
   baseTurf: PlatingVoxShuttle
   isSubfloor: false
-  canCrowbar: true
+  deconstructTools: [ Prying ]
   footstepSounds:
     collection: FootstepFloor
   itemDrop: FloorTileItemShuttleWhite
@@ -52,7 +52,7 @@
   sprite: /Textures/Theta/ShipEvent/Shuttles/tau_vox.rsi/vox_shuttle_floordown.png
   baseTurf: PlatingVoxShuttle
   isSubfloor: false
-  canCrowbar: true
+  deconstructTools: [ Prying ]
   footstepSounds:
     collection: FootstepFloor
   itemDrop: FloorTileItemShuttleWhite
@@ -64,7 +64,7 @@
   sprite: /Textures/Theta/ShipEvent/Shuttles/tau_vox.rsi/vox_shuttle_floorup.png
   baseTurf: PlatingVoxShuttle
   isSubfloor: false
-  canCrowbar: true
+  deconstructTools: [ Prying ]
   footstepSounds:
     collection: FootstepFloor
   itemDrop: FloorTileItemShuttleWhite
@@ -76,7 +76,7 @@
   sprite: /Textures/Theta/ShipEvent/Shuttles/tau_vox.rsi/vox_shuttle_floorplace.png
   baseTurf: PlatingVoxShuttle
   isSubfloor: false
-  canCrowbar: true
+  deconstructTools: [ Prying ]
   footstepSounds:
     collection: FootstepFloor
   itemDrop: FloorTileItemShuttleWhite

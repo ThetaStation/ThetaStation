@@ -1,6 +1,7 @@
 ﻿using Content.Server.Explosion.Components;
 using Content.Server.Shuttles.Systems;
 using Content.Server.Theta.ShipEvent.Components;
+using Content.Shared.Explosion.Components;
 using Content.Shared.Shuttles.Components;
 
 namespace Content.Server.Theta.ShipEvent.Systems;

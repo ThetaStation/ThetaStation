@@ -17,4 +17,4 @@ ent-DebugGyroscope = { ent-Gyroscope }
     .suffix = DEBUG
     .desc = { ent-Gyroscope.desc }
 ent-SkipjackGyroscope = { ent-Gyroscope }
-    .desc = { ent-Gyroscope.desc }}
+    .desc = { ent-Gyroscope.desc }

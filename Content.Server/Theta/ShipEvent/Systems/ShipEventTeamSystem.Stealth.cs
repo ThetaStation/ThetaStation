@@ -68,7 +68,7 @@ public partial class ShipEventTeamSystem
             return;
 
         var shuttle = xform.GridUid.Value;
-        RaiseNetworkEvent(new ShipEventStealthStatusMessage(!_onCooldown.Contains(shuttle), EntityManager.GetNetEntity(uid)), args.Session);
+        RaiseNetworkEvent(new ShipEventStealthStatusMessage(!_onCooldown.Contains(shuttle), EntityManager.GetNetEntity(uid)), GetEntity(args.Entity));
 
         //todo: no idea why this doesn't work
         /*if (_uiSys.TryGetUi(uid, args.UiKey, out var bui))

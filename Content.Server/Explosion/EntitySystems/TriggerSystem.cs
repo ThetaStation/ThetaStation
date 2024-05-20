@@ -231,19 +231,17 @@ namespace Content.Server.Explosion.EntitySystems
         private void OnParentChange(EntityUid uid, TriggerOnParentChangeComponent component,
             ref EntParentChangedMessage args)
         {
-            if (args.OldMapId == MapId.Nullspace)
+            if (args.OldMapId is not { Valid: true })
                 return;
             Trigger(uid, args.Transform.GridUid);
         }
-        
+
         private void OnSpawnTriggered(EntityUid uid, TriggerOnSpawnComponent component, MapInitEvent args)
         {
             Trigger(uid);
         }
 
-        private void OnA
-        
-        ctivate(EntityUid uid, TriggerOnActivateComponent component, ActivateInWorldEvent args)
+        private void OnActivate(EntityUid uid, TriggerOnActivateComponent component, ActivateInWorldEvent args)
         {
             Trigger(uid, args.User);
             args.Handled = true;

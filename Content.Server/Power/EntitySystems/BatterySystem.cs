@@ -136,7 +136,7 @@ namespace Content.Server.Power.EntitySystems
             if (!Resolve(uid, ref battery))
                 return;
 
-            if (!battery.IsRechargeable && value > battery.Charge)
+            if (!battery.IsRechargeable && value > battery.CurrentCharge)
                 return;
 
             var old = battery.CurrentCharge;

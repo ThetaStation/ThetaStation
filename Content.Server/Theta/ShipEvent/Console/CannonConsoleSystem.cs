@@ -1,3 +1,4 @@
+using Content.Server.Shuttles.Systems;
 using Content.Server.Theta.RadarRenderable;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
@@ -5,6 +6,7 @@ using Content.Shared.Theta.ShipEvent;
 using Content.Shared.Theta.ShipEvent.UI;
 using Robust.Server.GameObjects;
 using Robust.Server.GameStates;
+using Robust.Server.Player;
 using Robust.Shared.Map;
 
 namespace Content.Server.Theta.ShipEvent.Console;
@@ -13,7 +15,9 @@ public sealed class CannonConsoleSystem : EntitySystem
 {
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
     [Dependency] private readonly RadarRenderableSystem _radarRenderable = default!;
+    [Dependency] private readonly ShuttleConsoleSystem _shuttleConsole = default!;
     [Dependency] private readonly PvsOverrideSystem _pvsOverrideSys = default!;
+    [Dependency] private readonly IPlayerManager _playerManager = default!;
 
     public override void Initialize()
     {
@@ -41,14 +45,12 @@ public sealed class CannonConsoleSystem : EntitySystem
         EntityCoordinates? coordinates = transform.Coordinates;
 
         var radarState = new RadarConsoleBoundInterfaceState(
-            radarConsole.MaxRange,
-            GetNetCoordinates(coordinates),
-            angle,
-            new List<DockingInterfaceState>(), //pzdc
+            _shuttleConsole.GetNavState(uid, new Dictionary<NetEntity, List<DockingPortState>>()),
+            new DockingInterfaceState(), //pzdc
             _radarRenderable.GetObjectsAround(uid, radarConsole)
         );
 
-        _uiSystem.TrySetUiState(uid, CannonConsoleUiKey.Key, radarState);
+        _uiSystem.SetUiState(uid, CannonConsoleUiKey.Key, radarState);
     }
 
     private List<EntityUid> GetControlledCannons(EntityUid uid)
@@ -66,17 +68,21 @@ public sealed class CannonConsoleSystem : EntitySystem
 
     private void OnBUICreated(EntityUid uid, CannonConsoleComponent console, CannonConsoleBUICreatedMessage msg)
     {
+        if(!_playerManager.TryGetSessionByEntity(msg.Actor, out var session))
+            return;
         foreach (EntityUid controlledUid in GetControlledCannons(uid))
         {
-            _pvsOverrideSys.AddSessionOverride(controlledUid, msg.Session);
+            _pvsOverrideSys.AddSessionOverride(controlledUid, session);
         }
     }
 
     private void OnBUIDisposed(EntityUid uid, CannonConsoleComponent console, CannonConsoleBUIDisposedMessage msg)
     {
+        if(!_playerManager.TryGetSessionByEntity(msg.Actor, out var session))
+            return;
         foreach (EntityUid controlledUid in GetControlledCannons(uid))
         {
-            _pvsOverrideSys.RemoveSessionOverride(controlledUid, msg.Session);
+            _pvsOverrideSys.RemoveSessionOverride(controlledUid, session);
         }
     }
 }

@@ -196,7 +196,7 @@ public abstract partial class SharedGunSystem : EntitySystem
         return transform.GridUid == transform.ParentUid ? gun : transform.ParentUid;
     }
 
-    private void StopShooting(EntityUid uid, GunComponent gun)
+    public void StopShooting(EntityUid uid, GunComponent gun)
     {
         if (gun.ShotCounter == 0)
             return;

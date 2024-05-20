@@ -34,7 +34,7 @@
           layer:
             - WallLayer
     - type: RadarRenderable
-      viewProtos: 
+      viewProtos:
       - flagView
       group: enum.RadarRenderableGroup.Pickup
 
@@ -43,8 +43,7 @@
   id: SEFC
   parent: BaseGameRule
   components:
-    - type: SEFCRule
-      id: SEFC
+    - type: StationEvent
       startAnnouncement: sefc-eventannouncement
       maxOccurrences: 0
-      endAfter: 1
+      endTime: 1
