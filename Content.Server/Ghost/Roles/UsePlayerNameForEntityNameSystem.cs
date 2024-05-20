@@ -15,7 +15,6 @@ public sealed class UsePlayerNameForEntityNameSystem : EntitySystem
     {
         if(component.Applied)
             return;
-        var metaDataComponent = EntityManager.GetComponent<MetaDataComponent>(args.Entity);
         _metaDataSystem.SetEntityName(args.Entity, args.Player.Name);
         component.Applied = true;
     }
