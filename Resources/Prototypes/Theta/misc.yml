@@ -29,8 +29,8 @@
           damage: 300
         behaviors:
           - !type:PlaySoundBehavior
-            sound: !type:SoundPathSpecifier
-              path: "/Audio/Effects/metalbreak.ogg"
+            sound:
+              collection: MetalBreak
           - !type:SpawnEntitiesBehavior
             spawn:
               SheetSteel:
