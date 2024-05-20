@@ -83,6 +83,17 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
     [Dependency] private readonly IPlayerManager _playerMan = default!;
     [Dependency] private IRobustRandom _rand = default!;
 
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<ShipEventRuleComponent, ComponentShutdown>(OnEventShutDown);
+    }
+
+    // for tests
+    private void OnEventShutDown(Entity<ShipEventRuleComponent> ent, ref ComponentShutdown args)
+    {
+        _shipSys.RuleSelected = false;
+    }
+
     //Creates ComponentRegistryEntry for ChangeIFFOnSplit comp. Used by AddComponentProcessor to prevent splitted grids from getting labels.
     //todo: this is ugly hardcode, better to move it into prototype or somethin, when I will understand how
     private EntityPrototype.ComponentRegistryEntry CreateIFFCompEntry()
