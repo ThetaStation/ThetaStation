@@ -85,6 +85,7 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
 
     public override void Initialize()
     {
+        base.Initialize();
         SubscribeLocalEvent<ShipEventRuleComponent, ComponentShutdown>(OnEventShutDown);
     }
 
