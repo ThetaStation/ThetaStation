@@ -210,8 +210,7 @@ public abstract class ModularRadarControl : MapGridControl
             Angle angle = (Math.PI / gridLinesRadial) * i;
             // TODO: Handle distance properly.
             var aExtent = angle.ToVec() * ScaledMinimapRadius * 1.42f;
-            var lineColor = Color.MediumSpringGreen.WithAlpha(0.02f);
-            handle.DrawLine(origin - aExtent, origin + aExtent, lineColor);
+            handle.DrawLine(origin - aExtent, origin + aExtent, color.WithAlpha(0.009f));
         }
     }
 

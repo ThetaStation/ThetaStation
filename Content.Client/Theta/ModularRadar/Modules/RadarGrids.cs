@@ -86,7 +86,7 @@ public sealed class RadarGrids : RadarModule
         }
 
         var mapPos = ParentCoordinates.Value.ToMap(EntManager, _transform);
-        var rot = Radar.GetMatrixRotation();// TODO: Я ХЗ НУЖНО ЛИ ЭТО ИЛИ НЕ НУЖНО НЕ ЗНАЮ !!!ПРОВЕРИТЬ!!! + ParentRotation!.Value;
+        var rot = Radar.GetMatrixRotation();
         var viewBounds = new Box2Rotated(new Box2(-WorldRange, -WorldRange, WorldRange, WorldRange).Translated(mapPos.Position), rot, mapPos.Position);
         var viewAABB = viewBounds.CalcBoundingBox();
 

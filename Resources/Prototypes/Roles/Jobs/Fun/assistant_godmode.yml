@@ -11,3 +11,17 @@
     components:
     - type: Godmode
   alwaysShowInLatejoin: true
+
+# Civilian
+- type: roleLoadout
+  id: JobPassengerGodmode
+  groups:
+  - PassengerJumpsuit
+  - CommonBackpack
+  - PassengerFace
+  - PassengerGloves
+  - PassengerOuterClothing
+  - PassengerShoes
+  - Glasses
+  - Trinkets
+  - Inventory # Corvax-Loadouts
