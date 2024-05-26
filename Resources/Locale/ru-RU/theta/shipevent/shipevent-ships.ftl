@@ -1,3 +1,5 @@
+shipevent-shipclass-label = Класс корабля:
+
 shipevent-shipclass-light = [color=green]Лёгкий[/color]
 shipevent-shipclass-medium = [color=yellow]Средний[/color]
 shipevent-shipclass-heavy = [color=red]Тяжёлый[/color]
@@ -25,8 +27,8 @@ shipevent-tikvyak-name = Тыквяк
 shipevent-tikvyak-desc = ТЫКВА НЕ ТЫКВЯК!!!
 
 shipevent-asteroid-ship-name = Астеройд
-shipevent-asteroid-ship-desc = 
-    Плохо защищён, имеет 6 статичных пушек по 3-м бортам и выглядит как астеройд. 
+shipevent-asteroid-ship-desc =
+    Плохо защищён, имеет 6 статичных пушек по 3-м бортам и выглядит как астеройд.
     Пушки скрыты за дверьми, выглядящими как кусок камня, и управляемыми изнутри.
     Имеет увеличенную длительность стелс режима.
 

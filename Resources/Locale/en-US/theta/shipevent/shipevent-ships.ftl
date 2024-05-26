@@ -1,3 +1,5 @@
+shipevent-shipclass-label = Ship Class:
+
 shipevent-shipclass-light = [color=green]Light[/color]
 shipevent-shipclass-medium = [color=yellow]Medium[/color]
 shipevent-shipclass-heavy = [color=red]Heavy[/color]
@@ -25,8 +27,8 @@ shipevent-tikvyak-name = Gourd
 shipevent-tikvyak-desc = A GOURD IS NOT A PUMPKIN!!!
 
 shipevent-asteroid-ship-name = Asteroid
-shipevent-asteroid-ship-desc = 
-    It is poorly protected, has 6 static cannons on the 3 sides and looks like an asteroid. 
+shipevent-asteroid-ship-desc =
+    It is poorly protected, has 6 static cannons on the 3 sides and looks like an asteroid.
     The cannons are hidden behind doors which look like an asteroid rock and are controlled from the inside.
     Has extended stealth mode duration.
 
