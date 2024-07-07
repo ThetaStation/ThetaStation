@@ -1,0 +1,137 @@
+﻿- type: radarEntityView
+  id: genericProjectile
+  defaultColor: "#a52a2a"
+  form:
+    !type:ShapeRadarForm
+    size: 1.5
+    # primitiveTopology: enum.SharedDrawPrimitiveTopology.TriangleList <--- example
+    vertices:
+      - -0.5, 0
+      - 0.5, 0
+      - 0, -1
+      - -0.5, 0
+
+- type: radarEntityView
+  id: ionProjectile
+  defaultColor: "#00ffff55"
+  form:
+    !type:CircleRadarForm
+    radius: 3
+
+- type: radarEntityView
+  id: machineGunProjectile
+  defaultColor: "#ffff00"
+  form:
+    !type:ShapeRadarForm
+    size: 1.5
+    vertices:
+      - 0, 0
+      - 0, 1
+
+- type: radarEntityView
+  id: genericCannon
+  defaultColor: "#00ff00"
+  form:
+    !type:ShapeRadarForm
+    size: 3
+    vertices:
+      - -0.5, 0.25
+      - 0, -0.75
+      - 0.5, 0.25
+      - -0.5, 0.25
+
+- type: radarEntityView
+  id: genericMob
+  defaultColor: "#ff0000"
+  form:
+    !type:CircleRadarForm
+    radius: 2
+
+- type: radarEntityView
+  id: genericDoor
+  defaultColor: "#ff0000"
+  form:
+    !type:ShapeRadarForm
+    size: 1
+    vertices:
+      - -0.5, 0.5
+      - 0.5, 0.5
+      - 0.5, -0.5
+      - -0.5, -0.5
+      - -0.5, 0.5
+
+- type: radarEntityView      
+  id: ammoContainer
+  defaultColor: "#ffff00"
+  form:
+    !type:CharRadarForm
+    char: 'A'
+
+- type: radarEntityView
+  id: randomPower
+  defaultColor: "#ffffff"
+  form:
+    !type:CharRadarForm
+    char: '?'
+
+- type: radarEntityView
+  id: healContainer
+  defaultColor: "#00ff00"
+  form:
+    !type:CharRadarForm
+    char: '+'
+    scale: 1.5
+
+#anomalies
+- type: radarEntityView
+  id: radanomaly_icon
+  defaultColor: "#ffffff"
+  form:
+    !type:TextureRadarForm
+    sprite: /Textures/Theta/ShipEvent/Objects/Anomalies.rsi/radanomaly.png
+    scale: 1.5
+    constScale: false
+
+#todo (radars): it sucks having to create 999 protos for circles with different radius
+- type: radarEntityView
+  id: radanomaly_fill
+  defaultColor: "#ffff0022"
+  form:
+    !type:CircleRadarForm
+    radius: 179.9
+    constScale: false
+
+- type: radarEntityView
+  id: radanomaly_border
+  defaultColor: "#ffaa00"
+  form:
+    !type:CircleRadarForm
+    radius: 180
+    constScale: false
+    filled: false
+
+- type: radarEntityView
+  id: ionanomaly_icon
+  defaultColor: "#ffffff"
+  form:
+    !type:TextureRadarForm
+    sprite: /Textures/Theta/ShipEvent/Objects/Anomalies.rsi/ionanomaly.png
+    scale: 1.5
+    constScale: false
+
+- type: radarEntityView
+  id: ionanomaly_fill
+  defaultColor: "#00aaee22"
+  form:
+    !type:CircleRadarForm
+    radius: 179.9
+    constScale: false
+
+- type: radarEntityView
+  id: ionanomaly_border
+  defaultColor: "#0000ff"
+  form:
+    !type:CircleRadarForm
+    radius: 180
+    constScale: false
+    filled: false

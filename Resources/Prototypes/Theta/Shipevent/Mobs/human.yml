@@ -1,0 +1,69 @@
+﻿- type: entity
+  id: ObserverShipEvent
+  name: observer
+  parent: MobObserver
+  components:
+    - type: ShipEventTeamMarker
+    - type: UserInterface
+      interfaces:
+        enum.TeamViewUiKey.Key:
+          type: TeamViewBoundUserInterface
+          requireInputValidation: false
+        enum.CaptainMenuUiKey.Key:
+          type: CaptainMenuBoundUserInterface
+          requireInputValidation: false
+        enum.GenericWarningUiKey.ShipEventKey:
+          type: GenericWarningWindowBoundUserInterface
+          requireInputValidation: false
+    - type: MindContainer
+      ghostPrototype: ObserverShipEvent
+
+- type: entity
+  name: ShipEvent Agent
+  id: MobHumanShipEvent
+  parent: MobHuman
+  suffix: SHIPEVENT
+  components:
+    - type: Bloodstream #shitton of runtimes without it
+      maxBleedAmount: 0
+      bloodlossDamage:
+        types:
+          Bloodloss:
+            0
+      bloodlossHealDamage:
+        types:
+          Bloodloss:
+            -1
+    - type: RandomHumanoidAppearance
+    - type: Loadout
+      prototypes: [ShipEventStandard]
+    - type: UsePlayerNameForEntityName
+    - type: ShipEventTeamMarker
+    - type: RadarHUD
+    - type: UserInterface
+      interfaces:
+        enum.TeamViewUiKey.Key:
+          type: TeamViewBoundUserInterface
+        enum.CaptainMenuUiKey.Key:
+          type: CaptainMenuBoundUserInterface
+    - type: MobHUD
+    - type: MindContainer
+      ghostPrototype: ObserverShipEvent
+
+# Space Ship - Poverty
+- type: startingGear
+  id: ShipEventStandard
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitOperative
+    back: ClothingBackpackDuffelSyndicate
+    shoes: ClothingShoesBootsMagAdvOn
+    mask: ClothingMaskGasSyndicate
+    head: ClothingHeadHelmetHardsuitSyndie
+    eyes: ClothingEyesGlassesMeson
+    ears: ClothingHeadsetAltSyndicate
+    gloves: ClothingHandsGlovesCombat
+    outerClothing: ClothingOuterHardsuitSyndie
+    id: AgentIDCard
+    pocket1: ExtendedEmergencyOxygenTankFilled
+    pocket2: ShipEventUplink40TC
+    belt: ClothingBeltMilitaryWebbing

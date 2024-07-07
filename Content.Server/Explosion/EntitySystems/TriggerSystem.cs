@@ -29,6 +29,7 @@ using Robust.Shared.Containers;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Map;
 using Robust.Shared.Random;
 using Robust.Shared.Player;
 using Content.Shared.Coordinates;
@@ -94,6 +95,7 @@ namespace Content.Server.Explosion.EntitySystems
             SubscribeLocalEvent<TriggerOnStepTriggerComponent, StepTriggeredOffEvent>(OnStepTriggered);
             SubscribeLocalEvent<TriggerOnSlipComponent, SlipEvent>(OnSlipTriggered);
             SubscribeLocalEvent<TriggerWhenEmptyComponent, OnEmptyGunShotEvent>(OnEmptyTriggered);
+            SubscribeLocalEvent<TriggerOnParentChangeComponent, EntParentChangedMessage>(OnParentChange);
             SubscribeLocalEvent<RepeatingTriggerComponent, MapInitEvent>(OnRepeatInit);
 
             SubscribeLocalEvent<SpawnOnTriggerComponent, TriggerEvent>(OnSpawnTrigger);
@@ -160,7 +162,7 @@ namespace Content.Server.Explosion.EntitySystems
 
         private void HandleDeleteTrigger(EntityUid uid, DeleteOnTriggerComponent component, TriggerEvent args)
         {
-            EntityManager.QueueDeleteEntity(uid);
+            QueueDel(uid);
             args.Handled = true;
         }
 
@@ -207,8 +209,31 @@ namespace Content.Server.Explosion.EntitySystems
 
         private void OnTriggerCollide(EntityUid uid, TriggerOnCollideComponent component, ref StartCollideEvent args)
         {
-            if (args.OurFixtureId == component.FixtureID && (!component.IgnoreOtherNonHard || args.OtherFixture.Hard))
+            bool colliding = args.OurFixtureId == component.FixtureID && (!component.IgnoreOtherNonHard || args.OtherFixture.Hard);
+
+            bool compFilter = true;
+            if (component.RequiredComponents.Count > 0)
+            {
+                foreach (var entry in component.RequiredComponents.Values)
+                {
+                    if (!HasComp(args.OtherEntity, entry.Component.GetType()))
+                    {
+                        compFilter = false;
+                        break;
+                    }
+                }
+            }
+
+            if (colliding && compFilter)
                 Trigger(uid);
+        }
+
+        private void OnParentChange(EntityUid uid, TriggerOnParentChangeComponent component,
+            ref EntParentChangedMessage args)
+        {
+            if (args.OldMapId is not { Valid: true })
+                return;
+            Trigger(uid, args.Transform.GridUid);
         }
 
         private void OnSpawnTriggered(EntityUid uid, TriggerOnSpawnComponent component, MapInitEvent args)
@@ -315,7 +340,6 @@ namespace Content.Server.Explosion.EntitySystems
                     _adminLogger.Add(LogType.Trigger,
                         $"{ToPrettyString(user.Value):user} started a {delay} second timer trigger on entity {ToPrettyString(uid):timer}");
                 }
-
             }
             else
             {

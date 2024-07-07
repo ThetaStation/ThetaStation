@@ -46,6 +46,11 @@
       - ReagentId: Blood
         Quantity: 10
 
+# Theta: mock of removed vulpkanian species
+- type: entity
+  id: HeadVulpkanin
+  parent: HeadHuman
+
 - type: entity
   id: LeftArmHuman
   name: "left human arm"

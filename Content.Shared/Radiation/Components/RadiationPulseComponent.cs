@@ -16,14 +16,8 @@ public sealed partial class RadiationPulseComponent : Component
     public TimeSpan StartTime;
 
     /// <summary>
-    ///     How long will animation play in seconds.
-    ///     Can be overridden by <see cref="Robust.Shared.Spawners.TimedDespawnComponent"/>.
-    /// </summary>
-    public float VisualDuration = 2f;
-
-    /// <summary>
     ///     The range of animation.
-    ///     Can be overridden by <see cref="RadiationSourceComponent"/>.
     /// </summary>
+    [DataField("visualRange")]
     public float VisualRange = 5f;
 }

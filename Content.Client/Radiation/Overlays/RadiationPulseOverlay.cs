@@ -2,6 +2,7 @@ using System.Numerics;
 using Content.Shared.Radiation.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Enums;
 using Robust.Shared.Graphics;
 using Robust.Shared.Map;
@@ -58,7 +59,7 @@ namespace Content.Client.Radiation.Overlays
                 shd?.SetParameter("renderScale", viewport.RenderScale);
                 shd?.SetParameter("positionInput", tempCoords);
                 shd?.SetParameter("range", instance.Range);
-                var life = (_gameTiming.RealTime - instance.Start).TotalSeconds / instance.Duration;
+                var life = CalcLife((float)(_gameTiming.RealTime - instance.Start).TotalSeconds);
                 shd?.SetParameter("life", (float) life);
 
                 // There's probably a very good reason not to do this.
@@ -70,6 +71,14 @@ namespace Content.Client.Radiation.Overlays
             }
 
             worldHandle.UseShader(null);
+        }
+
+        //every single number is taken from a ceiling. that log + sine function rises and then oscillates, 
+        //so shader doesn't just freeze/develop very slowly
+        private float CalcLife(float lifetime)
+        {
+            var value = Math.Min(0.8, Math.Log(lifetime + 1, 4)) + 0.1 * Math.Sin(lifetime);
+            return (float) value;
         }
 
         //Queries all pulses on the map and either adds or removes them from the list of rendered pulses based on whether they should be drawn (in range? on the same z-level/map? pulse entity still exists?)
@@ -98,8 +107,7 @@ namespace Content.Client.Radiation.Overlays
                                 new RadiationShaderInstance(
                                     _transform.GetMapCoordinates(pulseEntity),
                                     pulse.VisualRange,
-                                    pulse.StartTime,
-                                    pulse.VisualDuration
+                                    pulse.StartTime
                                 )
                             )
                     );
@@ -132,12 +140,11 @@ namespace Content.Client.Radiation.Overlays
                 && transformComponent.Coordinates.InRange(_entityManager, transformSystem, EntityCoordinates.FromMap(transformComponent.ParentUid, currentEyeLoc, transformSystem, _entityManager), MaxDist);
         }
 
-        private sealed record RadiationShaderInstance(MapCoordinates CurrentMapCoords, float Range, TimeSpan Start, float Duration)
+        private sealed record RadiationShaderInstance(MapCoordinates CurrentMapCoords, float Range, TimeSpan Start)
         {
             public MapCoordinates CurrentMapCoords = CurrentMapCoords;
             public float Range = Range;
             public TimeSpan Start = Start;
-            public float Duration = Duration;
         };
     }
 }

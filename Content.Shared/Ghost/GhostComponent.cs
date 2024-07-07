@@ -50,6 +50,12 @@ public sealed partial class GhostComponent : Component
     [DataField("booMaxTargets"), ViewVariables(VVAccess.ReadWrite)]
     public int BooMaxTargets = 3;
 
+    [DataField("actions")]
+    public List<string> Actions = new();
+
+    [DataField("actionsEntities")]
+    public List<EntityUid?> ActionsEntities = new();
+
     // TODO: instead of this funny stuff just give it access and update in system dirtying when needed
     [ViewVariables(VVAccess.ReadWrite)]
     public bool CanGhostInteract

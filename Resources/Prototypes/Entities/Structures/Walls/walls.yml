@@ -753,8 +753,6 @@
     damageModifierSet: StructuralMetallic
   - type: Physics
     bodyType: Static
-  - type: Reflect
-    reflectProb: 1
   - type: Pullable
   - type: Airtight
     noAirWhenFullyAirBlocked: false
@@ -829,8 +827,8 @@
           3: { state: shuttle_construct-3, visible: true}
           4: { state: shuttle_construct-4, visible: true}
           5: { state: shuttle_construct-5, visible: true}
-  - type: Reflect
-    reflectProb: 1
+  #- type: Reflect
+  #  reflectProb: 1
 
 - type: entity
   parent: WallSolid
@@ -848,8 +846,8 @@
   - type: IconSmooth
     key: walls
     base: state
-  - type: Reflect
-    reflectProb: 1
+  #- type: Reflect
+  #  reflectProb: 1
 
 - type: entity
   parent: BaseWall

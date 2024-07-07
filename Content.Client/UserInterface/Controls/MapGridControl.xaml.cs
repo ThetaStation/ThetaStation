@@ -73,7 +73,7 @@ public partial class MapGridControl : LayoutContainer
     protected Vector2 MidPointVector => new Vector2(MidPoint, MidPoint);
 
     protected int MidPoint => SizeFull / 2;
-    protected int SizeFull => (int) ((UIDisplayRadius + MinimapMargin) * 2 * UIScale);
+    protected int SizeFull => (int) ((GetUIDisplayRadius() + GetMinimapMargin()) * 2 * UIScale);
     protected int ScaledMinimapRadius => (int) (UIDisplayRadius * UIScale);
     protected float MinimapScale => WorldRange != 0 ? ScaledMinimapRadius / WorldRange : 0f;
 
@@ -96,6 +96,16 @@ public partial class MapGridControl : LayoutContainer
 
         var cache = IoCManager.Resolve<IResourceCache>();
         _largerFont = new VectorFont(cache.GetResource<FontResource>("/EngineFonts/NotoSans/NotoSans-Regular.ttf"), 16);
+    }
+
+    public virtual int GetUIDisplayRadius()
+    {
+        return UIDisplayRadius;
+    }
+
+    public virtual int GetMinimapMargin()
+    {
+        return MinimapMargin;
     }
 
     public void ForceRecenter()

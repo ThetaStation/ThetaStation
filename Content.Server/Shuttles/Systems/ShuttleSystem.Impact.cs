@@ -1,9 +1,10 @@
+using Content.Server.Explosion.EntitySystems;
 using System.Numerics;
 using Content.Server.Shuttles.Components;
+using Robust.Server.GameObjects;
 using Content.Shared.Audio;
 using Robust.Shared.Audio;
 using Robust.Shared.Map;
-using Robust.Shared.Physics.Dynamics;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Player;
 
@@ -11,10 +12,15 @@ namespace Content.Server.Shuttles.Systems;
 
 public sealed partial class ShuttleSystem
 {
+    [Dependency] private readonly TransformSystem _formSys = default!;
+    [Dependency] private readonly ExplosionSystem _expSys = default!;
+
     /// <summary>
     /// Minimum velocity difference between 2 bodies for a shuttle "impact" to occur.
     /// </summary>
     private const int MinimumImpactVelocity = 10;
+
+    private const double IntensityMultiplier = 0.01; //carefully picked by trial & error
 
     private readonly SoundCollectionSpecifier _shuttleImpactSound = new("ShuttleImpactSound");
 
@@ -47,14 +53,16 @@ public sealed partial class ShuttleSystem
         var jungleDiff = (ourVelocity - otherVelocity).Length();
 
         if (jungleDiff < MinimumImpactVelocity)
-        {
             return;
-        }
 
         var coordinates = new EntityCoordinates(ourXform.MapUid.Value, args.WorldPoint);
         var volume = MathF.Min(10f, 1f * MathF.Pow(jungleDiff, 0.5f) - 5f);
         var audioParams = AudioParams.Default.WithVariation(SharedContentAudioSystem.DefaultVariation).WithVolume(volume);
 
         _audio.PlayPvs(_shuttleImpactSound, coordinates, audioParams);
+
+        var kineticEnergy = ourBody.Mass * Math.Pow(jungleDiff, 2) / 2;
+        var intensity = (float) (kineticEnergy * IntensityMultiplier);
+        _expSys.QueueExplosion(coordinates.ToMap(EntityManager, _formSys), ExplosionSystem.DefaultExplosionPrototypeId, intensity, 5f, 50f);
     }
 }

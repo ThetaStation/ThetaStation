@@ -1,29 +1,29 @@
-name: "Сообщить о проблеме"
-description: "Если что-то работает не так, как ожидалось."
-labels: ["triage"]
+name: "Bug report"
+description: "If something does not work as expected."
+labels: ["Bug"]
 body:
   - type: textarea
     id: description
     validations:
       required: true
     attributes:
-      label: "Описание"
-      description: "Опишите проблему как можно подробнее"
+      label: "Description"
+      description: "Describe the problem in details."
 
   - type: textarea
     id: reproduction
     attributes:
-      label: "Шаги воспроизведения"
-      description: "Если приемлемо, опишите шаги для воспроизведения проблемы"
+      label: "Reproduction steps"
+      description: "If possible, describe steps for reproducing the problem."
       placeholder: |
-        1. Открыть интерфейс консоли
-        2. Нажать кнопку "Старт"
-        3. Получить ошибку...
+        1. Open console interface
+        2. Press start button
+        3. Get error
 
   - type: textarea
     id: screenshots
     attributes:
-      label: "Скриншоты"
+      label: "Screenshots"
       description: |
-        Если приемлемо, добавьте скриншоты, чтобы помочь объяснить вашу проблему
-        **Подсказка**: Вы можете прикрепить изображения щелкнув по области ниже, чтобы выделить её, а затем перетащив в нее файлы
+        If possible, add screenshots to make problem clearer.
+        **Tip**: You can add images by clicking area below to select it and then dragging files inside.

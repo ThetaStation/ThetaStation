@@ -109,6 +109,7 @@ ui-options-header-ui = Интерфейс
 ui-options-header-misc = Разное
 ui-options-header-hotbar = Хотбар
 ui-options-header-shuttle = Шаттл
+ui-options-header-theta = Тета
 ui-options-header-map-editor = Редактор карт
 ui-options-header-dev = Разработка
 ui-options-header-general = Основное
@@ -258,3 +259,6 @@ ui-options-chat-window-opacity = Прозрачность окна чата
 ui-options-chat-window-opacity-percent = { TOSTRING($opacity, "P0") }
 ui-options-screen-shake-intensity = Интенсивность дрожания экрана
 ui-options-screen-shake-percent = { TOSTRING($intensity, "P0") }
+## Theta
+
+ui-options-function-ping-on-radar = Отправить сигнал на радаре

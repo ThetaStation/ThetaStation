@@ -1,8 +1,11 @@
 using System.Numerics;
 using Content.Server.Shuttles.Systems;
+using Content.Shared.Construction.Prototypes;
 using Content.Shared.Damage;
+using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Server.Shuttles.Components
 {
@@ -48,13 +51,32 @@ namespace Content.Server.Shuttles.Components
 
         public List<EntityUid> Colliding = new();
 
+        /// <summary>
+        /// Use SetThrusterFiring instead of setting this manually
+        /// </summary>
         public bool Firing = false;
+
+        public TimeSpan LastFire;
 
         /// <summary>
         /// Next time we tick damage for anyone colliding.
         /// </summary>
         [ViewVariables(VVAccess.ReadWrite), DataField("nextFire", customTypeSerializer:typeof(TimeOffsetSerializer))]
         public TimeSpan NextFire;
+
+        [DataField("partRatingThrustMultiplier")]
+        public float PartRatingThrustMultiplier = 1.5f;
+
+        [DataField("soundSpinup")]
+        public SoundSpecifier? SoundSpinup;
+
+        [DataField("soundCycle")]
+        public SoundSpecifier? SoundCycle;
+
+        [DataField("soundShutdown")]
+        public SoundSpecifier? SoundShutdown;
+
+        public EntityUid? AudioUid;
     }
 
     public enum ThrusterType

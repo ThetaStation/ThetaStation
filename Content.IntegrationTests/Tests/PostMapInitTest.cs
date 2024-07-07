@@ -36,10 +36,11 @@ namespace Content.IntegrationTests.Tests
 
         private static readonly string[] Grids =
         {
-            "/Maps/centcomm.yml",
-            "/Maps/Shuttles/cargo.yml",
-            "/Maps/Shuttles/emergency.yml",
-            "/Maps/Shuttles/infiltrator.yml",
+            "/Maps/Theta/Shipevent/Ships/shipevent-arrowhead.yml",
+            "/Maps/Theta/Shipevent/Ships/shipevent-mule.yml",
+            "/Maps/Theta/Shipevent/Ships/shipevent-boxship.yml",
+            "/Maps/Theta/Shipevent/Ships/shipevent-skipjack.yml",
+            "/Maps/Theta/Shipevent/Ships/shipevent-asteroid-ship.yml"
         };
 
         private static readonly string[] GameMaps =
@@ -134,7 +135,7 @@ namespace Content.IntegrationTests.Tests
             var server = pair.Server;
 
             var resourceManager = server.ResolveDependency<IResourceManager>();
-            var mapFolder = new ResPath("/Maps");
+            var mapFolder = new ResPath("/Maps/Theta");
             var maps = resourceManager
                 .ContentFindFiles(mapFolder)
                 .Where(filePath => filePath.Extension == "yml" && !filePath.Filename.StartsWith(".", StringComparison.Ordinal))
@@ -169,7 +170,13 @@ namespace Content.IntegrationTests.Tests
             await pair.CleanReturnAsync();
         }
 
-        [Test, TestCaseSource(nameof(GameMaps))]
+        private static string[] GetGameMapNames()
+        {
+            string[] task = { "Dev", "LobbyShipEvent" };
+            return task;
+        }
+
+        [Test, TestCaseSource(nameof(GetGameMapNames))]
         public async Task GameMapsLoadableTest(string mapProto)
         {
             await using var pair = await PoolManager.GetServerClient(new PoolSettings
@@ -312,7 +319,7 @@ namespace Content.IntegrationTests.Tests
             return resultCount;
         }
 
-        [Test]
+        [Test, Ignore("Not necessary for Theta")]
         public async Task AllMapsTested()
         {
             await using var pair = await PoolManager.GetServerClient();

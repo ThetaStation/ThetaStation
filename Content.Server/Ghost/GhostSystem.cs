@@ -163,6 +163,19 @@ namespace Content.Server.Ghost
 
             var time = _gameTiming.CurTime;
             component.TimeOfDeath = time;
+
+            foreach (var action in component.Actions)
+            {
+                EntityUid? actionEnt = null;
+                _actions.AddAction(uid, ref actionEnt, out var createdAction, action);
+                // TODO ghost: remove once ghosts are persistent and aren't deleted when returning to body
+                if (createdAction?.UseDelay != null)
+                    createdAction.Cooldown = (time, time + createdAction.UseDelay.Value);
+                component.ActionsEntities.Add(actionEnt);
+            }
+            _actions.AddAction(uid, ref component.ToggleLightingActionEntity, component.ToggleLightingAction);
+            _actions.AddAction(uid, ref component.ToggleFoVActionEntity, component.ToggleFoVAction);
+            _actions.AddAction(uid, ref component.ToggleGhostsActionEntity, component.ToggleGhostsAction);
         }
 
         private void OnGhostShutdown(EntityUid uid, GhostComponent component, ComponentShutdown args)
@@ -177,6 +190,11 @@ namespace Content.Server.Ghost
                 _visibilitySystem.RemoveLayer((uid, visibility), (int) VisibilityFlags.Ghost, false);
                 _visibilitySystem.AddLayer((uid, visibility), (int) VisibilityFlags.Normal, false);
                 _visibilitySystem.RefreshVisibility(uid, visibilityComponent: visibility);
+            }
+
+            foreach (var action in component.ActionsEntities)
+            {
+                _actions.RemoveAction(uid, action);
             }
 
             // Entity can't see ghosts anymore.
@@ -406,7 +424,7 @@ namespace Content.Server.Ghost
             bool canReturn = false)
         {
             _transformSystem.TryGetMapOrGridCoordinates(targetEntity, out var spawnPosition);
-            return SpawnGhost(mind, spawnPosition, canReturn);
+            return SpawnGhost(mind, targetEntity, spawnPosition, canReturn);
         }
 
         private bool IsValidSpawnPosition(EntityCoordinates? spawnPosition)
@@ -426,7 +444,7 @@ namespace Content.Server.Ghost
             return true;
         }
 
-        public EntityUid? SpawnGhost(Entity<MindComponent?> mind, EntityCoordinates? spawnPosition = null,
+        public EntityUid? SpawnGhost(Entity<MindComponent?> mind, EntityUid? targetEntity, EntityCoordinates? spawnPosition = null,
             bool canReturn = false)
         {
             if (!Resolve(mind, ref mind.Comp))
@@ -448,7 +466,11 @@ namespace Content.Server.Ghost
                 return null;
             }
 
-            var ghost = SpawnAtPosition(GameTicker.ObserverPrototypeName, spawnPosition.Value);
+            var ghostProto = GameTicker.ObserverPrototypeName;
+            if (targetEntity != null && TryComp<MindContainerComponent>(targetEntity, out var mindContainer))
+                ghostProto = mindContainer.GhostPrototype;
+
+            var ghost = SpawnAtPosition(ghostProto, spawnPosition.Value);
             var ghostComponent = Comp<GhostComponent>(ghost);
 
             // Try setting the ghost entity name to either the character name or the player name.

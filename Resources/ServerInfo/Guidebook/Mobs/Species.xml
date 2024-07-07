@@ -12,7 +12,7 @@
   <Box>
   <GuideEntityEmbed Entity="MobMoth" Caption="Ниан"/>
   <GuideEntityEmbed Entity="MobReptilian" Caption="Унатх"/>
-  <GuideEntityEmbed Entity="MobVulpkanin" Caption="Вульпканин"/>
+  <GuideEntityEmbed Entity="MobHumanShipEvent" Caption="Вульпканин"/>
   <GuideEntityEmbed Entity="MobSlimePerson" Caption="Слаймолюд"/>
   </Box>
 

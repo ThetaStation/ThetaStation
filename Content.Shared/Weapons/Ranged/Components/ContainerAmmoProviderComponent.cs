@@ -6,13 +6,16 @@ namespace Content.Shared.Weapons.Ranged.Components;
 ///     Handles pulling entities from the given container to use as ammunition.
 /// </summary>
 [RegisterComponent]
+[AutoGenerateComponentState]
 public sealed partial class ContainerAmmoProviderComponent : AmmoProviderComponent
 {
     [DataField("container", required: true)]
+    [AutoNetworkedField]
     [ViewVariables]
-    public string Container = default!;
+    public string Container = "storagebase";
 
     [DataField("provider")]
+    [AutoNetworkedField]
     [ViewVariables]
     public EntityUid? ProviderUid;
 }

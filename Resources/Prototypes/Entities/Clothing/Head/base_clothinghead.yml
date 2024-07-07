@@ -153,6 +153,8 @@
   name: base hardsuit helmet
   noSpawn: true
   components:
+  - type: Item
+    size: Normal
   - type: BreathMask
   - type: Sprite
     state: icon # default state used by most inheritors
@@ -197,6 +199,8 @@
   name: base hardsuit helmet with light
   noSpawn: true
   components:
+  - type: Item
+    heldPrefix: off
   - type: Sprite
     layers:
     - state: icon

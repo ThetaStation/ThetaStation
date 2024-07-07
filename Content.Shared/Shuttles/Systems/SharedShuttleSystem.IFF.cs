@@ -85,4 +85,15 @@ public abstract partial class SharedShuttleSystem
         Dirty(gridUid, component);
         UpdateIFFInterfaces(gridUid, component);
     }
+
+    [PublicAPI]
+    public void ResetIFFFlags(EntityUid gridUid, IFFComponent? component = null)
+    {
+        if (!Resolve(gridUid, ref component, false))
+            return;
+
+        component.Flags = IFFFlags.None;
+        Dirty(component);
+        UpdateIFFInterfaces(gridUid, component);
+    }
 }
