@@ -9,6 +9,7 @@ using Robust.Shared.Utility;
 using System;
 using System.Linq;
 using Content.Shared.Interaction.Events;
+using Content.Shared.Whitelist;
 using JetBrains.Annotations;
 
 namespace Content.Shared.Weapons.Ranged.Systems;
@@ -89,7 +90,7 @@ public partial class SharedGunSystem
 
     public bool TryRevolverInsert(EntityUid revolverUid, RevolverAmmoProviderComponent component, EntityUid uid, EntityUid? user)
     {
-        if (component.Whitelist?.IsValid(uid, EntityManager) == false)
+        if (_whitelistSystem.IsWhitelistFail(component.Whitelist, uid))
             return false;
 
         // If it's a speedloader try to get ammo from it.
@@ -192,9 +193,9 @@ public partial class SharedGunSystem
     /// <returns></returns>
     public bool CanRevolverInsert(EntityUid revolverUid, RevolverAmmoProviderComponent component, EntityUid uid, EntityUid? user)
     {
-        if (component.Whitelist?.IsValid(uid, EntityManager) == false)
+        if(component.Whitelist != null && !_whitelistSystem.IsValid(component.Whitelist, uid))
             return false;
-        
+
         if (EntityManager.HasComponent<SpeedLoaderComponent>(uid))
         {
             var freeSlots = 0;
@@ -207,9 +208,9 @@ public partial class SharedGunSystem
                 freeSlots++;
             }
 
-            if (freeSlots == 0) 
+            if (freeSlots == 0)
                 return false;
-            
+
             var xformQuery = GetEntityQuery<TransformComponent>();
             var xform = xformQuery.GetComponent(uid);
             var ammo = new List<(EntityUid? Entity, IShootable Shootable)>(freeSlots);
@@ -221,7 +222,7 @@ public partial class SharedGunSystem
 
             return true;
         }
-        
+
         for (var i = 0; i < component.Capacity; i++)
         {
             var index = (component.CurrentIndex + i) % component.Capacity;
@@ -231,10 +232,10 @@ public partial class SharedGunSystem
 
             return true;
         }
-        
+
         return false;
     }
- 
+
     private void SetChamber(int index, RevolverAmmoProviderComponent component, EntityUid uid)
     {
         if (TryComp<CartridgeAmmoComponent>(uid, out var cartridge) && cartridge.Spent)

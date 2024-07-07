@@ -55,7 +55,7 @@
   id: ShipEventStandard
   equipment:
     jumpsuit: ClothingUniformJumpsuitOperative
-    back: ClothingBackpackDuffelSyndicateOperative
+    back: ClothingBackpackDuffelSyndicate
     shoes: ClothingShoesBootsMagAdvOn
     mask: ClothingMaskGasSyndicate
     head: ClothingHeadHelmetHardsuitSyndie

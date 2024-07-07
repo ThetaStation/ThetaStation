@@ -65,7 +65,7 @@ public sealed class RadarPingsModule : RadarModule
             }
 
             var coordinates = ping.Coordinates;
-            var uiPosition = parameters.DrawMatrix.Transform(coordinates);
+            var uiPosition = Vector2.Transform(coordinates, parameters.DrawMatrix);
             uiPosition.Y = -uiPosition.Y;
 
             handle.DrawCircle(ScalePosition(uiPosition), ping.DotRadius, ping.Color);

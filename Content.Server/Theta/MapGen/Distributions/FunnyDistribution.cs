@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Numerics;
 
 namespace Content.Server.Theta.MapGen.Distributions;
@@ -13,7 +14,7 @@ public sealed class FunnyDistribution : IMapGenDistribution
         string[] coords = raw.Split(',');
         for (int i = 0; i < coords.Length - 2; i += 2)
         {
-            _positions.Add(new Vector2(float.Parse(coords[i]), float.Parse(coords[i + 1])));
+            _positions.Add(new Vector2(float.Parse(coords[i], CultureInfo.InvariantCulture), float.Parse(coords[i + 1], CultureInfo.InvariantCulture)));
         }
     }
 

@@ -79,7 +79,7 @@ public sealed class RadarGrids : RadarModule
             fixturesQuery.HasComponent(ourGridId.Value))
         {
             var ourGridMatrix = _transform.GetWorldMatrix(ourGridId.Value);
-            Matrix3.Multiply(in ourGridMatrix, in parameters.DrawMatrix, out var matrix);
+            var matrix = Matrix3x2.Multiply(ourGridMatrix, parameters.DrawMatrix);
             var color = _shuttles.GetIFFColor(ourGridId.Value, self: true);
 
             DrawGrid(handle, matrix, (ourGridId.Value, ourGrid), color);
@@ -106,7 +106,7 @@ public sealed class RadarGrids : RadarModule
                 continue;
 
             var gridMatrix = _transform.GetWorldMatrix(gUid);
-            Matrix3.Multiply(in gridMatrix, in parameters.DrawMatrix, out var matty);
+            var matty = Matrix3x2.Multiply(gridMatrix, parameters.DrawMatrix);
             var color = _shuttles.GetIFFColor(grid, self: false, iff);
 
             // Others default:
@@ -119,7 +119,7 @@ public sealed class RadarGrids : RadarModule
             {
                 var gridBounds = grid.Comp.LocalAABB;
 
-                var gridCentre = matty.Transform(gridBody.LocalCenter);
+                var gridCentre = Vector2.Transform(gridBody.LocalCenter, matty);
                 gridCentre.Y = -gridCentre.Y;
                 var distance = gridCentre.Length();
                 var labelText = Loc.GetString("shuttle-console-iff-label", ("name", labelName),
@@ -153,7 +153,7 @@ public sealed class RadarGrids : RadarModule
         }
     }
 
-    private void DrawGrid(DrawingHandleScreen handle, Matrix3 matrix, Entity<MapGridComponent> grid, Color color, float alpha = 0.01f)
+    private void DrawGrid(DrawingHandleScreen handle, Matrix3x2 matrix, Entity<MapGridComponent> grid, Color color, float alpha = 0.01f)
     {
         var rator = Maps.GetAllTilesEnumerator(grid.Owner, grid.Comp);
         var minimapScale = MinimapScale;
@@ -328,7 +328,7 @@ public sealed class RadarGrids : RadarModule
 
         public float MinimapScale;
         public Vector2 MidPoint;
-        public Matrix3 Matrix;
+        public Matrix3x2 Matrix;
 
         public List<Vector2> Vertices;
         public Vector2[] ScaledVertices;
@@ -336,7 +336,7 @@ public sealed class RadarGrids : RadarModule
         public void Execute(int index)
         {
             var vert = Vertices[index];
-            var adjustedVert = Matrix.Transform(vert);
+            var adjustedVert = Vector2.Transform(vert, Matrix);
             adjustedVert = adjustedVert with { Y = -adjustedVert.Y };
 
             var scaledVert = ScalePosition(adjustedVert, MinimapScale, MidPoint);

@@ -33,7 +33,7 @@ public sealed class RadarShieldStatus : RadarModule
             var verts = _shieldSys.GenerateConeVertices(shield.Radius, shield.Angle, shield.Width, (int) (shield.Width / Math.Tau * 20));
             for (var i = 0; i < verts.Length; i++)
             {
-                verts[i] = parameters.DrawMatrix.Transform(position + rot.RotateVec(verts[i]));
+                verts[i] = Vector2.Transform(position + rot.RotateVec(verts[i]), parameters.DrawMatrix);
                 verts[i].Y = -verts[i].Y;
                 verts[i] = ScalePosition(verts[i]);
             }

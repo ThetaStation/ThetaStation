@@ -1,11 +1,10 @@
 ﻿# Uplink
 - type: entity
-  parent: BaseUplinkRadio
+  parent: [BaseUplinkRadio, StorePresetUplink]
   id: ShipEventUplink40TC
   suffix: 40 TC, ShipEvent
   components:
     - type: Store
-      preset: StorePresetUplink
       balance:
         Telecrystal: 40
     - type: Tag

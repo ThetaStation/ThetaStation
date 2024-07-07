@@ -343,6 +343,13 @@
     !type:FridayThirteenth { }
 
 - type: holiday
+  id: PrideMonth
+  name: holiday-name-theta-day
+  beginDay: 1
+  endDay: 31
+  beginMonth: June
+
+- type: holiday
   id: ThetaDay
   name: holiday-name-theta-day
   beginDay: 6

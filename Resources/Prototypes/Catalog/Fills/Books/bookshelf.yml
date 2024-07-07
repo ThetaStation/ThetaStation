@@ -15,13 +15,15 @@
         orGroup: BookPool
       - id: BookBartendersManual
         orGroup: BookPool
-      - id: BookChefGaming
+      - id: BookHowToCookForFortySpaceman
         orGroup: BookPool
       - id: BookLeafLoversSecret
         orGroup: BookPool
       - id: BookEngineersHandbook
         orGroup: BookPool
       - id: BookScientistsGuidebook
+        orGroup: BookPool
+      - id: HyperLinkBookCorporateLaw # Corvax-HyperLink
         orGroup: BookPool
       - id: BookSecurity
         orGroup: BookPool

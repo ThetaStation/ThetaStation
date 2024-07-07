@@ -17,10 +17,10 @@ shuttle-console-ftl-timer = Время БСС
 # Display
 shuttle-console-max-radar = Макс. дальн. радара:
 shuttle-console-radar = Дальн. радара:
-shuttle-console-position = Местопол:
-shuttle-console-orientation = Ориент:
-shuttle-console-linear-velocity = Линейн. скр:
-shuttle-console-angular-velocity = Угл. скр:
+shuttle-console-position = Координаты:
+shuttle-console-orientation = Азимут:
+shuttle-console-linear-velocity = Линейная скорость:
+shuttle-console-angular-velocity = Угловая скорость:
 shuttle-console-dock-label = Стык. порты
 shuttle-console-name-label = Название корабля
 shuttle-console-name-change = Изменить
@@ -52,7 +52,6 @@ shuttle-console-map-beacons = Показ маяков
 shuttle-console-no-signal = Нет сигнала
 shuttle-console-map-objects = Объекты в секторе
 # DOCK
-shuttle-console-docked = Пристыкованные объекты
 shuttle-console-view = Выбрать
 shuttle-console-undock = Отстыковать
 shuttle-console-dock = Пристыковать

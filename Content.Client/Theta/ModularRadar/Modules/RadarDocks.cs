@@ -78,7 +78,7 @@ public sealed class RadarDocks : RadarModule
             foreach (var state in docks)
             {
                 var position = state.Coordinates.Position;
-                var uiPosition = parameters.DrawMatrix.Transform(position);
+                var uiPosition = Vector2.Transform(position, parameters.DrawMatrix);
 
                 if (uiPosition.Length() > (WorldRange * 2f) - DockScale)
                     continue;
@@ -89,10 +89,10 @@ public sealed class RadarDocks : RadarModule
 
                 var verts = new[]
                 {
-                    parameters.DrawMatrix.Transform(position + new Vector2(-DockScale, -DockScale)),
-                    parameters.DrawMatrix.Transform(position + new Vector2(DockScale, -DockScale)),
-                    parameters.DrawMatrix.Transform(position + new Vector2(DockScale, DockScale)),
-                    parameters.DrawMatrix.Transform(position + new Vector2(-DockScale, DockScale)),
+                    Vector2.Transform(position + new Vector2(-DockScale, -DockScale), parameters.DrawMatrix),
+                    Vector2.Transform(position + new Vector2(DockScale, -DockScale), parameters.DrawMatrix),
+                    Vector2.Transform(position + new Vector2(DockScale, DockScale), parameters.DrawMatrix),
+                    Vector2.Transform(position + new Vector2(-DockScale, DockScale), parameters.DrawMatrix),
                 };
 
                 for (var i = 0; i < verts.Length; i++)

@@ -28,7 +28,7 @@ public sealed class RadarVelocity : RadarModule
             var transformGridComp = xformQuery.GetComponent(ourGridId.Value);
             var ourGridMatrix = transformGridComp.WorldMatrix;
 
-            Matrix3.Multiply(in ourGridMatrix, in parameters.DrawMatrix, out var matrix);
+            var matrix = Matrix3x2.Multiply(ourGridMatrix, parameters.DrawMatrix);
 
             var worldRot = transformGridComp.WorldRotation;
             // Get the positive reduced angle.
@@ -41,7 +41,7 @@ public sealed class RadarVelocity : RadarModule
         }
     }
 
-    private void DrawVelocityArrow(DrawingHandleScreen handle, Matrix3 matrix, Vector2 gridVelocity, Vector2 gridCenter)
+    private void DrawVelocityArrow(DrawingHandleScreen handle, Matrix3x2 matrix, Vector2 gridVelocity, Vector2 gridCenter)
     {
         const float arrowSize = 3f;
 
@@ -64,7 +64,7 @@ public sealed class RadarVelocity : RadarModule
         for (var i = 0; i < verts.Length; i++)
         {
             var offset = gridCenter + gridVelocity * 1.5f + angle.RotateVec(verts[i]);
-            verts[i] = matrix.Transform(offset);
+            verts[i] = Vector2.Transform(offset, matrix);
 
             var vert = verts[i];
             vert.Y = -vert.Y;

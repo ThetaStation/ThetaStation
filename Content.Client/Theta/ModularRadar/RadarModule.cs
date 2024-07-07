@@ -28,7 +28,7 @@ public abstract class RadarModule
     protected float MaxRadarRange => Radar.MaxRadarRange;
     protected float WorldRange => Radar.WorldRange;
     protected float ActualRadarRange => Radar.GetActualRadarRange();
-    protected Matrix3 OffsetMatrix => Radar.GetOffsetMatrix().Invert();
+    protected Matrix3x2 OffsetMatrix => Radar.GetInvertOffsetMatrix();
     protected int PixelHeight => Radar.PixelHeight;
     protected int PixelWidth => Radar.PixelWidth;
 
@@ -46,11 +46,11 @@ public abstract class RadarModule
     public virtual void FrameUpdate(FrameEventArgs args) { }
     public virtual void OnClear() { }
 
-    protected Vector2 RelativePositionToCoordinates(Vector2 pos, Matrix3 matrix)
+    protected Vector2 RelativePositionToCoordinates(Vector2 pos, Matrix3x2 matrix)
     {
         var removeScale = InverseScalePosition(pos);
         removeScale.Y = -removeScale.Y;
-        return matrix.Transform(removeScale);
+        return Vector2.Transform(removeScale, matrix);
     }
 
     protected Vector2 ScalePosition(Vector2 value)
@@ -70,9 +70,9 @@ public abstract class RadarModule
 
     public sealed class Parameters
     {
-        public Matrix3 DrawMatrix;
+        public Matrix3x2 DrawMatrix;
 
-        public Parameters(Matrix3 drawMatrix)
+        public Parameters(Matrix3x2 drawMatrix)
         {
             DrawMatrix = drawMatrix;
         }

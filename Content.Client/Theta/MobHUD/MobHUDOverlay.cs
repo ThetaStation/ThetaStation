@@ -1,3 +1,4 @@
+using System.Numerics;
 using Content.Shared.Theta.MobHUD;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -25,7 +26,7 @@ public sealed class MobHUDOverlay : Overlay
         IoCManager.InjectDependencies(this);
         _hudSys = _entMan.System<MobHUDSystem>();
     }
-    
+
     protected override void Draw(in OverlayDrawArgs args)
     {
         DrawingHandleWorld handle = args.WorldHandle;
@@ -50,7 +51,7 @@ public sealed class MobHUDOverlay : Overlay
             }
         }
 
-        handle.SetTransform(Matrix3.Identity);
+        handle.SetTransform(Matrix3x2.Identity);
     }
 
     public void DrawHUD(TransformComponent form, MobHUDPrototype hudProt, DrawingHandleWorld handle)
@@ -77,12 +78,12 @@ public sealed class MobHUDOverlay : Overlay
 
             cachedTextures[hudProt.Sprite] = texture;
         }
-        
+
         texture = cachedTextures[hudProt.Sprite];
-        
+
         var angle = -_eyeMan.CurrentEye.Rotation;
         handle.SetTransform(form.WorldPosition, angle);
-        
+
         var textureSize = texture.Size / (float)EyeManager.PixelsPerMeter;
         var rect = Box2.FromDimensions(textureSize/-2, textureSize);
         handle.DrawTextureRectRegion(texture, rect, hudProt.Color);

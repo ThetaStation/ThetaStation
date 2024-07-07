@@ -27,6 +27,7 @@
   - Mime
   - Musician
   - Passenger
+  - PassengerGodmode
   - Reporter
   - Visitor
   - Zookeeper
@@ -103,4 +104,5 @@
   - Reporter
   - Zookeeper
   - Psychologist
+  - Pilot # Corvax-Pilot
   primary: false

@@ -1,4 +1,3 @@
-using Content.Server.GameTicking.Components;
 using Content.Server.Theta.MapGen;
 using Content.Server.Theta.MapGen.Distributions;
 using Content.Server.Theta.MapGen.Generators;
@@ -6,6 +5,7 @@ using Content.Server.Theta.MapGen.Processors;
 using Content.Server.Theta.MapGen.Prototypes;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Server.Theta.ShipEvent.Systems;
+using Content.Shared.GameTicking.Components;
 using Content.Shared.Random;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Theta.ShipEvent;
@@ -197,7 +197,7 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         List<IMapGenProcessor> globalProcessors = new() { iffSplitProc, iffFlagProc };
 
         IMapGenDistribution distribution = new SimpleDistribution();
-        if (_rand.Prob(0.05f))
+        if (_rand.Prob(1f))
         {
             distribution = new FunnyDistribution();
         }

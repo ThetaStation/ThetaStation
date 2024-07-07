@@ -17,10 +17,10 @@ public sealed class RadarPlayAreaBounds : RadarModule
     {
         var matrix = parameters.DrawMatrix;
 
-        Vector2 lb = matrix.Transform(_boundsOverSys.CurrentBounds.BottomLeft);
-        Vector2 lt = matrix.Transform(_boundsOverSys.CurrentBounds.TopLeft);
-        Vector2 rb = matrix.Transform(_boundsOverSys.CurrentBounds.BottomRight);
-        Vector2 rt = matrix.Transform(_boundsOverSys.CurrentBounds.TopRight);
+        Vector2 lb = Vector2.Transform(_boundsOverSys.CurrentBounds.BottomLeft, matrix);
+        Vector2 lt = Vector2.Transform(_boundsOverSys.CurrentBounds.TopLeft, matrix);
+        Vector2 rb = Vector2.Transform(_boundsOverSys.CurrentBounds.BottomRight, matrix);
+        Vector2 rt = Vector2.Transform(_boundsOverSys.CurrentBounds.TopRight, matrix);
 
         lb.Y = -lb.Y;
         lt.Y = -lt.Y;

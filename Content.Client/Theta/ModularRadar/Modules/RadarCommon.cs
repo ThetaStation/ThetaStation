@@ -50,7 +50,7 @@ public sealed class RadarCommon : RadarModule
                 switch (view.OnRadarForm)
                 {
                     case CircleRadarForm circleRadarForm:
-                        var uiPosition = matrix.Transform(position);
+                        var uiPosition = Vector2.Transform(position, matrix);
                         uiPosition.Y = -uiPosition.Y;
                         uiPosition = ScalePosition(uiPosition);
 
@@ -62,21 +62,21 @@ public sealed class RadarCommon : RadarModule
                         for (var i = 0; i < verts.Length; i++)
                         {
                             verts[i] *= shapeRadarForm.Size;
-                            verts[i] = matrix.Transform(position + angle.RotateVec(verts[i]));
+                            verts[i] = Vector2.Transform(position + angle.RotateVec(verts[i]), matrix);
                             verts[i].Y = -verts[i].Y;
                             verts[i] = ScalePosition(verts[i]);
                         }
                         handle.DrawPrimitives(GetTopology((SharedDrawPrimitiveTopology) shapeRadarForm.PrimitiveTopology), verts, color);
                         break;
                     case CharRadarForm charRadarForm:
-                        var uiPositionChar = matrix.Transform(position);
+                        var uiPositionChar = Vector2.Transform(position, matrix);
                         uiPositionChar.Y = -uiPositionChar.Y;
                         uiPositionChar = ScalePosition(uiPositionChar);
 
                         _font.DrawChar(handle, new Rune((uint) charRadarForm.Char), uiPositionChar, charRadarForm.Scale * scale, color);
                         break;
                     case TextureRadarForm textureRadarForm:
-                        var uiPositionTexture = matrix.Transform(position);
+                        var uiPositionTexture = Vector2.Transform(position, matrix);
                         uiPositionTexture.Y = -uiPositionTexture.Y;
                         uiPositionTexture = ScalePosition(uiPositionTexture);
 

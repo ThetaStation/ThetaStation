@@ -145,7 +145,7 @@ public abstract class ModularRadarControl : MapGridControl
         }
 
         var offsetMatrix = GetOffsetMatrix();
-        if (offsetMatrix.Equals(Matrix3.Zero))
+        if (offsetMatrix.Equals(Vector2.Zero))
         {
             Clear();
             return;
@@ -214,19 +214,26 @@ public abstract class ModularRadarControl : MapGridControl
         }
     }
 
-    public Matrix3 GetOffsetMatrix()
+    public Matrix3x2 GetOffsetMatrix()
     {
         if (_coordinates == null || _rotation == null)
-            return Matrix3.Zero;
+            return new Matrix3x2();
 
         var mapPosition = _coordinates.Value.ToMap(_entManager);
         if (mapPosition.MapId == MapId.Nullspace)
-            return Matrix3.Zero;
+            return new Matrix3x2();
 
-        return Matrix3.CreateInverseTransform(
+        return Matrix3Helpers.CreateInverseTransform(
             mapPosition.Position,
             GetMatrixRotation()
         );
+    }
+
+    public Matrix3x2 GetInvertOffsetMatrix()
+    {
+        var offsetMatrix = GetOffsetMatrix();
+        Matrix3x2.Invert(offsetMatrix, out var invert);
+        return invert;
     }
 
     public virtual Angle GetMatrixRotation()

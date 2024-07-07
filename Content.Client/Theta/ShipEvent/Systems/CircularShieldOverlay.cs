@@ -47,7 +47,7 @@ public sealed class CircularShieldOverlay : Overlay
                 (int) (shield.Width / Math.Tau * 20));
             for (int i = 0; i < verts.Length; i++)
             {
-                verts[i] = _formSys.GetWorldMatrix(form).Transform(verts[i]);
+                verts[i] = Vector2.Transform(verts[i], _formSys.GetWorldMatrix(form));
             }
 
             Vector2 shieldPos = args.Viewport.WorldToLocal(_formSys.GetWorldPosition(form));
