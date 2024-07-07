@@ -78,9 +78,10 @@ public sealed partial class ShipEventTeamSystem
 
     public IEnumerable<ICommonSession> GetTeamLivingMembers(ShipEventTeam team)
     {
+        //get all sessions with non null entity, which are also alive/aghosts
         return GetTeamSessions(team).Where(session => session.AttachedEntity != null &&
-            TryComp<MobStateComponent>(session.AttachedEntity.Value, out var state) &&
-            state.CurrentState != MobState.Dead);
+            (Comp<MetaDataComponent>(session.AttachedEntity.Value).EntityPrototype?.ID == "AdminObserver" ||
+            TryComp<MobStateComponent>(session.AttachedEntity.Value, out var state) && state.CurrentState != MobState.Dead));
     }
 
     #endregion

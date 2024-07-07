@@ -1,10 +1,8 @@
-﻿using Content.Shared.MachineLinking;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
+﻿namespace Content.Server.Theta.ShipEvent.Console;
 
-namespace Content.Server.Theta.ShipEvent.Console;
-
-[RegisterComponent, Access(typeof(CannonConsoleSystem))]
+[RegisterComponent]
 public sealed partial class CannonConsoleComponent : Component
 {
-
+    [ViewVariables(VVAccess.ReadWrite)]
+    public List<EntityUid> BoundCannonUids = new();
 }

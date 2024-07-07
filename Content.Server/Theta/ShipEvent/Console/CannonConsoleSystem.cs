@@ -55,34 +55,32 @@ public sealed class CannonConsoleSystem : EntitySystem
 
     private List<EntityUid> GetControlledCannons(EntityUid uid)
     {
-        List<EntityUid> result = new();
-        var query = EntityManager.EntityQueryEnumerator<CannonComponent>();
-        while (query.MoveNext(out var cannonUid, out var cannon))
-        {
-            if (cannon.BoundConsoleUid == uid)
-                result.Add(cannonUid);
-        }
-
-        return result;
+        return CompOrNull<CannonConsoleComponent>(uid)?.BoundCannonUids ?? new();
     }
 
     private void OnBUICreated(EntityUid uid, CannonConsoleComponent console, CannonConsoleBUICreatedMessage msg)
     {
-        if(!_playerManager.TryGetSessionByEntity(msg.Actor, out var session))
+        if (!_playerManager.TryGetSessionByEntity(msg.Actor, out var session))
             return;
         foreach (EntityUid controlledUid in GetControlledCannons(uid))
         {
             _pvsOverrideSys.AddSessionOverride(controlledUid, session);
+            EntityUid? loaderUid = Comp<CannonComponent>(controlledUid).BoundLoaderUid;
+            if (loaderUid != null)
+                _pvsOverrideSys.AddSessionOverride(loaderUid.Value, session);
         }
     }
 
     private void OnBUIDisposed(EntityUid uid, CannonConsoleComponent console, CannonConsoleBUIDisposedMessage msg)
     {
-        if(!_playerManager.TryGetSessionByEntity(msg.Actor, out var session))
+        if (!_playerManager.TryGetSessionByEntity(msg.Actor, out var session))
             return;
         foreach (EntityUid controlledUid in GetControlledCannons(uid))
         {
             _pvsOverrideSys.RemoveSessionOverride(controlledUid, session);
+            EntityUid? loaderUid = Comp<CannonComponent>(controlledUid).BoundLoaderUid;
+            if (loaderUid != null)
+                _pvsOverrideSys.RemoveSessionOverride(loaderUid.Value, session);
         }
     }
 }

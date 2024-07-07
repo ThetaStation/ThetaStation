@@ -41,9 +41,10 @@ public sealed class CannonSystem : SharedCannonSystem
         {
             foreach (EntityUid sourceUid in sink.LinkedSources)
             {
-                if (HasComp<CannonConsoleComponent>(sourceUid))
+                if (TryComp<CannonConsoleComponent>(sourceUid, out var console))
                 {
                     cannon.BoundConsoleUid = sourceUid;
+                    console.BoundCannonUids.Add(uid);
                     Dirty(uid, cannon);
                     break;
                 }
@@ -77,9 +78,10 @@ public sealed class CannonSystem : SharedCannonSystem
         if (ev.Sink != uid) //console is the source
             return;
 
-        if (HasComp<CannonConsoleComponent>(ev.Source))
+        if (TryComp<CannonConsoleComponent>(ev.Source, out var console))
         {
             cannon.BoundConsoleUid = ev.Source;
+            console.BoundCannonUids.Add(uid);
             Dirty(uid, cannon);
         }
     }

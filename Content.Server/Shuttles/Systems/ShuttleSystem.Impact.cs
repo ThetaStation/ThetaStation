@@ -7,6 +7,9 @@ using Robust.Shared.Audio;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Player;
+using Content.Shared.Theta.ShipEvent.Components;
+using Robust.Shared.Map.Components;
+using Content.Shared.Roles.Theta;
 
 namespace Content.Server.Shuttles.Systems;
 
@@ -31,8 +34,15 @@ public sealed partial class ShuttleSystem
 
     private void OnShuttleCollide(EntityUid uid, ShuttleComponent component, ref StartCollideEvent args)
     {
-        if (!HasComp<ShuttleComponent>(args.OtherEntity))
+        if (!HasComp<MapGridComponent>(args.OtherEntity))
             return;
+
+        if (TryComp<ShipEventTeamMarkerComponent>(uid, out var ourMark) &&
+            TryComp<ShipEventTeamMarkerComponent>(args.OtherEntity, out var otherMark) &&
+            ourMark.Team == otherMark.Team)
+        {
+            return;
+        }
 
         var ourBody = args.OurBody;
         var otherBody = args.OtherBody;
