@@ -398,6 +398,9 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         {
             foreach (ICommonSession session in GetTeamSessions(team))
             {
+                if (CompOrNull<MetaDataComponent>(session.AttachedEntity)?.EntityPrototype?.ID == "AdminObserver")
+                    continue;
+
                 if (!TryComp<MobStateComponent>(session.AttachedEntity, out var state) || state.CurrentState == MobState.Dead)
                 {
                     if (!TrySpawnPlayer(session, team, out _) && HasComp<GhostComponent>(session.AttachedEntity))
@@ -428,7 +431,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         if (!Equals(args.UiKey, GenericWarningUiKey.ShipEventKey))
             return;
         var entityUid = GetEntity(args.Entity);
-        if(!_playerMan.TryGetSessionByEntity(entityUid, out var session))
+        if (!_playerMan.TryGetSessionByEntity(entityUid, out var session))
             return;
         if (TryComp<ShipEventTeamMarkerComponent>(entityUid, out var marker) && marker.Team != null)
         {

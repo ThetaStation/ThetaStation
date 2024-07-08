@@ -43,7 +43,4 @@
   id: SEFC
   parent: BaseGameRule
   components:
-    - type: StationEvent
-      startAnnouncement: sefc-eventannouncement
-      maxOccurrences: 0
-      endTime: 1
+    - type: SEFCRule

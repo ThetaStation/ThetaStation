@@ -17,7 +17,7 @@
       energy: 1.6
       color: "#43ccb5"
     - type: ApcPowerReceiver
-      needsPower: true
+      needsPower: false
     - type: Sprite
       layers:
         - map: ["computerLayerBody"]
