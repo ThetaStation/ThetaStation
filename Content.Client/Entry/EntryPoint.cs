@@ -123,6 +123,7 @@ namespace Content.Client.Entry
             _prototypeManager.RegisterIgnore("stationGoal"); // Corvax-StationGoal
             _prototypeManager.RegisterIgnore("ghostRoleRaffleDecider");
             _prototypeManager.RegisterIgnore("structure"); //theta mapgen
+            _prototypeManager.RegisterIgnore("modifier"); //also theta
 
             _componentFactory.GenerateNetIds();
             _adminManager.Initialize();
