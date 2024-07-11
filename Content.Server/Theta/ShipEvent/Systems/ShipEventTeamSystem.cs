@@ -174,7 +174,6 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         SetupTimer(PickupSpawnInterval, PickupSpawn);
         SetupTimer(AnomalyUpdateInterval, AnomalyUpdate);
         SetupTimer(AnomalySpawnInterval, AnomalySpawn);
-        ModifierUpdate();
         SetupTimer(ModifierUpdateInterval, ModifierUpdate);
     }
 
