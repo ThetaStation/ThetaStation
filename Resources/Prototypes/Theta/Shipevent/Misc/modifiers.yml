@@ -46,7 +46,7 @@
   name: se-modifier-enginepower
   icon:
     sprite: /Textures/Structures/Power/power.rsi
-    state: generator.png
+    state: generator
   modifier:
     !type:MultiplyComponentFieldModifier
     component: !type:ThrusterComponent
@@ -58,7 +58,7 @@
   name: se-modifier-genpower
   icon:
     sprite: /Textures/Structures/Power/power.rsi
-    state: generator.png
+    state: generator
   modifier:
     !type:MultiplyComponentFieldModifier
     component: !type:PowerSupplierComponent
