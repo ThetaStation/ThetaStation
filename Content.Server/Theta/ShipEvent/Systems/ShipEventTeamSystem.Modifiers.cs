@@ -1,7 +1,8 @@
-using System.Linq;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Utility;
+using Content.Shared.Roles.Theta;
+using System.Linq;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
@@ -38,6 +39,14 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
                 ActiveModifiers.Add(modifier);
                 i++;
             }
+        }
+
+        //todo: make a proper UI for displaying em
+        foreach (ShipEventTeam team in Teams)
+        {
+            TeamMessage(team,
+                Loc.GetString("se-modifier-updated", ("time", ModifierUpdateInterval / 60)) + "\n" + string.Join("\n", ActiveModifiers.Select(m => Loc.GetString(m.Name))),
+                color: Color.LightGray);
         }
     }
 }

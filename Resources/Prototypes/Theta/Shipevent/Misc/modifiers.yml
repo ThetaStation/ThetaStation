@@ -93,9 +93,4 @@
         intervalSeconds: 30
         minimumEntitiesSpawned: 1
         maximumEntitiesSpawned: 3
-
-#todo:
-#se-modifier-freqanoms = Anomalies spawn more frequently
-#se-modifier-rangeanoms = Anomalies have greates rangeanoms
-#se-modifier-morepoints = Incoming points are multiplied
       
