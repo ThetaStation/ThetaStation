@@ -66,4 +66,15 @@ public static class ThetaHelpers
             entityManager.AddComponent(uid, (Component) temp);
         }
     }
+
+    public static void RemoveComponentsFromRegistry(EntityUid uid, ComponentRegistry registry)
+    {
+        var factory = IoCManager.Resolve<IComponentFactory>();
+        var entityManager = IoCManager.Resolve<IEntityManager>();
+
+        foreach (var (name, _) in registry)
+        {
+            entityManager.RemoveComponent(uid, factory.GetRegistration(name).Type);
+        }
+    }
 }

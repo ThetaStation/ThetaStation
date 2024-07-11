@@ -1,9 +1,7 @@
-using Content.Server.Theta.ShipEvent.Systems;
-using Content.Shared.Ghost;
-using Content.Shared.Mind.Components;
 using Content.Shared.Theta;
-using Content.Shared.Theta.ShipEvent.Components;
 using Robust.Shared.Prototypes;
+
+namespace Content.Server.Theta.ShipEvent.Systems.Modifiers;
 
 public partial class AddComponentOnSpawnModifier : ShipEventModifier, IEntityEventSubscriber
 {
@@ -11,24 +9,23 @@ public partial class AddComponentOnSpawnModifier : ShipEventModifier, IEntityEve
     [AlwaysPushInheritance]
     public ComponentRegistry Components { get; private set; } = new();
 
-    private IEntityManager _entMan;
+    private ShipEventTeamSystem _shipSys;
 
     public override void OnApply()
     {
         base.OnApply();
-        _entMan ??= IoCManager.Resolve<IEntityManager>();
-        _entMan.EventBus.SubscribeLocalEvent<ShipEventTeamMarkerComponent, MindAddedMessage>(OnMindAdded);
+        _shipSys ??= IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<ShipEventTeamSystem>();
+        _shipSys.OnPlayerSpawn += OnSpawn;
     }
 
-    private void OnMindAdded(EntityUid uid, ShipEventTeamMarkerComponent marker, MindAddedMessage ev)
+    private void OnSpawn(EntityUid uid)
     {
-        if (!_entMan.HasComponent<GhostComponent>(uid))
-            ThetaHelpers.AddComponentsFromRegistry(uid, Components);
+        ThetaHelpers.AddComponentsFromRegistry(uid, Components);
     }
 
     public override void OnRemove()
     {
         base.OnRemove();
-        _entMan.EventBus.UnsubscribeEvents(this);
+        _shipSys.OnPlayerSpawn -= OnSpawn;
     }
 }

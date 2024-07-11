@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace Content.Server.Theta.ShipEvent.Systems;
+namespace Content.Server.Theta.ShipEvent.Systems.Modifiers;
 
 public partial class SetComponentFieldModifier : ShipEventModifier, IEntityEventSubscriber
 {

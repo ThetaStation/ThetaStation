@@ -1,7 +1,6 @@
 using System.Reflection;
-using FastAccessors;
 
-namespace Content.Server.Theta.ShipEvent.Systems;
+namespace Content.Server.Theta.ShipEvent.Systems.Modifiers;
 
 public partial class MultiplyComponentFieldModifier : ShipEventModifier
 {

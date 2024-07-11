@@ -1,3 +1,4 @@
+using System.Linq;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Utility;
@@ -38,6 +39,8 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
                 i++;
             }
         }
+
+        Announce("Modifiers updated\n" + string.Join("\n", ActiveModifiers.Select(m => Loc.GetString(m.Name))));
     }
 }
 

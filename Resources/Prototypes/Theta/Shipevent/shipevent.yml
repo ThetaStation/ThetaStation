@@ -65,15 +65,16 @@
         - "ShipEventIonAnomaly"
 
       #modifiers
-      modifierAmount: 3
-      modifierUpdateInterval: 40 #300
+      modifierAmount: 1
+      modifierUpdateInterval: 60 #300
       modifierPrototypes:
-       #- "SpaceDeathModifier"
+       - "SpaceDeathModifier"
        #- "ExplodeOnDeathModifier"
        #- "ExtraHealthModifier"
-       - "EnginePowerModifier"
-       - "GeneratorPowerModifier"
-       - "CannonPowerModifier"
+       #- "EnginePowerModifier"
+       #- "GeneratorPowerModifier"
+       #- "CannonPowerModifier"
+       #- "BadClonerModifier"
 
 - type: weightedRandomEntity
   id: ShipEventPickupPrototype

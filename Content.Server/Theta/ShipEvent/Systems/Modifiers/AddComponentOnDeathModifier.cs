@@ -1,33 +1,36 @@
-using Content.Server.Theta.ShipEvent.Systems;
 using Content.Shared.Mobs;
 using Content.Shared.Theta;
-using Content.Shared.Theta.ShipEvent.Components;
 using Robust.Shared.Prototypes;
 
-public partial class AddComponentOnDeathModifier : ShipEventModifier, IEntityEventSubscriber
+namespace Content.Server.Theta.ShipEvent.Systems.Modifiers;
+
+public partial class AddComponentOnStateChangeModifier : ShipEventModifier, IEntityEventSubscriber
 {
     [DataField("components")]
     [AlwaysPushInheritance]
     public ComponentRegistry Components { get; private set; } = new();
 
-    private IEntityManager _entMan;
+    [DataField("state")]
+    public MobState State;
+
+    private ShipEventTeamSystem _shipSys;
 
     public override void OnApply()
     {
         base.OnApply();
-        _entMan ??= IoCManager.Resolve<IEntityManager>();
-        _entMan.EventBus.SubscribeLocalEvent<ShipEventTeamMarkerComponent, MobStateChangedEvent>(OnStateChange);
+        _shipSys ??= IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<ShipEventTeamSystem>();
+        _shipSys.OnPlayerStateChange += OnStateChange;
     }
 
-    private void OnStateChange(EntityUid uid, ShipEventTeamMarkerComponent marker, MobStateChangedEvent ev)
+    private void OnStateChange(EntityUid uid, MobState state)
     {
-        if (ev.NewMobState == MobState.Dead)
+        if ((state & State) != 0)
             ThetaHelpers.AddComponentsFromRegistry(uid, Components);
     }
 
     public override void OnRemove()
     {
         base.OnRemove();
-        _entMan.EventBus.UnsubscribeEvents(this);
+        _shipSys.OnPlayerStateChange -= OnStateChange;
     }
 }

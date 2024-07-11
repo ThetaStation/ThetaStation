@@ -18,13 +18,16 @@
     sprite: /Textures/Structures/Machines/bomb.rsi
     state: syndicate-bomb
   modifier:
-    !type:AddComponentOnDeathModifier
+    !type:AddComponentOnStateChangeModifier
+    state: Critical
     components:
     - type: Explosive
       explosionType: Default
       maxIntensity: 10
       intensitySlope: 3
       totalIntensity: 120
+    - type: ExplodeOnTrigger
+    - type: TriggerOnSpawn
 
 - type: modifier
   id: ExtraHealthModifier
@@ -74,9 +77,25 @@
     property: FireRateModified
     multiplier: 2.0
 
+- type: modifier
+  id: BadClonerModifier
+  name: se-modifier-badcloner
+  icon:
+    sprite: /Textures/Mobs/Demons/abomination.rsi
+    state: abomination
+  modifier:
+    !type:AddComponentModifier
+    targetComponent: !type:ShipEventSpawnerComponent
+    components:
+      - type: TimedSpawner
+        prototypes:
+          - MobAbomination
+        intervalSeconds: 30
+        minimumEntitiesSpawned: 1
+        maximumEntitiesSpawned: 3
+
 #todo:
 #se-modifier-freqanoms = Anomalies spawn more frequently
 #se-modifier-rangeanoms = Anomalies have greates rangeanoms
-#se-modifier-badcloner = Cloner machine spawns hostile clones
 #se-modifier-morepoints = Incoming points are multiplied
       

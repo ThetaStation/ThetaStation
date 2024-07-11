@@ -117,6 +117,9 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
 
     public Action? OnRuleSelected;
     public Action<RoundEndTextAppendEvent>? RoundEndEvent;
+    //used by modifiers to prevent locking subscriptions
+    public Action<EntityUid>? OnPlayerSpawn;
+    public Action<EntityUid, MobState>? OnPlayerStateChange;
 
     public CancellationTokenSource TimerTokenSource = new();
 
@@ -136,7 +139,9 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
 
         SubscribeLocalEvent<ShipEventTeamMarkerComponent, StartCollideEvent>(OnCollision);
         SubscribeLocalEvent<ShipEventTeamMarkerComponent, MindRemovedMessage>(OnMindRemoved);
+        SubscribeLocalEvent<ShipEventTeamMarkerComponent, MindAddedMessage>(OnMindAdded);
         SubscribeLocalEvent<ShipEventTeamMarkerComponent, EntitySpokeEvent>(OnTeammateSpeak);
+        SubscribeLocalEvent<ShipEventTeamMarkerComponent, MobStateChangedEvent>(OnMobStateChange);
 
         SubscribeLocalEvent<ShipEventSpawnerComponent, ComponentShutdown>(OnSpawnerDestroyed);
         SubscribeLocalEvent<ShipEventPointStorageComponent, UseInHandEvent>(OnPointStorageTriggered);
@@ -425,6 +430,17 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
             return;
 
         QueueDel(uid);
+    }
+
+    private void OnMindAdded(Entity<ShipEventTeamMarkerComponent> uid, ref MindAddedMessage args)
+    {
+        if (!HasComp<GhostComponent>(uid))
+            OnPlayerSpawn?.Invoke(uid);
+    }
+
+    private void OnMobStateChange(Entity<ShipEventTeamMarkerComponent> uid, ref MobStateChangedEvent args)
+    {
+        OnPlayerStateChange?.Invoke(uid, args.NewMobState);
     }
 
     //todo: our generic y/n dialog window is very weird
