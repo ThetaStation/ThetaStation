@@ -39,8 +39,6 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
                 i++;
             }
         }
-
-        Announce("Modifiers updated\n" + string.Join("\n", ActiveModifiers.Select(m => Loc.GetString(m.Name))));
     }
 }
 
