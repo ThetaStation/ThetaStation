@@ -1,0 +1,10 @@
+se-modifier-spacedeath = Космос убивает
+se-modifier-explosivedeath = Все взрываются после смерти
+se-modifier-morehealth = Все живучее
+se-modifier-enginepower = Двигатели мощнее
+se-modifier-genpower = Генераторы мощнее
+se-modifier-cannonpower = Пушки стреляют быстрее
+se-modifier-freqanoms = Аномалии появляются чаще
+se-modifier-rangeanoms = Аномалии имеют большую область действия
+se-modifier-badcloner = Клонер спавнит злых клонов
+se-modifier-morepoints = Получаемые очки умножаются

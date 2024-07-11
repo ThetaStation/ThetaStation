@@ -1,0 +1,82 @@
+- type: modifier
+  id: SpaceDeathModifier
+  name: se-modifier-spacedeath
+  icon: 
+    sprite: /Textures/Mobs/Species/Skeleton/parts.rsi
+    state: skull_icon
+  modifier: 
+    !type:SpaceDeathModifier
+    damage:
+      types:
+        Bloodloss:
+          10.0
+
+- type: modifier
+  id: ExplodeOnDeathModifier
+  name: se-modifier-explosivedeath
+  icon: 
+    sprite: /Textures/Structures/Machines/bomb.rsi
+    state: syndicate-bomb
+  modifier:
+    !type:AddComponentOnDeathModifier
+    components:
+    - type: Explosive
+      explosionType: Default
+      maxIntensity: 10
+      intensitySlope: 3
+      totalIntensity: 120
+
+- type: modifier
+  id: ExtraHealthModifier
+  name: se-modifier-morehealth
+  icon:
+    sprite: /Textures/Mobs/Species/Human/organs.rsi
+    state: heart-on
+  modifier:
+    !type:SetComponentFieldModifier
+    component: !type:ShipEventSpawnerComponent
+    property: Prototype
+    valueStr: MobHumanShipEventTough
+
+- type: modifier
+  id: EnginePowerModifier
+  name: se-modifier-enginepower
+  icon:
+    sprite: /Textures/Structures/Power/power.rsi
+    state: generator.png
+  modifier:
+    !type:MultiplyComponentFieldModifier
+    component: !type:ThrusterComponent
+    property: Thrust
+    multiplier: 2.0
+
+- type: modifier
+  id: GeneratorPowerModifier
+  name: se-modifier-genpower
+  icon:
+    sprite: /Textures/Structures/Power/power.rsi
+    state: generator.png
+  modifier:
+    !type:MultiplyComponentFieldModifier
+    component: !type:PowerSupplierComponent
+    property: MaxSupply
+    multiplier: 2.0
+
+- type: modifier
+  id: CannonPowerModifier
+  name: se-modifier-cannonpower
+  icon:
+    sprite: /Textures/Objects/Weapons/Guns/LMGs/l6.rsi
+    state: icon
+  modifier:
+    !type:MultiplyComponentFieldModifier
+    component: !type:GunComponent
+    property: FireRateModified
+    multiplier: 2.0
+
+#todo:
+#se-modifier-freqanoms = Anomalies spawn more frequently
+#se-modifier-rangeanoms = Anomalies have greates rangeanoms
+#se-modifier-badcloner = Cloner machine spawns hostile clones
+#se-modifier-morepoints = Incoming points are multiplied
+      

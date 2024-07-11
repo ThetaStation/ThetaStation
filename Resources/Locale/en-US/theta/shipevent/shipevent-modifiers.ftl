@@ -1,0 +1,10 @@
+se-modifier-spacedeath = Space kills
+se-modifier-explosivedeath = Everyone explodes after death
+se-modifier-morehealth = Everyone is tougher
+se-modifier-enginepower = Engines are more powerful
+se-modifier-genpower = Generators are more powerful
+se-modifier-cannonpower = Cannons shoot faster
+se-modifier-freqanoms = Anomalies spawn more frequently
+se-modifier-rangeanoms = Anomalies have greates rangeanoms
+se-modifier-badcloner = Cloner machine spawns hostile clones
+se-modifier-morepoints = Incoming points are multiplied
