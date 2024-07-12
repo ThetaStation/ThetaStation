@@ -4,12 +4,14 @@
   parent: ShipEventCannonBase
   name: ion cannon
   components:
+    - type: Sprite
+      sprite: Theta/ShipEvent/Structures/Machines/Cannon.rsi
+      drawdepth: WallMountedItems
+      layers:
+        - state: ion
     - type: Cannon
       ammoPrototypes:
         - "IonBolt"
-    - type: Sprite
-      layers:
-        - state: syndie_lethal
     - type: Destructible
       thresholds:
         - trigger:
@@ -69,12 +71,14 @@
   parent: ShipEventCannonBase
   name: plasma cannon
   components:
+    - type: Sprite
+      sprite: Theta/ShipEvent/Structures/Machines/Cannon.rsi
+      drawdepth: WallMountedItems
+      layers:
+        - state: plasma
     - type: Cannon
       ammoPrototypes:
         - "PlasmaCannonShot"
-    - type: Sprite
-      layers:
-        - state: syndie_lethal
     - type: Destructible
       thresholds:
         - trigger:

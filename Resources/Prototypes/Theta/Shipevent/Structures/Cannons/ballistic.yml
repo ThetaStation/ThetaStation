@@ -21,12 +21,6 @@
     - type: Actions
     - type: Cannon
     - type: Gun
-    - type: Sprite
-      netsync: false
-      sprite: Objects/Weapons/Guns/Turrets/turrets.rsi
-      drawdepth: WallMountedItems
-      layers:
-        - state: syndie_broken
     - type: InteractionOutline
     - type: InteractionPopup
       interactDelay: 0.2
@@ -55,12 +49,14 @@
   parent: ShipEventCannonBase
   name: machine gun turret
   components:
+    - type: Sprite
+      sprite: Theta/ShipEvent/Structures/Machines/Cannon.rsi
+      drawdepth: WallMountedItems
+      layers:
+        - state: machinegun
     - type: Cannon
       ammoPrototypes:
         - "CartridgeMachineGun"
-    - type: Sprite
-      layers:
-        - state: syndie_lethal
     - type: Destructible
       thresholds:
         - trigger:
@@ -98,15 +94,17 @@
   parent: ShipEventCannonBase
   name: flak cannon
   components:
+    - type: Sprite
+      sprite: Theta/ShipEvent/Structures/Machines/Cannon.rsi
+      drawdepth: WallMountedItems
+      layers:
+        - state: flak
     - type: Cannon
       ammoPrototypes:
         - "CartridgeFlak"
         - "CartridgeFlakHE"
         - "CartridgeFlakEMP"
       recoil: 10.0
-    - type: Sprite
-      layers:
-        - state: syndie_lethal
     - type: Destructible
       thresholds:
         - trigger:
@@ -140,7 +138,7 @@
 
 - type: entity
   id: ShipEventStaticFlakCannon
-  parent: ShipEventCannonBase
+  parent: ShipEventFlakCannon
   name: static flak cannon
   components:
     - type: Cannon
@@ -150,39 +148,6 @@
         - "CartridgeFlakEMP"
       rotatable: false
       recoil: 10.0
-    - type: Sprite
-      layers:
-        - state: syndie_lethal
-    - type: Destructible
-      thresholds:
-        - trigger:
-            !type:DamageTrigger
-            damage: 300
-          behaviors:
-            - !type:DoActsBehavior
-              acts: [ "Destruction" ]
-            - !type:PlaySoundBehavior
-              sound:
-                collection: MetalBreak
-            - !type:SpawnEntitiesBehavior
-              spawn:
-                SheetSteel1:
-                  min: 3
-                  max: 5
-    - type: Gun
-      minAngle: 0
-      maxAngle: 10
-      angleIncrease: 2
-      angleDecay: 1
-      fireRate: 2
-      projectileSpeed: 100
-      selectedMode: FullAuto
-      availableModes:
-        - FullAuto
-      soundGunshot:
-        path: /Audio/Theta/Shipevent/artillery.ogg
-        params:
-          volume: 10
 
 # SPG
 - type: entity
@@ -190,13 +155,15 @@
   parent: ShipEventCannonBase
   name: self propelled artillery
   components:
+    - type: Sprite
+      sprite: Theta/ShipEvent/Structures/Machines/Cannon.rsi
+      drawdepth: WallMountedItems
+      layers:
+        - state: flak
     - type: Cannon
       ammoPrototypes:
         - "CartridgeSPG"
       recoil: 50.0
-    - type: Sprite
-      layers:
-        - state: syndie_lethal
     - type: Destructible
       thresholds:
         - trigger:
