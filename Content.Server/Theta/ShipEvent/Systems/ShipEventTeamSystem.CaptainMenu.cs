@@ -17,7 +17,7 @@ public partial class ShipEventTeamSystem
     {
         foreach (var team in Teams)
         {
-            if(!_playerMan.TryGetSessionByEntity(msg.Actor, out var session))
+            if (!_playerMan.TryGetSessionByEntity(msg.Actor, out var session))
                 continue;
             if (team.Captain == session.Channel.UserName)
             {
@@ -31,7 +31,7 @@ public partial class ShipEventTeamSystem
     {
         foreach (var team in Teams)
         {
-            if(!_playerMan.TryGetSessionByEntity(msg.Actor, out var session))
+            if (!_playerMan.TryGetSessionByEntity(msg.Actor, out var session))
                 continue;
             if (team.Captain == session.Channel.UserName)
             {

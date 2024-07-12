@@ -1,0 +1,114 @@
+- type: modifier
+  id: SpaceDeathModifier
+  name: se-modifier-spacedeath
+  icon: 
+    sprite: /Textures/Mobs/Species/Skeleton/parts.rsi
+    state: skull_icon
+  modifiers: 
+    - !type:SpaceDeathModifier
+      damage:
+        types:
+          Bloodloss:
+            10.0
+
+- type: modifier
+  id: ExplodeOnDeathModifier
+  name: se-modifier-explosivedeath
+  icon: 
+    sprite: /Textures/Structures/Machines/bomb.rsi
+    state: syndicate-bomb
+  modifiers:
+    - !type:AddComponentOnStateChangeModifier
+      state: Critical
+      components:
+      - type: Explosive
+        explosionType: Default
+        maxIntensity: 10
+        intensitySlope: 3
+        totalIntensity: 120
+      - type: ExplodeOnTrigger
+      - type: TriggerOnSpawn
+
+- type: modifier
+  id: ExtraHealthModifier
+  name: se-modifier-morehealth
+  icon:
+    sprite: /Textures/Mobs/Species/Human/organs.rsi
+    state: heart-on
+  modifiers:
+    - !type:SetComponentFieldModifier
+      component: !type:ShipEventSpawnerComponent
+      property: Prototype
+      valueStr: MobHumanShipEventTough
+
+- type: modifier
+  id: EnginePowerModifier
+  name: se-modifier-enginepower
+  icon:
+    sprite: /Textures/Structures/Power/power.rsi
+    state: generator
+  modifiers:
+    - !type:IncreaseThrustModifier
+      multiplier: 2.0
+
+- type: modifier
+  id: GeneratorPowerModifier
+  name: se-modifier-genpower
+  icon:
+    sprite: /Textures/Structures/Power/power.rsi
+    state: generator
+  modifiers:
+    - !type:MultiplyComponentFieldModifier
+      component: !type:PowerSupplierComponent
+      property: MaxSupply
+      multiplier: 2.0
+
+- type: modifier
+  id: CannonSpeedModifier
+  name: se-modifier-cannonspeed
+  icon:
+    sprite: /Textures/Objects/Weapons/Guns/LMGs/l6.rsi
+    state: icon
+  modifiers:
+    - !type:MultiplyComponentFieldModifier
+      component: !type:GunComponent
+      property: FireRateModified
+      multiplier: 2.0
+
+- type: modifier
+  id: CannonRecoilModifier
+  name: se-modifier-cannonrecoil
+  icon:
+    sprite: /Textures/Objects/Weapons/Guns/LMGs/l6.rsi
+    state: icon
+  modifiers:
+    - !type:MultiplyComponentFieldModifier
+      component: !type:CannonComponent
+      property: Recoil
+      multiplier: 4.0
+
+- type: modifier
+  id: DisablePlayerRespawnModifier
+  name: se-modifier-disablespawn
+  icon:
+    sprite: /Textures/Mobs/Species/Skeleton/parts.rsi
+    state: skull_icon
+  modifiers:
+    - !type:DisablePlayerRespawnModifier
+
+- type: modifier
+  id: BadClonerModifier
+  name: se-modifier-badcloner
+  icon:
+    sprite: /Textures/Mobs/Demons/abomination.rsi
+    state: abomination
+  modifiers:
+    - !type:AddComponentModifier
+      targetComponent: !type:ShipEventSpawnerComponent
+      components:
+        - type: TimedSpawner
+          prototypes:
+            - MobAbomination
+          intervalSeconds: 30
+          minimumEntitiesSpawned: 1
+          maximumEntitiesSpawned: 3

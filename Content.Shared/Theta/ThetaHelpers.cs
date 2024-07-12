@@ -1,8 +1,14 @@
+using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.Manager;
+using Robust.Shared.Serialization.Manager.Definition;
+
 namespace Content.Shared.Theta;
 
 //todo: stuff here should be ported to RT someday
 public static class ThetaHelpers
 {
+    #region Angles
+
     /// <summary>
     /// Returns value of angle in 0~2pi range
     /// </summary>
@@ -38,5 +44,37 @@ public static class ThetaHelpers
         disthigh = AngNormal(starthigh + widthhigh) > startlow ? starthigh + widthhigh - startlow : Math.Tau - startlow + AngNormal(starthigh + widthhigh);
 
         return (startlow, Math.Min(Math.Max(widthlow, disthigh), Math.Tau));
+    }
+
+    #endregion
+
+    //todo: this is a copypaste from AddComponentSpecial, all concerns from there apply here too
+    public static void AddComponentsFromRegistry(EntityUid uid, ComponentRegistry registry)
+    {
+        var factory = IoCManager.Resolve<IComponentFactory>();
+        var entityManager = IoCManager.Resolve<IEntityManager>();
+        var serializationManager = IoCManager.Resolve<ISerializationManager>();
+
+        foreach (var (name, data) in registry)
+        {
+            var component = (Component) factory.GetComponent(name);
+            component.Owner = uid;
+
+            var temp = (object) component;
+            serializationManager.CopyTo(data.Component, ref temp);
+            entityManager.RemoveComponent(uid, temp!.GetType());
+            entityManager.AddComponent(uid, (Component) temp);
+        }
+    }
+
+    public static void RemoveComponentsFromRegistry(EntityUid uid, ComponentRegistry registry)
+    {
+        var factory = IoCManager.Resolve<IComponentFactory>();
+        var entityManager = IoCManager.Resolve<IEntityManager>();
+
+        foreach (var (name, _) in registry)
+        {
+            entityManager.RemoveComponent(uid, factory.GetRegistration(name).Type);
+        }
     }
 }

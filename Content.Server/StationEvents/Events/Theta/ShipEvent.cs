@@ -38,6 +38,7 @@ public sealed partial class ShipEventRuleComponent : Component
     [DataField("pickupsSpawnInterval")] public float PickupsSpawnInterval;
     [DataField("anomalyUpdateInterval")] public float AnomalyUpdateInterval;
     [DataField("anomalySpawnInterval")] public float AnomalySpawnInterval;
+    [DataField("modifierUpdateInterval")] public float ModifierUpdateInterval;
 
     //points
     [DataField("pointsPerInterval")] public int PointsPerInterval;
@@ -60,6 +61,7 @@ public sealed partial class ShipEventRuleComponent : Component
     [DataField("noiseThreshold")] public float NoiseThreshold;
 
     //misc
+    [DataField("spaceLightColor")] public Color? SpaceLightColor = null;
     [DataField("hudPrototypeId")] public string HUDPrototypeId = "";
     [DataField("captainHudPrototypeId")] public string CaptainHUDPrototypeId = "";
     [DataField("shipTypes")] public List<string> ShipTypes = new();
@@ -70,8 +72,9 @@ public sealed partial class ShipEventRuleComponent : Component
     public string PickupPrototype = default!;
     [DataField("anomalyPrototypes", customTypeSerializer: typeof(PrototypeIdListSerializer<EntityPrototype>))]
     public List<string> AnomalyPrototypes = new();
-    [DataField("spaceLightColor")]
-    public Color? SpaceLightColor = null;
+    [DataField("modifierAmount")] public int ModifierAmount;
+    [DataField("modifierPrototypes", customTypeSerializer: typeof(PrototypeIdListSerializer<ShipEventModifierPrototype>))]
+    public List<string> ModifierPrototypes = new();
 }
 
 public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
@@ -163,6 +166,13 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
             _shipSys.AnomalyPrototypes.Add(_protMan.Index<EntityPrototype>(anomalyProtId));
         }
 
+        _shipSys.ModifierUpdateInterval = component.ModifierUpdateInterval;
+        _shipSys.ModifierAmount = component.ModifierAmount;
+        foreach (var modifierProtId in component.ModifierPrototypes)
+        {
+            _shipSys.AllModifiers.Add(_protMan.Index<ShipEventModifierPrototype>(modifierProtId));
+        }
+
         List<StructurePrototype> obstacleStructProts = new();
         foreach (var structProtId in component.ObstacleTypes)
         {
@@ -197,7 +207,7 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         List<IMapGenProcessor> globalProcessors = new() { iffSplitProc, iffFlagProc };
 
         IMapGenDistribution distribution = new SimpleDistribution();
-        if (_rand.Prob(1f))
+        if (_rand.Prob(0.05f))
         {
             distribution = new FunnyDistribution();
         }
