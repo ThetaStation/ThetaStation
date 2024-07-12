@@ -6,7 +6,7 @@ using Timer = Robust.Shared.Timing.Timer;
 
 namespace Content.Server.Theta.ShipEvent.Systems.Modifiers;
 
-//todo: this should be more generic, but I'm out of ideas how to do so
+//todo: should be splitted into several modifiers
 public partial class SpaceDeathModifier : ShipEventModifier
 {
     [DataField("damage", required: true)]
@@ -32,6 +32,8 @@ public partial class SpaceDeathModifier : ShipEventModifier
     public void OnUpdate()
     {
         var enumerator = _entMan.EntityQueryEnumerator<TransformComponent, MobStateComponent>();
+        //this is required since when player will die team system will try to delete his body,
+        //modifying query and causing it to throw
         var enumeratorCopy = new List<(EntityUid, TransformComponent)>();
         while (enumerator.MoveNext(out var uid, out var form, out var _))
         {

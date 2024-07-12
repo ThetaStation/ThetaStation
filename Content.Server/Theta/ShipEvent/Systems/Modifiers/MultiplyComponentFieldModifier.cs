@@ -35,7 +35,7 @@ public partial class MultiplyComponentFieldModifier : ShipEventModifier
             TryModifyComp(comp, Multiplier);
         }
 
-        IoCManager.Resolve<IEntityManager>().ComponentAdded += OnCompAdd;
+        _entMan.ComponentAdded += OnCompAdd;
     }
 
     private void OnCompAdd(AddedComponentEventArgs args)

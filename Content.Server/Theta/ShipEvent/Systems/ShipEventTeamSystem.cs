@@ -113,6 +113,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
 
     public ColorPalette ColorPalette = new ShipEventPalette();
     public bool AllowTeamRegistration = true;
+    public bool AllowPlayerRespawn = true;
     public bool RemoveEmptyTeams = true;
 
     public Action? OnRuleSelected;
@@ -460,9 +461,12 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         _ticker.Respawn(session);
     }
 
-    private bool TrySpawnPlayer(ICommonSession session, ShipEventTeam team, [NotNullWhen(true)] out EntityUid? uid, EntityUid? spawnerUid = null)
+    private bool TrySpawnPlayer(ICommonSession session, ShipEventTeam team, [NotNullWhen(true)] out EntityUid? uid, EntityUid? spawnerUid = null, bool bypass = false)
     {
         uid = null;
+
+        if (!AllowPlayerRespawn && !bypass)
+            return false;
 
         if (!team.ShipGrids.Any())
             return false;
@@ -642,7 +646,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         SetMarkers(team);
 
         if (!noCaptain)
-            TrySpawnPlayer(session, team, out _);
+            TrySpawnPlayer(session, team, out _, bypass: true);
 
         Teams.Add(team);
     }
@@ -676,11 +680,11 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         var spawners = GetGridCompHolders<ShipEventSpawnerComponent>(team.ShipGrids);
         if (!spawners.Any())
         {
-            _chatSys.SendSimpleMessage(Loc.GetString("shipevent-spawner-destroyed"), session);
+            _chatSys.SendSimpleMessage(Loc.GetString("shipevent-spawner-destroyed-join"), session);
             return;
         }
 
-        if (TrySpawnPlayer(session, team, out var uid))
+        if (TrySpawnPlayer(session, team, out var uid, bypass: true))
             TeamMessage(team, Loc.GetString("shipevent-team-newmember", ("name", GetName(uid.Value))));
     }
 
@@ -735,7 +739,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
 
         foreach (var session in GetTeamSessions(team))
         {
-            TrySpawnPlayer(session, team, out _);
+            TrySpawnPlayer(session, team, out _, bypass: true);
         }
 
         team.Respawns++;
@@ -872,7 +876,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
     private void OnSpawnerDestroyed(EntityUid uid, ShipEventSpawnerComponent spawner, ComponentShutdown args)
     {
         if (TryComp<ShipEventTeamMarkerComponent>(uid, out var marker) && marker.Team != null)
-            TeamMessage(marker.Team, Loc.GetString("shipevent-spawnerdestroyed"), color: Color.DarkRed);
+            TeamMessage(marker.Team, Loc.GetString("shipevent-spawner-destroyed"), color: Color.DarkRed);
     }
 
     private void OnPointStorageTriggered(EntityUid uid, ShipEventPointStorageComponent storage, UseInHandEvent args)

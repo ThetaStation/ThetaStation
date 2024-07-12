@@ -4,12 +4,12 @@
   icon: 
     sprite: /Textures/Mobs/Species/Skeleton/parts.rsi
     state: skull_icon
-  modifier: 
-    !type:SpaceDeathModifier
-    damage:
-      types:
-        Bloodloss:
-          10.0
+  modifiers: 
+    - !type:SpaceDeathModifier
+      damage:
+        types:
+          Bloodloss:
+            10.0
 
 - type: modifier
   id: ExplodeOnDeathModifier
@@ -17,17 +17,17 @@
   icon: 
     sprite: /Textures/Structures/Machines/bomb.rsi
     state: syndicate-bomb
-  modifier:
-    !type:AddComponentOnStateChangeModifier
-    state: Critical
-    components:
-    - type: Explosive
-      explosionType: Default
-      maxIntensity: 10
-      intensitySlope: 3
-      totalIntensity: 120
-    - type: ExplodeOnTrigger
-    - type: TriggerOnSpawn
+  modifiers:
+    - !type:AddComponentOnStateChangeModifier
+      state: Critical
+      components:
+      - type: Explosive
+        explosionType: Default
+        maxIntensity: 10
+        intensitySlope: 3
+        totalIntensity: 120
+      - type: ExplodeOnTrigger
+      - type: TriggerOnSpawn
 
 - type: modifier
   id: ExtraHealthModifier
@@ -35,11 +35,11 @@
   icon:
     sprite: /Textures/Mobs/Species/Human/organs.rsi
     state: heart-on
-  modifier:
-    !type:SetComponentFieldModifier
-    component: !type:ShipEventSpawnerComponent
-    property: Prototype
-    valueStr: MobHumanShipEventTough
+  modifiers:
+    - !type:SetComponentFieldModifier
+      component: !type:ShipEventSpawnerComponent
+      property: Prototype
+      valueStr: MobHumanShipEventTough
 
 - type: modifier
   id: EnginePowerModifier
@@ -47,11 +47,9 @@
   icon:
     sprite: /Textures/Structures/Power/power.rsi
     state: generator
-  modifier:
-    !type:MultiplyComponentFieldModifier
-    component: !type:ThrusterComponent
-    property: Thrust
-    multiplier: 2.0
+  modifiers:
+    - !type:IncreaseThrustModifier
+      multiplier: 2.0
 
 - type: modifier
   id: GeneratorPowerModifier
@@ -59,23 +57,44 @@
   icon:
     sprite: /Textures/Structures/Power/power.rsi
     state: generator
-  modifier:
-    !type:MultiplyComponentFieldModifier
-    component: !type:PowerSupplierComponent
-    property: MaxSupply
-    multiplier: 2.0
+  modifiers:
+    - !type:MultiplyComponentFieldModifier
+      component: !type:PowerSupplierComponent
+      property: MaxSupply
+      multiplier: 2.0
 
 - type: modifier
-  id: CannonPowerModifier
-  name: se-modifier-cannonpower
+  id: CannonSpeedModifier
+  name: se-modifier-cannonspeed
   icon:
     sprite: /Textures/Objects/Weapons/Guns/LMGs/l6.rsi
     state: icon
-  modifier:
-    !type:MultiplyComponentFieldModifier
-    component: !type:GunComponent
-    property: FireRateModified
-    multiplier: 2.0
+  modifiers:
+    - !type:MultiplyComponentFieldModifier
+      component: !type:GunComponent
+      property: FireRateModified
+      multiplier: 2.0
+
+- type: modifier
+  id: CannonRecoilModifier
+  name: se-modifier-cannonrecoil
+  icon:
+    sprite: /Textures/Objects/Weapons/Guns/LMGs/l6.rsi
+    state: icon
+  modifiers:
+    - !type:MultiplyComponentFieldModifier
+      component: !type:CannonComponent
+      property: Recoil
+      multiplier: 4.0
+
+- type: modifier
+  id: DisablePlayerRespawnModifier
+  name: se-modifier-disablespawn
+  icon:
+    sprite: /Textures/Mobs/Species/Skeleton/parts.rsi
+    state: skull_icon
+  modifiers:
+    - !type:DisablePlayerRespawnModifier
 
 - type: modifier
   id: BadClonerModifier
@@ -83,14 +102,13 @@
   icon:
     sprite: /Textures/Mobs/Demons/abomination.rsi
     state: abomination
-  modifier:
-    !type:AddComponentModifier
-    targetComponent: !type:ShipEventSpawnerComponent
-    components:
-      - type: TimedSpawner
-        prototypes:
-          - MobAbomination
-        intervalSeconds: 30
-        minimumEntitiesSpawned: 1
-        maximumEntitiesSpawned: 3
-      
+  modifiers:
+    - !type:AddComponentModifier
+      targetComponent: !type:ShipEventSpawnerComponent
+      components:
+        - type: TimedSpawner
+          prototypes:
+            - MobAbomination
+          intervalSeconds: 30
+          minimumEntitiesSpawned: 1
+          maximumEntitiesSpawned: 3

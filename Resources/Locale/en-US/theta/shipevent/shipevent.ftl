@@ -46,9 +46,9 @@ shipevent-roundend-discord-teamstats = Has collected { $points } points, { $kill
 ## Misc.
 
 department-Unsorted = Unsorted
-shipevent-memberlimit = There's no free places in this team! Wait until someone leaves it/member limit will rise
+shipevent-memberlimit = This team is full!
 shipevent-ship-destroyed = The crew's ship has been destroyed! Wait until it is restored again.
-shipevent-spawner-destroyed = The crew's cloner has been destroyed! Wait until it is restored again.
+shipevent-spawner-destroyed-join = The crew's cloner has been destroyed! Wait until it is restored again.
 shipevent-incorrect-password = Incorrect password.
 shipevent-kicked = You've got kicked from the team! Use team menu to find a new one.
-shipevent-spawnerdestroyed = Team's spawner is destroyed. No more immortality.
+shipevent-spawner-destroyed = Team's spawner is destroyed. No more immortality.

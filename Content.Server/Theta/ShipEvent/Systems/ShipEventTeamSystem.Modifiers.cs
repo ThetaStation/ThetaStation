@@ -17,9 +17,12 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
     {
         List<ShipEventModifierPrototype> modifiersListCopy = new(AllModifiers);
 
-        foreach (ShipEventModifierPrototype prot in ActiveModifiers)
+        foreach (var modifierProt in ActiveModifiers)
         {
-            prot.Modifier.OnRemove();
+            foreach (var modifier in modifierProt.Modifiers)
+            {
+                modifier.OnRemove();
+            }
         }
         ActiveModifiers.Clear();
 
@@ -32,12 +35,23 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
                 return;
             }
 
-            ShipEventModifierPrototype modifier = _random.PickAndTake(modifiersListCopy);
-            if (modifier.Modifier.CheckEligibility())
+            ShipEventModifierPrototype modifierProt = _random.PickAndTake(modifiersListCopy);
+
+            bool allEligible = true;
+            foreach (var modifier in modifierProt.Modifiers)
             {
-                modifier.Modifier.OnApply();
-                ActiveModifiers.Add(modifier);
-                i++;
+                if (!modifier.CheckEligibility())
+                    allEligible = false;
+            }
+
+            if (allEligible)
+            {
+                foreach (var modifier in modifierProt.Modifiers)
+                {
+                    modifier.OnApply();
+                    ActiveModifiers.Add(modifierProt);
+                    i++;
+                }
             }
         }
 
@@ -63,8 +77,8 @@ public sealed class ShipEventModifierPrototype : IPrototype
     [DataField("icon", required: true)]
     public SpriteSpecifier Icon = SpriteSpecifier.Invalid;
 
-    [DataField("modifier", required: true)]
-    public ShipEventModifier Modifier = default!;
+    [DataField("modifiers", required: true)]
+    public List<ShipEventModifier> Modifiers = default!;
 }
 
 [ImplicitDataDefinitionForInheritors]
