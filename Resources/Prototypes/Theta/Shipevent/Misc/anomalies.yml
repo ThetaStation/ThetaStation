@@ -1,5 +1,6 @@
 - type: entity
   id: ShipEventBaseAnomaly
+  noSpawn: true
   components:
   - type: TimedDespawn
     lifetime: 180
@@ -26,6 +27,7 @@
 - type: entity
   id: ShipEventRadiationAnomaly
   parent: ShipEventBaseAnomaly
+  noSpawn: true
   components:
   - type: RadarRenderable
     viewProtos: 
@@ -41,6 +43,7 @@
   name: shimmering anomaly
   id: RadiationPulseStrong
   parent: RadiationPulse
+  noSpawn: true
   components:
   - type: RadiationSource
     intensity: 30
@@ -50,6 +53,7 @@
 - type: entity
   id: ShipEventIonAnomaly
   parent: ShipEventBaseAnomaly
+  noSpawn: true
   components:
   - type: RadarRenderable
     viewProtos: 
@@ -63,6 +67,7 @@
 
 - type: entity
   id: EmpPulse
+  noSpawn: true
   components:
   - type: TriggerOnSpawn
   - type: EmpOnTrigger

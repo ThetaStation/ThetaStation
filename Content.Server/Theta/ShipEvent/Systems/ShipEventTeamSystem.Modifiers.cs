@@ -17,14 +17,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
     {
         List<ShipEventModifierPrototype> modifiersListCopy = new(AllModifiers);
 
-        foreach (var modifierProt in ActiveModifiers)
-        {
-            foreach (var modifier in modifierProt.Modifiers)
-            {
-                modifier.OnRemove();
-            }
-        }
-        ActiveModifiers.Clear();
+        DisableAllModifiers();
 
         int i = 0;
         while (i < ModifierAmount)
@@ -62,6 +55,18 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
                 Loc.GetString("se-modifier-updated", ("time", ModifierUpdateInterval / 60)) + "\n" + string.Join("\n", ActiveModifiers.Select(m => Loc.GetString(m.Name))),
                 color: Color.LightGray);
         }
+    }
+
+    private void DisableAllModifiers()
+    {
+        foreach (var modifierProt in ActiveModifiers)
+        {
+            foreach (var modifier in modifierProt.Modifiers)
+            {
+                modifier.OnRemove();
+            }
+        }
+        ActiveModifiers.Clear();
     }
 }
 

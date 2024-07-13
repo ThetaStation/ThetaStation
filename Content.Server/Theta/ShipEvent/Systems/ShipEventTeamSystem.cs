@@ -209,6 +209,8 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         PickupPositions.Clear();
         Teams.Clear();
 
+        DisableAllModifiers();
+
         TimerTokenSource.Cancel();
         TimerTokenSource.Dispose();
         TimerTokenSource = new();
