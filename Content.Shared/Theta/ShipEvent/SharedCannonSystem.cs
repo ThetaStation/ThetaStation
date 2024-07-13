@@ -86,7 +86,7 @@ public abstract class SharedCannonSystem : EntitySystem
 
         var mapCoords = new MapCoordinates(ev.Coordinates, Transform(evCannonUid).MapID);
         var coords = EntityCoordinates.FromMap(evCannonUid, mapCoords, _transform);
-        _gunSystem.AttemptShoot(GetEntity(ev.PilotUid), evCannonUid, gun, coords);
+        _gunSystem.AttemptShoot(evCannonUid, evCannonUid, gun, coords);
     }
 
     private bool CanShoot(RequestCannonShootEvent args, GunComponent gun, CannonComponent cannon)
