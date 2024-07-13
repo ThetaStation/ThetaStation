@@ -38,7 +38,7 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
         SubscribeLocalEvent<CircularShieldConsoleComponent, CircularShieldChangeParametersMessage>(OnShieldChangeParams);
         SubscribeLocalEvent<CircularShieldConsoleComponent, AfterActivatableUIOpenEvent>(AfterUIOpen);
 
-        SubscribeLocalEvent<CircularShieldComponent, ComponentInit>(OnShieldInit);
+        SubscribeLocalEvent<CircularShieldConsoleComponent, ComponentInit>(OnShieldConsoleInit);
         SubscribeLocalEvent<CircularShieldComponent, ComponentShutdown>(OnShieldRemoved);
         SubscribeLocalEvent<CircularShieldComponent, PowerChangedEvent>(OnShieldPowerChanged);
         SubscribeLocalEvent<CircularShieldComponent, StartCollideEvent>(OnShieldEnter);
@@ -138,22 +138,26 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
         Dirty(console.BoundShield.Value, shield);
     }
 
-    private void OnShieldInit(EntityUid uid, CircularShieldComponent shield, ComponentInit args)
+    //this is silly, but apparently sink component on shields does not contain linked sources on startup
+    //while source component on consoles always does right after init
+    //so subscribing to it instead of sink
+    private void OnShieldConsoleInit(EntityUid uid, CircularShieldConsoleComponent console, ComponentInit args)
     {
         _pvsIgnoreSys.AddGlobalOverride(uid);
 
-        if (EntityManager.TryGetComponent<DeviceLinkSinkComponent>(uid, out var source))
-        {
-            if (source.LinkedSources.Count > 0)
-            {
-                EntityUid consoleUid = source.LinkedSources.First();
-                if (TryComp<CircularShieldConsoleComponent>(consoleUid, out var console))
-                {
-                    console.BoundShield = uid;
-                    shield.BoundConsole = consoleUid;
-                }
-            }
-        }
+        EntityUid shieldUid;
+        CircularShieldComponent shield;
+
+        if (!TryComp<DeviceLinkSourceComponent>(uid, out var source))
+            return;
+
+        if (source.LinkedPorts.Count == 0)
+            return;
+
+        shieldUid = source.LinkedPorts.First().Key;
+        shield = Comp<CircularShieldComponent>(shieldUid);
+        console.BoundShield = shieldUid;
+        shield.BoundConsole = uid;
 
         foreach (CircularShieldEffect effect in shield.Effects)
         {
