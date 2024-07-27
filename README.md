@@ -23,7 +23,7 @@ Official site with the [documentation](https://docs.spacestation14.io/) has a lo
 
 ## License
 All the code belonging to our team after unix timestamp `1668875136` is licensed under AGPL.
-All the repo's code before unix timestamp `1668875136` is licensed under MIT or any other license specified in LICENSE.TXT for the appropriate version's state.
+All the other code before unix timestamp is licensed under MIT (see MIT_LICENSE.TXT) or any other license specified in LICENSE.TXT for the appropriate version's state, or source from which it has been copied.
 
 Most of the assets are licensed under [CC-BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/), unless stated otherwise. Assets have their license and author written in metadata file.
 
