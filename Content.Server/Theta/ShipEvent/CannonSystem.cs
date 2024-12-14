@@ -28,13 +28,16 @@ public sealed class CannonSystem : SharedCannonSystem
     {
         base.Initialize();
         SubscribeNetworkEvent<RotateCannonsEvent>(OnRotateCannons);
-        SubscribeLocalEvent<CannonComponent, ComponentInit>(OnInit);
+        SubscribeLocalEvent<CannonComponent, SinkSourceSetEvent>(OnInit);
         SubscribeLocalEvent<CannonComponent, ComponentRemove>(OnRemoval);
         SubscribeLocalEvent<CannonComponent, NewLinkEvent>(OnLink);
         SubscribeLocalEvent<CannonComponent, AmmoShotEvent>(AfterShot);
     }
 
-    private void OnInit(EntityUid uid, CannonComponent cannon, ComponentInit args)
+    //using SinkSourceSetEvent here instead of ComponentStartup or something similar
+    //since it's crucial that sinks (cannons) initialize after source (console) so that LinkedSources is set properly
+    //it somehow worked so long on pure luck, relying on order in which entities are loaded in map
+    private void OnInit(EntityUid uid, CannonComponent cannon, SinkSourceSetEvent args)
     {
         if (EntityManager.TryGetComponent<DeviceLinkSinkComponent>(uid, out var sink))
         {

@@ -64,6 +64,7 @@ public abstract class SharedDeviceLinkSystem : EntitySystem
 
             invalidLinks.Clear();
             sinkComponent.LinkedSources.Add(source.Owner);
+            RaiseLocalEvent(sink, new SinkSourceSetEvent(), true);
         }
 
         foreach (var sink in invalidSinks)

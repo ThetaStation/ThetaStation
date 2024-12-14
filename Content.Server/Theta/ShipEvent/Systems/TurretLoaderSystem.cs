@@ -22,7 +22,7 @@ public sealed class TurretLoaderSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<TurretLoaderComponent, ComponentInit>(OnInit);
+        SubscribeLocalEvent<TurretLoaderComponent, ComponentStartup>(OnInit);
         SubscribeLocalEvent<TurretLoaderComponent, ComponentRemove>(OnRemoval);
         SubscribeLocalEvent<TurretLoaderComponent, EntInsertedIntoContainerMessage>(OnContainerInsert);
         SubscribeLocalEvent<TurretLoaderComponent, EntRemovedFromContainerMessage>(OnContainerRemove);
@@ -136,7 +136,7 @@ public sealed class TurretLoaderSystem : EntitySystem
         return false;
     }
 
-    private void OnInit(EntityUid uid, TurretLoaderComponent loader, ComponentInit args)
+    private void OnInit(EntityUid uid, TurretLoaderComponent loader, ComponentStartup args)
     {
         SetupLoader(uid, loader);
         CheckAndEjectContainer(uid, loader);
@@ -171,15 +171,16 @@ public sealed class TurretLoaderSystem : EntitySystem
     /// <summary>
     /// Throwing ammo in loads it up.
     /// </summary>
-    private void HandleThrowCollide(EntityUid uid, TurretLoaderComponent component, ThrowHitByEvent args)
+    private void HandleThrowCollide(EntityUid uid, TurretLoaderComponent loader, ThrowHitByEvent args)
     {
-        if (component.ContainerSlot == null)
+        if (loader.ContainerSlot == null)
             return;
 
-        if (component.ContainerSlot.HasItem && !_slotSys.TryEject(uid, component.ContainerSlot, null, out var item))
+        if (loader.ContainerSlot.HasItem && !_slotSys.TryEject(uid, loader.ContainerSlot, null, out var item))
             return;
 
-        _slotSys.TryInsert(uid, component.ContainerSlot, args.Thrown, args.Component.Thrower);
+        if (CheckContainer(uid, args.Thrown, loader))
+            _slotSys.TryInsert(uid, loader.ContainerSlot, args.Thrown, args.Component.Thrower);
     }
 
     private void OnHandInteract(EntityUid uid, TurretLoaderComponent component, InteractHandEvent args)
@@ -192,6 +193,9 @@ public sealed class TurretLoaderSystem : EntitySystem
 
     private void OnItemInteract(Entity<TurretLoaderComponent> uid, ref InteractUsingEvent args)
     {
+        if (!HasComp<TurretAmmoContainerComponent>(args.Used))
+            return;
+
         if (!CheckContainer(uid, args.Used, uid.Comp))
         {
             _audioSys.PlayPredicted(uid.Comp.InvalidAmmoSound, uid, uid);

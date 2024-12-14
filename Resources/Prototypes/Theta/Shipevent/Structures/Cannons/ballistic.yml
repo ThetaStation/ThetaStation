@@ -1,5 +1,4 @@
-#All ballistic cannons (except artillery) - machine gun, flak, spg
-#todo: draw some sick sprites for light & heavy cannon, since they look like generic machine gun turret rn
+#machine gun, flak, spg
 
 #base
 - type: entity
