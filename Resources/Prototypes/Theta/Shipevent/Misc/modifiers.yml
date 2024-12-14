@@ -109,6 +109,6 @@
         - type: TimedSpawner
           prototypes:
             - MobAbomination
-          intervalSeconds: 60
-          minimumEntitiesSpawned: 1
+          intervalSeconds: 90
+          minimumEntitiesSpawned: 0
           maximumEntitiesSpawned: 2

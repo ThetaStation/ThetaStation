@@ -86,7 +86,7 @@
       soundGunshot:
         path: /Audio/Weapons/Guns/Gunshots/gun_sentry.ogg
         params:
-          volume: 10
+          volume: 5
 
 # Flak Cannon
 - type: entity
@@ -134,7 +134,7 @@
       soundGunshot:
         path: /Audio/Theta/Shipevent/artillery.ogg
         params:
-          volume: 10
+          volume: 5
 
 - type: entity
   id: ShipEventStaticFlakCannon

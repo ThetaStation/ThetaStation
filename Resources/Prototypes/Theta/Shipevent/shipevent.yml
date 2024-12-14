@@ -76,7 +76,7 @@
         - "CannonSpeedModifier"
         - "CannonRecoilModifier"
         - "DisablePlayerRespawnModifier"
-        #- "BadClonerModifier"
+        - "BadClonerModifier"
 
 - type: weightedRandomEntity
   id: ShipEventPickupPrototype
