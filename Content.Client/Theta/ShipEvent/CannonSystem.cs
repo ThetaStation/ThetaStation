@@ -126,7 +126,7 @@ public sealed class CannonSystem : SharedCannonSystem
             if (!CanFire(uid))
                 return;
 
-            RaisePredictiveEvent(new RequestCannonShootEvent
+            RaiseNetworkEvent(new RequestCannonShootEvent
             {
                 CannonUid = GetNetEntity(uid),
                 Coordinates = vector2,
