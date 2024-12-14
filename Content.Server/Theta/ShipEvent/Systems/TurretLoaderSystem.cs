@@ -201,12 +201,12 @@ public sealed class TurretLoaderSystem : EntitySystem
 
     private void OnExamined(EntityUid uid, TurretLoaderComponent loader, ExaminedEvent args)
     {
-        var ammoCount = 0;
+        EntityUid? containerUid = loader.ContainerSlot?.Item;
+        if (containerUid == null)
+            return;
 
-        if (loader.ContainerSlot?.Item != null && TryComp<TurretAmmoContainerComponent>(uid, out var ammoContainer))
-            ammoCount = ammoContainer.AmmoCount;
-
-        args.PushMarkup(Loc.GetString("shipevent-turretloader-ammocount-examine", ("count", ammoCount)));
+        if (TryComp<TurretAmmoContainerComponent>(containerUid, out var container))
+            args.PushMarkup(Loc.GetString("shipevent-turretloader-ammocount-examine", ("count", container.AmmoCount)));
     }
 
     private void OnSync(TurretLoaderSyncMessage ev)
