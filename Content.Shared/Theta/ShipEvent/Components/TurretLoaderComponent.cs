@@ -20,7 +20,7 @@ public sealed partial class TurretLoaderComponent : Component
     /// Played when container with invalid ammo type is inserted
     /// </summary>
     [DataField("invalidAmmoSound")]
-    public SoundSpecifier? InvalidAmmoTypeSound;
+    public SoundSpecifier? InvalidAmmoSound;
 }
 
 [Serializable, NetSerializable]

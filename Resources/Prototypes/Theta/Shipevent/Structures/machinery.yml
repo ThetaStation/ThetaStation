@@ -201,7 +201,7 @@
         ammoContainer: !type:ContainerSlot
     - type: TurretLoader
       invalidAmmoSound:
-        path: /Audio/Effects/zzzt.ogg
+        path: /Audio/Machines/beep.ogg
     - type: DeviceNetwork
       deviceNetId: Wireless
     - type: WirelessNetworkConnection
