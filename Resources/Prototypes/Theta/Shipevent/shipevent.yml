@@ -22,7 +22,7 @@
       outOfBoundsPenalty: 2000
 
       #map gen
-      initialObstacleAmount: 10
+      initialObstacleAmount: 200
       minFieldSize: 1000
       maxFieldSize: 3000
       metersPerPlayer: 100
