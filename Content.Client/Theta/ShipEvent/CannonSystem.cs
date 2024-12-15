@@ -99,14 +99,10 @@ public sealed class CannonSystem : SharedCannonSystem
         var aggregateByVector = new Dictionary<Vector2, List<NetEntity>>();
         foreach (var (uid, vector2) in _toUpdateRotation)
         {
-            // https://github.com/space-wizards/space-station-14/issues/11446
-            // some kind of prediction bug for the client
-            //foreach (var uid in list)
-            //{
-            //    RotateToFaceSystem.TryFaceCoordinates(uid, coordinates);
-            //}
-            var list = aggregateByVector.GetOrNew(vector2);
-            list.Add(GetNetEntity(uid));
+            foreach (var uid in list)
+            {
+                RotateToFaceSystem.TryFaceCoordinates(uid, coordinates);
+            }
         }
 
         foreach (var (coordinates, list) in aggregateByVector)
