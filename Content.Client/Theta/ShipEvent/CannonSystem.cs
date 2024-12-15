@@ -99,10 +99,8 @@ public sealed class CannonSystem : SharedCannonSystem
         var aggregateByVector = new Dictionary<Vector2, List<NetEntity>>();
         foreach (var (uid, vector2) in _toUpdateRotation)
         {
-            foreach (var uid in list)
-            {
-                RotateToFaceSystem.TryFaceCoordinates(uid, coordinates);
-            }
+            var list = aggregateByVector.GetOrNew(vector2);
+            list.Add(GetNetEntity(uid));
         }
 
         foreach (var (coordinates, list) in aggregateByVector)
