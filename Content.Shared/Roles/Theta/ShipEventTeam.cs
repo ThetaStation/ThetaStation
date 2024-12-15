@@ -20,7 +20,7 @@ public sealed class ShipEventTeam
     public EntityUid? ShipMainGrid;
     public string ShipName = "";
 
-    public bool ShouldRespawn; //whether this team is currently waiting for respawn
+    public bool QueuedForRespawn; //whether this team is currently waiting for respawn
     public float TimeSinceRemoval;
     public bool OutOfBoundsWarningReceived;
     public int LastBonusInterval; //how much times this team has acquired bonus points for surviving bonus interval

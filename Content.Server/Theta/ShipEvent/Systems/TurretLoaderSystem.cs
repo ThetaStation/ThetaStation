@@ -15,17 +15,19 @@ namespace Content.Server.Theta.ShipEvent.Systems;
 
 public sealed class TurretLoaderSystem : EntitySystem
 {
+    [Dependency] private readonly MetaDataSystem _metaSys = default!;
     [Dependency] private readonly ItemSlotsSystem _slotSys = default!;
     [Dependency] private readonly SharedAudioSystem _audioSys = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<TurretLoaderComponent, ComponentInit>(OnInit);
+        SubscribeLocalEvent<TurretLoaderComponent, ComponentStartup>(OnInit);
         SubscribeLocalEvent<TurretLoaderComponent, ComponentRemove>(OnRemoval);
         SubscribeLocalEvent<TurretLoaderComponent, EntInsertedIntoContainerMessage>(OnContainerInsert);
         SubscribeLocalEvent<TurretLoaderComponent, EntRemovedFromContainerMessage>(OnContainerRemove);
         SubscribeLocalEvent<TurretLoaderComponent, InteractHandEvent>(OnHandInteract);
+        SubscribeLocalEvent<TurretLoaderComponent, InteractUsingEvent>(OnItemInteract, before: [typeof(SharedContainerSystem)]);
         SubscribeLocalEvent<TurretLoaderComponent, ThrowHitByEvent>(HandleThrowCollide);
         SubscribeLocalEvent<TurretLoaderComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<TurretLoaderComponent, TurretLoaderAfterShotMessage>(AfterShot);
@@ -68,7 +70,7 @@ public sealed class TurretLoaderSystem : EntitySystem
             {
                 if (EntityManager.TryGetComponent<CannonComponent>(loader.BoundTurretUid, out var cannon))
                 {
-                    if(cannon.BoundLoaderUid == null)
+                    if (cannon.BoundLoaderUid == null)
                     {
                         cannon.BoundLoaderUid = uid;
                         Dirty(loader.BoundTurretUid.Value, cannon);
@@ -84,26 +86,36 @@ public sealed class TurretLoaderSystem : EntitySystem
         Dirty(uid, loader);
     }
 
-    //ejects ammo container if turret does not accept its ammo type/it's empty
-    private void CheckAmmoContainer(EntityUid loaderUid, TurretLoaderComponent loader)
+    //returns true if container is compatible with the loader
+    private bool CheckContainer(
+        EntityUid loaderUid,
+        EntityUid containerUid,
+        TurretLoaderComponent? loader = null,
+        TurretAmmoContainerComponent? container = null)
     {
+        if (!(Resolve(loaderUid, ref loader) && Resolve(containerUid, ref container)))
+            return false;
+
         List<string>? turretAmmoProts = null;
         if (loader.BoundTurretUid != null && EntityManager.EntityExists(loader.BoundTurretUid))
             turretAmmoProts = EntityManager.GetComponent<CannonComponent>(loader.BoundTurretUid.Value).AmmoPrototypes;
 
-        var ammoContainerUid = loader.ContainerSlot?.Item;
-        if (TryComp<TurretAmmoContainerComponent>(ammoContainerUid, out var ammoContainer))
+        return container.AmmoCount != 0 && turretAmmoProts != null && turretAmmoProts.Contains(container.AmmoPrototype);
+    }
+
+    //ejects container if it's empty/incompatible
+    private void CheckAndEjectContainer(EntityUid loaderUid, TurretLoaderComponent loader)
+    {
+        EntityUid? containerUid = loader.ContainerSlot?.Item;
+        if (containerUid == null)
+            return;
+
+        if (!CheckContainer(loaderUid, containerUid.Value, loader))
         {
-            Dirty(ammoContainerUid.Value, ammoContainer);
+            if (loader.ContainerSlot == null)
+                return;
 
-            if (ammoContainer.AmmoCount == 0 || turretAmmoProts == null || !turretAmmoProts.Contains(ammoContainer.AmmoPrototype))
-            {
-                _audioSys.PlayPredicted(loader.InvalidAmmoTypeSound, loaderUid, loaderUid);
-
-                if (loader.ContainerSlot == null)
-                    return;
-                _slotSys.TryEject(loaderUid, loader.ContainerSlot, loaderUid, out _);
-            }
+            _slotSys.TryEject(loaderUid, loader.ContainerSlot, loaderUid, out _);
         }
 
         Dirty(loaderUid, loader);
@@ -124,10 +136,10 @@ public sealed class TurretLoaderSystem : EntitySystem
         return false;
     }
 
-    private void OnInit(EntityUid uid, TurretLoaderComponent loader, ComponentInit args)
+    private void OnInit(EntityUid uid, TurretLoaderComponent loader, ComponentStartup args)
     {
         SetupLoader(uid, loader);
-        CheckAmmoContainer(uid, loader);
+        CheckAndEjectContainer(uid, loader);
     }
 
     private void OnRemoval(EntityUid uid, TurretLoaderComponent loader, ComponentRemove args)
@@ -138,7 +150,7 @@ public sealed class TurretLoaderSystem : EntitySystem
 
     private void OnContainerInsert(EntityUid uid, TurretLoaderComponent loader, EntInsertedIntoContainerMessage args)
     {
-        CheckAmmoContainer(uid, loader);
+        CheckAndEjectContainer(uid, loader);
     }
 
     private void OnContainerRemove(EntityUid uid, TurretLoaderComponent loader, EntRemovedFromContainerMessage args)
@@ -153,38 +165,52 @@ public sealed class TurretLoaderSystem : EntitySystem
 
     private void AfterShot(EntityUid uid, TurretLoaderComponent loader, TurretLoaderAfterShotMessage args)
     {
-        CheckAmmoContainer(uid, loader);
+        CheckAndEjectContainer(uid, loader);
     }
 
     /// <summary>
     /// Throwing ammo in loads it up.
     /// </summary>
-    private void HandleThrowCollide(EntityUid uid, TurretLoaderComponent component, ThrowHitByEvent args)
+    private void HandleThrowCollide(EntityUid uid, TurretLoaderComponent loader, ThrowHitByEvent args)
     {
-        if (component.ContainerSlot == null)
+        if (loader.ContainerSlot == null)
             return;
 
-        if (component.ContainerSlot.HasItem && !_slotSys.TryEject(uid, component.ContainerSlot, null, out var item))
+        if (loader.ContainerSlot.HasItem && !_slotSys.TryEject(uid, loader.ContainerSlot, null, out var item))
             return;
 
-        _slotSys.TryInsert(uid, component.ContainerSlot, args.Thrown, args.Component.Thrower);
+        if (CheckContainer(uid, args.Thrown, loader))
+            _slotSys.TryInsert(uid, loader.ContainerSlot, args.Thrown, args.Component.Thrower);
     }
 
     private void OnHandInteract(EntityUid uid, TurretLoaderComponent component, InteractHandEvent args)
     {
         if (component.ContainerSlot == null)
             return;
+
         _slotSys.TryEject(uid, component.ContainerSlot, null, out var item);
+    }
+
+    private void OnItemInteract(Entity<TurretLoaderComponent> uid, ref InteractUsingEvent args)
+    {
+        if (!HasComp<TurretAmmoContainerComponent>(args.Used))
+            return;
+
+        if (!CheckContainer(uid, args.Used, uid.Comp))
+        {
+            _audioSys.PlayPredicted(uid.Comp.InvalidAmmoSound, uid, uid);
+            args.Handled = true;
+        }
     }
 
     private void OnExamined(EntityUid uid, TurretLoaderComponent loader, ExaminedEvent args)
     {
-        var ammoCount = 0;
+        EntityUid? containerUid = loader.ContainerSlot?.Item;
+        if (containerUid == null)
+            return;
 
-        if (loader.ContainerSlot?.Item != null && TryComp<TurretAmmoContainerComponent>(uid, out var ammoContainer))
-            ammoCount = ammoContainer.AmmoCount;
-
-        args.PushMarkup(Loc.GetString("shipevent-turretloader-ammocount-examine", ("count", ammoCount)));
+        if (TryComp<TurretAmmoContainerComponent>(containerUid, out var container))
+            args.PushMarkup(Loc.GetString("shipevent-turretloader-ammocount-examine", ("count", container.AmmoCount)));
     }
 
     private void OnSync(TurretLoaderSyncMessage ev)

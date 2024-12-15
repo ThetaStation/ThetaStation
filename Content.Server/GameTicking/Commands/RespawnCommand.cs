@@ -1,3 +1,4 @@
+using Content.Server.Administration;
 using Content.Shared.Mind;
 using Content.Shared.Players;
 using Robust.Server.Player;
@@ -6,6 +7,7 @@ using Robust.Shared.Network;
 
 namespace Content.Server.GameTicking.Commands
 {
+    [AdminCommand(Shared.Administration.AdminFlags.Admin)]
     sealed class RespawnCommand : IConsoleCommand
     {
         public string Command => "respawn";

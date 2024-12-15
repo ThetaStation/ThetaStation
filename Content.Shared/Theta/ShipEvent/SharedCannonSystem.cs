@@ -10,6 +10,7 @@ using Robust.Shared.Network;
 
 namespace Content.Shared.Theta.ShipEvent;
 
+//todo: like half of this is code isn't actually used on client and should be moved to server
 public abstract class SharedCannonSystem : EntitySystem
 {
     [Dependency] private readonly SharedGunSystem _gunSystem = default!;

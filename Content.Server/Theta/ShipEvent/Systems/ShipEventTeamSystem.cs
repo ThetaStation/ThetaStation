@@ -249,7 +249,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
 
     private void OnRoundEnd(RoundEndTextAppendEvent args)
     {
-        if (!RuleSelected || !Teams.Any())
+        if (!RuleSelected || Teams.Count == 0)
             return;
 
         RoundEndEvent?.Invoke(args);
@@ -278,7 +278,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
 
     private void OnRoundEndDiscord(ref RoundEndDiscordTextAppendEvent args)
     {
-        if (!RuleSelected || !Teams.Any())
+        if (!RuleSelected || Teams.Count == 0)
             return;
 
         var winner = Teams.First();
@@ -329,8 +329,8 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
             {
                 Name = team.Name,
                 Color = team.Color,
-                ShipName = team.ShouldRespawn ? null : team.ShipName,
-                AliveCrewCount = team.ShouldRespawn ? null : GetTeamLivingMembers(team).Count().ToString(),
+                ShipName = team.QueuedForRespawn ? null : team.ShipName,
+                AliveCrewCount = team.QueuedForRespawn ? null : GetTeamLivingMembers(team).Count().ToString(),
                 Points = team.Points,
             });
         }
@@ -470,7 +470,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         if (!AllowPlayerRespawn && !bypass)
             return false;
 
-        if (!team.ShipGrids.Any())
+        if (team.ShipGrids.Count == 0)
             return false;
 
         spawnerUid ??= GetGridCompHolders<ShipEventSpawnerComponent>(team.ShipGrids).FirstOrNull();
@@ -528,19 +528,19 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
             var activeMembers = GetTeamSessions(team);
             var livingMembers = GetTeamLivingMembers(team);
 
-            if (!activeMembers.Any())
+            if (RemoveEmptyTeams && activeMembers.Count == 0)
             {
                 emptyTeams.Add(team);
                 continue;
             }
 
-            if (!livingMembers.Any() && !team.ShouldRespawn)
+            if (activeMembers.Count > 0 && livingMembers.Count == 0 && !team.QueuedForRespawn)
             {
                 QueueTeamRespawn(team, Loc.GetString("shipevent-respawn-dead"));
                 continue;
             }
 
-            if (!GetGridCompHolders<ShuttleConsoleComponent>(team.ShipGrids).Any() && !team.ShouldRespawn)
+            if (GetGridCompHolders<ShuttleConsoleComponent>(team.ShipGrids).Count == 0 && !team.QueuedForRespawn)
             {
                 QueueTeamRespawn(team, Loc.GetString("shipevent-respawn-tech"));
                 continue;
@@ -561,14 +561,22 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
             }
 
             //if cap is disconnected we won't be able to get his session, thus triggering this condition
-            if (team.Captain == null || !_playerMan.TryGetSessionByUsername(team.Captain, out _))
+            if (team.Captain != null && !_playerMan.TryGetSessionByUsername(team.Captain, out _))
             {
-                var newCap = activeMembers.First();
-                TeamMessage(team, Loc.GetString("shipevent-team-captainchange", ("oldcap", team.Captain ?? "NONE"), ("newcap", newCap.Name)));
+                team.Captain = null;
+            }
+
+            if (team.Captain == null && activeMembers.Count != 0)
+            {
+                var newCap = activeMembers[0];
+                TeamMessage(
+                    team,
+                    Loc.GetString("shipevent-team-captainchange", ("oldcap", team.Captain ?? "NONE"),
+                    ("newcap", newCap.Name ?? "NONE")));
                 team.Captain = newCap.Name;
             }
 
-            if (team.ShouldRespawn && team.TimeSinceRemoval > RespawnDelay)
+            if (team.QueuedForRespawn && team.TimeSinceRemoval > RespawnDelay)
             {
                 TeamMessage(team, Loc.GetString("shipevent-team-respawnnow"));
                 ImmediateTeamRespawn(team);
@@ -588,8 +596,6 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
             team.TimeSinceRemoval += TeamCheckInterval;
         }
 
-        if (!RemoveEmptyTeams)
-            return;
         foreach (var team in emptyTeams)
         {
             RemoveTeam(team, Loc.GetString("shipevent-remove-noplayers"));
@@ -620,7 +626,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         foreach (EntityUid gridUid in shipGrids)
         {
             var consoles = GetGridCompHolders<ShuttleConsoleComponent>(gridUid);
-            if (consoles.Any())
+            if (consoles.Count != 0)
             {
                 team.ShipMainGrid = gridUid;
                 SetName(gridUid, team.ShipName);
@@ -673,14 +679,14 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
             return;
         }
 
-        if (!team.ShipGrids.Any())
+        if (team.ShipGrids.Count == 0)
         {
             _chatSys.SendSimpleMessage(Loc.GetString("shipevent-ship-destroyed"), session);
             return;
         }
 
         var spawners = GetGridCompHolders<ShipEventSpawnerComponent>(team.ShipGrids);
-        if (!spawners.Any())
+        if (spawners.Count == 0)
         {
             _chatSys.SendSimpleMessage(Loc.GetString("shipevent-spawner-destroyed-join"), session);
             return;
@@ -729,7 +735,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         }
         else
         {
-            team.ShouldRespawn = true;
+            team.QueuedForRespawn = true;
             team.TimeSinceRemoval = 0;
         }
     }
@@ -745,7 +751,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         }
 
         team.Respawns++;
-        team.ShouldRespawn = false;
+        team.QueuedForRespawn = false;
     }
 
     /// <summary>
