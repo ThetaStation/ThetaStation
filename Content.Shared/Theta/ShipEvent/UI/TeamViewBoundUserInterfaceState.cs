@@ -6,10 +6,12 @@ namespace Content.Shared.Theta.ShipEvent.UI;
 public sealed class TeamViewBoundUserInterfaceState : BoundUserInterfaceState
 {
     public readonly List<TeamViewTeamState> Teams;
+    public readonly List<string> Modifiers;
 
-    public TeamViewBoundUserInterfaceState(List<TeamViewTeamState> teams)
+    public TeamViewBoundUserInterfaceState(List<TeamViewTeamState> teams, List<string> modifiers)
     {
         Teams = teams;
+        Modifiers = modifiers;
     }
 }
 
