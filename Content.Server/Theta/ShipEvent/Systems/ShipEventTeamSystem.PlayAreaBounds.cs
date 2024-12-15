@@ -44,7 +44,7 @@ public sealed partial class ShipEventTeamSystem
 
     public bool IsTeamOutOfBounds(ShipEventTeam team)
     {
-        if (!team.ShouldRespawn)
+        if (!team.QueuedForRespawn)
         {
             if (EntityManager.TryGetComponent<TransformComponent>(team.ShipMainGrid, out var form) &&
                 EntityManager.TryGetComponent<PhysicsComponent>(team.ShipMainGrid, out var grid))

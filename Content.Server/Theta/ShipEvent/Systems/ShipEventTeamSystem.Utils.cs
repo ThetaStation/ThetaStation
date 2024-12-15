@@ -76,12 +76,24 @@ public sealed partial class ShipEventTeamSystem
         return sessions;
     }
 
-    public IEnumerable<ICommonSession> GetTeamLivingMembers(ShipEventTeam team)
+    public List<ICommonSession> GetTeamLivingMembers(ShipEventTeam team)
     {
-        //get all sessions with non null entity, which are also alive/aghosts
-        return GetTeamSessions(team).Where(session => session.AttachedEntity != null &&
-            (Comp<MetaDataComponent>(session.AttachedEntity.Value).EntityPrototype?.ID == "AdminObserver" ||
-            TryComp<MobStateComponent>(session.AttachedEntity.Value, out var state) && state.CurrentState != MobState.Dead));
+        List<ICommonSession> sessions = new();
+
+        //get all sessions with non null entity, which are alive/aghosts
+        foreach (ICommonSession session in GetTeamSessions(team))
+        {
+            if (session.AttachedEntity == null)
+                continue;
+
+            if (Comp<MetaDataComponent>(session.AttachedEntity.Value).EntityPrototype?.ID == "AdminObserver" ||
+            TryComp<MobStateComponent>(session.AttachedEntity.Value, out var state) && state.CurrentState != MobState.Dead)
+            {
+                sessions.Add(session);
+            }
+        }
+
+        return sessions;
     }
 
     #endregion
