@@ -322,10 +322,10 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
 
         args.Handled = true;
 
-        List<ShipTeamForTeamViewState> teamsInfo = new();
+        List<TeamViewTeamState> teamInfo = new();
         foreach (var team in Teams)
         {
-            teamsInfo.Add(new ShipTeamForTeamViewState
+            teamInfo.Add(new TeamViewTeamState
             {
                 Name = team.Name,
                 Color = team.Color,
@@ -339,7 +339,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         if (_uiSys.IsUiOpen(uid, uiKey))
             return;
         _uiSys.OpenUi(uid, uiKey, session);
-        _uiSys.SetUiState(uid, uiKey, new TeamViewBoundUserInterfaceState(teamsInfo));
+        _uiSys.SetUiState(uid, uiKey, new TeamViewBoundUserInterfaceState(teamInfo, ActiveModifiers.Select(m => Loc.GetString(m.Name)).ToList()));
     }
 
     private void OnCapMenuToggle(EntityUid uid, ShipEventTeamMarkerComponent marker, ShipEventCaptainMenuToggleEvent args)

@@ -16,55 +16,63 @@ public sealed partial class TeamViewWindow : DefaultWindow
     public TeamViewWindow()
     {
         RobustXamlLoader.Load(this);
-        ActiveTeams.SetMessage(Loc.GetString("shipevent-teamview-heading"));
     }
 
-    public void UpdateText(TeamViewBoundUserInterfaceState state)
+    public void Update(TeamViewBoundUserInterfaceState state)
     {
-        GridContent.RemoveAllChildren();
-        AddHeaders();
+        TeamContainer.DisposeAllChildren();
+        ModifierContainer.DisposeAllChildren();
 
-        foreach (var teamState in state.Teams)
+        TeamContainer.AddChild(CreateEntry(
+            Loc.GetString("shipevent-teamview-label-name"),
+            Loc.GetString("shipevent-teamview-label-ship"),
+            Loc.GetString("shipevent-teamview-label-crew"),
+            Loc.GetString("shipevent-teamview-label-points")
+        ));
+
+        foreach (TeamViewTeamState teamState in state.Teams)
         {
-            var richText = new RichTextLabel();
-            richText.MaxWidth = MinWidth / 4;
+            TeamContainer.AddChild(CreateEntry(
+                teamState.Name != null ? $"[color={teamState.Color.ToHex()}]{teamState.Name}[/color]" : "N/A",
+                teamState.ShipName ?? "N/A",
+                teamState.AliveCrewCount ?? "N/A",
+                teamState.Points.ToString()
+            ));
+        }
 
-            richText.SetMarkup($"[color={teamState.Color.ToHex()}]{teamState.Name ?? "N/A"}[/color]");
-            GridContent.AddChild(richText);
-
-            richText = new RichTextLabel();
-            richText.MaxWidth = MinWidth / 4;
-            richText.SetMessage(!String.IsNullOrEmpty(teamState.ShipName) ? teamState.ShipName : "N/A");
-            GridContent.AddChild(richText);
-
-            richText = new RichTextLabel();
-            richText.MaxWidth = MinWidth / 4;
-            richText.SetMessage(teamState.AliveCrewCount ?? "N/A");
-            GridContent.AddChild(richText);
-
-            richText = new RichTextLabel();
-            richText.MaxWidth = MinWidth / 4;
-            richText.SetMessage(teamState.Points.ToString());
-            GridContent.AddChild(richText);
+        foreach (string modifier in state.Modifiers)
+        {
+            ModifierContainer.AddChild(new Label() { Text = modifier });
         }
     }
 
-    private void AddHeaders()
+    private BoxContainer CreateEntry(string name, string ship, string crew, string points)
     {
-        var richText = new RichTextLabel();
-        richText.SetMessage(Loc.GetString("shipevent-teamview-heading-name"));
-        GridContent.AddChild(richText);
+        float minWidth = 590f / 4f;
 
-        richText = new RichTextLabel();
-        richText.SetMessage(Loc.GetString("shipevent-teamview-heading-shipname"));
-        GridContent.AddChild(richText);
+        BoxContainer container = new();
+        container.Orientation = BoxContainer.LayoutOrientation.Horizontal;
 
-        richText = new RichTextLabel();
-        richText.SetMessage(Loc.GetString("shipevent-teamview-heading-crew"));
-        GridContent.AddChild(richText);
+        RichTextLabel label = new();
+        label.SetMarkup(name);
+        label.MinWidth = label.SetWidth = minWidth;
+        container.AddChild(label);
 
-        richText = new RichTextLabel();
-        richText.SetMessage(Loc.GetString("shipevent-teamview-heading-points"));
-        GridContent.AddChild(richText);
+        label = new();
+        label.SetMarkup(ship);
+        label.MinWidth = label.SetWidth = minWidth;
+        container.AddChild(label);
+
+        label = new();
+        label.SetMarkup(crew);
+        label.MinWidth = label.SetWidth = minWidth;
+        container.AddChild(label);
+
+        label = new();
+        label.SetMarkup(points);
+        label.MinWidth = label.SetWidth = minWidth;
+        container.AddChild(label);
+
+        return container;
     }
 }
