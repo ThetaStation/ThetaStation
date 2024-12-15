@@ -322,10 +322,10 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
 
         args.Handled = true;
 
-        List<ShipTeamForTeamViewState> teamsInfo = new();
+        List<TeamViewTeamState> teamsInfo = new();
         foreach (var team in Teams)
         {
-            teamsInfo.Add(new ShipTeamForTeamViewState
+            teamsInfo.Add(new TeamViewTeamState
             {
                 Name = team.Name,
                 Color = team.Color,

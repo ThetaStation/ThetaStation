@@ -21,7 +21,7 @@ public sealed class TeamViewBoundUserInterface : BoundUserInterface
     protected override void UpdateState(BoundUserInterfaceState state)
     {
         base.UpdateState(state);
-        _window?.UpdateText((TeamViewBoundUserInterfaceState)state);
+        _window?.Update((TeamViewBoundUserInterfaceState) state);
     }
 
     protected override void Dispose(bool disposing)
