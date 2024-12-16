@@ -166,6 +166,9 @@ public sealed class TurretLoaderSystem : EntitySystem
     private void AfterShot(EntityUid uid, TurretLoaderComponent loader, TurretLoaderAfterShotMessage args)
     {
         CheckAndEjectContainer(uid, loader);
+
+        if (TryComp<TurretAmmoContainerComponent>(loader.ContainerSlot?.Item, out var container))
+            Dirty(loader.ContainerSlot.Item.Value, container, null);
     }
 
     /// <summary>
