@@ -176,8 +176,6 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         SetupTimer(AnomalyUpdateInterval, AnomalyUpdate);
         SetupTimer(AnomalySpawnInterval, AnomalySpawn);
         SetupTimer(ModifierUpdateInterval, ModifierUpdate);
-        //30 sec delay cause some modifiers may change entities right after spawn, causing failed tests
-        Timer.Spawn(30000, ModifierUpdate);
     }
 
     private void SetupTimer(float seconds, Action action)
