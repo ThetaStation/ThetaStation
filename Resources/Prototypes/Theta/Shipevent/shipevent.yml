@@ -4,8 +4,6 @@
   parent: BaseGameRule
   components:
     - type: ShipEventRule
-      hudPrototypeId: "ShipeventHUD"
-      captainHudPrototypeId: "ShipeventHUDCaptain"
 
       #time
       roundDuration: 1800

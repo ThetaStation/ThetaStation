@@ -62,8 +62,6 @@ public sealed partial class ShipEventRuleComponent : Component
 
     //misc
     [DataField("spaceLightColor")] public Color? SpaceLightColor = null;
-    [DataField("hudPrototypeId")] public string HUDPrototypeId = "";
-    [DataField("captainHudPrototypeId")] public string CaptainHUDPrototypeId = "";
     [DataField("shipTypes")] public List<string> ShipTypes = new();
     [DataField("boundsCompressionDistance")] public int BoundsCompressionDistance;
     [DataField("pickupsPositions")] public int PickupsPositionsCount;
@@ -141,9 +139,6 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         _shipSys.PickupSpawnInterval = component.PickupsSpawnInterval;
         _shipSys.PickupMinDistance = component.PickupMinDistance;
         _shipSys.PickupPrototype = component.PickupPrototype;
-
-        _shipSys.HUDPrototypeId = component.HUDPrototypeId;
-        _shipSys.CaptainHUDPrototypeId = component.CaptainHUDPrototypeId;
 
         _shipSys.MaxSpawnOffset = Math.Clamp(
             (int) Math.Round((float) _playerMan.PlayerCount * component.MetersPerPlayer / component.RoundFieldSizeTo) * component.RoundFieldSizeTo,

@@ -37,13 +37,21 @@ public sealed partial class ShipEventTeamSystem
     /// <param name="message">message text</param>
     /// <param name="chatChannel">chat channel (local by default)</param>
     /// <param name="color">color of message (team's color by default)</param>
-    public void TeamMessage(ShipEventTeam team, string message, ChatChannel chatChannel = ChatChannel.Local, Color? color = null)
+    public void TeamMessage(ShipEventTeam team, string message, ChatChannel channel = ChatChannel.Local, Color? color = null)
     {
         color ??= team.Color;
 
-        foreach (var session in GetTeamSessions(team))
+        foreach (ICommonSession session in GetTeamSessions(team))
         {
-            _chatSys.SendSimpleMessage(message, session, chatChannel, color);
+            _chatSys.SendSimpleMessage(message, session, channel, color);
+        }
+    }
+
+    public void FleetMessage(ShipEventFleet fleet, string message, ChatChannel channel = ChatChannel.Local, Color? color = null)
+    {
+        foreach (ShipEventTeam team in fleet.Teams)
+        {
+            TeamMessage(team, message, channel, color);
         }
     }
 

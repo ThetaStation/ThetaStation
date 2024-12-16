@@ -8,6 +8,7 @@ public sealed class ShipEventTeam
     public Color Color;
     public string? Captain;
     public List<string> Members = new();
+    public ShipEventFleet? Fleet = null;
 
     public Dictionary<ShipEventTeam, int> Hits = new(); //hits from other teams, not vice-versa
     public int Kills;
@@ -24,6 +25,7 @@ public sealed class ShipEventTeam
     public float TimeSinceRemoval;
     public bool OutOfBoundsWarningReceived;
     public int LastBonusInterval; //how much times this team has acquired bonus points for surviving bonus interval
+    public bool CaptainLocked; //if true new captain won't be selected when the old one disconnects
 
     private string? _password;
     public string? JoinPassword
