@@ -43,6 +43,7 @@ using Content.Shared.Mind.Components;
 using Content.Shared.Ghost;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Mind;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
@@ -967,7 +968,25 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         if (args.Channel == null || marker.Team == null)
             return;
 
-        string chatMsg = Loc.GetString("shipevent-team-msg-base", ("name", GetName(args.Source)), ("message", args.Message));
+        string messageLoc = "shipevent-team-msg";
+        if (_mindSys.TryGetMind(uid, out EntityUid mindUid, out MindComponent? mind) && mind.Session != null)
+        {
+            string uname = mind.Session.Channel.UserName;
+            if (uname == marker.Team.Fleet?.Admiral)
+            {
+                messageLoc = "shipevent-team-msg-admiral";
+            }
+            else if (uname == marker.Team.Captain)
+            {
+                messageLoc = "shipevent-team-msg-captain";
+            }
+        }
+
+        string chatMsg = Loc.GetString(
+            messageLoc,
+            ("name", GetName(args.Source)),
+            ("message", args.Message)
+        );
 
         if (args.Channel.ID == TeamChannelID)
             TeamMessage(marker.Team, chatMsg);

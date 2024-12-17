@@ -25,7 +25,6 @@ shipevent-lobby-password = Password
 ## Team console - team creation
 
 shipevent-teamcreation-windowtitle = TEAM CREATION
-
 shipevent-teamcreation-response-invalidname = This name is already taken/too long/too short/unavailable for some other reason.
 shipevent-teamcreation-response-invalidcolor = This color is already taken/unavailable for some other reason.
 shipevent-teamcreation-response-regdisabled = Registration of new teams is disabled.
@@ -62,6 +61,7 @@ shipevent-capmenu-toggle-name = Team management
 shipevent-capmenu-toggle-desc = Change your ship, kick team members, make announcements, etc.
 
 ## Enter Password Menu
+
 shipevent-enter-password-windowtitle = PASSWORD
 shipevent-enter-password-enterpass = Enter Password:
 shipevent-enter-password-enter-button = Enter
@@ -69,18 +69,7 @@ shipevent-enter-password-cancel-button = Cancel
 
 ## Turret loader
 
-shipevent-turretloader-windowtitle = WEAPON LOADER
-shipevent-turretloader-status = Status:
-shipevent-turretloader-status-normal = Working
-shipevent-turretloader-status-unbound = No bound turret
-shipevent-turretloader-status-nocontainer = No container
-shipevent-turretloader-status-broken = Malfunction
-shipevent-turretloader-ammocount = Ammo count:
-shipevent-turretloader-turret = Turret:
-shipevent-turretloader-ejectcontainerbutton = EJECT CONTAINER
-shipevent-turretloader-refreshbutton = REFRESH UI
 shipevent-turretloader-ammocount-examine = Ammo count: {$count}
-
 
 ## Cannon console
 
@@ -103,7 +92,9 @@ shipevent-shieldconsole-radiuslabel = Radius
 
 ## Team Messages
 
-shipevent-team-msg-base = \[Team\] [bold]{$name}[/bold]: {$message}
+shipevent-team-msg = \[Crew\] [bold]{$name}[/bold]: {$message}
+shipevent-team-msg-captain = [font size=14]\[Captain\] [bold]{$name}[/bold]: {$message}[/font]
+shipevent-team-msg-admiral = [font size=16]\[Admiral\] [bold]{$name}[/bold]: {$message}[/font]
 
 ## Shuttle Console
 
