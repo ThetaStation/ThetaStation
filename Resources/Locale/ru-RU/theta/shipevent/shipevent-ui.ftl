@@ -103,8 +103,8 @@ shipevent-shieldconsole-radiuslabel = Радиус
 ## Team Messages
 
 shipevent-team-msg = \[Экипаж\] [bold]{$name}[/bold]: {$message}
-shipevent-team-msg-captain = [head=1]\[Капитан\] [bold]{$name}[/bold]: {$message}[/head]
-shipevent-team-msg-admiral = [head=2]\[Адмирал\] [bold]{$name}[/bold]: {$message}[/head]
+shipevent-team-msg-captain = [font size=14]\[Капитан\] [bold]{$name}[/bold]: {$message}[/font]
+shipevent-team-msg-admiral = [font size=16]\[Адмирал\] [bold]{$name}[/bold]: {$message}[/font]
 
 ## Shuttle Console
 
