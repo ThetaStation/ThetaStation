@@ -32,16 +32,13 @@ shipevent-role-greet = Вы - член испытательной группы, 
 roles-antag-shiptester = Стань пилотом или наводчиком орудий боевого космического шаттла.
 
 ## Roundend messages
-
 shipevent-roundend-heading = Соревнование окончено. Команды принявшие участие:
+shipevent-roundend-independents = Независимые команды:
+shipevent-roundend-fleet = Флот '[color={ $color }]{ $name }[/color]' под руководством '{ $admiralname }' набравший '{ $points }' очков, со следующими командами:
 shipevent-roundend-team = Команда '[color={ $color }]{ $name }[/color]' (корабль - '{ $shipname }') под руководством '{ $capname }':
 shipevent-roundend-teamstats = Набрала { $points } очков, { $kills } фрагов и { $assists } ассистов, а также зареспавнилась { $respawns } раз.
-shipevent-roundend-winner = ПОБЕДИТЕЛЬ - КОМАНДА '{ $name }'! Поздравьте их в ООЦ (или полейте грязью).
-
-## For discord roundedn messages
-
-shipevent-roundend-discord-team = Победила команда под руководством '{ $capname }'.
-shipevent-roundend-discord-teamstats = Набрала { $points } очков, { $kills } фрагов и { $assists } ассистов, а также зареспавнилась { $respawns } раз.
+shipevent-roundend-winner-fleet = ПОБЕДИТЕЛЬ - ФЛОТ '{ $name }'! Лучшая команда флота - '{ $team }'.
+shipevent-roundend-winner-team = ПОБЕДИТЕЛЬ - КОМАНДА '{ $name }'!
 
 ## Misc.
 

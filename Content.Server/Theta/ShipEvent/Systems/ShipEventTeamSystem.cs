@@ -43,7 +43,6 @@ using Content.Shared.Mind.Components;
 using Content.Shared.Ghost;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
-using System.Collections;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
@@ -115,6 +114,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
     public MapId TargetMap;
     public List<IMapGenProcessor> ShipProcessors = new();
 
+    public List<ShipEventFleet> Fleets { get; } = new();
     public List<ShipEventTeam> Teams { get; } = new();
 
     public ColorPalette ColorPalette = new ShipEventPalette();
@@ -127,6 +127,8 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
     //used by modifiers to prevent locking subscriptions
     public Action<EntityUid>? OnPlayerSpawn;
     public Action<EntityUid, MobState>? OnPlayerStateChange;
+
+    public string RoundEndReport = "";
 
     public CancellationTokenSource TimerTokenSource = new();
 
@@ -258,26 +260,90 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
 
         RoundEndEvent?.Invoke(args);
 
-        var sortedTeams = Teams.ShallowClone().OrderByDescending(t => t.Points).ToList();
+        Dictionary<ShipEventFleet, List<ShipEventTeam>> teamsByFleet = new();
+        //can't put a null key into dict so independent teams are in a separate list
+        List<ShipEventTeam> independentTeams = new();
 
-        var winner = sortedTeams.First();
-        args.AddLine(Loc.GetString("shipevent-roundend-heading"));
-        foreach (var team in sortedTeams)
+        foreach (ShipEventTeam team in Teams)
         {
-            args.AddLine(Loc.GetString("shipevent-roundend-team",
+            if (team.Fleet == null)
+            {
+                independentTeams.Add(team);
+                continue;
+            }
+
+            teamsByFleet[team.Fleet].Add(team);
+        }
+
+        teamsByFleet.OrderByDescending(pair => GetFleetPoints(pair.Key));
+        foreach (ShipEventFleet fleet in Fleets)
+        {
+            teamsByFleet[fleet].OrderByDescending(team => team.Points);
+        }
+        independentTeams.OrderByDescending(team => team.Points);
+
+        RoundEndReport += Loc.GetString("shipevent-roundend-heading") + "\n";
+        foreach (var pair in teamsByFleet)
+        {
+            ShipEventFleet fleet = pair.Key;
+
+            RoundEndReport += "---\n";
+
+            RoundEndReport += Loc.GetString("shipevent-roundend-fleet",
+                ("name", fleet.Name),
+                ("color", fleet.Color),
+                ("admiralname", fleet.Admiral ?? "NONE"),
+                ("points", GetFleetPoints(fleet))
+            ) + "\n\n";
+
+            foreach (ShipEventTeam team in pair.Value)
+            {
+                RoundEndReport += Loc.GetString("shipevent-roundend-team",
+                    ("name", team.Name),
+                    ("color", team.Color),
+                    ("shipname", team.ShipName),
+                    ("capname", team.Captain ?? "NONE")) + "\n";
+                RoundEndReport += Loc.GetString("shipevent-roundend-teamstats",
+                    ("points", team.Points),
+                    ("kills", team.Kills),
+                    ("assists", team.Assists),
+                    ("respawns", team.Respawns)) + "\n\n";
+            }
+
+            RoundEndReport += "---\n\n";
+        }
+
+        RoundEndReport += "---\n";
+        RoundEndReport += Loc.GetString("shipevent-roundend-independents") + "\n";
+        foreach (ShipEventTeam team in independentTeams)
+        {
+            RoundEndReport += Loc.GetString("shipevent-roundend-team",
                 ("name", team.Name),
                 ("color", team.Color),
                 ("shipname", team.ShipName),
-                ("capname", team.Captain ?? "NONE")));
-            args.AddLine(Loc.GetString("shipevent-roundend-teamstats",
+                ("capname", team.Captain ?? "NONE")) + "\n";
+            RoundEndReport += Loc.GetString("shipevent-roundend-teamstats",
                 ("points", team.Points),
                 ("kills", team.Kills),
                 ("assists", team.Assists),
-                ("respawns", team.Respawns)));
-            args.AddLine("");
+                ("respawns", team.Respawns)) + "\n\n";
+        }
+        RoundEndReport += "---\n\n";
+
+        if (teamsByFleet.Count > 0 &&
+            (independentTeams.Count == 0 || GetFleetPoints(teamsByFleet.First().Key) > independentTeams[0].Points))
+        {
+            RoundEndReport += Loc.GetString("shipevent-roundend-winner-fleet",
+                ("name", teamsByFleet.First().Key.Name),
+                ("bestteamname", teamsByFleet.First().Value[0].Name)
+            ) + "\n";
+        }
+        else
+        {
+            RoundEndReport += Loc.GetString("shipevent-roundend-winner-team", ("name", independentTeams[0].Name)) + "\n";
         }
 
-        args.AddLine(Loc.GetString("shipevent-roundend-winner", ("name", winner.Name)));
+        args.AddLine(RoundEndReport);
     }
 
     private void OnRoundEndDiscord(ref RoundEndDiscordTextAppendEvent args)
@@ -285,20 +351,11 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         if (!RuleSelected || Teams.Count == 0)
             return;
 
-        var winner = Teams.First();
-        foreach (var team in Teams)
-        {
-            if (team.Points > winner.Points)
-                winner = team;
-        }
-
-        args.AddLine(Loc.GetString("shipevent-roundend-discord-team", ("capname", winner.Captain ?? "NONE")));
-        args.AddLine(Loc.GetString("shipevent-roundend-discord-teamstats",
-            ("points", winner.Points),
-            ("kills", winner.Kills),
-            ("assists", winner.Assists),
-            ("respawns", winner.Respawns)
-        ));
+        args.AddLine(Loc.GetString("shipevent-roundend-discord"));
+        args.AddLine("```"); //code block
+        args.AddLine(RoundEndReport);
+        args.AddLine("```");
+        RoundEndReport = "";
     }
 
     #endregion

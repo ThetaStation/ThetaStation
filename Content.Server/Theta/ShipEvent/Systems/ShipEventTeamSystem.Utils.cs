@@ -105,6 +105,42 @@ public sealed partial class ShipEventTeamSystem
         return sessions;
     }
 
+    public int GetFleetPoints(ShipEventFleet fleet)
+    {
+        int points = 0;
+
+        foreach (ShipEventTeam team in fleet.Teams)
+        {
+            points += team.Points;
+        }
+
+        return points;
+    }
+
+    public List<ICommonSession> GetFleetSessions(ShipEventFleet fleet)
+    {
+        List<ICommonSession> sessions = new();
+
+        foreach (ShipEventTeam team in fleet.Teams)
+        {
+            sessions.AddRange(GetTeamSessions(team));
+        }
+
+        return sessions;
+    }
+
+    public List<ICommonSession> GetFleetLivingMembers(ShipEventFleet fleet)
+    {
+        List<ICommonSession> sessions = new();
+
+        foreach (ShipEventTeam team in fleet.Teams)
+        {
+            sessions.AddRange(GetTeamLivingMembers(team));
+        }
+
+        return sessions;
+    }
+
     #endregion
 
     //yes, RT does not have such a method

@@ -35,13 +35,13 @@ roles-antag-shiptester = Become a pilot or gunner of a combat space shuttle..
 ## Roundend messages
 
 shipevent-roundend-heading = The contest is over. Here's a list of participating teams:
+shipevent-roundend-independents = Independent teams:
+shipevent-roundend-fleet = Fleet '[color={ $color }]{ $name }[/color]' under the guidance of '{ $admiralname }' with the total of '{ $points }', with the following teams:
 shipevent-roundend-team = Team '[color={ $color }]{ $name }[/color]' (ship name - '{ $shipname }') under the guidance of '{ $capname }':
 shipevent-roundend-teamstats = Has collected { $points } points, { $kills } kills, { $assists } assists, and they have respawned { $respawns } time(s).
-shipevent-roundend-winner = THE WINNER IS - TEAM '{ $name }'! Let's all congratulate them with their victory via OOC! (or badmouth them for their luck).
-
-## For discord roundend messages
-shipevent-roundend-discord-team = Team under the guidance of '{ $capname }' wins.
-shipevent-roundend-discord-teamstats = Has collected { $points } points, { $kills } kills, { $assists } assists, and they have respawned { $respawns } time(s).
+shipevent-roundend-winner-fleet = THE WINNER IS - FLEET '{ $name }'! Best team of the fleet - '{ $bestteamname }'.
+shipevent-roundend-winner-team = THE WINNER IS - TEAM '{ $name }'!
+shipevent-roundend-discord = Roundend report:
 
 ## Misc.
 
