@@ -1,18 +1,14 @@
 ﻿using Content.Shared.Theta.MobHUD;
-using Robust.Client.GameStates;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Shared.Player;
-using Robust.Shared.Prototypes;
 
 namespace Content.Client.Theta.MobHUD;
 
 public sealed class MobHUDSystem : SharedMobHUDSystem
 {
-    [Dependency] private readonly IPrototypeManager protMan = default!;
-    [Dependency] private readonly IClientGameStateManager statMan = default!;
-    [Dependency] private readonly IPlayerManager playerMan = default!;
-    [Dependency] private readonly IOverlayManager overlayMan = default!;
+    [Dependency] private readonly IPlayerManager _playerMan = default!;
+    [Dependency] private readonly IOverlayManager _overlayMan = default!;
 
     public MobHUDComponent? PlayerHUD;
 
@@ -20,23 +16,23 @@ public sealed class MobHUDSystem : SharedMobHUDSystem
     {
         base.Initialize();
         SubscribeLocalEvent<MobHUDComponent, ComponentInit>(OnHUDInit);
-        SubscribeLocalEvent<PlayerAttachedEvent>(OnPlayerEntityChange);
-        SubscribeLocalEvent<PlayerDetachedEvent>(OnPlayerEntityChange);
-        overlayMan.AddOverlay(new MobHUDOverlay());
+        SubscribeLocalEvent<LocalPlayerAttachedEvent>(OnPlayerEntityChange);
+        SubscribeLocalEvent<LocalPlayerDetachedEvent>(OnPlayerEntityChange);
+        _overlayMan.AddOverlay(new MobHUDOverlay());
     }
 
     public override void Shutdown()
     {
         base.Shutdown();
-        overlayMan.RemoveOverlay<MobHUDOverlay>();
+        _overlayMan.RemoveOverlay<MobHUDOverlay>();
     }
 
-    public void OnPlayerEntityChange(PlayerAttachedEvent _)
+    public void OnPlayerEntityChange(LocalPlayerAttachedEvent _)
     {
         UpdatePlayerHUD();
     }
 
-    public void OnPlayerEntityChange(PlayerDetachedEvent _)
+    public void OnPlayerEntityChange(LocalPlayerDetachedEvent _)
     {
         UpdatePlayerHUD();
     }
@@ -50,11 +46,11 @@ public sealed class MobHUDSystem : SharedMobHUDSystem
     {
         PlayerHUD = null;
 
-        var player = playerMan.LocalPlayer?.ControlledEntity;
-        if (player == null)
+        EntityUid? playerUid = _playerMan.LocalSession?.AttachedEntity;
+        if (playerUid == null)
             return;
 
-        if (EntityManager.TryGetComponent<MobHUDComponent>(player, out var hud))
+        if (EntityManager.TryGetComponent<MobHUDComponent>(playerUid, out var hud))
             PlayerHUD = hud;
     }
 }
