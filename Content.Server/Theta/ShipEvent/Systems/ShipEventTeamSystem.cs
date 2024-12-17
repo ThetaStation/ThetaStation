@@ -876,7 +876,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         {
             var hudProt = _protMan.Index<MobHUDPrototype>(session.Channel.UserName == team.Captain ? CaptainHUDPrototypeId : HUDPrototypeId).ShallowCopy();
             hudProt.Color = team.Color;
-            _hudSys.SetActiveHUDs(hud, new List<MobHUDPrototype> { hudProt });
+            _hudSys.SetActiveHUDs(uid, hud, new List<MobHUDPrototype> { hudProt });
         }
     }
 
