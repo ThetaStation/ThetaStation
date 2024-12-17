@@ -46,6 +46,7 @@ shipevent-roundend-discord = Roundend report:
 ## Misc.
 
 department-Unsorted = Unsorted
+shipevent-channel-fleet = Fleet
 shipevent-memberlimit = This team is full!
 shipevent-ship-destroyed = The crew's ship has been destroyed! Wait until it is restored again.
 shipevent-spawner-destroyed-join = The crew's cloner has been destroyed! Wait until it is restored again.

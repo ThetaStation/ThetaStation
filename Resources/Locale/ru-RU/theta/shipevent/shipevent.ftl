@@ -43,6 +43,7 @@ shipevent-roundend-winner-team = ПОБЕДИТЕЛЬ - КОМАНДА '{ $name 
 ## Misc.
 
 department-Unsorted = Прочее
+shipevent-channel-fleet = Флот
 shipevent-memberlimit = В этой команде нет места!
 shipevent-ship-destroyed = Корабль команды уничтожен! Подождите пока он заново не восстановится.
 shipevent-spawner-destroyed-join = Клонер команды уничтожен! Подождите пока он не восстановится.

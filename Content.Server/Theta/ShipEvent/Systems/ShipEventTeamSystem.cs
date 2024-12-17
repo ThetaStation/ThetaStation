@@ -220,6 +220,8 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         TimerTokenSource.Cancel();
         TimerTokenSource.Dispose();
         TimerTokenSource = new();
+
+        RoundEndReport = "";
     }
 
     private void CheckRoundendTimer()
@@ -355,7 +357,6 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         args.AddLine("```"); //code block
         args.AddLine(RoundEndReport);
         args.AddLine("```");
-        RoundEndReport = "";
     }
 
     #endregion
@@ -866,7 +867,8 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
                 if (marker.Team == null || marker.Team == component.Team)
                     return;
 
-                component.Team.Points += (int) Math.Ceiling(GetProjectileDamage(entity) * PointsPerHitMultiplier);
+                component.Team.Points += (int) (GetProjectileDamage(entity) * PointsPerHitMultiplier) * (marker.Team.Fleet == component.Team.Fleet ? -1 : 1);
+
                 if (!marker.Team.Hits.Keys.Contains(component.Team))
                     marker.Team.Hits[component.Team] = 0;
 
