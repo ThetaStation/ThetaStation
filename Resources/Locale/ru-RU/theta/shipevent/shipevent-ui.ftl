@@ -1,11 +1,12 @@
 ## Team view UI text
 
 shipevent-teamview-windowtitle = СПИСОК КОМАНД
-shipevent-teamview-heading = Активные команды:
-shipevent-teamview-heading-name = Название команды
-shipevent-teamview-heading-shipname = Название корабля
-shipevent-teamview-heading-crew = Живой экипаж
-shipevent-teamview-heading-points = Очки
+shipevent-teamview-heading-teams = Активные команды:
+shipevent-teamview-heading-mods = Активные модификаторы:
+shipevent-teamview-label-name = Имя
+shipevent-teamview-label-ship = Корабль
+shipevent-teamview-label-crew = Экипаж
+shipevent-teamview-label-points = Очки
 shipevent-teamview-toggle-name = Посмотреть активные команды
 shipevent-teamview-toggle-desc = Просмотр списка команд
 

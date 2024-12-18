@@ -9,7 +9,6 @@ using Content.Shared.Explosion;
 using Content.Shared.Ghost;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
-using Content.Shared.Mobs.Systems;
 using Content.Shared.Projectiles;
 using Content.Shared.Roles.Theta;
 using Content.Shared.Theta.ShipEvent.Components;
@@ -21,7 +20,8 @@ public sealed partial class ShipEventTeamSystem
 {
     [Dependency] private readonly IdCardSystem _cardSys = default!;
     [Dependency] private readonly MetaDataSystem _metaDataSys = default!;
-    [Dependency] private readonly MobStateSystem _mobStateSys = default!;
+
+    private const int MaxTeamNameLength = 15;
 
     #region Teams
 
@@ -57,7 +57,8 @@ public sealed partial class ShipEventTeamSystem
     {
         if (string.IsNullOrWhiteSpace(name))
             return false;
-        if (name.Length is > 25 or < 3)
+
+        if (name.Length > MaxTeamNameLength || name.Length < 1)
             return false;
 
         return Teams.All(team => team.Name != name);

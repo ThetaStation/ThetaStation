@@ -10,7 +10,7 @@ public abstract class SharedMobHUDSystem : EntitySystem
         SubscribeLocalEvent<MobHUDComponent, ComponentGetState>(GetHUDState);
         SubscribeLocalEvent<MobHUDComponent, ComponentHandleState>(SetHUDState);
     }
-    
+
     public void GetHUDState(EntityUid entity, MobHUDComponent hud, ref ComponentGetState args)
     {
         args.State = new MobHUDState
@@ -21,8 +21,9 @@ public abstract class SharedMobHUDSystem : EntitySystem
 
     public virtual void SetHUDState(EntityUid entity, MobHUDComponent hud, ref ComponentHandleState args)
     {
-        if (args.Current is not MobHUDState state) 
+        if (args.Current is not MobHUDState state)
             return;
+
         hud.ActiveHUDs = state.ActiveHUDs;
     }
 }

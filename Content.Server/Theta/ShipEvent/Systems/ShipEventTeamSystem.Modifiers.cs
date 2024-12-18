@@ -48,7 +48,6 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
             }
         }
 
-        //todo: make a proper UI for displaying em
         foreach (ShipEventTeam team in Teams)
         {
             TeamMessage(team,

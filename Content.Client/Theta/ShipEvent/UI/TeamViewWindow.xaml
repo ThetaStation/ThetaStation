@@ -1,10 +1,26 @@
 ﻿<DefaultWindow xmlns="https://spacestation14.io"
                Title="{Loc 'shipevent-teamview-windowtitle'}"
                MinSize="600 500"
-               SetSize="600 500">
-    <BoxContainer Orientation="Vertical">
-        <RichTextLabel Name="ActiveTeams"/>
-        <GridContainer Name="GridContent" Columns="4"/>
-        <Control MinSize="0 10" />
+               MaxSize="600 500">
+    <BoxContainer Orientation="Vertical" SeparationOverride="10">
+
+        <BoxContainer Orientation="Vertical" MinHeight="240" MaxHeight="240" Margin="5">
+        <Label Text="{Loc 'shipevent-teamview-heading-teams'}"/>
+        <ScrollContainer HScrollEnabled="False" VerticalExpand="True" Margin="2">
+            <BoxContainer
+                Name="TeamContainer"
+                Orientation="Vertical"/>
+        </ScrollContainer>
+        </BoxContainer>
+
+        <BoxContainer Orientation="Vertical" MinHeight="240" MaxHeight="240" Margin="5">
+        <Label Text="{Loc 'shipevent-teamview-heading-mods'}"/>
+        <ScrollContainer HScrollEnabled="False" VerticalExpand="True" Margin="2">
+            <BoxContainer
+                Name="ModifierContainer"
+                Orientation="Vertical"/>
+        </ScrollContainer>
+        </BoxContainer>
+
     </BoxContainer>
 </DefaultWindow>

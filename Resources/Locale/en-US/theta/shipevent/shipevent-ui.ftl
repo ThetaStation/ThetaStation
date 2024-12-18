@@ -1,11 +1,12 @@
 ## Team view UI text
 
 shipevent-teamview-windowtitle = TEAM LIST
-shipevent-teamview-heading = Active teams:
-shipevent-teamview-heading-name = Team name
-shipevent-teamview-heading-shipname = Ship name
-shipevent-teamview-heading-crew = Living crew
-shipevent-teamview-heading-points = Score
+shipevent-teamview-heading-teams = Active teams:
+shipevent-teamview-heading-mods = Active modifiers:
+shipevent-teamview-label-name = Name
+shipevent-teamview-label-ship = Ship
+shipevent-teamview-label-crew = Crew
+shipevent-teamview-label-points = Points
 shipevent-teamview-toggle-name = View active teams
 shipevent-teamview-toggle-desc = View team list
 
