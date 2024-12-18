@@ -12,7 +12,7 @@
       iconOn:
         sprite: Theta/ShipEvent/Actions.rsi
         state: lobby
-      event: !type:ShipEventReturnToLobbyEvent
+      event: !type:ReturnToLobbyEvent
       checkCanInteract: false
       useDelay: 0.5
 
@@ -30,7 +30,7 @@
       iconOn:
         sprite: Theta/ShipEvent/Actions.rsi
         state: team
-      event: !type:ShipEventTeamViewToggleEvent
+      event: !type:TeamViewToggleEvent
       checkCanInteract: false
       useDelay: 0.5
 
@@ -48,7 +48,7 @@
       iconOn:
         sprite: Theta/ShipEvent/Actions.rsi
         state: cap
-      event: !type:ShipEventCaptainMenuToggleEvent
+      event: !type:CaptainMenuToggleEvent
       checkCanInteract: false
       useDelay: 0.5
 
@@ -66,6 +66,6 @@
       iconOn:
         sprite: Theta/ShipEvent/Actions.rsi
         state: admiral
-      event: !type:ShipEventAdmiralMenuToggleEvent
+      event: !type:AdmiralMenuToggleEvent
       checkCanInteract: false
       useDelay: 0.5

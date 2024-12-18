@@ -8,4 +8,4 @@ public sealed partial class CaptainMenuToggleEvent : InstantActionEvent { }
 
 public sealed partial class AdmiralMenuToggleEvent : InstantActionEvent { }
 
-public sealed partial class ShipEventReturnToLobbyEvent : InstantActionEvent { }
+public sealed partial class ReturnToLobbyEvent : InstantActionEvent { }

@@ -148,7 +148,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         SubscribeLocalEvent<ShipEventTeamMarkerComponent, CaptainMenuToggleEvent>(OnCaptainMenuToggle);
         SubscribeLocalEvent<ShipEventTeamMarkerComponent, AdmiralMenuToggleEvent>(OnAdmiralMenuToggle);
 
-        SubscribeLocalEvent<ShipEventReturnToLobbyEvent>(OnReturnToLobbyAction);
+        SubscribeLocalEvent<ReturnToLobbyEvent>(OnReturnToLobbyAction);
         SubscribeLocalEvent<GenericWarningYesPressedMessage>(OnReturnPlayerToLobby);
 
         SubscribeLocalEvent<ShipEventTeamMarkerComponent, StartCollideEvent>(OnCollision);
@@ -494,7 +494,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
             new ShipPickerBoundUserInterfaceState(ShipTypes));
     }
 
-    private void OnReturnToLobbyAction(ShipEventReturnToLobbyEvent args)
+    private void OnReturnToLobbyAction(ReturnToLobbyEvent args)
     {
         if (!RuleSelected || args.Handled)
             return;
