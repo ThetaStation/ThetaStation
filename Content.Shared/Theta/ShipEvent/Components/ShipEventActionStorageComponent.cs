@@ -5,5 +5,6 @@ public sealed partial class ShipEventActionStorageComponent : Component
 {
     public EntityUid? TeamViewActionUid;
     public EntityUid? CaptainMenuActionUid;
+    public EntityUid? AdmiralMenuActionUid;
     public EntityUid? ReturnToLobbyActionUid;
 }

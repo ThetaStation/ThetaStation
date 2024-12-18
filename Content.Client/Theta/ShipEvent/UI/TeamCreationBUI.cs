@@ -1,6 +1,5 @@
 ﻿using Content.Shared.Theta.ShipEvent.UI;
 using JetBrains.Annotations;
-using Robust.Client.GameObjects;
 
 namespace Content.Client.Theta.ShipEvent.UI;
 
@@ -68,13 +67,13 @@ public sealed class ShipEventLobbyBoundUserInterface : BoundUserInterface
     {
         switch (state)
         {
-            case ShipEventCreateTeamBoundUserInterfaceState msg:
+            case CreateTeamBoundUserInterfaceState msg:
                 _teamCreation?.UpdateState(msg);
                 break;
             case ShipPickerBoundUserInterfaceState msg:
                 _teamCreation?.ShipPicker.UpdateState(msg);
                 break;
-            case ShipEventLobbyBoundUserInterfaceState msg:
+            case LobbyBoundUserInterfaceState msg:
                 _lobby?.UpdateState(msg);
                 break;
         }

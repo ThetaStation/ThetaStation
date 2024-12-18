@@ -1,6 +1,0 @@
-- type: entity
-  noSpawn: true
-  id: SET
-  parent: BaseGameRule
-  components:
-    - type: SETRule

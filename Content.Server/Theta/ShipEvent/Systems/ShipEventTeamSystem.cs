@@ -99,6 +99,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
     public const string FleetChannelID = "Fleet";
     public const string TeamViewActionPrototype = "ShipEventTeamViewToggle";
     public const string CaptainMenuActionPrototype = "ShipEventCaptainMenuToggle";
+    public const string AdmiralMenuActionPrototype = "ShipEventAdmiralMenuToggle";
     public const string ReturnToLobbyActionPrototype = "ShipEventReturnToLobbyAction";
 
     private bool _ruleSelected = false;
@@ -143,8 +144,9 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         SubscribeLocalEvent<RoundEndDiscordTextAppendEvent>(OnRoundEndDiscord);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
 
-        SubscribeLocalEvent<ShipEventTeamMarkerComponent, ShipEventTeamViewToggleEvent>(OnViewToggle);
-        SubscribeLocalEvent<ShipEventTeamMarkerComponent, ShipEventCaptainMenuToggleEvent>(OnCapMenuToggle);
+        SubscribeLocalEvent<ShipEventTeamMarkerComponent, TeamViewToggleEvent>(OnViewToggle);
+        SubscribeLocalEvent<ShipEventTeamMarkerComponent, CaptainMenuToggleEvent>(OnCaptainMenuToggle);
+        SubscribeLocalEvent<ShipEventTeamMarkerComponent, AdmiralMenuToggleEvent>(OnAdmiralMenuToggle);
 
         SubscribeLocalEvent<ShipEventReturnToLobbyEvent>(OnReturnToLobbyAction);
         SubscribeLocalEvent<GenericWarningYesPressedMessage>(OnReturnPlayerToLobby);
@@ -165,6 +167,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         InitializeAnomalies();
         InitializeStealth();
         InitializeCaptainMenu();
+        InitializeAdmiralMenu();
 
         OnRuleSelected += SetupTimers;
     }
@@ -370,14 +373,30 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
             _actSys.RemoveAction(actStorage.CaptainMenuActionUid);
             actStorage.CaptainMenuActionUid = null;
         }
+
+        if (actStorage.AdmiralMenuActionUid == null && session.Channel.UserName == team.Fleet?.Admiral)
+        {
+            actStorage.AdmiralMenuActionUid = _actSys.AddAction(uid, AdmiralMenuActionPrototype);
+        }
+        else if (actStorage.AdmiralMenuActionUid != null && session.Channel.UserName != team.Fleet?.Admiral)
+        {
+            _actSys.RemoveAction(actStorage.AdmiralMenuActionUid);
+            actStorage.AdmiralMenuActionUid = null;
+        }
     }
 
-    public List<TeamInterfaceState> GetTeamStates()
+    /// <summary>
+    /// Returns states of all teams if fleet is null
+    /// </summary>
+    public List<TeamInterfaceState> GetTeamStates(ShipEventFleet? fleet = null)
     {
         List<TeamInterfaceState> states = new();
 
         foreach (var team in Teams)
         {
+            if (fleet != null && team.Fleet != fleet)
+                continue;
+
             states.Add(new TeamInterfaceState
             {
                 Name = team.Name,
@@ -394,7 +413,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         return states;
     }
 
-    private void OnViewToggle(EntityUid uid, ShipEventTeamMarkerComponent marker, ShipEventTeamViewToggleEvent args)
+    private void OnViewToggle(EntityUid uid, ShipEventTeamMarkerComponent marker, TeamViewToggleEvent args)
     {
         if (!RuleSelected || args.Handled)
             return;
@@ -411,7 +430,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         _uiSys.SetUiState(uid, uiKey, new TeamViewBoundUserInterfaceState(GetTeamStates(), ActiveModifiers.Select(m => Loc.GetString(m.Name)).ToList()));
     }
 
-    private void OnCapMenuToggle(EntityUid uid, ShipEventTeamMarkerComponent marker, ShipEventCaptainMenuToggleEvent args)
+    private void OnCaptainMenuToggle(EntityUid uid, ShipEventTeamMarkerComponent marker, CaptainMenuToggleEvent args)
     {
         if (!RuleSelected || args.Handled)
             return;
@@ -425,20 +444,44 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         if (_uiSys.IsUiOpen(uid, uiKey))
             return;
 
-        foreach (var team in Teams)
+        ShipEventTeam? team = GetManagedTeam(session);
+        if (team != null)
         {
-            if (team.Captain != session.Channel.UserName)
-                continue;
-
-            _uiSys.SetUiState(uid, uiKey, new ShipEventCaptainMenuBoundUserInterfaceState(
-                    team.Members,
-                    team.ChosenShipType,
-                    team.JoinPassword,
-                    team.MaxMembers));
-            break;
+            _uiSys.SetUiState(uid, uiKey, new CaptainMenuBoundUserInterfaceState(
+            team.Members,
+            team.ChosenShipType,
+            team.JoinPassword,
+            team.MaxMembers));
+            _uiSys.OpenUi(uid, uiKey, session);
         }
+    }
 
-        _uiSys.OpenUi(uid, uiKey, session);
+    private void OnAdmiralMenuToggle(EntityUid uid, ShipEventTeamMarkerComponent marker, AdmiralMenuToggleEvent args)
+    {
+        if (!RuleSelected || args.Handled)
+            return;
+
+        if (marker.Team?.Fleet == null)
+            return;
+
+        if (!_playerMan.TryGetSessionByEntity(uid, out var session))
+            return;
+
+        args.Handled = true;
+
+        Enum uiKey = AdmiralMenuUiKey.Key;
+        if (_uiSys.IsUiOpen(uid, uiKey))
+            return;
+
+        ShipEventTeam? team = GetManagedTeam(session);
+        if (team != null)
+        {
+            _uiSys.SetUiState(uid, uiKey, new AdmiralMenuBoundUserInterfaceState
+            {
+                Teams = GetTeamStates(marker.Team.Fleet)
+            });
+            _uiSys.OpenUi(uid, uiKey, session);
+        }
     }
 
     private void OnShipPickerInfoRequest(GetShipPickerInfoMessage msg)

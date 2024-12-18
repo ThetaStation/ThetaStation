@@ -46,7 +46,7 @@ shipevent-shippicker-mediumclass = [color=yellow]Medium[/color]
 shipevent-shippicker-heavyclass = [color=red]Heavy[/color]
 shipevent-shippicker-specialclass = [color=pink]Special[/color]
 
-# Captain's menu
+## Captain's menu
 
 shipevent-capmenu-windowtitle = TEAM MANAGEMENT
 shipevent-capmenu-shipmanagement = Ship management:
@@ -59,6 +59,14 @@ shipevent-capmenu-setpassword = SET PASSWORD
 shipevent-capmenu-setmaxcrew = SET CREW MAX
 shipevent-capmenu-toggle-name = Team management
 shipevent-capmenu-toggle-desc = Change your ship, kick team members, make announcements, etc.
+
+## Admiral's menu
+
+shipevent-admmenu-windowtitle = FLEET MANAGEMENT
+shipevent-admmenu-manageteam = Manage
+shipevent-admmenu-createteam = Create team
+shipevent-admmenu-toggle-name = Fleet management
+shipevent-admmenu-toggle-desc = Create, manage and disband fleet teams.
 
 ## Enter Password Menu
 

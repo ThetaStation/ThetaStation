@@ -4,11 +4,11 @@ namespace Content.Shared.Theta.ShipEvent.UI;
 
 //Lobby messages
 [Serializable, NetSerializable]
-public sealed class ShipEventLobbyBoundUserInterfaceState : BoundUserInterfaceState
+public sealed class LobbyBoundUserInterfaceState : BoundUserInterfaceState
 {
     public readonly List<TeamInterfaceState> Teams;
 
-    public ShipEventLobbyBoundUserInterfaceState(List<TeamInterfaceState> teams)
+    public LobbyBoundUserInterfaceState(List<TeamInterfaceState> teams)
     {
         Teams = teams;
     }
@@ -35,11 +35,11 @@ public sealed class JoinToShipTeamsEvent : BoundUserInterfaceMessage
 
 //Team creation window messages
 [Serializable, NetSerializable]
-public sealed class ShipEventCreateTeamBoundUserInterfaceState : BoundUserInterfaceState
+public sealed class CreateTeamBoundUserInterfaceState : BoundUserInterfaceState
 {
     public readonly string UserMessage;
 
-    public ShipEventCreateTeamBoundUserInterfaceState(string userMessage)
+    public CreateTeamBoundUserInterfaceState(string userMessage)
     {
         UserMessage = userMessage;
     }

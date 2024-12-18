@@ -45,7 +45,7 @@ public sealed class TeamConsoleSystem : EntitySystem
 
     private void UpdateState(EntityUid uid)
     {
-        _uiSystem.SetUiState(uid, TeamCreationUiKey.Key, new ShipEventLobbyBoundUserInterfaceState(_shipSys.GetTeamStates()));
+        _uiSystem.SetUiState(uid, TeamCreationUiKey.Key, new LobbyBoundUserInterfaceState(_shipSys.GetTeamStates()));
     }
 
     private void OnTeamCreationRequest(EntityUid uid, TeamConsoleComponent component, TeamCreationRequest args)
@@ -80,7 +80,7 @@ public sealed class TeamConsoleSystem : EntitySystem
                 break;
         }
 
-        _uiSystem.SetUiState(uid, uiKey, new ShipEventCreateTeamBoundUserInterfaceState(Loc.GetString(text)));
+        _uiSystem.SetUiState(uid, uiKey, new CreateTeamBoundUserInterfaceState(Loc.GetString(text)));
     }
 
 

@@ -7,11 +7,10 @@ using Robust.Client.UserInterface.XAML;
 
 namespace Content.Client.Theta.ShipEvent.UI;
 
-//todo: add ability to kick members from team, make team announcements & other necessary stuff
 [GenerateTypedNameReferences]
 public sealed partial class CaptainMenuWindow : DefaultWindow
 {
-    public ShipPickerWindow shipPicker = default!;
+    public ShipPickerWindow ShipPicker = default!;
 
     public event Action<BaseButton.ButtonEventArgs>? ShipPickerButtonPressed;
     public event Action<BaseButton.ButtonEventArgs>? KickButtonPressed;
@@ -26,15 +25,15 @@ public sealed partial class CaptainMenuWindow : DefaultWindow
     {
         RobustXamlLoader.Load(this);
 
-        shipPicker = new ShipPickerWindow();
-        shipPicker.OnSelectionMade += SetChosenShipLabel;
+        ShipPicker = new ShipPickerWindow();
+        ShipPicker.OnSelectionMade += SetChosenShipLabel;
 
         MaxMembersEdit.IsValid = value => value >= 0 && value <= 100;
         MaxMembersEdit.InitDefaultButtons();
 
         ShipPickerButton.OnPressed += _ =>
         {
-            shipPicker.OpenCentered();
+            ShipPicker.OpenCentered();
             ShipPickerButtonPressed?.Invoke(_);
         };
         KickButton.OnPressed += _ =>
@@ -56,7 +55,7 @@ public sealed partial class CaptainMenuWindow : DefaultWindow
         ShipName.Text = Loc.GetString(selection!.Name);
     }
 
-    public void UpdateState(ShipEventCaptainMenuBoundUserInterfaceState state)
+    public void UpdateState(CaptainMenuBoundUserInterfaceState state)
     {
         MemberList.Text = string.Join(';', state.Members);
         ShipName.Text = Loc.GetString(state.CurrentShipType?.Name ?? "N/A");

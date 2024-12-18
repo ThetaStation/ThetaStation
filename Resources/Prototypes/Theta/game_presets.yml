@@ -24,17 +24,3 @@
     - SEFC
   supportedMaps: ShipEventMapPool
   forceMap: true
-
-- type: gamePreset
-  id: Tactical
-  alias:
-    - set
-    - ship-event-tactical
-  name: set-title
-  description: set-desc
-  showInVote: true
-  rules:
-    - ShipEvent
-    - SET
-  supportedMaps: ShipEventMapPool
-  forceMap: true

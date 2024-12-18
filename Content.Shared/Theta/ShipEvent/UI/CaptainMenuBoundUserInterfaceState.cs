@@ -3,14 +3,14 @@ using Robust.Shared.Serialization;
 namespace Content.Shared.Theta.ShipEvent.UI;
 
 [Serializable, NetSerializable]
-public sealed class ShipEventCaptainMenuBoundUserInterfaceState : BoundUserInterfaceState
+public sealed class CaptainMenuBoundUserInterfaceState : BoundUserInterfaceState
 {
     public ShipTypePrototype? CurrentShipType;
     public List<string> Members;
     public string? Password;
     public int MaxMembers;
 
-    public ShipEventCaptainMenuBoundUserInterfaceState(List<string> members, ShipTypePrototype? currentShipType, string? password, int maxMembers)
+    public CaptainMenuBoundUserInterfaceState(List<string> members, ShipTypePrototype? currentShipType, string? password, int maxMembers)
     {
         Members = members;
         CurrentShipType = currentShipType;
@@ -20,44 +20,44 @@ public sealed class ShipEventCaptainMenuBoundUserInterfaceState : BoundUserInter
 }
 
 [Serializable, NetSerializable]
-public sealed class ShipEventCaptainMenuChangeShipMessage : BoundUserInterfaceMessage
+public sealed class CaptainMenuChangeShipMessage : BoundUserInterfaceMessage
 {
     public ShipTypePrototype NewShip = default!;
 
-    public ShipEventCaptainMenuChangeShipMessage(ShipTypePrototype newShip)
+    public CaptainMenuChangeShipMessage(ShipTypePrototype newShip)
     {
         NewShip = newShip;
     }
 }
 
 [Serializable, NetSerializable]
-public sealed class ShipEventCaptainMenuKickMemberMessage : BoundUserInterfaceMessage
+public sealed class CaptainMenuKickMemberMessage : BoundUserInterfaceMessage
 {
     public string CKey;
 
-    public ShipEventCaptainMenuKickMemberMessage(string ckey)
+    public CaptainMenuKickMemberMessage(string ckey)
     {
         CKey = ckey;
     }
 }
 
 [Serializable, NetSerializable]
-public sealed class ShipEventCaptainMenuSetPasswordMessage : BoundUserInterfaceMessage
+public sealed class CaptainMenuSetPasswordMessage : BoundUserInterfaceMessage
 {
     public string? Password;
 
-    public ShipEventCaptainMenuSetPasswordMessage(string? password)
+    public CaptainMenuSetPasswordMessage(string? password)
     {
         Password = password;
     }
 }
 
 [Serializable, NetSerializable]
-public sealed class ShipEventCaptainMenuSetMaxMembersMessage : BoundUserInterfaceMessage
+public sealed class CaptainMenuSetMaxMembersMessage : BoundUserInterfaceMessage
 {
     public int MaxMembers;
 
-    public ShipEventCaptainMenuSetMaxMembersMessage(int maxMembers)
+    public CaptainMenuSetMaxMembersMessage(int maxMembers)
     {
         MaxMembers = maxMembers;
     }

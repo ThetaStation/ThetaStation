@@ -20,7 +20,7 @@ public sealed partial class TeamLobbyWindow : DefaultWindow
         Refresh.OnPressed += _ => RefreshButtonPressed?.Invoke(_);
     }
 
-    public void UpdateState(ShipEventLobbyBoundUserInterfaceState msg)
+    public void UpdateState(LobbyBoundUserInterfaceState msg)
     {
         TeamList.Update(msg.Teams, Loc.GetString("shipevent-lobby-jointeam"));
         TeamList.TeamSelected += state => JoinButtonPressed?.Invoke(state.Name, state.HasPassword);

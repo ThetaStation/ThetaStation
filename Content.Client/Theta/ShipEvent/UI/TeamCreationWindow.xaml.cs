@@ -52,7 +52,7 @@ public sealed partial class TeamCreationWindow : DefaultWindow
         ShipLabel.Text = $"{desc} {ship}";
     }
 
-    public void UpdateState(ShipEventCreateTeamBoundUserInterfaceState state)
+    public void UpdateState(CreateTeamBoundUserInterfaceState state)
     {
         UserMessage.Text = state.UserMessage;
     }

@@ -51,3 +51,21 @@
       event: !type:ShipEventCaptainMenuToggleEvent
       checkCanInteract: false
       useDelay: 0.5
+
+- type: entity
+  id: ShipEventAdmiralMenuToggle
+  name: shipevent-admmenu-toggle-name
+  description: shipevent-admmenu-toggle-desc
+  noSpawn: true
+  components:
+    - type: InstantAction
+      itemIconStyle: NoItem
+      icon:
+        sprite: Theta/ShipEvent/Actions.rsi
+        state: admiral
+      iconOn:
+        sprite: Theta/ShipEvent/Actions.rsi
+        state: admiral
+      event: !type:ShipEventAdmiralMenuToggleEvent
+      checkCanInteract: false
+      useDelay: 0.5

@@ -46,7 +46,7 @@ shipevent-shippicker-mediumclass = [color=yellow]Средний[/color]
 shipevent-shippicker-heavyclass = [color=red]Тяжёлый[/color]
 shipevent-shippicker-specialclass = [color=pink]Особый[/color]
 
-# Captain's menu
+## Captain's menu
 
 shipevent-capmenu-windowtitle = УПРАВЛЕНИЕ КОМАНДОЙ
 shipevent-capmenu-shipmanagement = Управление кораблём:
@@ -59,6 +59,14 @@ shipevent-capmenu-setpassword = УСТАНОВИТЬ ПАРОЛЬ
 shipevent-capmenu-setmaxcrew = УСТАНОВИТЬ МАКСИМУМ
 shipevent-capmenu-toggle-name = Управление командой
 shipevent-capmenu-toggle-desc = Меняйте корабль, кикайте участников, делайте объявления и т.д.
+
+## Admiral's menu
+
+shipevent-admmenu-windowtitle = УПРАВЛЕНИЕ ФЛОТОМ
+shipevent-admmenu-manageteam = Управление
+shipevent-admmenu-createteam = Создать команду
+shipevent-admmenu-toggle-name = Управление флотом
+shipevent-admmenu-toggle-desc = Создавайте, удаляйте и управляйте командами флота.
 
 ## Turret loader
 
