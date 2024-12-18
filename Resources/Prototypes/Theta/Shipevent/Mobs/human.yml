@@ -48,6 +48,8 @@
           type: TeamViewBoundUserInterface
         enum.CaptainMenuUiKey.Key:
           type: CaptainMenuBoundUserInterface
+        enum.AdmiralMenuUiKey.Key:
+          type: AdmiralMenuBoundUserInterface
     - type: MobHUD
     - type: MindContainer
       ghostPrototype: ObserverShipEvent
