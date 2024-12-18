@@ -3,7 +3,7 @@
 shipevent-title = Битва на кораблях
 shipevent-desc = Нанотрейзен устроила испытания своих кораблей лёгкого класса рядом со станцией
 
-## Global annoucements & team messages
+## Global announcements & team messages
 
 shipevent-announcement-title = Управления флотом Нанотрейзен
 shipevent-eventannouncement = На станции начался полный хаос, после того как НТ устроили поблизости испытания боевой мощи своих кораблей лёгкого класса.
@@ -25,6 +25,12 @@ shipevent-roundendtimer-fivemins = До окончания раунда оста
 shipevent-roundendtimer-onemin = Раунд вот-вот закончится...
 shipevent-pointsadded = Команде добавлено { $points } очков, возрадуйтесь!
 
+## Fleet messages
+
+shipevent-fleet-admiralchange = Адмирал { $oldadm } был заменён на своём посту { $newadm }. Да здравствует новый адмирал!
+shipevent-fleet-newteam = К флоту присоединилась новая команда '{ $name }'!
+shipevent-fleet-remteam = Команда '{ $name }' покинула флот.
+
 ## Role stuff
 
 shipevent-role-name = Пилот
@@ -32,6 +38,7 @@ shipevent-role-greet = Вы - член испытательной группы, 
 roles-antag-shiptester = Стань пилотом или наводчиком орудий боевого космического шаттла.
 
 ## Roundend messages
+
 shipevent-roundend-heading = Соревнование окончено. Команды принявшие участие:
 shipevent-roundend-independents = Независимые команды:
 shipevent-roundend-fleet = Флот '[color={ $color }]{ $name }[/color]' под руководством '{ $admiralname }' набравший '{ $points }' очков, со следующими командами:

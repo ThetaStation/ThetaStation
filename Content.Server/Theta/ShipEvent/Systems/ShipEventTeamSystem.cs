@@ -79,6 +79,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
     public bool TimedRoundEnd = false;
 
     public float TeamCheckInterval;
+    public float FleetCheckInterval;
     public float PlayerCheckInterval;
     public float RespawnDelay;
     public int MaxSpawnOffset;
@@ -91,8 +92,9 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
     public int PointsPerKill;
     public int OutOfBoundsPenalty; //subtracted from team's points every update cycle while they're out of bounds
 
-    public const string HUDPrototypeId = "ShipeventHUD";
-    public const string CaptainHUDPrototypeId = "ShipeventHUDCaptain";
+    public const string HUDPrototypeId = "ShipEventHUD";
+    public const string CaptainHUDPrototypeId = "ShipEventHUDCaptain";
+    public const string AdmiralHUDPrototypeId = "ShipEventHUDAdmiral";
     public const string TeamChannelID = "Common";
     public const string FleetChannelID = "Fleet";
     public const string TeamViewActionPrototype = "ShipEventTeamViewToggle";
@@ -179,6 +181,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
     private void SetupTimers()
     {
         SetupTimer(TeamCheckInterval, CheckTeams);
+        SetupTimer(FleetCheckInterval, CheckFleets);
         SetupTimer(PlayerCheckInterval, CheckPlayers);
         SetupTimer(BoundsCompressionInterval, BoundsUpdate);
         SetupTimer(PickupSpawnInterval, PickupSpawn);
@@ -262,34 +265,11 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
             return;
 
         RoundEndEvent?.Invoke(args);
-
-        Dictionary<ShipEventFleet, List<ShipEventTeam>> teamsByFleet = new();
-        //can't put a null key into dict so independent teams are in a separate list
-        List<ShipEventTeam> independentTeams = new();
-
-        foreach (ShipEventTeam team in Teams)
-        {
-            if (team.Fleet == null)
-            {
-                independentTeams.Add(team);
-                continue;
-            }
-
-            teamsByFleet[team.Fleet].Add(team);
-        }
-
-        teamsByFleet.OrderByDescending(pair => GetFleetPoints(pair.Key));
-        foreach (ShipEventFleet fleet in Fleets)
-        {
-            teamsByFleet[fleet].OrderByDescending(team => team.Points);
-        }
-        independentTeams.OrderByDescending(team => team.Points);
-
         RoundEndReport += Loc.GetString("shipevent-roundend-heading") + "\n";
-        foreach (var pair in teamsByFleet)
-        {
-            ShipEventFleet fleet = pair.Key;
 
+        List<ShipEventFleet> sortedFleets = Fleets.OrderByDescending(GetFleetPoints).ToList();
+        foreach (ShipEventFleet fleet in sortedFleets)
+        {
             RoundEndReport += "---\n";
 
             RoundEndReport += Loc.GetString("shipevent-roundend-fleet",
@@ -299,7 +279,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
                 ("points", GetFleetPoints(fleet))
             ) + "\n\n";
 
-            foreach (ShipEventTeam team in pair.Value)
+            foreach (ShipEventTeam team in fleet.Teams)
             {
                 RoundEndReport += Loc.GetString("shipevent-roundend-team",
                     ("name", team.Name),
@@ -318,6 +298,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
 
         RoundEndReport += "---\n";
         RoundEndReport += Loc.GetString("shipevent-roundend-independents") + "\n";
+        List<ShipEventTeam> independentTeams = Teams.Where(team => team.Fleet == null).ToList();
         foreach (ShipEventTeam team in independentTeams)
         {
             RoundEndReport += Loc.GetString("shipevent-roundend-team",
@@ -333,12 +314,13 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         }
         RoundEndReport += "---\n\n";
 
-        if (teamsByFleet.Count > 0 &&
-            (independentTeams.Count == 0 || GetFleetPoints(teamsByFleet.First().Key) > independentTeams[0].Points))
+        if (Fleets.Count > 0 &&
+            (independentTeams.Count == 0 || GetFleetPoints(sortedFleets[0]) > independentTeams[0].Points))
         {
+            ShipEventTeam bestTeam = sortedFleets[0].Teams.OrderByDescending(team => team.Points).First();
             RoundEndReport += Loc.GetString("shipevent-roundend-winner-fleet",
-                ("name", teamsByFleet.First().Key.Name),
-                ("bestteamname", teamsByFleet.First().Value[0].Name)
+                ("name", sortedFleets[0].Name),
+                ("bestteamname", bestTeam.Name)
             ) + "\n";
         }
         else
@@ -668,6 +650,30 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         }
     }
 
+    private void CheckFleets()
+    {
+        foreach (ShipEventFleet fleet in Fleets)
+        {
+            if (!fleet.AdmiralLocked && fleet.Teams.Count != 0 &&
+                (fleet.Admiral == null || !_playerMan.TryGetSessionByUsername(fleet.Admiral, out _)))
+            {
+                ICommonSession? newAdmiral = null;
+
+                foreach (ShipEventTeam team in fleet.Teams)
+                {
+                    List<ICommonSession> activeMembers = GetTeamSessions(team);
+                    if (activeMembers.Count == 0)
+                        continue;
+
+                    newAdmiral = activeMembers[0];
+                    break;
+                }
+
+                AssignAdmiral(fleet, newAdmiral);
+            }
+        }
+    }
+
     /// <summary>
     /// Spawns ship and sets all related fields in team
     /// </summary>
@@ -726,6 +732,41 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         }
 
         Teams.Add(team);
+    }
+
+    public void AddTeamToFleet(ShipEventTeam team, ShipEventFleet fleet)
+    {
+        team.Fleet = fleet;
+        fleet.Teams.Add(team);
+
+        //todo: it would be cool to have colored teams inside the same fleet
+        //but since it's currently the easiest way to tell if team is a friend or a foe we have to override team's color
+        team.Color = fleet.Color;
+
+        //recolor the huds
+        foreach (ICommonSession member in GetTeamSessions(team))
+        {
+            SetupHUD(member, team);
+        }
+
+        FleetMessage(fleet, Loc.GetString("shipevent-fleet-newteam", ("name", team.Name)));
+    }
+
+    public void RemoveTeamFromFleet(ShipEventTeam team, ShipEventFleet fleet)
+    {
+        team.Fleet = null;
+        fleet.Teams.Remove(team);
+
+        team.Color = ColorPalette.GetNextColor();
+        team.Color = team.Color == fleet.Color ? ColorPalette.GetNextColor() : team.Color;
+
+        //recolor the huds
+        foreach (ICommonSession member in GetTeamSessions(team))
+        {
+            SetupHUD(member, team);
+        }
+
+        FleetMessage(fleet, Loc.GetString("shipevent-fleet-remteam", ("name", team.Name)));
     }
 
     /// <summary>
@@ -925,7 +966,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         }
     }
 
-    private void SetupHUD(ICommonSession session, ShipEventTeam team)
+    private void SetupHUD(ICommonSession session, ShipEventTeam? team = null, ShipEventFleet? fleet = null)
     {
         if (session.AttachedEntity == null)
             return;
@@ -934,8 +975,19 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
 
         if (EntityManager.TryGetComponent<MobHUDComponent>(uid, out var hud))
         {
-            var hudProt = _protMan.Index<MobHUDPrototype>(session.Channel.UserName == team.Captain ? CaptainHUDPrototypeId : HUDPrototypeId).ShallowCopy();
-            hudProt.Color = team.Color;
+            string hudProtId = HUDPrototypeId;
+
+            if (fleet != null && session.Channel.UserName == fleet.Admiral)
+            {
+                hudProtId = AdmiralHUDPrototypeId;
+            }
+            else if (team != null && session.Channel.UserName == team.Captain)
+            {
+                hudProtId = CaptainHUDPrototypeId;
+            }
+
+            MobHUDPrototype hudProt = _protMan.Index<MobHUDPrototype>(hudProtId).ShallowCopy();
+            hudProt.Color = team?.Color ?? Color.White;
             _hudSys.SetActiveHUDs(uid, hud, new List<MobHUDPrototype> { hudProt });
         }
     }
@@ -958,6 +1010,21 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
             SetupActions(captain, team);
             SetupHUD(captain, team);
         }
+    }
+
+    public void AssignAdmiral(ShipEventFleet fleet, ICommonSession? admiral)
+    {
+        if (admiral?.Channel.UserName != fleet.Admiral)
+            FleetMessage(fleet, Loc.GetString("shipevent-fleet-admiralchange", ("oldadm", fleet.Admiral ?? "NONE"), ("newadm", admiral?.Channel.UserName ?? "NONE")));
+
+        if (fleet.Admiral != null &&
+            _playerMan.TryGetUserId(fleet.Admiral, out var id) &&
+            _mindSys.TryGetMind(id, out var mindUid))
+        {
+            QueueDel(mindUid);
+        }
+
+        fleet.Admiral = admiral?.Channel.UserName;
     }
 
     private void OnTeammateSpeak(EntityUid uid, ShipEventTeamMarkerComponent marker, EntitySpokeEvent args)

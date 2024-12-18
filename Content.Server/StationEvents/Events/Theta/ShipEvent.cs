@@ -31,6 +31,7 @@ public sealed partial class ShipEventRuleComponent : Component
     //time
     [DataField("roundDuration")] public int RoundDuration; //set to negative if you don't need a timed round end
     [DataField("teamCheckInterval")] public float TeamCheckInterval;
+    [DataField("fleetCheckInterval")] public float FleetCheckInterval;
     [DataField("playerCheckInterval")] public float PlayerCheckInterval;
     [DataField("respawnDelay")] public int RespawnDelay;
     [DataField("bonusInterval")] public int BonusInterval;
@@ -126,6 +127,7 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         _shipSys.RoundDuration = component.RoundDuration;
         _shipSys.TimedRoundEnd = component.RoundDuration > 0;
         _shipSys.TeamCheckInterval = component.TeamCheckInterval;
+        _shipSys.FleetCheckInterval = component.FleetCheckInterval;
         _shipSys.PlayerCheckInterval = component.PlayerCheckInterval;
         _shipSys.RespawnDelay = component.RespawnDelay;
         _shipSys.BonusInterval = component.BonusInterval;

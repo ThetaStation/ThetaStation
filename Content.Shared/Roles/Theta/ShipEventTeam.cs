@@ -2,11 +2,17 @@
 
 namespace Content.Shared.Roles.Theta;
 
+/// <summary>
+/// A single ship and it's crew, controlled by the captain (may not be present).
+/// Most of the fields in this class should only be set by the methods inside the team system (captain, fleet, ship grids, members, etc.), 
+/// I'm just too lazy to implement proper access restrictions. So please take a look at the team system before touching anything.
+/// </summary>
 public sealed class ShipEventTeam
 {
     public string Name;
     public Color Color;
     public string? Captain;
+    public bool CaptainLocked; //if true new captain won't be selected when the old one disconnects
     public List<string> Members = new();
     public ShipEventFleet? Fleet = null;
 
@@ -25,7 +31,6 @@ public sealed class ShipEventTeam
     public float TimeSinceRemoval;
     public bool OutOfBoundsWarningReceived;
     public int LastBonusInterval; //how much times this team has acquired bonus points for surviving bonus interval
-    public bool CaptainLocked; //if true new captain won't be selected when the old one disconnects
 
     private string? _password;
     public string? JoinPassword

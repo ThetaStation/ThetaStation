@@ -1,5 +1,4 @@
 ﻿using Content.Shared.Theta.ShipEvent.UI;
-using Robust.Client.GameObjects;
 
 namespace Content.Client.Theta.ShipEvent.UI;
 

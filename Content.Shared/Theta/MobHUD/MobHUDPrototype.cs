@@ -17,9 +17,9 @@ public sealed class MobHUDPrototype : IPrototype, IEquatable<MobHUDPrototype>
     /// <summary>
     /// HUDs which can see this type of HUD
     /// </summary>
-    [DataField("allowedHUDs", required: true, customTypeSerializer: typeof(PrototypeIdListSerializer<MobHUDPrototype>))] 
+    [DataField("allowedHUDs", required: true, customTypeSerializer: typeof(PrototypeIdListSerializer<MobHUDPrototype>))]
     public List<string> AllowedHUDs = default!;
-    
+
     /// <summary>
     /// Color of this HUD, in hex. Leave empty if you don't want to recolor your sprite.
     /// </summary>
@@ -28,12 +28,14 @@ public sealed class MobHUDPrototype : IPrototype, IEquatable<MobHUDPrototype>
 
     public bool Equals(MobHUDPrototype? other)
     {
-        if (other == null){return false;}
+        if (other == null)
+            return false;
+
         return ID == other.ID;
     }
 
     public MobHUDPrototype ShallowCopy()
     {
-        return (MobHUDPrototype)MemberwiseClone();
+        return (MobHUDPrototype) MemberwiseClone();
     }
 }

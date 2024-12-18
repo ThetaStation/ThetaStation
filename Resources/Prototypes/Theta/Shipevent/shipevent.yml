@@ -8,6 +8,7 @@
       #time
       roundDuration: 1800
       teamCheckInterval: 5
+      fleetCheckInterval: 60
       playerCheckInterval: 2
       respawnDelay: 30
       bonusInterval: 600

@@ -25,12 +25,17 @@ shipevent-roundendtimer-fivemins = Five mins left until round end, destroy some 
 shipevent-roundendtimer-onemin = Round will end very soon...
 shipevent-pointsadded = Team received { $points } points, rejoice!
 
+## Fleet messages
+
+shipevent-fleet-admiralchange = Admiral { $oldadm } has been replaced by { $newadm }. Long live the new admiral!
+shipevent-fleet-newteam = New team '{ $name }' has joined the fleet!
+shipevent-fleet-remteam = Team '{ $name }' has left the fleet.
 
 ## Role stuff
 
 shipevent-role-name = Pilot
 shipevent-role-greet = You are a member of the light battle cruiser testing group, created by NanoTrasen to entertain the public. Destroy your enemies at any cost!
-roles-antag-shiptester = Become a pilot or gunner of a combat space shuttle..
+roles-antag-shiptester = Become a pilot or gunner of a combat space shuttle.
 
 ## Roundend messages
 
