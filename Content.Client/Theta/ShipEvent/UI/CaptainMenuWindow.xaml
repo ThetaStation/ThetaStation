@@ -34,5 +34,10 @@
                 <Button Name="SetPasswordButton" Text="{Loc 'shipevent-capmenu-setpassword'}" />
             </BoxContainer>
         </BoxContainer>
+        <Button
+            Name="DisbandTeamButton" 
+            Text="{Loc 'shipevent-capmenu-disband'}" 
+            Margin="5" 
+            StyleClasses="ButtonColorRed"/>
     </BoxContainer>
 </DefaultWindow>

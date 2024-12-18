@@ -57,6 +57,7 @@ shipevent-capmenu-memberlist = Члены команды:
 shipevent-capmenu-kickbutton = ВЫГНАТЬ ЧЛЕНА
 shipevent-capmenu-setpassword = УСТАНОВИТЬ ПАРОЛЬ
 shipevent-capmenu-setmaxcrew = УСТАНОВИТЬ МАКСИМУМ
+shipevent-capmenu-disband = РАСФОРМИРОВАТЬ КОМАНДУ
 shipevent-capmenu-toggle-name = Управление командой
 shipevent-capmenu-toggle-desc = Меняйте корабль, кикайте участников, делайте объявления и т.д.
 

@@ -41,6 +41,10 @@ public sealed class CaptainMenuBoundUserInterface : BoundUserInterface
             var password = _window.Password != "" ? _window.Password : null;
             SendMessage(new CaptainMenuSetPasswordMessage(password));
         };
+        _window.DisbandTeamButtonPressed += _ =>
+        {
+            SendMessage(new CaptainMenuDisbandTeamMessage());
+        };
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)

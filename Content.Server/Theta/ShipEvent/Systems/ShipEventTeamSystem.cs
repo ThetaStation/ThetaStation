@@ -925,6 +925,9 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
             ("removereason", removalReason == "" ? Loc.GetString("shipevent-remove-default") : removalReason));
         TeamMessage(team, message);
 
+        if (team.Fleet != null)
+            RemoveTeamFromFleet(team, team.Fleet);
+
         if (killPoints)
             AddKillPoints(team);
 

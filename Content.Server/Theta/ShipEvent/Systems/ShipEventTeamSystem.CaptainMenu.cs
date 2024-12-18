@@ -13,6 +13,7 @@ public partial class ShipEventTeamSystem
         SubscribeAllEvent<CaptainMenuKickMemberMessage>(OnKickMemberRequest);
         SubscribeAllEvent<CaptainMenuSetPasswordMessage>(OnSetNewPassword);
         SubscribeAllEvent<CaptainMenuSetMaxMembersMessage>(OnSetNewMaxMembers);
+        SubscribeAllEvent<CaptainMenuDisbandTeamMessage>(OnDisbandTeam);
     }
 
     /// <summary>
@@ -80,5 +81,15 @@ public partial class ShipEventTeamSystem
             _chatSys.SendSimpleMessage(Loc.GetString("shipevent-kicked"), session, ChatChannel.Local, Color.DarkRed);
             QueueDel(session.AttachedEntity);
         }
+    }
+
+    private void OnDisbandTeam(CaptainMenuDisbandTeamMessage msg)
+    {
+        if (!_playerMan.TryGetSessionByEntity(msg.Actor, out var session))
+            return;
+
+        ShipEventTeam? team = GetManagedTeam(session);
+        if (team != null)
+            RemoveTeam(team);
     }
 }

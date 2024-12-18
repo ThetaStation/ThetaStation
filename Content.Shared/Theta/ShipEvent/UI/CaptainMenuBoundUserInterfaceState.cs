@@ -64,6 +64,11 @@ public sealed class CaptainMenuSetMaxMembersMessage : BoundUserInterfaceMessage
 }
 
 [Serializable, NetSerializable]
+public sealed class CaptainMenuDisbandTeamMessage : BoundUserInterfaceMessage
+{
+}
+
+[Serializable, NetSerializable]
 public enum CaptainMenuUiKey
 {
     Key

@@ -57,6 +57,7 @@ shipevent-capmenu-memberlist = Members:
 shipevent-capmenu-kickbutton = KICK MEMBER
 shipevent-capmenu-setpassword = SET PASSWORD
 shipevent-capmenu-setmaxcrew = SET CREW MAX
+shipevent-capmenu-disband = DISBAND TEAM
 shipevent-capmenu-toggle-name = Team management
 shipevent-capmenu-toggle-desc = Change your ship, kick team members, make announcements, etc.
 
