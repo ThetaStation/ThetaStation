@@ -45,24 +45,12 @@ public sealed class TeamConsoleSystem : EntitySystem
 
     private void UpdateState(EntityUid uid)
     {
-        _uiSystem.SetUiState(uid, TeamCreationUiKey.Key, new ShipEventLobbyBoundUserInterfaceState(GetTeams()));
-    }
-
-    private List<ShipTeamForLobbyState> GetTeams()
-    {
-        List<ShipTeamForLobbyState> teamStates = new();
-        foreach (var team in _shipSys.Teams)
-        {
-            var hasPassword = team.JoinPassword != null;
-            teamStates.Add(new ShipTeamForLobbyState(team.Name, team.Members.Count, team.Captain ?? "NONE", hasPassword, team.MaxMembers));
-        }
-
-        return teamStates;
+        _uiSystem.SetUiState(uid, TeamCreationUiKey.Key, new ShipEventLobbyBoundUserInterfaceState(_shipSys.GetTeamStates()));
     }
 
     private void OnTeamCreationRequest(EntityUid uid, TeamConsoleComponent component, TeamCreationRequest args)
     {
-        if(!_playerManager.TryGetSessionByEntity(args.Actor, out var session))
+        if (!_playerManager.TryGetSessionByEntity(args.Actor, out var session))
             return;
 
         if (!_shipSys.AllowTeamRegistration)
@@ -76,7 +64,7 @@ public sealed class TeamConsoleSystem : EntitySystem
             return;
         }
 
-        _shipSys.CreateTeam(session, args.Name, args.ShipType, args.Password, args.MaxPlayers);
+        _shipSys.CreateTeam(args.Name, args.ShipType, args.Password, args.MaxPlayers, session);
     }
 
     private void SendResponse(EntityUid uid, Enum uiKey, ResponseTypes response)

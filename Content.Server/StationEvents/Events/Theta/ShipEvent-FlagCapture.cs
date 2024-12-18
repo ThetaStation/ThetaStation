@@ -66,10 +66,10 @@ public sealed class SEFCRule : StationEventSystem<SEFCRuleComponent>
         _mapGenSys.ClearArea(_shipSys.TargetMap, (Box2i) new Box2(fieldBounds.BottomLeft, fieldBounds.TopRight).Scale(0.1f));
         Spawn(FlagPrototypeId, new MapCoordinates(fieldBounds.Center, _shipSys.TargetMap));
 
-        _shipSys.CreateTeam(default!, "RED", null, null, 0, true);
+        _shipSys.CreateTeam("RED", null, null, 0, null);
         _shipSys.Teams[0].Color = Color.Red;
 
-        _shipSys.CreateTeam(default!, "BLU", null, null, 0, true);
+        _shipSys.CreateTeam("BLU", null, null, 0, null);
         _shipSys.Teams[1].Color = Color.Blue;
 
         _shipSys.AllowTeamRegistration = false;

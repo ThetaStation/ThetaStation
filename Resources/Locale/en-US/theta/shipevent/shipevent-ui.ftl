@@ -1,12 +1,17 @@
-## Team view UI text
+## Team list control
+
+shipevent-teamlist-name = Name
+shipevent-teamlist-captain = Captain
+shipevent-teamlist-crew = Members
+shipevent-teamlist-points = Points
+shipevent-teamlist-pass = Password
+shipevent-teamlist-empty = Empty
+
+## Team view
 
 shipevent-teamview-windowtitle = TEAM LIST
 shipevent-teamview-heading-teams = Active teams:
 shipevent-teamview-heading-mods = Active modifiers:
-shipevent-teamview-label-name = Name
-shipevent-teamview-label-ship = Ship
-shipevent-teamview-label-crew = Crew
-shipevent-teamview-label-points = Points
 shipevent-teamview-toggle-name = View active teams
 shipevent-teamview-toggle-desc = View team list
 
@@ -14,13 +19,8 @@ shipevent-teamview-toggle-desc = View team list
 
 shipevent-lobby-windowtitle = LOBBY
 shipevent-lobby-createteam = Create team
+shipevent-lobby-jointeam = Join
 shipevent-lobby-refresh = Refresh
-shipevent-lobby-empty = Empty
-shipevent-lobby-join = Join
-shipevent-lobby-team = Team
-shipevent-lobby-captain = Captain
-shipevent-lobby-crew = Crew
-shipevent-lobby-password = Password
 
 ## Team console - team creation
 

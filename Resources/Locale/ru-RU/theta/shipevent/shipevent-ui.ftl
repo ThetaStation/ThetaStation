@@ -1,12 +1,17 @@
-## Team view UI text
+## Team list control
+
+shipevent-teamlist-name = Имя
+shipevent-teamlist-captain = Капитан
+shipevent-teamlist-crew = Экипаж
+shipevent-teamlist-points = Очки
+shipevent-teamlist-pass = Пароль
+shipevent-teamlist-empty = Пусто
+
+## Team view
 
 shipevent-teamview-windowtitle = СПИСОК КОМАНД
 shipevent-teamview-heading-teams = Активные команды:
 shipevent-teamview-heading-mods = Активные модификаторы:
-shipevent-teamview-label-name = Имя
-shipevent-teamview-label-ship = Корабль
-shipevent-teamview-label-crew = Экипаж
-shipevent-teamview-label-points = Очки
 shipevent-teamview-toggle-name = Посмотреть активные команды
 shipevent-teamview-toggle-desc = Просмотр списка команд
 
@@ -14,13 +19,8 @@ shipevent-teamview-toggle-desc = Просмотр списка команд
 
 shipevent-lobby-windowtitle = ЛОББИ
 shipevent-lobby-createteam = Создать команду
+shipevent-lobby-jointeam = Вступить
 shipevent-lobby-refresh = Обновить
-shipevent-lobby-empty = Пусто
-shipevent-lobby-join = Войти
-shipevent-lobby-team = Команда
-shipevent-lobby-captain = Капитан
-shipevent-lobby-crew = Экипаж
-shipevent-lobby-password = Пароль
 
 ## Team console - team creation
 
@@ -62,16 +62,6 @@ shipevent-capmenu-toggle-desc = Меняйте корабль, кикайте у
 
 ## Turret loader
 
-shipevent-turretloader-windowtitle = ЗАРЯДНИК ОРУДИЙ
-shipevent-turretloader-status = Статус:
-shipevent-turretloader-status-normal = Работает
-shipevent-turretloader-status-unbound = Нет привязки
-shipevent-turretloader-status-nocontainer = Нет контейнера
-shipevent-turretloader-status-broken = Неисправность
-shipevent-turretloader-ammocount = Количество патронов:
-shipevent-turretloader-turret = Турель:
-shipevent-turretloader-ejectcontainerbutton = ИЗВЛЕЧЬ КОНТЕЙНЕР
-shipevent-turretloader-refreshbutton = ОБНОВИТЬ UI
 shipevent-turretloader-ammocount-examine = Количество патронов: {$count}
 
 ## Enter Password Menu

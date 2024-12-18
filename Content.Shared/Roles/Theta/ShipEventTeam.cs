@@ -9,7 +9,7 @@ namespace Content.Shared.Roles.Theta;
 /// </summary>
 public sealed class ShipEventTeam
 {
-    public string Name;
+    public string Name = string.Empty;
     public Color Color;
     public string? Captain;
     public bool CaptainLocked; //if true new captain won't be selected when the old one disconnects
@@ -45,13 +45,5 @@ public sealed class ShipEventTeam
     {
         get => _maxMembers;
         set => _maxMembers = int.Clamp(value, 0, 100);
-    }
-
-    public ShipEventTeam(string name, Color color, string? captain, string? password = null)
-    {
-        Name = name;
-        Color = color;
-        Captain = captain;
-        _password = password;
     }
 }

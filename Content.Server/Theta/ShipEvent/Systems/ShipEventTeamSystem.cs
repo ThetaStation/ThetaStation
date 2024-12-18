@@ -372,6 +372,28 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         }
     }
 
+    public List<TeamInterfaceState> GetTeamStates()
+    {
+        List<TeamInterfaceState> states = new();
+
+        foreach (var team in Teams)
+        {
+            states.Add(new TeamInterfaceState
+            {
+                Name = team.Name,
+                Color = team.Color,
+                Fleet = team.Fleet?.Name,
+                Captain = team.Captain,
+                Members = team.Members.Count,
+                MaxMembers = team.MaxMembers,
+                Points = team.Points,
+                HasPassword = team.JoinPassword != null
+            });
+        }
+
+        return states;
+    }
+
     private void OnViewToggle(EntityUid uid, ShipEventTeamMarkerComponent marker, ShipEventTeamViewToggleEvent args)
     {
         if (!RuleSelected || args.Handled)
@@ -382,24 +404,11 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
 
         args.Handled = true;
 
-        List<TeamViewTeamState> teamInfo = new();
-        foreach (var team in Teams)
-        {
-            teamInfo.Add(new TeamViewTeamState
-            {
-                Name = team.Name,
-                Color = team.Color,
-                ShipName = team.QueuedForRespawn ? null : team.ShipName,
-                AliveCrewCount = team.QueuedForRespawn ? null : GetTeamLivingMembers(team).Count().ToString(),
-                Points = team.Points,
-            });
-        }
-
         Enum uiKey = TeamViewUiKey.Key;
         if (_uiSys.IsUiOpen(uid, uiKey))
             return;
         _uiSys.OpenUi(uid, uiKey, session);
-        _uiSys.SetUiState(uid, uiKey, new TeamViewBoundUserInterfaceState(teamInfo, ActiveModifiers.Select(m => Loc.GetString(m.Name)).ToList()));
+        _uiSys.SetUiState(uid, uiKey, new TeamViewBoundUserInterfaceState(GetTeamStates(), ActiveModifiers.Select(m => Loc.GetString(m.Name)).ToList()));
     }
 
     private void OnCapMenuToggle(EntityUid uid, ShipEventTeamMarkerComponent marker, ShipEventCaptainMenuToggleEvent args)
@@ -531,7 +540,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
     {
         uid = null;
 
-        if (!AllowPlayerRespawn && !bypass)
+        if (!(AllowPlayerRespawn || bypass))
             return false;
 
         if (team.ShipGrids.Count == 0)
@@ -543,11 +552,6 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
 
         uid = Spawn(Comp<ShipEventSpawnerComponent>(spawnerUid.Value).Prototype, Transform(spawnerUid.Value).Coordinates);
         Comp<ShipEventTeamMarkerComponent>(uid.Value).Team = team;
-        if (!team.Members.Contains(session.Channel.UserName))
-        {
-            team.Members.Add(session.Channel.UserName);
-            _chatMan.DispatchServerMessage(session, Loc.GetString("shipevent-role-greet"));
-        }
 
         //mind transfer
         EntityUid? lastUid = session.AttachedEntity;
@@ -566,6 +570,12 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         }
         _humanAppearanceSys.LoadProfile(uid.Value, profile);
         SetPlayerCharacterName(uid.Value, $"{GetName(uid.Value)} ({team.Name})");
+
+        if (!team.Members.Contains(session.Channel.UserName))
+        {
+            team.Members.Add(session.Channel.UserName);
+            _chatMan.DispatchServerMessage(session, Loc.GetString("shipevent-role-greet"));
+        }
 
         SetupHUD(session, team);
         SetupActions(session, team);
@@ -710,14 +720,16 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
     /// <summary>
     /// Does everything needed to create a new team, from faction creation to ship spawning.
     /// </summary>
-    public void CreateTeam(ICommonSession session, string name, ShipTypePrototype? initialShipType, string? password, int maxMembers, bool noCaptain = false)
+    public void CreateTeam(string name, ShipTypePrototype? initialShipType, string? password, int maxMembers, ICommonSession? captain)
     {
         if (!RuleSelected || !AllowTeamRegistration)
             return;
 
         Color color = ColorPalette.GetNextColor();
-        ShipEventTeam team = new(IsValidName(name) ? name : GenerateTeamName(), color, noCaptain ? null : session.Channel.UserName, password)
+        ShipEventTeam team = new()
         {
+            Name = IsValidName(name) ? name : GenerateTeamName(),
+            Color = color,
             ChosenShipType = initialShipType,
             JoinPassword = password,
             MaxMembers = maxMembers
@@ -725,10 +737,10 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         SpawnShip(team, name);
         SetMarkers(team);
 
-        if (!noCaptain)
+        if (captain != null)
         {
-            AssignCaptain(team, session);
-            TrySpawnPlayer(session, team, out _, bypass: true);
+            TrySpawnPlayer(captain, team, out _, bypass: true);
+            AssignCaptain(team, captain);
         }
 
         Teams.Add(team);
@@ -772,9 +784,6 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
     /// <summary>
     /// Adds player to faction (by name), spawns him on ship & does all other necessary stuff
     /// </summary>
-    /// <param name="session">player's session</param>
-    /// <param name="team">team's faction</param>
-    /// <param name="password">password of the team</param>
     public void JoinTeam(ICommonSession session, ShipEventTeam team, string? password)
     {
         if (team.JoinPassword != password)
@@ -807,10 +816,8 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
     }
 
     /// <summary>
-    ///     Deletes current team ship & members, and marks it for respawn
+    /// Deletes current team ship & members, and marks it for respawn
     /// </summary>
-    /// <param name="team">Team to respawn</param>
-    /// <param name="respawnReason">Message to show in team message</param>
     /// <param name="immediate">If this team should be respawned without delay</param>
     /// <param name="killPoints">Whether to add points to other teams for hits on respawned one</param>
     private void QueueTeamRespawn(ShipEventTeam team, string respawnReason = "", bool immediate = false, bool killPoints = true)
@@ -867,8 +874,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
     /// <summary>
     /// Removes team entirely
     /// </summary>
-    /// <param name="team">Team to remove</param>
-    /// <param name="killPoints">Whether to add points to other teams for hits on removed one</param>
+    /// <param name="killPoints">Whether to add points to other teams for hits on the removed one</param>
     public void RemoveTeam(ShipEventTeam team, string removalReason = "", bool killPoints = true)
     {
         var message = Loc.GetString(
@@ -920,9 +926,8 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
     }
 
     /// <summary>
-    ///     Adds points to other teams for destroying specified one.
+    /// Adds points to other teams for destroying the specified team.
     /// </summary>
-    /// <param name="team">Team which is destroyed</param>
     private void AddKillPoints(ShipEventTeam team)
     {
         var totalHits = team.Hits.Sum(obj => obj.Value);
@@ -992,6 +997,9 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         }
     }
 
+    /// <summary>
+    /// Assigns player as the captain of the team, assuming he's already spawned.
+    /// </summary>
     public void AssignCaptain(ShipEventTeam team, ICommonSession? captain)
     {
         if (captain?.Channel.UserName != team.Captain)
