@@ -48,6 +48,10 @@ public sealed partial class ShipEventRuleComponent : Component
     [DataField("pointsPerKill")] public int PointsPerKill;
     [DataField("outOfBoundsPenalty")] public int OutOfBoundsPenalty;
 
+    //fleets
+    [DataField("fleetMaxTeams")] public int FleetMaxTeams;
+    [DataField("fleetPointsPerTeam")] public int FleetPointsPerTeam; //how much points across all teams in the fleet are required to raise the limit
+
     //mapgen
     [DataField("initialObstacleAmount")] public int InitialObstacleAmount;
     [DataField("obstacleTypes")] public List<string> ObstacleTypes = new();
@@ -115,6 +119,7 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         return new EntityPrototype.ComponentRegistryEntry(iffSplitComp, mapping);
     }
 
+    //todo: this is absolute boilerplate, we should really make some kind of a source gen for setting those fields
     protected override void Started(EntityUid uid, ShipEventRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
         base.Started(uid, component, gameRule, args);
@@ -131,11 +136,15 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         _shipSys.PlayerCheckInterval = component.PlayerCheckInterval;
         _shipSys.RespawnDelay = component.RespawnDelay;
         _shipSys.BonusInterval = component.BonusInterval;
+
         _shipSys.PointsPerInterval = component.PointsPerInterval;
         _shipSys.PointsPerHitMultiplier = component.PointsPerHitMultiplier;
         _shipSys.PointsPerAssist = component.PointsPerAssist;
         _shipSys.PointsPerKill = component.PointsPerKill;
         _shipSys.OutOfBoundsPenalty = component.OutOfBoundsPenalty;
+
+        _shipSys.FleetMaxTeams = component.FleetMaxTeams;
+        _shipSys.FleetPointsPerTeam = component.FleetPointsPerTeam;
 
         _shipSys.PickupsPositionsCount = component.PickupsPositionsCount;
         _shipSys.PickupSpawnInterval = component.PickupsSpawnInterval;

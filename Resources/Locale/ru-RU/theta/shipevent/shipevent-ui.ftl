@@ -59,6 +59,7 @@ shipevent-capmenu-setpassword = УСТАНОВИТЬ ПАРОЛЬ
 shipevent-capmenu-setmaxcrew = УСТАНОВИТЬ МАКСИМУМ
 shipevent-capmenu-cap = Передача прав:
 shipevent-capmenu-setcap = НАЗНАЧИТЬ КАПИТАНОМ
+shipevent-capmenu-respawn = ЗАРЕСПАВНИТЬ КОМАНДУ
 shipevent-capmenu-disband = РАСФОРМИРОВАТЬ КОМАНДУ
 shipevent-capmenu-toggle-name = Управление командой
 shipevent-capmenu-toggle-desc = Меняйте корабль, кикайте участников, делайте объявления и т.д.
@@ -68,6 +69,7 @@ shipevent-capmenu-toggle-desc = Меняйте корабль, кикайте у
 shipevent-admmenu-windowtitle = УПРАВЛЕНИЕ ФЛОТОМ
 shipevent-admmenu-manageteam = Управление
 shipevent-admmenu-createteam = Создать команду
+shipevent-admmenu-createfailed = Не удалось создать новую команду, вероятно потому что вы достигли лимита.
 shipevent-admmenu-toggle-name = Управление флотом
 shipevent-admmenu-toggle-desc = Создавайте, удаляйте и управляйте командами флота.
 

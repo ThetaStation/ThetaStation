@@ -92,6 +92,9 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
     public int PointsPerKill;
     public int OutOfBoundsPenalty; //subtracted from team's points every update cycle while they're out of bounds
 
+    public int FleetMaxTeams;
+    public int FleetPointsPerTeam;
+
     public const string HUDPrototypeId = "ShipEventHUD";
     public const string CaptainHUDPrototypeId = "ShipEventHUDCaptain";
     public const string AdmiralHUDPrototypeId = "ShipEventHUDAdmiral";
@@ -766,13 +769,20 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
     /// <summary>
     /// Does everything needed to create a new team, from faction creation to ship spawning.
     /// </summary>
-    public void CreateTeam(string name, ShipTypePrototype? initialShipType, string? password, int maxMembers, ICommonSession? captain)
+    public bool TryCreateTeam(
+        string name,
+        ShipTypePrototype? initialShipType,
+        string? password,
+        int maxMembers,
+        ICommonSession? captain,
+        [NotNullWhen(true)] out ShipEventTeam? team)
     {
+        team = null;
         if (!RuleSelected || !AllowTeamRegistration)
-            return;
+            return false;
 
         Color color = ColorPalette.GetNextColor();
-        ShipEventTeam team = new()
+        team = new()
         {
             Name = IsValidName(name) ? name : GenerateTeamName(),
             Color = color,
@@ -790,10 +800,15 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         }
 
         Teams.Add(team);
+        return true;
     }
 
-    public void AddTeamToFleet(ShipEventTeam team, ShipEventFleet fleet)
+    public bool TryAddTeamToFleet(ShipEventTeam team, ShipEventFleet fleet)
     {
+        int limit = Math.Min(GetFleetPoints(fleet) / FleetPointsPerTeam, FleetMaxTeams);
+        if (fleet.Teams.Count > limit || fleet.Teams.Contains(team))
+            return false;
+
         team.Fleet = fleet;
         fleet.Teams.Add(team);
 
@@ -808,6 +823,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         }
 
         FleetMessage(fleet, Loc.GetString("shipevent-fleet-newteam", ("name", team.Name)));
+        return true;
     }
 
     public void RemoveTeamFromFleet(ShipEventTeam team, ShipEventFleet fleet)

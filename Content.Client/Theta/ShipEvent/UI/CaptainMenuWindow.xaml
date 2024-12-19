@@ -40,14 +40,16 @@
                 <Button Name="SetCaptainButton" Text="{Loc 'shipevent-capmenu-setcap'}" />
             </BoxContainer>
         </BoxContainer>
-        <Button
-            Name="RespawnTeamButton" 
-            Text="{Loc 'shipevent-capmenu-respawn'}" 
-            Margin="5" />
-        <Button
-            Name="DisbandTeamButton" 
-            Text="{Loc 'shipevent-capmenu-disband'}" 
-            Margin="5" 
-            StyleClasses="ButtonColorRed" />
+        <BoxContainer Orientation="Vertical">
+            <Button
+                Name="RespawnTeamButton" 
+                Text="{Loc 'shipevent-capmenu-respawn'}" 
+                Margin="5" />
+            <Button
+                Name="DisbandTeamButton" 
+                Text="{Loc 'shipevent-capmenu-disband'}" 
+                Margin="5" 
+                StyleClasses="ButtonColorRed" />
+        </BoxContainer>
     </BoxContainer>
 </DefaultWindow>

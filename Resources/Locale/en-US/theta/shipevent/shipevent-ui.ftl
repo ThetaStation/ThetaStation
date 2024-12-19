@@ -59,6 +59,7 @@ shipevent-capmenu-setpassword = SET PASSWORD
 shipevent-capmenu-setmaxcrew = SET CREW MAX
 shipevent-capmenu-cap = Rights transfer:
 shipevent-capmenu-setcap = TRANSFER CAPTAINSHIP
+shipevent-capmenu-respawn = RESPAWN TEAM
 shipevent-capmenu-disband = DISBAND TEAM
 shipevent-capmenu-toggle-name = Team management
 shipevent-capmenu-toggle-desc = Change your ship, kick team members, make announcements, etc.
@@ -68,6 +69,7 @@ shipevent-capmenu-toggle-desc = Change your ship, kick team members, make announ
 shipevent-admmenu-windowtitle = FLEET MANAGEMENT
 shipevent-admmenu-manageteam = Manage
 shipevent-admmenu-createteam = Create team
+shipevent-admmenu-createfailed = Failed to create a new team, probably because you've reached the fleet's limit.
 shipevent-admmenu-toggle-name = Fleet management
 shipevent-admmenu-toggle-desc = Create, manage and disband fleet teams.
 

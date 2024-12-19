@@ -20,6 +20,10 @@
       pointsPerKill : 10000
       outOfBoundsPenalty: 2000
 
+      #fleets
+      fleetMaxTeams: 10
+      fleetPointsPerTeam: 10000
+
       #map gen
       initialObstacleAmount: 200
       minFieldSize: 1000

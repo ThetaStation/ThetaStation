@@ -63,6 +63,24 @@ public partial class ShipEventTeamSystem
         if (!_playerMan.TryGetSessionByEntity(msg.Actor, out ICommonSession? session))
             return;
 
-        CreateTeam(msg.Name, null, null, 0, null);
+        ShipEventFleet? targetFleet = null;
+        foreach (ShipEventFleet fleet in Fleets)
+        {
+            if (fleet.Admiral == session.Channel.UserName)
+            {
+                targetFleet = fleet;
+                break;
+            }
+        }
+
+        if (targetFleet == null)
+            return;
+
+        if (!TryCreateTeam(msg.Name, null, null, 0, null, out var team) || !TryAddTeamToFleet(team, targetFleet))
+        {
+            //todo: this should be inside admiral's menu but I'm tired so someone else do it
+            //or better yet, integrate team creation window from lobby console into it
+            _chatSys.SendSimpleMessage(Loc.GetString("shipevent-admmenu-createfailed"), session, color: Color.DarkRed);
+        }
     }
 }
