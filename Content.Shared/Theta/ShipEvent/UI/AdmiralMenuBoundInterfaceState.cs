@@ -9,6 +9,12 @@ public sealed class AdmiralMenuManageTeamMessage : BoundUserInterfaceMessage
 }
 
 [Serializable, NetSerializable]
+public sealed class AdmiralMenuCreateTeamMessage : BoundUserInterfaceMessage
+{
+    public string Name = string.Empty;
+}
+
+[Serializable, NetSerializable]
 public sealed class AdmiralMenuBoundUserInterfaceState : BoundUserInterfaceState
 {
     public List<TeamInterfaceState> Teams = new();

@@ -17,6 +17,7 @@ public sealed class AdmiralMenuBoundUserInterface : BoundUserInterface
         _window.OnClose += Close;
 
         _window.TeamSelected += name => SendMessage(new AdmiralMenuManageTeamMessage { Name = name });
+        _window.OnCreateTeam += name => SendMessage(new AdmiralMenuCreateTeamMessage { Name = name });
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)

@@ -9,10 +9,12 @@ namespace Content.Client.Theta.ShipEvent.UI;
 public sealed partial class AdmiralMenuWindow : DefaultWindow
 {
     public Action<string>? TeamSelected;
+    public Action<string>? OnCreateTeam;
 
     public AdmiralMenuWindow()
     {
         RobustXamlLoader.Load(this);
+        CreateTeamButton.OnPressed += _ => OnCreateTeam?.Invoke(TeamNameEdit.Text);
     }
 
     public void Update(AdmiralMenuBoundUserInterfaceState state)

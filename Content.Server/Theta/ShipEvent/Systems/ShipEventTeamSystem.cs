@@ -641,7 +641,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
             var activeMembers = GetTeamSessions(team);
             var livingMembers = GetTeamLivingMembers(team);
 
-            if (RemoveEmptyTeams && activeMembers.Count == 0)
+            if (RemoveEmptyTeams && team.Fleet == null && activeMembers.Count == 0)
             {
                 emptyTeams.Add(team);
                 continue;
@@ -868,6 +868,9 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
     /// <param name="killPoints">Whether to add points to other teams for hits on respawned one</param>
     private void QueueTeamRespawn(ShipEventTeam team, string respawnReason = "", bool immediate = false, bool killPoints = true)
     {
+        if (team.QueuedForRespawn)
+            return;
+
         var message = Loc.GetString(
             "shipevent-team-respawn",
             ("respawnreason", respawnReason == "" ? Loc.GetString("shipevent-respawn-default") : respawnReason),

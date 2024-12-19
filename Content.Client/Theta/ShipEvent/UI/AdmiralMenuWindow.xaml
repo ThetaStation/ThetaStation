@@ -6,6 +6,7 @@
     <BoxContainer Orientation="Vertical">
         <ui:TeamListControl Name="TeamList" Margin="2"/>
         <BoxContainer Orientation="Horizontal" MaxHeight="20">
+            <LineEdit Name="TeamNameEdit"/>
             <Button
                 Name="CreateTeamButton"
                 Text="{Loc 'shipevent-admmenu-createteam'}"

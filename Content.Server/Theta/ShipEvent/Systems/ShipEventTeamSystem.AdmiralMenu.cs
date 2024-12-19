@@ -9,6 +9,7 @@ public partial class ShipEventTeamSystem
     private void InitializeAdmiralMenu()
     {
         SubscribeAllEvent<AdmiralMenuManageTeamMessage>(OnManageTeamRequest);
+        SubscribeAllEvent<AdmiralMenuCreateTeamMessage>(OnCreateTeamRequest);
     }
 
     private void OnManageTeamRequest(AdmiralMenuManageTeamMessage msg)
@@ -55,5 +56,13 @@ public partial class ShipEventTeamSystem
             targetTeam.JoinPassword,
             targetTeam.MaxMembers));
         _uiSys.OpenUi(msg.Actor, uiKey, session);
+    }
+
+    private void OnCreateTeamRequest(AdmiralMenuCreateTeamMessage msg)
+    {
+        if (!_playerMan.TryGetSessionByEntity(msg.Actor, out ICommonSession? session))
+            return;
+
+        CreateTeam(msg.Name, null, null, 0, null);
     }
 }

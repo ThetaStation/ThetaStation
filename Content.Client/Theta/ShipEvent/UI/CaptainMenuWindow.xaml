@@ -41,9 +41,13 @@
             </BoxContainer>
         </BoxContainer>
         <Button
+            Name="RespawnTeamButton" 
+            Text="{Loc 'shipevent-capmenu-respawn'}" 
+            Margin="5" />
+        <Button
             Name="DisbandTeamButton" 
             Text="{Loc 'shipevent-capmenu-disband'}" 
             Margin="5" 
-            StyleClasses="ButtonColorRed"/>
+            StyleClasses="ButtonColorRed" />
     </BoxContainer>
 </DefaultWindow>

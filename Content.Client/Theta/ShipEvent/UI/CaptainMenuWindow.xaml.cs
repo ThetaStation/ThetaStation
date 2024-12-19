@@ -17,6 +17,7 @@ public sealed partial class CaptainMenuWindow : DefaultWindow
     public event Action<BaseButton.ButtonEventArgs>? SetMaxMembersButtonPressed;
     public event Action<BaseButton.ButtonEventArgs>? SetPasswordButtonPressed;
     public event Action<BaseButton.ButtonEventArgs>? SetCaptainButtonPressed;
+    public event Action<BaseButton.ButtonEventArgs>? RespawnTeamButtonPressed;
     public event Action<BaseButton.ButtonEventArgs>? DisbandTeamButtonPressed;
 
     public string KickCKey => KickCKeyEdit.Text;
@@ -54,6 +55,10 @@ public sealed partial class CaptainMenuWindow : DefaultWindow
         SetCaptainButton.OnPressed += _ =>
         {
             SetCaptainButtonPressed?.Invoke(_);
+        };
+        RespawnTeamButton.OnPressed += _ =>
+        {
+            RespawnTeamButtonPressed?.Invoke(_);
         };
         DisbandTeamButton.OnPressed += _ =>
         {

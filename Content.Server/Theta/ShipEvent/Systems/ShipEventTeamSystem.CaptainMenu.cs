@@ -14,6 +14,7 @@ public partial class ShipEventTeamSystem
         SubscribeAllEvent<CaptainMenuSetPasswordMessage>(OnSetNewPassword);
         SubscribeAllEvent<CaptainMenuSetMaxMembersMessage>(OnSetNewMaxMembers);
         SubscribeAllEvent<CaptainMenuSetCaptainMessage>(OnSetNewCaptain);
+        SubscribeAllEvent<CaptainMenuRespawnTeamMessage>(OnRespawnTeam);
         SubscribeAllEvent<CaptainMenuDisbandTeamMessage>(OnDisbandTeam);
     }
 
@@ -99,6 +100,16 @@ public partial class ShipEventTeamSystem
             return;
 
         AssignCaptain(team, newcap);
+    }
+
+    private void OnRespawnTeam(CaptainMenuRespawnTeamMessage msg)
+    {
+        if (!_playerMan.TryGetSessionByEntity(msg.Actor, out var session))
+            return;
+
+        ShipEventTeam? team = GetManagedTeam(session);
+        if (team != null)
+            QueueTeamRespawn(team);
     }
 
     private void OnDisbandTeam(CaptainMenuDisbandTeamMessage msg)
