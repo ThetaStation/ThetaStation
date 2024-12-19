@@ -112,6 +112,9 @@ public sealed class TeamListControl : BoxContainer
                 state
             ));
         }
+
+        if (independentContainer.ChildCount == 0)
+            RemoveChild(independentScroll);
     }
 
     private BoxContainer CreateEntry(string[] data, string? buttonText, TeamInterfaceState? buttonData)

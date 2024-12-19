@@ -369,10 +369,9 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         _actSys.RemoveAction(actStorage.AdmiralMenuActionUid);
         _actSys.RemoveAction(actStorage.CaptainMenuActionUid);
 
-        if (actStorage.TeamViewActionUid == null)
-            actStorage.TeamViewActionUid = _actSys.AddAction(uid, TeamViewActionPrototype);
+        actStorage.TeamViewActionUid = _actSys.AddAction(uid, TeamViewActionPrototype);
 
-        if (actStorage.ReturnToLobbyActionUid == null && HasComp<GhostComponent>(uid))
+        if (HasComp<GhostComponent>(uid))
             actStorage.ReturnToLobbyActionUid = _actSys.AddAction(uid, ReturnToLobbyActionPrototype);
 
         if (actStorage.AdmiralMenuActionUid == null && session.Channel.UserName == fleet?.Admiral)
@@ -430,6 +429,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         Enum uiKey = TeamViewUiKey.Key;
         if (_uiSys.IsUiOpen(uid, uiKey))
             return;
+
         _uiSys.OpenUi(uid, uiKey, session);
         _uiSys.SetUiState(uid, uiKey, new TeamViewBoundUserInterfaceState(GetTeamStates(), ActiveModifiers.Select(m => Loc.GetString(m.Name)).ToList()));
     }
