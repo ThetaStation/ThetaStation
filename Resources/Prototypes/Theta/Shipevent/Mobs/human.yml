@@ -4,6 +4,7 @@
   parent: MobObserver
   components:
     - type: ShipEventTeamMarker
+    - type: ShipEventActionStorage
     - type: UserInterface
       interfaces:
         enum.TeamViewUiKey.Key:
@@ -39,6 +40,7 @@
       prototypes: [ShipEventStandard]
     - type: UsePlayerNameForEntityName
     - type: ShipEventTeamMarker
+    - type: ShipEventActionStorage
     - type: RadarHUD
     - type: UserInterface
       interfaces:
@@ -46,6 +48,8 @@
           type: TeamViewBoundUserInterface
         enum.CaptainMenuUiKey.Key:
           type: CaptainMenuBoundUserInterface
+        enum.AdmiralMenuUiKey.Key:
+          type: AdmiralMenuBoundUserInterface
     - type: MobHUD
     - type: MindContainer
       ghostPrototype: ObserverShipEvent

@@ -4,6 +4,8 @@ using Content.Shared.Administration;
 using Robust.Shared.Console;
 using System.Linq;
 using Content.Shared.Roles.Theta;
+using Robust.Server.Player;
+using Robust.Shared.Player;
 
 namespace Content.Server.Theta.ShipEvent;
 
@@ -58,7 +60,7 @@ public sealed class ToggleTeamRegistrationCommand : IConsoleCommand
     public string Description => "Disables/enables command registration.";
 
     public string Help => "";
-    
+
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         ShipEventTeamSystem seSys = IoCManager.Resolve<IEntityManager>().System<ShipEventTeamSystem>();
@@ -75,7 +77,7 @@ public sealed class ToggleEmptyTeamRemovalCommand : IConsoleCommand
     public string Description => "Disables/enables removal of empty teams.";
 
     public string Help => "";
-    
+
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         ShipEventTeamSystem seSys = IoCManager.Resolve<IEntityManager>().System<ShipEventTeamSystem>();
@@ -90,14 +92,14 @@ public sealed class RemoveTeamCommand : LocalizedCommands
     public override string Command => "se_remteam";
     public override string Description => "Removes team with specified name. Additionally, removal reason can be specified";
     public override string Help => "First arg - team name, second arg (optional) - removal reason. " +
-                                   "Name and removal reason should be separated by comma (as an argument itself), ex: 'se_remteam Team 1 , Assholes'";
+                                   "Name and removal reason should be separated by comma, example: 'se_remteam Team 1 , Blah blah blah'";
 
-    private ShipEventTeamSystem? seSys;
+    private ShipEventTeamSystem? _shipSys;
 
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
-        if(seSys == null)
-            seSys = IoCManager.Resolve<IEntityManager>().System<ShipEventTeamSystem>();
+        if (_shipSys == null)
+            _shipSys = IoCManager.Resolve<IEntityManager>().System<ShipEventTeamSystem>();
 
         if (args.Length == 0)
         {
@@ -106,50 +108,197 @@ public sealed class RemoveTeamCommand : LocalizedCommands
         }
 
         string teamName = "";
-        foreach (string arg in args)
+        int i = 0;
+        for (; i < args.Length; i++)
         {
-            if (arg == ",")
+            if (args[i] == ",")
+            {
+                i++;
                 break;
-            teamName += arg + " ";
+            }
+
+            teamName += args[i] + " ";
         }
         teamName = teamName.Trim();
 
-        bool commaPassed = false;
         string removalReason = "";
-        foreach (string arg in args)
+        for (; i < args.Length; i++)
         {
-            if (commaPassed)
-                removalReason += arg + " ";
-            if (arg == ",")
-                commaPassed = true;
+            removalReason += args[i] + " ";
         }
 
-        seSys = IoCManager.Resolve<IEntityManager>().System<ShipEventTeamSystem>();
-
-        ShipEventTeam? teamToRemove = null;
-        foreach (var team in seSys.Teams)
+        ShipEventTeam? targetTeam = null;
+        foreach (ShipEventTeam team in _shipSys.Teams)
         {
             if (team.Name == teamName)
             {
-                teamToRemove = team;
+                targetTeam = team;
                 break;
             }
         }
 
-        if (teamToRemove == null)
+        if (targetTeam == null)
         {
             shell.WriteError("No team with given name was found.");
             return;
         }
-        seSys.RemoveTeam(teamToRemove, removalReason);
+        _shipSys.RemoveTeam(targetTeam, removalReason);
     }
 
     public override CompletionResult GetCompletion(IConsoleShell shell, string[] args)
     {
-        if(seSys == null)
-            seSys = IoCManager.Resolve<IEntityManager>().System<ShipEventTeamSystem>();
-        if(args.Length == 1)
-            return CompletionResult.FromOptions(seSys.Teams.Select(t => t.Name));
+        if (_shipSys == null)
+            _shipSys = IoCManager.Resolve<IEntityManager>().System<ShipEventTeamSystem>();
+
+        if (args.Length == 1)
+            return CompletionResult.FromOptions(_shipSys.Teams.Select(t => t.Name));
+
+        return CompletionResult.Empty;
+    }
+}
+
+[AdminCommand(AdminFlags.Admin)]
+public sealed class DemoteCaptainCommand : LocalizedCommands
+{
+    public override string Command => "se_remcap";
+    public override string Description => "Demotes captain of the team. New captain can be specified.";
+    public override string Help => "First arg - team name, second arg (optional) - new captain's ckey." +
+                                   "Name and new cap should be separated by comma, example: 'se_remcap Team 1 , Cappie'";
+
+    private ShipEventTeamSystem? _shipSys;
+    private IPlayerManager? _playerMan;
+
+    public override void Execute(IConsoleShell shell, string argStr, string[] args)
+    {
+        if (_shipSys == null || _playerMan == null)
+        {
+            _shipSys = IoCManager.Resolve<IEntityManager>().System<ShipEventTeamSystem>();
+            _playerMan = IoCManager.Resolve<IPlayerManager>();
+        }
+
+        if (args.Length == 0)
+        {
+            shell.WriteError("Please specify team name.");
+            return;
+        }
+
+        string teamName = "";
+        int i = 0;
+        for (; i < args.Length; i++)
+        {
+            if (args[i] == ",")
+            {
+                i++;
+                break;
+            }
+
+            teamName += args[i] + " ";
+        }
+        teamName = teamName.Trim();
+
+        string newCapName = args[i];
+
+        ShipEventTeam? targetTeam = null;
+        foreach (ShipEventTeam team in _shipSys.Teams)
+        {
+            if (team.Name == teamName)
+            {
+                targetTeam = team;
+                break;
+            }
+        }
+
+        if (targetTeam == null)
+        {
+            shell.WriteError("No team with given name was found.");
+            return;
+        }
+
+        _playerMan.TryGetSessionByUsername(newCapName, out ICommonSession? newCap);
+        _shipSys.AssignCaptain(targetTeam, newCap);
+    }
+
+    public override CompletionResult GetCompletion(IConsoleShell shell, string[] args)
+    {
+        if (_shipSys == null)
+            _shipSys = IoCManager.Resolve<IEntityManager>().System<ShipEventTeamSystem>();
+
+        if (args.Length == 1)
+            return CompletionResult.FromOptions(_shipSys.Teams.Select(t => t.Name));
+
+        return CompletionResult.Empty;
+    }
+}
+
+[AdminCommand(AdminFlags.Admin)]
+public sealed class DemoteAdmiralCommand : LocalizedCommands
+{
+    public override string Command => "se_remadmiral";
+    public override string Description => "Demotes admiral of the fleet. New admiral can be specified.";
+    public override string Help => "First arg - team name, second arg (optional) - new admiral's ckey." +
+                                   "Name and new cap should be separated by comma, example: 'se_remadm Team 1 , Admiral'";
+
+    private ShipEventTeamSystem? _shipSys;
+    private IPlayerManager? _playerMan;
+
+    public override void Execute(IConsoleShell shell, string argStr, string[] args)
+    {
+        if (_shipSys == null || _playerMan == null)
+        {
+            _shipSys = IoCManager.Resolve<IEntityManager>().System<ShipEventTeamSystem>();
+            _playerMan = IoCManager.Resolve<IPlayerManager>();
+        }
+
+        if (args.Length == 0)
+        {
+            shell.WriteError("Please specify fleet name.");
+            return;
+        }
+
+        string fleetName = "";
+        int i = 0;
+        for (; i < args.Length; i++)
+        {
+            if (args[i] == ",")
+            {
+                i++;
+                break;
+            }
+
+            fleetName += args[i] + " ";
+        }
+        fleetName = fleetName.Trim();
+
+        string newAdmiralName = args[i];
+
+        ShipEventFleet? targetFleet = null;
+        foreach (ShipEventFleet fleet in _shipSys.Fleets)
+        {
+            if (fleet.Name == fleetName)
+            {
+                targetFleet = fleet;
+                break;
+            }
+        }
+
+        if (targetFleet == null)
+        {
+            shell.WriteError("No team with given name was found.");
+            return;
+        }
+
+        _playerMan.TryGetSessionByUsername(newAdmiralName, out ICommonSession? newAdmiral);
+        _shipSys.AssignAdmiral(targetFleet, newAdmiral);
+    }
+
+    public override CompletionResult GetCompletion(IConsoleShell shell, string[] args)
+    {
+        if (_shipSys == null)
+            _shipSys = IoCManager.Resolve<IEntityManager>().System<ShipEventTeamSystem>();
+
+        if (args.Length == 1)
+            return CompletionResult.FromOptions(_shipSys.Fleets.Select(t => t.Name));
+
         return CompletionResult.Empty;
     }
 }

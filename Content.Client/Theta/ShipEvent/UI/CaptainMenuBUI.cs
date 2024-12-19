@@ -1,7 +1,5 @@
-using System.Linq;
 using Content.Shared.Theta.ShipEvent.UI;
 using JetBrains.Annotations;
-using Robust.Client.GameObjects;
 
 namespace Content.Client.Theta.ShipEvent.UI;
 
@@ -25,23 +23,38 @@ public sealed class CaptainMenuBoundUserInterface : BoundUserInterface
         };
         _window.KickButtonPressed += _ =>
         {
-            SendMessage(new ShipEventCaptainMenuKickMemberMessage(_window.KickCKey));
+            SendMessage(new CaptainMenuKickMemberMessage(_window.KickCKey));
         };
-        _window.shipPicker.OnSelectionMade += _ =>
+        _window.ShipPicker.OnSelectionMade += _ =>
         {
-            if (_window.shipPicker.Selection == null)
+            if (_window.ShipPicker.Selection == null)
                 return;
 
-            SendMessage(new ShipEventCaptainMenuChangeShipMessage(_window.shipPicker.Selection));
+            SendMessage(new CaptainMenuChangeShipMessage(_window.ShipPicker.Selection));
         };
         _window.SetMaxMembersButtonPressed += _ =>
         {
-            SendMessage(new ShipEventCaptainMenuSetMaxMembersMessage(_window.MaxMembers));
+            SendMessage(new CaptainMenuSetMaxMembersMessage(_window.MaxMembers));
         };
         _window.SetPasswordButtonPressed += _ =>
         {
-            var password = _window.Password != "" ? _window.Password : null;
-            SendMessage(new ShipEventCaptainMenuSetPasswordMessage(password));
+            SendMessage(new CaptainMenuSetPasswordMessage(_window.Password != "" ? _window.Password : null));
+        };
+        _window.SetCaptainButtonPressed += _ =>
+        {
+            SendMessage(new CaptainMenuSetCaptainMessage(_window.CaptainCKey != "" ? _window.CaptainCKey : null));
+        };
+        _window.FormFleetButtonPressed += _ =>
+        {
+            SendMessage(new CaptainMenuFormFleetMessage());
+        };
+        _window.RespawnTeamButtonPressed += _ =>
+        {
+            SendMessage(new CaptainMenuRespawnTeamMessage());
+        };
+        _window.DisbandTeamButtonPressed += _ =>
+        {
+            SendMessage(new CaptainMenuDisbandTeamMessage());
         };
     }
 
@@ -49,12 +62,12 @@ public sealed class CaptainMenuBoundUserInterface : BoundUserInterface
     {
         switch (state)
         {
-            case ShipEventCaptainMenuBoundUserInterfaceState msg:
+            case CaptainMenuBoundUserInterfaceState msg:
                 base.UpdateState(state);
                 _window?.UpdateState(msg);
                 break;
             case ShipPickerBoundUserInterfaceState pickerMsg:
-                _window?.shipPicker.UpdateState(pickerMsg);
+                _window?.ShipPicker.UpdateState(pickerMsg);
                 break;
         }
     }

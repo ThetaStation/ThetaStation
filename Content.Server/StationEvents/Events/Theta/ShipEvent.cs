@@ -31,6 +31,7 @@ public sealed partial class ShipEventRuleComponent : Component
     //time
     [DataField("roundDuration")] public int RoundDuration; //set to negative if you don't need a timed round end
     [DataField("teamCheckInterval")] public float TeamCheckInterval;
+    [DataField("fleetCheckInterval")] public float FleetCheckInterval;
     [DataField("playerCheckInterval")] public float PlayerCheckInterval;
     [DataField("respawnDelay")] public int RespawnDelay;
     [DataField("bonusInterval")] public int BonusInterval;
@@ -47,6 +48,10 @@ public sealed partial class ShipEventRuleComponent : Component
     [DataField("pointsPerKill")] public int PointsPerKill;
     [DataField("outOfBoundsPenalty")] public int OutOfBoundsPenalty;
 
+    //fleets
+    [DataField("fleetMaxTeams")] public int FleetMaxTeams;
+    [DataField("fleetPointsPerTeam")] public int FleetPointsPerTeam; //how much points across all teams in the fleet are required to raise the limit
+
     //mapgen
     [DataField("initialObstacleAmount")] public int InitialObstacleAmount;
     [DataField("obstacleTypes")] public List<string> ObstacleTypes = new();
@@ -62,8 +67,6 @@ public sealed partial class ShipEventRuleComponent : Component
 
     //misc
     [DataField("spaceLightColor")] public Color? SpaceLightColor = null;
-    [DataField("hudPrototypeId")] public string HUDPrototypeId = "";
-    [DataField("captainHudPrototypeId")] public string CaptainHUDPrototypeId = "";
     [DataField("shipTypes")] public List<string> ShipTypes = new();
     [DataField("boundsCompressionDistance")] public int BoundsCompressionDistance;
     [DataField("pickupsPositions")] public int PickupsPositionsCount;
@@ -116,6 +119,7 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         return new EntityPrototype.ComponentRegistryEntry(iffSplitComp, mapping);
     }
 
+    //todo: this is absolute boilerplate, we should really make some kind of a source gen for setting those fields
     protected override void Started(EntityUid uid, ShipEventRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
         base.Started(uid, component, gameRule, args);
@@ -128,22 +132,24 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         _shipSys.RoundDuration = component.RoundDuration;
         _shipSys.TimedRoundEnd = component.RoundDuration > 0;
         _shipSys.TeamCheckInterval = component.TeamCheckInterval;
+        _shipSys.FleetCheckInterval = component.FleetCheckInterval;
         _shipSys.PlayerCheckInterval = component.PlayerCheckInterval;
         _shipSys.RespawnDelay = component.RespawnDelay;
         _shipSys.BonusInterval = component.BonusInterval;
+
         _shipSys.PointsPerInterval = component.PointsPerInterval;
         _shipSys.PointsPerHitMultiplier = component.PointsPerHitMultiplier;
         _shipSys.PointsPerAssist = component.PointsPerAssist;
         _shipSys.PointsPerKill = component.PointsPerKill;
         _shipSys.OutOfBoundsPenalty = component.OutOfBoundsPenalty;
 
+        _shipSys.FleetMaxTeams = component.FleetMaxTeams;
+        _shipSys.FleetPointsPerTeam = component.FleetPointsPerTeam;
+
         _shipSys.PickupsPositionsCount = component.PickupsPositionsCount;
         _shipSys.PickupSpawnInterval = component.PickupsSpawnInterval;
         _shipSys.PickupMinDistance = component.PickupMinDistance;
         _shipSys.PickupPrototype = component.PickupPrototype;
-
-        _shipSys.HUDPrototypeId = component.HUDPrototypeId;
-        _shipSys.CaptainHUDPrototypeId = component.CaptainHUDPrototypeId;
 
         _shipSys.MaxSpawnOffset = Math.Clamp(
             (int) Math.Round((float) _playerMan.PlayerCount * component.MetersPerPlayer / component.RoundFieldSizeTo) * component.RoundFieldSizeTo,

@@ -37,13 +37,21 @@ public sealed partial class ShipEventTeamSystem
     /// <param name="message">message text</param>
     /// <param name="chatChannel">chat channel (local by default)</param>
     /// <param name="color">color of message (team's color by default)</param>
-    public void TeamMessage(ShipEventTeam team, string message, ChatChannel chatChannel = ChatChannel.Local, Color? color = null)
+    public void TeamMessage(ShipEventTeam team, string message, ChatChannel channel = ChatChannel.Local, Color? color = null)
     {
         color ??= team.Color;
 
-        foreach (var session in GetTeamSessions(team))
+        foreach (ICommonSession session in GetTeamSessions(team))
         {
-            _chatSys.SendSimpleMessage(message, session, chatChannel, color);
+            _chatSys.SendSimpleMessage(message, session, channel, color);
+        }
+    }
+
+    public void FleetMessage(ShipEventFleet fleet, string message, ChatChannel channel = ChatChannel.Local, Color? color = null)
+    {
+        foreach (ShipEventTeam team in fleet.Teams)
+        {
+            TeamMessage(team, message, channel, color);
         }
     }
 
@@ -92,6 +100,42 @@ public sealed partial class ShipEventTeamSystem
             {
                 sessions.Add(session);
             }
+        }
+
+        return sessions;
+    }
+
+    public int GetFleetPoints(ShipEventFleet fleet)
+    {
+        int points = 0;
+
+        foreach (ShipEventTeam team in fleet.Teams)
+        {
+            points += team.Points;
+        }
+
+        return points;
+    }
+
+    public List<ICommonSession> GetFleetSessions(ShipEventFleet fleet)
+    {
+        List<ICommonSession> sessions = new();
+
+        foreach (ShipEventTeam team in fleet.Teams)
+        {
+            sessions.AddRange(GetTeamSessions(team));
+        }
+
+        return sessions;
+    }
+
+    public List<ICommonSession> GetFleetLivingMembers(ShipEventFleet fleet)
+    {
+        List<ICommonSession> sessions = new();
+
+        foreach (ShipEventTeam team in fleet.Teams)
+        {
+            sessions.AddRange(GetTeamLivingMembers(team));
         }
 
         return sessions;

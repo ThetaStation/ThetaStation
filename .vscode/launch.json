@@ -58,6 +58,14 @@
                 "Client (Compatibility renderer)"
             ],
             "preLaunchTask": "build"
+        },
+        {
+            "name": "Server/Two clients",
+            "configurations": [
+                "Server",
+                "Client",
+                "Client"
+            ]
         }
     ]
 }

@@ -1,9 +1,10 @@
 <DefaultWindow xmlns="https://spacestation14.io"
                Title="{Loc 'shipevent-capmenu-windowtitle'}"
-               MinSize="600 300"
-               SetSize="300 300">
+               MinSize="600 450"
+               MaxSize="600 450">
     <BoxContainer Orientation="Vertical">
         <BoxContainer Orientation="Vertical">
+            <Label Name="TeamName" StyleClasses="LabelBig" />
             <Label Text="{Loc 'shipevent-capmenu-shipmanagement'}" />
             <BoxContainer Orientation="Horizontal" SeparationOverride="4">
                 <Label Text="{Loc 'shipevent-capmenu-currentship'}" />
@@ -33,6 +34,26 @@
                 <LineEdit Name="PasswordEdit" HorizontalExpand="True" />
                 <Button Name="SetPasswordButton" Text="{Loc 'shipevent-capmenu-setpassword'}" />
             </BoxContainer>
+            <BoxContainer>
+                <Label Name="CaptainLabel" Text="{Loc 'shipevent-capmenu-cap'}"/>
+                <LineEdit Name="CaptainCKeyEdit" HorizontalExpand="True" />
+                <Button Name="SetCaptainButton" Text="{Loc 'shipevent-capmenu-setcap'}" />
+            </BoxContainer>
+        </BoxContainer>
+        <BoxContainer Orientation="Vertical">
+            <Button
+                Name="FormFleetButton"
+                Text="{Loc 'shipevent-capmenu-fleet'}"
+                Margin="5" />
+            <Button
+                Name="RespawnTeamButton"
+                Text="{Loc 'shipevent-capmenu-respawn'}"
+                Margin="5" />
+            <Button
+                Name="DisbandTeamButton"
+                Text="{Loc 'shipevent-capmenu-disband'}"
+                Margin="5"
+                StyleClasses="ButtonColorRed" />
         </BoxContainer>
     </BoxContainer>
 </DefaultWindow>

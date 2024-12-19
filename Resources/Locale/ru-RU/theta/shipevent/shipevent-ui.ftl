@@ -1,12 +1,18 @@
-## Team view UI text
+## Team list control
+
+shipevent-teamlist-name = Имя
+shipevent-teamlist-captain = Капитан
+shipevent-teamlist-crew = Экипаж
+shipevent-teamlist-points = Очки
+shipevent-teamlist-pass = Пароль
+shipevent-teamlist-empty = Пусто
+shipevent-teamlist-indies = Независимые команды
+
+## Team view
 
 shipevent-teamview-windowtitle = СПИСОК КОМАНД
 shipevent-teamview-heading-teams = Активные команды:
 shipevent-teamview-heading-mods = Активные модификаторы:
-shipevent-teamview-label-name = Имя
-shipevent-teamview-label-ship = Корабль
-shipevent-teamview-label-crew = Экипаж
-shipevent-teamview-label-points = Очки
 shipevent-teamview-toggle-name = Посмотреть активные команды
 shipevent-teamview-toggle-desc = Просмотр списка команд
 
@@ -14,13 +20,8 @@ shipevent-teamview-toggle-desc = Просмотр списка команд
 
 shipevent-lobby-windowtitle = ЛОББИ
 shipevent-lobby-createteam = Создать команду
+shipevent-lobby-jointeam = Вступить
 shipevent-lobby-refresh = Обновить
-shipevent-lobby-empty = Пусто
-shipevent-lobby-join = Войти
-shipevent-lobby-team = Команда
-shipevent-lobby-captain = Капитан
-shipevent-lobby-crew = Экипаж
-shipevent-lobby-password = Пароль
 
 ## Team console - team creation
 
@@ -46,7 +47,7 @@ shipevent-shippicker-mediumclass = [color=yellow]Средний[/color]
 shipevent-shippicker-heavyclass = [color=red]Тяжёлый[/color]
 shipevent-shippicker-specialclass = [color=pink]Особый[/color]
 
-# Captain's menu
+## Captain's menu
 
 shipevent-capmenu-windowtitle = УПРАВЛЕНИЕ КОМАНДОЙ
 shipevent-capmenu-shipmanagement = Управление кораблём:
@@ -57,21 +58,26 @@ shipevent-capmenu-memberlist = Члены команды:
 shipevent-capmenu-kickbutton = ВЫГНАТЬ ЧЛЕНА
 shipevent-capmenu-setpassword = УСТАНОВИТЬ ПАРОЛЬ
 shipevent-capmenu-setmaxcrew = УСТАНОВИТЬ МАКСИМУМ
+shipevent-capmenu-cap = Передача прав:
+shipevent-capmenu-setcap = НАЗНАЧИТЬ КАПИТАНОМ
+shipevent-capmenu-fleet = СОЗДАТЬ ФЛОТ
+shipevent-capmenu-fleetfailed = Не удалось создать флот.
+shipevent-capmenu-respawn = ЗАРЕСПАВНИТЬ КОМАНДУ
+shipevent-capmenu-disband = РАСФОРМИРОВАТЬ КОМАНДУ
 shipevent-capmenu-toggle-name = Управление командой
 shipevent-capmenu-toggle-desc = Меняйте корабль, кикайте участников, делайте объявления и т.д.
 
+## Admiral's menu
+
+shipevent-admmenu-windowtitle = УПРАВЛЕНИЕ ФЛОТОМ
+shipevent-admmenu-manageteam = Управление
+shipevent-admmenu-createteam = Создать команду
+shipevent-admmenu-createfailed = Не удалось создать новую команду, вероятно потому что вы достигли лимита.
+shipevent-admmenu-toggle-name = Управление флотом
+shipevent-admmenu-toggle-desc = Создавайте, удаляйте и управляйте командами флота.
+
 ## Turret loader
 
-shipevent-turretloader-windowtitle = ЗАРЯДНИК ОРУДИЙ
-shipevent-turretloader-status = Статус:
-shipevent-turretloader-status-normal = Работает
-shipevent-turretloader-status-unbound = Нет привязки
-shipevent-turretloader-status-nocontainer = Нет контейнера
-shipevent-turretloader-status-broken = Неисправность
-shipevent-turretloader-ammocount = Количество патронов:
-shipevent-turretloader-turret = Турель:
-shipevent-turretloader-ejectcontainerbutton = ИЗВЛЕЧЬ КОНТЕЙНЕР
-shipevent-turretloader-refreshbutton = ОБНОВИТЬ UI
 shipevent-turretloader-ammocount-examine = Количество патронов: {$count}
 
 ## Enter Password Menu
@@ -102,7 +108,9 @@ shipevent-shieldconsole-radiuslabel = Радиус
 
 ## Team Messages
 
-shipevent-team-msg-base = \[Команда\] [bold]{$name}[/bold]: {$message}
+shipevent-team-msg = \[Экипаж\] [bold]{$name}[/bold]: {$message}
+shipevent-team-msg-captain = [font size=14]\[Капитан\] [bold]{$name}[/bold]: {$message}[/font]
+shipevent-team-msg-admiral = [font size=16]\[Адмирал\] [bold]{$name}[/bold]: {$message}[/font]
 
 ## Shuttle Console
 
