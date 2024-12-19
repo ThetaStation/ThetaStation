@@ -349,10 +349,12 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
 
     #region UI
 
-    private void SetupActions(ICommonSession session, ShipEventTeam team)
+    private void SetupActions(ICommonSession session, ShipEventTeam? team = null, ShipEventFleet? fleet = null)
     {
         if (session.AttachedEntity == null)
             return;
+
+        fleet ??= team?.Fleet;
 
         EntityUid uid = session.AttachedEntity.Value;
         if (!TryComp<ShipEventActionStorageComponent>(uid, out var actStorage))
@@ -364,21 +366,21 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         if (actStorage.ReturnToLobbyActionUid == null && HasComp<GhostComponent>(uid))
             actStorage.ReturnToLobbyActionUid = _actSys.AddAction(uid, ReturnToLobbyActionPrototype);
 
-        if (actStorage.CaptainMenuActionUid == null && session.Channel.UserName == team.Captain)
+        if (actStorage.CaptainMenuActionUid == null && session.Channel.UserName == team?.Captain)
         {
             actStorage.CaptainMenuActionUid = _actSys.AddAction(uid, CaptainMenuActionPrototype);
         }
-        else if (actStorage.CaptainMenuActionUid != null && session.Channel.UserName != team.Captain)
+        else if (actStorage.CaptainMenuActionUid != null && session.Channel.UserName != team?.Captain)
         {
             _actSys.RemoveAction(actStorage.CaptainMenuActionUid);
             actStorage.CaptainMenuActionUid = null;
         }
 
-        if (actStorage.AdmiralMenuActionUid == null && session.Channel.UserName == team.Fleet?.Admiral)
+        if (actStorage.AdmiralMenuActionUid == null && session.Channel.UserName == fleet?.Admiral)
         {
             actStorage.AdmiralMenuActionUid = _actSys.AddAction(uid, AdmiralMenuActionPrototype);
         }
-        else if (actStorage.AdmiralMenuActionUid != null && session.Channel.UserName != team.Fleet?.Admiral)
+        else if (actStorage.AdmiralMenuActionUid != null && session.Channel.UserName != fleet?.Admiral)
         {
             _actSys.RemoveAction(actStorage.AdmiralMenuActionUid);
             actStorage.AdmiralMenuActionUid = null;
@@ -448,10 +450,11 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         if (team != null)
         {
             _uiSys.SetUiState(uid, uiKey, new CaptainMenuBoundUserInterfaceState(
-            team.Members,
-            team.ChosenShipType,
-            team.JoinPassword,
-            team.MaxMembers));
+                team.Name,
+                team.Members,
+                team.ChosenShipType,
+                team.JoinPassword,
+                team.MaxMembers));
             _uiSys.OpenUi(uid, uiKey, session);
         }
     }
@@ -1022,17 +1025,19 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         if (session.AttachedEntity == null)
             return;
 
+        fleet ??= team?.Fleet;
+
         EntityUid uid = session.AttachedEntity.Value;
 
         if (EntityManager.TryGetComponent<MobHUDComponent>(uid, out var hud))
         {
             string hudProtId = HUDPrototypeId;
 
-            if (fleet != null && session.Channel.UserName == fleet.Admiral)
+            if (session.Channel.UserName == fleet?.Admiral)
             {
                 hudProtId = AdmiralHUDPrototypeId;
             }
-            else if (team != null && session.Channel.UserName == team.Captain)
+            else if (session.Channel.UserName == team?.Captain)
             {
                 hudProtId = CaptainHUDPrototypeId;
             }
@@ -1051,15 +1056,15 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         if (captain?.Channel.UserName != team.Captain)
             TeamMessage(team, Loc.GetString("shipevent-team-captainchange", ("oldcap", team.Captain ?? "NONE"), ("newcap", captain?.Channel.UserName ?? "NONE")));
 
-        if (team.Captain != null &&
-            _playerMan.TryGetUserId(team.Captain, out var id) &&
-            _mindSys.TryGetMind(id, out var mindUid))
+        string? oldCaptainCKey = team.Captain;
+        team.Captain = captain?.Channel.UserName;
+        if (oldCaptainCKey != null && _playerMan.TryGetSessionByUsername(oldCaptainCKey, out var oldCaptain))
         {
-            QueueDel(mindUid);
+            SetupActions(oldCaptain, team);
+            SetupHUD(oldCaptain, team);
         }
 
-        team.Captain = captain?.Channel.UserName;
-        if (captain?.AttachedEntity != null)
+        if (captain != null)
         {
             SetupActions(captain, team);
             SetupHUD(captain, team);
@@ -1071,14 +1076,19 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         if (admiral?.Channel.UserName != fleet.Admiral)
             FleetMessage(fleet, Loc.GetString("shipevent-fleet-admiralchange", ("oldadm", fleet.Admiral ?? "NONE"), ("newadm", admiral?.Channel.UserName ?? "NONE")));
 
-        if (fleet.Admiral != null &&
-            _playerMan.TryGetUserId(fleet.Admiral, out var id) &&
-            _mindSys.TryGetMind(id, out var mindUid))
+        string? oldAdmiralCKey = fleet.Admiral;
+        fleet.Admiral = admiral?.Channel.UserName;
+        if (oldAdmiralCKey != null && _playerMan.TryGetSessionByUsername(oldAdmiralCKey, out var oldAdmiral))
         {
-            QueueDel(mindUid);
+            SetupActions(oldAdmiral, fleet: fleet);
+            SetupHUD(oldAdmiral, fleet: fleet);
         }
 
-        fleet.Admiral = admiral?.Channel.UserName;
+        if (admiral != null)
+        {
+            SetupActions(admiral, fleet: fleet);
+            SetupHUD(admiral, fleet: fleet);
+        }
     }
 
     private void OnTeammateSpeak(EntityUid uid, ShipEventTeamMarkerComponent marker, EntitySpokeEvent args)

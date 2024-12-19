@@ -38,8 +38,11 @@ public sealed class CaptainMenuBoundUserInterface : BoundUserInterface
         };
         _window.SetPasswordButtonPressed += _ =>
         {
-            var password = _window.Password != "" ? _window.Password : null;
-            SendMessage(new CaptainMenuSetPasswordMessage(password));
+            SendMessage(new CaptainMenuSetPasswordMessage(_window.Password != "" ? _window.Password : null));
+        };
+        _window.SetCaptainButtonPressed += _ =>
+        {
+            SendMessage(new CaptainMenuSetCaptainMessage(_window.CaptainCKey != "" ? _window.CaptainCKey : null));
         };
         _window.DisbandTeamButtonPressed += _ =>
         {

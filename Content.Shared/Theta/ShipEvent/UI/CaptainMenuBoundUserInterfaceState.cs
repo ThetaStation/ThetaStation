@@ -5,13 +5,15 @@ namespace Content.Shared.Theta.ShipEvent.UI;
 [Serializable, NetSerializable]
 public sealed class CaptainMenuBoundUserInterfaceState : BoundUserInterfaceState
 {
+    public string Name;
     public ShipTypePrototype? CurrentShipType;
     public List<string> Members;
     public string? Password;
     public int MaxMembers;
 
-    public CaptainMenuBoundUserInterfaceState(List<string> members, ShipTypePrototype? currentShipType, string? password, int maxMembers)
+    public CaptainMenuBoundUserInterfaceState(string name, List<string> members, ShipTypePrototype? currentShipType, string? password, int maxMembers)
     {
+        Name = name;
         Members = members;
         CurrentShipType = currentShipType;
         Password = password;
@@ -60,6 +62,17 @@ public sealed class CaptainMenuSetMaxMembersMessage : BoundUserInterfaceMessage
     public CaptainMenuSetMaxMembersMessage(int maxMembers)
     {
         MaxMembers = maxMembers;
+    }
+}
+
+[Serializable, NetSerializable]
+public sealed class CaptainMenuSetCaptainMessage : BoundUserInterfaceMessage
+{
+    public string? CKey;
+
+    public CaptainMenuSetCaptainMessage(string? ckey)
+    {
+        CKey = ckey;
     }
 }
 

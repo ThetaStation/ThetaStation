@@ -16,9 +16,11 @@ public sealed partial class CaptainMenuWindow : DefaultWindow
     public event Action<BaseButton.ButtonEventArgs>? KickButtonPressed;
     public event Action<BaseButton.ButtonEventArgs>? SetMaxMembersButtonPressed;
     public event Action<BaseButton.ButtonEventArgs>? SetPasswordButtonPressed;
+    public event Action<BaseButton.ButtonEventArgs>? SetCaptainButtonPressed;
     public event Action<BaseButton.ButtonEventArgs>? DisbandTeamButtonPressed;
 
     public string KickCKey => KickCKeyEdit.Text;
+    public string CaptainCKey => CaptainCKeyEdit.Text;
     public string Password => PasswordEdit.Text;
     public int MaxMembers => MaxMembersEdit.Value;
 
@@ -49,6 +51,10 @@ public sealed partial class CaptainMenuWindow : DefaultWindow
         {
             SetPasswordButtonPressed?.Invoke(_);
         };
+        SetCaptainButton.OnPressed += _ =>
+        {
+            SetCaptainButtonPressed?.Invoke(_);
+        };
         DisbandTeamButton.OnPressed += _ =>
         {
             DisbandTeamButtonPressed?.Invoke(_);
@@ -62,6 +68,7 @@ public sealed partial class CaptainMenuWindow : DefaultWindow
 
     public void UpdateState(CaptainMenuBoundUserInterfaceState state)
     {
+        TeamName.Text = state.Name;
         MemberList.Text = string.Join(';', state.Members);
         ShipName.Text = Loc.GetString(state.CurrentShipType?.Name ?? "N/A");
         PasswordEdit.Text = state.Password ?? "";

@@ -49,6 +49,7 @@ public partial class ShipEventTeamSystem
         targetFleet.ManagedByAdmiral = targetTeam;
 
         _uiSys.SetUiState(msg.Actor, uiKey, new CaptainMenuBoundUserInterfaceState(
+            targetTeam.Name,
             targetTeam.Members,
             targetTeam.ChosenShipType,
             targetTeam.JoinPassword,
