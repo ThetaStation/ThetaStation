@@ -65,7 +65,7 @@ public partial class ShipEventTeamSystem
         if (targetFleet == null)
             return;
 
-        if (!TryCreateTeam(msg.Name, null, null, 0, null, out var team) || !TryAddTeamToFleet(team, targetFleet))
+        if (!TryCreateTeam(msg.Name, targetFleet.Color, null, null, 0, null, out var team) || !TryAddTeamToFleet(team, targetFleet))
         {
             //todo: this should be inside admiral's menu but I'm tired so someone else do it
             //or better yet, integrate team creation window from lobby console into it

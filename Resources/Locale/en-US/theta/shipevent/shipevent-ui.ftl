@@ -60,6 +60,7 @@ shipevent-capmenu-setmaxcrew = SET CREW MAX
 shipevent-capmenu-cap = Rights transfer:
 shipevent-capmenu-setcap = TRANSFER CAPTAINSHIP
 shipevent-capmenu-fleet = FORM FLEET
+shipevent-capmenu-fleetfailed = Failed to form a fleet.
 shipevent-capmenu-respawn = RESPAWN TEAM
 shipevent-capmenu-disband = DISBAND TEAM
 shipevent-capmenu-toggle-name = Team management

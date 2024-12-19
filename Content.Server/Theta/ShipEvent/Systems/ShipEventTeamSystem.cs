@@ -369,6 +369,19 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         if (actStorage.ReturnToLobbyActionUid == null && HasComp<GhostComponent>(uid))
             actStorage.ReturnToLobbyActionUid = _actSys.AddAction(uid, ReturnToLobbyActionPrototype);
 
+        if (actStorage.AdmiralMenuActionUid == null && session.Channel.UserName == fleet?.Admiral)
+        {
+            actStorage.AdmiralMenuActionUid = _actSys.AddAction(uid, AdmiralMenuActionPrototype);
+            //returning here since admiral's menu should be mutually exclusive with cap's menu
+            //since former can access the latter anyway
+            return;
+        }
+        else if (actStorage.AdmiralMenuActionUid != null && session.Channel.UserName != fleet?.Admiral)
+        {
+            _actSys.RemoveAction(actStorage.AdmiralMenuActionUid);
+            actStorage.AdmiralMenuActionUid = null;
+        }
+
         if (actStorage.CaptainMenuActionUid == null && session.Channel.UserName == team?.Captain)
         {
             actStorage.CaptainMenuActionUid = _actSys.AddAction(uid, CaptainMenuActionPrototype);
@@ -377,16 +390,6 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         {
             _actSys.RemoveAction(actStorage.CaptainMenuActionUid);
             actStorage.CaptainMenuActionUid = null;
-        }
-
-        if (actStorage.AdmiralMenuActionUid == null && session.Channel.UserName == fleet?.Admiral)
-        {
-            actStorage.AdmiralMenuActionUid = _actSys.AddAction(uid, AdmiralMenuActionPrototype);
-        }
-        else if (actStorage.AdmiralMenuActionUid != null && session.Channel.UserName != fleet?.Admiral)
-        {
-            _actSys.RemoveAction(actStorage.AdmiralMenuActionUid);
-            actStorage.AdmiralMenuActionUid = null;
         }
     }
 
@@ -479,15 +482,11 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         if (_uiSys.IsUiOpen(uid, uiKey))
             return;
 
-        ShipEventTeam? team = GetManagedTeam(session);
-        if (team != null)
+        _uiSys.SetUiState(uid, uiKey, new AdmiralMenuBoundUserInterfaceState
         {
-            _uiSys.SetUiState(uid, uiKey, new AdmiralMenuBoundUserInterfaceState
-            {
-                Teams = GetTeamStates(marker.Team.Fleet)
-            });
-            _uiSys.OpenUi(uid, uiKey, session);
-        }
+            Teams = GetTeamStates(marker.Team.Fleet)
+        });
+        _uiSys.OpenUi(uid, uiKey, session);
     }
 
     private void OnShipPickerInfoRequest(GetShipPickerInfoMessage msg)
@@ -805,10 +804,6 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
 
     public bool TryCreateFleet(string name, Color? color, ICommonSession? admiral, [NotNullWhen(true)] out ShipEventFleet? fleet)
     {
-        fleet = null;
-        if (!IsValidName(name))
-            return false;
-
         fleet = new()
         {
             Name = name,

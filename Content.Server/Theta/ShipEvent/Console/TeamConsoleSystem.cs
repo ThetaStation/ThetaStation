@@ -64,7 +64,7 @@ public sealed class TeamConsoleSystem : EntitySystem
             return;
         }
 
-        _shipSys.TryCreateTeam(args.Name, args.ShipType, args.Password, args.MaxPlayers, session, out _);
+        _shipSys.TryCreateTeam(args.Name, null, args.ShipType, args.Password, args.MaxPlayers, session, out _);
     }
 
     private void SendResponse(EntityUid uid, Enum uiKey, ResponseTypes response)
