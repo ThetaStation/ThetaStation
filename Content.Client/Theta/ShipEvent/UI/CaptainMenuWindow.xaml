@@ -42,13 +42,17 @@
         </BoxContainer>
         <BoxContainer Orientation="Vertical">
             <Button
-                Name="RespawnTeamButton" 
-                Text="{Loc 'shipevent-capmenu-respawn'}" 
+                Name="FormFleetButton"
+                Text="{Loc 'shipevent-capmenu-fleet'}"
                 Margin="5" />
             <Button
-                Name="DisbandTeamButton" 
-                Text="{Loc 'shipevent-capmenu-disband'}" 
-                Margin="5" 
+                Name="RespawnTeamButton"
+                Text="{Loc 'shipevent-capmenu-respawn'}"
+                Margin="5" />
+            <Button
+                Name="DisbandTeamButton"
+                Text="{Loc 'shipevent-capmenu-disband'}"
+                Margin="5"
                 StyleClasses="ButtonColorRed" />
         </BoxContainer>
     </BoxContainer>

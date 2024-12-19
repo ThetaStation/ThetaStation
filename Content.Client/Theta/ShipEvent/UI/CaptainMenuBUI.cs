@@ -44,6 +44,10 @@ public sealed class CaptainMenuBoundUserInterface : BoundUserInterface
         {
             SendMessage(new CaptainMenuSetCaptainMessage(_window.CaptainCKey != "" ? _window.CaptainCKey : null));
         };
+        _window.FormFleetButtonPressed += _ =>
+        {
+            SendMessage(new CaptainMenuFormFleetMessage());
+        };
         _window.RespawnTeamButtonPressed += _ =>
         {
             SendMessage(new CaptainMenuRespawnTeamMessage());

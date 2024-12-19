@@ -1,5 +1,6 @@
 using Content.Shared.Chat;
 using Content.Shared.Roles.Theta;
+using Content.Shared.Theta.ShipEvent.Components;
 using Content.Shared.Theta.ShipEvent.UI;
 using Robust.Shared.Player;
 
@@ -14,6 +15,7 @@ public partial class ShipEventTeamSystem
         SubscribeAllEvent<CaptainMenuSetPasswordMessage>(OnSetNewPassword);
         SubscribeAllEvent<CaptainMenuSetMaxMembersMessage>(OnSetNewMaxMembers);
         SubscribeAllEvent<CaptainMenuSetCaptainMessage>(OnSetNewCaptain);
+        SubscribeAllEvent<CaptainMenuFormFleetMessage>(OnFormFleet);
         SubscribeAllEvent<CaptainMenuRespawnTeamMessage>(OnRespawnTeam);
         SubscribeAllEvent<CaptainMenuDisbandTeamMessage>(OnDisbandTeam);
     }
@@ -23,16 +25,13 @@ public partial class ShipEventTeamSystem
     /// </summary>
     private ShipEventTeam? GetManagedTeam(ICommonSession session)
     {
-        foreach (ShipEventFleet fleet in Fleets)
+        if (TryComp<ShipEventTeamMarkerComponent>(session.AttachedEntity, out var marker) && marker.Team != null)
         {
-            if (fleet.Admiral == session.Channel.UserName)
-                return fleet.ManagedByAdmiral;
-        }
+            if (marker.Team.Fleet?.Admiral == session.Channel.UserName)
+                return marker.Team.Fleet.ManagedByAdmiral;
 
-        foreach (ShipEventTeam team in Teams)
-        {
-            if (team.Captain == session.Channel.UserName)
-                return team;
+            if (marker.Team.Captain == session.Channel.UserName)
+                return marker.Team;
         }
 
         return null;
@@ -100,6 +99,24 @@ public partial class ShipEventTeamSystem
             return;
 
         AssignCaptain(team, newcap);
+    }
+
+    private void OnFormFleet(CaptainMenuFormFleetMessage msg)
+    {
+        if (!_playerMan.TryGetSessionByEntity(msg.Actor, out var session))
+            return;
+
+        ShipEventTeam? team = GetManagedTeam(session);
+        if (team != null)
+        {
+            if (!TryCreateFleet(team.Name, team.Color, session, out var fleet) ||
+                !TryAddTeamToFleet(team, fleet))
+            {
+                _chatSys.SendSimpleMessage(Loc.GetString("shipevent-capmenu-fleetfailed"), session, color: Color.DarkRed);
+                if (fleet != null)
+                    RemoveFleet(fleet);
+            }
+        }
     }
 
     private void OnRespawnTeam(CaptainMenuRespawnTeamMessage msg)

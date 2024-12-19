@@ -1,4 +1,5 @@
 using Content.Shared.Roles.Theta;
+using Content.Shared.Theta.ShipEvent.Components;
 using Content.Shared.Theta.ShipEvent.UI;
 using Robust.Shared.Player;
 
@@ -22,14 +23,8 @@ public partial class ShipEventTeamSystem
             return;
 
         ShipEventFleet? targetFleet = null;
-        foreach (ShipEventFleet fleet in Fleets)
-        {
-            if (fleet.Admiral == session.Channel.UserName)
-            {
-                targetFleet = fleet;
-                break;
-            }
-        }
+        if (TryComp<ShipEventTeamMarkerComponent>(msg.Actor, out var marker))
+            targetFleet = marker.Team?.Fleet;
 
         if (targetFleet == null)
             return;
@@ -64,14 +59,8 @@ public partial class ShipEventTeamSystem
             return;
 
         ShipEventFleet? targetFleet = null;
-        foreach (ShipEventFleet fleet in Fleets)
-        {
-            if (fleet.Admiral == session.Channel.UserName)
-            {
-                targetFleet = fleet;
-                break;
-            }
-        }
+        if (TryComp<ShipEventTeamMarkerComponent>(msg.Actor, out var marker))
+            targetFleet = marker.Team?.Fleet;
 
         if (targetFleet == null)
             return;

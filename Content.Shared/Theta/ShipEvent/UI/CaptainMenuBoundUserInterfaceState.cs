@@ -77,6 +77,11 @@ public sealed class CaptainMenuSetCaptainMessage : BoundUserInterfaceMessage
 }
 
 [Serializable, NetSerializable]
+public sealed class CaptainMenuFormFleetMessage : BoundUserInterfaceMessage
+{
+}
+
+[Serializable, NetSerializable]
 public sealed class CaptainMenuRespawnTeamMessage : BoundUserInterfaceMessage
 {
 }

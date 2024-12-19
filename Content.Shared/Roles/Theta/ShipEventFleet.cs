@@ -7,17 +7,10 @@ namespace Content.Shared.Roles.Theta;
 /// </summary>
 public sealed class ShipEventFleet
 {
-    public string Name;
+    public string Name = string.Empty;
     public Color Color;
     public string? Admiral = null;
     public bool AdmiralLocked; //if true new admiral won't be selected when the old one disconnects
     public ShipEventTeam? ManagedByAdmiral = null; //team last managed by the admiral via captain's menu
     public List<ShipEventTeam> Teams = new();
-
-    public ShipEventFleet(string name, Color color, string? admiral)
-    {
-        Name = name;
-        Color = color;
-        Admiral = admiral;
-    }
 }

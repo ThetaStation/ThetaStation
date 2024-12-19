@@ -771,6 +771,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
     /// </summary>
     public bool TryCreateTeam(
         string name,
+        Color? color,
         ShipTypePrototype? initialShipType,
         string? password,
         int maxMembers,
@@ -781,11 +782,10 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         if (!RuleSelected || !AllowTeamRegistration)
             return false;
 
-        Color color = ColorPalette.GetNextColor();
         team = new()
         {
             Name = IsValidName(name) ? name : GenerateTeamName(),
-            Color = color,
+            Color = color ?? ColorPalette.GetNextColor(),
             ChosenShipType = initialShipType,
             JoinPassword = password,
             MaxMembers = maxMembers
@@ -800,6 +800,23 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         }
 
         Teams.Add(team);
+        return true;
+    }
+
+    public bool TryCreateFleet(string name, Color? color, ICommonSession? admiral, [NotNullWhen(true)] out ShipEventFleet? fleet)
+    {
+        fleet = null;
+        if (!IsValidName(name))
+            return false;
+
+        fleet = new()
+        {
+            Name = name,
+            Color = color ?? ColorPalette.GetNextColor()
+        };
+        Fleets.Add(fleet);
+        AssignAdmiral(fleet, admiral);
+
         return true;
     }
 
@@ -964,6 +981,16 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         }
 
         Teams.Remove(team);
+    }
+
+    public void RemoveFleet(ShipEventFleet fleet)
+    {
+        foreach (ShipEventTeam team in fleet.Teams)
+        {
+            RemoveTeam(team);
+        }
+
+        Fleets.Remove(fleet);
     }
 
     #endregion

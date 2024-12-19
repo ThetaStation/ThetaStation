@@ -59,6 +59,7 @@ shipevent-capmenu-setpassword = УСТАНОВИТЬ ПАРОЛЬ
 shipevent-capmenu-setmaxcrew = УСТАНОВИТЬ МАКСИМУМ
 shipevent-capmenu-cap = Передача прав:
 shipevent-capmenu-setcap = НАЗНАЧИТЬ КАПИТАНОМ
+shipevent-capmenu-fleet = СОЗДАТЬ ФЛОТ
 shipevent-capmenu-respawn = ЗАРЕСПАВНИТЬ КОМАНДУ
 shipevent-capmenu-disband = РАСФОРМИРОВАТЬ КОМАНДУ
 shipevent-capmenu-toggle-name = Управление командой
