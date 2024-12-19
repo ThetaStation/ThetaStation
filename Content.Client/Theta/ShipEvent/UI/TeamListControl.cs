@@ -5,33 +5,28 @@ using Robust.Client.UserInterface;
 
 namespace Content.Client.Theta.ShipEvent.UI;
 
-public sealed class TeamListControl : ScrollContainer
+public sealed class TeamListControl : BoxContainer
 {
     public Action<TeamInterfaceState>? TeamSelected;
 
     //todo: maybe it's better to use grid container after all
     public int FieldCount;
 
-    private BoxContainer _mainContainer = new()
-    {
-        Orientation = BoxContainer.LayoutOrientation.Vertical,
-    };
-
     public TeamListControl()
     {
-        HScrollEnabled = false;
         VerticalExpand = true;
-        AddChild(_mainContainer);
+        HorizontalExpand = true;
+        Orientation = LayoutOrientation.Vertical;
     }
 
     public void Update(List<TeamInterfaceState> states, string? buttonText)
     {
-        _mainContainer.DisposeAllChildren();
+        DisposeAllChildren();
         FieldCount = 5 + (buttonText != null ? 1 : 0);
 
         if (states.Count == 0)
         {
-            _mainContainer.AddChild(new Label
+            AddChild(new Label
             {
                 Text = Loc.GetString("shipevent-teamlist-empty"),
                 HorizontalAlignment = HAlignment.Center,
@@ -41,7 +36,7 @@ public sealed class TeamListControl : ScrollContainer
             return;
         }
 
-        _mainContainer.AddChild(CreateEntry([
+        AddChild(CreateEntry([
             Loc.GetString("shipevent-teamlist-name"),
             Loc.GetString("shipevent-teamlist-captain"),
             Loc.GetString("shipevent-teamlist-crew"),
@@ -51,12 +46,26 @@ public sealed class TeamListControl : ScrollContainer
             null
         ));
 
-        BoxContainer independentContainer = new BoxContainer
+        ScrollContainer independentScroll = new()
         {
             Margin = new(2),
-            Orientation = BoxContainer.LayoutOrientation.Vertical
+            VerticalExpand = true,
+            HScrollEnabled = false
         };
-        _mainContainer.AddChild(independentContainer);
+        BoxContainer independentContainer = new BoxContainer
+        {
+            Orientation = LayoutOrientation.Vertical,
+            MinHeight = 100,
+            MaxHeight = 300
+        };
+
+        RichTextLabel independentLabel = new();
+        independentLabel.SetMarkup($"[bold]{Loc.GetString("shipevent-teamlist-indies")}[/bold]");
+        independentLabel.HorizontalAlignment = HAlignment.Center;
+        independentContainer.AddChild(independentLabel);
+
+        independentScroll.AddChild(independentContainer);
+        AddChild(independentScroll);
 
         Dictionary<string, BoxContainer> fleetContainers = new();
 
@@ -67,19 +76,27 @@ public sealed class TeamListControl : ScrollContainer
             {
                 if (!fleetContainers.ContainsKey(state.Fleet))
                 {
-                    BoxContainer newFleetCont = new()
+                    ScrollContainer fleetScroll = new ScrollContainer()
                     {
                         Margin = new(2),
-                        Orientation = BoxContainer.LayoutOrientation.Vertical,
+                        VerticalExpand = true,
+                        HScrollEnabled = false
+                    };
+                    BoxContainer fleetContainer = new()
+                    {
+                        Orientation = LayoutOrientation.Vertical,
+                        MinHeight = 100,
+                        MaxHeight = 300
                     };
 
                     RichTextLabel label = new();
                     label.SetMarkup($"[bold]{state.Fleet}[/bold]");
                     label.HorizontalAlignment = HAlignment.Center;
-                    newFleetCont.AddChild(label);
+                    fleetContainer.AddChild(label);
+                    fleetContainers[state.Fleet] = fleetContainer;
 
-                    fleetContainers[state.Fleet] = newFleetCont;
-                    _mainContainer.AddChild(newFleetCont);
+                    fleetScroll.AddChild(fleetContainer);
+                    AddChild(fleetScroll);
                 }
 
                 container = fleetContainers[state.Fleet];

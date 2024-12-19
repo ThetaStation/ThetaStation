@@ -6,6 +6,7 @@ shipevent-teamlist-crew = Members
 shipevent-teamlist-points = Points
 shipevent-teamlist-pass = Password
 shipevent-teamlist-empty = Empty
+shipevent-teamlist-indies = Independent teams
 
 ## Team view
 

@@ -1,16 +1,17 @@
 <DefaultWindow xmlns="https://spacestation14.io"
     xmlns:ui="clr-namespace:Content.Client.Theta.ShipEvent.UI"
     Title="{Loc 'shipevent-admmenu-windowtitle'}"
-    MinSize="600 300"
-    MaxSize="600 300">
+    MinSize="600 300">
     <BoxContainer Orientation="Vertical">
         <ui:TeamListControl Name="TeamList" Margin="2"/>
-        <BoxContainer Orientation="Horizontal" MaxHeight="20">
-            <LineEdit Name="TeamNameEdit"/>
+        <BoxContainer Orientation="Horizontal" MaxHeight="50" Margin="2">
+            <LineEdit 
+                Name="TeamNameEdit"
+                MinWidth="100" 
+                HorizontalExpand="true"/>
             <Button
                 Name="CreateTeamButton"
-                Text="{Loc 'shipevent-admmenu-createteam'}"
-                HorizontalAlignment="Center"/>
+                Text="{Loc 'shipevent-admmenu-createteam'}"/>
         </BoxContainer>
     </BoxContainer>
 </DefaultWindow>

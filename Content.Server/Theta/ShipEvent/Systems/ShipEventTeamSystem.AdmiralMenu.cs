@@ -70,6 +70,15 @@ public partial class ShipEventTeamSystem
             //todo: this should be inside admiral's menu but I'm tired so someone else do it
             //or better yet, integrate team creation window from lobby console into it
             _chatSys.SendSimpleMessage(Loc.GetString("shipevent-admmenu-createfailed"), session, color: Color.DarkRed);
+
+            if (team != null)
+                RemoveTeam(team);
         }
+
+        //refresh team list
+        _uiSys.SetUiState(msg.Actor, msg.UiKey, new AdmiralMenuBoundUserInterfaceState
+        {
+            Teams = GetTeamStates(targetFleet)
+        });
     }
 }

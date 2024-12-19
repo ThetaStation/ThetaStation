@@ -22,7 +22,7 @@
 
       #fleets
       fleetMaxTeams: 10
-      fleetPointsPerTeam: 10000
+      fleetPointsPerTeam: 5000
 
       #map gen
       initialObstacleAmount: 200

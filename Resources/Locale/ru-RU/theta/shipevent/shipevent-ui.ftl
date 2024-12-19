@@ -6,6 +6,7 @@ shipevent-teamlist-crew = Экипаж
 shipevent-teamlist-points = Очки
 shipevent-teamlist-pass = Пароль
 shipevent-teamlist-empty = Пусто
+shipevent-teamlist-indies = Независимые команды
 
 ## Team view
 

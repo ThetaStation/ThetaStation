@@ -813,7 +813,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
 
     public bool TryAddTeamToFleet(ShipEventTeam team, ShipEventFleet fleet)
     {
-        int limit = Math.Min(GetFleetPoints(fleet) / FleetPointsPerTeam, FleetMaxTeams);
+        int limit = Math.Min((FleetPointsPerTeam != 0) ? (GetFleetPoints(fleet) / FleetPointsPerTeam) : int.MaxValue, FleetMaxTeams);
         if (fleet.Teams.Count > limit || fleet.Teams.Contains(team))
             return false;
 
@@ -1001,7 +1001,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
                 if (marker.Team == null || marker.Team == component.Team)
                     return;
 
-                component.Team.Points += (int) (GetProjectileDamage(entity) * PointsPerHitMultiplier) * (marker.Team.Fleet == component.Team.Fleet ? -1 : 1);
+                component.Team.Points += (int) (GetProjectileDamage(entity) * PointsPerHitMultiplier) * (marker.Team.Fleet == component.Team.Fleet ? 0 : 1);
 
                 if (!marker.Team.Hits.Keys.Contains(component.Team))
                     marker.Team.Hits[component.Team] = 0;
