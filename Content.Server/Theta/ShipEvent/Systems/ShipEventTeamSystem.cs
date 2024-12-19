@@ -363,6 +363,12 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         if (!TryComp<ShipEventActionStorageComponent>(uid, out var actStorage))
             return;
 
+        //clear actions
+        _actSys.RemoveAction(actStorage.TeamViewActionUid);
+        _actSys.RemoveAction(actStorage.ReturnToLobbyActionUid);
+        _actSys.RemoveAction(actStorage.AdmiralMenuActionUid);
+        _actSys.RemoveAction(actStorage.CaptainMenuActionUid);
+
         if (actStorage.TeamViewActionUid == null)
             actStorage.TeamViewActionUid = _actSys.AddAction(uid, TeamViewActionPrototype);
 
@@ -376,20 +382,10 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
             //since former can access the latter anyway
             return;
         }
-        else if (actStorage.AdmiralMenuActionUid != null && session.Channel.UserName != fleet?.Admiral)
-        {
-            _actSys.RemoveAction(actStorage.AdmiralMenuActionUid);
-            actStorage.AdmiralMenuActionUid = null;
-        }
 
         if (actStorage.CaptainMenuActionUid == null && session.Channel.UserName == team?.Captain)
         {
             actStorage.CaptainMenuActionUid = _actSys.AddAction(uid, CaptainMenuActionPrototype);
-        }
-        else if (actStorage.CaptainMenuActionUid != null && session.Channel.UserName != team?.Captain)
-        {
-            _actSys.RemoveAction(actStorage.CaptainMenuActionUid);
-            actStorage.CaptainMenuActionUid = null;
         }
     }
 
