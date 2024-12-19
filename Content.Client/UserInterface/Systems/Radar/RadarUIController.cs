@@ -21,8 +21,8 @@ public sealed class RadarUIController : UIController
     {
         SubscribeLocalEvent<RadarHudComponentAdded>(OnRadarHudAdded);
         SubscribeLocalEvent<RadarHudComponentRemoved>(OnRadarHudRemoved);
-        SubscribeLocalEvent<PlayerAttachedEvent>(OnPlayerAttach);
-        SubscribeLocalEvent<PlayerDetachedEvent>(OnPlayerDetach);
+        SubscribeLocalEvent<LocalPlayerAttachedEvent>(OnPlayerAttach);
+        SubscribeLocalEvent<LocalPlayerDetachedEvent>(OnPlayerDetach);
 
         var gameplayStateLoad = UIManager.GetUIController<GameplayStateLoadController>();
         gameplayStateLoad.OnScreenLoad += OnScreenLoad;
@@ -34,12 +34,12 @@ public sealed class RadarUIController : UIController
         InitializeRadarGui();
     }
 
-    private void OnPlayerAttach(PlayerAttachedEvent ev)
+    private void OnPlayerAttach(LocalPlayerAttachedEvent ev)
     {
         InitializeRadarGui();
     }
 
-    private void OnPlayerDetach(PlayerDetachedEvent ev)
+    private void OnPlayerDetach(LocalPlayerDetachedEvent ev)
     {
         ClearRadarGui();
     }
@@ -64,21 +64,21 @@ public sealed class RadarUIController : UIController
         if (RadarGui == null)
             return;
 
-        if (_playerManager.LocalPlayer?.ControlledEntity == null)
+        if (_playerManager.LocalSession?.AttachedEntity == null)
             return;
 
         var transform =
-            EntityManager.GetComponent<TransformComponent>(_playerManager.LocalPlayer!.ControlledEntity.Value);
+            EntityManager.GetComponent<TransformComponent>(_playerManager.LocalSession.AttachedEntity.Value);
 
         RadarGui.SetMatrix(transform.Coordinates, _eyeManager.CurrentEye.Rotation);
     }
 
     private void InitializeRadarGui()
     {
-        if (_playerManager.LocalPlayer?.ControlledEntity == null)
+        if (_playerManager.LocalSession?.AttachedEntity == null)
             return;
 
-        if (!EntityManager.HasComponent<RadarHUDComponent>(_playerManager.LocalPlayer.ControlledEntity))
+        if (!EntityManager.HasComponent<RadarHUDComponent>(_playerManager.LocalSession.AttachedEntity))
         {
             ClearRadarGui();
             return;
@@ -88,7 +88,7 @@ public sealed class RadarUIController : UIController
             return;
 
         RadarGui = new();
-        RadarGui.SetOwner(_playerManager.LocalPlayer.ControlledEntity.Value);
+        RadarGui.SetOwner(_playerManager.LocalSession.AttachedEntity.Value);
         switch (UIManager.ActiveScreen)
         {
             case DefaultGameScreen game:
