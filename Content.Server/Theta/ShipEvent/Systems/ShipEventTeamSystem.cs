@@ -99,7 +99,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
     public const string CaptainHUDPrototypeId = "ShipEventHUDCaptain";
     public const string AdmiralHUDPrototypeId = "ShipEventHUDAdmiral";
     public const string TeamChannelID = "Common";
-    public const string FleetChannelID = "Fleet";
+    public const string FleetChannelID = "ShipEventFleet";
     public const string TeamViewActionPrototype = "ShipEventTeamViewToggle";
     public const string CaptainMenuActionPrototype = "ShipEventCaptainMenuToggle";
     public const string AdmiralMenuActionPrototype = "ShipEventAdmiralMenuToggle";
