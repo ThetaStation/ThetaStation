@@ -1,0 +1,25 @@
+- type: mapgenlayer
+  id: AsteroidLayer
+  structureAmount: 200
+  distribution: !type:NoiseDistribution
+    noiseType: OpenSimplex2
+    frequency: 2
+    noiseThreshold: 0.1
+  structures:
+    - "asteroid_small"
+    - "asteroid_large"
+
+- type: mapgenlayer
+  id: RuinLayer
+  structureAmount: 10
+  structures:
+    - "ruin_office"
+    - "ruin_communism"
+    - "ruin_ship"
+
+- type: mapgenpreset
+  id: ShipEventMapGen
+  area: 0, 0, 1000, 1000 #todo: ship event sys only supports square areas right now
+  layers:
+    - "AsteroidLayer"
+    - "RuinLayer"

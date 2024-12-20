@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Numerics;
+using Content.Server.Theta.MapGen.Distributions;
 using Content.Server.Theta.MapGen.Prototypes;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
@@ -25,44 +26,55 @@ public sealed class MapGenSystem : EntitySystem
     [Dependency] public readonly IRobustRandom Random = default!;
     public IEntityManager EntMan => EntityManager;
 
+    public Box2i Area;
     public MapId TargetMap = MapId.Nullspace;
-    public Vector2i StartPos;
-    public int MaxSpawnOffset;
     public List<EntityUid> SpawnedGrids = new();
 
     //primitive quad tree (aka plain grid) for optimising collision checks
     public const int SectorSize = 100;
     private Dictionary<Vector2i, HashSet<SectorRange>> _spawnSectors = new(); //sector pos => free ranges in this sector
-    private Dictionary<Vector2i, double> _spawnSectorVolumes = new(); //sector pos => occupied volume in this sector
+    private Dictionary<Vector2i, double> _spawnSectorAreas = new(); //sector pos => occupied area in this sector
+    private IMapGenDistribution? _lastDistribution = null;
 
-    /// <summary>
-    /// Randomly places specified structures onto map
-    /// </summary>
-    /// <param name="targetMap">Selected map</param>
-    /// <param name="startPos">Bottom-left corner of spawning square</param>
-    /// <param name="structures">List of structure prototypes to spawn</param>
-    /// <param name="globalProcessors">List of processors which should run after all structures were spawned</param>
-    /// <param name="structureAmount">Amount of structures to spawn</param>
-    /// <param name="maxOffset">Spawning square size</param>
-    public void SpawnStructures(
-        MapId targetMap,
-        Vector2i startPos,
-        int structureAmount,
-        int maxOffset,
-        List<StructurePrototype> structures,
-        List<IMapGenProcessor> globalProcessors,
-        IMapGenDistribution distribution)
+
+    public void RunPreset(MapId map, MapGenPresetPrototype preset, Vector2i? shift = null)
     {
-        if (targetMap == MapId.Nullspace || !MapMan.MapExists(targetMap))
+        if (!MapSys.TryGetMap(map, out var mapUid))
             return;
-        TargetMap = targetMap;
+
+        Area = preset.Area.Translated(shift ?? Vector2i.Zero);
+        TargetMap = map;
         MapMan.SetMapPaused(TargetMap, true);
+        SetupGrid(Area);
 
-        StartPos = startPos;
-        MaxSpawnOffset = maxOffset;
-        SetupGrid(startPos, maxOffset);
+        foreach (string layer in preset.Layers)
+        {
+            RunLayer(ProtMan.Index<MapGenLayerPrototype>(layer));
+        }
 
-        for (int n = 0; n < structureAmount; n++)
+        foreach (var proc in preset.GlobalProcessors)
+        {
+            proc.Process(this, TargetMap, mapUid.Value, true);
+        }
+
+        MapMan.SetMapPaused(TargetMap, false);
+        Area = Box2i.Empty;
+        TargetMap = MapId.Nullspace;
+        Log.Info($"Spawned {SpawnedGrids.Count} grids");
+        SpawnedGrids.Clear();
+        _spawnSectors.Clear();
+        _spawnSectorAreas.Clear();
+    }
+
+    public void RunLayer(MapGenLayerPrototype layer)
+    {
+        List<MapGenStructurePrototype> structures = new();
+        foreach (string structure in layer.Structures)
+        {
+            structures.Add(ProtMan.Index<MapGenStructurePrototype>(structure));
+        }
+
+        for (int n = 0; n < layer.StructureAmount; n++)
         {
             var structProt = PickStructure(structures);
             if (structProt == null)
@@ -73,8 +85,13 @@ public sealed class MapGenSystem : EntitySystem
 
             var gridUids = structProt.Generator.Generate(this, TargetMap);
             var aabb = ComputeTotalAABB(gridUids).Enlarged(structProt.MinDistance);
-            if (aabb.Width + aabb.Height > 200)
-                Log.Warning("Structure's AABB is suspiciously big");
+
+            var distribution = layer.Distribution ?? _lastDistribution;
+            if (distribution == null)
+            {
+                Log.Warning("Distribution is null, using uniform distribution instead.");
+                distribution = _lastDistribution = new UniformDistribution();
+            }
 
             var spawnPos = GenerateSpawnPosition((Box2i) aabb, distribution, 50);
             if (spawnPos == null)
@@ -100,29 +117,13 @@ public sealed class MapGenSystem : EntitySystem
             }
             SpawnedGrids.AddRange(gridUids);
         }
-
-        foreach (var proc in globalProcessors)
-        {
-            proc.Process(this, TargetMap, MapMan.GetMapEntityId(TargetMap), true);
-        }
-
-        MapMan.SetMapPaused(TargetMap, false);
-        TargetMap = MapId.Nullspace;
-        Log.Info($"Spawned {SpawnedGrids.Count} grids");
-        SpawnedGrids.Clear();
-
-        StartPos = Vector2i.Zero;
-        MaxSpawnOffset = 0;
-
-        _spawnSectors.Clear();
-        _spawnSectorVolumes.Clear();
     }
 
     /// <summary>
     /// Randomly places specified structure onto map. Does not optimise collision checking in any way
     /// </summary>
     public IEnumerable<EntityUid> RandomPosSpawn(MapId targetMap, Vector2 startPos, int maxOffset, int tries,
-        StructurePrototype structure, List<IMapGenProcessor>? extraProcessors = null, bool forceIfFailed = false)
+        MapGenStructurePrototype structure, List<IMapGenProcessor>? extraProcessors = null, bool forceIfFailed = false)
     {
         TargetMap = targetMap;
 
@@ -143,6 +144,7 @@ public sealed class MapGenSystem : EntitySystem
                 bounds.Bottom + aabb.Height,
                 bounds.Right - aabb.Width,
                 bounds.Top - aabb.Height).Rounded();
+
             if (!MapMan.FindGridsIntersecting(targetMap, new Box2(mapPos - finalDistance, mapPos + finalDistance)).Any())
             {
                 result = true;
@@ -208,24 +210,19 @@ public sealed class MapGenSystem : EntitySystem
         }
     }
 
-    /// <summary>
-    /// Sets up collision grid
-    /// </summary>
-    /// <param name="startPos">Bottom-left corner of grid's square</param>
-    /// <param name="maxOffset">Grid's size</param>
-    private void SetupGrid(Vector2i startPos, int maxOffset)
+    private void SetupGrid(Box2i area)
     {
-        for (int y = 0; y < maxOffset; y += SectorSize)
+        for (int y = 0; y < area.Height; y += SectorSize)
         {
-            for (int x = 0; x < maxOffset; x += SectorSize)
+            for (int x = 0; x < area.Width; x += SectorSize)
             {
-                Vector2i sectorPos = new Vector2i(startPos.X + x, startPos.Y + y);
+                Vector2i sectorPos = new Vector2i(area.Left + x, area.Bottom + y);
                 _spawnSectors[sectorPos] = new HashSet<SectorRange>
                 {
                     new SectorRange(sectorPos.Y, sectorPos.Y + SectorSize,
                         new List<(int, int)>{(sectorPos.X, sectorPos.X + SectorSize)})
                 };
-                _spawnSectorVolumes[sectorPos] = SectorSize * SectorSize;
+                _spawnSectorAreas[sectorPos] = SectorSize * SectorSize;
             }
         }
     }
@@ -233,12 +230,12 @@ public sealed class MapGenSystem : EntitySystem
     /// <summary>
     /// Randomly picks structures from structure list, accounting for their weight
     /// </summary>
-    private StructurePrototype? PickStructure(List<StructurePrototype> structures)
+    private MapGenStructurePrototype? PickStructure(List<MapGenStructurePrototype> structures)
     {
         float totalWeight = structures.Select(s => s.SpawnWeight).Sum();
         float randFloat = Random.NextFloat(0, totalWeight);
 
-        StructurePrototype? picked = null;
+        MapGenStructurePrototype? picked = null;
         foreach (var structProt in structures)
         {
             if (structProt.SpawnWeight > randFloat)
@@ -258,13 +255,15 @@ public sealed class MapGenSystem : EntitySystem
     /// </summary>
     private Vector2? GenerateSpawnPosition(Box2i bounds, IMapGenDistribution distribution, int tries)
     {
-        var volume = bounds.Height * bounds.Width;
+        var area = bounds.Height * bounds.Width;
 
         for (int i = 0; i < tries; i++)
         {
             Vector2i sectorPos = (distribution.Generate(this) / SectorSize).Floored() * SectorSize;
-            if (_spawnSectorVolumes[sectorPos] < volume)
+
+            if (_spawnSectorAreas[sectorPos] < area)
                 continue;
+
             if (TryPlaceInSector(sectorPos, bounds, out Vector2i spawnPos))
                 return spawnPos;
         }
@@ -301,12 +300,12 @@ public sealed class MapGenSystem : EntitySystem
                         hy = range.Top - bounds.Height;
                         break;
                     }
-                    SectorRange combinedRange = CombineRangesVertically(_spawnSectors[sectorPos], start, end, range.Bottom, range.Top, bounds.Width);
 
+                    SectorRange combinedRange = CombineRangesVertically(_spawnSectors[sectorPos], start, end, range.Bottom, range.Top, bounds.Width);
                     if (combinedRange.Top - combinedRange.Bottom >= bounds.Height)
                     {
                         result = true;
-                        (int startc, int endc) = combinedRange.XRanges.First();
+                        (int startc, int endc) = combinedRange.XRanges[0];
 
                         lx = startc;
                         hx = endc - bounds.Width;
@@ -331,7 +330,7 @@ public sealed class MapGenSystem : EntitySystem
                         Box2i.FromDimensions(resultPos, new Vector2i(bounds.Width, bounds.Height))
                         )
                     );
-            _spawnSectorVolumes[sectorPos] -= bounds.Height * bounds.Width;
+            _spawnSectorAreas[sectorPos] -= bounds.Height * bounds.Width;
         }
 
         return result;
@@ -342,7 +341,7 @@ public sealed class MapGenSystem : EntitySystem
     /// </summary>
     private SectorRange RangeFromBox(Box2i box)
     {
-        return new SectorRange(box.Bottom, box.Top, new List<(int, int)> {(box.Left, box.Right)});
+        return new SectorRange(box.Bottom, box.Top, new List<(int, int)> { (box.Left, box.Right) });
     }
 
     /// <summary>
@@ -415,7 +414,7 @@ public sealed class MapGenSystem : EntitySystem
                 int endnn = endf < endn ? endf : endn;
                 if (endnn - startnn < minWidth)
                     continue;
-                return new SectorRange(srange.Bottom, srange.Top, new List<(int, int)>{(startnn, endnn)});
+                return new SectorRange(srange.Bottom, srange.Top, new List<(int, int)> { (startnn, endnn) });
             }
 
             return null;
@@ -440,7 +439,7 @@ public sealed class MapGenSystem : EntitySystem
             (startn, endn) = r.Value.XRanges[0];
         }
 
-        return new SectorRange(bottomn, topn, new List<(int, int)> {(startn, endn)});
+        return new SectorRange(bottomn, topn, new List<(int, int)> { (startn, endn) });
     }
 
     /// <summary>
@@ -471,6 +470,7 @@ public sealed class MapGenSystem : EntitySystem
             (int, int) nextRange = ranges.Where(r => r.Item1 > end).OrderBy(r => r.Item1).FirstOrDefault();
             if (nextRange == default)
                 continue;
+
             results.Add((end, nextRange.Item1));
         }
 
@@ -549,7 +549,8 @@ public sealed class MapGenSystem : EntitySystem
 /// <summary>
 /// Distribution is used for generating spawn positions. It may be simple randint or some 2D noise.
 /// </summary>
-public interface IMapGenDistribution
+[ImplicitDataDefinitionForInheritors]
+public partial interface IMapGenDistribution
 {
     public Vector2 Generate(MapGenSystem sys);
 }

@@ -122,8 +122,12 @@ namespace Content.Client.Entry
             _prototypeManager.RegisterIgnore("nukeopsRole");
             _prototypeManager.RegisterIgnore("stationGoal"); // Corvax-StationGoal
             _prototypeManager.RegisterIgnore("ghostRoleRaffleDecider");
-            _prototypeManager.RegisterIgnore("structure"); //theta mapgen
-            _prototypeManager.RegisterIgnore("modifier"); //also theta
+
+            //theta
+            _prototypeManager.RegisterIgnore("mapgenstructure");
+            _prototypeManager.RegisterIgnore("mapgenlayer");
+            _prototypeManager.RegisterIgnore("mapgenpreset");
+            _prototypeManager.RegisterIgnore("modifier");
 
             _componentFactory.GenerateNetIds();
             _adminManager.Initialize();

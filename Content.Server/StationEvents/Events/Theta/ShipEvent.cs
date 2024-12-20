@@ -29,54 +29,48 @@ public sealed partial class ShipEventRuleComponent : Component
     //all time related fields are in seconds
 
     //time
-    [DataField("roundDuration")] public int RoundDuration; //set to negative if you don't need a timed round end
-    [DataField("teamCheckInterval")] public float TeamCheckInterval;
-    [DataField("fleetCheckInterval")] public float FleetCheckInterval;
-    [DataField("playerCheckInterval")] public float PlayerCheckInterval;
-    [DataField("respawnDelay")] public int RespawnDelay;
-    [DataField("bonusInterval")] public int BonusInterval;
-    [DataField("boundsCompressionInterval")] public float BoundsCompressionInterval;
-    [DataField("pickupsSpawnInterval")] public float PickupsSpawnInterval;
-    [DataField("anomalyUpdateInterval")] public float AnomalyUpdateInterval;
-    [DataField("anomalySpawnInterval")] public float AnomalySpawnInterval;
-    [DataField("modifierUpdateInterval")] public float ModifierUpdateInterval;
+    [DataField] public int RoundDuration; //set to negative if you don't need a timed round end
+    [DataField] public float TeamCheckInterval;
+    [DataField] public float FleetCheckInterval;
+    [DataField] public float PlayerCheckInterval;
+    [DataField] public int RespawnDelay;
+    [DataField] public int BonusInterval;
+    [DataField] public float BoundsCompressionInterval;
+    [DataField] public float PickupsSpawnInterval;
+    [DataField] public float AnomalyUpdateInterval;
+    [DataField] public float AnomalySpawnInterval;
+    [DataField] public float ModifierUpdateInterval;
 
     //points
-    [DataField("pointsPerInterval")] public int PointsPerInterval;
-    [DataField("pointsPerHitMultiplier")] public float PointsPerHitMultiplier;
-    [DataField("pointsPerAssist")] public int PointsPerAssist;
-    [DataField("pointsPerKill")] public int PointsPerKill;
-    [DataField("outOfBoundsPenalty")] public int OutOfBoundsPenalty;
+    [DataField] public int PointsPerInterval;
+    [DataField] public float PointsPerHitMultiplier;
+    [DataField] public int PointsPerAssist;
+    [DataField] public int PointsPerKill;
+    [DataField] public int OutOfBoundsPenalty;
 
     //fleets
-    [DataField("fleetMaxTeams")] public int FleetMaxTeams;
-    [DataField("fleetPointsPerTeam")] public int FleetPointsPerTeam; //how much points across all teams in the fleet are required to raise the limit
+    [DataField] public int FleetMaxTeams;
+    [DataField] public int FleetPointsPerTeam; //how much points across all teams in the fleet are required to raise the limit
 
     //mapgen
-    [DataField("initialObstacleAmount")] public int InitialObstacleAmount;
-    [DataField("obstacleTypes")] public List<string> ObstacleTypes = new();
-    [DataField("obstacleAmountAmplitude")] public int ObstacleAmountAmplitude;
-    [DataField("obstacleSizeAmplitude")] public int ObstacleSizeAmplitude;
-    [DataField("minFieldSize")] public int MinFieldSize;
-    [DataField("maxFieldSize")] public int MaxFieldSize;
-    [DataField("metersPerPlayer")] public int MetersPerPlayer; //scaling field based on online (at roundstart)
-    [DataField("roundFieldSizeTo")] public int RoundFieldSizeTo;
-    [DataField("useNoise")] public bool UseNoise;
-    [DataField("noiseGenerator")] public FastNoiseLite? NoiseGenerator;
-    [DataField("noiseThreshold")] public float NoiseThreshold;
+    [DataField(customTypeSerializer: typeof(PrototypeIdSerializer<MapGenPresetPrototype>))]
+    public string MapGenPresetPrototype;
+    [DataField] public int MaxFieldSize;
+    [DataField] public int MetersPerPlayer; //scaling field based on online (at roundstart)
+    [DataField] public int RoundFieldSizeTo;
 
     //misc
-    [DataField("spaceLightColor")] public Color? SpaceLightColor = null;
-    [DataField("shipTypes")] public List<string> ShipTypes = new();
-    [DataField("boundsCompressionDistance")] public int BoundsCompressionDistance;
-    [DataField("pickupsPositions")] public int PickupsPositionsCount;
-    [DataField("pickupMinDistance")] public float PickupMinDistance;
-    [DataField("pickupPrototype", customTypeSerializer: typeof(PrototypeIdSerializer<WeightedRandomEntityPrototype>))]
+    [DataField] public Color? SpaceLightColor = null;
+    [DataField] public List<string> ShipTypes = new();
+    [DataField] public int BoundsCompressionDistance;
+    [DataField] public int PickupPositionCount;
+    [DataField] public float PickupMinDistance;
+    [DataField(customTypeSerializer: typeof(PrototypeIdSerializer<WeightedRandomEntityPrototype>))]
     public string PickupPrototype = default!;
-    [DataField("anomalyPrototypes", customTypeSerializer: typeof(PrototypeIdListSerializer<EntityPrototype>))]
+    [DataField(customTypeSerializer: typeof(PrototypeIdListSerializer<EntityPrototype>))]
     public List<string> AnomalyPrototypes = new();
-    [DataField("modifierAmount")] public int ModifierAmount;
-    [DataField("modifierPrototypes", customTypeSerializer: typeof(PrototypeIdListSerializer<ShipEventModifierPrototype>))]
+    [DataField] public int ModifierAmount;
+    [DataField(customTypeSerializer: typeof(PrototypeIdListSerializer<ShipEventModifierPrototype>))]
     public List<string> ModifierPrototypes = new();
 }
 
@@ -124,6 +118,8 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
     {
         base.Started(uid, component, gameRule, args);
 
+        var mapGenPreset = _protMan.Index<MapGenPresetPrototype>(component.MapGenPresetPrototype).ShallowCopy();
+
         var map = _mapMan.CreateMap();
         if (component.SpaceLightColor != null)
             EnsureComp<MapLightComponent>(_mapMan.GetMapEntityId(map)).AmbientLightColor = component.SpaceLightColor.Value;
@@ -146,15 +142,19 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         _shipSys.FleetMaxTeams = component.FleetMaxTeams;
         _shipSys.FleetPointsPerTeam = component.FleetPointsPerTeam;
 
-        _shipSys.PickupsPositionsCount = component.PickupsPositionsCount;
+        _shipSys.PickupsPositionsCount = component.PickupPositionCount;
         _shipSys.PickupSpawnInterval = component.PickupsSpawnInterval;
         _shipSys.PickupMinDistance = component.PickupMinDistance;
         _shipSys.PickupPrototype = component.PickupPrototype;
 
-        _shipSys.MaxSpawnOffset = Math.Clamp(
+        //todo: add support for non square field to ship event sys
+        _shipSys.MaxSpawnOffset = mapGenPreset.Area.Width;
+        var extraMeters = Math.Min(
             (int) Math.Round((float) _playerMan.PlayerCount * component.MetersPerPlayer / component.RoundFieldSizeTo) * component.RoundFieldSizeTo,
-            component.MinFieldSize,
             component.MaxFieldSize);
+        var areaBottomLeft = mapGenPreset.Area.BottomLeft;
+        mapGenPreset.Area = mapGenPreset.Area.Translated(new Vector2i(extraMeters, extraMeters));
+        mapGenPreset.Area.BottomLeft = areaBottomLeft;
 
         _shipSys.BoundsCompressionInterval = component.BoundsCompressionInterval;
         _shipSys.BoundsCompression = component.BoundsCompressionInterval > 0;
@@ -179,25 +179,6 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
             _shipSys.AllModifiers.Add(_protMan.Index<ShipEventModifierPrototype>(modifierProtId));
         }
 
-        List<StructurePrototype> obstacleStructProts = new();
-        foreach (var structProtId in component.ObstacleTypes)
-        {
-            var structProt = _protMan.Index<StructurePrototype>(structProtId);
-
-            //todo: remove this horror after proper map gen adjustment system is made
-            var randomSize = _rand.Next(-component.ObstacleSizeAmplitude, component.ObstacleSizeAmplitude);
-            if (structProt.Generator is AsteroidGenerator gen)
-            {
-                var ratio = (gen.Size + randomSize) / gen.Size;
-                gen.MaxCircleRadius *= ratio;
-                gen.MaxCircleRadius *= ratio;
-                structProt.MinDistance += randomSize;
-                gen.Size += randomSize;
-            }
-
-            obstacleStructProts.Add(structProt);
-        }
-
         AddComponentsProcessor iffSplitProc = new();
         iffSplitProc.Components = new ComponentRegistry(
             new()
@@ -210,31 +191,10 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         iffFlagProc.Flags = new() { IFFFlags.HideLabel };
         iffFlagProc.ColorOverride = Color.Gold;
 
-        List<IMapGenProcessor> globalProcessors = new() { iffSplitProc, iffFlagProc };
-
-        IMapGenDistribution distribution = new SimpleDistribution();
-        if (_rand.Prob(0.05f))
-        {
-            distribution = new FunnyDistribution();
-        }
-        else
-        {
-            if (component.UseNoise && component.NoiseGenerator != null)
-                distribution = new NoiseDistribution(
-                component.NoiseGenerator,
-                _shipSys.MaxSpawnOffset / MapGenSystem.SectorSize,
-                component.NoiseThreshold);
-        }
-
-        _mapGenSys.SpawnStructures(map,
-            Vector2i.Zero,
-            component.InitialObstacleAmount + _rand.Next(-component.ObstacleAmountAmplitude, component.ObstacleAmountAmplitude),
-            _shipSys.MaxSpawnOffset,
-            obstacleStructProts,
-            globalProcessors,
-            distribution);
+        mapGenPreset.GlobalProcessors.AddRange([iffSplitProc, iffFlagProc]);
         _shipSys.ShipProcessors.Add(iffSplitProc);
 
+        _mapGenSys.RunPreset(map, mapGenPreset);
         _shipSys.RuleSelected = true;
     }
 }

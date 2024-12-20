@@ -4,44 +4,46 @@ using Robust.Shared.Random;
 
 namespace Content.Server.Theta.MapGen.Distributions;
 
-public sealed class NoiseDistribution : IMapGenDistribution
+public sealed partial class NoiseDistribution : IMapGenDistribution
 {
+    [DataField] public FastNoiseLite.NoiseType NoiseType;
+    [DataField] public float Frequency;
+    [DataField] public float Threshold;
+
     private List<Vector2> _positions = new();
     private int _lastIndex;
 
-    //total amount of positions = resolution ^ 2
-    public NoiseDistribution(FastNoiseLite.NoiseType noiseType, int resolution, float frequency, float threshold)
+    private void FillPositions(FastNoiseLite generator, Box2i area, int sectorSize, float threshold)
     {
-        var generator = new FastNoiseLite();
-        generator.SetNoiseType(noiseType);
-        generator.SetFrequency(frequency);
-        FillPositions(generator, resolution, threshold);
-    }
+        int sectorsX = area.Width / sectorSize;
+        int sectorsY = area.Height / sectorSize;
 
-    public NoiseDistribution(FastNoiseLite generator, int resolution, float threshold)
-    {
-        FillPositions(generator, resolution, threshold);
-    }
-
-    private void FillPositions(FastNoiseLite generator, int resolution, float threshold)
-    {
         var random = IoCManager.Resolve<IRobustRandom>();
-        for (int y = 0; y < resolution; y++)
+        for (int y = 0; y < sectorsX; y++)
         {
-            for (int x = 0; x < resolution; x++)
+            for (int x = 0; x < sectorsY; x++)
             {
-                float normalX = (float) x / resolution;
-                float normalY = (float) y / resolution;
+                float normalX = (float) x / sectorsX;
+                float normalY = (float) y / sectorsY;
                 float value = generator.GetNoise(normalX, normalY);
+
                 if (value > threshold)
-                    _positions.Add(new Vector2(normalX, normalY));
+                    _positions.Add(new Vector2(normalX * area.Width, normalY * area.Height));
             }
         }
     }
 
     public Vector2 Generate(MapGenSystem sys)
     {
-        Vector2 pos = _positions[_lastIndex] * sys.MaxSpawnOffset + sys.StartPos;
+        if (_positions.Count == 0)
+        {
+            var generator = new FastNoiseLite();
+            generator.SetNoiseType(NoiseType);
+            generator.SetFrequency(Frequency);
+            FillPositions(generator, sys.Area, MapGenSystem.SectorSize, Threshold);
+        }
+
+        Vector2 pos = _positions[_lastIndex];
         _lastIndex++;
         if (_lastIndex > _positions.Count - 1)
             _lastIndex = 0;

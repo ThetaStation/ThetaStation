@@ -739,7 +739,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
             new Vector2(CurrentBoundsOffset, CurrentBoundsOffset),
             MaxSpawnOffset - CurrentBoundsOffset,
             50,
-            _protMan.Index<StructurePrototype>(team.ChosenShipType.StructurePrototype),
+            _protMan.Index<MapGenStructurePrototype>(team.ChosenShipType.StructurePrototype),
             ShipProcessors,
             true);
         team.ShipGrids = shipGrids.ToList();
