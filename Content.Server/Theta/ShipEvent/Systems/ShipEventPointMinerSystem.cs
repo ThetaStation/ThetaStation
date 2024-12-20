@@ -30,6 +30,7 @@ public sealed class ShipEventPointMinerSystem : EntitySystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
+
         var query = EntityQueryEnumerator<ShipEventPointMinerComponent>();
         while (query.MoveNext(out var uid, out var miner))
         {
@@ -42,7 +43,7 @@ public sealed class ShipEventPointMinerSystem : EntitySystem
             if (miner.NextFire <= _timing.CurTime)
             {
                 OnTimerFire(uid, miner);
-                miner.NextFire += miner.Interval;
+                miner.NextFire = miner.NextFire.Value + miner.Interval;
             }
         }
     }
