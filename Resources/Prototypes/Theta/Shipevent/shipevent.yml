@@ -15,9 +15,9 @@
 
       #points
       pointsPerInterval: 5000
-      pointsPerHitMultiplier: 0.01
-      pointsPerAssist: 5000
-      pointsPerKill : 10000
+      pointsPerHitMultiplier: 0.005
+      pointsPerAssist: 1000
+      pointsPerKill : 5000
       outOfBoundsPenalty: 2000
 
       #fleets
