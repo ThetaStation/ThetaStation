@@ -91,6 +91,8 @@ public sealed class ShipEventPointMinerSystem : EntitySystem
 
         if (TryComp<RadarRenderableComponent>(uid, out var rend))
             rend.OverrideColor = targetTeam.Color;
+
+        RaiseNetworkEvent(new ShipEventPointMinerSetColorMessage() { NetUid = GetNetEntity(uid), Color = targetTeam.Color });
     }
 
     private void OnTimerFire(EntityUid uid, ShipEventPointMinerComponent miner)

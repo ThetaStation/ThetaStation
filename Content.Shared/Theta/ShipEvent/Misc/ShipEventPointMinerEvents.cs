@@ -10,3 +10,11 @@ public sealed partial class ShipEventPointMinerOverrideFinished : DoAfterEvent
 
     public override DoAfterEvent Clone() => this;
 }
+
+[Serializable, NetSerializable]
+public sealed partial class ShipEventPointMinerSetColorMessage : EntityEventArgs
+{
+    public NetEntity NetUid;
+
+    public Color Color;
+}

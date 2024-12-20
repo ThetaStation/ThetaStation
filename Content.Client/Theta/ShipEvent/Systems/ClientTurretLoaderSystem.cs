@@ -2,14 +2,12 @@ using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Theta.ShipEvent;
 using Content.Shared.Theta.ShipEvent.Components;
 using Robust.Client.GameObjects;
-using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
 
 namespace Content.Client.Theta.ShipEvent.Systems;
 
 public sealed class ClientTurretLoaderSystem : EntitySystem
 {
-    [Dependency] private readonly SharedContainerSystem _contSys = default!;
     [Dependency] private readonly ItemSlotsSystem _slotSys = default!;
 
     public override void Initialize()
