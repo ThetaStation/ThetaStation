@@ -1,12 +1,8 @@
-using Content.Server.Roles;
 using Content.Server.Shuttles.Systems;
 using Content.Server.Theta.ShipEvent;
 using Content.Server.Theta.ShipEvent.Console;
 using Content.Shared.Doors.Components;
-using Content.Shared.Mind.Components;
-using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
-using Content.Shared.Roles.Theta;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Theta.ShipEvent;
@@ -113,7 +109,8 @@ public sealed class RadarRenderableSystem : EntitySystem
         return new CommonRadarEntityInterfaceState(
             GetNetCoordinates(_transformSystem.GetMoverCoordinates(uid, xform)),
             _transformSystem.GetWorldRotation(xform),
-            renderable.ViewPrototypes
+            renderable.ViewPrototypes,
+            renderable.OverrideColor
         );
     }
 

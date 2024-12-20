@@ -252,3 +252,42 @@
       id: loot
       teleportationSound:
         path: /Audio/Effects/tesla_consume.ogg
+
+- type: entity
+  id: ShipEventPointMiner
+  suffix: ShipEvent
+  name: point miner
+  parent: BaseComputer
+  components:
+    - type: ShipEventTeamMarker
+    - type: ShipEventPointMiner
+      overrideDelay: 5
+      interval: 60
+      pointsPerInterval: 1000
+      fireSound: /Audio/Effects/newplayerping.ogg
+    - type: RadarRenderable
+      viewProtos:
+        - pointminer
+      group: enum.RadarRenderableGroup.None
+    - type: PointLight
+      radius: 1.5
+      energy: 1.6
+      color: "#ffffff"
+    - type: Sprite
+      sprite: Theta/ShipEvent/Structures/Machines/PointMiner.rsi
+      layers:
+      - map: ["computerLayerBody"]
+        state: computer
+      - map: ["computerLayerKeyboard"]
+        state: generic_keyboard
+      - map: ["computerLayerScreen"]
+        state: miner
+      - map: ["computerLayerKeys"]
+        state: generic_keys
+    - type: ApcPowerReceiver
+      needsPower: false
+    - type: Destructible
+      thresholds:
+        - trigger: # override the parent slot for immortality
+            !type:DamageTrigger
+            damage: 100000

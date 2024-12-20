@@ -15,9 +15,9 @@
 
       #points
       pointsPerInterval: 5000
-      pointsPerHitMultiplier: 0.01
-      pointsPerAssist: 5000
-      pointsPerKill : 10000
+      pointsPerHitMultiplier: 0.005
+      pointsPerAssist: 1000
+      pointsPerKill : 5000
       outOfBoundsPenalty: 2000
 
       #fleets
@@ -25,8 +25,8 @@
       fleetPointsPerTeam: 5000
 
       #map gen
+      mapGenPresetPrototype: ShipEventMapGen
       initialObstacleAmount: 200
-      minFieldSize: 1000
       maxFieldSize: 3000
       metersPerPlayer: 100
       roundFieldSizeTo: 1000
@@ -38,10 +38,6 @@
         - "shiptype_asteroid_ship"
         - "shiptype_boxship"
         - "shiptype_python"
-      useNoise: true
-      noiseGenerator: !type:FastNoiseLite
-        frequency: 2
-      noiseThreshold: 0.1
 
       #bounds
       boundsCompressionInterval: 0
@@ -55,8 +51,8 @@
       obstacleSizeAmplitude: 0
 
       #pickups
-      pickupsPositions: 25
-      pickupsSpawnInterval: 60 # in seconds
+      pickupPositionCount: 25
+      pickupSpawnInterval: 60 # in seconds
       pickupMinDistance: 100
       pickupPrototype: ShipEventPickupPrototype
 

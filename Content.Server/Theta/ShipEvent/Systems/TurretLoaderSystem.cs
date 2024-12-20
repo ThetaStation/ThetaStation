@@ -15,7 +15,6 @@ namespace Content.Server.Theta.ShipEvent.Systems;
 
 public sealed class TurretLoaderSystem : EntitySystem
 {
-    [Dependency] private readonly MetaDataSystem _metaSys = default!;
     [Dependency] private readonly ItemSlotsSystem _slotSys = default!;
     [Dependency] private readonly SharedAudioSystem _audioSys = default!;
 

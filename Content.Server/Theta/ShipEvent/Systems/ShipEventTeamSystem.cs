@@ -99,7 +99,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
     public const string CaptainHUDPrototypeId = "ShipEventHUDCaptain";
     public const string AdmiralHUDPrototypeId = "ShipEventHUDAdmiral";
     public const string TeamChannelID = "Common";
-    public const string FleetChannelID = "Fleet";
+    public const string FleetChannelID = "ShipEventFleet";
     public const string TeamViewActionPrototype = "ShipEventTeamViewToggle";
     public const string CaptainMenuActionPrototype = "ShipEventCaptainMenuToggle";
     public const string AdmiralMenuActionPrototype = "ShipEventAdmiralMenuToggle";
@@ -739,7 +739,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
             new Vector2(CurrentBoundsOffset, CurrentBoundsOffset),
             MaxSpawnOffset - CurrentBoundsOffset,
             50,
-            _protMan.Index<StructurePrototype>(team.ChosenShipType.StructurePrototype),
+            _protMan.Index<MapGenStructurePrototype>(team.ChosenShipType.StructurePrototype),
             ShipProcessors,
             true);
         team.ShipGrids = shipGrids.ToList();
