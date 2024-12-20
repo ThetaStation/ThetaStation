@@ -11,7 +11,8 @@
 
 - type: mapgenlayer
   id: RuinLayer
-  structureAmount: 10
+  structureAmount: 5
+  distribution: !type:UniformDistribution
   structures:
     - "ruin_office"
     - "ruin_communism"

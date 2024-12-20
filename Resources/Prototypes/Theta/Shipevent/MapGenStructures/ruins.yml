@@ -3,18 +3,18 @@
   generator: !type:MapLoaderGenerator
     mapPath: "/Maps/Theta/Shipevent/Ruins/office.yml"
   spawnWeight: 0.2
-  minDistance: 30
+  minDistance: 0
 
 - type: mapgenstructure
   id: "ruin_communism"
   generator: !type:MapLoaderGenerator
     mapPath: "/Maps/Theta/Shipevent/Ruins/communism.yml"
   spawnWeight: 0.4
-  minDistance: 30
+  minDistance: 0
 
 - type: mapgenstructure
   id: "ruin_ship"
   generator: !type:MapLoaderGenerator
     mapPath: "/Maps/Theta/Shipevent/Ruins/ship.yml"
   spawnWeight: 0.4
-  minDistance: 30
+  minDistance: 0
