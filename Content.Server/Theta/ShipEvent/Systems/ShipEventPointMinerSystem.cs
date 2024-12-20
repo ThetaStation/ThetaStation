@@ -42,6 +42,7 @@ public sealed class ShipEventPointMinerSystem : EntitySystem
             if (miner.NextFire <= _timing.CurTime)
             {
                 OnTimerFire(uid, miner);
+                miner.NextFire += miner.Interval;
             }
         }
     }
