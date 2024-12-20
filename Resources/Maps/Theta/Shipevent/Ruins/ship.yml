@@ -629,6 +629,25 @@ entities:
     - type: Transform
       pos: 4.5,1.5
       parent: 1
+- proto: SpawnMobSpaceSpider
+  entities:
+  - uid: 148
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 2.5,-1.5
+      parent: 1
+  - uid: 149
+    components:
+    - type: Transform
+      pos: 7.5,-3.5
+      parent: 1
+  - uid: 150
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 11.5,-2.5
+      parent: 1
 - proto: TableReinforced
   entities:
   - uid: 112
