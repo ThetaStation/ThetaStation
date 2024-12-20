@@ -82,6 +82,14 @@
     char: '+'
     scale: 1.5
 
+- type: radarEntityView
+  id: pointminer
+  defaultColor: "#ffffff"
+  form:
+    !type:CharRadarForm
+    char: '$'
+    scale: 1.5
+
 #anomalies
 - type: radarEntityView
   id: radanomaly_icon

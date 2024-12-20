@@ -12,4 +12,7 @@ public sealed partial class RadarRenderableComponent : Component
 
     [DataField("group", required: true)]
     public Enum Group = RadarRenderableGroup.None;
+
+    [DataField("overrideColor")]
+    public Color? OverrideColor = null;
 }
