@@ -5,18 +5,17 @@ using Content.Shared.Interaction;
 using Content.Shared.Theta.ShipEvent.Components;
 using Robust.Shared.Audio.Systems;
 using Robust.Server.GameObjects;
-using Robust.Shared.Timing;
-using Timer = Robust.Shared.Timing.Timer;
 using Content.Server.Theta.RadarRenderable;
 using Content.Shared.Theta.ShipEvent.Misc;
 using Content.Shared.Roles.Theta;
+using Robust.Shared.Timing;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
 public sealed class ShipEventPointMinerSystem : EntitySystem
 {
     [Dependency] private readonly ShipEventTeamSystem _shipSys = default!;
-    [Dependency] private readonly ITimerManager _timerMan = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly DoAfterSystem _doAfterSys = default!;
     [Dependency] private readonly SharedPointLightSystem _lightSys = default!;
     [Dependency] private readonly SharedAudioSystem _audioSys = default!;
@@ -24,20 +23,27 @@ public sealed class ShipEventPointMinerSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<ShipEventPointMinerComponent, ComponentStartup>(OnStartup);
-        SubscribeLocalEvent<ShipEventPointMinerComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<ShipEventPointMinerComponent, InteractHandEvent>(OnHandInteract);
         SubscribeLocalEvent<ShipEventPointMinerComponent, ShipEventPointMinerOverrideFinished>(OnOverrideFinished);
     }
 
-    private void OnStartup(EntityUid uid, ShipEventPointMinerComponent miner, ref ComponentStartup args)
+    public override void Update(float frameTime)
     {
-        SetupTimer(uid, miner);
-    }
+        base.Update(frameTime);
+        var query = EntityQueryEnumerator<ShipEventPointMinerComponent>();
+        while (query.MoveNext(out var uid, out var miner))
+        {
+            if (miner.NextFire == null && miner.OwnerTeam != null)
+            {
+                miner.NextFire = _timing.CurTime + miner.Interval;
+                continue;
+            }
 
-    private void OnShutdown(EntityUid uid, ShipEventPointMinerComponent miner, ref ComponentShutdown args)
-    {
-        CancelTimer(miner);
+            if (miner.NextFire <= _timing.CurTime)
+            {
+                OnTimerFire(uid, miner);
+            }
+        }
     }
 
     private void OnHandInteract(EntityUid uid, ShipEventPointMinerComponent miner, ref InteractHandEvent args)
@@ -92,24 +98,5 @@ public sealed class ShipEventPointMinerSystem : EntitySystem
 
         miner.OwnerTeam.Points += miner.PointsPerInterval;
         _audioSys.PlayPredicted(miner.FireSound, uid, uid);
-    }
-
-    private void SetupTimer(EntityUid uid, ShipEventPointMinerComponent miner)
-    {
-        _timerMan.AddTimer(new Timer(miner.Interval * 1000, true, () => { OnTimerFire(uid, miner); }), miner.TimerTokenSource.Token);
-    }
-
-    private void CancelTimer(ShipEventPointMinerComponent miner)
-    {
-        miner.TimerTokenSource.Cancel();
-        miner.TimerTokenSource.Dispose();
-        miner.TimerTokenSource = new();
-    }
-
-    public void SetMinerInterval(EntityUid uid, ShipEventPointMinerComponent miner, int newInterval)
-    {
-        miner.Interval = newInterval;
-        CancelTimer(miner);
-        SetupTimer(uid, miner);
     }
 }
