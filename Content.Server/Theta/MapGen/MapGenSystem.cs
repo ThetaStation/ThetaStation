@@ -90,7 +90,7 @@ public sealed class MapGenSystem : EntitySystem
             if (distribution == null)
             {
                 Log.Warning("Distribution is null, using uniform distribution instead.");
-                distribution = _lastDistribution = new UniformDistribution();
+                distribution = new UniformDistribution();
             }
 
             var spawnPos = GenerateSpawnPosition((Box2i) aabb, distribution, 50);
@@ -116,6 +116,8 @@ public sealed class MapGenSystem : EntitySystem
                 }
             }
             SpawnedGrids.AddRange(gridUids);
+
+            _lastDistribution = distribution;
         }
     }
 
