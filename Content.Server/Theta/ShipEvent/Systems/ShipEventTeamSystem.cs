@@ -342,6 +342,22 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         if (!RuleSelected || Teams.Count == 0)
             return;
 
+        //todo: damn
+        int tagIndex = 0;
+        for (int i = 0; i < RoundEndReport.Length; i++)
+        {
+            Char ch = RoundEndReport[i];
+
+            if (ch == '[')
+                tagIndex = i;
+
+            if (ch == ']')
+            {
+                RoundEndReport = RoundEndReport.Remove(tagIndex, i - tagIndex + 1);
+                i = tagIndex;
+            }
+        }
+
         args.AddLine(Loc.GetString("shipevent-roundend-discord"));
         args.AddLine("```"); //code block
         args.AddLine(RoundEndReport);
