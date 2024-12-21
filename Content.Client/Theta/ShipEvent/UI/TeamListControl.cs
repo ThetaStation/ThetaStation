@@ -113,8 +113,8 @@ public sealed class TeamListControl : BoxContainer
             ));
         }
 
-        if (independentContainer.ChildCount == 0)
-            RemoveChild(independentScroll);
+        if (independentContainer.ChildCount < 2) //so nothing aside from the label
+            independentScroll.Dispose();
     }
 
     private BoxContainer CreateEntry(string[] data, string? buttonText, TeamInterfaceState? buttonData)
