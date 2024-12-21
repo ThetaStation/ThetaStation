@@ -1,10 +1,10 @@
 - type: mapgenlayer
   id: AsteroidLayer
-  structureAmount: 200
+  structureAmount: 300
   distribution: !type:NoiseDistribution
-    noiseType: OpenSimplex2
-    frequency: 2
-    noiseThreshold: 0.1
+    noiseType: Cellular
+    frequency: 6
+    threshold: -0.8
   structures:
     - "asteroid_small"
     - "asteroid_large"
@@ -20,7 +20,7 @@
 
 - type: mapgenpreset
   id: ShipEventMapGen
-  area: 0, 0, 1000, 1000 #todo: ship event sys only supports square areas right now
+  area: 0, 0, 1500, 1500 #todo: ship event sys only supports square areas right now
   layers:
     - "AsteroidLayer"
     - "RuinLayer"
