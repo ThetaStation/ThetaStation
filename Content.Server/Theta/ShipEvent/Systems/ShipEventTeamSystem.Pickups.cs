@@ -9,16 +9,19 @@ public sealed partial class ShipEventTeamSystem
     public readonly List<MapCoordinates> PickupPositions = new();
     public readonly List<EntityUid> Pickups = new();
 
-    public int PickupsPositionsCount;
+    public int PickupPositionsCount;
     public string PickupPrototype = "";
     public float PickupSpawnInterval;
     public float PickupMinDistance;
 
+    private void InitializePickups()
+    {
+        FindPickupPositions();
+        SpawnPickups();
+    }
+
     private void PickupSpawn()
     {
-        if (PickupPositions.Count == 0)
-            FindPickupPositions();
-
         DeletePickups();
         SpawnPickups();
     }
@@ -27,12 +30,11 @@ public sealed partial class ShipEventTeamSystem
     {
         PickupPositions.Clear();
 
-        var areaBounds = GetPlayAreaBounds();
-        areaBounds = areaBounds.Scale(0.8f);
+        var areaBounds = PlayArea.Scale(0.8f);
 
         const short maxAttempts = 30;
         var attempts = 0;
-        while (PickupPositions.Count != PickupsPositionsCount)
+        while (PickupPositions.Count != PickupPositionsCount)
         {
             if (attempts == maxAttempts)
                 break;

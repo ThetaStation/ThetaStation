@@ -82,7 +82,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
     public float FleetCheckInterval;
     public float PlayerCheckInterval;
     public float RespawnDelay;
-    public int MaxSpawnOffset;
+    public Box2 PlayArea;
 
     public int BonusInterval;
     public int PointsPerInterval; //points for surviving longer than BonusInterval without respawn
@@ -173,6 +173,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         InitializeAdmiralMenu();
 
         OnRuleSelected += SetupTimers;
+        OnRuleSelected += InitializePickups;
     }
 
     public override void Update(float frametime)
@@ -211,7 +212,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         _lastTeamNumber = 0;
         RoundendTimer = 0;
         _lastAnnoucementMinute = 0;
-        CurrentBoundsOffset = 0;
+        PlayArea.BottomLeft = PlayArea.TopRight = Vector2.Zero;
 
         RuleSelected = false;
         AllowTeamRegistration = true;
@@ -661,7 +662,8 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
                 continue;
             }
 
-            if (activeMembers.Count > 0 && livingMembers.Count == 0 && !team.QueuedForRespawn)
+            if (GetGridCompHolders<ShipEventSpawnerComponent>(team.ShipGrids).Count == 0 &&
+                activeMembers.Count > 0 && livingMembers.Count == 0 && !team.QueuedForRespawn)
             {
                 QueueTeamRespawn(team, Loc.GetString("shipevent-respawn-dead"));
                 continue;
@@ -673,7 +675,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
                 continue;
             }
 
-            if (IsTeamOutOfBounds(team))
+            if (!IsTeamInBounds(team))
             {
                 if (!team.OutOfBoundsWarningReceived)
                 {
@@ -752,8 +754,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         team.ChosenShipType ??= Pick(ShipTypes.Where(t => t.MinCrewAmount == 1));
         var shipGrids = _mapGenSys.RandomPosSpawn(
             TargetMap,
-            new Vector2(CurrentBoundsOffset, CurrentBoundsOffset),
-            MaxSpawnOffset - CurrentBoundsOffset,
+            PlayArea,
             50,
             _protMan.Index<MapGenStructurePrototype>(team.ChosenShipType.StructurePrototype),
             ShipProcessors,

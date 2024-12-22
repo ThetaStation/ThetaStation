@@ -1,6 +1,6 @@
 - type: mapgenlayer
   id: AsteroidLayer
-  structureAmount: 300
+  structureAmount: 350
   distribution: !type:NoiseDistribution
     noiseType: Cellular
     frequency: 6
@@ -20,7 +20,7 @@
 
 - type: mapgenpreset
   id: ShipEventMapGen
-  area: 0, 0, 1500, 1500 #todo: ship event sys only supports square areas right now
+  area: 0, 0, 1500, 1500
   layers:
     - "AsteroidLayer"
     - "RuinLayer"
