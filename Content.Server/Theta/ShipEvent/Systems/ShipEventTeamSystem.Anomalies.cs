@@ -11,6 +11,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Physics;
 using System.Linq;
 using Content.Shared.Random.Helpers;
+using Content.Shared.Theta.ShipEvent.Components;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
@@ -63,7 +64,7 @@ public sealed partial class ShipEventTeamSystem
     private void OnCollision(EntityUid uid, ShipEventProximityAnomalyComponent anomaly, ref StartCollideEvent args)
     {
         var gridUid = Transform(args.OtherEntity).GridUid;
-        if (gridUid == null)
+        if (gridUid == null || !HasComp<ShipEventTeamMarkerComponent>(gridUid))
             return;
 
         EnsureComp<ShipEventProximityAnomalyTrackerComponent>(gridUid.Value).TrackedBy = uid;
@@ -85,8 +86,8 @@ public sealed partial class ShipEventTeamSystem
         {
             Vector2 worldPos = _formSys.GetWorldPosition(form);
 
-            if (IsPositionOutOfBounds(worldPos))
-                _formSys.SetWorldPosition(form, GetPlayAreaBounds().Center);
+            if (!IsPositionInBounds(worldPos))
+                _formSys.SetWorldPosition(form, PlayArea.Center);
 
             var trackerQuery = EntityManager.EntityQueryEnumerator<ShipEventProximityAnomalyTrackerComponent>();
             while (trackerQuery.MoveNext(out var trackedUid, out var tracker))

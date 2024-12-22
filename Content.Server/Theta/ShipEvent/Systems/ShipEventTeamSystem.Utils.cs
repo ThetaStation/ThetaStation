@@ -264,8 +264,7 @@ public sealed partial class ShipEventTeamSystem
     {
         for (int c = 0; c < attempts; c++)
         {
-            Box2 bounds = GetPlayAreaBounds();
-            Vector2 pos = _random.NextVector2Box(bounds.BottomLeft.X, bounds.BottomLeft.Y, bounds.TopRight.X, bounds.TopRight.Y);
+            Vector2 pos = _random.NextVector2Box(PlayArea.Left, PlayArea.Bottom, PlayArea.Right, PlayArea.Top);
 
             if (_mapMan.TryFindGridAt(new(pos, TargetMap), out _, out _))
                 continue;

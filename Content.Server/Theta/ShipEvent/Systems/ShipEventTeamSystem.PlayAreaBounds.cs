@@ -1,14 +1,9 @@
-using System.Linq;
 using System.Numerics;
 using Content.Server.Explosion.EntitySystems;
-using Content.Shared.Random.Helpers;
 using Content.Shared.Roles.Theta;
 using Content.Shared.Theta.ShipEvent;
-using Robust.Shared.Map;
-using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Player;
-using Robust.Shared.Random;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
@@ -18,16 +13,6 @@ public sealed partial class ShipEventTeamSystem
     public bool BoundsCompression = false;
     public float BoundsCompressionInterval;
     public int BoundsCompressionDistance; //how much play area bounds are compressed after every BoundCompressionInterval
-    public int CurrentBoundsOffset; //inward offset of bounds
-
-    public Box2 GetPlayAreaBounds()
-    {
-        return new Box2i(
-            CurrentBoundsOffset,
-            CurrentBoundsOffset,
-            MaxSpawnOffset - CurrentBoundsOffset,
-            MaxSpawnOffset - CurrentBoundsOffset);
-    }
 
     private void BoundsUpdate()
     {
@@ -37,23 +22,23 @@ public sealed partial class ShipEventTeamSystem
         CompressBounds();
     }
 
-    public bool IsPositionOutOfBounds(Vector2 worldPos)
+    public bool IsPositionInBounds(Vector2 worldPos)
     {
-        return !GetPlayAreaBounds().Contains(worldPos);
+        return PlayArea.Contains(worldPos);
     }
 
-    public bool IsTeamOutOfBounds(ShipEventTeam team)
+    public bool IsTeamInBounds(ShipEventTeam team)
     {
         if (!team.QueuedForRespawn)
         {
             if (EntityManager.TryGetComponent<TransformComponent>(team.ShipMainGrid, out var form) &&
                 EntityManager.TryGetComponent<PhysicsComponent>(team.ShipMainGrid, out var grid))
             {
-                return IsPositionOutOfBounds(grid.LocalCenter + _formSys.GetWorldPosition(form));
+                return IsPositionInBounds(grid.LocalCenter + _formSys.GetWorldPosition(form));
             }
         }
 
-        return false;
+        return true;
     }
 
     //idk how to name it otherwise
@@ -66,21 +51,20 @@ public sealed partial class ShipEventTeamSystem
 
     public void CompressBounds()
     {
-        CurrentBoundsOffset = Math.Min(MaxSpawnOffset / 2, CurrentBoundsOffset + BoundsCompressionDistance);
+        PlayArea.BottomLeft += new Vector2(BoundsCompressionDistance);
+        PlayArea.TopRight -= new Vector2(BoundsCompressionDistance);
         UpdateBoundsOverlay();
     }
 
     private void UpdateBoundsOverlay(ICommonSession? recipient = null)
     {
-        Box2 bounds = GetPlayAreaBounds();
-
         if (recipient == null)
         {
-            RaiseNetworkEvent(new BoundsOverlayInfo(TargetMap, bounds));
+            RaiseNetworkEvent(new BoundsOverlayInfo(TargetMap, PlayArea));
         }
         else
         {
-            RaiseNetworkEvent(new BoundsOverlayInfo(TargetMap, bounds), recipient);
+            RaiseNetworkEvent(new BoundsOverlayInfo(TargetMap, PlayArea), recipient);
         }
     }
 

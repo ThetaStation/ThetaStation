@@ -36,7 +36,7 @@ public sealed partial class ShipEventRuleComponent : Component
     [DataField] public int RespawnDelay;
     [DataField] public int BonusInterval;
     [DataField] public float BoundsCompressionInterval;
-    [DataField] public float PickupsSpawnInterval;
+    [DataField] public float PickupSpawnInterval;
     [DataField] public float AnomalyUpdateInterval;
     [DataField] public float AnomalySpawnInterval;
     [DataField] public float ModifierUpdateInterval;
@@ -142,13 +142,12 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         _shipSys.FleetMaxTeams = component.FleetMaxTeams;
         _shipSys.FleetPointsPerTeam = component.FleetPointsPerTeam;
 
-        _shipSys.PickupsPositionsCount = component.PickupPositionCount;
-        _shipSys.PickupSpawnInterval = component.PickupsSpawnInterval;
+        _shipSys.PickupPositionsCount = component.PickupPositionCount;
+        _shipSys.PickupSpawnInterval = component.PickupSpawnInterval;
         _shipSys.PickupMinDistance = component.PickupMinDistance;
         _shipSys.PickupPrototype = component.PickupPrototype;
 
-        //todo: add support for non square field to ship event sys
-        _shipSys.MaxSpawnOffset = mapGenPreset.Area.Width;
+        _shipSys.PlayArea = mapGenPreset.Area;
         var extraMeters = Math.Min(
             (int) Math.Round((float) _playerMan.PlayerCount * component.MetersPerPlayer / component.RoundFieldSizeTo) * component.RoundFieldSizeTo,
             component.MaxFieldSize);

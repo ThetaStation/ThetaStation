@@ -124,28 +124,22 @@ public sealed class MapGenSystem : EntitySystem
     /// <summary>
     /// Randomly places specified structure onto map. Does not optimise collision checking in any way
     /// </summary>
-    public IEnumerable<EntityUid> RandomPosSpawn(MapId targetMap, Vector2 startPos, int maxOffset, int tries,
+    public IEnumerable<EntityUid> RandomPosSpawn(MapId targetMap, Box2 area, int tries,
         MapGenStructurePrototype structure, List<IMapGenProcessor>? extraProcessors = null, bool forceIfFailed = false)
     {
         TargetMap = targetMap;
 
         var gridUids = structure.Generator.Generate(this, TargetMap);
         var aabb = ComputeTotalAABB(gridUids);
-        var bounds = new Box2(startPos.X,
-            startPos.Y,
-            startPos.X + maxOffset - aabb.Width,
-            startPos.Y + maxOffset - aabb.Height);
+        //area.BottomLeft += new Vector2(aabb.Width, aabb.Height);
+        area.TopRight -= new Vector2(aabb.Width, aabb.Height);
         var finalDistance = (int) Math.Ceiling(structure.MinDistance + Math.Max(aabb.Height, aabb.Width));
 
         Vector2i mapPos = Vector2i.Zero;
         var result = false;
         for (int n = 0; n < tries; n++)
         {
-            mapPos = (Vector2i) Random.NextVector2Box(
-                bounds.Left + aabb.Width,
-                bounds.Bottom + aabb.Height,
-                bounds.Right - aabb.Width,
-                bounds.Top - aabb.Height).Rounded();
+            mapPos = (Vector2i) Random.NextVector2Box(area.Left, area.Bottom, area.Right, area.Top).Rounded();
 
             if (!MapMan.FindGridsIntersecting(targetMap, new Box2(mapPos - finalDistance, mapPos + finalDistance)).Any())
             {
@@ -155,13 +149,10 @@ public sealed class MapGenSystem : EntitySystem
         }
 
         TargetMap = MapId.Nullspace;
-        string gridString = "[";
-        foreach (EntityUid uid in gridUids) { gridString += uid.ToString() + ", "; }
-        gridString += "]";
 
         if (result)
         {
-            Log.Info($"Spawned grids {gridString} successfully");
+            Log.Info($"Spawned grids successfully");
             foreach (EntityUid gridUid in gridUids)
             {
                 var form = Transform(gridUid);
@@ -170,9 +161,7 @@ public sealed class MapGenSystem : EntitySystem
         }
         else if (forceIfFailed)
         {
-            Log.Info($"Failed to find spawn position for grids {gridString}," +
-                        "but forceIfFailed is set to true; proceeding to force-spawn");
-            mapPos = (Vector2i) Random.NextVector2Box(bounds.Left, bounds.Bottom, bounds.Right, bounds.Top).Rounded();
+            Log.Info($"Failed to find spawn position for grids, but forceIfFailed is set to true; proceeding to force-spawn");
             foreach (EntityUid gridUid in gridUids)
             {
                 var form = Transform(gridUid);
@@ -180,23 +169,20 @@ public sealed class MapGenSystem : EntitySystem
             }
         }
 
-        if (result || forceIfFailed)
+        if ((result || forceIfFailed) && extraProcessors != null)
         {
-            if (extraProcessors != null)
+            foreach (IMapGenProcessor extraProc in extraProcessors)
             {
-                foreach (IMapGenProcessor extraProc in extraProcessors)
+                foreach (EntityUid gridUid in gridUids)
                 {
-                    foreach (EntityUid gridUid in gridUids)
-                    {
-                        extraProc.Process(this, targetMap, gridUid, false);
-                    }
+                    extraProc.Process(this, targetMap, gridUid, false);
                 }
             }
 
             return gridUids;
         }
 
-        Log.Error($"Failed to find spawn position, deleting grids {gridString}");
+        Log.Error($"Failed to find spawn position, deleting grids");
         foreach (EntityUid gridUid in gridUids) { QueueDel(gridUid); }
         return new List<EntityUid>();
     }

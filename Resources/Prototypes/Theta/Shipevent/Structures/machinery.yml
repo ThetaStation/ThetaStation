@@ -55,6 +55,8 @@
       allowedFlags:
       - Hide
       - HideLabel
+    - type: RadarConsole
+      maxRange: 800
     - type: ShipStealth
       stealthDuration: 30
       stealthCooldown: 120

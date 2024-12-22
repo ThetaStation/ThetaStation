@@ -42,8 +42,6 @@ public sealed class SEFCRule : StationEventSystem<SEFCRuleComponent>
     private const int PointsPerFlag = (int) 1E6;
     private const int UpdateInterval = 10;
 
-    private Box2 FieldBounds => _shipSys.GetPlayAreaBounds(); //fetching it multiple times since on start it's a single point + it might compress
-
     public override void Initialize()
     {
         base.Initialize();
@@ -62,9 +60,8 @@ public sealed class SEFCRule : StationEventSystem<SEFCRuleComponent>
             return;
         }
 
-        Box2 fieldBounds = _shipSys.GetPlayAreaBounds();
-        _mapGenSys.ClearArea(_shipSys.TargetMap, (Box2i) new Box2(fieldBounds.BottomLeft, fieldBounds.TopRight).Scale(0.1f));
-        Spawn(FlagPrototypeId, new MapCoordinates(fieldBounds.Center, _shipSys.TargetMap));
+        ClearCenterOfTheField();
+        Spawn(FlagPrototypeId, new MapCoordinates(_shipSys.PlayArea.Center, _shipSys.TargetMap));
 
         if (!_shipSys.TryCreateTeam("RED", Color.Red, null, null, 0, null, out var red) ||
             !_shipSys.TryCreateTeam("BLU", Color.Blue, null, null, 0, null, out var blue))
@@ -81,7 +78,7 @@ public sealed class SEFCRule : StationEventSystem<SEFCRuleComponent>
     //to ensure that flags will not become stuck inside some asteroid
     private void ClearCenterOfTheField()
     {
-        _mapGenSys.ClearArea(_shipSys.TargetMap, (Box2i) new Box2(FieldBounds.BottomLeft, FieldBounds.TopRight).Scale(0.1f));
+        _mapGenSys.ClearArea(_shipSys.TargetMap, (Box2i) new Box2(_shipSys.PlayArea.BottomLeft, _shipSys.PlayArea.TopRight).Scale(0.1f));
     }
 
     private void OnFlagParentChanged(EntityUid uid, SEFCFlagComponent flag, ref EntParentChangedMessage args)
@@ -109,7 +106,7 @@ public sealed class SEFCRule : StationEventSystem<SEFCRuleComponent>
             return;
 
         ClearCenterOfTheField();
-        EntityUid newFlag = Spawn(FlagPrototypeId, new MapCoordinates(FieldBounds.Center, _shipSys.TargetMap));
+        EntityUid newFlag = Spawn(FlagPrototypeId, new MapCoordinates(_shipSys.PlayArea.Center, _shipSys.TargetMap));
         Comp<SEFCFlagComponent>(newFlag).LastTeam = flag.LastTeam;
     }
 
@@ -119,14 +116,14 @@ public sealed class SEFCRule : StationEventSystem<SEFCRuleComponent>
 
         foreach ((SEFCFlagComponent _, TransformComponent form) in EntityManager.EntityQuery<SEFCFlagComponent, TransformComponent>())
         {
-            if (!FieldBounds.Contains(_formSys.GetWorldPosition(form)))
+            if (!_shipSys.IsPositionInBounds(_formSys.GetWorldPosition(form)))
             {
                 if (!centerClear)
                 {
                     ClearCenterOfTheField();
                     centerClear = true;
                 }
-                _formSys.SetWorldPosition(form, FieldBounds.Center);
+                _formSys.SetWorldPosition(form, _shipSys.PlayArea.Center);
             }
         }
     }
