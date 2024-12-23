@@ -13,6 +13,11 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
     public List<ShipEventModifierPrototype> AllModifiers = new();
     public List<ShipEventModifierPrototype> ActiveModifiers = new();
 
+    private void InitializeModifiers()
+    {
+        ModifierUpdate();
+    }
+
     private void ModifierUpdate()
     {
         List<ShipEventModifierPrototype> modifiersListCopy = new(AllModifiers);
