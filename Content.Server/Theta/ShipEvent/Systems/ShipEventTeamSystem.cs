@@ -174,6 +174,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
 
         OnRuleSelected += SetupTimers;
         OnRuleSelected += InitializePickups;
+        OnRuleSelected += InitializeModifiers;
     }
 
     public override void Update(float frametime)
