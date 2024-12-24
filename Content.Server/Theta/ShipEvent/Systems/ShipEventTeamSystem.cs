@@ -150,7 +150,6 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         SubscribeLocalEvent<ShipEventTeamMarkerComponent, TeamViewToggleEvent>(OnViewToggle);
         SubscribeLocalEvent<ShipEventTeamMarkerComponent, CaptainMenuToggleEvent>(OnCaptainMenuToggle);
         SubscribeLocalEvent<ShipEventTeamMarkerComponent, AdmiralMenuToggleEvent>(OnAdmiralMenuToggle);
-
         SubscribeLocalEvent<ReturnToLobbyEvent>(OnReturnToLobbyAction);
         SubscribeLocalEvent<GenericWarningYesPressedMessage>(OnReturnPlayerToLobby);
 
@@ -378,8 +377,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         fleet ??= team?.Fleet;
 
         EntityUid uid = session.AttachedEntity.Value;
-        if (!TryComp<ShipEventActionStorageComponent>(uid, out var actStorage))
-            return;
+        var actStorage = EnsureComp<ShipEventActionStorageComponent>(uid);
 
         //clear actions
         _actSys.RemoveAction(actStorage.TeamViewActionUid);
@@ -540,18 +538,23 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         {
             foreach (ICommonSession session in GetTeamSessions(team))
             {
-                if (CompOrNull<MetaDataComponent>(session.AttachedEntity)?.EntityPrototype?.ID == "AdminObserver")
+                EntityUid? uid = session.AttachedEntity;
+                if (uid == null)
                     continue;
 
-                if (!TryComp<MobStateComponent>(session.AttachedEntity, out var state) || state.CurrentState == MobState.Dead)
+                string? protId = Comp<MetaDataComponent>(uid.Value).EntityPrototype?.ID;
+                if (protId == "AdminObserver" ||
+                    protId == "ShipEventObserver" && HasComp<ShipEventTeamMarkerComponent>(uid))
+                    continue;
+
+                if (!TryComp<MobStateComponent>(uid, out var state) || state.CurrentState == MobState.Dead)
                 {
-                    if (!TrySpawnPlayer(session, team, out _) && HasComp<GhostComponent>(session.AttachedEntity))
+                    if (!TrySpawnPlayer(session, team, out _))
                     {
-                        if (TryComp<ShipEventTeamMarkerComponent>(session.AttachedEntity, out var marker) && marker.Team == null)
-                        {
-                            marker.Team = team;
-                            SetupActions(session, team);
-                        }
+                        EntityUid observerUid = SpawnAtPosition("ShipEventObserver", Transform(uid.Value).Coordinates);
+                        _mindSys.TransferTo(_mindSys.GetOrCreateMind(session.UserId), observerUid, true);
+                        EnsureComp<ShipEventTeamMarkerComponent>(observerUid).Team = team;
+                        SetupActions(session, team);
                     }
                 }
             }

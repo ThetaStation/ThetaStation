@@ -1,9 +1,8 @@
 ﻿- type: entity
-  id: ObserverShipEvent
+  id: ShipEventObserver
   name: observer
   parent: MobObserver
   components:
-    - type: ShipEventTeamMarker
     - type: ShipEventActionStorage
     - type: UserInterface
       interfaces:
@@ -17,7 +16,7 @@
           type: GenericWarningWindowBoundUserInterface
           requireInputValidation: false
     - type: MindContainer
-      ghostPrototype: ObserverShipEvent
+      ghostPrototype: ShipEventObserver
 
 - type: entity
   name: ShipEvent Agent
@@ -51,8 +50,6 @@
         enum.AdmiralMenuUiKey.Key:
           type: AdmiralMenuBoundUserInterface
     - type: MobHUD
-    - type: MindContainer
-      ghostPrototype: ObserverShipEvent
 
 - type: entity
   name: ShipEvent Agent
