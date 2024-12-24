@@ -19,6 +19,13 @@ public sealed class BoundsOverlayInfo : EntityEventArgs
     }
 }
 
+[NetSerializable, Serializable]
+public sealed class RespawnTimerOverlayInfo : EntityEventArgs
+{
+    //in seconds
+    public int Time;
+}
+
 //sent from shuttle console when user presses stealth activation button
 [Serializable, NetSerializable]
 public sealed class ShipEventToggleStealthMessage : BoundUserInterfaceMessage { }

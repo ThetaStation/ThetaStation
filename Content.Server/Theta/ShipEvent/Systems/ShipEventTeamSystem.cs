@@ -938,6 +938,9 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         {
             if (session.AttachedEntity != null && !HasComp<GhostComponent>(session.AttachedEntity))
                 QueueDel(session.AttachedEntity);
+
+            if (!immediate)
+                RaiseNetworkEvent(new RespawnTimerOverlayInfo() { Time = (int) RespawnDelay }, session);
         }
 
         if (immediate)
@@ -959,6 +962,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         foreach (var session in GetTeamSessions(team))
         {
             TrySpawnPlayer(session, team, out _, bypass: true);
+            RaiseNetworkEvent(new RespawnTimerOverlayInfo() { Time = 0 }, session);
         }
 
         team.Respawns++;

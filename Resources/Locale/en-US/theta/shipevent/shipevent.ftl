@@ -58,3 +58,4 @@ shipevent-spawner-destroyed-join = The crew's cloner has been destroyed! Wait un
 shipevent-incorrect-password = Incorrect password.
 shipevent-kicked = You've got kicked from the team! Use team menu to find a new one.
 shipevent-spawner-destroyed = Team's spawner is destroyed. No more immortality.
+shipevent-respawntimerhud = Respawn in:
