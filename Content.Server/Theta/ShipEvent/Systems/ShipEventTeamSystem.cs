@@ -940,7 +940,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
                 QueueDel(session.AttachedEntity);
 
             if (!immediate)
-                RaiseNetworkEvent(new RespawnTimerOverlayInfo() { Time = (int) RespawnDelay }, session);
+                RaiseNetworkEvent(new RespawnTimerOverlayInfo() { Time = (int) (RespawnDelay + TeamCheckInterval) }, session);
         }
 
         if (immediate)
