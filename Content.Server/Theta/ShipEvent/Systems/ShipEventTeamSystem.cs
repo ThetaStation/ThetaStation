@@ -702,7 +702,6 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
                 AssignCaptain(team, activeMembers[0]);
             }
 
-            Log.Debug($"timer: {team.TimeSinceRemoval}");
             if (team.QueuedForRespawn && team.TimeSinceRemoval >= RespawnDelay)
             {
                 TeamMessage(team, Loc.GetString("shipevent-team-respawnnow"));
