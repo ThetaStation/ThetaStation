@@ -657,6 +657,8 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         List<ShipEventTeam> emptyTeams = new();
         foreach (var team in Teams)
         {
+            team.TimeSinceRemoval += TeamCheckInterval;
+
             var activeMembers = GetTeamSessions(team);
             var livingMembers = GetTeamLivingMembers(team);
 
@@ -700,7 +702,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
                 AssignCaptain(team, activeMembers[0]);
             }
 
-            if (team.QueuedForRespawn && team.TimeSinceRemoval > RespawnDelay)
+            if (team.QueuedForRespawn && team.TimeSinceRemoval >= RespawnDelay)
             {
                 TeamMessage(team, Loc.GetString("shipevent-team-respawnnow"));
                 ImmediateTeamRespawn(team);
@@ -716,8 +718,6 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
                 team.Points += PointsPerInterval;
                 team.LastBonusInterval++;
             }
-
-            team.TimeSinceRemoval += TeamCheckInterval;
         }
 
         foreach (var team in emptyTeams)
@@ -919,7 +919,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         var message = Loc.GetString(
             "shipevent-team-respawn",
             ("respawnreason", respawnReason == "" ? Loc.GetString("shipevent-respawn-default") : respawnReason),
-            ("respawntime", RespawnDelay / 60));
+            ("respawntime", RespawnDelay));
         TeamMessage(team, message);
 
         if (killPoints)
@@ -940,7 +940,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
                 QueueDel(session.AttachedEntity);
 
             if (!immediate)
-                RaiseNetworkEvent(new RespawnTimerOverlayInfo() { Time = (int) (RespawnDelay + TeamCheckInterval) }, session);
+                RaiseNetworkEvent(new RespawnTimerOverlayInfo() { Time = (int) (RespawnDelay) }, session);
         }
 
         if (immediate)

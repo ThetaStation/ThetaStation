@@ -11,13 +11,11 @@ namespace Content.Client.Theta.ShipEvent.Systems;
 public sealed class RespawnTimerOverlay : Overlay
 {
     [Dependency] private IResourceCache _cache = default!;
-    [Dependency] private IGameTiming _timing = default!;
 
     public override OverlaySpace Space => OverlaySpace.ScreenSpace;
     private Font _font;
     public Vector2 _position;
-    private TimeSpan _lastUpd = TimeSpan.Zero;
-    public TimeSpan Time;
+    public TimeSpan TimeCountdown;
 
     public RespawnTimerOverlay()
     {
@@ -27,35 +25,33 @@ public sealed class RespawnTimerOverlay : Overlay
 
     public void Reset()
     {
-        Time = TimeSpan.Zero;
+        TimeCountdown = TimeSpan.Zero;
         _position = Vector2.Zero;
-        _lastUpd = TimeSpan.Zero;
+    }
+
+    protected override void FrameUpdate(FrameEventArgs args)
+    {
+        TimeSpan delta = TimeSpan.FromSeconds(args.DeltaSeconds);
+        TimeCountdown -= delta;
+    }
+
+    protected override bool BeforeDraw(in OverlayDrawArgs args)
+    {
+        if (TimeCountdown <= TimeSpan.Zero)
+        {
+            Reset();
+            return false;
+        }
+        return true;
     }
 
     protected override void Draw(in OverlayDrawArgs args)
     {
-        if (Time == TimeSpan.Zero)
-            return;
-
-        if (_lastUpd == TimeSpan.Zero)
-        {
-            _lastUpd = _timing.CurTime;
-            return;
-        }
-
         string text = GenerateText();
 
         if (_position == Vector2.Zero)
             _position = CalcPosition(_font, text, args.ViewportBounds.Width);
 
-        Time -= _timing.CurTime - _lastUpd;
-        if (Time <= TimeSpan.Zero)
-        {
-            Reset();
-            return;
-        }
-
-        _lastUpd = _timing.CurTime;
         args.ScreenHandle.DrawString(_font, _position, text);
     }
 
@@ -77,6 +73,6 @@ public sealed class RespawnTimerOverlay : Overlay
 
     private string GenerateText()
     {
-        return Loc.GetString("shipevent-respawntimerhud") + " " + Time.Minutes.ToString("D2") + ":" + Time.Seconds.ToString("D2");
+        return Loc.GetString("shipevent-respawntimerhud") + " " + TimeCountdown.Minutes.ToString("D2") + ":" + TimeCountdown.Seconds.ToString("D2");
     }
 }
