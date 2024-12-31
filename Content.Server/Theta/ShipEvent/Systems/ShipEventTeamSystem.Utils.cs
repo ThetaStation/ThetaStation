@@ -13,6 +13,7 @@ using Content.Shared.Projectiles;
 using Content.Shared.Roles.Theta;
 using Content.Shared.Theta.ShipEvent.Components;
 using Robust.Shared.Player;
+using Robust.Shared.Timing;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
@@ -177,6 +178,9 @@ public sealed partial class ShipEventTeamSystem
 
     private HashSet<EntityUid> GetGridCompHolders<T>(EntityUid gridUid) where T : IComponent
     {
+        if (Deleted(gridUid))
+            return new();
+
         HashSet<EntityUid> uids = new();
         var childEnum = Transform(gridUid).ChildEnumerator;
 
