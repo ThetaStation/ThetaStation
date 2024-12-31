@@ -6,7 +6,6 @@ namespace Content.Client.Theta.ShipEvent.Systems;
 public sealed class RespawnTimerOverlaySystem : EntitySystem
 {
     [Dependency] private readonly IOverlayManager _overMan = default!;
-    public Box2 CurrentBounds;
     private RespawnTimerOverlay _overlay = default!;
 
     public override void Initialize()
@@ -19,6 +18,6 @@ public sealed class RespawnTimerOverlaySystem : EntitySystem
 
     private void OnInfoReceived(RespawnTimerOverlayInfo ev)
     {
-        _overlay.Time = TimeSpan.FromSeconds(ev.Time);
+        _overlay.TimeCountdown = TimeSpan.FromSeconds(ev.Time + 1);
     }
 }

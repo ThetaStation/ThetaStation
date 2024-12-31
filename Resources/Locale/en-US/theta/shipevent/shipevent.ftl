@@ -7,7 +7,7 @@ shipevent-desc = NanoTrasen has started a contest to test out their light battle
 
 shipevent-announcement-title = NanoTrasen Fleet Command
 shipevent-eventannouncement = Station has plunged into chaos after NT began testing their light battle ships nearby
-shipevent-team-respawn = Your team was temporarily withdrawn from the competition due to { $respawnreason }. You will respawn in { $respawntime } minute(s).
+shipevent-team-respawn = Your team was temporarily withdrawn from the competition due to { $respawnreason }. You will respawn in about { $respawntime } second(s).
 shipevent-team-remove = Your team was withdrawn from the competition due to { $removereason }.
 shipevent-team-captainchange = Captain { $oldcap } has been replaced by { $newcap }. Long live the new captain!
 shipevent-team-respawnnow = Team respawn is in progress...

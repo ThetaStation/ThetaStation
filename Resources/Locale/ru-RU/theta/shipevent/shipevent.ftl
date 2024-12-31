@@ -7,7 +7,7 @@ shipevent-desc = Нанотрейзен устроила испытания св
 
 shipevent-announcement-title = Управления флотом Нанотрейзен
 shipevent-eventannouncement = На станции начался полный хаос, после того как НТ устроили поблизости испытания боевой мощи своих кораблей лёгкого класса.
-shipevent-team-respawn = Ваша команда временно покинула соревнования из-за { $respawnreason }. Вы восстановитесь через { $respawntime } минут.
+shipevent-team-respawn = Ваша команда временно покинула соревнования из-за { $respawnreason }. Вы восстановитесь примерно через { $respawntime } секунд.
 shipevent-team-remove = Ваша команда покинула соревнования из-за { $removereason }.
 shipevent-team-captainchange = Капитан { $oldcap } был заменён на своём посту { $newcap }. Да здравствует новый капитан!
 shipevent-team-respawnnow = Идёт респавн команды...
