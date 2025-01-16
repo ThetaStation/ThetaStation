@@ -54,17 +54,18 @@
         path: /Audio/Theta/Shipevent/rocket.ogg
         params:
           volume: 20
-    - type: BallisticAmmoProvider
-      whitelist:
-      tags:
-      - GuidedRocket
-      capacity: 1
-      soundInsert:
-        path: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
-    - type: ContainerContainer
-      containers:
-        ballistic-ammo: !type:Container
-          ents: [ ]
+    - type: ContainerAmmoProvider
+      container: rocketSlot
+    - type: ItemSlots
+      slots:
+        rocketSlot:
+          name: rocketSlot
+          insertSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
+          ejectSound: /Audio/Weapons/Guns/MagOut/batrifle_magout.ogg
+          priority: 2
+          whitelist:
+            tags:
+            - GuidedRocket
     - type: RadarRenderable
       viewProtos:
       - rocket
