@@ -7,8 +7,8 @@ namespace Content.Server.Theta.ShipEvent.Systems;
 
 public sealed class VelocityExplosionTriggerSystem : EntitySystem
 {
-    [Dependency] private readonly ExplosionSystem expSys = default!;
-    
+    [Dependency] private readonly ExplosionSystem _expSys = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -23,7 +23,7 @@ public sealed class VelocityExplosionTriggerSystem : EntitySystem
             if (v < trigger.MinimumVelocity)
                 return;
 
-            expSys.TriggerExplosive(uid, exp, totalIntensity: Math.Min(trigger.IntensityMultiplier * v, trigger.MaximumIntensity));
+            _expSys.TriggerExplosive(uid, exp, totalIntensity: Math.Min(trigger.IntensityMultiplier * v, trigger.MaximumIntensity));
         }
     }
 }

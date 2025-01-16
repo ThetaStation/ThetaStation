@@ -46,11 +46,18 @@ public abstract class RadarModule
     public virtual void FrameUpdate(FrameEventArgs args) { }
     public virtual void OnClear() { }
 
-    protected Vector2 RelativePositionToCoordinates(Vector2 pos, Matrix3x2 matrix)
+    protected Vector2 RelativeToWorld(Vector2 pos, Matrix3x2 matrix)
     {
-        var removeScale = InverseScalePosition(pos);
-        removeScale.Y = -removeScale.Y;
-        return Vector2.Transform(removeScale, matrix);
+        pos = InverseScalePosition(pos);
+        pos.Y = -pos.Y;
+        return Vector2.Transform(pos, matrix);
+    }
+
+    protected Vector2 WorldToRelative(Vector2 pos, Matrix3x2 matrix)
+    {
+        pos = Vector2.Transform(pos, matrix);
+        pos.Y = -pos.Y;
+        return ScalePosition(pos);
     }
 
     protected Vector2 ScalePosition(Vector2 value)

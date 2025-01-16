@@ -91,6 +91,12 @@ shipevent-enter-password-cancel-button = Отмена
 
 shipevent-cannonconsole-ammostatus = Боезапас
 
+## Rocket launcher console
+
+shipevent-rocketconsole-windowtitle = Консоль управления ракетной установкой
+shipevent-rocketconsole-launchbutton = Пуск
+shipevent-rocketconsole-resetbutton = Сброс
+
 ## Return to lobby action
 
 shipevent-returntolobby-name = Вернутся в лобби

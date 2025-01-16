@@ -38,7 +38,7 @@
         Piercing: 150
         Blunt: 150
   - type: Sprite
-    sprite: /Textures/Theta/ShipEvent/Objects/AmmoArtillery.rsi
+    sprite: /Textures/Theta/ShipEvent/Objects/Ammo.rsi
     layers:
     - state: bullet
 
@@ -57,7 +57,7 @@
     deleteOnSpawn: true
   - type: Sprite
     netsync: false
-    sprite: /Textures/Theta/ShipEvent/Objects/AmmoArtillery.rsi
+    sprite: /Textures/Theta/ShipEvent/Objects/Ammo.rsi
     layers:
     - state: cartridge
 
@@ -73,11 +73,9 @@
       types:
         Blunt: 10
   - type: Sprite
-    sprite: /Textures/Theta/ShipEvent/Objects/AmmoArtillery.rsi
+    sprite: /Textures/Theta/ShipEvent/Objects/Ammo.rsi
     layers:
     - state: bullet
-  - type: TimedDespawn
-    lifetime: 21
   - type: ActiveTimerTrigger
     timeRemaining: 20
   - type: VelocityExplosionTrigger
@@ -91,7 +89,7 @@
     totalIntensity: 1 #gets overriden by VelocityExplosionTrigger
   - type: MovementAcceleration
     acceleration: 10
-    maxVelocity: 100
+    maxVelocity: 35
 
 - type: entity
   id: CartridgeSPG

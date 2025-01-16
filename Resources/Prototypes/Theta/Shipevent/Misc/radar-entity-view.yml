@@ -28,6 +28,7 @@
       - 0, 0
       - 0, 1
 
+#4 verts cause it's drawn with line strip, first and last vert are identical
 - type: radarEntityView
   id: genericCannon
   defaultColor: "#00ff00"
@@ -39,6 +40,22 @@
       - 0, -0.75
       - 0.5, 0.25
       - -0.5, 0.25
+
+- type: radarEntityView
+  id: rocket
+  defaultColor: "#ffff00"
+  form:
+    !type:ShapeRadarForm
+    size: 3
+    vertices:
+      - -0.25,-0.75
+      - 0,-1.25
+      - 0.25,-0.75
+      - 0.25,0.25
+      - 0.5,0.5
+      - -0.5, 0.5
+      - -0.25,0.25
+      - -0.25,-0.75
 
 - type: radarEntityView
   id: genericMob

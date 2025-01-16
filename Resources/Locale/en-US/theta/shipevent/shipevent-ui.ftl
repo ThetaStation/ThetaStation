@@ -91,6 +91,10 @@ shipevent-turretloader-ammocount-examine = Ammo count: {$count}
 
 shipevent-cannonconsole-ammostatus = Ammo
 
+shipevent-rocketconsole-windowtitle = Rocket launcher console
+shipevent-rocketconsole-launchbutton = Launch
+shipevent-rocketconsole-resetbutton = Reset
+
 ## Return to lobby action
 
 shipevent-returntolobby-name = Return to lobby
