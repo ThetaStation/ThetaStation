@@ -3,6 +3,7 @@ using Content.Server.Shuttles.Systems;
 using Content.Server.Theta.RadarRenderable;
 using Content.Server.Theta.ShipEvent.Components;
 using Content.Server.Weapons.Ranged.Systems;
+using Content.Shared.DeviceLinking;
 using Content.Shared.DeviceLinking.Events;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
@@ -28,6 +29,19 @@ public sealed class RocketConsoleSystem : EntitySystem
         SubscribeLocalEvent<RocketConsoleComponent, RocketConsoleLaunchMessage>(OnLaunch);
         SubscribeLocalEvent<RocketLauncherComponent, AmmoShotEvent>(AfterShot);
         SubscribeLocalEvent<RocketLauncherComponent, NewLinkEvent>(OnLink);
+        SubscribeLocalEvent<RocketLauncherComponent, SinkSourceSetEvent>(OnInit);
+    }
+
+    private void OnInit(EntityUid uid, RocketLauncherComponent launcher, SinkSourceSetEvent args)
+    {
+        if (EntityManager.TryGetComponent<DeviceLinkSinkComponent>(uid, out var sink))
+        {
+            foreach (EntityUid sourceUid in sink.LinkedSources)
+            {
+                if (TryComp<RocketConsoleComponent>(sourceUid, out var console))
+                    console.BoundLauncher = uid;
+            }
+        }
     }
 
     private void OnLink(EntityUid uid, RocketLauncherComponent launcher, ref NewLinkEvent args)

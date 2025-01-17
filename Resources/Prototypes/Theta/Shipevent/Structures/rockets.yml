@@ -68,7 +68,7 @@
             - GuidedRocket
     - type: ContainerContainer
       containers:
-        item: !type:ContainerSlot
+        rocketSlot: !type:ContainerSlot
     - type: RadarRenderable
       viewProtos:
       - rocket
@@ -157,7 +157,7 @@
       explosionType: Default
       maxIntensity: 100
       intensitySlope: 5
-      totalIntensity: 500
+      totalIntensity: 5000
     - type: GuidedProjectile
     - type: ActiveTimerTrigger
       timeRemaining: 20
