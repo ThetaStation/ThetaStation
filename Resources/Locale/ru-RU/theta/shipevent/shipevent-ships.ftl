@@ -35,3 +35,7 @@ shipevent-asteroid-ship-desc =
 shipevent-python-name = Питон
 shipevent-python-desc =
     Длинный корабль состоящий из 4 секций соединённых цепями для подвижности. ОЧЕНЬ ТЯЖЁЛО УПРАВЛЯЕТСЯ.
+
+shipevent-carrack-name = Каррака
+shipevent-carrack-desc =
+    Парусное судно 18 века с приделанными к нему двигателями.
