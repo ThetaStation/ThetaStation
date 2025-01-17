@@ -40,7 +40,7 @@ public sealed class GuidedProjectileSystem : EntitySystem
         Vector2 delta = proj.Waypoints[proj.CurrentWaypoint + 1] - proj.Waypoints[proj.CurrentWaypoint];
         Angle worldRot = Angle.FromWorldVec(delta);
         _formSys.SetWorldRotation(uid, worldRot);
-        _physSys.SetLinearVelocity(uid, delta.Normalized() * 35f);
+        _physSys.SetLinearVelocity(uid, delta.Normalized() * proj.Velocity);
         proj.CurrentWaypoint++;
 
         TimeSpan eta = TimeSpan.FromSeconds(delta.Length() / _physSys.GetLinearVelocity(uid, proj.Waypoints[proj.CurrentWaypoint]).Length());

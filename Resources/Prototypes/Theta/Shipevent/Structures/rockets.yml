@@ -66,6 +66,9 @@
           whitelist:
             tags:
             - GuidedRocket
+    - type: ContainerContainer
+      containers:
+        item: !type:ContainerSlot
     - type: RadarRenderable
       viewProtos:
       - rocket
@@ -154,7 +157,9 @@
       explosionType: Default
       maxIntensity: 100
       intensitySlope: 5
-      totalIntensity: 200
+      totalIntensity: 500
     - type: GuidedProjectile
     - type: ActiveTimerTrigger
-      timeRemaining: 10
+      timeRemaining: 20
+    - type: TimedDespawn
+      lifetime: 21 #overloading BaseBullet

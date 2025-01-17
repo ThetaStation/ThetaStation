@@ -1,18 +1,11 @@
 <DefaultWindow xmlns="https://spacestation14.io"
                xmlns:radarSetups="clr-namespace:Content.Client.Theta.ModularRadar.RadarSetups"
                Title="{Loc 'shipevent-rocketconsole-windowtitle'}"
-               SetSize="940 680"
-               MinSize="790 320">
-    <GridContainer Columns="2"
+               SetSize="650 740"
+               MinSize="650 740">
+    <GridContainer Rows="2"
                    HorizontalAlignment="Stretch"
                    Margin="5 5 5 5">
-        <BoxContainer HorizontalAlignment="Left"
-                      MinWidth="256"
-                      MaxWidth="256"
-                      Orientation="Vertical">
-            <Button Name="LaunchButton" Text="{Loc 'shipevent-rocketconsole-launchbutton'}" />
-            <Button Name="ResetButton" Text="{Loc 'shipevent-rocketconsole-resetbutton'}" />
-        </BoxContainer>
         <BoxContainer Orientation="Vertical">
             <radarSetups:RocketModularRadar
                 Name="RadarScreen"
@@ -20,6 +13,13 @@
                 Margin="4"
                 HorizontalExpand="True"
                 VerticalExpand="True" />
+        </BoxContainer>
+        <BoxContainer MinHeight="30"
+                      MaxHeight="30"
+                      Orientation="Horizontal"
+                      HorizontalExpand="True">
+            <Button Name="LaunchButton" Text="{Loc 'shipevent-rocketconsole-launchbutton'}" HorizontalExpand="True" />
+            <Button Name="ResetButton" Text="{Loc 'shipevent-rocketconsole-resetbutton'}" HorizontalExpand="True" />
         </BoxContainer>
     </GridContainer>
 </DefaultWindow>

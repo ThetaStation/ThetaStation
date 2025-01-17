@@ -78,6 +78,8 @@
     - state: bullet
   - type: ActiveTimerTrigger
     timeRemaining: 20
+  - type: TimedDespawn
+    lifetime: 21 #overloading BaseBullet
   - type: VelocityExplosionTrigger
     minVelocity: 10
     intensityMultiplier: 5
