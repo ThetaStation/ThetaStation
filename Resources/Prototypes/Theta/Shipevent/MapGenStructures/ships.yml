@@ -107,3 +107,19 @@
   previewImage: /Textures/Theta/ShipEvent/ShipPreviews/python-preview.png
   structurePrototype: "shipevent_python"
   minCrewAmount: 2
+
+- type: mapgenstructure
+  id: shipevent_carrack
+  generator: !type:MapLoaderGenerator
+    mapPath: "/Maps/Theta/Shipevent/Ships/shipevent-carrack.yml"
+  spawnWeight: 0
+  minDistance: 20
+
+- type: shiptype
+  id: shiptype_carrack
+  name: shipevent-carrack-name
+  description: shipevent-carrack-desc
+  class: shipevent-shipclass-medium
+  previewImage: /Textures/Theta/ShipEvent/ShipPreviews/carrack-preview.png
+  structurePrototype: "shipevent_carrack"
+  minCrewAmount: 2

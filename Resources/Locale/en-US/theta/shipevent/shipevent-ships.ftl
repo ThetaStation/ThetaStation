@@ -35,3 +35,7 @@ shipevent-asteroid-ship-desc =
 shipevent-python-name = Python
 shipevent-python-desc =
     Long ship consisting of 4 sections connected with chains for flexibility. VERY HARD TO CONTROL.
+
+shipevent-carrack-name = Carrack
+shipevent-carrack-desc =
+    18th century ship with engines strapped to it.

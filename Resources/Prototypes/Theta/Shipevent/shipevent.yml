@@ -38,6 +38,7 @@
         - "shiptype_asteroid_ship"
         - "shiptype_boxship"
         - "shiptype_python"
+        - "shiptype_carrack"
 
       #bounds
       boundsCompressionInterval: 0
