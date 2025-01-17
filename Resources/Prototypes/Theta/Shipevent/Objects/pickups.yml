@@ -71,4 +71,5 @@
       - TurretAmmoContainerFlakEMPFilled
       - ShipEventRCD
       - ShipEventPlasmaGun
+      - GuidedRocket
     chance: 1

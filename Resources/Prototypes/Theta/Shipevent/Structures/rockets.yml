@@ -1,0 +1,165 @@
+- type: entity
+  id: ShipEventRocketComputer
+  name: rocket launcher console
+  suffix: ShipEvent
+  parent: BaseComputer
+  components:
+    - type: RocketConsole
+    - type: ActivatableUI
+      key: enum.RocketConsoleUiKey.Key
+    - type: UserInterface
+      interfaces:
+        enum.RocketConsoleUiKey.Key:
+          type: RocketConsoleBoundUserInterface
+    - type: RadarConsole
+    - type: PointLight
+      radius: 1.5
+      energy: 1.6
+      color: "#43ccb5"
+    - type: ApcPowerReceiver
+      needsPower: true
+    - type: Sprite
+      layers:
+        - map: ["computerLayerBody"]
+          state: computer
+        - map: ["computerLayerKeyboard"]
+          state: generic_keyboard
+        - map: ["computerLayerScreen"]
+          state: comm_syndie
+        - map: ["computerLayerKeys"]
+          state: syndie_key
+    - type: DeviceLinkSource
+      ports:
+      - CannonConsoleSender
+
+- type: entity
+  id: ShipEventRocketLauncher
+  name: rocket launcher
+  parent: BaseStructure
+  placement:
+    mode: SnapgridCenter
+  components:
+    - type: RocketLauncher
+    - type: Gun
+      minAngle: 0
+      maxAngle: 0
+      angleIncrease: 0
+      angleDecay: 0
+      fireRate: 3
+      projectileSpeed: 1
+      selectedMode: FullAuto
+      availableModes:
+        - FullAuto
+      soundGunshot:
+        path: /Audio/Theta/Shipevent/rocket.ogg
+        params:
+          volume: 20
+    - type: ContainerAmmoProvider
+      container: rocketSlot
+    - type: ItemSlots
+      slots:
+        rocketSlot:
+          name: rocketSlot
+          insertSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
+          ejectSound: /Audio/Weapons/Guns/MagOut/batrifle_magout.ogg
+          priority: 2
+          whitelist:
+            tags:
+            - GuidedRocket
+    - type: ContainerContainer
+      containers:
+        rocketSlot: !type:ContainerSlot
+    - type: RadarRenderable
+      viewProtos:
+      - rocket
+      group: enum.RadarRenderableGroup.None
+    - type: Transform
+      anchored: true
+    - type: Anchorable
+      delay: 7
+    - type: Sprite
+      drawdepth: Objects
+      sprite: Theta/ShipEvent/Structures/Machines/RocketLauncher.rsi
+      state: launcher
+    - type: InteractionOutline
+    - type: Physics
+      bodyType: Static
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape:
+            !type:PhysShapeAabb {}
+          mask:
+            - FullTileMask
+          layer:
+            - WallLayer
+    - type: Damageable
+      damageContainer: Inorganic
+      damageModifierSet: Metallic
+    - type: Repairable
+    - type: Destructible
+      thresholds:
+        - trigger:
+            !type:DamageTrigger
+            damage: 300
+          behaviors:
+            - !type:PlaySoundBehavior
+              sound:
+                collection: MetalBreak
+            - !type:SpawnEntitiesBehavior
+              spawn:
+                SheetSteel:
+                  min: 3
+                  max: 5
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+    - type: ApcPowerReceiver
+      needsPower: false
+    - type: DeviceLinkSink
+      ports:
+      - CannonConsoleReceiver
+
+- type: entity
+  id: GuidedRocket
+  name: guided rocket
+  parent: BaseCartridge
+  components:
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - Cartridge
+    - GuidedRocket
+  - type: CartridgeAmmo
+    proto: GuidedRocketProjectile
+    deleteOnSpawn: true
+  - type: Sprite
+    netsync: false
+    sprite: /Textures/Theta/ShipEvent/Objects/Ammo.rsi
+    layers:
+    - state: rocket
+
+- type: entity
+  id: GuidedRocketProjectile
+  parent: BulletRocket
+  suffix: ShipEvent
+  components:
+    - type: Sprite
+      netsync: false
+      sprite: /Textures/Theta/ShipEvent/Objects/Ammo.rsi
+      layers:
+      - state: rocket
+    - type: RadarRenderable
+      viewProtos:
+      - rocket
+      group: enum.RadarRenderableGroup.Projectiles
+    - type: Explosive
+      explosionType: Default
+      maxIntensity: 100
+      intensitySlope: 5
+      totalIntensity: 5000
+    - type: GuidedProjectile
+    - type: ActiveTimerTrigger
+      timeRemaining: 20
+    - type: TimedDespawn
+      lifetime: 21 #overloading BaseBullet

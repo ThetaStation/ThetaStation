@@ -38,10 +38,6 @@
           state: comm_syndie
         - map: ["computerLayerKeys"]
           state: syndie_key
-    - type: DeviceNetwork
-      deviceNetId: Wireless
-    - type: WirelessNetworkConnection
-      range: 200
     - type: DeviceLinkSource
       ports:
       - CannonConsoleSender
@@ -205,10 +201,6 @@
     - type: TurretLoader
       invalidAmmoSound:
         path: /Audio/Machines/beep.ogg
-    - type: DeviceNetwork
-      deviceNetId: Wireless
-    - type: WirelessNetworkConnection
-      range: 200
     - type: DeviceLinkSource
       ports:
       - TurretLoaderSender

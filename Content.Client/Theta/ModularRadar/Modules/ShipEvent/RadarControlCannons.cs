@@ -110,7 +110,7 @@ public sealed class RadarControlCannons : RadarModule
     private Vector2 RotateCannons(Vector2 mouseRelativePosition)
     {
         var offsetMatrix = OffsetMatrix;
-        var relativePositionToCoordinates = RelativePositionToCoordinates(mouseRelativePosition, offsetMatrix);
+        var relativePositionToCoordinates = RelativeToWorld(mouseRelativePosition, offsetMatrix);
         var player = _playerMan.LocalSession?.AttachedEntity;
         if (player == null)
             return relativePositionToCoordinates;

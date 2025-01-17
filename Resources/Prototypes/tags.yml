@@ -643,9 +643,12 @@
 
 - type: Tag
   id: GPS
+
 - type: Tag
   id: Gourd # tikvyak!!!
 
+- type: Tag
+  id: GuidedRocket # shipevent
 
 - type: Tag
   id: Grenade

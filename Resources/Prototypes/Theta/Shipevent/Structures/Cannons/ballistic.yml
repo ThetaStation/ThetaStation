@@ -34,10 +34,6 @@
       viewProtos:
       - genericCannon
       group: enum.RadarRenderableGroup.Cannon
-    - type: DeviceNetwork
-      deviceNetId: Wireless
-    - type: WirelessNetworkConnection
-      range: 200
     - type: DeviceLinkSink
       ports:
         - CannonConsoleReceiver
