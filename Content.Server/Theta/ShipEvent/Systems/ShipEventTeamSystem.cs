@@ -225,6 +225,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         AnomalyPrototypes.Clear();
         PickupPositions.Clear();
         Teams.Clear();
+        Fleets.Clear();
 
         DisableAllModifiers();
 
