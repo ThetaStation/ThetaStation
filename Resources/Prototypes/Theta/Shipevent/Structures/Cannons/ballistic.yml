@@ -181,7 +181,7 @@
       angleIncrease: 0
       angleDecay: 0
       fireRate: 0.5
-      projectileSpeed: 1
+      projectileSpeed: 5
       selectedMode: FullAuto
       availableModes:
         - FullAuto

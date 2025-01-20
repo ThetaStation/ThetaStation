@@ -21,41 +21,49 @@ public sealed class RadarRenderableSystem : EntitySystem
     public List<CommonRadarEntityInterfaceState> GetObjectsAround(EntityUid consoleUid, RadarConsoleComponent? radar = null)
     {
         var states = new List<CommonRadarEntityInterfaceState>();
-        if (!Resolve(consoleUid, ref radar))
-            return states;
-        states.AddRange(GetRadarRenderableStates(consoleUid, radar));
+        if (Resolve(consoleUid, ref radar))
+            states.AddRange(GetRadarRenderableStates(consoleUid, radar));
+
         return states;
     }
 
-    private List<CommonRadarEntityInterfaceState> GetRadarRenderableStates(EntityUid consoleUid,
+    //todo: this is bad, RadarRenderableComponent should be modified by the cannon/shipevent/mob systems
+    //and this method should just collect the states
+    private List<CommonRadarEntityInterfaceState> GetRadarRenderableStates(
+        EntityUid consoleUid,
         RadarConsoleComponent? radar = null,
-        TransformComponent? xform = null)
+        TransformComponent? consoleForm = null)
     {
         var states = new List<CommonRadarEntityInterfaceState>();
-        if (!Resolve(consoleUid, ref radar, ref xform))
+        if (!Resolve(consoleUid, ref radar, ref consoleForm))
             return states;
+
         var query = EntityQueryEnumerator<RadarRenderableComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out var radarRenderable, out var transform))
+        while (query.MoveNext(out var rendUid, out var renderable, out var rendForm))
         {
-            if (!_radarConsoleSystem.HasFlag(radar, (RadarRenderableGroup) radarRenderable.Group))
+            if (!_radarConsoleSystem.HasFlag(radar, (RadarRenderableGroup) renderable.Group))
                 continue;
-            if (!xform.MapPosition.InRange(transform.MapPosition, radar.MaxRange))
+
+            if (TryComp<IFFComponent>(rendForm.GridUid, out var iff) && (iff.Flags & IFFFlags.Hide) != 0)
+                continue;
+
+            if (!consoleForm.MapPosition.InRange(rendForm.MapPosition, radar.MaxRange))
                 continue;
 
             CommonRadarEntityInterfaceState? state;
-            switch ((RadarRenderableGroup) radarRenderable.Group)
+            switch ((RadarRenderableGroup) renderable.Group)
             {
                 case RadarRenderableGroup.ShipEventTeammate:
-                    state = GetMobState(uid, radarRenderable, transform);
+                    state = GetMobState(rendUid, renderable, rendForm);
                     break;
                 case RadarRenderableGroup.Cannon:
-                    state = GetCannonState(uid, consoleUid, radarRenderable, xform, transform);
+                    state = GetCannonState(rendUid, consoleUid, renderable, rendForm, consoleForm);
                     break;
                 case RadarRenderableGroup.Door:
-                    state = GetDoorState(uid, radarRenderable, transform, xform);
+                    state = GetDoorState(rendUid, renderable, rendForm, consoleForm);
                     break;
                 default:
-                    state = GetDefaultState(uid, radarRenderable, transform);
+                    state = GetDefaultState(rendUid, renderable, rendForm);
                     break;
             }
 
@@ -67,7 +75,7 @@ public sealed class RadarRenderableSystem : EntitySystem
     }
 
     private CommonRadarEntityInterfaceState? GetCannonState(EntityUid uid, EntityUid consoleUid,
-        RadarRenderableComponent radarRenderable, TransformComponent consoleTransform, TransformComponent xform)
+        RadarRenderableComponent radarRenderable, TransformComponent xform, TransformComponent consoleTransform)
     {
         if (!TryComp<CannonComponent>(uid, out var cannon))
             return null;
@@ -119,9 +127,6 @@ public sealed class RadarRenderableSystem : EntitySystem
         if (_mobStateSystem.IsIncapacitated(uid))
             return null;
 
-        if (TryComp<IFFComponent>(Transform(uid).GridUid, out var iff) && iff.Flags == IFFFlags.Hide)
-            return null;
-
         Color? color = null;
         if (TryComp<ShipEventTeamMarkerComponent>(uid, out var marker) && marker.Team != null)
             color = marker.Team.Color;
@@ -135,27 +140,17 @@ public sealed class RadarRenderableSystem : EntitySystem
     }
 
     private CommonRadarEntityInterfaceState? GetDoorState(EntityUid uid, RadarRenderableComponent renderable,
-        TransformComponent xform, TransformComponent consoleTransform)
+        TransformComponent xform, TransformComponent consoleForm)
     {
-        var myGrid = consoleTransform.GridUid;
-
-        if (Transform(uid).GridUid != myGrid)
-            return null;
-        if (!Transform(uid).Anchored)
-            return null;
-        if (!TryComp<DoorComponent>(uid, out var door))
+        if (Transform(uid).GridUid != consoleForm.GridUid)
             return null;
 
-        Color? color = Color.White;
+        if (!Transform(uid).Anchored || !TryComp<DoorComponent>(uid, out var door))
+            return null;
 
+        Color? color = Color.Red;
         if (door.State == DoorState.Open)
-        {
             color = Color.LimeGreen;
-        }
-        else
-        {
-            color = Color.Red;
-        }
 
         return new CommonRadarEntityInterfaceState(
             GetNetCoordinates(_transformSystem.GetMoverCoordinates(uid, xform)),
