@@ -187,15 +187,6 @@
       supplyRate: 15000
 
 - type: entity
-  parent: GeneratorRTG
-  id: GeneratorUraniumShipEvent
-  suffix: Uranium, 50kW
-  components:
-    - type: PowerSupplier
-      supplyRate: 50000
-      supplyRampPosition: 50000
-
-- type: entity
   parent: BaseGeneratorWallmount
   id: GeneratorWallmountBasic
   suffix: Basic, 3kW

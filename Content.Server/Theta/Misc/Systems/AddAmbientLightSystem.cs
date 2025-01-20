@@ -6,7 +6,7 @@ namespace Content.Server.Theta.Misc.Systems;
 public sealed class AddAmbientLightSystem : EntitySystem
 {
     [Dependency] private MapSystem _mapSys = default!;
-    
+
     public override void Initialize()
     {
         base.Initialize();
