@@ -9,54 +9,6 @@
       enableAfterEmp: true
 
 - type: entity
-  id: GeneratorShipEvent
-  parent: GeneratorRTG
-  suffix: ShipEvent
-  components:
-    - type: PowerSupplier
-      supplyRate: 100000
-      supplyRampPosition: 100000
-    - type: SupplierDamage
-      damageMultiplier: 0.0001 #10 mins at 25kW load
-      updateInterval: 5
-      damage:
-        types:
-          Shock: 1
-    - type: Appearance
-    - type: DamageVisuals
-      thresholds: [100, 200, 290]
-      trackAllDamage: true
-      damageOverlay:
-        sprite: Theta/ShipEvent/Objects/GeneratorDamage.rsi
-    - type: Repairable
-      doAfterDelay: 5
-    - type: Destructible
-      thresholds:
-      - trigger:
-          !type:DamageTrigger
-          damage: 600
-        behaviors:
-          - !type:DoActsBehavior
-            acts: [ "Destruction" ]
-      - trigger:
-          !type:DamageTrigger
-          damage: 300
-        behaviors:
-          - !type:PlaySoundBehavior
-            sound:
-              collection: MetalBreak
-          - !type:SpawnEntitiesBehavior
-            spawn:
-              RadiationPulseStrong:
-                min: 1
-                max: 1
-              SheetSteel:
-                min: 3
-                max: 5
-          - !type:DoActsBehavior
-            acts: [ "Destruction" ]
-
-- type: entity
   id: CannonComputerShipEvent
   name: cannon console
   suffix: ShipEvent
@@ -129,7 +81,7 @@
       needsPower: false
     - type: Destructible
       thresholds:
-        - trigger: #overriding parent
+        - trigger: # override the parent slot for immortality
             !type:DamageTrigger
             damage: 100000
 
@@ -165,7 +117,6 @@
     damageContainer: Inorganic
     damageModifierSet: Glass
   - type: Repairable
-    doAfterDelay: 5
   - type: Destructible
     thresholds:
     - trigger:
@@ -215,6 +166,7 @@
     - type: Damageable
       damageContainer: Inorganic
       damageModifierSet: Metallic
+    - type: Repairable
     - type: Destructible
       thresholds:
         - trigger:
@@ -231,8 +183,6 @@
                   max: 5
             - !type:DoActsBehavior
               acts: [ "Destruction" ]
-    - type: Repairable
-      doAfterDelay: 5
     - type: ApcPowerReceiver
       needsPower: false
     - type: ItemSlots
@@ -330,24 +280,8 @@
         state: generic_keys
     - type: ApcPowerReceiver
       needsPower: false
-    - type: Damageable
-      damageContainer: Inorganic
-      damageModifierSet: Metallic
     - type: Destructible
       thresholds:
-        - trigger:
+        - trigger: # override the parent slot for immortality
             !type:DamageTrigger
-            damage: 300
-          behaviors:
-            - !type:PlaySoundBehavior
-              sound:
-                collection: MetalBreak
-            - !type:SpawnEntitiesBehavior
-              spawn:
-                SheetSteel:
-                  min: 3
-                  max: 5
-            - !type:DoActsBehavior
-              acts: [ "Destruction" ]
-    - type: Repairable
-      doAfterDelay: 5
+            damage: 100000

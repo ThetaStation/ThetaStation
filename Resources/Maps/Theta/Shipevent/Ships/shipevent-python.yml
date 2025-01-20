@@ -863,7 +863,7 @@ entities:
     - type: Transform
       pos: 2.5,-4.5
       parent: 163
-- proto: GeneratorShipEvent
+- proto: GeneratorUraniumShipEvent
   entities:
   - uid: 48
     components:

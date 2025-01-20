@@ -614,7 +614,7 @@ entities:
     - type: Transform
       pos: 1.6032674,3.4966645
       parent: 1
-- proto: GeneratorShipEvent
+- proto: GeneratorUraniumShipEvent
   entities:
   - uid: 114
     components:
