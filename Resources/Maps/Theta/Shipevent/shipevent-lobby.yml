@@ -447,7 +447,7 @@ entities:
     - pos: 8.637921,-2.2137043
       parent: 1
       type: Transform
-- proto: GeneratorUraniumShipEvent
+- proto: GeneratorRTG
   entities:
   - uid: 49
     components:
