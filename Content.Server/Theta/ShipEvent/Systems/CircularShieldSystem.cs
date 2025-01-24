@@ -67,6 +67,7 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
     {
         if (!Resolve(uid, ref console, ref radar) || console.BoundShield == null)
             return;
+
         if (!TryComp<CircularShieldComponent>(console.BoundShield, out var shield) ||
             !TryComp<TransformComponent>(console.BoundShield, out var transform))
             return;
@@ -97,6 +98,7 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
             return;
 
         shield.Enabled = !shield.Enabled;
+        UpdatePowerDraw(uid, shield);
         UpdateConsoleState(uid, console);
 
         if (!shield.Enabled)
@@ -124,16 +126,9 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
         shield.Angle = args.Angle ?? shield.Angle;
         shield.Width = args.Width ?? shield.Width;
         shield.Radius = args.Radius ?? shield.Radius;
-        UpdateShieldFixture(console.BoundShield.Value, shield);
 
-        if (TryComp<ApcPowerReceiverComponent>(console.BoundShield.Value, out var receiver))
-        {
-            receiver.Load = shield.DesiredDraw;
-        }
-        else if (shield.DesiredDraw > 0)
-        {
-            shield.Powered = false;
-        }
+        UpdateShieldFixture(console.BoundShield.Value, shield);
+        UpdatePowerDraw(console.BoundShield.Value, shield);
 
         Dirty(console.BoundShield.Value, shield);
     }
@@ -232,6 +227,18 @@ public sealed class CircularShieldSystem : SharedCircularShieldSystem
         else
         {
             _physSys.SetRadius(uid, ShieldFixtureId, shieldFix, shieldFix.Shape, shield.Radius);
+        }
+    }
+
+    private void UpdatePowerDraw(EntityUid uid, CircularShieldComponent shield)
+    {
+        if (TryComp<ApcPowerReceiverComponent>(uid, out var receiver))
+        {
+            receiver.Load = shield.DesiredDraw;
+        }
+        else if (shield.DesiredDraw > 0)
+        {
+            shield.Powered = false;
         }
     }
 }

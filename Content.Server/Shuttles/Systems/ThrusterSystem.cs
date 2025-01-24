@@ -1,9 +1,9 @@
+using System.Diagnostics;
 using System.Numerics;
 using Content.Server.Audio;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Server.Shuttles.Components;
-using Content.Server.Sound;
 using Content.Shared.Audio;
 using Content.Shared.Damage;
 using Content.Shared.Examine;
@@ -13,7 +13,6 @@ using Content.Shared.Physics;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Temperature;
 using Robust.Shared.Audio;
-using Robust.Shared.Audio.Components;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -236,7 +235,7 @@ public sealed class ThrusterSystem : EntitySystem
     {
         if (component.SoundCycle != null)
             _ambient.SetSound(uid, component.SoundCycle, EnsureComp<AmbientSoundComponent>(uid));
-        _ambient.SetAmbience(uid, false);
+        SetThrusterFiring(uid, component, false);
 
         if (!component.Enabled)
         {
@@ -399,6 +398,8 @@ public sealed class ThrusterSystem : EntitySystem
                 throw new ArgumentOutOfRangeException();
         }
 
+        SetThrusterFiring(uid, component, false);
+
         if (EntityManager.TryGetComponent(uid, out AppearanceComponent? appearance))
         {
             _appearance.SetData(uid, ThrusterVisualState.State, false, appearance);
@@ -459,16 +460,24 @@ public sealed class ThrusterSystem : EntitySystem
         var query = EntityQueryEnumerator<ThrusterComponent>();
         var curTime = _timing.CurTime;
 
-        while (query.MoveNext(out var comp))
+        while (query.MoveNext(out var uid, out var comp))
         {
+            if (comp.Firing && comp.RampPosition <= comp.RampDuration &&
+                TryComp<ApcPowerReceiverComponent>(uid, out var receiver))
+            {
+                float rampCompleted = (float) (comp.RampPosition / comp.RampDuration);
+                receiver.Load = comp.LoadIdle + (comp.LoadFiring - comp.LoadIdle) * rampCompleted;
+                comp.RampPosition += TimeSpan.FromSeconds(frameTime);
+            }
+
             if (!comp.Firing || comp.Colliding.Count == 0 || comp.Damage == null || comp.NextFire < curTime)
                 continue;
 
             comp.NextFire += TimeSpan.FromSeconds(1);
 
-            foreach (var uid in comp.Colliding.ToArray())
+            foreach (var colUid in comp.Colliding.ToArray())
             {
-                _damageable.TryChangeDamage(uid, comp.Damage);
+                _damageable.TryChangeDamage(colUid, comp.Damage);
             }
         }
     }
@@ -493,11 +502,16 @@ public sealed class ThrusterSystem : EntitySystem
     {
         if (component.Firing == value)
             return;
-        component.Firing = value;
 
+        if (!value && TryComp<ApcPowerReceiverComponent>(uid, out var receiver))
+            receiver.Load = component.LoadIdle;
+
+        component.Firing = value;
+        component.RampPosition = TimeSpan.Zero;
         _appearance.SetData(uid, ThrusterVisualState.Thrusting, value);
         _ambient.SetAmbience(uid, value);
 
+        //to prevent sound spam
         bool recentFire = (_timing.CurTime - component.LastFire).TotalSeconds < 0.5;
         component.LastFire = _timing.CurTime;
         if (recentFire)
