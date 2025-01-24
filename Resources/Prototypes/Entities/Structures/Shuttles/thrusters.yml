@@ -29,6 +29,9 @@
     - type: Rotatable
       rotateWhileAnchored: true
     - type: Thruster
+      loadIdle: 100
+      loadFiring: 2000
+      rampDuration: 1
       damage:
         types:
           Heat: 40
@@ -46,7 +49,7 @@
     - type: Appearance
     - type: ThrusterVisuals
     - type: ApcPowerReceiver
-      powerLoad: 1500
+      powerLoad: 100
     - type: ExtensionCableReceiver
     - type: Damageable
       damageContainer: Inorganic
