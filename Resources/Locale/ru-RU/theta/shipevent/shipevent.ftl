@@ -51,10 +51,11 @@ shipevent-roundend-winner-team = ПОБЕДИТЕЛЬ - КОМАНДА '{ $name 
 
 department-Unsorted = Прочее
 shipevent-channel-fleet = Флот
-shipevent-memberlimit = В этой команде нет места!
-shipevent-ship-destroyed = Корабль команды уничтожен! Подождите пока он заново не восстановится.
-shipevent-spawner-destroyed-join = Клонер команды уничтожен! Подождите пока он не восстановится.
-shipevent-incorrect-password = Неверный пароль.
+shipevent-join-fail = Не удалось присоединиться к команде.
+shipevent-join-limit = В этой команде нет места!
+shipevent-join-ship = Корабль команды уничтожен! Подождите пока он заново не восстановится.
+shipevent-join-spawner = Спавнер команды уничтожен! Подождите пока он не восстановится.
+shipevent-join-pass = Неверный пароль.
 shipevent-kicked = Вас выгнали из команды! Используйте меню команд чтоб найти новое пристанище.
 shipevent-spawner-destroyed = Спавнер команды уничтожен. Больше никакого бессмертия.
 shipevent-respawntimerhud = Респавн через:

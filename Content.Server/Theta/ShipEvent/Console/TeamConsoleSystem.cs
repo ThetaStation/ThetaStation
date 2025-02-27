@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Linq;
+using Content.Server.Chat.Systems;
 using Content.Server.Theta.ShipEvent.Systems;
 using Content.Server.UserInterface;
 using Content.Shared.Theta.ShipEvent.UI;
@@ -13,6 +14,7 @@ public sealed class TeamConsoleSystem : EntitySystem
 {
     [Dependency] private readonly ShipEventTeamSystem _shipSys = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
+    [Dependency] private readonly ChatSystem _chatSys = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
 
     public override void Initialize()
@@ -29,8 +31,11 @@ public sealed class TeamConsoleSystem : EntitySystem
         if (teams.Count() != 1)
             return;
 
-        if(_playerManager.TryGetSessionByEntity(args.Actor, out var session))
-            _shipSys.JoinTeam(session, teams.First(), args.Password);
+        if (_playerManager.TryGetSessionByEntity(args.Actor, out var session))
+        {
+            if (!_shipSys.TryJoinTeam(session, teams.First(), args.Password, out string reason))
+                _chatSys.SendSimpleMessage(reason, session);
+        }
     }
 
     private void OnRefreshTeams(EntityUid uid, TeamConsoleComponent component, RefreshShipTeamsEvent args)

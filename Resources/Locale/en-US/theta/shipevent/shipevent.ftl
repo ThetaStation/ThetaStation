@@ -1,4 +1,5 @@
-﻿## Gamemode stuff
+﻿
+## Gamemode stuff
 
 shipevent-title = Ship Battle
 shipevent-desc = NanoTrasen has started a contest to test out their light battle cruisers in combat situations
@@ -52,10 +53,11 @@ shipevent-roundend-discord = Roundend report:
 
 department-Unsorted = Unsorted
 shipevent-channel-fleet = Fleet
-shipevent-memberlimit = This team is full!
-shipevent-ship-destroyed = The crew's ship has been destroyed! Wait until it is restored again.
-shipevent-spawner-destroyed-join = The crew's cloner has been destroyed! Wait until it is restored again.
-shipevent-incorrect-password = Incorrect password.
+shipevent-join-fail = Failed to join team.
+shipevent-join-limit = This team is full!
+shipevent-join-ship = The crew's ship has been destroyed! Wait until it is restored again.
+shipevent-join-spawner = The crew's spawner has been destroyed! Wait until it is restored again.
+shipevent-join-pass = Incorrect password.
 shipevent-kicked = You've got kicked from the team! Use team menu to find a new one.
 shipevent-spawner-destroyed = Team's spawner is destroyed. No more immortality.
 shipevent-respawntimerhud = Respawn in:

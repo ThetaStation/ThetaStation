@@ -602,6 +602,47 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         _ticker.Respawn(session);
     }
 
+    /// <summary>
+    /// Adds player to faction (by name), spawns him on ship & does all other necessary stuff
+    /// </summary>
+    public bool TryJoinTeam(ICommonSession session, ShipEventTeam team, string? password, out string message)
+    {
+        message = Loc.GetString("shipevent-join-fail");
+
+        if (team.JoinPassword != password)
+        {
+            message = Loc.GetString("shipevent-join-pass");
+            return false;
+        }
+
+        if (team.MaxMembers != 0 && team.Members.Count >= team.MaxMembers)
+        {
+            message = Loc.GetString("shipevent-join-limit");
+            return false;
+        }
+
+        if (team.ShipGrids.Count == 0)
+        {
+            message = Loc.GetString("shipevent-join-ship");
+            return false;
+        }
+
+        var spawners = GetGridCompHolders<ShipEventSpawnerComponent>(team.ShipGrids);
+        if (spawners.Count == 0)
+        {
+            message = Loc.GetString("shipevent-join-spawner");
+            return false;
+        }
+
+        if (TrySpawnPlayer(session, team, out var uid, bypass: true))
+        {
+            TeamMessage(team, Loc.GetString("shipevent-team-newmember", ("name", GetName(uid.Value))));
+            return true;
+        }
+
+        return false;
+    }
+
     private bool TrySpawnPlayer(ICommonSession session, ShipEventTeam team, [NotNullWhen(true)] out EntityUid? uid, EntityUid? spawnerUid = null, bool bypass = false)
     {
         uid = null;
@@ -871,40 +912,6 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         }
 
         FleetMessage(fleet, Loc.GetString("shipevent-fleet-remteam", ("name", team.Name)));
-    }
-
-    /// <summary>
-    /// Adds player to faction (by name), spawns him on ship & does all other necessary stuff
-    /// </summary>
-    public void JoinTeam(ICommonSession session, ShipEventTeam team, string? password)
-    {
-        if (team.JoinPassword != password)
-        {
-            _chatSys.SendSimpleMessage(Loc.GetString("shipevent-incorrect-password"), session);
-            return;
-        }
-
-        if (team.MaxMembers != 0 && team.Members.Count >= team.MaxMembers)
-        {
-            _chatSys.SendSimpleMessage(Loc.GetString("shipevent-memberlimit"), session);
-            return;
-        }
-
-        if (team.ShipGrids.Count == 0)
-        {
-            _chatSys.SendSimpleMessage(Loc.GetString("shipevent-ship-destroyed"), session);
-            return;
-        }
-
-        var spawners = GetGridCompHolders<ShipEventSpawnerComponent>(team.ShipGrids);
-        if (spawners.Count == 0)
-        {
-            _chatSys.SendSimpleMessage(Loc.GetString("shipevent-spawner-destroyed-join"), session);
-            return;
-        }
-
-        if (TrySpawnPlayer(session, team, out var uid, bypass: true))
-            TeamMessage(team, Loc.GetString("shipevent-team-newmember", ("name", GetName(uid.Value))));
     }
 
     /// <summary>
