@@ -254,7 +254,21 @@ namespace Content.Server.GameTicking
             if (count % PopCounterStep == 0 && count > PopCounterMax)
             {
                 string msg = PopCounterMessage.Replace("{$count}", count.ToString());
-                var payload = new WebhookPayload { Content = msg };
+                var payload = new WebhookPayload
+                {
+                    Embeds = new List<WebhookEmbed>
+                    {
+                        new()
+                        {
+                            Description = msg,
+                            Color = 0x00FF00,
+                            Footer = new WebhookEmbedFooter
+                            {
+                                Text = $"**{_cfg.GetCVar(CCVars.HubServerUrl)}**"
+                            },
+                        },
+                    },
+                };
                 await _discord.CreateMessage(_webhookIdentifier.Value, payload);
             }
         }
