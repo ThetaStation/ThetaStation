@@ -254,6 +254,7 @@ namespace Content.Server.GameTicking
             if (count % PopCounterStep == 0 && count > PopCounterMax)
             {
                 string msg = PopCounterMessage.Replace("{$count}", count.ToString());
+
                 var payload = new WebhookPayload
                 {
                     Embeds = new List<WebhookEmbed>
@@ -269,6 +270,7 @@ namespace Content.Server.GameTicking
                         },
                     },
                 };
+
                 await _discord.CreateMessage(_webhookIdentifier.Value, payload);
             }
         }
