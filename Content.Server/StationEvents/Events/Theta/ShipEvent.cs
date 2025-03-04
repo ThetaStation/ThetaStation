@@ -35,11 +35,6 @@ public sealed partial class ShipEventRuleComponent : Component
     [DataField] public float PlayerCheckInterval;
     [DataField] public int RespawnDelay;
     [DataField] public int BonusInterval;
-    [DataField] public float BoundsCompressionInterval;
-    [DataField] public float PickupSpawnInterval;
-    [DataField] public float AnomalyUpdateInterval;
-    [DataField] public float AnomalySpawnInterval;
-    [DataField] public float ModifierUpdateInterval;
 
     //points
     [DataField] public int PointsPerInterval;
@@ -59,19 +54,37 @@ public sealed partial class ShipEventRuleComponent : Component
     [DataField] public int MetersPerPlayer; //scaling field based on online (at roundstart)
     [DataField] public int RoundFieldSizeTo;
 
-    //misc
-    [DataField] public Color? SpaceLightColor = null;
-    [DataField] public List<string> ShipTypes = new();
+    //bounds
     [DataField] public int BoundsCompressionDistance;
+    [DataField] public float BoundsCompressionInterval;
+
+    //pickups
+    [DataField] public float PickupSpawnInterval;
     [DataField] public int PickupPositionCount;
     [DataField] public float PickupMinDistance;
     [DataField(customTypeSerializer: typeof(PrototypeIdSerializer<WeightedRandomEntityPrototype>))]
     public string PickupPrototype = default!;
+
+    //anomalies
+    [DataField] public float AnomalyUpdateInterval;
+    [DataField] public float AnomalySpawnInterval;
     [DataField(customTypeSerializer: typeof(PrototypeIdListSerializer<EntityPrototype>))]
     public List<string> AnomalyPrototypes = new();
+
+    //modifiers
+    [DataField] public float ModifierUpdateInterval;
     [DataField] public int ModifierAmount;
     [DataField(customTypeSerializer: typeof(PrototypeIdListSerializer<ShipEventModifierPrototype>))]
     public List<string> ModifierPrototypes = new();
+
+    //bots
+    [DataField] public float BotUpdateInterval;
+    [DataField] public int BotAmount;
+
+    //misc
+    [DataField] public Color? SpaceLightColor = null;
+    [DataField(customTypeSerializer: typeof(PrototypeIdListSerializer<ShipTypePrototype>))]
+    public List<string> ShipTypes = new();
 }
 
 public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
@@ -177,6 +190,9 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         {
             _shipSys.AllModifiers.Add(_protMan.Index<ShipEventModifierPrototype>(modifierProtId));
         }
+
+        _shipSys.BotAmount = component.BotAmount;
+        _shipSys.BotUpdateInterval = component.BotUpdateInterval;
 
         AddComponentsProcessor iffSplitProc = new();
         iffSplitProc.Components = new ComponentRegistry(

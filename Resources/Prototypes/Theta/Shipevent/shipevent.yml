@@ -78,6 +78,9 @@
         - "DisablePlayerRespawnModifier"
         - "BadClonerModifier"
 
+      botAmount: 3
+      botUpdateInterval: 10
+
 - type: weightedRandomEntity
   id: ShipEventPickupPrototype
   weights:

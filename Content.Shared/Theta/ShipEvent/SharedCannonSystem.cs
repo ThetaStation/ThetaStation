@@ -69,42 +69,46 @@ public abstract class SharedCannonSystem : EntitySystem
 
     private void OnShootRequest(RequestCannonShootEvent ev, EntitySessionEventArgs args)
     {
-        var evCannonUid = GetEntity(ev.CannonUid);
-        var gun = GetCannonGun(evCannonUid);
-        var cannon = EntityManager.GetComponent<CannonComponent>(evCannonUid);
-        if (gun == null || !CanShoot(ev, gun, cannon))
-        {
-            StopShoot(evCannonUid);
-            return;
-        }
-
-        var cannonTransform = Transform(evCannonUid);
-        if (cannonTransform.GridUid == null)
-        {
-            StopShoot(evCannonUid);
-            return;
-        }
-
-        var mapCoords = new MapCoordinates(ev.Coordinates, Transform(evCannonUid).MapID);
-        var coords = EntityCoordinates.FromMap(evCannonUid, mapCoords, _transform);
-        _gunSystem.AttemptShoot(evCannonUid, evCannonUid, gun, coords);
+        ShootCannon(GetEntity(ev.CannonUid), GetEntity(ev.PilotUid), ev.Coordinates);
     }
 
-    private bool CanShoot(RequestCannonShootEvent args, GunComponent gun, CannonComponent cannon)
+    public void ShootCannon(EntityUid uid, EntityUid userUid, Vector2 coords)
+    {
+        var gun = CompOrNull<GunComponent>(uid);
+        var cannon = EntityManager.GetComponent<CannonComponent>(uid);
+        if (gun == null || !CanShoot(uid, gun, cannon, userUid, coords))
+        {
+            StopShoot(uid);
+            return;
+        }
+
+        var form = Transform(uid);
+        if (form.GridUid == null)
+        {
+            StopShoot(uid);
+            return;
+        }
+
+        var mapCoords = new MapCoordinates(coords, form.MapID);
+        var entCoords = _transform.ToCoordinates(uid, mapCoords);
+        _gunSystem.AttemptShoot(uid, uid, gun, entCoords);
+    }
+
+    private bool CanShoot(EntityUid uid, GunComponent gun, CannonComponent cannon, EntityUid userUid, Vector2 coords)
     {
         if (!_gunSystem.CanShoot(gun))
             return false;
 
-        TransformComponent cannonTransform = Transform(GetEntity(args.CannonUid));
-        TransformComponent pilotTransform = Transform(GetEntity(args.PilotUid));
+        TransformComponent cannonTransform = Transform(uid);
+        TransformComponent pilotTransform = Transform(userUid);
         if (TryComp<ShipEventTeamMarkerComponent>(pilotTransform.GridUid, out var marker) &&
             marker.Team != null &&
             cannonTransform.GridUid != null &&
             !marker.Team.ShipGrids.Contains(cannonTransform.GridUid.Value))
             return false;
 
-        Angle firingAngle = ThetaHelpers.AngNormal(new Angle(args.Coordinates - _transform.GetWorldPosition(cannonTransform)) -
-                                               _transform.GetWorldRotation(Transform(cannonTransform.GridUid ?? GetEntity(args.CannonUid))));
+        Angle targetAngle = new Angle(coords - _transform.GetWorldPosition(cannonTransform));
+        Angle firingAngle = ThetaHelpers.AngNormal(targetAngle - _transform.GetWorldRotation(cannonTransform.GridUid ?? uid));
         foreach ((Angle start, Angle width) in cannon.ObstructedRanges)
         {
             if (ThetaHelpers.AngInSector(firingAngle, start, width))
@@ -131,23 +135,18 @@ public abstract class SharedCannonSystem : EntitySystem
             StopShoot(uid);
     }
 
-    public GunComponent? GetCannonGun(EntityUid uid)
-    {
-        return !TryComp<GunComponent>(uid, out var gun) ? null : gun;
-    }
-
     private void OnStopShootRequest(RequestStopCannonShootEvent ev)
     {
         StopShoot(GetEntity(ev.CannonUid));
     }
 
-    private void StopShoot(EntityUid cannonUid)
+    private void StopShoot(EntityUid uid)
     {
-        var gun = GetCannonGun(cannonUid);
+        var gun = CompOrNull<GunComponent>(uid);
         if (gun == null || gun.ShotCounter == 0)
             return;
 
-        _gunSystem.StopShooting(cannonUid, gun);
+        _gunSystem.StopShooting(uid, gun);
     }
 }
 

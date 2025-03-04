@@ -67,6 +67,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
     [Dependency] private readonly HumanoidAppearanceSystem _humanAppearanceSys = default!;
     [Dependency] private readonly IServerPreferencesManager _prefsMan = default!;
     [Dependency] private readonly ITimerManager _timerMan = default!;
+    [Dependency] private readonly IGameTiming _timingSys = default!;
     [Dependency] private readonly PhysicsSystem _physSys = default!;
 
     private readonly Dictionary<string, int> _projectileDamage = new(); //cached damage for projectile prototypes

@@ -205,6 +205,23 @@ public sealed partial class ShipEventTeamSystem
         return uids;
     }
 
+    private List<(EntityUid, T)> GetGridComps<T>(EntityUid gridUid) where T : IComponent
+    {
+        if (Deleted(gridUid))
+            return new();
+
+        List<(EntityUid, T)> uids = new();
+        var childEnum = Transform(gridUid).ChildEnumerator;
+
+        while (childEnum.MoveNext(out EntityUid uid))
+        {
+            if (TryComp<T>(uid, out T? comp))
+                uids.Add((uid, comp));
+        }
+
+        return uids;
+    }
+
     private void DetachEntityFromGrid(EntityUid uid)
     {
         TransformComponent form = Transform(uid);
