@@ -253,6 +253,7 @@ namespace Content.Server.GameTicking
             int count = _playerManager.PlayerCount;
             if (count % PopCounterStep == 0 && count > PopCounterMax)
             {
+                PopCounterMax = count;
                 string msg = PopCounterMessage.Replace("{$count}", count.ToString());
 
                 var payload = new WebhookPayload
