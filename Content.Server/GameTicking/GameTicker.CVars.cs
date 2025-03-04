@@ -29,6 +29,15 @@ namespace Content.Server.GameTicking
         [ViewVariables]
         private string? RoundEndSoundCollection { get; set; }
 
+        [ViewVariables]
+        public int PopCounterStep;
+
+        [ViewVariables]
+        public int PopCounterMax;
+
+        [ViewVariables]
+        public string PopCounterMessage = string.Empty;
+
 #if EXCEPTION_TOLERANCE
         [ViewVariables]
         public int RoundStartFailShutdownCount { get; private set; } = 0;
@@ -72,6 +81,9 @@ namespace Content.Server.GameTicking
                     DiscordRoundEndRole = null;
                 }
             }, true);
+            Subs.CVar(_configurationManager, CCVars.DiscordPopCounterStep, value => PopCounterStep = value, true);
+            Subs.CVar(_configurationManager, CCVars.DiscordPopCounterMax, value => PopCounterMax = value, true);
+            Subs.CVar(_configurationManager, CCVars.DiscordPopCounterMessage, value => PopCounterMessage = value, true);
             Subs.CVar(_configurationManager, CCVars.RoundEndSoundCollection, value => RoundEndSoundCollection = value, true);
 #if EXCEPTION_TOLERANCE
             Subs.CVar(_configurationManager, CCVars.RoundStartFailShutdownCount, value => RoundStartFailShutdownCount = value, true);

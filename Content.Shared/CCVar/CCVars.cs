@@ -497,6 +497,25 @@ namespace Content.Shared.CCVar
         public static readonly CVarDef<string> DiscordRoundEndRoleWebhook =
             CVarDef.Create("discord.round_end_role", string.Empty, CVar.SERVERONLY);
 
+        /// <summary>
+        /// Pop counter will post a message only when the current online is divisible by this value
+        /// </summary>
+        public static readonly CVarDef<int> DiscordPopCounterStep =
+            CVarDef.Create("discord.popcounter_step", 5, CVar.SERVERONLY);
+
+
+        /// <summary>
+        /// Pop counter will post a message and update this value only when the current online is greater
+        /// </summary>
+        public static readonly CVarDef<int> DiscordPopCounterMax =
+            CVarDef.Create("discord.popcounter_max", 5, CVar.SERVERONLY);
+
+        /// <summary>
+        /// Message posted by pop counter
+        /// </summary>
+        public static readonly CVarDef<string> DiscordPopCounterMessage =
+            CVarDef.Create("discord.popcounter_message", string.Empty, CVar.SERVERONLY);
+
         /*
          * Tips
          */
