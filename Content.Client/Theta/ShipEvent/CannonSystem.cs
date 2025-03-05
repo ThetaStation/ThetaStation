@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Client.Weapons.Ranged.Systems;
 using Content.Shared.Theta.ShipEvent;
+using Content.Shared.Weapons.Ranged.Components;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -129,12 +130,11 @@ public sealed class CannonSystem : SharedCannonSystem
         }
     }
 
-    private bool CanFire(EntityUid cannonUid)
+    private bool CanFire(EntityUid uid)
     {
-        var gun = GetCannonGun(cannonUid);
-        if (gun == null)
+        if (!TryComp<GunComponent>(uid, out var gun))
         {
-            _firingCannons.Remove(cannonUid);
+            _firingCannons.Remove(uid);
             return false;
         }
 

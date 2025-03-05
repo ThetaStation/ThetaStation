@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
 using Robust.Shared.Prototypes;
@@ -49,6 +50,16 @@ public static class ThetaHelpers
 
     #endregion
 
+    #region Geometry
+
+    public static bool SegBoxIntersect(Vector2 a, Vector2 b, Box2 box, [NotNullWhen(true)] out Vector2? ipos)
+    {
+        ipos = null;
+        return false;
+    }
+
+    #endregion
+
     #region Graphs
 
     /// <summary>
@@ -56,9 +67,97 @@ public static class ThetaHelpers
     /// </summary>
     public sealed class GraphNode<T>
     {
-        public required T Value;
-        public List<GraphNode<T>> Neighbours = new();
-        public List<int> Costs = new();
+        public T Value;
+        public List<(GraphNode<T>, float)> Neighbours = new();
+
+        public GraphNode(T value)
+        {
+            Value = value;
+        }
+
+        public void AddNeighbour(GraphNode<T> node, float cost, bool twoway = true)
+        {
+            if (Neighbours.Contains((node, cost)))
+                return;
+
+            Neighbours.Add((node, cost));
+
+            if (twoway)
+                node.Neighbours.Add((this, cost));
+        }
+
+        public void RemoveNeighbour(GraphNode<T> node, bool twoway = true)
+        {
+            for (int i = 0; i < node.Neighbours.Count; i++)
+            {
+                GraphNode<T> neighbour = node.Neighbours[i].Item1;
+                if (neighbour == node)
+                {
+                    if (twoway)
+                        RemoveNeighbour(neighbour, false);
+                    node.Neighbours.RemoveAt(i);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Finds the shortest path between start and finish nodes
+    /// Graph nodes will be modified in the process so pass a copy if you want to save it
+    /// </summary>
+    public static List<GraphNode<T>> DjikstraFindPath<T>(GraphNode<T> start, GraphNode<T> finish)
+    {
+        Dictionary<GraphNode<T>, (GraphNode<T>, float)> tree = new() { { start, (start, 0) } };
+        List<GraphNode<T>> frontNodes = new() { start };
+
+        //building tree
+        List<GraphNode<T>> buffer = new();
+        while (frontNodes.Count > 0)
+        {
+            foreach (GraphNode<T> node in frontNodes)
+            {
+                float nodeCost = tree[node].Item2;
+                foreach ((GraphNode<T> neighbour, float cost) in node.Neighbours)
+                {
+                    if (tree.TryGetValue(neighbour, out var pair))
+                    {
+                        if (cost + nodeCost < pair.Item2)
+                        {
+                            neighbour.RemoveNeighbour(pair.Item1); //remove parent connection
+                            pair.Item1 = node;
+                            pair.Item2 = cost + nodeCost;
+                        }
+                        else
+                        {
+                            neighbour.RemoveNeighbour(node);
+                        }
+                    }
+                    else
+                    {
+                        tree[neighbour] = (node, cost + nodeCost);
+                    }
+
+                    buffer.Add(neighbour);
+                }
+            }
+
+            frontNodes = buffer;
+            buffer.Clear();
+        }
+
+        //then traversing it in reverse to get the resulting path
+        List<GraphNode<T>> result = new();
+        GraphNode<T> currentNode = finish;
+        while (currentNode != start)
+        {
+            GraphNode<T> parent = tree[currentNode].Item1;
+            result.Add(parent);
+            currentNode = parent;
+        }
+
+        result.Add(start);
+        result.Reverse();
+        return result;
     }
 
     #endregion
@@ -69,17 +168,20 @@ public static class ThetaHelpers
     /// <summary>
     /// RectRange represents a rectangular part of space from Bottom to Top on Y axis
     /// Each xrange represents free/occupied ranges of space on X axis
+    /// Group is used by CombineAllRanges to mark ranges which are in contact with each other
     /// </summary>
     public struct RectRange
     {
         public int Bottom, Top;
         public List<(int, int)> XRanges;
+        public int Group;
 
-        public RectRange(int bottom, int top, List<(int, int)> xRanges)
+        public RectRange(int bottom, int top, List<(int, int)> xRanges, int group = 0)
         {
             Bottom = bottom;
             Top = top;
             XRanges = xRanges;
+            Group = group;
         }
     }
 
@@ -89,22 +191,149 @@ public static class ThetaHelpers
     public delegate List<(int, int)> XRangeOperation(List<(int, int)> ranges1, List<(int, int)> ranges2);
 
     /// <summary>
-    /// Converts Box2i to RectRange (area inside the box is considered free)
+    /// Converts Box2i to RectRange
     /// </summary>
     public static RectRange RangeFromBox(Box2i box)
     {
         return new RectRange(box.Bottom, box.Top, new List<(int, int)> { (box.Left, box.Right) });
     }
 
-    public static List<GraphNode<Vector2>> RangesToGraph(List<RectRange> ranges)
+    public static List<GraphNode<Vector2i>> RangeToNodes(RectRange range)
     {
+        List<GraphNode<Vector2i>> result = new();
+
+        int height = range.Top - range.Bottom;
+        foreach ((int start, int end) in range.XRanges)
+        {
+            int width = end - start;
+
+            GraphNode<Vector2i> lb = new(new(start, range.Bottom));
+            GraphNode<Vector2i> lt = new(new(start, range.Top));
+            GraphNode<Vector2i> rb = new(new(end, range.Bottom));
+            GraphNode<Vector2i> rt = new(new(end, range.Top));
+
+            lb.AddNeighbour(lt, height);
+            lb.AddNeighbour(rb, width);
+            lt.AddNeighbour(rt, width);
+            rb.AddNeighbour(rt, height);
+
+            result.AddRange([lb, lt, rb, rt]);
+        }
+
+        return result;
     }
 
     /// <summary>
-    /// Combines all ranges lying between end X & start X, and above/below height into a single range (with single X range)
-    /// with width above minWidth and combined height of included ranges
+    /// Combines geometry of all ranges in the list, each node representing a vertex of the resulting shape
+    /// All input ranges should have only 1 xrange (since it's expected that they were created from boxes)
     /// </summary>
-    public static RectRange CombineRangesVertically(List<RectRange> ranges, int start, int end, int heightBottom, int heightTop, int minWidth)
+    public static List<GraphNode<Vector2i>> RangesToGraph(List<RectRange> ranges)
+    {
+        //combine overlapping ranges, basically splitting them into a bunch of horizontal layers
+        ranges = CombineAllRanges(ranges, AddXRanges, out _);
+
+        List<List<RectRange>> groups = new();
+        Dictionary<RectRange, List<GraphNode<Vector2i>>> nodes = new();
+
+        //separate em by groups (adjacent ranges)
+        foreach (RectRange range in ranges)
+        {
+            groups[range.Group - 1].Add(range);
+        }
+
+        foreach (List<RectRange> group in groups)
+        {
+            //sort by height
+            group.Sort((r1, r2) => r1.Bottom - r2.Bottom);
+
+            for (int ilow = 0; ilow < group.Count; ilow++)
+            {
+                for (int ihigh = 0; ihigh < group.Count; ihigh++)
+                {
+                    if (ilow == ihigh)
+                        continue;
+
+                    RectRange lowRange = group[ilow];
+                    RectRange highRange = group[ihigh];
+
+                    //if ranges are actually adjacent combine them and convert the result to nodes
+                    if (lowRange.Top == highRange.Bottom && XRangesOverlap(lowRange.XRanges, highRange.XRanges))
+                    {
+                        List<GraphNode<Vector2i>> allNodes;
+
+                        if (nodes.TryGetValue(highRange, out var value))
+                        {
+                            allNodes = value;
+                        }
+                        else
+                        {
+                            allNodes = RangeToNodes(highRange);
+                        }
+                        allNodes.AddRange(RangeToNodes(lowRange));
+
+                        //for combining them we get all the points lying on the border of the ranges (horizontal line)...
+                        List<GraphNode<Vector2i>> borderNodes = new();
+                        foreach (GraphNode<Vector2i> node in allNodes)
+                        {
+                            if (node.Value.Y == lowRange.Top)
+                                borderNodes.Add(node);
+                        }
+
+                        //arrange them from left to right...
+                        borderNodes.Sort((n1, n2) => n1.Value.X - n2.Value.X);
+                        for (int m = 0; m < borderNodes.Count; m++)
+                        {
+                            GraphNode<Vector2i> node = borderNodes[m];
+
+                            //delete their old horizontal connections...
+                            for (int n = 0; n < node.Neighbours.Count; n++)
+                            {
+                                if (node.Neighbours[n].Item1.Value.Y == lowRange.Top)
+                                {
+                                    node.Neighbours.RemoveAt(n);
+                                    n--;
+                                }
+                            }
+
+                            /*
+                            and finally create the connections, 
+                            changing between connection and no connection for each pair of points, example:
+
+                            .                           .
+                            .                           .
+                            |       Top range (A)       |
+                            |                           |
+                            A1___B1   B2___C1     C2___A2
+                                 |  B  |   |   C   |
+                                 |_____|   |       |
+                                           |_______|
+                            */
+                            if (m % 2 == 0)
+                                borderNodes[m + 1].AddNeighbour(node, (borderNodes[m + 1].Value - node.Value).Length);
+                        }
+
+                        nodes[highRange] = allNodes;
+                        nodes[lowRange] = allNodes;
+                    }
+                }
+            }
+        }
+
+        //finally combine nodes of each group into a single list
+        List<GraphNode<Vector2i>> result = new();
+        foreach ((RectRange _, List<GraphNode<Vector2i>> n) in nodes)
+        {
+            result.AddRange(n);
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// Tries to find a free spot with width no less than minWidth in given ranges 
+    /// from start to end on X axis and from heightBottom to heightTop on Y
+    /// Result is a rect range with a single x range
+    /// </summary>
+    public static RectRange VerticalRangeSearch(List<RectRange> ranges, int start, int end, int heightBottom, int heightTop, int minWidth)
     {
         int startn, endn, bottomn, topn;
         (startn, endn, bottomn, topn) = (start, end, heightBottom, heightTop);
@@ -158,28 +387,22 @@ public static class ThetaHelpers
     }
 
     /// <summary>
-    /// Returns true if atleast one x-range overlaps another
-    /// </summary>
-    public static bool XRangesOverlap(List<(int, int)> ranges1, List<(int, int)> ranges2)
-    {
-        foreach ((int start1, int end1) in ranges1)
-        {
-            foreach ((int start2, int end2) in ranges2)
-            {
-                if (start1 < end2 && end1 > start2)
-                    return true;
-            }
-        }
-
-        return false;
-    }
-
-    /// <summary>
     /// Applies operation to the xranges of range and all of the ranges vertically overlapping with it
+    /// Also assigns range's group to all ranges in contact
+    /// newRanges are ranges that we're created after executing this method,
+    /// oldRanges are ranges that weren't modified in any way,
+    /// returned ranges are new and old ranges combined
     /// </summary>
-    public static List<RectRange> CombineRangesHorizontaly(List<RectRange> ranges, RectRange range, XRangeOperation operation)
+    public static List<RectRange> CombineRanges(
+        List<RectRange> ranges,
+        RectRange range,
+        XRangeOperation operation,
+        out List<RectRange> newRanges,
+        out List<RectRange> oldRanges)
     {
-        List<RectRange> rangesNew = new();
+        newRanges = new();
+        oldRanges = new();
+
         foreach (RectRange rangeOther in ranges)
         {
             if (rangeOther.Top >= range.Bottom && rangeOther.Bottom <= range.Top) //overlap
@@ -189,30 +412,65 @@ public static class ThetaHelpers
 
                 if (range.Bottom > rangeOther.Bottom)
                 {
-                    rangesNew.Add(new RectRange(rangeOther.Bottom, range.Bottom, rangeOther.XRanges));
+                    newRanges.Add(new RectRange(rangeOther.Bottom, range.Bottom, rangeOther.XRanges, range.Group));
                     overlapBottom = range.Bottom;
                 }
                 if (range.Top < rangeOther.Top)
                 {
-                    rangesNew.Add(new RectRange(range.Top, rangeOther.Top, rangeOther.XRanges));
+                    newRanges.Add(new RectRange(range.Top, rangeOther.Top, rangeOther.XRanges, range.Group));
                     overlapTop = range.Top;
                 }
 
-                rangesNew.Add(new RectRange(overlapBottom, overlapTop, operation(rangeOther.XRanges, range.XRanges)));
+                newRanges.Add(new(overlapBottom, overlapTop, operation(rangeOther.XRanges, range.XRanges), range.Group));
             }
             else
             {
-                rangesNew.Add(rangeOther);
+                oldRanges.Add(rangeOther);
             }
         }
 
-        foreach (RectRange nrange in rangesNew)
+        for (int i = 0; i < newRanges.Count; i++)
         {
-            if (nrange.Top - nrange.Bottom == 0 || nrange.XRanges.Count == 0)
-                rangesNew.Remove(nrange);
+            RectRange newRange = newRanges[i];
+            if (newRange.Top - newRange.Bottom == 0 || newRange.XRanges.Count == 0)
+                newRanges.RemoveAt(i);
         }
 
-        return rangesNew;
+        oldRanges.AddRange(newRanges);
+        return oldRanges;
+    }
+
+    /// <summary>
+    /// Like CombineRanges but combines all of em at once
+    /// Also assigns groups to ranges in contact with eachother
+    /// </summary>
+    public static List<RectRange> CombineAllRanges(List<RectRange> ranges, XRangeOperation operation, out int lastGroup)
+    {
+        lastGroup = 0;
+        List<RectRange> currentRanges = new(ranges);
+
+        for (int i = 0; i < ranges.Count; i++) //not foreach cause range is modified during iteration
+        {
+            RectRange range = ranges[i];
+            if (!currentRanges.Contains(range)) //already got modified
+                continue;
+
+            range.Group = lastGroup++; //should propagate to all ranges in contact
+            currentRanges = CombineRanges(currentRanges, range, operation, out var newRanges, out _);
+            List<RectRange> buffer = new();
+            while (newRanges.Count > 0)
+            {
+                foreach (RectRange newRange in newRanges)
+                {
+                    currentRanges = CombineRanges(currentRanges, newRange, operation, out var newNewRanges, out _);
+                    buffer.AddRange(newNewRanges);
+                }
+                newRanges = buffer;
+                buffer.Clear();
+            }
+        }
+
+        return currentRanges;
     }
 
     /// <summary>
@@ -302,6 +560,23 @@ public static class ThetaHelpers
         }
 
         return newRanges;
+    }
+
+    /// <summary>
+    /// Returns true if atleast one pair of xranges overlap
+    /// </summary>
+    public static bool XRangesOverlap(List<(int, int)> ranges1, List<(int, int)> ranges2)
+    {
+        foreach ((int start1, int end1) in ranges1)
+        {
+            foreach ((int start2, int end2) in ranges2)
+            {
+                if (start1 <= end2 && end1 >= start2)
+                    return true;
+            }
+        }
+
+        return false;
     }
 
     #endregion

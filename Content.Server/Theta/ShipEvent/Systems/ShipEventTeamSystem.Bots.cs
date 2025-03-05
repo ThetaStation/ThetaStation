@@ -1,8 +1,6 @@
 using Content.Server.Physics.Controllers;
 using Content.Server.Shuttles.Components;
 using Content.Server.Theta.ShipEvent.Components;
-using Content.Shared.Construction;
-using Content.Shared.Theta;
 using Content.Shared.Theta.ShipEvent;
 using Content.Shared.Theta.ShipEvent.Components;
 using Robust.Shared.Map.Components;
@@ -32,7 +30,7 @@ public sealed partial class ShipEventTeamSystem
     //so on 1 it will ram straight into it, at 0.5 it will only come half way, etc.
     public const float BotAttackApproachPercent = 0.8f;
 
-    private void BotInit()
+    private void InitializeBots()
     {
         SubscribeLocalEvent<ShipEventBotComponent, StartCollideEvent>(OnBotCollide);
     }
@@ -159,6 +157,23 @@ public sealed partial class ShipEventTeamSystem
         targetPoint = new Vector2(
             Math.Clamp(targetPoint.X, pathfindingBox.Left, pathfindingBox.Right),
             Math.Clamp(targetPoint.Y, pathfindingBox.Bottom, pathfindingBox.Top));
+
+        (GraphNode<Vector2i> start, GraphNode<Vector2i> finish) = BuildGraph(new Entity<MapGridComponent>(
+            uid,
+            Comp<MapGridComponent>(uid)),
+            grids,
+            (Vector2i) form.LocalPosition,
+            (Vector2i) targetPoint);
+
+        List<GraphNode<Vector2i>> pathNodes = DjikstraFindPath(start, finish);
+        List<Vector2> path = new();
+        foreach (GraphNode<Vector2i> node in pathNodes)
+        {
+            path.Add(node.Value);
+        }
+
+        bot.Waypoints = path;
+        bot.CurrentWaypoint = 0;
     }
 
     //returns true if target is valid and bot should continue following/avoiding it
@@ -199,19 +214,59 @@ public sealed partial class ShipEventTeamSystem
     //finally run Djikstra's algorithm to find the shortest path in the result graph
 
     /// <summary>
-    /// Returns root nodes of the resulting graphs
-    /// Graph search algorithm can then be run on it in order to find the actual route
+    /// Returns start and finish nodes
+    /// Graph search algorithm can then be run on them in order to find the actual route
     /// </summary>
-    private List<GraphNode<Vector2>> BuildGraph(List<Entity<MapGridComponent>> grids, Vector2 start, Vector2 finish)
+    private (GraphNode<Vector2i>, GraphNode<Vector2i>) BuildGraph(
+        Entity<MapGridComponent> botGridUid,
+        List<Entity<MapGridComponent>> grids,
+        Vector2i start,
+        Vector2i finish)
     {
-        List<RectRange> ranges = [];
+        float gridSize = Math.Max(botGridUid.Comp.LocalAABB.Width, botGridUid.Comp.LocalAABB.Height);
+        List<Box2> boxes = new();
+        List<RectRange> ranges = new();
         foreach ((EntityUid uid, MapGridComponent grid) in grids)
         {
             Box2 worldAabb = _formSys.GetWorldMatrix(uid).TransformBox(grid.LocalAABB);
+            worldAabb.Enlarged(gridSize);
+            boxes.Add(worldAabb);
             ranges.Add(RangeFromBox((Box2i) worldAabb));
         }
 
-        return RangesToGraph(ranges);
+        List<GraphNode<Vector2i>> graph = RangesToGraph(ranges);
+
+        GraphNode<Vector2i> startNode = new(start);
+        ConnectToAllAvailable(startNode, graph, boxes);
+        graph.Add(startNode);
+
+        GraphNode<Vector2i> finishNode = new(finish);
+        ConnectToAllAvailable(finishNode, graph, boxes);
+        graph.Add(finishNode);
+
+        return (startNode, finishNode);
+    }
+
+    private void ConnectToAllAvailable(GraphNode<Vector2i> target, List<GraphNode<Vector2i>> graph, List<Box2> boxes)
+    {
+        foreach (GraphNode<Vector2i> node in graph)
+        {
+            bool intersecting = false;
+            foreach (Box2 box in boxes)
+            {
+                if (SegBoxIntersect(target.Value, node.Value, box, out _))
+                {
+                    intersecting = true;
+                    break;
+                }
+            }
+
+            if (intersecting)
+                continue;
+
+            //LengthSquared cause aoaoa performance and it doesn't matter for the search algo
+            target.AddNeighbour(node, (target.Value - node.Value).LengthSquared);
+        }
     }
 
     #endregion

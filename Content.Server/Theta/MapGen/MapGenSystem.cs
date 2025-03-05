@@ -289,7 +289,7 @@ public sealed class MapGenSystem : EntitySystem
                         break;
                     }
 
-                    RectRange combinedRange = CombineRangesVertically(_spawnSectors[sectorPos], start, end, range.Bottom, range.Top, bounds.Width);
+                    RectRange combinedRange = VerticalRangeSearch(_spawnSectors[sectorPos], start, end, range.Bottom, range.Top, bounds.Width);
                     if (combinedRange.Top - combinedRange.Bottom >= bounds.Height)
                     {
                         result = true;
@@ -313,10 +313,12 @@ public sealed class MapGenSystem : EntitySystem
 
         if (result)
         {
-            _spawnSectors[sectorPos] = CombineRangesHorizontaly(
+            _spawnSectors[sectorPos] = CombineRanges(
                     _spawnSectors[sectorPos],
                     RangeFromBox(Box2i.FromDimensions(resultPos, new Vector2i(bounds.Width, bounds.Height))),
-                    SubtractXRanges);
+                    SubtractXRanges,
+                    out _,
+                    out _);
             _spawnSectorAreas[sectorPos] -= bounds.Height * bounds.Width;
         }
 

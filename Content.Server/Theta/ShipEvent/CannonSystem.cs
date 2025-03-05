@@ -111,7 +111,7 @@ public sealed class CannonSystem : SharedCannonSystem
 
     public void RefreshFiringRanges(EntityUid uid, CannonComponent cannon)
     {
-        cannon.ObstructedRanges = CalculateFiringRanges(uid, GetCannonGun(uid)!);
+        cannon.ObstructedRanges = CalculateFiringRanges(uid, Comp<GunComponent>(uid));
         Dirty(uid, cannon);
     }
 

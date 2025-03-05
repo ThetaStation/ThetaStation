@@ -5,16 +5,16 @@ namespace Content.Server.Theta.ShipEvent.Components;
 [RegisterComponent]
 public sealed partial class ShipEventBotComponent : Component
 {
-    [DataField]
+    [DataField, ViewVariables(VVAccess.ReadWrite)]
     public int PathfindingRange;
 
-    [DataField]
+    [DataField, ViewVariables(VVAccess.ReadWrite)]
     public int MaxFollowRange;
 
-    [DataField]
+    [DataField, ViewVariables(VVAccess.ReadWrite)]
     public int MaxAttackRange;
 
-    [DataField]
+    [DataField, ViewVariables(VVAccess.ReadWrite)]
     public int FleeDamageThreshold;
 
     public TimeSpan LastUpdate = TimeSpan.Zero;

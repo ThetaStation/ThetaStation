@@ -169,6 +169,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
 
         InitializeAnomalies();
         InitializeStealth();
+        InitializeBots();
         InitializeCaptainMenu();
         InitializeAdmiralMenu();
 
@@ -184,6 +185,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
 
         RoundendTimer += frametime;
         CheckRoundendTimer();
+        BotUpdateMovementAll(frametime);
     }
 
     private void SetupTimers()
@@ -196,6 +198,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         SetupTimer(AnomalyUpdateInterval, AnomalyUpdate);
         SetupTimer(AnomalySpawnInterval, AnomalySpawn);
         SetupTimer(ModifierUpdateInterval, ModifierUpdate);
+        SetupTimer(BotUpdateInterval, BotUpdatePathAll);
     }
 
     private void SetupTimer(float seconds, Action action)

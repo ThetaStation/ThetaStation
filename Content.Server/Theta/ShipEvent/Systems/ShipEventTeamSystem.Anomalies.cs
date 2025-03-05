@@ -1,16 +1,12 @@
 using System.Numerics;
 using Content.Shared.Physics;
 using Content.Server.Theta.ShipEvent.Components;
-using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Collision.Shapes;
-using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Dynamics;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Physics;
-using System.Linq;
-using Content.Shared.Random.Helpers;
 using Content.Shared.Theta.ShipEvent.Components;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
