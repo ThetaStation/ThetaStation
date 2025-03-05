@@ -52,10 +52,48 @@ public static class ThetaHelpers
 
     #region Geometry
 
-    public static bool SegBoxIntersect(Vector2 a, Vector2 b, Box2 box, [NotNullWhen(true)] out Vector2? ipos)
+    //https://stackoverflow.com/questions/3746274/line-intersection-with-aabb-rectangle
+    static bool SegSegIntersect(Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2, [NotNullWhen(true)] out Vector2? intersection)
     {
-        ipos = null;
-        return false;
+        intersection = null;
+
+        Vector2 b = a2 - a1;
+        Vector2 d = b2 - b1;
+        float bDotDPerp = b.X * d.Y - b.Y * d.X;
+
+        if (bDotDPerp == 0)
+            return false;
+
+        Vector2 c = b1 - a1;
+        float t = (c.X * d.Y - c.Y * d.X) / bDotDPerp;
+        if (t < 0 || t > 1)
+            return false;
+
+        float u = (c.X * b.Y - c.Y * b.X) / bDotDPerp;
+        if (u < 0 || u > 1)
+            return false;
+
+        intersection = a1 + t * b;
+
+        return true;
+    }
+
+    public static bool SegBoxIntersect(Vector2 a, Vector2 b, Box2 box, out List<Vector2> intersections)
+    {
+        intersections = new();
+        bool result = false;
+
+        Vector2[] segs = { box.BottomLeft, box.TopLeft, box.TopRight, box.BottomRight, box.BottomLeft };
+        for (int i = 0; i < segs.Length - 1; i++)
+        {
+            if (SegSegIntersect(a, b, segs[i], segs[i + 1], out Vector2? p))
+            {
+                intersections.Add(p.Value);
+                result = true;
+            }
+        }
+
+        return result;
     }
 
     #endregion
@@ -230,9 +268,11 @@ public static class ThetaHelpers
     public static List<GraphNode<Vector2i>> RangesToGraph(List<RectRange> ranges)
     {
         //combine overlapping ranges, basically splitting them into a bunch of horizontal layers
-        ranges = CombineAllRanges(ranges, AddXRanges, out _);
+        ranges = CombineAllRanges(ranges, AddXRanges, out int groupCount);
 
         List<List<RectRange>> groups = new();
+        for (int i = 0; i < groupCount; i++) { groups.Add(new()); }
+
         Dictionary<RectRange, List<GraphNode<Vector2i>>> nodes = new();
 
         //separate em by groups (adjacent ranges)
@@ -455,7 +495,8 @@ public static class ThetaHelpers
             if (!currentRanges.Contains(range)) //already got modified
                 continue;
 
-            range.Group = lastGroup++; //should propagate to all ranges in contact
+            lastGroup++;
+            range.Group = lastGroup; //should propagate to all ranges in contact
             currentRanges = CombineRanges(currentRanges, range, operation, out var newRanges, out _);
             List<RectRange> buffer = new();
             while (newRanges.Count > 0)

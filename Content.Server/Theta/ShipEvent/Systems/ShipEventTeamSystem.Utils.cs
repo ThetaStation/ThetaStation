@@ -176,12 +176,12 @@ public sealed partial class ShipEventTeamSystem
         _idSys.QueueIdentityUpdate(uid);
     }
 
-    private HashSet<EntityUid> GetGridCompHolders<T>(EntityUid gridUid) where T : IComponent
+    private List<EntityUid> GetGridCompHolders<T>(EntityUid gridUid) where T : IComponent
     {
         if (Deleted(gridUid))
             return new();
 
-        HashSet<EntityUid> uids = new();
+        List<EntityUid> uids = new();
         var childEnum = Transform(gridUid).ChildEnumerator;
 
         while (childEnum.MoveNext(out EntityUid uid))
@@ -193,30 +193,30 @@ public sealed partial class ShipEventTeamSystem
         return uids;
     }
 
-    private HashSet<EntityUid> GetGridCompHolders<T>(IEnumerable<EntityUid> gridUids) where T : IComponent
+    private List<EntityUid> GetGridCompHolders<T>(IEnumerable<EntityUid> gridUids) where T : IComponent
     {
-        HashSet<EntityUid> uids = new();
+        List<EntityUid> uids = new();
 
         foreach (EntityUid gridUid in gridUids)
         {
-            uids.UnionWith(GetGridCompHolders<T>(gridUid));
+            uids.AddRange(GetGridCompHolders<T>(gridUid));
         }
 
         return uids;
     }
 
-    private List<(EntityUid, T)> GetGridComps<T>(EntityUid gridUid) where T : IComponent
+    private List<Entity<T>> GetGridComps<T>(EntityUid gridUid) where T : IComponent
     {
         if (Deleted(gridUid))
             return new();
 
-        List<(EntityUid, T)> uids = new();
+        List<Entity<T>> uids = new();
         var childEnum = Transform(gridUid).ChildEnumerator;
 
         while (childEnum.MoveNext(out EntityUid uid))
         {
-            if (TryComp<T>(uid, out T? comp))
-                uids.Add((uid, comp));
+            if (TryComp(uid, out T? comp))
+                uids.Add(new(uid, comp));
         }
 
         return uids;

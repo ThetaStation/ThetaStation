@@ -185,7 +185,6 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
 
         RoundendTimer += frametime;
         CheckRoundendTimer();
-        BotUpdateMovementAll(frametime);
     }
 
     private void SetupTimers()
@@ -199,6 +198,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         SetupTimer(AnomalySpawnInterval, AnomalySpawn);
         SetupTimer(ModifierUpdateInterval, ModifierUpdate);
         SetupTimer(BotUpdateInterval, BotUpdatePathAll);
+        SetupTimer(1, () => { BotUpdateMovementAll(1); });
     }
 
     private void SetupTimer(float seconds, Action action)
@@ -1082,9 +1082,8 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         {
             EnsureComp<ShipEventTeamMarkerComponent>(gridUid).Team = team;
 
-            HashSet<EntityUid> uids = GetGridCompHolders<ShipEventSpawnerComponent>(gridUid);
-            uids.UnionWith(GetGridCompHolders<CannonComponent>(gridUid));
-            uids.UnionWith(GetGridCompHolders<ShipEventSpawnerComponent>(gridUid));
+            List<EntityUid> uids = GetGridCompHolders<ShipEventSpawnerComponent>(gridUid);
+            uids.AddRange(GetGridCompHolders<CannonComponent>(gridUid));
 
             foreach (var uid in uids)
             {

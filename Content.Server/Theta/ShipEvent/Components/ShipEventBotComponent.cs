@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Shared.Theta.ShipEvent;
 
 namespace Content.Server.Theta.ShipEvent.Components;
 
@@ -19,9 +20,10 @@ public sealed partial class ShipEventBotComponent : Component
 
     public TimeSpan LastUpdate = TimeSpan.Zero;
     public BotState State = BotState.Wander;
-    public EntityUid? TargetUid;
+    public EntityUid? TargetUid = null;
     public int CurrentWaypoint;
-    public List<Vector2> Waypoints;
+    public List<Vector2> Waypoints = new();
+    public List<Entity<CannonComponent>> CachedCannons = new();
 }
 
 public enum BotState

@@ -28,7 +28,7 @@ public sealed partial class ShipEventTeamSystem
 
     //how close bot will try to get to it's target when attacking
     //so on 1 it will ram straight into it, at 0.5 it will only come half way, etc.
-    public const float BotAttackApproachPercent = 0.8f;
+    public const float BotAttackApproachPercent = 0.7f;
 
     private void InitializeBots()
     {
@@ -96,8 +96,18 @@ public sealed partial class ShipEventTeamSystem
 
     private void BotFireWeapons(EntityUid uid, ShipEventBotComponent bot, Vector2 coords)
     {
-        foreach (EntityUid cannonUid in GetGridCompHolders<CannonComponent>(uid))
+        if (bot.CachedCannons.Count == 0)
+            bot.CachedCannons = GetGridComps<CannonComponent>(uid);
+
+        for (int i = 0; i < bot.CachedCannons.Count; i++)
         {
+            Entity<CannonComponent> cannonUid = bot.CachedCannons[i];
+            if (Deleted(cannonUid))
+            {
+                bot.CachedCannons.RemoveAt(i);
+                i--;
+                continue;
+            }
             _cannonSys.ShootCannon(cannonUid, cannonUid, coords);
         }
     }
@@ -120,7 +130,7 @@ public sealed partial class ShipEventTeamSystem
             case BotState.Attack: //as close to our target as possible
                 {
                     if (BotCheckTarget(uid, bot, form, out Vector2? pos))
-                        targetPoint = pos.Value;
+                        targetPoint = pos.Value * BotAttackApproachPercent;
                     break;
                 }
             case BotState.Avoid: //as far from our target as possible
