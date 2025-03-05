@@ -167,12 +167,14 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         SubscribeAllEvent<GetShipPickerInfoMessage>(OnShipPickerInfoRequest);
         SubscribeAllEvent<BoundsOverlayInfoRequest>(OnBoundsOverlayInfoRequest);
 
+        //stuff that can be initialized at any time
         InitializeAnomalies();
         InitializeStealth();
         InitializeBots();
         InitializeCaptainMenu();
         InitializeAdmiralMenu();
 
+        //stuff that can only be intialized after the gamerule has started
         OnRuleSelected += SetupTimers;
         OnRuleSelected += InitializePickups;
         OnRuleSelected += InitializeModifiers;
@@ -227,6 +229,8 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         ShipTypes.Clear();
         ShipProcessors.Clear();
         AnomalyPrototypes.Clear();
+        AllModifiers.Clear();
+        ActiveModifiers.Clear();
         PickupPositions.Clear();
         Teams.Clear();
         Fleets.Clear();
