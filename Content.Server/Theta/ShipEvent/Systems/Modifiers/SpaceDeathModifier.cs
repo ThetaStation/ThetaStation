@@ -31,11 +31,11 @@ public partial class SpaceDeathModifier : ShipEventModifier
 
     public void OnUpdate()
     {
-        var enumerator = _entMan.EntityQueryEnumerator<TransformComponent, MobStateComponent>();
+        var enumerator = _entMan.EntityQueryEnumerator<MobStateComponent, TransformComponent>();
         //this is required since when player will die team system will try to delete his body,
         //modifying query and causing it to throw
         var enumeratorCopy = new List<(EntityUid, TransformComponent)>();
-        while (enumerator.MoveNext(out var uid, out var form, out var _))
+        while (enumerator.MoveNext(out var uid, out var _, out var form))
         {
             enumeratorCopy.Add((uid, form));
         }

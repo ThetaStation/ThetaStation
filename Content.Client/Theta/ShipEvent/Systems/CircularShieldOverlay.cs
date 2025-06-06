@@ -34,8 +34,8 @@ public sealed class CircularShieldOverlay : Overlay
 
     protected override void Draw(in OverlayDrawArgs args)
     {
-        var query = _entMan.EntityQuery<TransformComponent, CircularShieldComponent>();
-        foreach ((var form, var shield) in query)
+        var query = _entMan.EntityQuery<CircularShieldComponent, TransformComponent>();
+        foreach ((var shield, var form) in query)
         {
             if (!shield.CanWork || form.MapID != args.MapId)
                 continue;

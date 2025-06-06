@@ -21,8 +21,8 @@ public sealed partial class ShipPickupSystem : EntitySystem
         if (args.User == null || !HasComp<ShuttleComponent>(args.User))
             return;
 
-        var beaconQuery = EntityQueryEnumerator<TransformComponent, ShipPickupBeaconComponent>();
-        while (beaconQuery.MoveNext(out var beaconUid, out var form, out var beacon))
+        var beaconQuery = EntityQueryEnumerator<ShipPickupBeaconComponent, TransformComponent>();
+        while (beaconQuery.MoveNext(out var beaconUid, out var beacon, out var form))
         {
             if (form.GridUid == args.User && pickup.TargetBeaconId == beacon.Id)
             {
