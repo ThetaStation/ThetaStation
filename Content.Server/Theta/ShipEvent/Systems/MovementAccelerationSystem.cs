@@ -14,9 +14,9 @@ public sealed class MovementAccelerationSystem : EntitySystem
     {
         base.Update(frameTime);
 
-        var query = EntityQueryEnumerator<TransformComponent, PhysicsComponent, MovementAccelerationComponent>();
+        var query = EntityQueryEnumerator<MovementAccelerationComponent, PhysicsComponent, TransformComponent>();
 
-        while (query.MoveNext(out var uid, out var form, out var body, out var accel))
+        while (query.MoveNext(out var uid, out var accel, out var body, out var form))
         {
             if (body.LinearVelocity.Length() >= accel.MaxVelocity)
                 return;

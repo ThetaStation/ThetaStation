@@ -48,10 +48,10 @@ public sealed class HealGridSystem : EntitySystem
     private List<(EntityUid, DamageableComponent)> GetDamageableOnGrid(EntityUid gridUid)
     {
         var entityUids = new List<(EntityUid, DamageableComponent)>();
-        var query = EntityManager.EntityQueryEnumerator<TransformComponent, DamageableComponent>();
-        while (query.MoveNext(out var uid, out var transform, out var damageable))
+        var query = EntityManager.EntityQueryEnumerator<DamageableComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var damageable, out var form))
         {
-            if (transform.GridUid != gridUid || damageable.TotalDamage == FixedPoint2.Zero)
+            if (form.GridUid != gridUid || damageable.TotalDamage == FixedPoint2.Zero)
                 continue;
             entityUids.Add((uid, damageable));
         }

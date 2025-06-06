@@ -34,7 +34,7 @@ public sealed class DebugOverlay : Overlay
 
     protected override void Draw(in OverlayDrawArgs args)
     {
-        foreach ((TransformComponent form, CannonComponent cannon) in entMan.EntityQuery<TransformComponent, CannonComponent>(true))
+        foreach ((var cannon, var form) in entMan.EntityQuery<CannonComponent, TransformComponent>(true))
         {
             if (!form.ParentUid.IsValid())
                 continue;
