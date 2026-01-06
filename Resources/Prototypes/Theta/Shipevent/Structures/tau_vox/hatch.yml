@@ -1,0 +1,23 @@
+﻿- type: entity
+  parent: Airlock
+  id: SkipjackAirlockHatch
+  name: hatch
+  components:
+    - type: Sprite
+      sprite: Theta/ShipEvent/Structures/Doors/hatch.rsi
+
+- type: entity
+  parent: AirlockShuttle
+  id: SkipjackAirlockHatchDocking
+  name: hatch
+  components:
+    - type: Sprite
+      sprite: Theta/ShipEvent/Structures/Doors/hatch.rsi
+
+- type: entity
+  parent: Airlock
+  id: SkipjackAirlockMaintenanceHatch
+  name: hatch
+  components:
+    - type: Sprite
+      sprite: Theta/ShipEvent/Structures/Doors/maintenance_hatch.rsi

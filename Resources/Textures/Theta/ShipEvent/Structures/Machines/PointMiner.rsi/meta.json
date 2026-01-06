@@ -1,0 +1,45 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Created for Thetastation ship-event",
+    "size": {
+      "x": 32,
+      "y": 32
+    },
+    "states": [
+      {
+        "name": "miner",
+        "directions": 4,
+        "delays": [
+            [
+                0.2,
+                0.2
+            ],
+            [
+                0.2,
+                0.2
+            ],
+            [
+                0.2,
+                0.2
+            ],
+            [
+                0.2,
+                0.2
+            ]
+        ]
+    },
+    {
+        "name": "computer",
+        "directions": 4
+    },
+    {
+        "name": "generic_keys",
+        "directions": 4
+    },
+    {
+        "name": "generic_keyboard",
+        "directions": 4
+    }
+    ]
+}

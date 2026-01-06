@@ -5,3 +5,6 @@ ent-WeaponLightMachineGunL6 = L6 SAW
     .suffix = Пулемёт
 ent-WeaponLightMachineGunL6C = L6C ROW
     .desc = L6 SAW для киборгов. На ходу создаёт патроны калибра .30 винтовочный из встроенного самозарядного фабрикатора боеприпасов.
+ent-WeaponLightMachineGunL6Event = L6 SAW (Взрывной)
+    .desc = Просто пила, но со взрывными пулями
+    .suffix = SHIPEVENT

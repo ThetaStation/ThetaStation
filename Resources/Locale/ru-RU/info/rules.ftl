@@ -6,3 +6,4 @@ ui-rules-accept = Я ознакомился и согласен следоват
 ui-rules-wait = Кнопка принятия будет разблокирована через { $time } секунд.
 ui-rules-button-home = В начало
 ui-rules-button-back = Назад
+ui-rules-header-theta = Правила сервера Theta

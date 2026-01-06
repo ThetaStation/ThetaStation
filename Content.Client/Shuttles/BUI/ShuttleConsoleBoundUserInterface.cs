@@ -26,6 +26,7 @@ public sealed class ShuttleConsoleBoundUserInterface : BoundUserInterface
         _window.RequestBeaconFTL += OnFTLBeaconRequest;
         _window.DockRequest += OnDockRequest;
         _window.UndockRequest += OnUndockRequest;
+        _window.ChangeNamePressed += OnChangeNamePressed;
     }
 
     private void OnUndockRequest(NetEntity entity)
@@ -34,6 +35,11 @@ public sealed class ShuttleConsoleBoundUserInterface : BoundUserInterface
         {
             DockEntity = entity,
         });
+    }
+
+    private void OnChangeNamePressed(string name)
+    {
+        SendMessage(new ShuttleConsoleChangeShipNameMessage(name));
     }
 
     private void OnDockRequest(NetEntity entity, NetEntity target)

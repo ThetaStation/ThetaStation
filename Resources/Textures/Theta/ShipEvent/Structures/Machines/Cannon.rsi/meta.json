@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "license": "Do not distribute",
+  "copyright": "Taken from 'Sector Crescent: Hullrot'",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+        "name": "flak",
+        "directions": 8
+    },
+    {
+        "name": "machinegun",
+        "directions": 8
+    },
+    {
+        "name": "ion",
+        "directions": 8
+    },
+    {
+        "name": "plasma",
+        "directions": 8
+    }
+  ]
+}

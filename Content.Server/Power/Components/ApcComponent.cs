@@ -27,6 +27,12 @@ public sealed partial class ApcComponent : BaseApcNetComponent
     public bool MainBreakerEnabled = true;
 
     /// <summary>
+    /// If set, APC's main breaker will be automatically re-enabled after EMP passes.
+    /// </summary>
+    [DataField("enableAfterEmp")]
+    public bool EnableAfterEmp = false;
+
+    /// <summary>
     /// APC state needs to always be updated after first processing tick.
     /// </summary>
     public bool NeedStateUpdate;

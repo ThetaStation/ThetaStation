@@ -22,6 +22,8 @@ public sealed partial class ShuttleConsoleWindow : FancyWindow,
 
     public event Action<NetEntity, NetEntity>? DockRequest;
     public event Action<NetEntity>? UndockRequest;
+    public event Action<string>? ChangeNamePressed;
+
 
     public ShuttleConsoleWindow()
     {
@@ -61,6 +63,11 @@ public sealed partial class ShuttleConsoleWindow : FancyWindow,
         DockContainer.UndockRequest += entity =>
         {
             UndockRequest?.Invoke(entity);
+        };
+
+        NavContainer.ChangeNamePressed += str =>
+        {
+            ChangeNamePressed?.Invoke(str);
         };
     }
 

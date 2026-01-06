@@ -132,6 +132,12 @@ namespace Content.Client.Entry
             _prototypeManager.RegisterIgnore("codewordGenerator");
             _prototypeManager.RegisterIgnore("codewordFaction");
 
+            //theta
+            _prototypeManager.RegisterIgnore("mapgenstructure");
+            _prototypeManager.RegisterIgnore("mapgenlayer");
+            _prototypeManager.RegisterIgnore("mapgenpreset");
+            _prototypeManager.RegisterIgnore("modifier");
+
             _componentFactory.GenerateNetIds();
             _adminManager.Initialize();
             _screenshotHook.Initialize();

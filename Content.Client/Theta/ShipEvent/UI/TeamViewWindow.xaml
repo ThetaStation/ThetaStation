@@ -1,0 +1,22 @@
+﻿<DefaultWindow xmlns="https://spacestation14.io"
+    xmlns:ui="clr-namespace:Content.Client.Theta.ShipEvent.UI"
+    Title="{Loc 'shipevent-teamview-windowtitle'}"
+    MinSize="600 600">
+    <BoxContainer Orientation="Vertical" SeparationOverride="10">
+
+        <BoxContainer Orientation="Vertical" VerticalExpand="True" Margin="5">
+            <Label Text="{Loc 'shipevent-teamview-heading-teams'}"/>
+            <ui:TeamListControl Name="TeamList" Margin="2"/>
+        </BoxContainer>
+
+        <BoxContainer Orientation="Vertical" VerticalExpand="True" Margin="5">
+        <Label Text="{Loc 'shipevent-teamview-heading-mods'}"/>
+        <ScrollContainer HScrollEnabled="False" VerticalExpand="True" Margin="2">
+            <BoxContainer
+                Name="ModifierContainer"
+                Orientation="Vertical"/>
+        </ScrollContainer>
+        </BoxContainer>
+
+    </BoxContainer>
+</DefaultWindow>

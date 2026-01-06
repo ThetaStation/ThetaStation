@@ -1,0 +1,27 @@
+﻿# Uplink
+- type: entity
+  parent: [BaseUplinkRadio, StorePresetUplink]
+  id: ShipEventUplink40TC
+  suffix: 40 TC, ShipEvent
+  components:
+    - type: Store
+      balance:
+        Telecrystal: 40
+    - type: Tag
+      tags:
+        - ShipEventUplink
+
+# Ammo containers
+
+- type: entity
+  id: TurretAmmoContainer
+  name: ammo container
+  parent: BaseItem
+  abstract: true
+  components:
+    - type: Item
+      size: Ginormous
+    - type: Sprite
+      drawdepth: Items
+      sprite: Theta/ShipEvent/Objects/AmmoContainer.rsi
+      state: container

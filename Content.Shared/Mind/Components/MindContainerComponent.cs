@@ -1,94 +1,123 @@
 using System.Diagnostics.CodeAnalysis;
 using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
-namespace Content.Shared.Mind.Components;
-
-/// <summary>
-/// This component indicates that this entity may have mind, which is simply an entity with a <see cref="MindComponent"/>.
-/// The mind entity is not actually stored in a "container", but is simply stored in nullspace.
-/// </summary>
-[RegisterComponent, Access(typeof(SharedMindSystem)), NetworkedComponent, AutoGenerateComponentState]
-public sealed partial class MindContainerComponent : Component
+namespace Content.Shared.Mind.Components
 {
     /// <summary>
-    ///     The mind controlling this mob. Can be null.
+    /// This component indicates that this entity may have mind, which is simply an entity with a <see cref="MindComponent"/>.
+    /// The mind entity is not actually stored in a "container", but is simply stored in nullspace.
     /// </summary>
-    [DataField, AutoNetworkedField]
-    public EntityUid? Mind { get; set; }
+    [RegisterComponent, Access(typeof(SharedMindSystem)), NetworkedComponent, AutoGenerateComponentState]
+    public sealed partial class MindContainerComponent : Component
+    {
+        /// <summary>
+        ///     The mind controlling this mob. Can be null.
+        /// </summary>
+        [DataField, AutoNetworkedField]
+        [Access(typeof(SharedMindSystem), Other = AccessPermissions.ReadWriteExecute)] // FIXME Friends
+        public EntityUid? Mind { get; set; }
+
+        /// <summary>
+        ///     True if we have a mind, false otherwise.
+        /// </summary>
+        [MemberNotNullWhen(true, nameof(Mind))]
+        public bool HasMind => Mind != null;
+
+        /// <summary>
+        ///     Whether examining should show information about the mind or not.
+        /// </summary>
+        [ViewVariables(VVAccess.ReadWrite)]
+        [DataField("showExamineInfo"), AutoNetworkedField]
+        public bool ShowExamineInfo { get; set; }
+
+        /// <summary>
+        ///     Whether the mind will be put on a ghost after this component is shutdown.
+        /// </summary>
+        [ViewVariables(VVAccess.ReadWrite)]
+        [DataField("ghostOnShutdown")]
+        [Access(typeof(SharedMindSystem), Other = AccessPermissions.ReadWriteExecute)] // FIXME Friends
+        public bool GhostOnShutdown { get; set; } = true;
+
+        /// <summary>
+        ///     Ghost type which will be spawned when this component is shutting down. Also requires ghostOnShutdown.
+        /// </summary>
+        [DataField("ghostPrototype", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+        public string GhostPrototype = "MobObserver";
+    }
+
+    public abstract class MindEvent : EntityEventArgs
+    {
+        public readonly Entity<MindComponent> Mind;
+        public readonly Entity<MindContainerComponent> Container;
+
+        public MindEvent(Entity<MindComponent> mind, Entity<MindContainerComponent> container)
+        {
+            Mind = mind;
+            Container = container;
+        }
+    }
 
     /// <summary>
-    ///     True if we have a mind, false otherwise.
+    /// Event raised directed at a mind-container when a mind gets removed.
     /// </summary>
-    [MemberNotNullWhen(true, nameof(Mind))]
-    public bool HasMind => Mind != null;
+    public sealed class MindRemovedMessage : MindEvent
+    {
+        public MindRemovedMessage(Entity<MindComponent> mind, Entity<MindContainerComponent> container)
+            : base(mind, container)
+        {
+        }
+    }
 
     /// <summary>
-    ///     Whether examining should show information about the mind or not.
+    /// Event raised directed at a mind when it gets removed from a mind-container.
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite)]
-    [DataField("showExamineInfo"), AutoNetworkedField]
-    public bool ShowExamineInfo { get; set; }
+    public sealed class MindGotRemovedEvent : MindEvent
+    {
+        public MindGotRemovedEvent(Entity<MindComponent> mind, Entity<MindContainerComponent> container)
+            : base(mind, container)
+        {
+        }
+    }
 
     /// <summary>
-    ///     Whether the mind will be put on a ghost after this component is shutdown.
+    /// Event raised directed at a mind-container when a mind gets added.
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite)]
-    [DataField("ghostOnShutdown")]
-    public bool GhostOnShutdown { get; set; } = true;
-}
-
-public abstract class MindEvent : EntityEventArgs
-{
-    public readonly Entity<MindComponent> Mind;
-    public readonly Entity<MindContainerComponent> Container;
-
-    public MindEvent(Entity<MindComponent> mind, Entity<MindContainerComponent> container)
+    public sealed class MindAddedMessage : MindEvent
     {
-        Mind = mind;
-        Container = container;
+        public MindAddedMessage(Entity<MindComponent> mind, Entity<MindContainerComponent> container)
+            : base(mind, container)
+        {
+        }
     }
-}
 
-/// <summary>
-/// Event raised directed at a mind-container when a mind gets removed.
-/// </summary>
-public sealed class MindRemovedMessage : MindEvent
-{
-    public MindRemovedMessage(Entity<MindComponent> mind, Entity<MindContainerComponent> container)
-        : base(mind, container)
+    /// <summary>
+    /// Event raised directed at a mind when it gets added to a mind-container.
+    /// </summary>
+    public sealed class MindGotAddedEvent : MindEvent
     {
+        public MindGotAddedEvent(Entity<MindComponent> mind, Entity<MindContainerComponent> container)
+            : base(mind, container)
+        {
+        }
     }
-}
 
-/// <summary>
-/// Event raised directed at a mind when it gets removed from a mind-container.
-/// </summary>
-public sealed class MindGotRemovedEvent : MindEvent
-{
-    public MindGotRemovedEvent(Entity<MindComponent> mind, Entity<MindContainerComponent> container)
-        : base(mind, container)
+    public sealed class MindTransferredMessage : EntityEventArgs
     {
-    }
-}
+        public EntityUid? OldEntity;
+        public EntityUid? NewEntity;
+        public EntityUid MindUid;
+        public MindComponent Mind;
+        public MindContainerComponent? NewComponent;
 
-/// <summary>
-/// Event raised directed at a mind-container when a mind gets added.
-/// </summary>
-public sealed class MindAddedMessage : MindEvent
-{
-    public MindAddedMessage(Entity<MindComponent> mind, Entity<MindContainerComponent> container)
-        : base(mind, container)
-    {
-    }
-}
-
-/// <summary>
-/// Event raised directed at a mind when it gets added to a mind-container.
-/// </summary>
-public sealed class MindGotAddedEvent : MindEvent
-{
-    public MindGotAddedEvent(Entity<MindComponent> mind, Entity<MindContainerComponent> container)
-        : base(mind, container)
-    {
+        public MindTransferredMessage(EntityUid? oldEnt, EntityUid? newEnt, EntityUid mindUid, MindComponent mind, MindContainerComponent? newComp)
+        {
+            NewEntity = newEnt;
+            OldEntity = oldEnt;
+            MindUid = mindUid;
+            Mind = mind;
+            NewComponent = newComp;
+        }
     }
 }

@@ -644,7 +644,16 @@
   id: GlassShard # ConstructionGraph: BladedFlatcapBrown, BladedFlatcapGrey, ImprovisedArrow, ImprovisedShotgunShellGraph, Shiv, Spear
 
 - type: Tag
-  id: Goat # Reproductive partner key
+  id: Goat
+
+- type: Tag
+  id: Gourd # tikvyak!!!
+
+- type: Tag
+  id: GuidedRocket # shipevent
+
+- type: Tag
+  id: Grenade
 
 - type: Tag
   id: GoldenPlunger # Storage whitelist: JanitorialTrolley. ItemMapper: JanitorialTrolley
@@ -1044,6 +1053,12 @@
 
 - type: Tag
   id: ParcelWrapBlacklist # Tagged entities can't be wrapped in ParcelWrap.
+
+- type: Tag
+  id: ShipEventUplink
+
+- type: Tag
+  id: Ointment
 
 - type: Tag
   id: Payload # Used by PayloadSystem to find entities to send TriggerEvent. ConstructionGraph: ModularGrenadeGraph, ModularMineGraph

@@ -1,0 +1,23 @@
+﻿- type: mobhud
+  id: ShipEventHUD
+  sprite: {sprite: /Textures/Theta/ShipEvent/ShipEventHUDIcon.rsi, state: member}
+  allowedHUDs:
+    - ShipEventHUD
+    - ShipEventHUDCaptain
+    - ShipEventHUDAdmiral
+  
+- type: mobhud
+  id: ShipEventHUDCaptain
+  sprite: {sprite: /Textures/Theta/ShipEvent/ShipEventHUDIcon.rsi, state: captain}
+  allowedHUDs:
+    - ShipEventHUD
+    - ShipEventHUDCaptain
+    - ShipEventHUDAdmiral
+
+- type: mobhud
+  id: ShipEventHUDAdmiral
+  sprite: {sprite: /Textures/Theta/ShipEvent/ShipEventHUDIcon.rsi, state: admiral}
+  allowedHUDs:
+    - ShipEventHUD
+    - ShipEventHUDCaptain
+    - ShipEventHUDAdmiral

@@ -53,7 +53,14 @@
     context: "ghost"
   - type: Examiner
     skipChecks: true
+  - type: UserInterface
+    interfaces:
+      enum.GenericWarningUiKey.ShipEventKey:
+        type: GenericWarningWindowBoundUserInterface
+        requireInputValidation: false
   - type: Ghost
+    actions:
+    - ActionGhostBoo
   - type: GhostHearing
   - type: ShowElectrocutionHUD
   - type: IntrinsicRadioReceiver

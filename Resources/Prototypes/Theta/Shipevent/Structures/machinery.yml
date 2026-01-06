@@ -1,0 +1,354 @@
+﻿- type: entity
+  id: APCShipEvent
+  parent: APCHighCapacity
+  suffix: ShipEvent
+  components:
+    - type: AccessReader
+      enabled: false
+    - type: Apc
+      enableAfterEmp: true
+
+- type: entity
+  id: GeneratorShipEvent
+  parent: GeneratorRTG
+  suffix: ShipEvent
+  components:
+    - type: PowerSupplier
+      supplyRate: 100000
+      supplyRampPosition: 100000
+      supplyRampRate: 10000
+    - type: SupplierDamage
+      damageMultiplier: 0.00015 #~10 mins at 15kW load
+      updateInterval: 5
+      damage:
+        types:
+          Shock: 1
+    - type: Appearance
+    - type: DamageVisuals
+      thresholds: [100, 200, 290]
+      trackAllDamage: true
+      damageOverlay:
+        sprite: Theta/ShipEvent/Objects/GeneratorDamage.rsi
+    - type: Repairable
+      doAfterDelay: 5
+    - type: Destructible
+      thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: 600
+        behaviors:
+          - !type:DoActsBehavior
+            acts: [ "Destruction" ]
+      - trigger:
+          !type:DamageTrigger
+          damage: 300
+        behaviors:
+          - !type:PlaySoundBehavior
+            sound:
+              collection: MetalBreak
+          - !type:SpawnEntitiesBehavior
+            spawn:
+              RadiationPulseStrong:
+                min: 1
+                max: 1
+              SheetSteel:
+                min: 3
+                max: 5
+          - !type:DoActsBehavior
+            acts: [ "Destruction" ]
+
+- type: entity
+  id: CannonComputerShipEvent
+  name: cannon console
+  suffix: ShipEvent
+  parent: BaseComputer
+  components:
+    - type: CannonConsole
+    - type: ActivatableUI
+      key: enum.CannonConsoleUiKey.Key
+    - type: UserInterface
+      interfaces:
+        enum.CannonConsoleUiKey.Key:
+          type: CannonConsoleBoundUserInterface
+    - type: RadarConsole
+    - type: PointLight
+      radius: 1.5
+      energy: 1.6
+      color: "#43ccb5"
+    - type: ApcPowerReceiver
+      needsPower: false
+    - type: Sprite
+      layers:
+        - map: ["computerLayerBody"]
+          state: computer
+        - map: ["computerLayerKeyboard"]
+          state: generic_keyboard
+        - map: ["computerLayerScreen"]
+          state: comm_syndie
+        - map: ["computerLayerKeys"]
+          state: syndie_key
+    - type: DeviceLinkSource
+      ports:
+      - CannonConsoleSender
+
+- type: entity
+  parent: ComputerShuttleSyndie
+  id: ComputerShuttleSyndieShipEvent
+  suffix: ShipEvent
+  components:
+    - type: IFFConsole
+      allowedFlags:
+      - Hide
+      - HideLabel
+    - type: RadarConsole
+      maxRange: 800
+    - type: ShipStealth
+      stealthDuration: 30
+      stealthCooldown: 120
+    - type: Anchorable
+      disabled: true
+
+- type: entity
+  id: TeamCreationConsoleShipEvent
+  suffix: ShipEvent
+  name: team console
+  parent: BaseComputer
+  components:
+    - type: ShipEventTeamMarker
+    - type: TeamConsole
+    - type: ActivatableUI
+      key: enum.TeamCreationUiKey.Key
+    - type: UserInterface
+      interfaces:
+        enum.TeamCreationUiKey.Key:
+          type: ShipEventLobbyBoundUserInterface
+    - type: PointLight
+      radius: 1.5
+      energy: 1.6
+      color: "#43ccb5"
+    - type: ApcPowerReceiver
+      needsPower: false
+    - type: Destructible
+      thresholds:
+        - trigger: #overriding parent
+            !type:DamageTrigger
+            damage: 100000
+
+- type: entity
+  id: TeamSpawnerShipEvent
+  suffix: ShipEvent
+  name: team spawner
+  parent: BaseStructure
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: /Textures/Structures/Machines/cloning.rsi
+    state: pod_1
+  - type: ShipEventTeamMarker
+  - type: ShipEventSpawner
+    prototype: MobHumanShipEvent
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb {}
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: Glass
+  - type: Repairable
+    doAfterDelay: 5
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 150
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: GlassBreak
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          ShardGlass:
+            min: 1
+            max: 2
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: MeleeSound
+    soundGroups:
+      Brute:
+        collection: GlassSmash
+
+- type: entity
+  id: TurretLoaderShipEvent
+  name: turret loader
+  parent: BaseStructure
+  placement:
+    mode: SnapgridCenter
+  components:
+    - type: Transform
+      anchored: true
+    - type: Sprite
+      drawdepth: Objects
+      sprite: Theta/ShipEvent/Structures/Machines/TurretLoader.rsi
+      state: loader
+    - type: InteractionOutline
+    - type: Physics
+      bodyType: Static
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape:
+            !type:PhysShapeAabb {}
+          mask:
+            - FullTileMask
+          layer:
+            - WallLayer
+    - type: Damageable
+      damageContainer: Inorganic
+      damageModifierSet: Metallic
+    - type: Destructible
+      thresholds:
+        - trigger:
+            !type:DamageTrigger
+            damage: 300
+          behaviors:
+            - !type:PlaySoundBehavior
+              sound:
+                collection: MetalBreak
+            - !type:SpawnEntitiesBehavior
+              spawn:
+                SheetSteel:
+                  min: 3
+                  max: 5
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+    - type: Repairable
+      doAfterDelay: 5
+    - type: ApcPowerReceiver
+      needsPower: false
+    - type: ItemSlots
+      slots:
+        ammoContainer:
+          name: AmmoContainer
+          insertSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
+          ejectSound: /Audio/Weapons/Guns/MagOut/batrifle_magout.ogg
+          priority: 2
+          whitelist:
+            components:
+            - TurretAmmoContainer
+    - type: ContainerContainer
+      containers:
+        ammoContainer: !type:ContainerSlot
+    - type: TurretLoader
+      invalidAmmoSound:
+        path: /Audio/Machines/beep.ogg
+    - type: DeviceLinkSource
+      ports:
+      - TurretLoaderSender
+
+- type: entity
+  id: ShipPickupBeacon
+  parent: [ BaseMachinePowered, ConstructibleMachine ]
+  name: pickup beacon
+  components:
+    - type: InteractionOutline
+    - type: Physics
+      bodyType: Static
+      canCollide: false
+    - type: Transform
+      anchored: true
+      noRot: true
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape:
+            !type:PhysShapeAabb
+            bounds: "-0.45,-0.45,0.45,0.00"
+          density: 190
+          mask:
+            - MachineMask
+    - type: Sprite
+      sprite: Structures/cargo_telepad.rsi
+      drawdepth: FloorObjects
+      layers:
+        - state: offline
+          map: [ "enum.CargoTelepadLayers.Base" ]
+        - state: idle
+          map: [ "enum.CargoTelepadLayers.Beam" ]
+          shader: unshaded
+    - type: Damageable
+      damageContainer: Inorganic
+      damageModifierSet: Metallic
+    - type: ApcPowerReceiver
+      powerLoad: 1000
+    - type: Appearance
+    - type: CollideOnAnchor
+    - type: ShipPickupBeacon
+      id: loot
+      teleportationSound:
+        path: /Audio/Effects/tesla_consume.ogg
+
+- type: entity
+  id: ShipEventPointMiner
+  suffix: ShipEvent
+  name: point miner
+  parent: BaseComputer
+  components:
+    - type: ShipEventTeamMarker
+    - type: ShipEventPointMiner
+      overrideDelay: 5
+      interval: 60
+      pointsPerInterval: 1000
+      fireSound: /Audio/Effects/newplayerping.ogg
+    - type: RadarRenderable
+      viewProtos:
+        - pointminer
+      group: enum.RadarRenderableGroup.None
+    - type: PointLight
+      radius: 1.5
+      energy: 1.6
+      color: "#ffffff"
+    - type: Sprite
+      sprite: Theta/ShipEvent/Structures/Machines/PointMiner.rsi
+      layers:
+      - map: ["computerLayerBody"]
+        state: computer
+      - map: ["computerLayerKeyboard"]
+        state: generic_keyboard
+      - map: ["computerLayerScreen"]
+        state: miner
+      - map: ["computerLayerKeys"]
+        state: generic_keys
+    - type: ApcPowerReceiver
+      needsPower: false
+    - type: Damageable
+      damageContainer: Inorganic
+      damageModifierSet: Metallic
+    - type: Destructible
+      thresholds:
+        - trigger:
+            !type:DamageTrigger
+            damage: 300
+          behaviors:
+            - !type:PlaySoundBehavior
+              sound:
+                collection: MetalBreak
+            - !type:SpawnEntitiesBehavior
+              spawn:
+                SheetSteel:
+                  min: 3
+                  max: 5
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+    - type: Repairable
+      doAfterDelay: 5

@@ -15,6 +15,10 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
+using Content.Client.UserInterface.Systems.EscapeMenu;
+using Content.Shared.CCVar;
+using Content.Shared.Corvax.CCCVars;
+using Robust.Shared.Configuration;
 
 namespace Content.Client.Lobby
 {
@@ -30,6 +34,7 @@ namespace Content.Client.Lobby
         [Dependency] private readonly IVoteManager _voteManager = default!;
         [Dependency] private readonly ClientsidePlaytimeTrackingManager _playtimeTracking = default!;
         [Dependency] private readonly IPrototypeManager _protoMan = default!;
+        [Dependency] private readonly IConfigurationManager _configurationManager = default!;
 
         private ClientGameTicker _gameTicker = default!;
         private ContentAudioSystem _contentAudioSystem = default!;
@@ -71,6 +76,8 @@ namespace Content.Client.Lobby
             Lobby.CharacterPreview.CharacterSetupButton.OnPressed += OnSetupPressed;
             Lobby.ReadyButton.OnPressed += OnReadyPressed;
             Lobby.ReadyButton.OnToggled += OnReadyToggled;
+
+            HandleLocalization();
 
             _gameTicker.InfoBlobUpdated += UpdateLobbyUi;
             _gameTicker.LobbyStatusUpdated += LobbyStatusUpdated;
@@ -183,7 +190,6 @@ namespace Content.Client.Lobby
                 Lobby!.ReadyButton.Text = Loc.GetString("lobby-state-ready-button-join-state");
                 Lobby!.ReadyButton.ToggleMode = false;
                 Lobby!.ReadyButton.Pressed = false;
-                Lobby!.ObserveButton.Disabled = false;
             }
             else
             {
@@ -192,7 +198,7 @@ namespace Content.Client.Lobby
                 Lobby!.ReadyButton.Text = Loc.GetString(Lobby!.ReadyButton.Pressed ? "lobby-state-player-status-ready": "lobby-state-player-status-not-ready");
                 Lobby!.ReadyButton.ToggleMode = true;
                 Lobby!.ReadyButton.Disabled = false;
-                Lobby!.ObserveButton.Disabled = true;
+				Lobby!.ObserveButton.Disabled = true;
             }
 
             if (_gameTicker.ServerInfoBlob != null)
@@ -278,6 +284,15 @@ namespace Content.Client.Lobby
             }
 
             _consoleHost.ExecuteCommand($"toggleready {newReady}");
+        }
+
+        private void HandleLocalization()
+        {
+            _configurationManager.OnValueChanged(CCVars.CultureLocale, _ => Lobby!.ReadyButton.Text = Loc.GetString("ui-lobby-ready-up-button"));
+            _configurationManager.OnValueChanged(CCVars.CultureLocale, _ => Lobby!.AHelpButton.Text = Loc.GetString("ui-lobby-ahelp-button"));
+            _configurationManager.OnValueChanged(CCVars.CultureLocale, _ => Lobby!.OptionsButton.Text = Loc.GetString("ui-lobby-options-button"));
+            _configurationManager.OnValueChanged(CCVars.CultureLocale, _ => Lobby!.LeaveButton.Text = Loc.GetString("ui-lobby-leave-button"));
+            _configurationManager.OnValueChanged(CCVars.CultureLocale, _ => Lobby!.ServerInfoHeader.Text = Loc.GetString("ui-lobby-server-info-block"));
         }
     }
 }

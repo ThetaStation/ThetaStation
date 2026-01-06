@@ -1,12 +1,13 @@
 using System.Numerics;
 using Content.Server.Shuttles.Systems;
 using Content.Shared.Damage;
+using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Server.Shuttles.Components
 {
-    [RegisterComponent, NetworkedComponent, AutoGenerateComponentPause]
+    [RegisterComponent, NetworkedComponent]
     [Access(typeof(ThrusterSystem))]
     public sealed partial class ThrusterComponent : Component
     {
@@ -28,7 +29,8 @@ namespace Content.Server.Shuttles.Components
         [DataField("thrusterType")]
         public ThrusterType Type = ThrusterType.Linear;
 
-        [DataField("burnShape")] public List<Vector2> BurnPoly = new()
+        [DataField("burnShape")]
+        public List<Vector2> BurnPoly = new()
         {
             new Vector2(-0.4f, 0.5f),
             new Vector2(-0.1f, 1.2f),
@@ -39,28 +41,57 @@ namespace Content.Server.Shuttles.Components
         /// <summary>
         /// How much damage is done per second to anything colliding with our thrust.
         /// </summary>
-        [DataField("damage")] public DamageSpecifier? Damage = new();
+        [DataField] public DamageSpecifier? Damage = new();
 
-        [DataField("requireSpace")]
+        [DataField]
         public bool RequireSpace = true;
 
         // Used for burns
-
         public List<EntityUid> Colliding = new();
 
+        /// <summary>
+        /// Use SetThrusterFiring instead of setting this manually
+        /// </summary>
         public bool Firing = false;
 
-        /// <summary>
-        /// How often thruster deals damage.
-        /// </summary>
-        [DataField]
-        public TimeSpan FireCooldown = TimeSpan.FromSeconds(2);
+        public TimeSpan LastFire;
 
         /// <summary>
         /// Next time we tick damage for anyone colliding.
         /// </summary>
-        [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
-        public TimeSpan NextFire = TimeSpan.Zero;
+        [ViewVariables(VVAccess.ReadWrite), DataField(customTypeSerializer:typeof(TimeOffsetSerializer))]
+        public TimeSpan NextFire;
+
+        [DataField("partRatingThrustMultiplier")]
+        public float PartRatingThrustMultiplier = 1.5f;
+
+
+        [DataField, ViewVariables(VVAccess.ReadWrite)]
+        public int LoadIdle;
+
+        [DataField, ViewVariables(VVAccess.ReadWrite)]
+        public int LoadFiring;
+
+        /// <summary>
+        /// How much time is required to go from idle consumption to max
+        /// Thrust is not changed tho, because I'm lazy
+        /// </summary>
+        [DataField, ViewVariables(VVAccess.ReadWrite)]
+        public TimeSpan RampDuration;
+
+        public TimeSpan RampPosition;
+
+
+        [DataField]
+        public SoundSpecifier? SoundSpinup;
+
+        [DataField]
+        public SoundSpecifier? SoundCycle;
+
+        [DataField]
+        public SoundSpecifier? SoundShutdown;
+
+        public EntityUid? AudioUid;
     }
 
     public enum ThrusterType

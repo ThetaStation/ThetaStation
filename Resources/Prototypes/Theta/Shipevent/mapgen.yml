@@ -1,0 +1,26 @@
+- type: mapgenlayer
+  id: AsteroidLayer
+  structureAmount: 350
+  distribution: !type:NoiseDistribution
+    noiseType: Cellular
+    frequency: 6
+    threshold: -0.8
+  structures:
+    - "asteroid_small"
+    - "asteroid_large"
+
+- type: mapgenlayer
+  id: RuinLayer
+  structureAmount: 5
+  distribution: !type:UniformDistribution
+  structures:
+    - "ruin_office"
+    - "ruin_communism"
+    - "ruin_ship"
+
+- type: mapgenpreset
+  id: ShipEventMapGen
+  area: 0, 0, 1500, 1500
+  layers:
+    - "AsteroidLayer"
+    - "RuinLayer"

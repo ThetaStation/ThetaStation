@@ -7,6 +7,16 @@ shuttle-console-prevent = Вы не можете пилотировать это
 # NAV
 
 shuttle-console-display-label = Дисплей
+shuttle-console-ftl-state = Состояние БСС
+shuttle-console-ftl-available = Доступно
+shuttle-console-ftl-starting = Запускается
+shuttle-console-ftl-travelling = В пути
+shuttle-console-ftl-arriving = Прибытие
+shuttle-console-ftl-cooldown = Охлаждение
+shuttle-console-ftl-timer = Время БСС
+# Display
+shuttle-console-max-radar = Макс. дальн. радара:
+shuttle-console-radar = Дальн. радара:
 shuttle-console-position = Координаты:
 shuttle-console-position-value = { $X }, { $Y }
 shuttle-console-orientation = Азимут:
@@ -15,6 +25,13 @@ shuttle-console-linear-velocity = Линейная скорость:
 shuttle-console-linear-velocity-value = { $X }, { $Y }
 shuttle-console-angular-velocity = Угловая скорость:
 shuttle-console-angular-velocity-value = { $angularVelocity }
+shuttle-console-dock-label = Стык. порты
+shuttle-console-name-label = Название корабля
+shuttle-console-name-change = Изменить
+shuttle-console-docked = { $index } (Пристыкован)
+shuttle-console-dock-button = Пристыковать { $suffix }
+shuttle-console-hyperspace-label = Пункты назначения БСС
+shuttle-console-hyperspace-none = Пункты назначения не найдены
 shuttle-console-unknown = Неизвестно
 shuttle-console-iff-label = { $name } ({ $distance } м)
 shuttle-console-exclusion = Зона отчуждения
@@ -40,7 +57,6 @@ shuttle-console-map-beacons = Показ маяков
 shuttle-console-no-signal = Нет сигнала
 shuttle-console-map-objects = Объекты в секторе
 # DOCK
-shuttle-console-docked = Пристыкованные объекты
 shuttle-console-view = Выбрать
 shuttle-console-undock = Отстыковать
 shuttle-console-dock = Пристыковать

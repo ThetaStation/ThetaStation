@@ -56,16 +56,16 @@ public sealed class ApcVisualizerSystem : VisualizerSystem<ApcVisualsComponent>
         else
         {
             /// Overrides all of the lock and channel indicators.
-            SpriteSystem.LayerSetRsiState((uid, args.Sprite), ApcVisualLayers.ChargeState, comp.EmaggedScreenState);
-            for (var i = 0; i < comp.LockIndicators; ++i)
+            args.Sprite.LayerSetState(ApcVisualLayers.ChargeState, comp.EmaggedScreenState);
+            for(var i = 0; i < comp.LockIndicators; ++i)
             {
-                var layer = (byte)lockIndicatorOverlayStart + i;
-                SpriteSystem.LayerSetVisible((uid, args.Sprite), layer, false);
+                var layer = ((byte)lockIndicatorOverlayStart + i);
+                args.Sprite.LayerSetVisible(layer, false);
             }
             for (var i = 0; i < comp.ChannelIndicators; ++i)
             {
-                var layer = (byte)channelIndicatorOverlayStart + i;
-                SpriteSystem.LayerSetVisible((uid, args.Sprite), layer, false);
+                var layer = ((byte)channelIndicatorOverlayStart + i);
+                args.Sprite.LayerSetVisible(layer, false);
             }
 
             if (TryComp<PointLightComponent>(uid, out var light))

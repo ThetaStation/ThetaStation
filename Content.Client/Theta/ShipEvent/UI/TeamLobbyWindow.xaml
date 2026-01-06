@@ -1,0 +1,18 @@
+﻿<DefaultWindow xmlns="https://spacestation14.io"
+    xmlns:ui="clr-namespace:Content.Client.Theta.ShipEvent.UI"
+    Title="{Loc 'shipevent-lobby-windowtitle'}"
+    MinSize="650 350">
+    <BoxContainer Orientation="Vertical">
+        <ui:TeamListControl Name="TeamList" Margin="2"/>
+        <BoxContainer Orientation="Horizontal">
+            <Button Name="Refresh"
+                    Text="{Loc 'shipevent-lobby-refresh'}"
+                    HorizontalExpand="True"
+                    HorizontalAlignment="Left"/>
+            <Button Name="CreateTeam"
+                    Text="{Loc 'shipevent-lobby-createteam'}"
+                    HorizontalExpand="True"
+                    HorizontalAlignment="Right"/>
+        </BoxContainer>
+    </BoxContainer>
+</DefaultWindow>

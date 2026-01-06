@@ -122,6 +122,7 @@ ui-options-header-ui = User Interface
 ui-options-header-misc = Miscellaneous
 ui-options-header-hotbar = Hotbar
 ui-options-header-shuttle = Shuttle
+ui-options-header-theta = Theta
 ui-options-header-map-editor = Map Editor
 ui-options-header-dev = Development
 ui-options-header-general = General
@@ -318,6 +319,9 @@ ui-options-function-text-scroll-to-bottom = Scroll to bottom
 ui-options-function-text-tab-complete = Tab completion
 ui-options-function-text-complete-next = Complete next
 ui-options-function-text-complete-prev = Complete previous
+
+## Theta
+ui-options-function-ping-on-radar = Send ping in radar
 
 ## Network menu
 

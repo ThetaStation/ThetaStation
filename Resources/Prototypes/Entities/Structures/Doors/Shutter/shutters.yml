@@ -104,6 +104,10 @@
     interactSuccessSound:
       collection: FenceRattle
   - type: BlockWeather
+  - type: RadarRenderable
+    viewProtos: 
+    - genericDoor
+    group: enum.RadarRenderableGroup.Door
 
 - type: entity
   id: ShuttersNormal

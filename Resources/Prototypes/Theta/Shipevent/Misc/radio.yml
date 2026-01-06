@@ -1,0 +1,6 @@
+- type: radioChannel
+  id: ShipEventFleet
+  name: shipevent-channel-fleet
+  keycode: 'f'
+  frequency: 0666
+  color: "#ffffff"

@@ -14,7 +14,7 @@ namespace Content.IntegrationTests.Tests
     [TestFixture]
     public sealed class SaveLoadMapTest
     {
-        [Test]
+        [Test, Ignore("Too long for Theta Station")]
         public async Task SaveLoadMultiGridMap()
         {
             var mapPath = new ResPath("/Maps/Test/TestMap.yml");

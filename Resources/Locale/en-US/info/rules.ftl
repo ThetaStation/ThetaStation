@@ -7,3 +7,4 @@ ui-rules-wait = The accept button will be enabled after {$time} seconds.
 
 ui-rules-button-home = Home
 ui-rules-button-back = Back
+ui-rules-header-theta = Theta Server Rules

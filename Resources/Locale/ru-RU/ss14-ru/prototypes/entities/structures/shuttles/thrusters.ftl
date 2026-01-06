@@ -20,3 +20,6 @@ ent-DebugGyroscope = { ent-BaseThruster }
     .desc = { ent-BaseThruster.desc }
 ent-RustedThruster = ржавый ракетный двигатель
     .desc = Неподлежащий ремонту двигатель, вышел из строя из-за износа. Пригоден только на металлолом.
+    .desc = { ent-Gyroscope.desc }
+ent-SkipjackGyroscope = { ent-Gyroscope }
+    .desc = { ent-Gyroscope.desc }

@@ -1,22 +1,8 @@
 ﻿name: Test Packaging
 
 on:
-  push:
-    branches: [ master, staging, stable ]
-    paths:
-      - '**.cs'
-      - '**.csproj'
-      - '**.sln'
-      - '**.git**'
-      - '**.yml'
-      # no docs on which one of these is supposed to work, so
-      # why not just do both
-      - 'RobustToolbox'
-      - 'RobustToolbox/**'
-  merge_group:
-  pull_request:
-    types: [ opened, reopened, synchronize, ready_for_review ]
-    branches: [ master, staging, stable ]
+  pull_request_review:
+    types: [submitted]
     paths:
       - '**.cs'
       - '**.csproj'
@@ -29,12 +15,12 @@ on:
 jobs:
   build:
     name: Test Packaging
-    if: github.actor != 'IanComradeBot' && github.event.pull_request.draft == false
-    runs-on: ubuntu-latest
+    if: github.event.pull_request.base.ref == 'master' && github.actor != 'IanComradeBot' && github.event.pull_request.draft == false && github.event.review.state == 'approved'
+    runs-on: [self-hosted, linux, x64]
 
     steps:
       - name: Checkout Master
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v3.6.0
 
       - name: Setup Submodule
         run: |
@@ -63,9 +49,9 @@ jobs:
       # Corvax-Secrets-End
 
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v4.1.0
+        uses: actions/setup-dotnet@v3.2.0
         with:
-          dotnet-version: 9.0.x
+          dotnet-version: 8.0.x
 
       - name: Install dependencies
         run: dotnet restore
@@ -74,7 +60,17 @@ jobs:
         run: dotnet build Content.Packaging --configuration Release --no-restore /m
 
       - name: Package server
-        run: dotnet run --project Content.Packaging server --platform win-x64 --platform win-arm64 --platform linux-x64 --platform linux-arm64 --platform osx-x64 --platform osx-arm64
+        run: dotnet run --project Content.Packaging server --platform win-x64 --platform linux-x64 --platform osx-x64 --platform linux-arm64
 
       - name: Package client
         run: dotnet run --project Content.Packaging client --no-wipe-release
+
+      - name: Update Build Info
+        env:
+          FORK_ID: ${{ vars.FORK_ID }}
+        run: Tools/gen_build_info.py
+
+      - name: Shuffle files around
+        run: |
+          mkdir "release/${{ github.sha }}"
+          mv release/*.zip "release/${{ github.sha }}"

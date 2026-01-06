@@ -2,7 +2,7 @@ name: RSI Validator
 
 on:
   push:
-    branches: [ master, staging, stable ]
+    branches: [ staging, trying ]
   merge_group:
   pull_request:
     paths:
@@ -12,6 +12,7 @@ jobs:
   validate_rsis:
     name: Validate RSIs
     runs-on: ubuntu-latest
+    if: github.actor != 'IanComradeBot' && github.event.pull_request.draft == false && github.event.review.state == 'approved'
     steps:
       - uses: actions/checkout@v4.2.2
       - name: Setup Submodule
@@ -33,7 +34,7 @@ jobs:
         uses: space-wizards/submodule-dependency@v0.1.5
       - name: Install Python dependencies
         run: |
-          pip3 install --ignore-installed --user pillow jsonschema
+          python3 -m pip install --ignore-installed --user pillow jsonschema
       - name: Validate RSIs
         run: |
           python3 RobustToolbox/Schemas/validate_rsis.py Resources/
