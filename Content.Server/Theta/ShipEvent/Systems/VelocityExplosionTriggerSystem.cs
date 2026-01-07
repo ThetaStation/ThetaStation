@@ -1,6 +1,7 @@
-using Content.Server.Explosion.Components;
 using Content.Server.Explosion.EntitySystems;
 using Content.Server.Theta.ShipEvent.Components;
+using Content.Shared.Explosion.Components;
+using Content.Shared.Trigger;
 using Robust.Shared.Physics.Components;
 
 namespace Content.Server.Theta.ShipEvent.Systems;

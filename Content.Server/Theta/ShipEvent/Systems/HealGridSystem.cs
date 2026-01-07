@@ -4,6 +4,9 @@ using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Random;
+using Content.Shared.Damage.Components;
+using Content.Shared.Trigger;
+using Content.Shared.Damage.Systems;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
@@ -30,7 +33,7 @@ public sealed class HealGridSystem : EntitySystem
             var heal = new DamageSpecifier(damageable.Damage);
             foreach (var (group, damage) in heal.DamageDict)
             {
-                if(healComponent.AvailableHealth == 0)
+                if (healComponent.AvailableHealth == 0)
                     break;
 
                 var healingValue = healComponent.AvailableHealth - damage > 0
@@ -41,7 +44,7 @@ public sealed class HealGridSystem : EntitySystem
             }
 
             heal = -heal;
-            _damageableSystem.TryChangeDamage(entityOnGrid, heal, true, false, damageable);
+            _damageableSystem.TryChangeDamage(new Entity<DamageableComponent?>(entityOnGrid, damageable), heal, true, false);
         }
     }
 

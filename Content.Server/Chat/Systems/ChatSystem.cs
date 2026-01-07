@@ -297,7 +297,7 @@ public sealed partial class ChatSystem : SharedChatSystem
 
     public void SendSimpleMessage(string message, ICommonSession player, ChatChannel channel = ChatChannel.Local, Color? color = null)
     {
-        _chatManager.ChatMessageToOne(channel, message, message, default, false, player.ConnectedClient, color);
+        _chatManager.ChatMessageToOne(channel, message, message, default, false, player.Channel, color);
     }
 
     #region Announcements

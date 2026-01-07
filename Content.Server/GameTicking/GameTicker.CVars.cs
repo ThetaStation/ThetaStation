@@ -81,12 +81,10 @@ namespace Content.Server.GameTicking
                     DiscordRoundEndRole = null;
                 }
             }, true);
-
             Subs.CVar(_cfg, CCVars.RoundEndSoundCollection, value => RoundEndSoundCollection = value, true);
-            Subs.CVar(_configurationManager, CCVars.DiscordPopCounterStep, value => PopCounterStep = value, true);
-            Subs.CVar(_configurationManager, CCVars.DiscordPopCounterMax, value => PopCounterMax = value, true);
-            Subs.CVar(_configurationManager, CCVars.DiscordPopCounterMessage, value => PopCounterMessage = value, true);
-            Subs.CVar(_configurationManager, CCVars.RoundEndSoundCollection, value => RoundEndSoundCollection = value, true);
+            Subs.CVar(_cfg, CCVars.PopCounterStep, value => PopCounterStep = value, true);
+            Subs.CVar(_cfg, CCVars.PopCounterMax, value => PopCounterMax = value, true);
+            Subs.CVar(_cfg, CCVars.PopCounterMessage, value => PopCounterMessage = value, true);
 #if EXCEPTION_TOLERANCE
             Subs.CVar(_cfg, CCVars.RoundStartFailShutdownCount, value => RoundStartFailShutdownCount = value, true);
 #endif

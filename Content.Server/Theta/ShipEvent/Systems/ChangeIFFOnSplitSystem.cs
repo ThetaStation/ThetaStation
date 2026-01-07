@@ -1,14 +1,16 @@
-﻿using Content.Server.Explosion.Components;
-using Content.Server.Shuttles.Systems;
+﻿using Content.Server.Shuttles.Systems;
 using Content.Server.Theta.ShipEvent.Components;
-using Content.Shared.Explosion.Components;
 using Content.Shared.Shuttles.Components;
+using Content.Shared.Trigger.Components;
+using Content.Shared.Trigger.Components.Effects;
+using Content.Shared.Trigger.Systems;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
 public sealed class ChangeIFFOnSplitSystem : EntitySystem
 {
-    [Dependency] private readonly ShuttleSystem _shuttleSystem = default!;
+    [Dependency] private readonly ShuttleSystem _shuttleSys = default!;
+    [Dependency] private readonly TriggerSystem _triggerSys = default!;
 
     public override void Initialize()
     {
@@ -32,18 +34,19 @@ public sealed class ChangeIFFOnSplitSystem : EntitySystem
 
         if (comp.DeleteInheritedGridsDelay > 0)
         {
-            AddComp<DeleteOnTriggerComponent>(args.Grid);
-            var timerComp = AddComp<ActiveTimerTriggerComponent>(args.Grid);
-            timerComp.TimeRemaining = comp.DeleteInheritedGridsDelay;
+            AddComp<DeleteOnTriggerComponent>(args.Grid).KeysIn = ["timer"];
+            var timer = AddComp<TimerTriggerComponent>(args.Grid);
+            timer.Delay = TimeSpan.FromSeconds(comp.DeleteInheritedGridsDelay);
+            _triggerSys.ActivateTimerTrigger(args.Grid);
         }
 
         IFFComponent? originIff = CompOrNull<IFFComponent>(args.OldGrid);
 
-        IFFFlags flags = comp.NewFlags ?? (originIff?.Flags ?? IFFFlags.None);
-        Color color = comp.NewColor ?? (originIff?.Color ?? Color.Gold);
+        IFFFlags flags = comp.NewFlags ?? originIff?.Flags ?? IFFFlags.None;
+        Color color = comp.NewColor ?? originIff?.Color ?? Color.Gold;
 
         var newIff = EnsureComp<IFFComponent>(args.Grid);
-        _shuttleSystem.AddIFFFlag(args.Grid, flags, newIff);
-        _shuttleSystem.SetIFFColor(args.Grid, color, newIff);
+        _shuttleSys.AddIFFFlag(args.Grid, flags, newIff);
+        _shuttleSys.SetIFFColor(args.Grid, color, newIff);
     }
 }

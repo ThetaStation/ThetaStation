@@ -3,17 +3,16 @@
 using System.Linq;
 using System.Numerics;
 using Content.Server.Access.Systems;
-using Content.Server.Explosion.Components;
 using Content.Shared.Chat;
-using Content.Shared.Explosion;
+using Content.Shared.Explosion.Components;
 using Content.Shared.Ghost;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Projectiles;
 using Content.Shared.Roles.Theta;
 using Content.Shared.Theta.ShipEvent.Components;
+using Robust.Shared.Map;
 using Robust.Shared.Player;
-using Robust.Shared.Timing;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
@@ -86,7 +85,7 @@ public sealed partial class ShipEventTeamSystem
         return sessions;
     }
 
-    public List<ICommonSession> GetTeamLivingMembers(ShipEventTeam team)
+    public List<ICommonSession> GetTeamLivingMembersSessions(ShipEventTeam team)
     {
         List<ICommonSession> sessions = new();
 
@@ -104,6 +103,19 @@ public sealed partial class ShipEventTeamSystem
         }
 
         return sessions;
+    }
+
+    public List<EntityUid> GetTeamLivingMembersUids(ShipEventTeam team)
+    {
+        List<EntityUid> uids = new();
+
+        foreach (ICommonSession session in GetTeamLivingMembersSessions(team))
+        {
+            if (session.AttachedEntity != null)
+                uids.Add(session.AttachedEntity.Value);
+        }
+
+        return uids;
     }
 
     public int GetFleetPoints(ShipEventFleet fleet)
@@ -136,7 +148,7 @@ public sealed partial class ShipEventTeamSystem
 
         foreach (ShipEventTeam team in fleet.Teams)
         {
-            sessions.AddRange(GetTeamLivingMembers(team));
+            sessions.AddRange(GetTeamLivingMembersSessions(team));
         }
 
         return sessions;
@@ -208,13 +220,15 @@ public sealed partial class ShipEventTeamSystem
     private void DetachEntityFromGrid(EntityUid uid)
     {
         TransformComponent form = Transform(uid);
-        _formSys.SetParent(uid, form, _mapMan.GetMapEntityId(form.MapID));
+        if (form.MapUid == null)
+            return;
+        _formSys.SetParent(uid, form, form.MapUid.Value);
     }
 
     private void DetachEnemiesFromGrid(EntityUid gridUid, ShipEventTeam team)
     {
         var childEnum = Transform(gridUid).ChildEnumerator;
-        List<EntityUid> toDetach = new();
+        List<EntityUid> toDetach = [];
         while (childEnum.MoveNext(out EntityUid uid))
         {
             if (HasComp<GhostComponent>(uid) || TryComp<ShipEventTeamMarkerComponent>(uid, out var marker) && marker.Team != team)
@@ -248,12 +262,12 @@ public sealed partial class ShipEventTeamSystem
             int damage = 0;
 
             if (EntityManager.TryGetComponent<ProjectileComponent>(entity, out var proj))
-                damage += (int) proj.Damage.GetTotal();
+                damage += (int)proj.Damage.GetTotal();
 
             if (EntityManager.TryGetComponent<ExplosiveComponent>(entity, out var exp))
             {
-                var damagePerIntensity = (int) _protMan.Index<ExplosionPrototype>(exp.ExplosionType).DamagePerIntensity.GetTotal();
-                damage += (int) (exp.TotalIntensity * damagePerIntensity); //todo: this is inaccurate
+                var damagePerIntensity = (int)_protMan.Index(exp.ExplosionType).DamagePerIntensity.GetTotal();
+                damage += (int)(exp.TotalIntensity * damagePerIntensity); //todo: this is inaccurate
             }
 
             _projectileDamage[meta.EntityPrototype.ID] = damage;
@@ -273,7 +287,7 @@ public sealed partial class ShipEventTeamSystem
             if (_mapMan.TryFindGridAt(new(pos, TargetMap), out _, out _))
                 continue;
 
-            return SpawnAtPosition(prot, new(_mapMan.GetMapEntityId(TargetMap), pos));
+            return Spawn(prot, new MapCoordinates(pos, TargetMap));
         }
 
         return null;

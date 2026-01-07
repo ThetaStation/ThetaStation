@@ -114,4 +114,9 @@ public sealed partial class CCVars
     public static readonly CVarDef<bool> DiscordNewsWebhookSendDuringRound =
         CVarDef.Create("discord.news_webhook_send_during_round", false, CVar.SERVERONLY);
 
+    public static readonly CVarDef<int> PopCounterStep = CVarDef.Create("discord.popcounter_step", 3, CVar.SERVERONLY);
+
+    public static readonly CVarDef<int> PopCounterMax = CVarDef.Create("discord.popcounter_max", 15, CVar.SERVERONLY);
+
+    public static readonly CVarDef<string> PopCounterMessage = CVarDef.Create("discord.popcounter_message", "", CVar.SERVERONLY);
 }

@@ -1,4 +1,4 @@
-﻿using Content.Client.Changelog;
+﻿﻿using Content.Client.Changelog;
 using Content.Client.UserInterface.Systems.EscapeMenu;
 using Content.Client.UserInterface.Systems.Guidebook;
 using Content.Shared.CCVar;
@@ -29,7 +29,6 @@ namespace Content.Client.Info
             var rulesButton = new Button() {Text = Loc.GetString("server-info-rules-button")};
             rulesButton.OnPressed += args => new RulesAndInfoWindow().Open();
             buttons.AddChild(rulesButton);
-            _cfg.OnValueChanged(CCVars.CultureLocale, _ => rulesButton.Text = Loc.GetString("server-info-rules-button"));
 
             AddInfoButton("server-info-discord-button", CCVars.InfoLinksDiscord);
             AddInfoButton("server-info-website-button", CCVars.InfoLinksWebsite);
@@ -55,7 +54,6 @@ namespace Content.Client.Info
                 button.OnPressed += _ => uriOpener.OpenUri(_cfg.GetCVar(cVar));
                 buttons.AddChild(button);
                 _infoLinks.Add((cVar, button));
-                _cfg.OnValueChanged(CCVars.CultureLocale, _ => button.Text = Loc.GetString(loc));
             }
         }
 

@@ -5,7 +5,6 @@ using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
 using Content.Server.GameTicking;
 using Content.Server.Humanoid;
-using Content.Server.IdentityManagement;
 using Content.Server.Mind;
 using Content.Server.Preferences.Managers;
 using Content.Server.RoundEnd;
@@ -43,7 +42,8 @@ using Content.Shared.Mind.Components;
 using Content.Shared.Ghost;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
-using Content.Shared.Mind;
+using Content.Shared.Chat;
+using Content.Shared.IdentityManagement;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
@@ -55,8 +55,8 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
     [Dependency] private readonly IChatManager _chatMan = default!;
     [Dependency] private readonly MobHUDSystem _hudSys = default!;
     [Dependency] private readonly MapGenSystem _mapGenSys = default!;
-    [Dependency] private readonly IdentitySystem _idSys = default!;
     [Dependency] private readonly IMapManager _mapMan = default!;
+    [Dependency] private readonly MapSystem _mapSys = default!;
     [Dependency] private readonly IPrototypeManager _protMan = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSys = default!;
@@ -64,6 +64,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
     [Dependency] private readonly TransformSystem _formSys = default!;
     [Dependency] private readonly RoundEndSystem _endSys = default!;
     [Dependency] private readonly MindSystem _mindSys = default!;
+    [Dependency] private readonly IdentitySystem _idSys = default!;
     [Dependency] private readonly HumanoidAppearanceSystem _humanAppearanceSys = default!;
     [Dependency] private readonly IServerPreferencesManager _prefsMan = default!;
     [Dependency] private readonly ITimerManager _timerMan = default!;
@@ -201,7 +202,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
     {
         if (seconds <= 0)
             return;
-        Timer timer = new((int) (seconds * 1000), true, action);
+        Timer timer = new((int)(seconds * 1000), true, action);
         _timerMan.AddTimer(timer, TimerTokenSource.Token);
     }
 
@@ -628,7 +629,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
         HumanoidCharacterProfile profile;
         if (_prefsMan.TryGetCachedPreferences(session.UserId, out var prefs))
         {
-            profile = (HumanoidCharacterProfile) prefs.GetProfile(prefs.SelectedCharacterIndex);
+            profile = (HumanoidCharacterProfile)prefs.GetProfile(prefs.SelectedCharacterIndex);
         }
         else
         {
@@ -661,7 +662,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
             team.TimeSinceRemoval += TeamCheckInterval;
 
             var activeMembers = GetTeamSessions(team);
-            var livingMembers = GetTeamLivingMembers(team);
+            var livingMembers = GetTeamLivingMembersSessions(team);
 
             if (RemoveEmptyTeams && team.Fleet == null && activeMembers.Count == 0)
             {
@@ -941,7 +942,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
                 QueueDel(session.AttachedEntity);
 
             if (!immediate)
-                RaiseNetworkEvent(new RespawnTimerOverlayInfo() { Time = (int) (RespawnDelay) }, session);
+                RaiseNetworkEvent(new RespawnTimerOverlayInfo() { Time = (int)RespawnDelay }, session);
         }
 
         if (immediate)
@@ -1027,7 +1028,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
                 if (marker.Team == null || marker.Team == component.Team)
                     return;
 
-                component.Team.Points += (int) (GetProjectileDamage(entity) * PointsPerHitMultiplier) * (marker.Team.Fleet == component.Team.Fleet ? 0 : 1);
+                component.Team.Points += (int)(GetProjectileDamage(entity) * PointsPerHitMultiplier) * (marker.Team.Fleet == component.Team.Fleet ? 0 : 1);
 
                 if (!marker.Team.Hits.Keys.Contains(component.Team))
                     marker.Team.Hits[component.Team] = 0;
@@ -1046,7 +1047,7 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
 
         foreach (var (killerTeam, hits) in team.Hits)
         {
-            double ratio = hits / (double) totalHits;
+            double ratio = hits / (double)totalHits;
             switch (ratio)
             {
                 case >= 0.5:
@@ -1163,9 +1164,9 @@ public sealed partial class ShipEventTeamSystem : EntitySystem
             return;
 
         string messageLoc = "shipevent-team-msg";
-        if (_mindSys.TryGetMind(uid, out EntityUid mindUid, out MindComponent? mind) && mind.Session != null)
+        if (_playerMan.TryGetSessionByEntity(uid, out ICommonSession? session))
         {
-            string uname = mind.Session.Channel.UserName;
+            string uname = session.Channel.UserName;
             if (uname == marker.Team.Fleet?.Admiral)
             {
                 messageLoc = "shipevent-team-msg-admiral";

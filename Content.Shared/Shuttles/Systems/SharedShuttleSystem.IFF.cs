@@ -93,7 +93,7 @@ public abstract partial class SharedShuttleSystem
             return;
 
         component.Flags = IFFFlags.None;
-        Dirty(component);
+        Dirty(gridUid, component);
         UpdateIFFInterfaces(gridUid, component);
     }
 }

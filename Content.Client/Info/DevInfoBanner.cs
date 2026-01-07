@@ -1,4 +1,4 @@
-﻿using Content.Client.Changelog;
+﻿﻿using Content.Client.Changelog;
 using Content.Client.Credits;
 using Content.Shared.CCVar;
 using Robust.Client.UserInterface;
@@ -33,7 +33,6 @@ namespace Content.Client.Info
             var creditsButton = new Button {Text = Loc.GetString("server-info-credits-button")};
             creditsButton.OnPressed += args => new CreditsWindow().Open();
             buttons.AddChild(creditsButton);
-            cfg.OnValueChanged(CCVars.CultureLocale, _ => creditsButton.Text = Loc.GetString("server-info-credits-button"));
         }
     }
 }

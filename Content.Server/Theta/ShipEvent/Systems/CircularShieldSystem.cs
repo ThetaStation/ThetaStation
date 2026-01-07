@@ -4,6 +4,7 @@ using Content.Server.Shuttles.Systems;
 using Content.Shared.DeviceLinking;
 using Content.Shared.DeviceLinking.Events;
 using Content.Shared.Physics;
+using Content.Shared.Power;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Theta.ShipEvent.CircularShield;
