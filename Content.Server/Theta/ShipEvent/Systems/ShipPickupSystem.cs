@@ -1,6 +1,7 @@
 using Content.Server.Explosion.EntitySystems;
 using Content.Server.Shuttles.Components;
 using Content.Server.Theta.ShipEvent.Components;
+using Content.Shared.Trigger;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Random;
 

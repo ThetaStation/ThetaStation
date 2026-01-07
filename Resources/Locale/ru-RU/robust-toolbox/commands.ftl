@@ -1,6 +1,5 @@
 ### Localization for engine console commands
 
-
 ## generic command errors
 
 cmd-invalid-arg-number-error = Недопустимое число аргументов.
@@ -22,7 +21,7 @@ cmd-help-help =
     Если имя команды не будет указано, будет выведена общая справка. Если имя команды будет указано, будет выведена справка по этой команде.
 cmd-help-no-args = Чтобы получить справку по определённой команде, используйте 'help <command>'. Для получения списка всех доступных команд используйте 'list'. Для поиска по командам используйте 'list <filter>'.
 cmd-help-unknown = Неизвестная команда: { $command }
-cmd-help-top = { $command } - { $description }
+cmd-help-top = { $command } — { $description }
 cmd-help-invalid-args = Недопустимое количество аргументов.
 cmd-help-arg-cmdname = [имя команды]
 
@@ -172,7 +171,6 @@ cmd-hint-savebp-id = <Grid EntityID>
 
 ## 'flushcookies' command
 
-
 # Примечание: команда flushcookies взята из Robust.Client.WebView, её нет в коде основного движка.
 
 cmd-flushcookies-desc = Сброс хранилища CEF-cookie на диск
@@ -234,7 +232,7 @@ cmd-net-watch-ent-desc = Выводит на консоль все сетевы�
 cmd-net-watch-ent-help = Использование: net_watchent <0|EntityUid>
 cmd-net-refresh-desc = Запрашивает полное состояние сервера.
 cmd-net-refresh-help = Использование: net_refresh
-cmd-net-entity-report-desc = Переключает панель отчета о сетевых сущностях.
+cmd-net-entity-report-desc = Переключает панель отчёта о сетевых сущностях.
 cmd-net-entity-report-help = Использование: net_entityreport
 cmd-fill-desc = Заполнить консоль для отладки.
 cmd-fill-help = Заполняет консоль всякой чепухой для отладки.
@@ -329,9 +327,9 @@ cmd-spin-help = spin velocity [drag] [entityUid]
 cmd-rldloc-desc = Перезагружает локализацию (клиент и сервер).
 cmd-rldloc-help = Использование: rldloc
 # Debug entity controls
-cmd-spawn-desc = Создаёт сущность определенного типа.
+cmd-spawn-desc = Создаёт сущность определённого типа.
 cmd-spawn-help = spawn <прототип> ИЛИ spawn <прототип> <относительная сущность ID> ИЛИ spawn <прототип> <x> <y>
-cmd-cspawn-desc = Спавнит на стороне клиента сущность определенного типа у ваших ног.
+cmd-cspawn-desc = Спавнит на стороне клиента сущность определённого типа у ваших ног.
 cmd-cspawn-help = cspawn <entity type>
 cmd-scale-desc = Увеличивает или уменьшает размер сущности.
 cmd-scale-help = scale <entityUid> <float>
@@ -355,7 +353,7 @@ cmd-sggcell-desc = Перечисляет сущности в ячейке се�
 cmd-sggcell-help = Использование: sggcell <gridID> <vector2i>\nЭтот vector2i параметр в форме x<int>,y<int>.
 cmd-overrideplayername-desc = Изменяет имя, используемое при попытке подключения к серверу.
 cmd-overrideplayername-help = Использование: overrideplayername <name>
-cmd-showanchored-desc = Показывает закреплённые объекты на определенной плитке.
+cmd-showanchored-desc = Показывает закреплённые объекты на определённой плитке.
 cmd-showanchored-help = Использование: showanchored
 cmd-dmetamem-desc = Выводит члены типа в формате, подходящем для файла конфигурации песочницы.
 cmd-dmetamem-help = Использование: dmetamem <type>
@@ -372,7 +370,7 @@ cmd-physics-help = Использование: physics <aabbs / com / contactnor
 cmd-hardquit-desc = Мгновенно убивает игровой клиент.
 cmd-hardquit-help = Убивает игровой клиент мгновенно, не оставляя следов. Не говорит серверу пока.
 cmd-quit-desc = Корректное завершение работы клиента игры.
-cmd-quit-help = Правильно завершает работу игрового клиента, уведомляя об этом подключенный сервер и т.д.
+cmd-quit-help = Правильно завершает работу игрового клиента, уведомляя об этом подключённый сервер и т.д.
 cmd-csi-desc = Открывает интерактивную консоль C#.
 cmd-csi-help = Использование: csi
 cmd-scsi-desc = Открывает интерактивную консоль C# на сервере.
@@ -383,7 +381,7 @@ cmd-showspritebb-desc = Переключить отображение грани
 cmd-showspritebb-help = Использование: showspritebb
 cmd-togglelookup-desc = Показывает/скрывает границы списка сущностей с помощью наложения.
 cmd-togglelookup-help = Использование: togglelookup
-cmd-net_entityreport-desc = Переключает панель отчета о сетевых сущностях.
+cmd-net_entityreport-desc = Переключает панель отчёта о сетевых сущностях.
 cmd-net_entityreport-help = Использование: net_entityreport
 cmd-net_refresh-desc = Запрашивает полное состояние сервера.
 cmd-net_refresh-help = Использование: net_refresh

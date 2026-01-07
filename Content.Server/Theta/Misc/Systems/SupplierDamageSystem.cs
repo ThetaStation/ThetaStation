@@ -1,6 +1,8 @@
 using Content.Server.Power.Components;
 using Content.Server.Theta.Misc.Components;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Robust.Shared.Timing;
 
 namespace Content.Server.Theta.Misc.Systems;
@@ -26,7 +28,7 @@ public sealed class SupplierDamageSystem : EntitySystem
                 continue;
 
             DamageSpecifier damage = supdamage.Damage * supplier.CurrentSupply * supdamage.DamageMultiplier;
-            _damageSys.TryChangeDamage(uid, damage, damageable: damageable);
+            _damageSys.TryChangeDamage(new Entity<DamageableComponent?>(uid, damageable), damage);
             supdamage.NextUpdate = _timing.CurTime + supdamage.UpdateInterval;
         }
     }

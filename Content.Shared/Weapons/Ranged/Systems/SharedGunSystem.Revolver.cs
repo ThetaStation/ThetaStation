@@ -9,7 +9,8 @@ using Robust.Shared.Utility;
 using System;
 using System.Linq;
 using Content.Shared.Interaction.Events;
-using Content.Shared.Whitelist;
+using Content.Shared.Wieldable;
+using Content.Shared.Wieldable.Components;
 using JetBrains.Annotations;
 
 namespace Content.Shared.Weapons.Ranged.Systems;
@@ -32,8 +33,13 @@ public partial class SharedGunSystem
 
     private void OnRevolverUse(EntityUid uid, RevolverAmmoProviderComponent component, UseInHandEvent args)
     {
+        if (args.Handled)
+            return;
+
         if (!_useDelay.TryResetDelay(uid))
             return;
+
+        args.Handled = true;
 
         Cycle(component);
         UpdateAmmoCount(uid, prediction: false);
@@ -94,7 +100,7 @@ public partial class SharedGunSystem
             return false;
 
         // If it's a speedloader try to get ammo from it.
-        if (EntityManager.HasComponent<SpeedLoaderComponent>(uid))
+        if (HasComp<SpeedLoaderComponent>(uid))
         {
             var freeSlots = 0;
 
@@ -124,7 +130,7 @@ public partial class SharedGunSystem
                 return false;
             }
 
-            for (var i = Math.Min(ev.Ammo.Count - 1, component.Capacity - 1); i >= 0; i--)
+            for (var i = 0; i < component.Capacity; i++)
             {
                 var index = (component.CurrentIndex + i) % component.Capacity;
 
@@ -184,55 +190,6 @@ public partial class SharedGunSystem
         }
 
         Popup(Loc.GetString("gun-revolver-full"), revolverUid, user);
-        return false;
-    }
-
-    /// <summary>
-    /// Copypaster from TryRevolverInsert but without insertion logic
-    /// </summary>
-    /// <returns></returns>
-    public bool CanRevolverInsert(EntityUid revolverUid, RevolverAmmoProviderComponent component, EntityUid uid, EntityUid? user)
-    {
-        if(component.Whitelist != null && !_whitelistSystem.IsValid(component.Whitelist, uid))
-            return false;
-
-        if (EntityManager.HasComponent<SpeedLoaderComponent>(uid))
-        {
-            var freeSlots = 0;
-
-            for (var i = 0; i < component.Capacity; i++)
-            {
-                if (component.AmmoSlots[i] != null || component.Chambers[i] != null)
-                    continue;
-
-                freeSlots++;
-            }
-
-            if (freeSlots == 0)
-                return false;
-
-            var xformQuery = GetEntityQuery<TransformComponent>();
-            var xform = xformQuery.GetComponent(uid);
-            var ammo = new List<(EntityUid? Entity, IShootable Shootable)>(freeSlots);
-            var ev = new TakeAmmoEvent(freeSlots, ammo, xform.Coordinates, user);
-            RaiseLocalEvent(uid, ev);
-
-            if (ev.Ammo.Count == 0)
-                return false;
-
-            return true;
-        }
-
-        for (var i = 0; i < component.Capacity; i++)
-        {
-            var index = (component.CurrentIndex + i) % component.Capacity;
-
-            if (component.AmmoSlots[index] != null || component.Chambers[index] != null)
-                continue;
-
-            return true;
-        }
-
         return false;
     }
 
@@ -443,10 +400,14 @@ public partial class SharedGunSystem
                 args.Ammo.Add((spawned, EnsureComp<AmmoComponent>(spawned)));
 
                 if (cartridge.DeleteOnSpawn)
+                {
+                    component.AmmoSlots[index] = null;
                     component.Chambers[index] = null;
+                }
             }
             else
             {
+                component.AmmoSlots[index] = null;
                 component.Chambers[index] = null;
                 args.Ammo.Add((ent.Value, EnsureComp<AmmoComponent>(ent.Value)));
             }

@@ -63,16 +63,15 @@ public sealed partial class FaxMachineComponent : Component
     /// <summary>
     /// Should that fax receive station goal info
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite)]
-    [DataField("receiveStationGoal")]
-    public bool ReceiveStationGoal { get; set; } = false;
-    // Corvax-StationGoal-End
+    [DataField]
+    public bool ReceiveStationGoal { get; set; }
 
     /// <summary>
-    /// Sound to play when fax has been emagged
+    /// Should that fax receive station goals from other stations
     /// </summary>
     [DataField]
-    public SoundSpecifier EmagSound = new SoundCollectionSpecifier("sparks");
+    public bool ReceiveAllStationGoals { get; set; }
+    // Corvax-StationGoal-End
 
     /// <summary>
     /// Sound to play when fax printing new message
@@ -136,6 +135,20 @@ public sealed partial class FaxMachineComponent : Component
     /// </summary>
     [ViewVariables]
     public float PrintingTime = 2.3f;
+
+    /// <summary>
+    ///     The prototype ID to use for faxed or copied entities if we can't get one from
+    ///     the paper entity for whatever reason.
+    /// </summary>
+    [DataField]
+    public EntProtoId PrintPaperId = "Paper";
+
+    /// <summary>
+    ///     The prototype ID to use for faxed or copied entities if we can't get one from
+    ///     the paper entity for whatever reason of the Office type.
+    /// </summary>
+    [DataField]
+    public EntProtoId PrintOfficePaperId = "PaperOffice";
 }
 
 [DataDefinition]
@@ -159,11 +172,14 @@ public sealed partial class FaxPrintout
     [DataField("stampedBy")]
     public List<StampDisplayInfo> StampedBy { get; private set; } = new();
 
+    [DataField]
+    public bool Locked { get; private set; }
+
     private FaxPrintout()
     {
     }
 
-    public FaxPrintout(string content, string name, string? label = null, string? prototypeId = null, string? stampState = null, List<StampDisplayInfo>? stampedBy = null)
+    public FaxPrintout(string content, string name, string? label = null, string? prototypeId = null, string? stampState = null, List<StampDisplayInfo>? stampedBy = null, bool locked = false)
     {
         Content = content;
         Name = name;
@@ -171,5 +187,6 @@ public sealed partial class FaxPrintout
         PrototypeId = prototypeId ?? "";
         StampState = stampState;
         StampedBy = stampedBy ?? new List<StampDisplayInfo>();
+        Locked = locked;
     }
 }

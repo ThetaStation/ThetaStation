@@ -3,6 +3,7 @@ using System.Numerics;
 using Content.Server.Theta.MapGen.Distributions;
 using Content.Server.Theta.MapGen.Prototypes;
 using Robust.Server.GameObjects;
+using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
@@ -44,7 +45,7 @@ public sealed class MapGenSystem : EntitySystem
 
         Area = preset.Area.Translated(shift ?? Vector2i.Zero);
         TargetMap = map;
-        MapMan.SetMapPaused(TargetMap, true);
+        MapSys.SetPaused(TargetMap, true);
         SetupGrid(Area);
 
         foreach (string layer in preset.Layers)
@@ -57,7 +58,7 @@ public sealed class MapGenSystem : EntitySystem
             proc.Process(this, TargetMap, mapUid.Value, true);
         }
 
-        MapMan.SetMapPaused(TargetMap, false);
+        MapSys.SetPaused(TargetMap, false);
         Area = Box2i.Empty;
         TargetMap = MapId.Nullspace;
         Log.Info($"Spawned {SpawnedGrids.Count} grids");
@@ -93,7 +94,7 @@ public sealed class MapGenSystem : EntitySystem
                 distribution = new UniformDistribution();
             }
 
-            var spawnPos = GenerateSpawnPosition((Box2i) aabb, distribution, 50);
+            var spawnPos = GenerateSpawnPosition((Box2i)aabb, distribution, 50);
             if (spawnPos == null)
             {
                 Log.Warning("Failed to find spawn position, deleting grids");

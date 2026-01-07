@@ -6,10 +6,14 @@
   requirements:
   - !type:DepartmentTimeRequirement
     department: Command
-    time: 72000
+    time: 20h
   - !type:DepartmentTimeRequirement
     department: Security
-    time: 36000
+    time: 10h
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Muted
   startingGear: IAAGear
   icon: "JobIconIAA"
   supervisors: job-supervisors-centcom
@@ -32,9 +36,18 @@
     id: IAAPDA
     eyes: ClothingEyesGlassesSunglasses
     ears: ClothingHeadsetIAA
-    pocket2: HyperLinkBookCorporateLaw
+    pocket2: BookSpaceLaw
   inhand:
     - BriefcaseIAAFilled
-  storage:
-    back:
-    - BoxSurvival
+
+- type: chameleonOutfit
+  id: IAAChameleonOutfit
+  job: IAA
+  hasMindShield: true
+  equipment:
+    head: ClothingHeadHatBowlerHat
+    eyes: ClothingEyesGlassesSunglasses
+    outerClothing: ClothingUniformJumpsuitLawyerBlack
+    neck: ClothingNeckScarfStripedBlue
+    gloves: ClothingHandsGlovesColorWhite
+    mask: ClothingMaskBreath

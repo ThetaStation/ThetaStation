@@ -1,7 +1,7 @@
 ent-BaseShutter = ставни
     .desc = Страшно подумать, что могут скрывать эти ставни.
 ent-ShuttersNormal = { ent-BaseShutter }
-    .desc = { ent-BaseShutter.desc }
+    .desc = { ent-BaseDeltaPressureGlass.desc }
 ent-ShuttersNormalOpen = { ent-ShuttersNormal }
     .suffix = Открытые
     .desc = { ent-ShuttersNormal.desc }
@@ -11,7 +11,7 @@ ent-ShuttersRadiationOpen = { ent-ShuttersRadiation }
     .suffix = Открытые
     .desc = { ent-ShuttersRadiation.desc }
 ent-ShuttersWindow = оконные ставни
-    .desc = Лучшее (TM) место чтобы поглядеть, как взрываются твои друзья!
+    .desc = Лучшее (TM) место, чтобы поглядеть, как взрываются твои друзья!
 ent-ShuttersWindowOpen = { ent-ShuttersWindow }
     .suffix = Открытые
     .desc = { ent-ShuttersWindow.desc }

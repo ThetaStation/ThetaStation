@@ -1,7 +1,4 @@
-using System.Linq;
 using Content.Corvax.Interfaces.Server;
-using Content.Server.Database;
-using Content.Server.Discord;
 using Content.Shared.Administration;
 using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
@@ -11,7 +8,6 @@ using Content.Shared.Preferences;
 using JetBrains.Annotations;
 using Robust.Server.Player;
 using Robust.Shared.Audio;
-using Robust.Shared.Audio.Systems;
 using Robust.Shared.Enums;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
@@ -23,8 +19,6 @@ namespace Content.Server.GameTicking
     public sealed partial class GameTicker
     {
         [Dependency] private readonly IPlayerManager _playerManager = default!;
-        [Dependency] private readonly IServerDbManager _dbManager = default!;
-        [Dependency] private readonly SharedAudioSystem _audioSystem = default!;
 
         private void InitializePlayer()
         {
@@ -39,11 +33,8 @@ namespace Content.Server.GameTicking
             {
                 if (args.NewStatus != SessionStatus.Disconnected)
                 {
-                    mind.Session = session;
-                    _pvsOverride.AddSessionOverride(GetNetEntity(mindId.Value), session);
+                    _pvsOverride.AddSessionOverride(mindId.Value, session);
                 }
-
-                DebugTools.Assert(mind.Session == session);
             }
 
             DebugTools.Assert(session.GetMind() == mindId);
@@ -66,12 +57,10 @@ namespace Content.Server.GameTicking
                     // timer time must be > tick length
                     // Corvax-Queue-Start
                     if (!IoCManager.Instance!.TryResolveType<IServerJoinQueueManager>(out _))
-                        {
-                            Timer.Spawn(0, () => _playerManager.JoinGame(args.Session));
-                        }
-                        // Corvax-Queue-End
+                        Timer.Spawn(0, () => _playerManager.JoinGame(args.Session));
+                    // Corvax-Queue-End
 
-                        var record = await _dbManager.GetPlayerRecordByUserId(args.Session.UserId);
+                    var record = await _db.GetPlayerRecordByUserId(args.Session.UserId);
                     var firstConnection = record != null &&
                                           Math.Abs((record.FirstSeenTime - record.LastSeenTime).TotalMinutes) < 1;
 
@@ -81,14 +70,12 @@ namespace Content.Server.GameTicking
 
                     RaiseNetworkEvent(GetConnectionStatusMsg(), session.Channel);
 
-                    if (firstConnection && _configurationManager.GetCVar(CCVars.AdminNewPlayerJoinSound))
-                        {
-                            _audioSystem.PlayGlobal(new SoundPathSpecifier("/Audio/Effects/newplayerping.ogg"),
+                    if (firstConnection && _cfg.GetCVar(CCVars.AdminNewPlayerJoinSound))
+                        _audio.PlayGlobal(new SoundPathSpecifier("/Audio/Effects/newplayerping.ogg"),
                             Filter.Empty().AddPlayers(_adminManager.ActiveAdmins), false,
                             audioParams: new AudioParams { Volume = -5f });
-                        }
 
-                        if (LobbyEnabled && _roundStartCountdownHasNotStartedYetDueToNoPlayers)
+                    if (LobbyEnabled && _roundStartCountdownHasNotStartedYetDueToNoPlayers)
                     {
                         _roundStartCountdownHasNotStartedYetDueToNoPlayers = false;
                         _roundStartTime = _gameTiming.CurTime + LobbyDuration;
@@ -104,15 +91,11 @@ namespace Content.Server.GameTicking
                     if (mind == null)
                     {
                         if (LobbyEnabled)
-                            {
-                                PlayerJoinLobby(session);
-                            }
-                            else
-                            {
-                                SpawnWaitDb();
-                            }
+                            PlayerJoinLobby(session);
+                        else
+                            SpawnWaitDb();
 
-                            break;
+                        break;
                     }
 
                     if (mind.CurrentEntity == null || Deleted(mind.CurrentEntity))
@@ -144,18 +127,14 @@ namespace Content.Server.GameTicking
                 case SessionStatus.Disconnected:
                 {
                     _chatManager.SendAdminAnnouncement(Loc.GetString("player-leave-message", ("name", args.Session.Name)));
-                    if (mind != null)
+                    if (mindId != null)
                     {
-                        _pvsOverride.ClearOverride(GetNetEntity(mindId!.Value));
-                        mind.Session = null;
+                        _pvsOverride.RemoveSessionOverride(mindId.Value, session);
                     }
 
                     if (_playerGameStatuses.ContainsKey(args.Session.UserId)) // Corvax-Queue: Delete data only if player was in game
-                        {
-                            _userDb.ClientDisconnected(session);
-                        }
-
-                        break;
+                        _userDb.ClientDisconnected(session);
+                    break;
                 }
             }
             //When the status of a player changes, update the server info text
@@ -210,9 +189,7 @@ namespace Content.Server.GameTicking
         public void PlayerJoinGame(ICommonSession session, bool silent = false)
         {
             if (!silent)
-            {
                 _chatManager.DispatchServerMessage(session, Loc.GetString("game-ticker-player-join-game-message"));
-            }
 
             _playerGameStatuses[session.UserId] = PlayerGameStatus.JoinedGame;
             _db.AddRoundPlayers(RoundId, session.UserId);
@@ -225,8 +202,6 @@ namespace Content.Server.GameTicking
                     _chatManager.SendAdminAnnouncementMessage(session, Loc.GetString("starting-rule-selected-preset", ("preset", rulesMessage)));
                 }
             }
-
-            CheckPopCounter();
 
             RaiseNetworkEvent(new TickerJoinGameEvent(), session.Channel);
         }
@@ -241,39 +216,6 @@ namespace Content.Server.GameTicking
             RaiseNetworkEvent(GetStatusMsg(session), client);
             RaiseNetworkEvent(GetInfoMsg(), client);
             RaiseLocalEvent(new PlayerJoinedLobbyEvent(session));
-        }
-
-        private async void CheckPopCounter()
-        {
-            if (_webhookIdentifier == null)
-            {
-                return;
-            }
-
-            int count = _playerManager.PlayerCount;
-            if (count % PopCounterStep == 0 && count > PopCounterMax)
-            {
-                PopCounterMax = count;
-                string msg = PopCounterMessage.Replace("{$count}", count.ToString());
-
-                var payload = new WebhookPayload
-                {
-                    Embeds = new List<WebhookEmbed>
-                    {
-                        new()
-                        {
-                            Description = msg,
-                            Color = 0x00FF00,
-                            Footer = new WebhookEmbedFooter
-                            {
-                                Text = $"**{_cfg.GetCVar(CCVars.HubServerUrl)}**"
-                            },
-                        },
-                    },
-                };
-
-                await _discord.CreateMessage(_webhookIdentifier.Value, payload);
-            }
         }
 
         private void ReqWindowAttentionAll()

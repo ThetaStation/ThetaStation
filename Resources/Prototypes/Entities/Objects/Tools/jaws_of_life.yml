@@ -52,7 +52,7 @@
 
 - type: entity
   name: syndicate jaws of life
-  parent: JawsOfLife
+  parent: [JawsOfLife, BaseSyndicateContraband]
   id: SyndicateJawsOfLife
   description: Useful for entering the station or its departments.
   components:
@@ -67,6 +67,7 @@
       - state: syn_inhand-right
     size: Normal
   - type: Prying
+    force: true
     speedModifier: 3.0
   - type: MultipleTool
     entries:
@@ -86,3 +87,5 @@
     damage:
       types:
         Blunt: 14
+  - type: StaticPrice
+    price: 1000

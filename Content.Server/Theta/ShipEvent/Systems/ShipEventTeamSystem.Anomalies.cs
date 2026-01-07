@@ -1,17 +1,14 @@
 using System.Numerics;
 using Content.Shared.Physics;
 using Content.Server.Theta.ShipEvent.Components;
-using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Collision.Shapes;
-using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Dynamics;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Physics;
-using System.Linq;
-using Content.Shared.Random.Helpers;
 using Content.Shared.Theta.ShipEvent.Components;
+using Robust.Shared.Map.Components;
 
 namespace Content.Server.Theta.ShipEvent.Systems;
 
@@ -95,8 +92,15 @@ public sealed partial class ShipEventTeamSystem
                 if (tracker.TrackedBy != uid)
                     continue;
 
-                var trackedForm = Transform(trackedUid);
-                SpawnAtPosition(anomaly.ToSpawn, Transform(Pick(trackedForm.ChildEntities)).Coordinates);
+                if (TryComp<MapGridComponent>(trackedUid, out var grid))
+                {
+                    SpawnAtPosition(anomaly.ToSpawn, new(trackedUid,
+                    _random.NextVector2Box(
+                        grid.LocalAABB.Left,
+                        grid.LocalAABB.Bottom,
+                        grid.LocalAABB.Right,
+                        grid.LocalAABB.Top)));
+                }
             }
         }
     }

@@ -25,7 +25,14 @@ public sealed partial class CannonComponent : Component
 
     /// <summary>
     /// Recoil impulse, applied to parent grid after each shot
+    /// todo: might be better to set this in the gun component
     /// </summary>
     [DataField("recoil")]
     public float Recoil = 0;
+
+    /// <summary>
+    /// For shotgun-like cannons
+    /// todo: this should be updated based on the current ammo type
+    /// </summary>
+    public float Spread = 0;
 }

@@ -111,16 +111,16 @@ public sealed class CannonSystem : SharedCannonSystem
 
     public void RefreshFiringRanges(EntityUid uid, CannonComponent cannon)
     {
-        cannon.ObstructedRanges = CalculateFiringRanges(uid, GetCannonGun(uid)!);
+        cannon.ObstructedRanges = CalculateFiringRanges(uid, cannon, GetCannonGun(uid)!);
         Dirty(uid, cannon);
     }
 
-    private List<(Angle, Angle)> CalculateFiringRanges(EntityUid uid, GunComponent gun)
+    private List<(Angle, Angle)> CalculateFiringRanges(EntityUid uid, CannonComponent cannon, GunComponent gun)
     {
         List<(Angle, Angle)> ranges = new();
         TransformComponent gridForm = EntityManager.GetComponent<TransformComponent>(Transform(uid).ParentUid);
 
-        foreach (EntityUid childUid in gridForm.ChildEntities)
+        while (gridForm.ChildEnumerator.MoveNext(out EntityUid childUid))
         {
             //checking if obstacle is not too far/close to the cannon
             TransformComponent form = Transform(childUid);
@@ -158,19 +158,7 @@ public sealed class CannonSystem : SharedCannonSystem
             ranges.Add((start2, width2));
         }
 
-        Angle maxSpread = Angle.Zero;
-
-        //adding ammo spread (for shotguns)
-        CannonComponent cannon = Comp<CannonComponent>(uid);
-        foreach (string ammoProtId in cannon.AmmoPrototypes)
-        {
-            EntityPrototype ammoProt = _protMan.Index<EntityPrototype>(ammoProtId);
-            if (ammoProt.Components.TryGetValue("CartridgeAmmo", out var compEntry)
-                && compEntry.Component is CartridgeAmmoComponent cartridge)
-            {
-                maxSpread = cartridge.Spread > maxSpread ? cartridge.Spread : maxSpread;
-            }
-        }
+        Angle maxSpread = cannon.Spread;
 
         //and spread from the gun itself
         maxSpread += gun.MaxAngle + Angle.FromDegrees(10);

@@ -1,7 +1,7 @@
 ent-BaseThruster = thruster
     .desc = A thruster that allows a shuttle to move.
 ent-Thruster = thruster
-  .desc = { ent-BaseThruster.desc }
+    .desc = { ent-BaseThruster.desc }
 ent-ThrusterUnanchored = { ent-Thruster }
     .suffix = Unanchored
     .desc = { ent-Thruster.desc }
@@ -16,5 +16,7 @@ ent-GyroscopeUnanchored = { ent-Gyroscope }
 ent-DebugGyroscope = { ent-BaseThruster }
     .suffix = DEBUG
     .desc = { ent-BaseThruster.desc }
+ent-RustedThruster = rusted thruster
+    .desc = An unrepairable thruster, broken down from wear and tear. Only useful for scrapping.
 ent-SkipjackGyroscope = { ent-Gyroscope }
     .desc = { ent-Gyroscope }

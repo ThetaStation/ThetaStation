@@ -104,10 +104,10 @@ public sealed class ShipEventRule : StationEventSystem<ShipEventRuleComponent>
         iffSplitComp.Replicate = true;
         iffSplitComp.DeleteInheritedGridsDelay = 120;
 
-        MappingDataNode mapping = new MappingDataNode(new Dictionary<DataNode, DataNode>
+        MappingDataNode mapping = new MappingDataNode(new Dictionary<string, DataNode>
         {
-            {new ValueDataNode("flags"), new ValueDataNode(IFFFlags.HideLabel.ToString())},
-            {new ValueDataNode("replicate"), new ValueDataNode("true")}
+            {"flags", new ValueDataNode(IFFFlags.HideLabel.ToString())},
+            {"replicate", new ValueDataNode("true")}
         });
 
         return new EntityPrototype.ComponentRegistryEntry(iffSplitComp, mapping);

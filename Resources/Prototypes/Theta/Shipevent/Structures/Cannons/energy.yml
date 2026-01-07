@@ -45,7 +45,7 @@
         input:
           !type:CableDeviceNode
           nodeGroupID: MVPower
-    - type: ProjectileBatteryAmmoProvider
+    - type: BatteryAmmoProvider
       proto: IonBolt
       fireCost: 10000
     - type: Gun
@@ -112,7 +112,7 @@
         input:
           !type:CableDeviceNode
           nodeGroupID: MVPower
-    - type: ProjectileBatteryAmmoProvider
+    - type: BatteryAmmoProvider
       proto: PlasmaCannonShot
       fireCost: 1000
     - type: Gun

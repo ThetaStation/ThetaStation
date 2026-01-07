@@ -5,23 +5,24 @@ using Robust.Client.Graphics;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
-using Robust.Shared.Utility;
 
 namespace Content.Client.Theta.ModularRadar.Modules;
 
 public sealed class RadarDocks : RadarModule
 {
+    private readonly SharedTransformSystem _formSys = default!;
     private Dictionary<NetEntity, List<DockingPortState>> _docks = new();
 
     public bool ShowDocks { get; set; } = true;
 
     public RadarDocks(ModularRadarControl parentRadar) : base(parentRadar)
     {
+        _formSys = EntManager.System<SharedTransformSystem>();
     }
 
     public override void UpdateState(BoundUserInterfaceState state)
     {
-        if(state is not RadarConsoleBoundInterfaceState radarState)
+        if (state is not RadarConsoleBoundInterfaceState radarState)
             return;
 
         _docks = radarState.DockState.Docks;
@@ -34,7 +35,7 @@ public sealed class RadarDocks : RadarModule
         var bodyQuery = EntManager.GetEntityQuery<PhysicsComponent>();
 
         var ourGridId = ParentCoordinates!.Value.GetGridUid(EntManager);
-        if(ourGridId == null)
+        if (ourGridId == null)
             return;
 
         if (EntManager.HasComponent<MapGridComponent>(ourGridId) &&
@@ -43,10 +44,9 @@ public sealed class RadarDocks : RadarModule
             DrawDocks(handle, ourGridId.Value, parameters);
         }
 
-        var mapPosition = ParentCoordinates.Value.ToMap(EntManager);
+        var mapPosition = _formSys.ToMapCoordinates(ParentCoordinates.Value);
 
-        foreach (var grid in MapManager.FindGridsIntersecting(mapPosition.MapId,
-                     new Box2(mapPosition.Position - MaxRadarRangeVector, mapPosition.Position + MaxRadarRangeVector)))
+        foreach (var grid in MapManager.FindGridsIntersecting(mapPosition.MapId, new Box2(mapPosition.Position - MaxRadarRangeVector, mapPosition.Position + MaxRadarRangeVector)))
         {
             if (grid.Owner == ourGridId || !fixturesQuery.HasComponent(grid.Owner))
                 continue;

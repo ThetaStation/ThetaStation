@@ -46,7 +46,7 @@ public sealed partial class ShipEventTeamSystem
     {
         team.Points = Math.Max(0, team.Points - OutOfBoundsPenalty);
         var form = Transform(team.ShipMainGrid!.Value);
-        _expSys.QueueExplosion(Pick(form.ChildEntities), ExplosionSystem.DefaultExplosionPrototypeId, 5, 0.5f, 1);
+        _expSys.QueueExplosion(Pick(GetTeamLivingMembersUids(team)), ExplosionSystem.DefaultExplosionPrototypeId, 5, 0.5f, 1);
     }
 
     public void CompressBounds()

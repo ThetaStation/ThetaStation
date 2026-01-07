@@ -9,8 +9,9 @@
         - meaty
         - parents
         - hope
-    - type: Food
-      trash: FoodPlate
+    - type: Edible
+      trash:
+        - FoodPlate
     - type: Sprite
       sprite: Corvax/Objects/Consumable/Food/plate.rsi
       layers:

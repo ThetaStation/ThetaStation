@@ -5,7 +5,7 @@ using Robust.Client.Graphics;
 using Robust.Shared.Enums;
 using Content.Shared.Theta.ShipEvent.CircularShield;
 using Robust.Shared.Prototypes;
-using Vector3 = Robust.Shared.Maths.Vector3;
+
 
 namespace Content.Client.Theta.ShipEvent.Systems;
 

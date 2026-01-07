@@ -5,9 +5,9 @@ namespace Content.Shared.Construction.Steps
 {
     public abstract partial class ArbitraryInsertConstructionGraphStep : EntityInsertConstructionGraphStep
     {
-        [DataField("name")] public string Name { get; private set; } = string.Empty;
+        [DataField] public LocId Name { get; private set; } = string.Empty;
 
-        [DataField("icon")] public SpriteSpecifier? Icon { get; private set; }
+        [DataField] public SpriteSpecifier? Icon { get; private set; }
 
         [DataField("consume")] public bool Consume = true;
 
@@ -16,15 +16,17 @@ namespace Content.Shared.Construction.Steps
             if (string.IsNullOrEmpty(Name))
                 return;
 
-            examinedEvent.PushMarkup(Loc.GetString("construction-insert-arbitrary-entity", ("stepName", Name)));
+            var stepName = Loc.GetString(Name);
+            examinedEvent.PushMarkup(Loc.GetString("construction-insert-arbitrary-entity", ("stepName", stepName)));
         }
 
         public override ConstructionGuideEntry GenerateGuideEntry()
         {
+            var stepName = Loc.GetString(Name);
             return new ConstructionGuideEntry
             {
                 Localization = "construction-presenter-arbitrary-step",
-                Arguments = new (string, object)[]{("name", Name)},
+                Arguments = new (string, object)[]{("name", stepName)},
                 Icon = Icon,
             };
         }

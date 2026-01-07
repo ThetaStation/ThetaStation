@@ -20,6 +20,15 @@ zzzz-object-pronoun =
         [epicene] их
        *[neuter] его
     }
+# Used internally by the DAT-OBJ() function.
+# Not used in en-US. Created for supporting other languages.
+zzzz-dat-object =
+    { GENDER($ent) ->
+        [male] ему
+        [female] ей
+        [epicene] им
+       *[neuter] ему
+    }
 # Used internally by the POSS-PRONOUN() function.
 zzzz-possessive-pronoun =
     { GENDER($ent) ->
@@ -53,8 +62,8 @@ zzzz-conjugate-be =
 # Used internally by the CONJUGATE-HAVE() function.
 zzzz-conjugate-have =
     { GENDER($ent) ->
-        [epicene] have
-       *[other] has
+        [epicene] имеют
+       *[other] имеет
     }
 # Used internally by the CONJUGATE-BASIC() function.
 zzzz-conjugate-basic =

@@ -1,5 +1,6 @@
 using System.Threading;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Mobs.Components;
 using Robust.Shared.Timing;
 using Timer = Robust.Shared.Timing.Timer;

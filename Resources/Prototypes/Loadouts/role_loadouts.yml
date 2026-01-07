@@ -10,12 +10,14 @@
   - CaptainOuterClothing
   - Survival
   - Trinkets
-
+  - CaptainJobTrinkets
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobHeadOfPersonnel
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
   - HoPHead
   - HoPNeck
   - HoPJumpsuit
@@ -24,14 +26,29 @@
   - Glasses
   - Survival
   - Trinkets
+  - HoPJobTrinkets
+  - GroupSpeciesBreathTool
+
+# Silicons
+- type: roleLoadout
+  id: JobBorg
+  nameDataset: NamesBorg
+  canCustomizeName: true
+
+- type: roleLoadout
+  id: JobStationAi
+  nameDataset: NamesAI
+  canCustomizeName: true
 
 # Civilian
 - type: roleLoadout
   id: JobPassenger
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
   - PassengerJumpsuit
   - CommonBackpack
+  - PassengerNeck
   - PassengerFace
   - PassengerGloves
   - PassengerOuterClothing
@@ -39,11 +56,14 @@
   - Glasses
   - Survival
   - Trinkets
+  - PassengerJobTrinkets
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobBartender
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
   - BartenderHead
   - BartenderJumpsuit
   - CommonBackpack
@@ -51,21 +71,27 @@
   - Glasses
   - Survival
   - Trinkets
+  - BartenderJobTrinkets
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobServiceWorker
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
   - BartenderJumpsuit
   - CommonBackpack
   - Glasses
   - Survival
   - Trinkets
+  - ServiceWorkerJobTrinkets
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobChef
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
   - ChefHead
   - ChefMask
   - ChefJumpsuit
@@ -74,46 +100,59 @@
   - Glasses
   - Survival
   - Trinkets
+  - ChefJobTrinkets
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobLibrarian
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
   - LibrarianJumpsuit
   - CommonBackpack
   - Glasses
   - Survival
   - Trinkets
+  - LibrarianJobTrinkets
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobLawyer
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
   - LawyerNeck
   - LawyerJumpsuit
   - CommonBackpack
   - Glasses
   - Survival
   - Trinkets
+  - LawyerJobTrinkets
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobChaplain
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
   - ChaplainHead
   - ChaplainMask
   - ChaplainNeck
   - ChaplainJumpsuit
   - CommonBackpack
   - ChaplainOuterClothing
+  - ChaplainBible
   - Glasses
   - Survival
   - Trinkets
+  - ChaplainJobTrinkets
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobJanitor
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
   - JanitorHead
   - JanitorJumpsuit
   - JanitorGloves
@@ -122,12 +161,14 @@
   - Glasses
   - Survival
   - Trinkets
-  - JanitorPlunger
+  - JanitorJobTrinkets
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobBotanist
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
   - BotanistHead
   - BotanistJumpsuit
   - BotanistBackpack
@@ -135,11 +176,15 @@
   - Glasses
   - Survival
   - Trinkets
+  - BotanistJobTrinkets
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobClown
+  canCustomizeName: true
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
   - ClownHead
   - ClownJumpsuit
   - ClownBackpack
@@ -148,37 +193,47 @@
   - Glasses
   - SurvivalClown
   - Trinkets
+  - ClownJobTrinkets
 
 - type: roleLoadout
   id: JobMime
+  canCustomizeName: true
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
   - MimeHead
   - MimeMask
   - MimeJumpsuit
   - MimeBackpack
   - MimeOuterClothing
+  - MimeBelt
   - Glasses
-  - Survival
+  - SurvivalMime
   - Trinkets
+  - MimeJobTrinkets
 
 - type: roleLoadout
   id: JobMusician
+  canCustomizeName: true
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
   - MusicianJumpsuit
   - CommonBackpack
   - MusicianOuterClothing
   - Glasses
   - Survival
   - Trinkets
+  - MusicianJobTrinkets
   - Instruments
+  - GroupSpeciesBreathTool
 
 # Cargo
 - type: roleLoadout
   id: JobQuartermaster
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
   - QuartermasterHead
   - QuartermasterNeck
   - QuartermasterJumpsuit
@@ -188,36 +243,46 @@
   - Glasses
   - Survival
   - Trinkets
+  - QuartermasterJobTrinkets
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobCargoTechnician
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
   - CargoTechnicianHead
   - CargoTechnicianJumpsuit
   - CargoTechnicianBackpack
   - CargoTechnicianOuterClothing
   - CargoTechnicianShoes
+  - CargoTechnicianID
   - Glasses
   - Survival
   - Trinkets
+  - CargoTechnicianJobTrinkets
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobSalvageSpecialist
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
   - SalvageSpecialistBackpack
   - SalvageSpecialistOuterClothing
   - SalvageSpecialistShoes
   - Glasses
   - Survival
   - Trinkets
+  - SalvageSpecialistJobTrinkets
+  - GroupSpeciesBreathTool
 
 # Engineering
 - type: roleLoadout
   id: JobChiefEngineer
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
   - ChiefEngineerHead
   - ChiefEngineerJumpsuit
   - ChiefEngineerBackpack # Corvax-Loadouts
@@ -226,20 +291,26 @@
   - ChiefEngineerShoes
   - SurvivalExtended
   - Trinkets
+  - ChiefEngineerJobTrinkets
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobTechnicalAssistant
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
   - TechnicalAssistantJumpsuit
   - StationEngineerBackpack
   - SurvivalExtended
   - Trinkets
+  - TechnicalAssistantJobTrinkets
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobStationEngineer
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
   - StationEngineerHead
   - StationEngineerJumpsuit
   - StationEngineerBackpack
@@ -248,23 +319,29 @@
   - StationEngineerID
   - SurvivalExtended
   - Trinkets
+  - StationEngineerJobTrinkets
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobAtmosphericTechnician
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
   - AtmosphericTechnicianJumpsuit
   - AtmosphericTechnicianBackpack
   - AtmosphericTechnicianOuterClothing
   - AtmosphericTechnicianShoes
   - SurvivalExtended
   - Trinkets
+  - AtmosphericTechnicianJobTrinkets
+  - GroupSpeciesBreathTool
 
 # Science
 - type: roleLoadout
   id: JobResearchDirector
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
   - ResearchDirectorHead
   - ResearchDirectorNeck
   - ResearchDirectorJumpsuit
@@ -275,11 +352,14 @@
   - Glasses
   - Survival
   - Trinkets
+  - ResearchDirectorJobTrinkets
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobScientist
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
   - ScientistHead
   - ScientistNeck
   - ScientistJumpsuit
@@ -291,16 +371,21 @@
   - Glasses
   - Survival
   - Trinkets
+  - ScientistJobTrinkets
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobResearchAssistant
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
   - ResearchAssistantJumpsuit
   - ScientistBackpack
   - Glasses
   - Survival
   - Trinkets
+  - ResearchAssistantJobTrinkets
+  - GroupSpeciesBreathTool
 
 # Security
 - type: roleLoadout
@@ -316,6 +401,8 @@
   - SecurityShoes
   - SurvivalSecurity
   - Trinkets
+  - HeadofSecurityJobTrinkets
+  - GroupSpeciesBreathToolSecurity
 
 - type: roleLoadout
   id: JobWarden
@@ -329,6 +416,8 @@
   - SecurityShoes
   - SurvivalSecurity
   - Trinkets
+  - WardenJobTrinkets
+  - GroupSpeciesBreathToolSecurity
 
 - type: roleLoadout
   id: JobSecurityOfficer
@@ -343,6 +432,8 @@
   - SecurityBelt
   - SurvivalSecurity
   - Trinkets
+  - SecurityJobTrinkets
+  - GroupSpeciesBreathToolSecurity
 
 - type: roleLoadout
   id: JobDetective
@@ -356,6 +447,8 @@
   - SecurityShoes
   - SurvivalSecurity
   - Trinkets
+  - DetectiveJobTrinkets
+  - GroupSpeciesBreathToolSecurity
 
 - type: roleLoadout
   id: JobSecurityCadet
@@ -365,12 +458,15 @@
   - SecurityBackpack
   - SurvivalSecurity
   - Trinkets
+  - SecurityCadetJobTrinkets
+  - GroupSpeciesBreathToolSecurity
 
 # Medical
 - type: roleLoadout
   id: JobChiefMedicalOfficer
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
   - ChiefMedicalOfficerHead
   - MedicalMask
   - ChiefMedicalOfficerJumpsuit
@@ -379,14 +475,17 @@
   - ChiefMedicalOfficerOuterClothing
   - ChiefMedicalOfficerNeck
   - ChiefMedicalOfficerShoes
-  - Glasses
+  - MedicalEyewear
   - SurvivalMedical
   - Trinkets
+  - ChiefMedicalOfficerJobTrinkets
+  - GroupSpeciesBreathToolMedical
 
 - type: roleLoadout
   id: JobMedicalDoctor
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
   - MedicalDoctorHead
   - MedicalMask
   - MedicalDoctorJumpsuit
@@ -395,24 +494,30 @@
   - MedicalDoctorOuterClothing
   - MedicalShoes
   - MedicalDoctorPDA
-  - Glasses
+  - MedicalEyewear
   - SurvivalMedical
   - Trinkets
+  - MedicalDoctorJobTrinkets
+  - GroupSpeciesBreathToolMedical
 
 - type: roleLoadout
   id: JobMedicalIntern
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
   - MedicalInternJumpsuit
   - MedicalBackpack
-  - Glasses
+  - MedicalEyewear
   - SurvivalMedical
   - Trinkets
+  - MedicalInternJobTrinkets
+  - GroupSpeciesBreathToolMedical
 
 - type: roleLoadout
   id: JobChemist
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
   - MedicalMask
   - ChemistJumpsuit
   - MedicalGloves
@@ -421,11 +526,14 @@
   - MedicalShoes
   - SurvivalMedical
   - Trinkets
+  - ChemistJobTrinkets
+  - GroupSpeciesBreathToolMedical
 
 - type: roleLoadout
   id: JobParamedic
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
   - ParamedicHead
   - MedicalMask
   - ParamedicJumpsuit
@@ -433,78 +541,112 @@
   - MedicalBackpack
   - ParamedicOuterClothing
   - ParamedicShoes
-  - Glasses
+  - MedicalEyewear
   - SurvivalMedical
   - Trinkets
+  - ParamedicJobTrinkets
+  - GroupSpeciesBreathToolMedical
 
 # Wildcards
-- type: roleLoadout
-  id: JobZookeeper
-  groups:
-  - Inventory # Corvax-Loadouts
-  - CommonBackpack
-  - Glasses
-  - Survival
-  - Trinkets
-
 - type: roleLoadout
   id: JobReporter
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
   - ReporterJumpsuit
   - CommonBackpack
   - Glasses
   - Survival
   - Trinkets
+  - ReporterJobTrinkets
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobPsychologist
   groups:
   - Inventory # Corvax-Loadouts
+  - GroupTankHarness
+  - PsychologistJumpsuit
   - MedicalBackpack
   - Glasses
   - Survival
   - Trinkets
+  - PsychologistJobTrinkets
+  - GroupSpeciesBreathTool
 
+# These loadouts are used for non-crew spawns, like off-station antags and event mobs
+# They will be used without player configuration, thus they will only ever apply what is forced by MinLimit
+
+# gives vox a harness and breathing mask
+# nitrogen tank not included
 - type: roleLoadout
-  id: JobBoxer
+  id: RoleSurvivalVoxSupport
   groups:
-  - Inventory # Corvax-Loadouts
-  - BoxerJumpsuit
-  - BoxerGloves
-  - CommonBackpack
-  - Glasses
-  - Survival
-  - Trinkets
+  - GroupSpeciesBreathTool
+  - GroupTankHarness
 
-# These loadouts will be used without player configuration, thus they must be designed to work without manual selection
+# gives vox a nitrogen breathing tank
+# other species get nothing
+- type: roleLoadout
+  id: RoleSurvivalVoxTank
+  groups:
+  - GroupEVATankVox
 
 - type: roleLoadout
-  id: LoadoutSurvivalStandard
+  id: RoleSurvivalStandard
   groups:
   - Survival
+  - GroupSpeciesBreathTool
+  - GroupTankHarness
 
 - type: roleLoadout
-  id: LoadoutSurvivalClown
+  id: RoleSurvivalClown
   groups:
   - SurvivalClown
+  - GroupTankHarness
 
 - type: roleLoadout
-  id: LoadoutSurvivalExtended
+  id: RoleSurvivalExtended
   groups:
   - SurvivalExtended
+  - GroupSpeciesBreathTool
+  - GroupTankHarness
 
 - type: roleLoadout
-  id: LoadoutSurvivalMedical
+  id: RoleSurvivalMedical
   groups:
   - SurvivalMedical
+  - GroupSpeciesBreathToolMedical
+  - GroupTankHarness
 
 - type: roleLoadout
-  id: LoadoutSurvivalSecurity
+  id: RoleSurvivalSecurity
   groups:
   - SurvivalSecurity
+  - GroupSpeciesBreathToolSecurity
+  - GroupTankHarness
 
 - type: roleLoadout
-  id: LoadoutSurvivalSyndicate
+  id: RoleSurvivalSyndicate
   groups:
   - SurvivalSyndicate
+  - GroupSpeciesBreathTool
+  - GroupTankHarness
+
+- type: roleLoadout
+  id: RoleSurvivalMilitaryDouble
+  groups:
+  - SurvivalMilitaryDouble
+
+- type: roleLoadout
+  id: RoleSurvivalNukie
+  groups:
+  - SurvivalSyndicate
+  - GroupSpeciesBreathTool
+  - GroupPocketTankDouble
+
+- type: roleLoadout
+  id: RoleSurvivalEVA
+  groups:
+  - GroupEVATank
+  - SurvivalExtended

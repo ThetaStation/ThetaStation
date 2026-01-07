@@ -1,6 +1,6 @@
 ent-BaseArachnidOrgan = { ent-BaseItem }
     .desc = { ent-BaseItem.desc }
-ent-OrganArachnidStomach = желудок
+ent-OrganArachnidStomach = { ent-OrganAnimalStomach }
     .desc = Мерзость. Не перевариваю его.
 ent-OrganArachnidLungs = лёгкие
     .desc = Фильтрует кислород из атмосферы... только более жадно.
@@ -11,6 +11,6 @@ ent-OrganArachnidLiver = печень
 ent-OrganArachnidKidneys = почки
     .desc = Выводят токсины из кровеносной системы.
 ent-OrganArachnidEyes = глаза
-    .desc = Два - это уже слишком много.
+    .desc = Два — это уже слишком много.
 ent-OrganArachnidTongue = язык
     .desc = Мясистая мышца, используемая в основном для обмана.

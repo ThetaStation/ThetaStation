@@ -121,7 +121,6 @@
     - type: SolutionTransfer
       canChangeTransferAmount: true
       maxTransferAmount: 5
-    - type: Drink
     - type: Openable
       opened: true
     - type: MeleeWeapon
@@ -129,7 +128,7 @@
         path: "/Audio/Effects/Fluids/splat.ogg"
       damage:
         types:
-          Blunt: 0
+          Blunt: 2
     - type: Spillable
       solution: drink
     - type: FitsInDispenser

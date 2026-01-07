@@ -55,6 +55,19 @@ public sealed class CCCVars
     public static readonly CVarDef<int> TTSMaxCache =
         CVarDef.Create("tts.max_cache", 250, CVar.SERVERONLY | CVar.ARCHIVE);
 
+    /// <summary>
+    /// Tts rate limit values are accounted in periods of this size (seconds).
+    /// After the period has passed, the count resets.
+    /// </summary>
+    public static readonly CVarDef<float> TTSRateLimitPeriod =
+        CVarDef.Create("tts.rate_limit_period", 2f, CVar.SERVERONLY);
+
+    /// <summary>
+    /// How many tts preview messages are allowed in a single rate limit period.
+    /// </summary>
+    public static readonly CVarDef<int> TTSRateLimitCount =
+        CVarDef.Create("tts.rate_limit_count", 3, CVar.SERVERONLY);
+
     /*
      * Peaceful Round End
      */
@@ -63,43 +76,15 @@ public sealed class CCCVars
     /// Making everyone a pacifist at the end of a round.
     /// </summary>
     public static readonly CVarDef<bool> PeacefulRoundEnd =
-        CVarDef.Create("game.peaceful_end", true, CVar.SERVERONLY);
+        CVarDef.Create("game.peaceful_end", false, CVar.SERVERONLY);
 
     /*
-     * Discord Auth
+     * Station Goal
      */
 
     /// <summary>
-    ///     Enabled Discord linking, show linking button and modal window
+    /// Send station goal on round start or not.
     /// </summary>
-    public static readonly CVarDef<bool> DiscordAuthEnabled =
-        CVarDef.Create("discord_auth.enabled", false, CVar.SERVERONLY);
-
-    /// <summary>
-    ///     URL of the Discord auth server API
-    /// </summary>
-    public static readonly CVarDef<string> DiscordAuthApiUrl =
-        CVarDef.Create("discord_auth.api_url", "", CVar.SERVERONLY);
-
-    /// <summary>
-    ///     Secret key of the Discord auth server API
-    /// </summary>
-    public static readonly CVarDef<string> DiscordAuthApiKey =
-        CVarDef.Create("discord_auth.api_key", "", CVar.SERVERONLY | CVar.CONFIDENTIAL);
-
-    /*
-     * Theta
-     */
-
-    /// <summary>
-    ///     URL of the sponsors server API.
-    /// </summary>
-    public static readonly CVarDef<string> SponsorsApiUrl =
-        CVarDef.Create("sponsor.api_url", "", CVar.SERVERONLY);
-
-    /// <summary>
-    /// Name of the game server in lobby.
-    /// </summary>
-    public static readonly CVarDef<string> ServerNameLobby =
-        CVarDef.Create("game.servername_lobby", "", CVar.ARCHIVE | CVar.REPLICATED | CVar.SERVER);
+    public static readonly CVarDef<bool> StationGoal =
+        CVarDef.Create("game.station_goal", true, CVar.SERVERONLY);
 }

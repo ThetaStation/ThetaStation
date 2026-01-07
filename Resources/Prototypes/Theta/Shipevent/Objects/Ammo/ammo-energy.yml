@@ -26,14 +26,22 @@
   noSpawn: true
   components:
     - type: CartridgeAmmo
-      proto: PlasmaBolt
+      proto: PlasmaBoltSpread
       deleteOnSpawn: true
-      count: 4
-      spread: 45
     - type: Sprite
       sprite: /Textures/Theta/ShipEvent/Objects/Energy.rsi
       layers:
         - state: orange
+
+- type: entity
+  parent: PlasmaBolt
+  id: PlasmaBoltSpread
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ProjectileSpread
+    proto: PlasmaBolt
+    count: 4
+    spread: 45
 
 - type: entity
   id: PlasmaBolt

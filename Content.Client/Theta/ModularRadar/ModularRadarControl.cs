@@ -4,7 +4,6 @@ using Content.Client.Resources;
 using Content.Client.UserInterface.Controls;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Theta.ShipEvent.UI;
-using Pidgin;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
@@ -19,6 +18,7 @@ namespace Content.Client.Theta.ModularRadar;
 public abstract class ModularRadarControl : MapGridControl
 {
     [Dependency] private readonly IEntityManager _entManager = default!;
+    private readonly SharedTransformSystem _formSys = default!;
 
     public readonly Font Font;
 
@@ -219,7 +219,7 @@ public abstract class ModularRadarControl : MapGridControl
         if (_coordinates == null || _rotation == null)
             return new Matrix3x2();
 
-        var mapPosition = _coordinates.Value.ToMap(_entManager);
+        var mapPosition = _formSys.ToMapCoordinates(_coordinates.Value);
         if (mapPosition.MapId == MapId.Nullspace)
             return new Matrix3x2();
 
