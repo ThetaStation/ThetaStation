@@ -8,10 +8,10 @@
   markingLimits: MobDionaMarkingLimits
   dollPrototype: MobDionaDummy
   skinColoration: Hues
-  maleFirstNames: NamesDionaFirst
-  femaleFirstNames: NamesDionaFirst
-  maleLastNames: NamesDionaLast # Corvax-LastnameGender
-  femaleLastNames: NamesDionaLast # Corvax-LastnameGender
+  maleFirstNames: DionaFirst_en
+  femaleFirstNames: DionaFirst_en
+  maleLastNames: DionaLast_en
+  femaleLastNames: DionaLast_en
   naming: TheFirstofLast
   # Corvax-SpeciesAgeLore-Start
   youngAge: 3000

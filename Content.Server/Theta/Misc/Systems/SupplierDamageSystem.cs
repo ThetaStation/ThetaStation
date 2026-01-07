@@ -28,7 +28,7 @@ public sealed class SupplierDamageSystem : EntitySystem
                 continue;
 
             DamageSpecifier damage = supdamage.Damage * supplier.CurrentSupply * supdamage.DamageMultiplier;
-            _damageSys.TryChangeDamage(new Entity<DamageableComponent>(uid, damageable), damage);
+            _damageSys.TryChangeDamage(new Entity<DamageableComponent?>(uid, damageable), damage);
             supdamage.NextUpdate = _timing.CurTime + supdamage.UpdateInterval;
         }
     }

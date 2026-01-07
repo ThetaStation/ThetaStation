@@ -10,8 +10,7 @@
       state: signaller
     - type: ShipEventPointStorage
       points: 10000
-    - type: OnUseTimerTrigger
-      delay: 0
+    - type: TriggerOnActivate
     - type: DeleteOnTrigger
 
 # Ebic ammo - HE
@@ -134,6 +133,6 @@
     - type: Battery
       maxCharge: 10000
       startingCharge: 10000
-    - type: ProjectileBatteryAmmoProvider
+    - type: BatteryAmmoProvider
       proto: PlasmaBolt
       fireCost: 1000
